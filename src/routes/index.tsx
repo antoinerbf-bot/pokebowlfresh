@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
+import heroPoke from "@/assets/hero-poke.jpg";
 
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
@@ -78,6 +79,14 @@ function Index() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { scrollYProgress } = useScroll();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
   
   // Parallax for the hero video
   const videoY = useTransform(scrollYProgress, [0, 1], [0, 300]);
@@ -229,15 +238,18 @@ function Index() {
               style={{ y: videoY }}
               className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/5] md:aspect-[3/4] max-w-md mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-700"
             >
-              {/* Note: This is a placeholder for a poke bowl building video */}
               <video 
+                ref={videoRef}
                 autoPlay 
                 loop 
                 muted 
                 playsInline
+                preload="auto"
+                poster={heroPoke}
                 className="absolute inset-0 w-full h-full object-cover scale-105"
               >
-                <source src="https://videos.pexels.com/video-files/8844883/8844883-uhd_2160_3840_25fps.mp4" type="video/mp4" />
+                <source src="/hero-video.mp4" type="video/mp4" />
+                <source src="/hero-video.webm" type="video/webm" />
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               
