@@ -8,7 +8,7 @@ import heroPoke from "@/assets/hero-poke.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bowls, spicy, drinks, desserts } from "../lib/data";
 
@@ -80,6 +80,7 @@ function Index() {
   const { addItem, setIsCartOpen, items } = useCart();
   const { scrollYProgress } = useScroll();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -87,6 +88,19 @@ function Index() {
       videoRef.current.play().catch(() => {});
     }
   }, []);
+
+  const toggleSound = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (videoRef.current) {
+      const nextMuted = !isMuted;
+      videoRef.current.muted = nextMuted;
+      setIsMuted(nextMuted);
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch(() => {});
+      }
+    }
+  };
   
   // Parallax for the hero video
   const videoY = useTransform(scrollYProgress, [0, 1], [0, 300]);
@@ -169,99 +183,160 @@ function Index() {
         </nav>
       </header>
 
-      {/* Split Hero with Video on the side */}
-      <section id="top" className="relative overflow-hidden surface-hero text-deep-foreground pt-12 pb-24 md:pt-20 md:pb-32">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-[500px] w-[500px] rounded-full bg-lime/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 -left-20 h-[600px] w-[600px] rounded-full bg-coral/10 blur-3xl" />
-        
-        <div className="relative mx-auto max-w-6xl px-5 flex flex-col-reverse md:flex-row items-center gap-12 lg:gap-20">
-          
-          {/* Text Content */}
-          <div className="flex-1 text-center md:text-left z-10">
-            <FadeIn delay={0.1}>
-              <p className="eyebrow text-lime mb-3 inline-block px-4 py-1.5 bg-lime/10 rounded-full">{t("hero.subtitle")}</p>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <h1 className="text-4xl font-extrabold leading-[1.1] md:text-5xl lg:text-6xl tracking-tight">
-                {t("hero.title1")}
-                <span className="block text-coral mt-2">{t("hero.title2")}</span>
-              </h1>
-            </FadeIn>
-            <FadeIn delay={0.3}>
-              <p className="mt-5 text-base leading-relaxed text-deep-foreground/80 max-w-md mx-auto md:mx-0">
-                {t("hero.desc")}
-              </p>
-            </FadeIn>
-            
-            <FadeIn delay={0.4} className="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href={ORDER_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-full bg-coral px-8 py-3.5 text-sm font-semibold text-coral-foreground shadow-lift flex items-center gap-2"
-              >
-                {t("hero.order")}
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href={`tel:${PHONE}`}
-                className="rounded-full border border-deep-foreground/20 bg-background/50 backdrop-blur-sm px-8 py-3.5 text-sm font-semibold transition-colors hover:bg-deep-foreground/5"
-              >
-                04 91 28 14 56
-              </motion.a>
-            </FadeIn>
-            
-            <FadeIn delay={0.5}>
-              <dl className="mt-12 grid grid-cols-3 gap-4 border-t border-deep-foreground/10 pt-8 max-w-md mx-auto md:mx-0 text-left">
-                <div>
-                  <dt className="text-xs text-deep-foreground/60 uppercase tracking-wider font-semibold mb-1">{t("hero.rating")}</dt>
-                  <dd className="font-display text-2xl font-bold text-lime">4.5<span className="text-base text-deep-foreground/40">/5</span></dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-deep-foreground/60 uppercase tracking-wider font-semibold mb-1">{t("hero.price")}</dt>
-                  <dd className="font-display text-2xl font-bold text-lime">10 €</dd>
-                </div>
-                <div>
-                  <dt className="text-xs text-deep-foreground/60 uppercase tracking-wider font-semibold mb-1">{t("hero.time")}</dt>
-                  <dd className="font-display text-2xl font-bold text-lime">10<span className="text-base text-deep-foreground/40">min</span></dd>
-                </div>
-              </dl>
-            </FadeIn>
-          </div>
+      {/* Cinematic Hero */}
+      <section id="top" className="relative overflow-hidden surface-hero text-deep-foreground pt-10 pb-20 md:pt-16 md:pb-28">
+        {/* Ambient glow lights */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[600px] w-[600px] rounded-full bg-lime/15 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-[600px] w-[600px] rounded-full bg-coral/15 blur-[120px]" />
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-primary/10 blur-[140px]" />
 
-          {/* Video Side */}
-          <div className="flex-1 w-full relative z-10">
-            <motion.div 
-              style={{ y: videoY }}
-              className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/5] md:aspect-[3/4] max-w-md mx-auto transform rotate-2 hover:rotate-0 transition-transform duration-700"
-            >
-              <video 
-                ref={videoRef}
-                autoPlay 
-                loop 
-                muted 
-                playsInline
-                preload="auto"
-                poster={heroPoke}
-                className="absolute inset-0 w-full h-full object-cover scale-105"
-              >
-                <source src="/hero-video.mp4" type="video/mp4" />
-                <source src="/hero-video.webm" type="video/webm" />
-              </video>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="bg-background/90 backdrop-blur-md rounded-2xl p-4 shadow-xl">
-                  <p className="eyebrow text-primary text-[10px] mb-1">Préparation minute</p>
-                  <p className="text-sm font-semibold text-foreground">Fait sous vos yeux avec des produits frais.</p>
+        <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            
+            {/* Left Col: Text Content */}
+            <div className="lg:col-span-6 xl:col-span-5 text-center lg:text-left z-10">
+              <FadeIn delay={0.1}>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-lime/15 border border-lime/30 text-lime text-xs font-bold tracking-wide uppercase mb-4 shadow-sm">
+                  <Sparkles className="h-3.5 w-3.5 animate-pulse" />
+                  <span>{t("hero.subtitle")}</span>
                 </div>
-              </div>
-            </motion.div>
+              </FadeIn>
+              <FadeIn delay={0.2}>
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight">
+                  {t("hero.title1")}
+                  <span className="block bg-gradient-to-r from-coral to-amber-400 bg-clip-text text-transparent mt-2">
+                    {t("hero.title2")}
+                  </span>
+                </h1>
+              </FadeIn>
+              <FadeIn delay={0.3}>
+                <p className="mt-5 text-base sm:text-lg leading-relaxed text-deep-foreground/80 max-w-lg mx-auto lg:mx-0">
+                  {t("hero.desc")}
+                </p>
+              </FadeIn>
+              
+              <FadeIn delay={0.4} className="mt-8 flex flex-wrap justify-center lg:justify-start items-center gap-4">
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={ORDER_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-coral px-8 py-4 text-sm sm:text-base font-bold text-coral-foreground shadow-lift flex items-center gap-2 hover:bg-coral/90 transition-all"
+                >
+                  {t("hero.order")}
+                  <span className="text-lg leading-none">→</span>
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  href={`tel:${PHONE}`}
+                  className="rounded-full border-2 border-deep-foreground/20 bg-background/60 backdrop-blur-md px-7 py-3.5 text-sm sm:text-base font-semibold transition-all hover:bg-background/90 hover:border-deep-foreground/40 shadow-sm"
+                >
+                  04 91 28 14 56
+                </motion.a>
+              </FadeIn>
+              
+              <FadeIn delay={0.5}>
+                <dl className="mt-10 grid grid-cols-3 gap-3 sm:gap-4 border-t border-deep-foreground/15 pt-6 max-w-md mx-auto lg:mx-0 text-left">
+                  <div className="bg-background/40 backdrop-blur-sm p-3 rounded-2xl border border-white/5">
+                    <dt className="text-[10px] sm:text-xs text-deep-foreground/70 uppercase tracking-wider font-bold mb-0.5">{t("hero.rating")}</dt>
+                    <dd className="font-display text-xl sm:text-2xl font-black text-lime">4.5<span className="text-xs text-deep-foreground/50 font-normal">/5</span></dd>
+                  </div>
+                  <div className="bg-background/40 backdrop-blur-sm p-3 rounded-2xl border border-white/5">
+                    <dt className="text-[10px] sm:text-xs text-deep-foreground/70 uppercase tracking-wider font-bold mb-0.5">{t("hero.price")}</dt>
+                    <dd className="font-display text-xl sm:text-2xl font-black text-lime">10 €</dd>
+                  </div>
+                  <div className="bg-background/40 backdrop-blur-sm p-3 rounded-2xl border border-white/5">
+                    <dt className="text-[10px] sm:text-xs text-deep-foreground/70 uppercase tracking-wider font-bold mb-0.5">{t("hero.time")}</dt>
+                    <dd className="font-display text-xl sm:text-2xl font-black text-lime">10<span className="text-xs text-deep-foreground/50 font-normal">min</span></dd>
+                  </div>
+                </dl>
+              </FadeIn>
+            </div>
+
+            {/* Right Col: Grand Cinematic Video Showcase */}
+            <div className="lg:col-span-6 xl:col-span-7 w-full relative z-10">
+              <FadeIn delay={0.2} direction="left">
+                <div className="relative group">
+                  {/* Ambient glowing projector effect behind the video */}
+                  <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-r from-coral/30 via-lime/25 to-primary/30 rounded-[3rem] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10" />
+
+                  {/* Cinematic Video Container */}
+                  <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border-2 border-white/20 bg-black aspect-[16/10] sm:aspect-[16/9] w-full">
+                    <video 
+                      ref={videoRef}
+                      autoPlay 
+                      loop 
+                      muted={isMuted}
+                      playsInline
+                      preload="auto"
+                      poster={heroPoke}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    >
+                      <source src="/hero-video.mp4" type="video/mp4" />
+                      <source src="/hero-video.webm" type="video/webm" />
+                    </video>
+
+                    {/* Subtle Cinematic Vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/40 pointer-events-none" />
+
+                    {/* Top Floating Glass Header */}
+                    <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between pointer-events-auto z-20">
+                      <div className="inline-flex items-center gap-2 rounded-full bg-black/50 backdrop-blur-md px-3.5 py-1.5 text-xs font-bold text-white border border-white/15 shadow-md">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-coral opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-coral"></span>
+                        </span>
+                        <span>Préparation minute en direct</span>
+                      </div>
+
+                      <button
+                        onClick={toggleSound}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-white border border-white/20 hover:bg-black/80 hover:border-coral transition-all shadow-md active:scale-95 cursor-pointer"
+                        title={isMuted ? "Activer le son" : "Couper le son"}
+                      >
+                        {isMuted ? (
+                          <>
+                            <VolumeX className="h-3.5 w-3.5 text-coral" />
+                            <span className="hidden sm:inline">Son désactivé</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="h-3.5 w-3.5 text-lime" />
+                            <span className="hidden sm:inline">Son activé</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Bottom Cinematic Info Card */}
+                    <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 z-20">
+                      <div className="bg-background/90 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-coral/15 flex items-center justify-center shrink-0 border border-coral/30 text-xl sm:text-2xl">
+                            🥗
+                          </div>
+                          <div>
+                            <p className="eyebrow text-coral text-[10px] sm:text-xs font-extrabold uppercase tracking-wider mb-0.5">
+                              Ingrédients ultra-frais du jour
+                            </p>
+                            <p className="text-xs sm:text-sm font-bold text-foreground leading-snug">
+                              Saumon frais, mangue mûre, avocat onctueux & sauces maison
+                            </p>
+                          </div>
+                        </div>
+                        <span className="self-end sm:self-center shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-full bg-lime/20 text-lime border border-lime/40">
+                          100% Fait Maison
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </FadeIn>
+            </div>
+            
           </div>
-          
         </div>
       </section>
 
