@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as RecrutementRouteImport } from './routes/recrutement'\nimport { Route as CommanderRouteImport } from './routes/commander'
+import { Route as RecrutementRouteImport } from './routes/recrutement'import { Route as CommanderRouteImport } from './routes/commander'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +34,25 @@ const RecrutementRoute = RecrutementRouteImport.update({
   path: '/recrutement',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommanderRoute = CommanderRouteImport.update({
+  id: '/commander',
+  path: '/commander',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
+  '/commander': typeof CommanderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
+  '/commander': typeof CommanderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,6 +60,7 @@ export interface FileRoutesById {
   '/product/$productId': typeof ProductProductIdRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
+  '/commander': typeof CommanderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -67,6 +75,7 @@ export interface RootRouteChildren {
   ProductProductIdRoute: typeof ProductProductIdRoute
   ContactRoute: typeof ContactRoute
   RecrutementRoute: typeof RecrutementRoute
+  CommanderRoute: typeof CommanderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecrutementRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/commander': {
+      id: '/commander'
+      path: '/commander'
+      fullPath: '/commander'
+      preLoaderRoute: typeof CommanderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductProductIdRoute: ProductProductIdRoute,
   ContactRoute: ContactRoute,
   RecrutementRoute: RecrutementRoute,
+  CommanderRoute: CommanderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
