@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion";\nimport * as React from "react";
 import {
   ArrowRight,
   BriefcaseBusiness,
-  ChevronDown,
   MapPin,
   Menu,
   ShoppingBag,
@@ -47,19 +45,16 @@ const hours = [
 function Reveal({
   children,
   delay = 0,
-  className = "",
 }: {
   children: React.ReactNode;
   delay?: number;
-  className?: string;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -69,59 +64,49 @@ function Reveal({
 function Index() {
   const { t, language, setLanguage } = useTranslation();
   const { items, setIsCartOpen } = useCart();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  const closeMobile = () => setMobileOpen(false);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f4ec] text-[#17231f]">
       <CartDrawer />
 
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-8 sm:py-4 lg:px-12">
-          <Link to="/" className="group flex min-w-0 items-center gap-3" onClick={() => setMobileOpen(false)}>
+        <nav className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+          <Link
+            to="/"
+            onClick={closeMobile}
+            className="flex shrink-0 items-center"
+            aria-label="Poke N Bowl accueil"
+          >
             <img
               src={logo}
               alt="Poke N Bowl"
-              className="h-12 w-12 shrink-0 object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,.45)] transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-14"
+              className="h-11 w-11 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,.35)] sm:h-14 sm:w-14"
             />
-            <div className="hidden min-w-0 text-white sm:block">
-              <div className="text-lg font-black tracking-tight">Poke N Bowl</div>
-              <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/60">
+            <span className="ml-2 hidden text-white sm:block">
+              <strong className="block text-base font-black leading-none">Poke N Bowl</strong>
+              <span className="mt-1 block text-[8px] font-bold uppercase tracking-[0.2em] text-white/55">
                 Visé · Fresh food
-              </div>
-            </div>
+              </span>
+            </span>
           </Link>
 
-          <div className="hidden items-center gap-8 text-[10px] font-black uppercase tracking-[0.18em] text-white md:flex">
-            <a href="#carte" className="transition-opacity hover:opacity-60">
-              La carte
-            </a>
-            <a href="#composer" className="transition-opacity hover:opacity-60">
-              Composer
-            </a>
-            <a href="#infos" className="transition-opacity hover:opacity-60">
-              Infos
-            </a>
-            <Link to="/contact" className="transition-opacity hover:opacity-60">
-              Contact
-            </Link>
+          <div className="hidden items-center gap-7 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex">
+            <a href="#carte" className="hover:text-[#d7ff45]">La carte</a>
+            <a href="#composer" className="hover:text-[#d7ff45]">Composer</a>
+            <a href="#infos" className="hover:text-[#d7ff45]">Infos</a>
+            <Link to="/contact" className="hover:text-[#d7ff45]">Contact</Link>
           </div>
 
           <div className="flex items-center gap-2">
             <Link
               to="/recrutement"
-              className="hidden items-center gap-2 rounded-full bg-[#ff705f] px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.16em] text-white shadow-lg shadow-[#ff705f]/25 sm:flex"
+              className="hidden rounded-full bg-[#ff705f] px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] text-white sm:block"
             >
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
               On recrute
             </Link>
 
@@ -143,8 +128,8 @@ function Index() {
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
-              className="relative rounded-full border border-white/20 bg-black/20 p-3 text-white backdrop-blur transition hover:bg-white/15"
               aria-label="Ouvrir le panier"
+              className="relative rounded-full border border-white/20 bg-black/20 p-2.5 text-white backdrop-blur"
             >
               <ShoppingBag className="h-4 w-4" />
               {cartCount > 0 && (
@@ -157,8 +142,8 @@ function Index() {
             <button
               type="button"
               aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-              onClick={() => setMobileOpen((value) => !value)}
-              className="rounded-full border border-white/20 bg-black/20 p-3 text-white backdrop-blur md:hidden"
+              onClick={() => setMobileOpen((open) => !open)}
+              className="rounded-full border border-white/20 bg-black/20 p-2.5 text-white backdrop-blur md:hidden"
             >
               {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -166,150 +151,107 @@ function Index() {
         </nav>
 
         {mobileOpen && (
-          <div className="mx-4 rounded-3xl border border-white/15 bg-[#10251f]/95 p-4 shadow-2xl backdrop-blur-xl md:hidden">
+          <div className="mx-3 rounded-3xl border border-white/10 bg-[#10251f] p-3 shadow-2xl md:hidden">
             <div className="grid gap-1">
-              {[
-                ["La carte", "#carte"],
-                ["Composer", "#composer"],
-                ["Infos", "#infos"],
-              ].map(([label, href]) => (
-                <a
-                  key={href}
-                  href={href}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-2xl px-4 py-3 text-sm font-black text-white/80 hover:bg-white/10"
-                >
-                  {label}
-                </a>
-              ))}
-              <Link
-                to="/contact"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-2xl px-4 py-3 text-sm font-black text-white/80 hover:bg-white/10"
-              >
-                Contact
-              </Link>
-              <Link
-                to="/recrutement"
-                onClick={() => setMobileOpen(false)}
-                className="mt-1 rounded-2xl bg-[#ff705f] px-4 py-3 text-center text-sm font-black text-white"
-              >
-                On recrute
-              </Link>
+              <a onClick={closeMobile} href="#carte" className="rounded-2xl px-4 py-3 text-sm font-black text-white">La carte</a>
+              <a onClick={closeMobile} href="#composer" className="rounded-2xl px-4 py-3 text-sm font-black text-white">Composer</a>
+              <a onClick={closeMobile} href="#infos" className="rounded-2xl px-4 py-3 text-sm font-black text-white">Infos</a>
+              <Link onClick={closeMobile} to="/contact" className="rounded-2xl px-4 py-3 text-sm font-black text-white">Contact</Link>
+              <Link onClick={closeMobile} to="/recrutement" className="rounded-2xl bg-[#ff705f] px-4 py-3 text-center text-sm font-black text-white">On recrute</Link>
             </div>
           </div>
         )}
       </header>
 
       <main>
-        <section id="top" className="relative min-h-[700px] h-[100svh] max-h-[920px] overflow-hidden bg-[#071713] text-white">
-          <div className="absolute inset-0 overflow-hidden bg-[#071713]">
-            <div
-              className="absolute left-[82%] top-[62%] h-[390px] lg:left-1/2 lg:top-[48%] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-70 transition-transform duration-100"
-              style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.04, 0)}px), 0)` }}
-            />
-            <div
-              className="absolute left-[82%] top-[62%] h-[315px] lg:left-1/2 lg:top-[48%] w-[315px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7ff45]/20 shadow-[0_0_120px_-30px_rgba(215,255,69,.8)]"
-              style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.025, 0)}px), 0)` }}
-            />
-            <div
-              className="absolute left-[82%] top-[62%] h-[235px] lg:left-1/2 lg:top-[48%] w-[235px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[16px] border-[#f7f4ec]/85 shadow-[0_0_80px_-20px_rgba(255,255,255,.7)] sm:h-[270px] sm:w-[270px]"
-              style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.02, 0)}px), 0)` }}
-            >
-              <div className="absolute inset-[22%] rounded-full bg-[#071713] shadow-[inset_0_0_55px_rgba(0,0,0,.9)]" />
-              <div className="absolute left-1/2 top-1/2 h-2.5 w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f7f4ec]/90 sm:h-3" />
-              <div className="absolute left-1/2 top-1/2 h-2.5 w-[125%] -translate-x-1/2 -translate-y-1/2 rotate-90 rounded-full bg-[#f7f4ec]/90 sm:h-3" />
-              <span className="absolute left-[14%] top-[27%] h-3 w-3 rounded-full bg-[#ff705f] shadow-[0_0_22px_#ff705f] sm:h-4 sm:w-4" />
-              <span className="absolute right-[17%] top-[31%] h-2.5 w-2.5 rounded-full bg-[#d7ff45] shadow-[0_0_18px_#d7ff45] sm:h-3 sm:w-3" />
-              <span className="absolute bottom-[23%] left-[23%] h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_16px_white] sm:h-3 sm:w-3" />
-              <span className="absolute bottom-[18%] right-[24%] h-4 w-4 rounded-full bg-[#ff705f] shadow-[0_0_24px_#ff705f] sm:h-5 sm:w-5" />
+        <section className="relative flex min-h-[680px] items-center overflow-hidden bg-[#071713] text-white sm:min-h-[720px]">
+          <div className="absolute inset-0">
+            <div className="absolute -right-28 top-28 h-[430px] w-[430px] rounded-full border border-white/10 sm:right-[5%] sm:top-1/2 sm:-translate-y-1/2" />
+            <div className="absolute -right-12 top-40 h-[340px] w-[340px] rounded-full border border-[#d7ff45]/20 shadow-[0_0_100px_-25px_rgba(215,255,69,.7)] sm:right-[9%] sm:top-1/2 sm:-translate-y-1/2" />
+            <div className="absolute right-5 top-52 h-[250px] w-[250px] rounded-full border-[17px] border-[#f7f4ec]/90 shadow-[0_0_70px_-20px_rgba(255,255,255,.55)] sm:right-[14%] sm:top-1/2 sm:-translate-y-1/2">
+              <div className="absolute inset-[21%] rounded-full bg-[#071713]" />
+              <div className="absolute left-1/2 top-1/2 h-3 w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f7f4ec]" />
+              <span className="absolute left-[14%] top-[26%] h-3 w-3 rounded-full bg-[#ff705f] shadow-[0_0_20px_#ff705f]" />
+              <span className="absolute right-[16%] top-[30%] h-3 w-3 rounded-full bg-[#d7ff45] shadow-[0_0_18px_#d7ff45]" />
+              <span className="absolute bottom-[20%] left-[22%] h-2.5 w-2.5 rounded-full bg-white" />
+              <span className="absolute bottom-[17%] right-[23%] h-4 w-4 rounded-full bg-[#ff705f]" />
             </div>
-            <div className="absolute left-[82%] top-[62%] h-[340px] lg:left-1/2 lg:top-[48%] w-[340px] -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite] rounded-full border border-dashed border-white/15 sm:h-[380px] sm:w-[380px]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(215,255,69,.12),transparent_25%),radial-gradient(circle_at_50%_68%,rgba(255,112,95,.12),transparent_32%),linear-gradient(180deg,#071713_0%,#071713_45%,#0b1a16_100%)]" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/25 via-transparent to-[#071713]/90" />
+            <div className="absolute right-[-30px] top-1/2 hidden h-[390px] w-[390px] -translate-y-1/2 animate-[spin_24s_linear_infinite] rounded-full border border-dashed border-white/15 sm:right-[7%] sm:block" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_45%,rgba(215,255,69,.09),transparent_30%),linear-gradient(115deg,#071713_0%,#071713_55%,#10251f_100%)]" />
           </div>
 
-          <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-center px-5 pb-24 pt-28 sm:px-8 sm:pb-20 sm:pt-28 lg:px-12 lg:pb-16">
-            <div className="w-full">
-              <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,.92fr)_minmax(0,1.08fr)] lg:gap-12">
-                <div className="relative z-20 min-w-0 max-w-[680px]">
-                  <div className="mb-4 flex flex-wrap gap-2 sm:mb-5">
-                    <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em] text-white/70 backdrop-blur">Fresh · préparé minute</span>
-                    <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em]">On recrute →</Link>
-                  </div>
-                  <p className="mb-3 text-[8px] font-black uppercase tracking-[.26em] text-[#d7ff45] sm:text-[9px] sm:tracking-[.32em]">Poke N Bowl · Visé</p>
-                  <h1 className="max-w-[680px] text-[clamp(2.35rem,11.2vw,4.8rem)] font-black leading-[1] tracking-[-.012em] [font-stretch:normal] sm:text-7xl lg:text-[6rem] xl:text-[6.45rem]">
-                    <span className="block">Ton bowl.</span>
-                    <span className="block text-[#d7ff45]">Tes règles.</span>
-                  </h1>
-                  <p className="mt-5 max-w-[560px] text-[13px] leading-5 text-white/70 sm:mt-6 sm:text-base sm:leading-6">
-                    Choisis ta recette. Personnalise-la. Et commande ton bowl sans détour.
-                  </p>
-                  <div className="mt-6 flex w-full flex-col gap-2.5 sm:mt-7 sm:w-auto sm:flex-row">
-                    <Link to="/commander" className="group inline-flex min-w-0 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-6 py-3.5 text-[13px] font-black sm:px-7 sm:py-4 sm:text-sm shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition hover:-translate-y-1">
-                      Composer mon bowl <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                    </Link>
-                    <a href="#carte" className="inline-flex min-w-0 items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-[13px] font-bold sm:px-7 sm:py-4 sm:text-sm backdrop-blur-xl">Voir les bowls</a>
-                  </div>
-                  <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[8px] font-black uppercase tracking-[.14em] text-white/45 sm:gap-6 sm:text-[9px] sm:tracking-[.18em]">
-                    <span>9 recettes</span><span>À partir de 9,50 €</span><span>Visé</span>
-                  </div>
-                </div>
+          <div className="relative z-10 mx-auto w-full max-w-[1320px] px-5 pb-16 pt-28 sm:px-6 lg:px-8">
+            <div className="max-w-[700px]">
+              <div className="mb-5 flex flex-wrap gap-2">
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] text-white/70">
+                  Fresh · préparé minute
+                </span>
+                <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em]">
+                  On recrute
+                </Link>
+              </div>
 
-                <div
-                  className="relative hidden h-[500px] min-w-0 lg:block"
-                  style={{ transform: `translateY(${Math.min(scrollY * -0.06, 0)}px)` }}
+              <p className="text-[8px] font-black uppercase tracking-[0.25em] text-[#d7ff45] sm:text-[9px]">
+                Poke N Bowl · Visé
+              </p>
+
+              <h1 className="mt-3 max-w-[680px] text-[clamp(2.7rem,12vw,5.7rem)] font-black leading-[0.98] tracking-[-0.02em] sm:text-7xl lg:text-[5.9rem]">
+                Ton bowl.
+                <br />
+                <span className="text-[#d7ff45]">Tes règles.</span>
+              </h1>
+
+              <p className="mt-5 max-w-[480px] text-sm leading-6 text-white/70 sm:text-base">
+                Choisis ta recette, personnalise-la et commande ton bowl simplement.
+              </p>
+
+              <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
+                <Link
+                  to="/commander"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black shadow-[0_18px_45px_-18px_rgba(255,112,95,.9)]"
                 >
-                  <div className="absolute inset-2 rounded-[40px] border border-white/10 bg-black/5" />
-                  <div className="absolute left-1/2 top-1/2 h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10" />
-                  <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7ff45]/25 shadow-[0_0_90px_-25px_rgba(215,255,69,.7)]" />
-                  <div className="absolute left-1/2 top-1/2 h-[245px] w-[245px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[18px] border-[#f7f4ec]/90 shadow-[0_0_70px_-20px_rgba(255,255,255,.65)]">
-                    <div className="absolute inset-[22%] rounded-full bg-[#071713] shadow-[inset_0_0_50px_rgba(0,0,0,.8)]" />
-                    <div className="absolute left-1/2 top-1/2 h-3 w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f7f4ec]/90" />
-                    <div className="absolute left-1/2 top-1/2 h-3 w-[125%] -translate-x-1/2 -translate-y-1/2 rotate-90 rounded-full bg-[#f7f4ec]/90" />
-                    <div className="absolute left-[15%] top-[28%] h-4 w-4 rounded-full bg-[#ff705f] shadow-[0_0_24px_#ff705f]" />
-                    <div className="absolute right-[18%] top-[32%] h-3 w-3 rounded-full bg-[#d7ff45] shadow-[0_0_20px_#d7ff45]" />
-                    <div className="absolute bottom-[24%] left-[24%] h-3 w-3 rounded-full bg-white shadow-[0_0_18px_white]" />
-                    <div className="absolute bottom-[19%] right-[25%] h-5 w-5 rounded-full bg-[#ff705f] shadow-[0_0_26px_#ff705f]" />
-                  </div>
-                  <div className="absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 animate-[spin_18s_linear_infinite] rounded-full border border-dashed border-white/20" />
-                  <div className="absolute inset-x-10 top-1/2 h-px bg-gradient-to-r from-transparent via-[#d7ff45]/40 to-transparent" />
-                  <div className="absolute bottom-3 right-2 rounded-full border border-white/10 bg-black/25 px-3 py-2 text-[7px] font-black uppercase tracking-[.14em] text-white/45 backdrop-blur">
-                    Cinématique · Fresh food · Visé
-                  </div>
-                </div>
+                  Composer mon bowl
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <a
+                  href="#carte"
+                  className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-bold backdrop-blur"
+                >
+                  Voir la carte
+                </a>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[8px] font-black uppercase tracking-[0.12em] text-white/45 sm:text-[9px]">
+                <span>9 recettes</span>
+                <span>À partir de 9,50 €</span>
+                <span>Visé</span>
               </div>
             </div>
           </div>
-
-          <div className="absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 text-center sm:block">
-            <div className="text-[8px] font-black uppercase tracking-[.35em] text-white/35">Découvre · compose · commande</div>
-            <div className="mx-auto mt-2 h-7 w-px bg-gradient-to-b from-white/40 to-transparent" />
-          </div>
         </section>
 
-        <section className="overflow-hidden bg-[#d7ff45] py-3 text-[#10251f] sm:py-4">
+        <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
             className="flex w-max whitespace-nowrap"
           >
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:mx-8 sm:text-xs sm:tracking-[0.18em]">
-                Poke N Bowl · Fresh food · Visé <span className="mx-8">✦</span>
+              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">
+                Poke N Bowl · Fresh food · Visé <span className="mx-6">✦</span>
               </span>
             ))}
           </motion.div>
         </section>
 
-        <section id="carte" className="scroll-mt-20 mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <section id="carte" className="scroll-mt-10 mx-auto max-w-[1320px] px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Reveal>
-            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
                   {t("menu.eyebrow")}
                 </p>
-                <h2 className="mt-3 max-w-3xl text-[2.05rem] font-black leading-[1.04] tracking-[-.012em] [font-stretch:normal] sm:text-6xl">
+                <h2 className="mt-3 max-w-2xl text-[2.15rem] font-black leading-[1.04] tracking-[-0.015em] sm:text-5xl lg:text-6xl">
                   Choisis ton bowl.
                   <br />
                   <span className="text-[#7d8b83]">Puis rends-le unique.</span>
@@ -317,53 +259,51 @@ function Index() {
               </div>
               <div className="max-w-sm">
                 <p className="text-sm leading-6 text-[#68756f]">
-                  Les recettes sont affichées ici sans filtre caché : tu vois toute la carte,
-                  puis tu cliques sur le bowl que tu veux personnaliser.
+                  Toute la carte est visible ici. Choisis une recette, puis personnalise ton bowl.
                 </p>
-                <Link
-                  to="/commander"
-                  className="mt-4 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.15em] text-[#ff705f]"
-                >
-                  Voir toute la commande <ArrowRight className="h-4 w-4" />
+                <Link to="/commander" className="mt-3 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#ff705f]">
+                  Commander <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
           </Reveal>
 
-          <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {bowls.map((bowl, index) => (
-              <Reveal key={bowl.id} delay={index * 0.04}>
+              <Reveal key={bowl.id} delay={index * 0.03}>
                 <Link
                   to="/product/$productId"
                   params={{ productId: bowl.id }}
-                  className="group block overflow-hidden rounded-[28px] bg-white shadow-[0_15px_50px_-30px_rgba(0,0,0,.35)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-35px_rgba(0,0,0,.45)]"
+                  className="group block overflow-hidden rounded-[24px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1"
                 >
-                  <div className="relative aspect-[1.15] overflow-hidden">
+                  <div className="relative aspect-[1.08] overflow-hidden">
                     <img
                       src={bowl.image}
                       alt={bowl.name}
                       loading="lazy"
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-                    <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-[#17231f] backdrop-blur">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-[0.1em]">
                       {bowl.tag}
                     </span>
-                    <span className="absolute bottom-4 right-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-xs font-black">
+                    <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black">
                       € {bowl.price.toFixed(2)}
                     </span>
                   </div>
                   <div className="p-4 sm:p-5">
-                    <div className="flex min-w-0 items-center justify-between gap-3">
-                      <h3 className="min-w-0 max-w-[calc(100%-48px)] break-words text-[17px] font-black leading-[1.08] tracking-normal [font-stretch:normal] sm:text-xl">{bowl.name}</h3>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="min-w-0 flex-1 break-words text-[17px] font-black leading-[1.1] tracking-normal sm:text-xl">
+                        {bowl.name}
+                      </h3>
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-[1.4] tracking-normal text-[#758079] sm:text-sm">{bowl.desc}</p>
-                    <div className="mt-4 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]">
+                    <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079]">{bowl.desc}</p>
+                    <p className="mt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]">
                       Personnaliser →
-                    </div>
+                    </p>
                   </div>
                 </Link>
               </Reveal>
@@ -371,72 +311,55 @@ function Index() {
           </div>
         </section>
 
-        <section id="composer" className="scroll-mt-20 bg-[#10251f] px-4 py-14 text-white sm:px-8 sm:py-20 lg:px-12 lg:py-28">
+        <section id="composer" className="scroll-mt-10 bg-[#10251f] px-5 py-16 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-[1200px]">
             <Reveal>
-              <div className="max-w-3xl">
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#d7ff45]">
-                  Le parcours
-                </p>
-                <h2 className="mt-3 text-[2.25rem] font-black leading-[1.02] tracking-[-.012em] [font-stretch:normal] sm:text-6xl">
-                  Du premier clic
-                  <br />
-                  <span className="text-white/40">au dernier coup de fourchette.</span>
-                </h2>
-              </div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">Le parcours</p>
+              <h2 className="mt-3 max-w-3xl text-[2.25rem] font-black leading-[1.03] tracking-[-0.015em] sm:text-5xl lg:text-6xl">
+                Du premier clic
+                <br />
+                <span className="text-white/40">au dernier coup de fourchette.</span>
+              </h2>
             </Reveal>
 
-            <div className="mt-8 grid gap-2 overflow-hidden rounded-[24px] border border-white/10 bg-white/10 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-9 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                ["01", "Choisis", "Sélectionne une recette dans toute la carte."],
-                ["02", "Personnalise", "Ajoute jusqu’à 5 toppings à ton bowl."],
-                ["03", "Valide", "Ajoute ton bowl, une boisson ou un dessert au panier."],
-                ["04", "Commande", "Retrouve tout dans ton panier pour finaliser."],
-              ].map(([num, title, desc], i) => (
-                <Reveal key={num} delay={i * 0.07}>
-                  <div className="h-full bg-[#16352d] p-5 transition hover:bg-[#1b4036] sm:p-7">
-                    <span className="text-4xl font-black text-[#ff705f]">{num}</span>
-                    <h3 className="mt-5 text-lg font-black sm:mt-8 sm:text-xl">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-white/55">{desc}</p>
+                ["01", "Choisis", "Sélectionne une recette."],
+                ["02", "Personnalise", "Ajoute jusqu’à 5 toppings."],
+                ["03", "Valide", "Ajoute au panier."],
+                ["04", "Commande", "Finalise depuis ton panier."],
+              ].map(([num, title, desc], index) => (
+                <Reveal key={num} delay={index * 0.05}>
+                  <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6">
+                    <span className="text-3xl font-black text-[#ff705f]">{num}</span>
+                    <h3 className="mt-5 text-lg font-black">{title}</h3>
+                    <p className="mt-2 text-sm leading-5 text-white/55">{desc}</p>
                   </div>
                 </Reveal>
               ))}
             </div>
 
-            <div className="mt-10 flex flex-col gap-5 rounded-[28px] border border-white/10 bg-white/[0.04] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+            <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
               <div>
-                <div className="text-xs font-black uppercase tracking-[0.18em] text-[#d7ff45]">
-                  Prêt à composer ?
-                </div>
-                <p className="mt-2 text-sm text-white/55">
-                  Toute la carte est regroupée dans un seul parcours de commande.
-                </p>
+                <p className="text-xs font-black uppercase tracking-[0.15em] text-[#d7ff45]">Prêt ?</p>
+                <p className="mt-1 text-sm text-white/55">La carte complète est à un clic.</p>
               </div>
-              <Link
-                to="/commander"
-                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black"
-              >
-                Ouvrir la carte complète <ArrowRight className="h-4 w-4" />
+              <Link to="/commander" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff705f] px-5 py-3 text-sm font-black">
+                Ouvrir la carte <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1200px] px-4 py-14 sm:px-8 sm:py-20 lg:py-24">
+        <section className="mx-auto max-w-[1200px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
           <Reveal>
-            <div className="grid gap-4 lg:grid-cols-2 sm:gap-6">
-              <div className="rounded-[24px] bg-white p-5 shadow-[0_20px_60px_-35px_rgba(0,0,0,.3)] sm:p-9">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
-                  {t("menu.drinks")}
-                </p>
-                <h3 className="mt-2 text-3xl font-black tracking-tight">Une boisson avec ça ?</h3>
-                <div className="mt-7 grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-[24px] bg-white p-5 shadow-[0_15px_50px_-35px_rgba(0,0,0,.3)] sm:p-8">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">{t("menu.drinks")}</p>
+                <h3 className="mt-2 text-2xl font-black sm:text-3xl">Une boisson avec ça ?</h3>
+                <div className="mt-6 grid gap-2 sm:grid-cols-2">
                   {drinks.map((drink) => (
-                    <Link
-                      key={drink.id}
-                      to="/commander"
-                      className="flex items-center justify-between rounded-2xl bg-[#f5f4ee] px-4 py-3 text-left transition hover:bg-[#d7ff45]"
-                    >
+                    <Link key={drink.id} to="/commander" className="flex items-center justify-between rounded-xl bg-[#f5f4ee] px-4 py-3 hover:bg-[#d7ff45]">
                       <span className="text-sm font-bold">{drink.name}</span>
                       <span className="text-xs font-black">€ {drink.price.toFixed(2)}</span>
                     </Link>
@@ -444,34 +367,16 @@ function Index() {
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-[24px] bg-[#ff705f] text-white">
-                <div className="flex h-full flex-col justify-between p-7 sm:p-9">
+              <div className="rounded-[24px] bg-[#ff705f] p-5 text-white sm:p-8">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/70">{t("menu.desserts")}</p>
+                <h3 className="mt-2 text-2xl font-black sm:text-3xl">Garde une place pour le dessert.</h3>
+                <div className="mt-7 flex items-center gap-4">
+                  <img src={dessert} alt="Dessert maison" loading="lazy" className="h-20 w-20 shrink-0 rounded-2xl object-cover" />
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">
-                      {t("menu.desserts")}
-                    </p>
-                    <h3 className="mt-2 text-3xl font-black tracking-tight">
-                      Garde une place pour le dessert.
-                    </h3>
-                  </div>
-                  <div className="mt-8 flex items-end gap-5">
-                    <img
-                      src={dessert}
-                      alt="Dessert maison"
-                      loading="lazy"
-                      className="h-24 w-24 rounded-2xl object-cover"
-                    />
-                    <div className="flex-1">
-                      <p className="text-sm text-white/75">
-                        {desserts.map((item) => item.name).join(" · ")}
-                      </p>
-                      <Link
-                        to="/commander"
-                        className="mt-3 inline-block text-xs font-black uppercase tracking-[0.16em] underline underline-offset-4"
-                      >
-                        Voir les desserts →
-                      </Link>
-                    </div>
+                    <p className="text-sm text-white/75">{desserts.map((item) => item.name).join(" · ")}</p>
+                    <Link to="/commander" className="mt-2 inline-block text-xs font-black uppercase tracking-[0.12em] underline underline-offset-4">
+                      Voir les desserts →
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -479,99 +384,67 @@ function Index() {
           </Reveal>
         </section>
 
-        <section className="px-4 pb-16 sm:px-8 sm:pb-20 lg:pb-28">
+        <section className="px-5 pb-14 sm:px-6 sm:pb-20 lg:px-8">
           <Link
             to="/recrutement"
-            className="group mx-auto block max-w-[1200px] overflow-hidden rounded-[24px] bg-[#d7ff45] p-5 transition hover:-translate-y-1 sm:rounded-[32px] sm:p-10"
+            className="group mx-auto flex max-w-[1200px] items-center justify-between gap-5 rounded-[24px] bg-[#d7ff45] p-5 transition hover:-translate-y-1 sm:rounded-[30px] sm:p-8"
           >
-            <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#536018]">
-                  <BriefcaseBusiness className="h-4 w-4" /> Poke N Bowl recrute
-                </div>
-                <h2 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
-                  Et si ta prochaine aventure était ici ?
-                </h2>
+            <div>
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-[#536018]">
+                <BriefcaseBusiness className="h-4 w-4" />
+                Poke N Bowl recrute
               </div>
-              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white transition group-hover:rotate-[-45deg]">
-                <ArrowRight className="h-5 w-5" />
-              </span>
+              <h2 className="mt-2 text-2xl font-black leading-tight sm:text-4xl">Et si ta prochaine aventure était ici ?</h2>
             </div>
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white">
+              <ArrowRight className="h-5 w-5" />
+            </span>
           </Link>
         </section>
 
-        <section id="infos" className="scroll-mt-20 bg-[#ece9df] px-4 py-14 sm:px-8 sm:py-20 lg:px-12 lg:py-28">
-          <div className="mx-auto grid max-w-[1200px] gap-6 lg:grid-cols-[1fr_.8fr] lg:gap-10">
+        <section id="infos" className="scroll-mt-10 bg-[#ece9df] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="mx-auto grid max-w-[1200px] gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
             <Reveal>
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
-                Infos pratiques
-              </p>
-              <h2 className="mt-3 text-4xl font-black tracking-[-0.018em] sm:text-6xl">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">Infos pratiques</p>
+              <h2 className="mt-3 text-4xl font-black leading-[1.02] tracking-[-0.02em] sm:text-5xl lg:text-6xl">
                 Passe nous voir
                 <br />
                 <span className="text-[#7d8b83]">à Visé.</span>
               </h2>
 
-              <div className="mt-10 space-y-4">
-                <a
-                  href={MAPS_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-start gap-4 rounded-3xl bg-white p-5 transition hover:-translate-y-1"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]">
+              <div className="mt-8 grid gap-3">
+                <a href={MAPS_URL} target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-2xl bg-white p-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]">
                     <MapPin className="h-5 w-5" />
                   </span>
                   <span>
-                    <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-[#7d8b83]">
-                      Adresse
-                    </span>
-                    <span className="mt-1 block text-sm font-bold">
-                      Av. du Pont 12, 4600 Visé, Belgique
-                    </span>
+                    <span className="block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]">Adresse</span>
+                    <span className="mt-1 block text-sm font-bold">Av. du Pont 12, 4600 Visé, Belgique</span>
                   </span>
                 </a>
-
-                <a
-                  href={`tel:${PHONE}`}
-                  className="flex items-start gap-4 rounded-3xl bg-white p-5 transition hover:-translate-y-1"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
-                    <span className="text-sm font-black">☎</span>
-                  </span>
+                <a href={`tel:${PHONE}`} className="flex items-center gap-4 rounded-2xl bg-white p-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">☎</span>
                   <span>
-                    <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-[#7d8b83]">
-                      Téléphone
-                    </span>
+                    <span className="block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]">Téléphone</span>
                     <span className="mt-1 block text-sm font-bold">+32 491 28 14 56</span>
                   </span>
                 </a>
               </div>
             </Reveal>
 
-            <Reveal delay={0.08}>
-              <div className="rounded-[24px] bg-[#10251f] p-5 text-white sm:rounded-[30px] sm:p-9">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-black">Horaires</h3>
-                  <ChevronDown className="h-5 w-5 text-white/35" />
-                </div>
-                <div className="mt-7 divide-y divide-white/10">
+            <Reveal delay={0.06}>
+              <div className="rounded-[24px] bg-[#10251f] p-5 text-white sm:p-7">
+                <h3 className="text-2xl font-black">Horaires</h3>
+                <div className="mt-5 divide-y divide-white/10">
                   {hours.map(([day, value]) => (
-                    <div key={day} className="flex items-center justify-between py-3.5 text-sm">
-                      <span className="font-bold text-white/70">{day}</span>
-                      <span className={value === "Fermé" ? "font-black text-[#ff705f]" : "font-black"}>
-                        {value}
-                      </span>
+                    <div key={day} className="flex items-center justify-between py-3 text-sm">
+                      <span className="font-bold text-white/65">{day}</span>
+                      <span className={value === "Fermé" ? "font-black text-[#ff705f]" : "font-black"}>{value}</span>
                     </div>
                   ))}
                 </div>
-                <a
-                  href={MAPS_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#d7ff45]"
-                >
-                  Ouvrir dans Google Maps <ArrowRight className="h-4 w-4" />
+                <a href={MAPS_URL} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#d7ff45]">
+                  Google Maps <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
             </Reveal>
@@ -579,37 +452,30 @@ function Index() {
         </section>
       </main>
 
-      <footer className="bg-[#0b1a16] px-4 py-8 text-white sm:px-8 sm:py-10 lg:px-12">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="bg-[#0b1a16] px-5 py-8 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Poke N Bowl" className="h-12 w-12 object-contain" />
+            <img src={logo} alt="Poke N Bowl" className="h-11 w-11 object-contain" />
             <div>
               <div className="font-black">Poke N Bowl</div>
-              <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/35">
-                Visé · Fresh food
-              </div>
+              <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Visé · Fresh food</div>
             </div>
           </Link>
-
-          <div className="flex flex-wrap gap-5 text-[9px] font-black uppercase tracking-[0.18em] text-white/45">
-            <a href="#carte" className="hover:text-white">La carte</a>
-            <Link to="/commander" className="hover:text-white">Commander</Link>
-            <Link to="/recrutement" className="hover:text-white">Recrutement</Link>
-            <Link to="/contact" className="hover:text-white">Contact</Link>
+          <div className="flex flex-wrap gap-4 text-[9px] font-black uppercase tracking-[0.12em] text-white/45">
+            <a href="#carte">La carte</a>
+            <Link to="/commander">Commander</Link>
+            <Link to="/recrutement">Recrutement</Link>
+            <Link to="/contact">Contact</Link>
           </div>
-
-          <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/25">
-            © {new Date().getFullYear()} Poke N Bowl
-          </div>
+          <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/25">© {new Date().getFullYear()} Poke N Bowl</div>
         </div>
       </footer>
 
       <Link
         to="/commander"
-        className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-3 rounded-full bg-[#ff705f] px-5 py-3.5 text-sm font-black text-white shadow-[0_20px_50px_-15px_rgba(0,0,0,.5)] sm:inset-x-4 sm:bottom-4 sm:px-6 sm:py-4 md:hidden"
+        className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-2 rounded-full bg-[#ff705f] px-5 py-3.5 text-sm font-black text-white shadow-xl md:hidden"
       >
-        Composer mon bowl
-        <ArrowRight className="h-4 w-4" />
+        Composer mon bowl <ArrowRight className="h-4 w-4" />
       </Link>
     </div>
   );
