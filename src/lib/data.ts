@@ -5,7 +5,7 @@ import bowlCrousty from "@/assets/bowl-crousty.jpg";
 import dessert from "@/assets/dessert.jpg";
 
 export const allToppings = [
-  "Avocat", "Mangue", "Édamamé", "Maïs", "Feta", "Algues", "Tomates cerises", 
+  "Avocat", "Mangue", "Edamame", "Maïs", "Feta", "Algues", "Tomates cerises", 
   "Oignons croustillants", "Sésame mixte", "Jalapeños", "Poivrons", "Concombre", 
   "Radis", "Ananas", "Grenade", "Coriandre", "Ciboulette", "Cacahuètes", "Nachos", 
   "Oignons rouges", "Graines de chia", "Noix de cajou", "Sauce Sriracha", "Citron vert",
