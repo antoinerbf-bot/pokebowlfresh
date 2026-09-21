@@ -195,7 +195,7 @@ function Index() {
                 Poke N Bowl · Visé
               </p>
 
-              <h1 className="mt-3 max-w-[650px] text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[.92] tracking-[-0.025em] [overflow-wrap:anywhere] sm:text-7xl lg:text-[5.9rem]">
+              <h1 className="mt-3 max-w-[650px] text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[1.02] tracking-[-0.02em] [overflow-wrap:anywhere] sm:text-7xl lg:text-[5.9rem]">
                 Ton bowl.
                 <br />
                 <span className="text-[#d7ff45]">Tes règles.</span>
@@ -251,7 +251,7 @@ function Index() {
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
                   {t("menu.eyebrow")}
                 </p>
-                <h2 className="mt-3 max-w-2xl text-[2.15rem] font-black leading-[1.04] tracking-[-0.015em] sm:text-5xl lg:text-6xl">
+                <h2 className="mt-3 max-w-2xl text-[2.15rem] font-black leading-[1.08] tracking-[-0.01em] sm:text-5xl lg:text-6xl">
                   Choisis ton bowl.
                   <br />
                   <span className="text-[#7d8b83]">Puis rends-le unique.</span>
@@ -315,7 +315,7 @@ function Index() {
           <div className="mx-auto max-w-[1200px]">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">Le parcours</p>
-              <h2 className="mt-3 max-w-3xl text-[2.25rem] font-black leading-[1.03] tracking-[-0.015em] sm:text-5xl lg:text-6xl">
+              <h2 className="mt-3 max-w-3xl text-[2.25rem] font-black leading-[1.08] tracking-[-0.01em] sm:text-5xl lg:text-6xl">
                 Du premier clic
                 <br />
                 <span className="text-white/40">au dernier coup de fourchette.</span>
