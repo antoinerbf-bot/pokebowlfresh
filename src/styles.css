@@ -249,3 +249,24 @@
     line-height: 1.1;
   }
 }
+
+
+/* Viewport alignment: keep the homepage flush with the browser viewport. */
+@layer base {
+  html, body, #root {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+}
