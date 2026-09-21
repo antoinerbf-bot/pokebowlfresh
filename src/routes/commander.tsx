@@ -23,9 +23,11 @@ function CommanderPage() {
       <CartDrawer />
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Poke N Bowl" className="h-11 w-11 object-contain" />
-            <span className="font-black tracking-tight">Poke N Bowl</span>
+          <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="Poke N Bowl — Accueil">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
+              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain" />
+            </span>
+            <span className="truncate text-base font-black sm:text-lg">Poke N Bowl</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link to="/" className="hidden rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider sm:flex">
