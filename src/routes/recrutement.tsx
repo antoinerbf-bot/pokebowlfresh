@@ -31,8 +31,11 @@ function RecruitmentPage() {
           <div className="rounded-3xl border border-border bg-card p-7 shadow-soft"><BriefcaseBusiness className="h-6 w-6 text-coral" /><h2 className="mt-5 text-xl font-black">Candidature</h2><p className="mt-2 text-sm leading-relaxed text-muted-foreground">CV + quelques lignes sur toi pour commencer l’échange.</p></div>
         </div>
         <section className="mt-10 rounded-3xl border border-coral/20 bg-coral/5 p-8 md:p-10">
-          <h2 className="text-2xl font-black">E-mail recrutement</h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">Je n’ai pas trouvé d’adresse e-mail de recrutement publiquement vérifiable pour Poke N Bowl Visé. Je préfère ne pas en inventer une. Donne-moi l’adresse exacte et je branche immédiatement ici un bouton « Envoyer ma candidature » avec le vrai mail.</p>
+          <h2 className="text-2xl font-black">Envoyer ma candidature</h2>
+          <p className="mt-3 max-w-2xl text-muted-foreground">Envoie ton CV et quelques lignes sur toi directement à notre équipe.</p>
+          <a href="mailto:pokenball1@gmail.com?subject=Candidature%20—%20Poke%20N%20Bowl" className="mt-6 inline-flex rounded-full bg-coral px-6 py-3 font-black text-white shadow-lift transition hover:scale-105">
+            pokenball1@gmail.com
+          </a>
         </section>
       </main>
     </div>
