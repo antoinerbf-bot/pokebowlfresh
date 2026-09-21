@@ -12,14 +12,14 @@ function ContactPage() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-          <Link to="/" className="flex items-center gap-3"><img src={logo} alt="Poke N Bowl" className="h-10 w-10" /><span className="font-display text-lg font-black">Poke N Bowl</span></Link>
+          <Link to="/" className="flex items-center gap-3"><img src={logo} alt="Poke N Bowl" className="h-10 w-auto max-w-[150px] object-contain" /></Link>
           <Link to="/" className="inline-flex items-center gap-2 text-sm font-bold"><ArrowLeft className="h-4 w-4" /> Accueil</Link>
         </nav>
       </header>
       <main className="mx-auto max-w-6xl px-5 py-16 md:py-24">
         <div className="max-w-3xl">
           <p className="eyebrow text-coral">Contact</p>
-          <h1 className="mt-3 text-5xl font-black tracking-tight md:text-7xl">On se parle ?</h1>
+          <h1 className="mt-3 break-words text-5xl font-black leading-[.96] tracking-[-0.035em] md:text-7xl">On se parle ?</h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">Une question, une commande ou une demande particulière ? Retrouve-nous à Visé ou appelle directement l’équipe.</p>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
