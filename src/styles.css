@@ -220,3 +220,32 @@
 
 .hero-video { object-position: 50% 48%; transform: scale(1.015); filter: saturate(1.08) contrast(1.04); }
 @media (max-width: 767px) { .hero-video { object-position: 52% 42%; transform: scale(1.06); } }
+
+/* Typography safety: prevent clipped glyphs and improve long-word wrapping across all viewports. */
+@layer base {
+  h1, h2, h3, h4, h5, h6, p, a, button, span, label {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button, a {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@media (max-width: 767px) {
+  h1, h2, h3, h4 {
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+}
