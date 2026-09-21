@@ -265,7 +265,13 @@ function Index() {
             <div className="lg:col-span-6 xl:col-span-7 w-full relative z-10">
               <FadeIn delay={0.2} direction="left">
                 <div className="relative group">
-                  {/* Ambient glowing projector effect behind the video */}
+                  <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, -120]) }} className="pointer-events-none absolute -left-10 top-10 hidden lg:block z-20">
+                    <img src={bowlChicken} alt="" className="h-28 w-28 rounded-full object-cover border-8 border-background shadow-2xl rotate-[-10deg]" />
+                  </motion.div>
+                  <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 90]) }} className="pointer-events-none absolute -right-8 bottom-12 hidden md:block z-20">
+                    <img src={bowlScampi} alt="" className="h-24 w-24 rounded-full object-cover border-8 border-background shadow-2xl rotate-[12deg]" />
+                  </motion.div>
+                  {/* Ambient glowing projector effect behind the video */
                   <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-r from-coral/30 via-lime/25 to-primary/30 rounded-[3rem] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10" />
 
                   {/* Cinematic Video Container */}
@@ -514,6 +520,14 @@ function Index() {
           </FadeIn>
         </div>
       </ParallaxSection>
+
+      <section className="relative overflow-hidden bg-coral py-6 text-white">
+        <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }} className="flex w-[200%] whitespace-nowrap text-sm font-black uppercase tracking-[0.22em]">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span key={i} className="mx-8 inline-flex items-center gap-4"><BriefcaseBusiness className="h-4 w-4" /> On recrute · Rejoins Poke N Bowl</span>
+          ))}
+        </motion.div>
+      </section>
 
       {/* Infos */}
       <ParallaxSection speed={0.05} className="mx-auto max-w-6xl px-5 py-24">
