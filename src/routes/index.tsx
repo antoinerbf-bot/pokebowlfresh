@@ -204,14 +204,14 @@ function Index() {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <a
-                href="#carte"
+                href="/commander"
                 className="group inline-flex items-center gap-3 rounded-full bg-[#ff705f] px-7 py-4 text-sm font-black text-white shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition duration-300 hover:-translate-y-1"
               >
                 Composer mon bowl
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
               <a
-                href="#carte"
+                href="/commander"
                 className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-6 py-4 text-sm font-bold backdrop-blur-xl transition hover:bg-white/15"
               >
                 Voir la carte
@@ -466,7 +466,7 @@ function Index() {
       </footer>
 
       <div className="fixed inset-x-3 bottom-3 z-[70] md:hidden">
-        <a href="#carte" className="flex items-center justify-center gap-2 rounded-2xl bg-[#ff705f] px-5 py-4 text-sm font-black text-white shadow-2xl">
+        <a href="/commander" className="flex items-center justify-center gap-2 rounded-2xl bg-[#ff705f] px-5 py-4 text-sm font-black text-white shadow-2xl">
           Composer mon bowl <ArrowRight className="h-4 w-4" />
         </a>
       </div>
