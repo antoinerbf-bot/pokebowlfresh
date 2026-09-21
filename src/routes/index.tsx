@@ -87,14 +87,12 @@ function Index() {
 
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-8 sm:py-4 lg:px-12">
-          <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3" onClick={() => setMobileOpen(false)}>
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-[#071713]/80 p-1.5 shadow-[0_10px_30px_-10px_rgba(0,0,0,.7)] backdrop-blur-xl sm:h-14 sm:w-14 sm:p-2">
-              <img
-                src={logo}
-                alt="Poke N Bowl"
-                className="h-full w-full object-contain drop-shadow-xl"
-              />
-            </span>
+          <Link to="/" className="group flex min-w-0 items-center gap-3" onClick={() => setMobileOpen(false)}>
+            <img
+              src={logo}
+              alt="Poke N Bowl"
+              className="h-12 w-12 shrink-0 object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,.45)] transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-14"
+            />
             <div className="hidden min-w-0 text-white sm:block">
               <div className="text-lg font-black tracking-tight">Poke N Bowl</div>
               <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/60">
@@ -206,25 +204,32 @@ function Index() {
       <main>
         <section id="top" className="relative min-h-[700px] h-[100svh] max-h-[920px] overflow-hidden bg-[#071713] text-white">
           <div className="absolute inset-0 overflow-hidden bg-[#071713]">
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              src="/hero-video.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              style={{
-                transform: `translate3d(0, ${Math.min(scrollY * -0.08, 0)}px, 0) scale(1.04)`,
-              }}
+            <div
+              className="absolute left-1/2 top-[48%] h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-70 transition-transform duration-100"
+              style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.04, 0)}px), 0)` }}
             />
-            <div className="absolute inset-0 bg-[#071713]/62" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_48%,rgba(215,255,69,.18),transparent_22%),radial-gradient(circle_at_72%_58%,rgba(255,112,95,.16),transparent_28%),linear-gradient(90deg,#071713_4%,rgba(7,23,19,.78)_38%,rgba(7,23,19,.25)_72%,#071713_100%)]" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/35 via-transparent to-[#071713]" />
+            <div
+              className="absolute left-1/2 top-[48%] h-[315px] w-[315px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7ff45]/20 shadow-[0_0_120px_-30px_rgba(215,255,69,.8)]"
+              style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.025, 0)}px), 0)` }}
+            />
+            <div
+              className="absolute left-1/2 top-[48%] h-[235px] w-[235px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[16px] border-[#f7f4ec]/85 shadow-[0_0_80px_-20px_rgba(255,255,255,.7)] sm:h-[270px] sm:w-[270px]"
+              style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.02, 0)}px), 0)` }}
+            >
+              <div className="absolute inset-[22%] rounded-full bg-[#071713] shadow-[inset_0_0_55px_rgba(0,0,0,.9)]" />
+              <div className="absolute left-1/2 top-1/2 h-2.5 w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f7f4ec]/90 sm:h-3" />
+              <div className="absolute left-1/2 top-1/2 h-2.5 w-[125%] -translate-x-1/2 -translate-y-1/2 rotate-90 rounded-full bg-[#f7f4ec]/90 sm:h-3" />
+              <span className="absolute left-[14%] top-[27%] h-3 w-3 rounded-full bg-[#ff705f] shadow-[0_0_22px_#ff705f] sm:h-4 sm:w-4" />
+              <span className="absolute right-[17%] top-[31%] h-2.5 w-2.5 rounded-full bg-[#d7ff45] shadow-[0_0_18px_#d7ff45] sm:h-3 sm:w-3" />
+              <span className="absolute bottom-[23%] left-[23%] h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_16px_white] sm:h-3 sm:w-3" />
+              <span className="absolute bottom-[18%] right-[24%] h-4 w-4 rounded-full bg-[#ff705f] shadow-[0_0_24px_#ff705f] sm:h-5 sm:w-5" />
+            </div>
+            <div className="absolute left-1/2 top-[48%] h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite] rounded-full border border-dashed border-white/15 sm:h-[380px] sm:w-[380px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(215,255,69,.12),transparent_25%),radial-gradient(circle_at_50%_68%,rgba(255,112,95,.12),transparent_32%),linear-gradient(180deg,#071713_0%,#071713_45%,#0b1a16_100%)]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/25 via-transparent to-[#071713]/90" />
           </div>
 
-          <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-center px-5 pb-16 pt-24 sm:px-8 sm:pb-20 sm:pt-28 lg:px-12 lg:pb-16">
+          <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-center px-5 pb-24 pt-28 sm:px-8 sm:pb-20 sm:pt-28 lg:px-12 lg:pb-16">
             <div className="w-full">
               <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,.92fr)_minmax(0,1.08fr)] lg:gap-12">
                 <div className="relative z-20 min-w-0 max-w-[680px]">
@@ -233,7 +238,7 @@ function Index() {
                     <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em]">On recrute →</Link>
                   </div>
                   <p className="mb-3 text-[8px] font-black uppercase tracking-[.26em] text-[#d7ff45] sm:text-[9px] sm:tracking-[.32em]">Poke N Bowl · Visé</p>
-                  <h1 className="max-w-[680px] text-[clamp(2.8rem,11.5vw,4.8rem)] font-black leading-[.94] tracking-[-.025em] [font-stretch:normal] sm:text-7xl lg:text-[6.25rem] xl:text-[6.7rem]">
+                  <h1 className="max-w-[680px] text-[clamp(2.65rem,12.5vw,4.8rem)] font-black leading-[.96] tracking-[-.02em] [font-stretch:normal] sm:text-7xl lg:text-[6.25rem] xl:text-[6.7rem]">
                     <span className="block">Ton bowl.</span>
                     <span className="block text-[#d7ff45]">Tes règles.</span>
                   </h1>
@@ -277,7 +282,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 text-center">
+          <div className="absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 text-center sm:block">
             <div className="text-[8px] font-black uppercase tracking-[.35em] text-white/35">Découvre · compose · commande</div>
             <div className="mx-auto mt-2 h-7 w-px bg-gradient-to-b from-white/40 to-transparent" />
           </div>
