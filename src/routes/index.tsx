@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";\nimport * as React from "react";
+import { motion } from "framer-motion";
+import * as React from "react";
 import {
   ArrowRight,
   BriefcaseBusiness,
