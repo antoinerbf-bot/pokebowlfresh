@@ -226,15 +226,11 @@ function Index() {
       <main>
         <section id="top" className="relative min-h-[680px] h-[100svh] max-h-[900px] overflow-hidden bg-[#10251f] text-white">
           <div className="absolute inset-0 bg-[#10251f]" />
-          <img
-            src="/hero-poke.jpg"
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-black/25" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/35 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-black/20" />
+          <div className="absolute -right-24 top-24 h-72 w-72 rounded-full border-[18px] border-white/10 sm:-right-32 sm:top-20 sm:h-[30rem] sm:w-[30rem] sm:border-[24px]" />
+          <div className="absolute -right-8 top-40 h-44 w-44 rounded-full border-[10px] border-[#d7ff45]/20 sm:right-0 sm:top-36 sm:h-72 sm:w-72 sm:border-[14px]" />
+          <div className="absolute right-10 top-52 h-28 w-28 rounded-full bg-[#ff705f]/20 blur-2xl sm:right-20 sm:top-56 sm:h-44 sm:w-44" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#10251f] via-[#10251f]/90 to-[#10251f]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-[#10251f]/30" />
 
           <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-4 pb-24 pt-24 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
             <div className="w-full max-w-4xl">
@@ -252,7 +248,7 @@ function Index() {
                 </Link>
               </div>
 
-              <div className="relative h-[135px] sm:h-[225px] lg:h-[250px]">
+              <div className="relative h-[150px] sm:h-[225px] lg:h-[250px]">
                 {headlines.map((line, index) => (
                   <motion.h1
                     key={index}
@@ -263,7 +259,7 @@ function Index() {
                       filter: headline === index ? "blur(0px)" : "blur(5px)",
                     }}
                     transition={{ duration: 0.65, ease: "easeOut" }}
-                    className="absolute left-0 top-0 text-[3.55rem] font-black leading-[0.88] tracking-[-0.065em] sm:text-7xl lg:text-[7.5rem]"
+                    className="absolute left-0 top-0 max-w-full text-[3.15rem] font-black leading-[0.92] tracking-[-0.06em] sm:text-7xl lg:text-[7.5rem]"
                   >
                     {line}
                   </motion.h1>
