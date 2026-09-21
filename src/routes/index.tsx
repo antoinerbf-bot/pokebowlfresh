@@ -231,9 +231,9 @@ function Index() {
                     <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em]">On recrute →</Link>
                   </div>
                   <p className="mb-3 text-[8px] font-black uppercase tracking-[.26em] text-[#d7ff45] sm:text-[9px] sm:tracking-[.32em]">Poke N Bowl · Visé</p>
-                  <h1 className="max-w-[680px] text-[clamp(3.15rem,13vw,4.8rem)] font-black leading-[.9] tracking-[-.055em] sm:text-7xl lg:text-[6.6rem] xl:text-[7.1rem]">
-                    Ton bowl.<br />
-                    <span className="text-[#d7ff45]">Tes règles.</span>
+                  <h1 className="max-w-[680px] text-[clamp(3.15rem,13vw,4.8rem)] font-black leading-[.9] tracking-[-.035em] [font-stretch:normal] sm:text-7xl lg:text-[6.4rem] xl:text-[6.9rem]">
+                    Ton bowl.<br className="hidden sm:block" /><span className="sm:hidden"> </span>
+                    <span className="inline-block whitespace-nowrap pr-[0.08em] text-[#d7ff45]">Tes règles.</span>
                   </h1>
                   <p className="mt-5 max-w-[560px] text-[13px] leading-5 text-white/70 sm:mt-6 sm:text-base sm:leading-6">
                     Choisis ta recette. Personnalise-la. Et commande ton bowl sans détour.
@@ -290,7 +290,7 @@ function Index() {
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
                   {t("menu.eyebrow")}
                 </p>
-                <h2 className="mt-3 max-w-3xl text-[2.15rem] font-black leading-[.98] tracking-[-.045em] sm:text-6xl">
+                <h2 className="mt-3 max-w-3xl text-[2.15rem] font-black leading-[1.02] tracking-[-.025em] [font-stretch:normal] sm:text-6xl">
                   Choisis ton bowl.
                   <br />
                   <span className="text-[#7d8b83]">Puis rends-le unique.</span>
@@ -335,13 +335,13 @@ function Index() {
                     </span>
                   </div>
                   <div className="p-4 sm:p-5">
-                    <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-lg font-black tracking-tight sm:text-xl">{bowl.name}</h3>
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
+                    <div className="flex min-w-0 items-center justify-between gap-3">
+                      <h3 className="min-w-0 break-words text-[17px] font-black leading-tight tracking-[-0.015em] sm:text-xl">{bowl.name}</h3>
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:text-sm">{bowl.desc}</p>
+                    <p className="mt-2 line-clamp-2 text-[13px] leading-[1.4] tracking-normal text-[#758079] sm:text-sm">{bowl.desc}</p>
                     <div className="mt-4 text-[9px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
                       Personnaliser →
                     </div>
@@ -359,7 +359,7 @@ function Index() {
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#d7ff45]">
                   Le parcours
                 </p>
-                <h2 className="mt-3 text-[2.25rem] font-black leading-[.98] tracking-[-.045em] sm:text-6xl">
+                <h2 className="mt-3 text-[2.25rem] font-black leading-[1.02] tracking-[-.025em] [font-stretch:normal] sm:text-6xl">
                   Du premier clic
                   <br />
                   <span className="text-white/40">au dernier coup de fourchette.</span>
