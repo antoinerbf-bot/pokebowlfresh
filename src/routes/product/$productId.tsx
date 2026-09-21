@@ -63,15 +63,11 @@ function ProductPage() {
       {/* Header (simplified) */}
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-          <Link to="/" className="flex items-center gap-3 group">
-            <img 
-              src={logo} 
-              alt="Logo" 
-              className="h-10 w-auto max-w-[150px] object-contain group-hover:rotate-2 transition-transform duration-300 drop-shadow-md" 
-            />
-            <span className="font-display text-lg font-extrabold tracking-tight hidden sm:block">
-              Poke N Bowl
+          <Link to="/" className="flex min-w-0 items-center gap-2.5 group" aria-label="Poke N Bowl — Accueil">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5 transition-transform duration-300 group-hover:rotate-2">
+              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain drop-shadow-md" />
             </span>
+            <span className="truncate text-base font-black tracking-tight sm:text-lg">Poke N Bowl</span>
           </Link>
           
           <div className="flex items-center gap-4">
@@ -125,7 +121,7 @@ function ProductPage() {
           {/* Details & Toppings */}
           <div className="flex flex-col">
             <div className="flex justify-between items-start mb-2">
-              <h1 className="text-3xl font-extrabold">{product.name}</h1>
+              <h1 className="min-w-0 break-words text-3xl font-extrabold leading-tight">{product.name}</h1>
               <span className="text-2xl font-display font-bold text-coral">€ {product.price.toFixed(2)}</span>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-8">{product.desc}</p>
