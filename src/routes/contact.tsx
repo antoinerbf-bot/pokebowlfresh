@@ -24,7 +24,7 @@ function ContactPage() {
       <main className="mx-auto max-w-6xl px-5 py-16 md:py-24">
         <div className="max-w-3xl">
           <p className="eyebrow text-coral">Contact</p>
-          <h1 className="mt-3 break-words text-5xl font-black leading-[.96] tracking-[-0.035em] md:text-7xl">On se parle ?</h1>
+          <h1 className="mt-3 break-words text-5xl font-black leading-[1.08] tracking-[-0.02em] md:text-7xl">On se parle ?</h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">Une question, une commande ou une demande particulière ? Retrouve-nous à Visé ou appelle directement l’équipe.</p>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
