@@ -153,7 +153,7 @@ function Index() {
         </nav>
 
         {mobileOpen && (
-          <div className="mx-3 rounded-3xl border border-white/10 bg-[#10251f] p-3 shadow-2xl md:hidden">
+          <div className="mx-3 max-h-[calc(100vh-88px)] overflow-y-auto rounded-3xl border border-white/10 bg-[#10251f]/95 p-3 shadow-2xl backdrop-blur-xl md:hidden">
             <div className="grid gap-1">
               <a onClick={closeMobile} href="#carte" className="rounded-2xl px-4 py-3 text-sm font-black text-white">La carte</a>
               <a onClick={closeMobile} href="#composer" className="rounded-2xl px-4 py-3 text-sm font-black text-white">Composer</a>
@@ -272,9 +272,9 @@ function Index() {
                 <Link
                   to="/product/$productId"
                   params={{ productId: bowl.id }}
-                  className="group block overflow-hidden rounded-[24px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1"
+                  className="group block overflow-hidden rounded-[20px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1 sm:rounded-[24px]"
                 >
-                  <div className="relative aspect-[1.08] overflow-hidden">
+                  <div className="relative aspect-[1.12] overflow-hidden sm:aspect-[1.08]">
                     <img
                       src={bowl.image}
                       alt={bowl.name}
@@ -320,7 +320,7 @@ function Index() {
               </h2>
             </Reveal>
 
-            <div className="mt-9 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 ["01", "Choisis", "Sélectionne une recette."],
                 ["02", "Personnalise", "Ajoute jusqu’à 5 toppings."],
@@ -401,7 +401,7 @@ function Index() {
         </section>
 
         <section id="infos" className="scroll-mt-10 bg-[#ece9df] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-          <div className="mx-auto grid max-w-[1200px] gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
+          <div className="mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">Infos pratiques</p>
               <h2 className="mt-3 text-4xl font-black leading-[1.02] tracking-[-0.02em] sm:text-5xl lg:text-6xl">
@@ -410,7 +410,7 @@ function Index() {
                 <span className="text-[#7d8b83]">à Visé.</span>
               </h2>
 
-              <div className="mt-8 grid gap-3">
+              <div className="mt-6 grid gap-2.5 sm:mt-8 sm:gap-3">
                 <a href={MAPS_URL} target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-2xl bg-white p-4">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]">
                     <MapPin className="h-5 w-5" />
