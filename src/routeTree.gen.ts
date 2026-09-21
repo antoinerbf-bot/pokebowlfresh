@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as RecrutementRouteImport } from './routes/recrutement'
+import { Route as RecrutementRouteImport } from './routes/recrutement'\nimport { Route as CommanderRouteImport } from './routes/commander'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -56,10 +56,10 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/product/$productId' | '/contact' | '/recrutement'
+  fullPaths: '/' | '/product/$productId' | '/contact' | '/recrutement' | '/commander'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/product/$productId' | '/contact' | '/recrutement'
-  id: '__root__' | '/' | '/product/$productId' | '/contact' | '/recrutement'
+  to: '/' | '/product/$productId' | '/contact' | '/recrutement' | '/commander'
+  id: '__root__' | '/' | '/product/$productId' | '/contact' | '/recrutement' | '/commander'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
