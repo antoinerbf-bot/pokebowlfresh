@@ -26,7 +26,7 @@ export const bowls = [
     name: "Saumon wasabi",
     price: 11.00,
     image: heroPoke,
-    desc: "Saumon, avocat, salade d'algues, mangue, maïs, édamamé, mayo wasabi, sésame mixte, nachos.",
+    desc: "Saumon, avocat, salade d'algues, mangue, maïs, edamame, mayo wasabi, sésame mixte, nachos.",
     tag: "Signature",
   },
   {
@@ -34,7 +34,7 @@ export const bowls = [
     name: "Scampis royaux",
     price: 10.00,
     image: bowlScampi,
-    desc: "Scampis, guacamole, édamamé, tomates, concombre, poivrons, spicy mayo, jalapeños, flocons de chili, nachos.",
+    desc: "Scampis, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños, flocons de chili, nachos.",
     tag: "Relevé",
   },
   {
@@ -66,7 +66,7 @@ export const bowls = [
     name: "Vegan Tofu",
     price: 9.50,
     image: bowlScampi, // Fallback image
-    desc: "Tofu frit, édamamé, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
+    desc: "Tofu frit, edamame, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
     tag: "Vegan",
   },
   {
