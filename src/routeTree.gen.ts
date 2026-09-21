@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as RecrutementRouteImport } from './routes/recrutement'import { Route as CommanderRouteImport } from './routes/commander'
+import { Route as RecrutementRouteImport } from './routes/recrutement'\nimport { Route as CommanderRouteImport } from './routes/commander'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
