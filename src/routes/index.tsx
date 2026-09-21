@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -70,6 +70,14 @@ function Index() {
   const { t, language, setLanguage } = useTranslation();
   const { items, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -195,21 +203,23 @@ function Index() {
 
       <main>
         <section id="top" className="relative min-h-[760px] h-[100svh] max-h-[980px] overflow-hidden bg-[#071713] text-white">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_48%,rgba(215,255,69,.14),transparent_22%),radial-gradient(circle_at_72%_58%,rgba(255,112,95,.16),transparent_24%),linear-gradient(135deg,#071713_0%,#10251f_55%,#071713_100%)]" />
-
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute left-1/2 top-[51%] h-[min(70vw,680px)] w-[min(70vw,680px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-80" />
-            <div className="absolute left-1/2 top-[51%] h-[min(56vw,540px)] w-[min(56vw,540px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[18px] border-[#d7ff45]/15 animate-[spin_28s_linear_infinite]" />
-            <div className="absolute left-1/2 top-[51%] h-[min(40vw,390px)] w-[min(40vw,390px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[10px] border-white/10" />
-
-            <div className="absolute left-1/2 top-[51%] h-[min(29vw,280px)] w-[min(29vw,280px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#101c18] shadow-[0_0_100px_rgba(215,255,69,.14)]" />
-            <div className="absolute left-1/2 top-[48%] h-24 w-24 -translate-x-1/2 rounded-full bg-[#d7ff45]/20 blur-3xl sm:h-40 sm:w-40" />
-
-            <div className="absolute left-[calc(50%-125px)] top-[35%] h-16 w-16 rounded-full bg-[#d7ff45]/80 blur-[1px] shadow-[0_0_35px_rgba(215,255,69,.45)] animate-[float_5s_ease-in-out_infinite] sm:left-[calc(50%-190px)] sm:h-24 sm:w-24" />
-            <div className="absolute left-[calc(50%+105px)] top-[39%] h-12 w-12 rounded-full bg-[#ff705f]/80 blur-[1px] shadow-[0_0_30px_rgba(255,112,95,.45)] animate-[float_6s_ease-in-out_infinite_reverse] sm:left-[calc(50%+160px)] sm:h-20 sm:w-20" />
-            <div className="absolute left-[calc(50%-155px)] top-[63%] h-10 w-10 rounded-full bg-white/25 animate-[float_4s_ease-in-out_infinite] sm:left-[calc(50%-240px)] sm:h-14 sm:w-14" />
-
-            <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/40 via-transparent to-[#071713]" />
+          <div className="absolute inset-0 overflow-hidden bg-[#071713]">
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src="/hero-video.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              style={{
+                transform: `translate3d(0, ${Math.min(scrollY * -0.12, 0)}px, 0) scale(1.08)`,
+              }}
+            />
+            <div className="absolute inset-0 bg-[#071713]/55" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_48%,rgba(215,255,69,.18),transparent_22%),radial-gradient(circle_at_72%_58%,rgba(255,112,95,.16),transparent_28%),linear-gradient(90deg,#071713_4%,rgba(7,23,19,.78)_38%,rgba(7,23,19,.25)_72%,#071713_100%)]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/35 via-transparent to-[#071713]" />
           </div>
 
           <header className="relative z-20">
@@ -269,18 +279,15 @@ function Index() {
                   </div>
                 </div>
 
-                <div className="relative hidden h-[520px] lg:block">
-                  <div className="absolute inset-0" style={{ transform: "translateY(calc(var(--scroll-y, 0px) * -0.08))" }}>
-                    <div className="absolute left-1/2 top-1/2 h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[22px] border-white/10" />
-                    <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[14px] border-[#d7ff45]/30" />
-                    <div className="absolute left-1/2 top-1/2 h-[215px] w-[215px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#152c25] shadow-[0_0_90px_rgba(215,255,69,.18)]" />
-                    <div className="absolute left-1/2 top-[34%] h-20 w-20 -translate-x-1/2 rounded-full bg-[#ff705f] shadow-[0_0_45px_rgba(255,112,95,.55)]" />
-                    <div className="absolute left-[24%] top-[30%] h-14 w-14 rounded-full bg-[#d7ff45] shadow-[0_0_35px_rgba(215,255,69,.5)]" />
-                    <div className="absolute right-[23%] top-[46%] h-12 w-12 rounded-full bg-white/70" />
-                    <div className="absolute left-[28%] bottom-[25%] h-10 w-10 rounded-full bg-[#ff705f]/70" />
-                    <div className="absolute right-[28%] bottom-[20%] h-16 w-16 rounded-full bg-[#d7ff45]/70" />
+                <div
+                  className="relative hidden h-[520px] lg:block"
+                  style={{ transform: `translateY(${Math.min(scrollY * -0.06, 0)}px)` }}
+                >
+                  <div className="absolute inset-0 rounded-[40px] border border-white/10 bg-black/10 backdrop-blur-[1px]" />
+                  <div className="absolute inset-x-10 top-1/2 h-px bg-gradient-to-r from-transparent via-[#d7ff45]/40 to-transparent" />
+                  <div className="absolute bottom-5 right-4 rounded-full border border-white/10 bg-black/25 px-4 py-2 text-[8px] font-black uppercase tracking-[.22em] text-white/45 backdrop-blur">
+                    Cinématique · Fresh food · Visé
                   </div>
-                  <div className="absolute bottom-5 right-4 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[8px] font-black uppercase tracking-[.22em] text-white/45 backdrop-blur">Fresh food · Visé</div>
                 </div>
               </div>
             </div>
