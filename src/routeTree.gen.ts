@@ -44,11 +44,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/product/$productId': typeof ProductProductIdRoute
+  '/contact': typeof ContactRoute
+  '/recrutement': typeof RecrutementRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/product/$productId': typeof ProductProductIdRoute
+  '/contact': typeof ContactRoute
+  '/recrutement': typeof RecrutementRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
