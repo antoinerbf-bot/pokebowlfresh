@@ -31,14 +31,14 @@ const MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 const PHONE = "+32491281456";
 
 // Advanced Parallax Wrapper using Framer Motion
-const ParallaxSection = ({ children, speed = 0.5, className = "" }: { children: React.ReactNode, speed?: number, className?: string }) => {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 3000], [0, 3000 * speed]);
+const ParallaxSection = ({ children, speed = 0.12, className = "" }: { children: React.ReactNode, speed?: number, className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [70 * speed / 0.12, -70 * speed / 0.12]);
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      <motion.div style={{ y }} className="absolute inset-0 w-full h-full -z-10 pointer-events-none" />
-      {children}
+    <div ref={ref} className={`relative overflow-hidden ${className}`}>
+      <motion.div style={{ y }} className="relative will-change-transform">{children}</motion.div>
     </div>
   );
 };
@@ -148,6 +148,8 @@ function Index() {
             <a href="#infos" className="transition-colors hover:text-primary">
               {t("nav.info")}
             </a>
+            <Link to="/contact" className="transition-colors hover:text-primary">Contact</Link>
+            <Link to="/recrutement" className="transition-colors hover:text-primary">Recrutement</Link>
           </div>
           
           <div className="flex items-center gap-4">
