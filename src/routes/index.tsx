@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
@@ -80,6 +80,9 @@ function Index() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { scrollYProgress } = useScroll();
+  const [heroMuted, setHeroMuted] = useState(true);
+  const [heroLine, setHeroLine] = useState(0);
+  useEffect(() => { const id = window.setInterval(() => setHeroLine(v => (v + 1) % 3), 3200); return () => window.clearInterval(id); }, []);
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   const directAddToCart = (item: any) => {
@@ -97,149 +100,70 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       <CartDrawer />
       
-      {/* Nav */}
-      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3">
-          <a href="#top" className="flex items-center gap-3.5">
-            <motion.img 
-              whileHover={{ rotate: 12, scale: 1.1 }}
-              src={logo} 
-              alt="Logo Poke N Bowl" 
-              className="h-14 w-14 shrink-0 object-contain drop-shadow-lg" 
-            />
-            <span className="font-display text-lg font-extrabold tracking-tight hidden sm:block leading-none">Poke N Bowl<span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.22em] text-muted-foreground">Visé · Fresh bowls</span></span>
+      {/* Navigation — marque + accès rapides */}
+      <header className="absolute left-0 right-0 top-0 z-50 border-b border-white/15 bg-black/10 text-white backdrop-blur-md">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
+          <a href="#top" className="flex items-center gap-3 rounded-full pr-3 transition-transform hover:scale-[1.02]">
+            <img src={logo} alt="Poke N Bowl" className="h-12 w-12 shrink-0 object-contain drop-shadow-[0_4px_18px_rgba(0,0,0,.35)] sm:h-14 sm:w-14" />
+            <div className="hidden sm:block leading-none"><div className="font-display text-xl font-black tracking-tight">Poke N Bowl</div><div className="mt-1 text-[9px] font-bold uppercase tracking-[0.22em] text-white/65">Visé · Fresh bowls</div></div>
           </a>
-          
-          <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-            <a href="#carte" className="transition-colors hover:text-primary">
-              {t("nav.menu")}
-            </a>
-            <a href="#bowl" className="transition-colors hover:text-primary">
-              {t("nav.create")}
-            </a>
-            <a href="#infos" className="transition-colors hover:text-primary">
-              {t("nav.info")}
-            </a>
-            <Link to="/contact" className="transition-colors hover:text-primary">Contact</Link>
-            <Link to="/recrutement" className="transition-colors hover:text-primary">Recrutement</Link>
+          <div className="hidden items-center gap-7 text-xs font-bold uppercase tracking-[0.14em] md:flex">
+            <a href="#carte" className="hover:text-lime transition-colors">La carte</a>
+            <a href="#bowl" className="hover:text-lime transition-colors">Composer</a>
+            <a href="#infos" className="hover:text-lime transition-colors">Infos</a>
+            <Link to="/contact" className="hover:text-lime transition-colors">Contact</Link>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 bg-secondary rounded-full p-1">
-              {(["fr", "en", "nl"] as const).map(lang => (
-                <button
-                  key={lang}
-                  onClick={() => setLanguage(lang)}
-                  className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase transition-colors ${language === lang ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-                >
-                  {lang}
-                </button>
-              ))}
-            </div>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsCartOpen(true)}
-              className="relative p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              {cartItemsCount > 0 && (
-                <motion.span 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-1 -right-1 bg-coral text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center"
-                >
-                  {cartItemsCount}
-                </motion.span>
-              )}
-            </motion.button>
+          <div className="flex items-center gap-2">
+            <Link to="/recrutement" className="group relative hidden items-center gap-2 overflow-hidden rounded-full bg-coral px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.15em] shadow-[0_12px_35px_-12px_rgba(255,93,93,.9)] sm:flex">
+              <span className="absolute inset-0 animate-pulse bg-white/10" /><span className="relative h-2 w-2 rounded-full bg-white shadow-[0_0_0_5px_rgba(255,255,255,.15)]" /> <span className="relative">On recrute</span><ArrowRight className="relative h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <div className="hidden items-center gap-1 rounded-full bg-black/25 p-1 backdrop-blur md:flex">{(["fr","en","nl"] as const).map(lang => <button key={lang} onClick={() => setLanguage(lang)} className={`rounded-full px-2 py-1 text-[9px] font-bold uppercase ${language===lang?"bg-white text-black":"text-white/65"}`}>{lang}</button>)}</div>
+            <motion.button whileTap={{scale:.95}} onClick={() => setIsCartOpen(true)} className="relative rounded-full bg-white/15 p-2.5 backdrop-blur hover:bg-white/25"><ShoppingCart className="h-4 w-4" />{cartItemsCount>0&&<span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[9px] font-bold">{cartItemsCount}</span>}</motion.button>
           </div>
         </nav>
       </header>
 
       {/* Hero — composition marketing immersive, sans éléments superposés */}
-      <section id="top" className="relative min-h-[calc(100svh-81px)] overflow-hidden bg-[#f7f3e9] text-[#17342d]">
-        <div className="pointer-events-none absolute -right-32 -top-40 h-[560px] w-[560px] rounded-full bg-lime/25 blur-[110px]" />
-        <div className="pointer-events-none absolute -left-40 bottom-[-260px] h-[620px] w-[620px] rounded-full bg-coral/15 blur-[120px]" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.045] bg-[radial-gradient(circle_at_1px_1px,currentColor_1px,transparent_1px)] [background-size:26px_26px]" />
+      <section id="top" className="relative min-h-[calc(100svh-81px)] overflow-hidden bg-[#f7f3e9] text-[      {/* Hero — film food cinématique + parcours conversion */}
+      <section id="top" className="relative h-[100svh] min-h-[680px] overflow-hidden bg-[#10251f] text-white">
+        <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted={heroMuted} loop playsInline preload="auto" poster="/hero-video-poster.jpg">
+          <source src="/hero-video.webm" type="video/webm" /><source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/35" /><div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/25" /><div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-black/30" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_48%,rgba(180,255,55,.18),transparent_32%)]" />
 
-        <div className="relative mx-auto flex min-h-[calc(100svh-81px)] max-w-7xl items-center px-5 py-8 sm:px-6 lg:px-8">
-          <div className="grid w-full items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
-            <div className="relative z-10 max-w-xl text-center lg:text-left">
-              <FadeIn delay={0.03}>
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#17342d]/10 bg-white/70 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] shadow-sm backdrop-blur-md">
-                  <span className="h-2 w-2 rounded-full bg-lime shadow-[0_0_0_5px_rgba(173,255,47,.16)]" /> Fresh · fait minute · Visé
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.1}>
-                <h1 className="text-5xl font-black leading-[0.9] tracking-[-0.055em] sm:text-6xl lg:text-[5.8rem]">
-                  Ton bowl.<br />
-                  <span className="text-coral">Ton choix.</span><br />
-                  <span className="text-lime">Ton moment.</span>
-                </h1>
-              </FadeIn>
-              <FadeIn delay={0.18}>
-                <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-[#17342d]/70 sm:text-lg lg:mx-0">
-                  Des bowls généreux, frais et préparés à la minute. Choisis ton bowl, compose-le à ta façon et commande en quelques clics.
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.25}>
-                <div className="mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
-                  <motion.a whileHover={{ y: -3, scale: 1.02 }} whileTap={{ scale: 0.98 }} href={ORDER_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-coral px-7 py-4 text-sm font-black text-white shadow-[0_18px_45px_-18px_rgba(255,93,93,.8)]">
-                    Commander mon bowl <ArrowRight className="h-4 w-4" />
-                  </motion.a>
-                  <a href="#carte" className="inline-flex items-center rounded-full border border-[#17342d]/15 bg-white/70 px-6 py-4 text-sm font-bold backdrop-blur-md hover:bg-white transition-colors">Découvrir la carte</a>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.32}>
-                <div className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-[0.15em] text-[#17342d]/55 lg:justify-start">
-                  <span>À partir de 10 €</span><span className="h-1 w-1 rounded-full bg-coral" /><span>Préparé minute</span><span className="h-1 w-1 rounded-full bg-coral" /><span>À emporter</span>
-                </div>
-              </FadeIn>
+        <button onClick={() => setHeroMuted(v=>!v)} aria-label={heroMuted ? "Activer le son" : "Couper le son"} className="absolute bottom-7 right-5 z-30 flex items-center gap-2 rounded-full border border-white/20 bg-black/25 px-3 py-2 text-[9px] font-bold uppercase tracking-wider text-white/80 backdrop-blur-md hover:bg-black/40">
+          {heroMuted ? <VolumeX className="h-3.5 w-3.5"/> : <Volume2 className="h-3.5 w-3.5"/>} {heroMuted ? "Son coupé" : "Son actif"}
+        </button>
+
+        <div className="relative z-20 mx-auto flex h-full max-w-7xl items-center px-5 pt-24 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.7}} className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[10px] font-black uppercase tracking-[.2em] text-white/85 backdrop-blur-md"><span className="h-2 w-2 rounded-full bg-lime shadow-[0_0_0_5px_rgba(180,255,55,.15)]"/> Fresh. Généreux. Préparé minute.</motion.div>
+            <div className="relative min-h-[190px] sm:min-h-[230px]">
+              {[
+                <>Le bowl qui<br/><span className="text-lime">te ressemble.</span></>,
+                <>Du frais.<br/><span className="text-coral">Du vrai.</span></>,
+                <>Compose.<br/><span className="text-lime">Savoure.</span></>
+              ].map((line,i)=><motion.h1 key={i} initial={{opacity:0,y:24}} animate={{opacity:heroLine===i?1:0,y:heroLine===i?0:-18}} transition={{duration:.65,ease:"easeOut"}} className="absolute left-0 top-0 text-5xl font-black leading-[.9] tracking-[-.055em] sm:text-7xl lg:text-[6.5rem]">{line}</motion.h1>)}
             </div>
-
-            <div className="relative z-10 min-h-[470px] lg:min-h-[620px]">
-              <FadeIn delay={0.12} direction="left" className="h-full">
-                <div className="relative mx-auto flex h-full max-w-[650px] flex-col justify-center">
-                  <div className="absolute left-1/2 top-[44%] h-[330px] w-[330px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime/20 blur-3xl sm:h-[460px] sm:w-[460px]" />
-                  <motion.div animate={{ y: [0,-8,0], rotate: [0,0.8,0,-0.8,0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="relative mx-auto w-[min(72vw,390px)] sm:w-[430px]">
-                    <div className="absolute -inset-5 rounded-[48%] border border-[#17342d]/10 bg-white/30 shadow-2xl backdrop-blur-sm" />
-                    <div className="relative aspect-square overflow-hidden rounded-[46%] border-[12px] border-white bg-white shadow-[0_35px_80px_-30px_rgba(23,52,45,.55)]">
-                      <img src={bowlChicken} alt="Poké bowl Poke N Bowl" className="h-full w-full object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/15" />
-                    </div>
-                    <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#17342d] px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.16em] text-white shadow-xl">Sweet Chicken · 10 €</div>
-                  </motion.div>
-
-                  <div className="relative mt-12 grid grid-cols-4 gap-2 sm:gap-3">
-                    {[["01","Base","Riz"],["02","Protéine","Poulet"],["03","Fraîcheur","Avocat"],["04","Sauce","Teriyaki"]].map(([n,title,sub], i) => (
-                      <motion.div key={n} initial={{ opacity:0, y:18 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.45 + i*0.12, duration:0.55 }} className="rounded-2xl border border-[#17342d]/10 bg-white/80 p-2.5 text-center shadow-sm backdrop-blur-md sm:p-3">
-                        <div className="mx-auto mb-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#17342d] text-[8px] font-black text-white">{n}</div>
-                        <div className="text-[9px] font-black uppercase tracking-wider sm:text-[10px]">{title}</div>
-                        <div className="mt-0.5 text-[9px] text-[#17342d]/55 sm:text-[10px]">{sub}</div>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  <Link to="/recrutement" className="group mt-3 flex items-center justify-between rounded-2xl border-2 border-coral/20 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-md transition-all hover:-translate-y-1 hover:border-coral/50 hover:shadow-xl">
-                    <div className="flex items-center gap-3">
-                      <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-coral text-white"><span className="absolute inset-0 animate-ping rounded-xl bg-coral/30" /><BriefcaseBusiness className="relative h-4 w-4" /></span>
-                      <div><div className="text-[10px] font-black uppercase tracking-[0.16em] text-coral">On recrute</div><div className="text-xs font-semibold text-[#17342d]/65">Rejoins l’équipe Poke N Bowl</div></div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-coral transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </div>
-              </FadeIn>
-            </div>
+            <motion.p initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} transition={{delay:.25,duration:.7}} className="mt-4 max-w-xl text-sm leading-relaxed text-white/78 sm:text-base">Poké bowls, crousty chicken et desserts maison à Visé. Choisis ton bowl, personnalise-le et passe commande.</motion.p>
+            <motion.div initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} transition={{delay:.38,duration:.7}} className="mt-7 flex flex-wrap items-center gap-3">
+              <a href="#carte" className="inline-flex items-center gap-2 rounded-full bg-coral px-7 py-4 text-sm font-black text-white shadow-[0_20px_55px_-18px_rgba(255,93,93,.9)] hover:-translate-y-1 transition-transform">Composer son bowl <ArrowRight className="h-4 w-4"/></a>
+              <a href="#carte" className="rounded-full border border-white/25 bg-white/10 px-6 py-4 text-sm font-bold text-white backdrop-blur-md hover:bg-white/15">Voir tous les bowls</a>
+            </motion.div>
+            <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[9px] font-black uppercase tracking-[.18em] text-white/55"><span>À partir de 10 €</span><span>Visé</span><span>À emporter</span></div>
           </div>
         </div>
-        <div className="pointer-events-none absolute bottom-3 left-1/2 hidden -translate-x-1/2 text-[9px] font-black uppercase tracking-[0.28em] text-[#17342d]/35 md:block">Faites défiler ↓</div>
+
+        <Link to="/recrutement" className="group absolute right-5 top-24 z-30 w-[205px] sm:right-8 sm:top-28 sm:w-[230px]">
+          <div className="relative overflow-hidden rounded-2xl border border-white/25 bg-[#17342d]/85 p-3 shadow-[0_20px_55px_-18px_rgba(0,0,0,.8)] backdrop-blur-xl transition-transform group-hover:-translate-y-1">
+            <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-coral/25 blur-2xl"/><div className="flex items-center gap-3"><span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-coral"><span className="absolute inset-0 animate-ping rounded-xl bg-coral/30"/><BriefcaseBusiness className="relative h-4 w-4"/></span><div><div className="text-[10px] font-black uppercase tracking-[.18em] text-coral">On recrute</div><div className="mt-0.5 text-[11px] font-semibold text-white/75">Ta prochaine aventure ?</div></div><ArrowRight className="ml-auto h-4 w-4 transition-transform group-hover:translate-x-1"/></div>
+          </div>
+        </Link>
+        <div className="absolute bottom-6 left-1/2 z-20 hidden -translate-x-1/2 text-center md:block"><div className="text-[9px] font-black uppercase tracking-[.3em] text-white/45">Découvre · compose · commande</div><div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-white/50 to-transparent"/></div>
       </section>
-      {/* Bandeau avec défilement continu */}
-      <div className="border-y border-border bg-secondary overflow-hidden">
-        <motion.div 
-          animate={{ x: ["0%", "-50%"] }}
+
+
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           className="flex whitespace-nowrap gap-x-12 px-5 py-4 text-xs font-semibold text-secondary-foreground uppercase tracking-widest w-[200%]"
         >
