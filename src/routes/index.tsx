@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
-import heroPoke from "@/assets/hero-poke.jpg";
 import bowlChicken from "@/assets/bowl-chicken.jpg";
 import bowlScampi from "@/assets/bowl-scampi.jpg";
 
@@ -81,33 +80,6 @@ function Index() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { scrollYProgress } = useScroll();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = true;
-      videoRef.current.playbackRate = 0.52;
-      videoRef.current.play().catch(() => {});
-    }
-  }, []);
-
-  const toggleSound = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (videoRef.current) {
-      const nextMuted = !isMuted;
-      videoRef.current.muted = nextMuted;
-      setIsMuted(nextMuted);
-      if (videoRef.current.paused) {
-        videoRef.current.play().catch(() => {});
-      }
-    }
-  };
-  
-  // Parallax for the hero video
-  const videoY = useTransform(scrollYProgress, [0, 1], [0, 300]);
-
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   const directAddToCart = (item: any) => {
@@ -191,169 +163,37 @@ function Index() {
       {/* Recruitment flash */}
       <Link to="/recrutement" className="fixed right-4 top-24 z-[60] hidden sm:flex items-center gap-2 rounded-full bg-coral px-4 py-2 text-[11px] font-black uppercase tracking-widest text-white shadow-lift hover:scale-105 transition-transform"><BriefcaseBusiness className="h-3.5 w-3.5" /> On recrute</Link>
 
-      {/* Cinematic Hero */}
-      <section id="top" className="relative overflow-hidden surface-hero text-deep-foreground pt-10 pb-20 md:pt-16 md:pb-28">
-        {/* Ambient glow lights */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[600px] w-[600px] rounded-full bg-lime/15 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-20 -left-20 h-[600px] w-[600px] rounded-full bg-coral/15 blur-[120px]" />
-        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[800px] rounded-full bg-primary/10 blur-[140px]" />
-
-        <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            
-            {/* Left Col: Text Content */}
-            <div className="lg:col-span-6 xl:col-span-5 text-center lg:text-left z-10">
-              <FadeIn delay={0.1}>
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-lime/15 border border-lime/30 text-lime text-xs font-bold tracking-wide uppercase mb-4 shadow-sm">
-                  <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-                  <span>{t("hero.subtitle")}</span>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.2}>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight">
-                  {t("hero.title1")}
-                  <span className="block bg-gradient-to-r from-coral to-amber-400 bg-clip-text text-transparent mt-2">
-                    {t("hero.title2")}
-                  </span>
-                </h1>
-              </FadeIn>
-              <FadeIn delay={0.3}>
-                <p className="mt-5 text-base sm:text-lg leading-relaxed text-deep-foreground/80 max-w-lg mx-auto lg:mx-0">
-                  {t("hero.desc")}
-                </p>
-              </FadeIn>
-              
-              <FadeIn delay={0.4} className="mt-8 flex flex-wrap justify-center lg:justify-start items-center gap-4">
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href={ORDER_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-full bg-coral px-8 py-4 text-sm sm:text-base font-bold text-coral-foreground shadow-lift flex items-center gap-2 hover:bg-coral/90 transition-all"
-                >
-                  {t("hero.compose")}
-                  <span className="text-lg leading-none">→</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="#carte"
-                  className="rounded-full border-2 border-deep-foreground/20 bg-background/60 backdrop-blur-md px-7 py-3.5 text-sm sm:text-base font-semibold transition-all hover:bg-background/90 hover:border-deep-foreground/40 shadow-sm"
-                >
-                  Voir les bowls
-                </motion.a>
-              </FadeIn>
-              
-              <FadeIn delay={0.5}>
-                <dl className="mt-10 grid grid-cols-3 gap-3 sm:gap-4 border-t border-deep-foreground/15 pt-6 max-w-md mx-auto lg:mx-0 text-left">
-                  <div className="bg-background/40 backdrop-blur-sm p-3 rounded-2xl border border-white/5">
-                    <dt className="text-[10px] sm:text-xs text-deep-foreground/70 uppercase tracking-wider font-bold mb-0.5">{t("hero.rating")}</dt>
-                    <dd className="font-display text-xl sm:text-2xl font-black text-lime">4.5<span className="text-xs text-deep-foreground/50 font-normal">/5</span></dd>
-                  </div>
-                  <div className="bg-background/40 backdrop-blur-sm p-3 rounded-2xl border border-white/5">
-                    <dt className="text-[10px] sm:text-xs text-deep-foreground/70 uppercase tracking-wider font-bold mb-0.5">{t("hero.price")}</dt>
-                    <dd className="font-display text-xl sm:text-2xl font-black text-lime">10 €</dd>
-                  </div>
-                  <div className="bg-background/40 backdrop-blur-sm p-3 rounded-2xl border border-white/5">
-                    <dt className="text-[10px] sm:text-xs text-deep-foreground/70 uppercase tracking-wider font-bold mb-0.5">{t("hero.time")}</dt>
-                    <dd className="font-display text-xl sm:text-2xl font-black text-lime">10<span className="text-xs text-deep-foreground/50 font-normal">min</span></dd>
-                  </div>
-                </dl>
+      {/* Immersive hero — bowl assembly */}
+      <section id="top" className="relative min-h-[calc(100svh-73px)] overflow-hidden surface-hero text-deep-foreground">
+        <div className="pointer-events-none absolute -right-40 -top-32 h-[620px] w-[620px] rounded-full bg-lime/20 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-48 -left-32 h-[650px] w-[650px] rounded-full bg-coral/20 blur-[130px]" />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[radial-gradient(circle_at_20%_20%,currentColor_1px,transparent_1px)] [background-size:28px_28px]" />
+        <div className="relative mx-auto flex min-h-[calc(100svh-73px)] max-w-7xl items-center px-5 py-8 sm:px-6 lg:px-8 lg:py-10">
+          <div className="grid w-full items-center gap-8 lg:grid-cols-12 lg:gap-10">
+            <div className="z-20 text-center lg:col-span-5 lg:text-left">
+              <FadeIn delay={0.05}><div className="mb-4 inline-flex items-center gap-2 rounded-full border border-lime/40 bg-lime/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.16em] text-lime shadow-sm"><Sparkles className="h-3.5 w-3.5 animate-pulse" /> {t("hero.subtitle")}</div></FadeIn>
+              <FadeIn delay={0.12}><h1 className="text-4xl font-black leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-7xl">{t("hero.title1")}<span className="mt-2 block bg-gradient-to-r from-coral via-amber-400 to-lime bg-clip-text text-transparent">{t("hero.title2")}</span></h1></FadeIn>
+              <FadeIn delay={0.2}><p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-deep-foreground/75 sm:text-lg lg:mx-0">{t("hero.desc")}</p></FadeIn>
+              <FadeIn delay={0.28}><div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start"><motion.a whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }} href={ORDER_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-coral px-7 py-4 text-sm font-black text-coral-foreground shadow-lift">{t("hero.compose")} <ArrowRight className="h-4 w-4" /></motion.a><motion.a whileHover={{ scale: 1.04 }} href="#carte" className="rounded-full border-2 border-deep-foreground/15 bg-background/55 px-6 py-3.5 text-sm font-bold backdrop-blur-md">Voir les bowls</motion.a></div></FadeIn>
+              <FadeIn delay={0.36}><div className="mt-7 grid max-w-md grid-cols-3 gap-2 text-left lg:mt-9">{[["4.5","Avis"],["10 €","À partir de"],["10","min"]].map(([value,label]) => (<div key={label} className="rounded-2xl border border-white/10 bg-background/45 p-3 backdrop-blur-md"><div className="font-display text-xl font-black text-lime">{value}{label === "min" && <span className="text-xs font-normal text-deep-foreground/50"> min</span>}</div><div className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-deep-foreground/55">{label}</div></div>))}</div></FadeIn>
+            </div>
+            <div className="relative z-10 flex min-h-[420px] items-center justify-center lg:col-span-7 lg:min-h-[620px]">
+              <FadeIn delay={0.18} direction="left" className="relative h-full w-full">
+                <div className="absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime/20 blur-3xl sm:h-[500px] sm:w-[500px]" />
+                <motion.div animate={{ rotate: [0, 1.5, 0, -1.5, 0], y: [0, -7, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+                  <div className="relative h-[245px] w-[245px] overflow-hidden rounded-[46%] border-[10px] border-background bg-background shadow-[0_35px_80px_-20px_rgba(0,0,0,.45)] sm:h-[350px] sm:w-[350px]"><img src={bowlChicken} alt="Poké bowl Poke N Bowl" className="h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/10" /></div>
+                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/30 bg-background/90 px-5 py-2 text-center text-xs font-black shadow-xl backdrop-blur-xl"><span className="text-coral">TON BOWL.</span> À TOI DE LE COMPOSER.</div>
+                </motion.div>
+                {[{src:bowlScampi,label:"PROTÉINE",x:"-38%",y:"-28%",delay:0.4},{src:bowlChicken,label:"FRAÎCHEUR",x:"34%",y:"-26%",delay:0.55},{src:bowlScampi,label:"SAUCE",x:"38%",y:"34%",delay:0.7},{src:bowlChicken,label:"TOPPINGS",x:"-40%",y:"35%",delay:0.85}].map((item,i)=>(<motion.div key={item.label} initial={{opacity:0,scale:.5}} animate={{opacity:1,scale:1}} transition={{delay:item.delay,duration:.7,type:"spring",stiffness:150}} className="absolute left-1/2 top-1/2 z-30" style={{x:item.x,y:item.y}}><motion.div animate={{y:[0,-10,0],rotate:[i%2?3:-3,i%2?-3:3,i%2?3:-3]}} transition={{duration:4+i*.5,repeat:Infinity,ease:"easeInOut"}} className="flex items-center gap-2 rounded-full border-4 border-background bg-background/95 p-1.5 pr-3 shadow-2xl backdrop-blur-xl"><img src={item.src} alt="" className="h-12 w-12 rounded-full object-cover sm:h-16 sm:w-16" /><span className="text-[9px] font-black uppercase tracking-widest sm:text-[10px]">{item.label}</span></motion.div></motion.div>))}
+                <motion.div animate={{rotate:360}} transition={{duration:30,repeat:Infinity,ease:"linear"}} className="absolute left-1/2 top-1/2 z-0 h-[430px] w-[430px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-coral/25 sm:h-[570px] sm:w-[570px]" />
+                <motion.div animate={{rotate:-360}} transition={{duration:42,repeat:Infinity,ease:"linear"}} className="absolute left-1/2 top-1/2 z-0 h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-lime/25 sm:h-[470px] sm:w-[470px]" />
+                <Link to="/recrutement" className="absolute right-0 top-2 z-40 flex items-center gap-2 rounded-full border-2 border-background bg-coral px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-white shadow-2xl transition-transform hover:scale-105 sm:right-5 sm:top-4 sm:px-5 sm:py-3 sm:text-xs"><span className="relative flex h-2.5 w-2.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-80" /><span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" /></span>On recrute <ArrowRight className="h-3.5 w-3.5" /></Link>
               </FadeIn>
             </div>
-
-            {/* Right Col: Grand Cinematic Video Showcase */}
-            <div className="lg:col-span-6 xl:col-span-7 w-full relative z-10">
-              <FadeIn delay={0.2} direction="left">
-                <div className="relative group">
-                  <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, -120]) }} className="pointer-events-none absolute -left-10 top-10 hidden lg:block z-20">
-                    <img src={bowlChicken} alt="" className="h-28 w-28 rounded-full object-cover border-8 border-background shadow-2xl rotate-[-10deg]" />
-                  </motion.div>
-                  <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 90]) }} className="pointer-events-none absolute -right-8 bottom-12 hidden md:block z-20">
-                    <img src={bowlScampi} alt="" className="h-24 w-24 rounded-full object-cover border-8 border-background shadow-2xl rotate-[12deg]" />
-                  </motion.div>
-                  {/* Ambient glowing projector effect behind the video */}
-                  <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-r from-coral/30 via-lime/25 to-primary/30 rounded-[3rem] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10" />
-
-                  {/* Cinematic Video Container */}
-                  <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] border-2 border-white/20 bg-black aspect-[16/10] sm:aspect-[16/9] w-full">
-                    <video 
-                      ref={videoRef}
-                      autoPlay 
-                      loop 
-                      muted={isMuted}
-                      playsInline
-                      preload="auto"
-                      poster={heroPoke}
-                      className="hero-video absolute inset-0 w-full h-full object-cover"
-                    >
-                      <source src="/hero-video.mp4" type="video/mp4" />
-                      <source src="/hero-video.webm" type="video/webm" />
-                    </video>
-
-                    {/* Subtle Cinematic Vignette */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/40 pointer-events-none" />
-
-                    {/* Top Floating Glass Header */}
-                    <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between pointer-events-auto z-20">
-                      <div className="inline-flex items-center gap-2 rounded-full bg-black/50 backdrop-blur-md px-3.5 py-1.5 text-xs font-bold text-white border border-white/15 shadow-md">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-coral opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-coral"></span>
-                        </span>
-                        <span>Préparation minute en direct</span>
-                      </div>
-
-                      <button
-                        onClick={toggleSound}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-white border border-white/20 hover:bg-black/80 hover:border-coral transition-all shadow-md active:scale-95 cursor-pointer"
-                        title={isMuted ? "Activer le son" : "Couper le son"}
-                      >
-                        {isMuted ? (
-                          <>
-                            <VolumeX className="h-3.5 w-3.5 text-coral" />
-                            <span className="hidden sm:inline">Son désactivé</span>
-                          </>
-                        ) : (
-                          <>
-                            <Volume2 className="h-3.5 w-3.5 text-lime" />
-                            <span className="hidden sm:inline">Son activé</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Bottom Cinematic Info Card */}
-                    <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 z-20">
-                      <div className="bg-background/90 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/20 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-coral/15 flex items-center justify-center shrink-0 border border-coral/30 text-xl sm:text-2xl">
-                            🥗
-                          </div>
-                          <div>
-                            <p className="eyebrow text-coral text-[10px] sm:text-xs font-extrabold uppercase tracking-wider mb-0.5">
-                              Ingrédients ultra-frais du jour
-                            </p>
-                            <p className="text-xs sm:text-sm font-bold text-foreground leading-snug">
-                              Saumon frais, mangue mûre, avocat onctueux & sauces maison
-                            </p>
-                          </div>
-                        </div>
-                        <span className="self-end sm:self-center shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-full bg-lime/20 text-lime border border-lime/40">
-                          100% Fait Maison
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-            
           </div>
         </div>
+        <div className="absolute bottom-3 left-1/2 z-20 hidden -translate-x-1/2 items-center gap-2 text-[9px] font-black uppercase tracking-[0.25em] text-deep-foreground/40 md:flex"><span className="h-px w-10 bg-current" /> Faites défiler · découvrez · composez <span className="h-px w-10 bg-current" /></div>
       </section>
-
       {/* Bandeau avec défilement continu */}
       <div className="border-y border-border bg-secondary overflow-hidden">
         <motion.div 
