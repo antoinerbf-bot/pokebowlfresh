@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -120,6 +121,33 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+
+  useEffect(() => {
+    // Always start each route at the real top of the viewport.
+    // This also fixes the case where Safari/browser history restores a previous
+    // scroll position after the homepage has already mounted.
+    window.history.scrollRestoration = "manual";
+
+    const resetScroll = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    resetScroll();
+    const frame = window.requestAnimationFrame(resetScroll);
+    const frame2 = window.requestAnimationFrame(() =>
+      window.requestAnimationFrame(resetScroll),
+    );
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(frame2);
+    };
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
