@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
 import heroPoke from "@/assets/hero-poke.jpg";
+import bowlChicken from "@/assets/bowl-chicken.jpg";
+import bowlScampi from "@/assets/bowl-scampi.jpg";
 
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
@@ -271,7 +273,7 @@ function Index() {
                   <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 90]) }} className="pointer-events-none absolute -right-8 bottom-12 hidden md:block z-20">
                     <img src={bowlScampi} alt="" className="h-24 w-24 rounded-full object-cover border-8 border-background shadow-2xl rotate-[12deg]" />
                   </motion.div>
-                  {/* Ambient glowing projector effect behind the video */
+                  {/* Ambient glowing projector effect behind the video */}
                   <div className="absolute -inset-3 sm:-inset-5 bg-gradient-to-r from-coral/30 via-lime/25 to-primary/30 rounded-[3rem] blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10" />
 
                   {/* Cinematic Video Container */}
