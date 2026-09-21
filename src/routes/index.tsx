@@ -194,76 +194,101 @@ function Index() {
       </header>
 
       <main>
-        <section id="top" className="relative min-h-[680px] h-[100svh] max-h-[900px] overflow-hidden bg-[#10251f] text-white">
-          <div className="absolute inset-0 bg-[#10251f]" />
-          <div className="absolute -right-24 top-24 h-72 w-72 rounded-full border-[18px] border-white/10 sm:-right-32 sm:top-20 sm:h-[30rem] sm:w-[30rem] sm:border-[24px]" />
-          <div className="absolute -right-8 top-40 h-44 w-44 rounded-full border-[10px] border-[#d7ff45]/20 sm:right-0 sm:top-36 sm:h-72 sm:w-72 sm:border-[14px]" />
-          <div className="absolute right-10 top-52 h-28 w-28 rounded-full bg-[#ff705f]/20 blur-2xl sm:right-20 sm:top-56 sm:h-44 sm:w-44" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#10251f] via-[#10251f]/90 to-[#10251f]/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-[#10251f]/30" />
+        <section id="top" className="relative min-h-[760px] h-[100svh] max-h-[980px] overflow-hidden bg-[#071713] text-white">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_48%,rgba(215,255,69,.14),transparent_22%),radial-gradient(circle_at_72%_58%,rgba(255,112,95,.16),transparent_24%),linear-gradient(135deg,#071713_0%,#10251f_55%,#071713_100%)]" />
 
-          <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-4 pb-24 pt-24 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
-            <div className="w-full max-w-4xl">
-              <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-6 sm:gap-3">
-                <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[9px] sm:tracking-[0.2em]">
-                  Fresh · préparé minute
-                </span>
-                <Link
-                  to="/recrutement"
-                  className="group rounded-full border border-[#ff705f]/50 bg-[#ff705f]/90 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-white shadow-xl sm:px-4 sm:py-2 sm:text-[9px] sm:tracking-[0.2em]"
-                >
-                  <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
-                  On recrute
-                  <ArrowRight className="ml-1 inline h-3 w-3 transition-transform group-hover:translate-x-1" />
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute left-1/2 top-[51%] h-[min(70vw,680px)] w-[min(70vw,680px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-80" />
+            <div className="absolute left-1/2 top-[51%] h-[min(56vw,540px)] w-[min(56vw,540px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[18px] border-[#d7ff45]/15 animate-[spin_28s_linear_infinite]" />
+            <div className="absolute left-1/2 top-[51%] h-[min(40vw,390px)] w-[min(40vw,390px)] -translate-x-1/2 -translate-y-1/2 rounded-full border-[10px] border-white/10" />
+
+            <div className="absolute left-1/2 top-[51%] h-[min(29vw,280px)] w-[min(29vw,280px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#101c18] shadow-[0_0_100px_rgba(215,255,69,.14)]" />
+            <div className="absolute left-1/2 top-[48%] h-24 w-24 -translate-x-1/2 rounded-full bg-[#d7ff45]/20 blur-3xl sm:h-40 sm:w-40" />
+
+            <div className="absolute left-[calc(50%-125px)] top-[35%] h-16 w-16 rounded-full bg-[#d7ff45]/80 blur-[1px] shadow-[0_0_35px_rgba(215,255,69,.45)] animate-[float_5s_ease-in-out_infinite] sm:left-[calc(50%-190px)] sm:h-24 sm:w-24" />
+            <div className="absolute left-[calc(50%+105px)] top-[39%] h-12 w-12 rounded-full bg-[#ff705f]/80 blur-[1px] shadow-[0_0_30px_rgba(255,112,95,.45)] animate-[float_6s_ease-in-out_infinite_reverse] sm:left-[calc(50%+160px)] sm:h-20 sm:w-20" />
+            <div className="absolute left-[calc(50%-155px)] top-[63%] h-10 w-10 rounded-full bg-white/25 animate-[float_4s_ease-in-out_infinite] sm:left-[calc(50%-240px)] sm:h-14 sm:w-14" />
+
+            <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/40 via-transparent to-[#071713]" />
+          </div>
+
+          <header className="relative z-20">
+            <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-8 sm:py-4 lg:px-12">
+              <Link to="/" className="flex items-center gap-3">
+                <img src={logo} alt="Poke N Bowl" className="h-10 w-10 object-contain drop-shadow-xl sm:h-14 sm:w-14" />
+                <div className="hidden text-white sm:block">
+                  <div className="text-lg font-black tracking-tight">Poke N Bowl</div>
+                  <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/50">Visé · Fresh food</div>
+                </div>
+              </Link>
+              <div className="hidden items-center gap-8 text-[10px] font-black uppercase tracking-[0.18em] text-white md:flex">
+                <a href="#carte" className="hover:opacity-60">La carte</a>
+                <a href="#composer" className="hover:opacity-60">Composer</a>
+                <a href="#infos" className="hover:opacity-60">Infos</a>
+                <Link to="/contact" className="hover:opacity-60">Contact</Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link to="/recrutement" className="hidden items-center gap-2 rounded-full bg-[#ff705f] px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.16em] sm:flex">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> On recrute
                 </Link>
+                <button type="button" onClick={() => setIsCartOpen(true)} className="relative rounded-full border border-white/15 bg-black/20 p-3 text-white backdrop-blur">
+                  <ShoppingBag className="h-4 w-4" />
+                  {cartCount > 0 && <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black">{cartCount}</span>}
+                </button>
+                <button type="button" aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"} onClick={() => setMobileOpen(v => !v)} className="rounded-full border border-white/15 bg-black/20 p-3 text-white backdrop-blur md:hidden">
+                  {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                </button>
               </div>
+            </nav>
+          </header>
 
-              <div className="sm:hidden">
-                <h1 className="max-w-[340px] text-[3.05rem] font-black leading-[0.92] tracking-[-0.055em]">
-                  Ton bowl.<br /><span className="text-[#d7ff45]">Tes règles.</span>
-                </h1>
-              </div>
-              <div className="hidden h-[225px] sm:block lg:h-[250px]">
-                <h1 className="text-7xl font-black leading-[0.9] tracking-[-0.06em] lg:text-[7.5rem]">
-                  Ton bowl.<br /><span className="text-[#d7ff45]">Tes règles.</span>
-                </h1>
-              </div>
+          <div className="relative z-10 mx-auto flex h-[calc(100%-76px)] max-w-[1440px] items-center px-5 sm:px-8 lg:px-12">
+            <div className="w-full">
+              <div className="grid items-center gap-8 lg:grid-cols-[.9fr_1.1fr]">
+                <div className="relative z-20 max-w-2xl">
+                  <div className="mb-5 flex flex-wrap gap-2">
+                    <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em] text-white/70 backdrop-blur">Fresh · préparé minute</span>
+                    <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em]">On recrute →</Link>
+                  </div>
+                  <p className="mb-3 text-[9px] font-black uppercase tracking-[.32em] text-[#d7ff45]">Poke N Bowl · Visé</p>
+                  <h1 className="max-w-[720px] text-[3.4rem] font-black leading-[.88] tracking-[-.065em] sm:text-7xl lg:text-[7.6rem]">
+                    Ton bowl.<br />
+                    <span className="text-[#d7ff45]">Tes règles.</span>
+                  </h1>
+                  <p className="mt-6 max-w-xl text-sm leading-6 text-white/65 sm:text-base">
+                    Choisis ta recette. Personnalise-la. Et commande ton bowl sans détour.
+                  </p>
+                  <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
+                    <Link to="/commander" className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#ff705f] px-7 py-4 text-sm font-black shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition hover:-translate-y-1">
+                      Composer mon bowl <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                    </Link>
+                    <a href="#carte" className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 py-4 text-sm font-bold backdrop-blur-xl">Voir les bowls</a>
+                  </div>
+                  <div className="mt-5 flex gap-6 text-[8px] font-black uppercase tracking-[.18em] text-white/40 sm:text-[9px]">
+                    <span>9 recettes</span><span>À partir de 9,50 €</span><span>Visé</span>
+                  </div>
+                </div>
 
-              <p className="mt-2 max-w-xl text-[13px] leading-5 text-white/75 sm:mt-3 sm:text-base sm:leading-6">
-                Poké bowls, crousty chicken et desserts maison à Visé. Choisis une recette,
-                personnalise-la et commande sans te perdre dans un menu compliqué.
-              </p>
-
-              <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:gap-3">
-                <Link
-                  to="/commander"
-                  className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black text-white shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition duration-300 hover:-translate-y-1 sm:w-auto sm:px-7 sm:py-4"
-                >
-                  Composer mon bowl
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <a
-                  href="#carte"
-                  className="inline-flex w-full items-center justify-center rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold backdrop-blur-xl transition hover:bg-white/15 sm:w-auto sm:px-6 sm:py-4"
-                >
-                  Voir les bowls
-                </a>
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[8px] font-black uppercase tracking-[0.16em] text-white/50 sm:mt-7 sm:gap-x-7 sm:text-[9px] sm:tracking-[0.2em]">
-                <span>À partir de 9,50 €</span>
-                <span>Visé</span>
-                <span>À emporter</span>
+                <div className="relative hidden h-[520px] lg:block">
+                  <div className="absolute inset-0" style={{ transform: "translateY(calc(var(--scroll-y, 0px) * -0.08))" }}>
+                    <div className="absolute left-1/2 top-1/2 h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[22px] border-white/10" />
+                    <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[14px] border-[#d7ff45]/30" />
+                    <div className="absolute left-1/2 top-1/2 h-[215px] w-[215px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#152c25] shadow-[0_0_90px_rgba(215,255,69,.18)]" />
+                    <div className="absolute left-1/2 top-[34%] h-20 w-20 -translate-x-1/2 rounded-full bg-[#ff705f] shadow-[0_0_45px_rgba(255,112,95,.55)]" />
+                    <div className="absolute left-[24%] top-[30%] h-14 w-14 rounded-full bg-[#d7ff45] shadow-[0_0_35px_rgba(215,255,69,.5)]" />
+                    <div className="absolute right-[23%] top-[46%] h-12 w-12 rounded-full bg-white/70" />
+                    <div className="absolute left-[28%] bottom-[25%] h-10 w-10 rounded-full bg-[#ff705f]/70" />
+                    <div className="absolute right-[28%] bottom-[20%] h-16 w-16 rounded-full bg-[#d7ff45]/70" />
+                  </div>
+                  <div className="absolute bottom-5 right-4 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[8px] font-black uppercase tracking-[.22em] text-white/45 backdrop-blur">Fresh food · Visé</div>
+                </div>
               </div>
             </div>
           </div>
 
-
-          <div className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 text-center md:block">
-            <div className="text-[8px] font-black uppercase tracking-[0.35em] text-white/45">
-              Découvre · compose · commande
-            </div>
-            <div className="mx-auto mt-2 h-8 w-px bg-gradient-to-b from-white/50 to-transparent" />
+          <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 text-center">
+            <div className="text-[8px] font-black uppercase tracking-[.35em] text-white/35">Découvre · compose · commande</div>
+            <div className="mx-auto mt-2 h-7 w-px bg-gradient-to-b from-white/40 to-transparent" />
           </div>
         </section>
 
