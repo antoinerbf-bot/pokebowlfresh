@@ -121,7 +121,7 @@ function ProductPage() {
           {/* Details & Toppings */}
           <div className="flex flex-col">
             <div className="flex justify-between items-start mb-2">
-              <h1 className="min-w-0 break-words text-3xl font-extrabold leading-tight">{product.name}</h1>
+              <h1 className="min-w-0 flex-1 break-words overflow-visible pb-1 text-3xl font-extrabold leading-[1.12]">{product.name}</h1>
               <span className="text-2xl font-display font-bold text-coral">€ {product.price.toFixed(2)}</span>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-8">{product.desc}</p>
