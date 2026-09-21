@@ -72,7 +72,7 @@ function CommanderPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {bowls.map((bowl, i) => (
               <motion.div key={bowl.id} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * .04 }} className="overflow-hidden rounded-[28px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)]">
-                <Link to={`/product/${bowl.id}`} className="group block">
+                <Link to="/product/$productId" params={{ productId: bowl.id }} className="group block">
                   <div className="relative aspect-[1.12] overflow-hidden">
                     <img src={bowl.image} alt={bowl.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -108,8 +108,8 @@ function CommanderPage() {
             </div>
             <div className="rounded-[28px] bg-[#ff705f] p-7 text-white sm:p-9">
               <h2 className="text-2xl font-black">Desserts maison</h2>
-              <div className="mt-6 flex gap-5">
-                <img src={dessert} alt="Dessert maison" className="h-28 w-28 rounded-2xl object-cover" />
+              <div className="mt-6 flex flex-col gap-5 sm:flex-row">
+                <img src={dessert} alt="Dessert maison" className="h-28 w-full rounded-2xl object-cover sm:w-28" />
                 <div className="flex-1">
                   <div className="space-y-2">
                     {desserts.map((d) => <button key={d.id} onClick={() => quickAdd(d)} className="flex w-full items-center justify-between rounded-xl bg-white/10 px-3 py-2 text-left text-sm hover:bg-white/20"><span>{d.name}</span><span className="font-black">€ {d.price.toFixed(2)}</span></button>)}
