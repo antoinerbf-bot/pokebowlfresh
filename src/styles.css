@@ -216,3 +216,7 @@
   }
 }
 
+
+
+.hero-video { object-position: 50% 48%; transform: scale(1.015); filter: saturate(1.08) contrast(1.04); }
+@media (max-width: 767px) { .hero-video { object-position: 52% 42%; transform: scale(1.06); } }
