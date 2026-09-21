@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -8,8 +8,6 @@ import {
   MapPin,
   Menu,
   ShoppingBag,
-  Volume2,
-  VolumeX,
   X,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -71,37 +69,9 @@ function Reveal({
 function Index() {
   const { t, language, setLanguage } = useTranslation();
   const { items, setIsCartOpen } = useCart();
-  const [muted, setMuted] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [headline, setHeadline] = useState(0);
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  useEffect(() => {
-    const timer = window.setInterval(
-      () => setHeadline((value) => (value + 1) % 3),
-      3600,
-    );
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const headlines = [
-    <>
-      Ton bowl.
-      <br />
-      <span className="text-[#d7ff45]">Tes règles.</span>
-    </>,
-    <>
-      Frais.
-      <br />
-      <span className="text-[#ff705f]">Généreux.</span>
-    </>,
-    <>
-      Compose.
-      <br />
-      <span className="text-[#d7ff45]">Savoure.</span>
-    </>,
-  ];
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f4ec] text-[#17231f]">
@@ -248,22 +218,15 @@ function Index() {
                 </Link>
               </div>
 
-              <div className="relative h-[150px] sm:h-[225px] lg:h-[250px]">
-                {headlines.map((line, index) => (
-                  <motion.h1
-                    key={index}
-                    initial={false}
-                    animate={{
-                      opacity: headline === index ? 1 : 0,
-                      y: headline === index ? 0 : 18,
-                      filter: headline === index ? "blur(0px)" : "blur(5px)",
-                    }}
-                    transition={{ duration: 0.65, ease: "easeOut" }}
-                    className="absolute left-0 top-0 max-w-full text-[3.15rem] font-black leading-[0.92] tracking-[-0.06em] sm:text-7xl lg:text-[7.5rem]"
-                  >
-                    {line}
-                  </motion.h1>
-                ))}
+              <div className="sm:hidden">
+                <h1 className="max-w-[340px] text-[3.05rem] font-black leading-[0.92] tracking-[-0.055em]">
+                  Ton bowl.<br /><span className="text-[#d7ff45]">Tes règles.</span>
+                </h1>
+              </div>
+              <div className="hidden h-[225px] sm:block lg:h-[250px]">
+                <h1 className="text-7xl font-black leading-[0.9] tracking-[-0.06em] lg:text-[7.5rem]">
+                  Ton bowl.<br /><span className="text-[#d7ff45]">Tes règles.</span>
+                </h1>
               </div>
 
               <p className="mt-2 max-w-xl text-[13px] leading-5 text-white/75 sm:mt-3 sm:text-base sm:leading-6">
@@ -274,14 +237,14 @@ function Index() {
               <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:gap-3">
                 <Link
                   to="/commander"
-                  className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black text-white sm:w-auto sm:px-7 sm:py-4" shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition duration-300 hover:-translate-y-1"
+                  className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black text-white shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition duration-300 hover:-translate-y-1 sm:w-auto sm:px-7 sm:py-4"
                 >
                   Composer mon bowl
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <a
                   href="#carte"
-                  className="inline-flex w-full items-center justify-center rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold sm:w-auto sm:px-6 sm:py-4" backdrop-blur-xl transition hover:bg-white/15"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold backdrop-blur-xl transition hover:bg-white/15 sm:w-auto sm:px-6 sm:py-4"
                 >
                   Voir les bowls
                 </a>
@@ -498,7 +461,7 @@ function Index() {
         <section className="px-4 pb-16 sm:px-8 sm:pb-20 lg:pb-28">
           <Link
             to="/recrutement"
-            className="group mx-auto block max-w-[1200px] overflow-hidden rounded-[24px] bg-[#d7ff45] p-5 transition sm:rounded-[32px] sm:p-7" hover:-translate-y-1 sm:p-10"
+            className="group mx-auto block max-w-[1200px] overflow-hidden rounded-[24px] bg-[#d7ff45] p-5 transition hover:-translate-y-1 sm:rounded-[32px] sm:p-10"
           >
             <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -622,7 +585,7 @@ function Index() {
 
       <Link
         to="/commander"
-        className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-3 rounded-full bg-[#ff705f] px-5 py-3.5 text-sm font-black text-white sm:inset-x-4 sm:bottom-4 sm:px-6 sm:py-4" shadow-[0_20px_50px_-15px_rgba(0,0,0,.5)] md:hidden"
+        className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-3 rounded-full bg-[#ff705f] px-5 py-3.5 text-sm font-black text-white shadow-[0_20px_50px_-15px_rgba(0,0,0,.5)] sm:inset-x-4 sm:bottom-4 sm:px-6 sm:py-4 md:hidden"
       >
         Composer mon bowl
         <ArrowRight className="h-4 w-4" />
