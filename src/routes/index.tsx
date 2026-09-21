@@ -8,7 +8,7 @@ import heroPoke from "@/assets/hero-poke.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
-import { ShoppingCart, Volume2, VolumeX, Sparkles } from "lucide-react";
+import { ShoppingCart, Volume2, VolumeX, Sparkles, ArrowRight, BriefcaseBusiness } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bowls, spicy, drinks, desserts } from "../lib/data";
 
@@ -85,6 +85,7 @@ function Index() {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = true;
+      videoRef.current.playbackRate = 0.52;
       videoRef.current.play().catch(() => {});
     }
   }, []);
@@ -183,6 +184,9 @@ function Index() {
         </nav>
       </header>
 
+      {/* Recruitment flash */}
+      <Link to="/recrutement" className="fixed right-4 top-24 z-[60] hidden sm:flex items-center gap-2 rounded-full bg-coral px-4 py-2 text-[11px] font-black uppercase tracking-widest text-white shadow-lift hover:scale-105 transition-transform"><BriefcaseBusiness className="h-3.5 w-3.5" /> On recrute</Link>
+
       {/* Cinematic Hero */}
       <section id="top" className="relative overflow-hidden surface-hero text-deep-foreground pt-10 pb-20 md:pt-16 md:pb-28">
         {/* Ambient glow lights */}
@@ -224,16 +228,16 @@ function Index() {
                   rel="noreferrer"
                   className="rounded-full bg-coral px-8 py-4 text-sm sm:text-base font-bold text-coral-foreground shadow-lift flex items-center gap-2 hover:bg-coral/90 transition-all"
                 >
-                  {t("hero.order")}
+                  {t("hero.compose")}
                   <span className="text-lg leading-none">→</span>
                 </motion.a>
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  href={`tel:${PHONE}`}
+                  href="#carte"
                   className="rounded-full border-2 border-deep-foreground/20 bg-background/60 backdrop-blur-md px-7 py-3.5 text-sm sm:text-base font-semibold transition-all hover:bg-background/90 hover:border-deep-foreground/40 shadow-sm"
                 >
-                  04 91 28 14 56
+                  Voir les bowls
                 </motion.a>
               </FadeIn>
               
@@ -272,7 +276,7 @@ function Index() {
                       playsInline
                       preload="auto"
                       poster={heroPoke}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="hero-video absolute inset-0 w-full h-full object-cover"
                     >
                       <source src="/hero-video.mp4" type="video/mp4" />
                       <source src="/hero-video.webm" type="video/webm" />
@@ -582,6 +586,8 @@ function Index() {
           </FadeIn>
         </div>
       </ParallaxSection>
+
+      <div className="fixed inset-x-3 bottom-3 z-[70] md:hidden"><a href={ORDER_URL} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-2xl bg-coral px-5 py-4 text-sm font-black text-white shadow-lift">Composer mon bowl <ArrowRight className="h-4 w-4" /></a></div>
 
       <footer className="border-t border-border bg-secondary overflow-hidden mt-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-5 py-12 text-center text-sm text-secondary-foreground relative">
