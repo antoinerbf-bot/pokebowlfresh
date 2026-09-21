@@ -133,7 +133,7 @@ function Index() {
               whileHover={{ rotate: 12, scale: 1.1 }}
               src={logo} 
               alt="Logo Poke N Bowl" 
-              className="h-10 w-10 drop-shadow-md" 
+              className="h-11 w-11 shrink-0 object-contain drop-shadow-md" 
             />
             <span className="font-display text-lg font-extrabold tracking-tight hidden sm:block">
               Poke N Bowl
