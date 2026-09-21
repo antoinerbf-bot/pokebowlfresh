@@ -26,7 +26,7 @@ function RecruitmentPage() {
           <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime/20 blur-3xl" />
           <div className="relative max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-widest"><BriefcaseBusiness className="h-4 w-4" /> On recrute</span>
-            <h1 className="mt-6 break-words text-5xl font-black leading-[.96] tracking-[-0.035em] md:text-7xl">Rejoins l’aventure Poke N Bowl.</h1>
+            <h1 className="mt-6 break-words text-5xl font-black leading-[1.08] tracking-[-0.02em] md:text-7xl">Rejoins l’aventure Poke N Bowl.</h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">Nous cherchons des personnes énergiques, fiables et souriantes pour faire vivre l’expérience Poke N Bowl à Visé.</p>
           </div>
         </section>
