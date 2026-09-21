@@ -49,7 +49,7 @@ function CommanderPage() {
             </Link>
             <div className="mt-10 max-w-4xl">
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#d7ff45]">Commande Poke N Bowl</p>
-              <h1 className="mt-3 text-5xl font-black tracking-[-0.06em] sm:text-7xl">
+              <h1 className="mt-3 text-5xl font-black tracking-[-0.02em] sm:text-7xl">
                 Tout le menu.<br /><span className="text-white/35">À toi de composer.</span>
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-white/60">
@@ -83,7 +83,7 @@ function CommanderPage() {
                   </div>
                   <div className="p-5">
                     <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-xl font-black">{bowl.name}</h3>
+                      <h3 className="min-w-0 flex-1 break-words text-xl font-black leading-[1.15] tracking-normal">{bowl.name}</h3>
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white"><ArrowRight className="h-4 w-4" /></span>
                     </div>
                     <p className="mt-2 line-clamp-3 text-sm leading-5 text-[#758079]">{bowl.desc}</p>
