@@ -205,15 +205,15 @@ function Index() {
         <section id="top" className="relative min-h-[700px] h-[100svh] max-h-[920px] overflow-hidden bg-[#071713] text-white">
           <div className="absolute inset-0 overflow-hidden bg-[#071713]">
             <div
-              className="absolute left-1/2 top-[48%] h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-70 transition-transform duration-100"
+              className="absolute left-[82%] top-[62%] h-[390px] lg:left-1/2 lg:top-[48%] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-70 transition-transform duration-100"
               style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.04, 0)}px), 0)` }}
             />
             <div
-              className="absolute left-1/2 top-[48%] h-[315px] w-[315px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7ff45]/20 shadow-[0_0_120px_-30px_rgba(215,255,69,.8)]"
+              className="absolute left-[82%] top-[62%] h-[315px] lg:left-1/2 lg:top-[48%] w-[315px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7ff45]/20 shadow-[0_0_120px_-30px_rgba(215,255,69,.8)]"
               style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.025, 0)}px), 0)` }}
             />
             <div
-              className="absolute left-1/2 top-[48%] h-[235px] w-[235px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[16px] border-[#f7f4ec]/85 shadow-[0_0_80px_-20px_rgba(255,255,255,.7)] sm:h-[270px] sm:w-[270px]"
+              className="absolute left-[82%] top-[62%] h-[235px] lg:left-1/2 lg:top-[48%] w-[235px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[16px] border-[#f7f4ec]/85 shadow-[0_0_80px_-20px_rgba(255,255,255,.7)] sm:h-[270px] sm:w-[270px]"
               style={{ transform: `translate3d(-50%, calc(-50% + ${Math.min(scrollY * -0.02, 0)}px), 0)` }}
             >
               <div className="absolute inset-[22%] rounded-full bg-[#071713] shadow-[inset_0_0_55px_rgba(0,0,0,.9)]" />
@@ -224,7 +224,7 @@ function Index() {
               <span className="absolute bottom-[23%] left-[23%] h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_16px_white] sm:h-3 sm:w-3" />
               <span className="absolute bottom-[18%] right-[24%] h-4 w-4 rounded-full bg-[#ff705f] shadow-[0_0_24px_#ff705f] sm:h-5 sm:w-5" />
             </div>
-            <div className="absolute left-1/2 top-[48%] h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite] rounded-full border border-dashed border-white/15 sm:h-[380px] sm:w-[380px]" />
+            <div className="absolute left-[82%] top-[62%] h-[340px] lg:left-1/2 lg:top-[48%] w-[340px] -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite] rounded-full border border-dashed border-white/15 sm:h-[380px] sm:w-[380px]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(215,255,69,.12),transparent_25%),radial-gradient(circle_at_50%_68%,rgba(255,112,95,.12),transparent_32%),linear-gradient(180deg,#071713_0%,#071713_45%,#0b1a16_100%)]" />
             <div className="absolute inset-0 bg-gradient-to-b from-[#071713]/25 via-transparent to-[#071713]/90" />
           </div>
@@ -238,7 +238,7 @@ function Index() {
                     <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em]">On recrute →</Link>
                   </div>
                   <p className="mb-3 text-[8px] font-black uppercase tracking-[.26em] text-[#d7ff45] sm:text-[9px] sm:tracking-[.32em]">Poke N Bowl · Visé</p>
-                  <h1 className="max-w-[680px] text-[clamp(2.65rem,12.5vw,4.8rem)] font-black leading-[.96] tracking-[-.02em] [font-stretch:normal] sm:text-7xl lg:text-[6.25rem] xl:text-[6.7rem]">
+                  <h1 className="max-w-[680px] text-[clamp(2.35rem,11.2vw,4.8rem)] font-black leading-[1] tracking-[-.012em] [font-stretch:normal] sm:text-7xl lg:text-[6rem] xl:text-[6.45rem]">
                     <span className="block">Ton bowl.</span>
                     <span className="block text-[#d7ff45]">Tes règles.</span>
                   </h1>
@@ -309,7 +309,7 @@ function Index() {
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
                   {t("menu.eyebrow")}
                 </p>
-                <h2 className="mt-3 max-w-3xl text-[2.05rem] font-black leading-[1.04] tracking-[-.02em] [font-stretch:normal] sm:text-6xl">
+                <h2 className="mt-3 max-w-3xl text-[2.05rem] font-black leading-[1.04] tracking-[-.012em] [font-stretch:normal] sm:text-6xl">
                   Choisis ton bowl.
                   <br />
                   <span className="text-[#7d8b83]">Puis rends-le unique.</span>
@@ -355,7 +355,7 @@ function Index() {
                   </div>
                   <div className="p-4 sm:p-5">
                     <div className="flex min-w-0 items-center justify-between gap-3">
-                      <h3 className="min-w-0 max-w-[calc(100%-48px)] break-words text-[17px] font-black leading-[1.08] tracking-[-0.01em] [font-stretch:normal] sm:text-xl">{bowl.name}</h3>
+                      <h3 className="min-w-0 max-w-[calc(100%-48px)] break-words text-[17px] font-black leading-[1.08] tracking-normal [font-stretch:normal] sm:text-xl">{bowl.name}</h3>
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
@@ -378,7 +378,7 @@ function Index() {
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#d7ff45]">
                   Le parcours
                 </p>
-                <h2 className="mt-3 text-[2.25rem] font-black leading-[1.02] tracking-[-.025em] [font-stretch:normal] sm:text-6xl">
+                <h2 className="mt-3 text-[2.25rem] font-black leading-[1.02] tracking-[-.012em] [font-stretch:normal] sm:text-6xl">
                   Du premier clic
                   <br />
                   <span className="text-white/40">au dernier coup de fourchette.</span>
@@ -506,7 +506,7 @@ function Index() {
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
                 Infos pratiques
               </p>
-              <h2 className="mt-3 text-4xl font-black tracking-[-0.05em] sm:text-6xl">
+              <h2 className="mt-3 text-4xl font-black tracking-[-0.018em] sm:text-6xl">
                 Passe nous voir
                 <br />
                 <span className="text-[#7d8b83]">à Visé.</span>
