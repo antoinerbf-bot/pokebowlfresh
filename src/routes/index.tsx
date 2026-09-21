@@ -87,7 +87,7 @@ function Index() {
             <img
               src={logo}
               alt="Poke N Bowl"
-              className="h-10 w-10 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,.35)] sm:h-14 sm:w-14"
+              className="h-11 w-auto max-w-[170px] object-contain object-left drop-shadow-[0_8px_18px_rgba(0,0,0,.35)] sm:h-14 sm:max-w-[210px]"
             />
             <span className="ml-2 hidden text-white sm:block">
               <strong className="block text-base font-black leading-none">Poke N Bowl</strong>
@@ -291,7 +291,7 @@ function Index() {
                   </div>
                   <div className="p-4 sm:p-5">
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="min-w-0 flex-1 break-words text-[17px] font-black leading-[1.1] tracking-normal sm:text-xl">
+                      <h3 className="min-w-0 flex-1 break-words text-[16px] font-black leading-[1.15] tracking-normal sm:text-xl">
                         {bowl.name}
                       </h3>
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white">
@@ -411,7 +411,7 @@ function Index() {
               </h2>
 
               <div className="mt-6 grid gap-2.5 sm:mt-8 sm:gap-3">
-                <a href={MAPS_URL} target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-2xl bg-white p-4">
+                <a href={MAPS_URL} target="_blank" rel="noreferrer" className="flex min-w-0 items-center gap-4 rounded-2xl bg-white p-4">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]">
                     <MapPin className="h-5 w-5" />
                   </span>
@@ -453,7 +453,7 @@ function Index() {
       <footer className="bg-[#0b1a16] px-5 py-8 text-white sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Poke N Bowl" className="h-11 w-11 object-contain" />
+            <img src={logo} alt="Poke N Bowl" className="h-11 w-auto max-w-[170px] object-contain object-left" />
             <div>
               <div className="font-black">Poke N Bowl</div>
               <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Visé · Fresh food</div>
