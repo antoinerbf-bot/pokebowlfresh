@@ -214,7 +214,7 @@ function Index() {
                 Poke N Bowl · Visé
               </p>
 
-              <h1 className="mt-3 max-w-[650px] text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[1.02] tracking-[-0.02em] [overflow-wrap:anywhere] sm:text-7xl lg:text-[5.9rem]">
+              <h1 className="mt-3 max-w-[650px] overflow-visible pb-2 text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[1.12] tracking-[-0.02em] [overflow-wrap:anywhere] sm:pb-3 sm:text-7xl lg:text-[5.9rem]">
                 Ton bowl.
                 <br />
                 <span className="text-[#d7ff45]">Tes règles.</span>
