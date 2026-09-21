@@ -225,22 +225,16 @@ function Index() {
 
       <main>
         <section id="top" className="relative min-h-[680px] h-[100svh] max-h-[900px] overflow-hidden bg-[#10251f] text-white">
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted={muted}
-            loop
-            playsInline
-            preload="metadata"
+          <div className="absolute inset-0 bg-[#10251f]" />
+          <img
+            src="/hero-poke.jpg"
+            alt=""
             aria-hidden="true"
-          >
-            <source src="/hero-video.webm" type="video/webm" />
-            <source src="/hero-video.mp4" type="video/mp4" />
-          </video>
-
-          <div className="absolute inset-0 bg-black/35" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/35 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-black/25" />
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/35 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-black/20" />
 
           <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-4 pb-24 pt-24 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
             <div className="w-full max-w-4xl">
@@ -305,15 +299,6 @@ function Index() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMuted((value) => !value)}
-            className="absolute bottom-24 right-4 z-20 flex items-center gap-2 sm:bottom-7 sm:right-5" rounded-full border border-white/20 bg-black/25 px-3 py-2 text-[9px] font-black uppercase tracking-wider text-white/70 backdrop-blur-xl"
-            aria-label={muted ? "Activer le son" : "Couper le son"}
-          >
-            {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
-            {muted ? "Son" : "Son actif"}
-          </button>
 
           <div className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 text-center md:block">
             <div className="text-[8px] font-black uppercase tracking-[0.35em] text-white/45">
