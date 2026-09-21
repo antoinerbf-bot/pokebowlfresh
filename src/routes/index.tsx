@@ -81,17 +81,19 @@ function Index() {
           <Link
             to="/"
             onClick={closeMobile}
-            className="flex shrink-0 items-center"
-            aria-label="Poke N Bowl accueil"
+            className="flex min-w-0 shrink-0 items-center gap-2.5"
+            aria-label="Poke N Bowl — Accueil"
           >
-            <img
-              src={logo}
-              alt="Poke N Bowl"
-              className="h-11 w-auto max-w-[170px] object-contain object-left drop-shadow-[0_8px_18px_rgba(0,0,0,.35)] sm:h-14 sm:max-w-[210px]"
-            />
-            <span className="ml-2 hidden text-white sm:block">
-              <strong className="block text-base font-black leading-none">Poke N Bowl</strong>
-              <span className="mt-1 block text-[8px] font-bold uppercase tracking-[0.2em] text-white/55">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,.25)] sm:h-14 sm:w-14">
+              <img
+                src={logo}
+                alt="Logo Poke N Bowl"
+                className="h-full w-full object-contain"
+              />
+            </span>
+            <span className="min-w-0 text-white">
+              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Poke N Bowl</strong>
+              <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">
                 Visé · Fresh food
               </span>
             </span>
@@ -178,7 +180,7 @@ function Index() {
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.72)_0%,rgba(7,23,19,.32)_35%,rgba(7,23,19,.78)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.58)_48%,rgba(7,23,19,.22)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_78%_38%,rgba(215,255,69,.16),transparent_30%)]" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1320px] px-5 pb-28 pt-32 sm:px-6 sm:pb-20 sm:pt-36 lg:px-8">
+          <div className="relative z-10 mx-auto w-full max-w-[1320px] min-w-0 px-5 pb-28 pt-32 sm:px-6 sm:pb-20 sm:pt-36 lg:px-8">
             <div className="max-w-[700px]">
               <div className="mb-4 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] text-white/80 backdrop-blur-md sm:text-[9px]">
@@ -193,7 +195,7 @@ function Index() {
                 Poke N Bowl · Visé
               </p>
 
-              <h1 className="mt-3 max-w-[650px] text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[.92] tracking-[-0.045em] sm:text-7xl lg:text-[5.9rem]">
+              <h1 className="mt-3 max-w-[650px] text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[.92] tracking-[-0.025em] [overflow-wrap:anywhere] sm:text-7xl lg:text-[5.9rem]">
                 Ton bowl.
                 <br />
                 <span className="text-[#d7ff45]">Tes règles.</span>
