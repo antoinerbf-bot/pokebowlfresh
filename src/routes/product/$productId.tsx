@@ -27,7 +27,7 @@ function ProductPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Produit introuvable</h1>
+          <h1 className="break-words text-3xl font-bold mb-4">Produit introuvable</h1>
           <Link to="/" className="text-coral underline">Retour à l'accueil</Link>
         </div>
       </div>
@@ -67,7 +67,7 @@ function ProductPage() {
             <img 
               src={logo} 
               alt="Logo" 
-              className="h-10 w-10 group-hover:rotate-12 transition-transform duration-300 drop-shadow-md" 
+              className="h-10 w-auto max-w-[150px] object-contain group-hover:rotate-2 transition-transform duration-300 drop-shadow-md" 
             />
             <span className="font-display text-lg font-extrabold tracking-tight hidden sm:block">
               Poke N Bowl
@@ -136,7 +136,7 @@ function ProductPage() {
                 <span className="text-xs font-semibold text-muted-foreground">{selectedToppings.length}/5 max</span>
               </div>
               
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-2">
+              <div className="grid grid-cols-1 gap-y-3 gap-x-2 sm:grid-cols-2 sm:gap-y-4 lg:grid-cols-3">
                 {allToppings.map((topping) => {
                   const isChecked = selectedToppings.includes(topping);
                   const isDisabled = !isChecked && selectedToppings.length >= 5;
