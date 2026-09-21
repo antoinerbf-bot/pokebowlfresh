@@ -71,6 +71,14 @@ function Index() {
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const closeMobile = () => setMobileOpen(false);
+  const goHome = () => {
+    setMobileOpen(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  };
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f4ec] text-[#17231f]">
@@ -80,7 +88,7 @@ function Index() {
         <nav className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
           <Link
             to="/"
-            onClick={closeMobile}
+            onClick={goHome}
             className="flex min-w-0 shrink-0 items-center gap-2.5"
             aria-label="Poke N Bowl — Accueil"
           >
