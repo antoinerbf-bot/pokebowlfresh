@@ -108,12 +108,12 @@ function Index() {
       <CartDrawer />
 
       <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
+        <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-8 sm:py-4 lg:px-12">
           <Link to="/" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
             <img
               src={logo}
               alt="Poke N Bowl"
-              className="h-12 w-12 object-contain drop-shadow-xl sm:h-14 sm:w-14"
+              className="h-10 w-10 object-contain drop-shadow-xl sm:h-14 sm:w-14"
             />
             <div className="hidden text-white sm:block">
               <div className="text-lg font-black tracking-tight">Poke N Bowl</div>
@@ -224,7 +224,7 @@ function Index() {
       </header>
 
       <main>
-        <section id="top" className="relative min-h-[720px] h-[100svh] overflow-hidden bg-[#10251f] text-white">
+        <section id="top" className="relative min-h-[680px] h-[100svh] max-h-[900px] overflow-hidden bg-[#10251f] text-white">
           <video
             className="absolute inset-0 h-full w-full object-cover"
             autoPlay
@@ -242,15 +242,15 @@ function Index() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/35 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-transparent to-black/25" />
 
-          <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-5 pb-20 pt-32 sm:px-8 lg:px-12 lg:pb-24">
+          <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-end px-4 pb-24 pt-24 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24">
             <div className="w-full max-w-4xl">
-              <div className="mb-6 flex flex-wrap items-center gap-3">
-                <span className="rounded-full border border-white/20 bg-black/25 px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] backdrop-blur-xl">
+              <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-6 sm:gap-3">
+                <span className="rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] backdrop-blur-xl sm:px-4 sm:py-2 sm:text-[9px] sm:tracking-[0.2em]">
                   Fresh · préparé minute
                 </span>
                 <Link
                   to="/recrutement"
-                  className="group rounded-full border border-[#ff705f]/50 bg-[#ff705f]/90 px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-white shadow-xl"
+                  className="group rounded-full border border-[#ff705f]/50 bg-[#ff705f]/90 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-white shadow-xl sm:px-4 sm:py-2 sm:text-[9px] sm:tracking-[0.2em]"
                 >
                   <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
                   On recrute
@@ -258,7 +258,7 @@ function Index() {
                 </Link>
               </div>
 
-              <div className="relative h-[180px] sm:h-[225px] lg:h-[250px]">
+              <div className="relative h-[135px] sm:h-[225px] lg:h-[250px]">
                 {headlines.map((line, index) => (
                   <motion.h1
                     key={index}
@@ -269,35 +269,35 @@ function Index() {
                       filter: headline === index ? "blur(0px)" : "blur(5px)",
                     }}
                     transition={{ duration: 0.65, ease: "easeOut" }}
-                    className="absolute left-0 top-0 text-[4.1rem] font-black leading-[0.88] tracking-[-0.07em] sm:text-7xl lg:text-[7.5rem]"
+                    className="absolute left-0 top-0 text-[3.55rem] font-black leading-[0.88] tracking-[-0.065em] sm:text-7xl lg:text-[7.5rem]"
                   >
                     {line}
                   </motion.h1>
                 ))}
               </div>
 
-              <p className="mt-3 max-w-xl text-sm leading-6 text-white/75 sm:text-base">
+              <p className="mt-2 max-w-xl text-[13px] leading-5 text-white/75 sm:mt-3 sm:text-base sm:leading-6">
                 Poké bowls, crousty chicken et desserts maison à Visé. Choisis une recette,
                 personnalise-la et commande sans te perdre dans un menu compliqué.
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:gap-3">
                 <Link
                   to="/commander"
-                  className="group inline-flex items-center gap-3 rounded-full bg-[#ff705f] px-7 py-4 text-sm font-black text-white shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition duration-300 hover:-translate-y-1"
+                  className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black text-white sm:w-auto sm:px-7 sm:py-4" shadow-[0_20px_60px_-20px_rgba(255,112,95,.9)] transition duration-300 hover:-translate-y-1"
                 >
                   Composer mon bowl
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <a
                   href="#carte"
-                  className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-6 py-4 text-sm font-bold backdrop-blur-xl transition hover:bg-white/15"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold sm:w-auto sm:px-6 sm:py-4" backdrop-blur-xl transition hover:bg-white/15"
                 >
                   Voir les bowls
                 </a>
               </div>
 
-              <div className="mt-7 flex flex-wrap gap-x-7 gap-y-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/50">
+              <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[8px] font-black uppercase tracking-[0.16em] text-white/50 sm:mt-7 sm:gap-x-7 sm:text-[9px] sm:tracking-[0.2em]">
                 <span>À partir de 9,50 €</span>
                 <span>Visé</span>
                 <span>À emporter</span>
@@ -308,7 +308,7 @@ function Index() {
           <button
             type="button"
             onClick={() => setMuted((value) => !value)}
-            className="absolute bottom-7 right-5 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-black/25 px-3 py-2 text-[9px] font-black uppercase tracking-wider text-white/70 backdrop-blur-xl"
+            className="absolute bottom-24 right-4 z-20 flex items-center gap-2 sm:bottom-7 sm:right-5" rounded-full border border-white/20 bg-black/25 px-3 py-2 text-[9px] font-black uppercase tracking-wider text-white/70 backdrop-blur-xl"
             aria-label={muted ? "Activer le son" : "Couper le son"}
           >
             {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
@@ -323,7 +323,7 @@ function Index() {
           </div>
         </section>
 
-        <section className="overflow-hidden bg-[#d7ff45] py-4 text-[#10251f]">
+        <section className="overflow-hidden bg-[#d7ff45] py-3 text-[#10251f] sm:py-4">
           <motion.div
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
@@ -344,7 +344,7 @@ function Index() {
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
                   {t("menu.eyebrow")}
                 </p>
-                <h2 className="mt-3 max-w-3xl text-4xl font-black tracking-[-0.05em] sm:text-6xl">
+                <h2 className="mt-3 max-w-3xl text-[2.35rem] font-black leading-[0.95] tracking-[-0.055em] sm:text-6xl">
                   Choisis ton bowl.
                   <br />
                   <span className="text-[#7d8b83]">Puis rends-le unique.</span>
@@ -365,7 +365,7 @@ function Index() {
             </div>
           </Reveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
             {bowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.04}>
                 <Link
@@ -373,7 +373,7 @@ function Index() {
                   params={{ productId: bowl.id }}
                   className="group block overflow-hidden rounded-[28px] bg-white shadow-[0_15px_50px_-30px_rgba(0,0,0,.35)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_70px_-35px_rgba(0,0,0,.45)]"
                 >
-                  <div className="relative aspect-[1.08] overflow-hidden">
+                  <div className="relative aspect-[1.15] overflow-hidden">
                     <img
                       src={bowl.image}
                       alt={bowl.name}
@@ -388,14 +388,14 @@ function Index() {
                       € {bowl.price.toFixed(2)}
                     </span>
                   </div>
-                  <div className="p-5">
+                  <div className="p-4 sm:p-5">
                     <div className="flex items-center justify-between gap-3">
-                      <h3 className="text-xl font-black tracking-tight">{bowl.name}</h3>
+                      <h3 className="text-lg font-black tracking-tight sm:text-xl">{bowl.name}</h3>
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-sm leading-5 text-[#758079]">{bowl.desc}</p>
+                    <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:text-sm">{bowl.desc}</p>
                     <div className="mt-4 text-[9px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
                       Personnaliser →
                     </div>
@@ -406,7 +406,7 @@ function Index() {
           </div>
         </section>
 
-        <section id="composer" className="scroll-mt-20 bg-[#10251f] px-5 py-20 text-white sm:px-8 lg:px-12 lg:py-28">
+        <section id="composer" className="scroll-mt-20 bg-[#10251f] px-4 py-14 text-white sm:px-8 sm:py-20 lg:px-12 lg:py-28">
           <div className="mx-auto max-w-[1200px]">
             <Reveal>
               <div className="max-w-3xl">
@@ -421,7 +421,7 @@ function Index() {
               </div>
             </Reveal>
 
-            <div className="mt-14 grid gap-px overflow-hidden rounded-[28px] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-2 overflow-hidden rounded-[24px] border border-white/10 bg-white/10 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 ["01", "Choisis", "Sélectionne une recette dans toute la carte."],
                 ["02", "Personnalise", "Ajoute jusqu’à 5 toppings à ton bowl."],
@@ -429,9 +429,9 @@ function Index() {
                 ["04", "Commande", "Retrouve tout dans ton panier pour finaliser."],
               ].map(([num, title, desc], i) => (
                 <Reveal key={num} delay={i * 0.07}>
-                  <div className="h-full bg-[#16352d] p-7 transition hover:bg-[#1b4036]">
+                  <div className="h-full bg-[#16352d] p-5 transition hover:bg-[#1b4036] sm:p-7">
                     <span className="text-4xl font-black text-[#ff705f]">{num}</span>
-                    <h3 className="mt-8 text-xl font-black">{title}</h3>
+                    <h3 className="mt-5 text-lg font-black sm:mt-8 sm:text-xl">{title}</h3>
                     <p className="mt-2 text-sm leading-6 text-white/55">{desc}</p>
                   </div>
                 </Reveal>
@@ -457,10 +457,10 @@ function Index() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 lg:py-24">
+        <section className="mx-auto max-w-[1200px] px-4 py-14 sm:px-8 sm:py-20 lg:py-24">
           <Reveal>
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-[28px] bg-white p-7 shadow-[0_20px_60px_-35px_rgba(0,0,0,.3)] sm:p-9">
+            <div className="grid gap-4 lg:grid-cols-2 sm:gap-6">
+              <div className="rounded-[24px] bg-white p-5 shadow-[0_20px_60px_-35px_rgba(0,0,0,.3)] sm:p-9">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
                   {t("menu.drinks")}
                 </p>
@@ -479,7 +479,7 @@ function Index() {
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-[28px] bg-[#ff705f] text-white">
+              <div className="overflow-hidden rounded-[24px] bg-[#ff705f] text-white">
                 <div className="flex h-full flex-col justify-between p-7 sm:p-9">
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/65">
@@ -514,10 +514,10 @@ function Index() {
           </Reveal>
         </section>
 
-        <section className="px-5 pb-20 sm:px-8 lg:pb-28">
+        <section className="px-4 pb-16 sm:px-8 sm:pb-20 lg:pb-28">
           <Link
             to="/recrutement"
-            className="group mx-auto block max-w-[1200px] overflow-hidden rounded-[32px] bg-[#d7ff45] p-7 transition hover:-translate-y-1 sm:p-10"
+            className="group mx-auto block max-w-[1200px] overflow-hidden rounded-[24px] bg-[#d7ff45] p-5 transition sm:rounded-[32px] sm:p-7" hover:-translate-y-1 sm:p-10"
           >
             <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -535,8 +535,8 @@ function Index() {
           </Link>
         </section>
 
-        <section id="infos" className="scroll-mt-20 bg-[#ece9df] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
-          <div className="mx-auto grid max-w-[1200px] gap-10 lg:grid-cols-[1fr_.8fr]">
+        <section id="infos" className="scroll-mt-20 bg-[#ece9df] px-4 py-14 sm:px-8 sm:py-20 lg:px-12 lg:py-28">
+          <div className="mx-auto grid max-w-[1200px] gap-6 lg:grid-cols-[1fr_.8fr] lg:gap-10">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
                 Infos pratiques
@@ -585,7 +585,7 @@ function Index() {
             </Reveal>
 
             <Reveal delay={0.08}>
-              <div className="rounded-[30px] bg-[#10251f] p-7 text-white sm:p-9">
+              <div className="rounded-[24px] bg-[#10251f] p-5 text-white sm:rounded-[30px] sm:p-9">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl font-black">Horaires</h3>
                   <ChevronDown className="h-5 w-5 text-white/35" />
@@ -614,7 +614,7 @@ function Index() {
         </section>
       </main>
 
-      <footer className="bg-[#0b1a16] px-5 py-10 text-white sm:px-8 lg:px-12">
+      <footer className="bg-[#0b1a16] px-4 py-8 text-white sm:px-8 sm:py-10 lg:px-12">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="Poke N Bowl" className="h-12 w-12 object-contain" />
@@ -641,7 +641,7 @@ function Index() {
 
       <Link
         to="/commander"
-        className="fixed inset-x-4 bottom-4 z-40 flex items-center justify-center gap-3 rounded-full bg-[#ff705f] px-6 py-4 text-sm font-black text-white shadow-[0_20px_50px_-15px_rgba(0,0,0,.5)] md:hidden"
+        className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-3 rounded-full bg-[#ff705f] px-5 py-3.5 text-sm font-black text-white sm:inset-x-4 sm:bottom-4 sm:px-6 sm:py-4" shadow-[0_20px_50px_-15px_rgba(0,0,0,.5)] md:hidden"
       >
         Composer mon bowl
         <ArrowRight className="h-4 w-4" />
