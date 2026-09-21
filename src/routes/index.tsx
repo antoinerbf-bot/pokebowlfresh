@@ -77,7 +77,18 @@ function Index() {
   };
 
   React.useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    // Prevent browser scroll restoration from reopening the homepage a few pixels down.
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    const reset = () => window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    reset();
+    const frame = window.requestAnimationFrame(reset);
+    const frame2 = window.requestAnimationFrame(() => window.requestAnimationFrame(reset));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(frame2);
+      window.history.scrollRestoration = previous;
+    };
   }, []);
 
   return (
