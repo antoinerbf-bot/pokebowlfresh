@@ -87,13 +87,15 @@ function Index() {
 
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-8 sm:py-4 lg:px-12">
-          <Link to="/" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-            <img
-              src={logo}
-              alt="Poke N Bowl"
-              className="h-10 w-10 object-contain drop-shadow-xl sm:h-14 sm:w-14"
-            />
-            <div className="hidden text-white sm:block">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3" onClick={() => setMobileOpen(false)}>
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-[#071713]/80 p-1.5 shadow-[0_10px_30px_-10px_rgba(0,0,0,.7)] backdrop-blur-xl sm:h-14 sm:w-14 sm:p-2">
+              <img
+                src={logo}
+                alt="Poke N Bowl"
+                className="h-full w-full object-contain drop-shadow-xl"
+              />
+            </span>
+            <div className="hidden min-w-0 text-white sm:block">
               <div className="text-lg font-black tracking-tight">Poke N Bowl</div>
               <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-white/60">
                 Visé · Fresh food
@@ -231,9 +233,9 @@ function Index() {
                     <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[.18em]">On recrute →</Link>
                   </div>
                   <p className="mb-3 text-[8px] font-black uppercase tracking-[.26em] text-[#d7ff45] sm:text-[9px] sm:tracking-[.32em]">Poke N Bowl · Visé</p>
-                  <h1 className="max-w-[680px] text-[clamp(3.15rem,13vw,4.8rem)] font-black leading-[.9] tracking-[-.035em] [font-stretch:normal] sm:text-7xl lg:text-[6.4rem] xl:text-[6.9rem]">
-                    Ton bowl.<br className="hidden sm:block" /><span className="sm:hidden"> </span>
-                    <span className="inline-block whitespace-nowrap pr-[0.08em] text-[#d7ff45]">Tes règles.</span>
+                  <h1 className="max-w-[680px] text-[clamp(2.8rem,11.5vw,4.8rem)] font-black leading-[.94] tracking-[-.025em] [font-stretch:normal] sm:text-7xl lg:text-[6.25rem] xl:text-[6.7rem]">
+                    <span className="block">Ton bowl.</span>
+                    <span className="block text-[#d7ff45]">Tes règles.</span>
                   </h1>
                   <p className="mt-5 max-w-[560px] text-[13px] leading-5 text-white/70 sm:mt-6 sm:text-base sm:leading-6">
                     Choisis ta recette. Personnalise-la. Et commande ton bowl sans détour.
@@ -254,8 +256,20 @@ function Index() {
                   style={{ transform: `translateY(${Math.min(scrollY * -0.06, 0)}px)` }}
                 >
                   <div className="absolute inset-2 rounded-[40px] border border-white/10 bg-black/5" />
+                  <div className="absolute left-1/2 top-1/2 h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10" />
+                  <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7ff45]/25 shadow-[0_0_90px_-25px_rgba(215,255,69,.7)]" />
+                  <div className="absolute left-1/2 top-1/2 h-[245px] w-[245px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[18px] border-[#f7f4ec]/90 shadow-[0_0_70px_-20px_rgba(255,255,255,.65)]">
+                    <div className="absolute inset-[22%] rounded-full bg-[#071713] shadow-[inset_0_0_50px_rgba(0,0,0,.8)]" />
+                    <div className="absolute left-1/2 top-1/2 h-3 w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f7f4ec]/90" />
+                    <div className="absolute left-1/2 top-1/2 h-3 w-[125%] -translate-x-1/2 -translate-y-1/2 rotate-90 rounded-full bg-[#f7f4ec]/90" />
+                    <div className="absolute left-[15%] top-[28%] h-4 w-4 rounded-full bg-[#ff705f] shadow-[0_0_24px_#ff705f]" />
+                    <div className="absolute right-[18%] top-[32%] h-3 w-3 rounded-full bg-[#d7ff45] shadow-[0_0_20px_#d7ff45]" />
+                    <div className="absolute bottom-[24%] left-[24%] h-3 w-3 rounded-full bg-white shadow-[0_0_18px_white]" />
+                    <div className="absolute bottom-[19%] right-[25%] h-5 w-5 rounded-full bg-[#ff705f] shadow-[0_0_26px_#ff705f]" />
+                  </div>
+                  <div className="absolute left-1/2 top-1/2 h-[340px] w-[340px] -translate-x-1/2 -translate-y-1/2 animate-[spin_18s_linear_infinite] rounded-full border border-dashed border-white/20" />
                   <div className="absolute inset-x-10 top-1/2 h-px bg-gradient-to-r from-transparent via-[#d7ff45]/40 to-transparent" />
-                  <div className="absolute bottom-3 right-2 rounded-full border border-white/10 bg-black/25 px-3 py-2 text-[7px] font-black uppercase tracking-[.18em] text-white/45 backdrop-blur">
+                  <div className="absolute bottom-3 right-2 rounded-full border border-white/10 bg-black/25 px-3 py-2 text-[7px] font-black uppercase tracking-[.14em] text-white/45 backdrop-blur">
                     Cinématique · Fresh food · Visé
                   </div>
                 </div>
@@ -276,7 +290,7 @@ function Index() {
             className="flex w-max whitespace-nowrap"
           >
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.18em] sm:mx-8 sm:text-xs sm:tracking-[0.24em]">
+              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:mx-8 sm:text-xs sm:tracking-[0.18em]">
                 Poke N Bowl · Fresh food · Visé <span className="mx-8">✦</span>
               </span>
             ))}
@@ -287,10 +301,10 @@ function Index() {
           <Reveal>
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
                   {t("menu.eyebrow")}
                 </p>
-                <h2 className="mt-3 max-w-3xl text-[2.15rem] font-black leading-[1.02] tracking-[-.025em] [font-stretch:normal] sm:text-6xl">
+                <h2 className="mt-3 max-w-3xl text-[2.05rem] font-black leading-[1.04] tracking-[-.02em] [font-stretch:normal] sm:text-6xl">
                   Choisis ton bowl.
                   <br />
                   <span className="text-[#7d8b83]">Puis rends-le unique.</span>
@@ -336,13 +350,13 @@ function Index() {
                   </div>
                   <div className="p-4 sm:p-5">
                     <div className="flex min-w-0 items-center justify-between gap-3">
-                      <h3 className="min-w-0 break-words text-[17px] font-black leading-tight tracking-[-0.015em] sm:text-xl">{bowl.name}</h3>
+                      <h3 className="min-w-0 max-w-[calc(100%-48px)] break-words text-[17px] font-black leading-[1.08] tracking-[-0.01em] [font-stretch:normal] sm:text-xl">{bowl.name}</h3>
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
                     <p className="mt-2 line-clamp-2 text-[13px] leading-[1.4] tracking-normal text-[#758079] sm:text-sm">{bowl.desc}</p>
-                    <div className="mt-4 text-[9px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
+                    <div className="mt-4 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]">
                       Personnaliser →
                     </div>
                   </div>
