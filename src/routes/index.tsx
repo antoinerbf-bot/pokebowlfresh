@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
+import heroPoke from "@/assets/hero-poke.jpg";
 import dessert from "@/assets/dessert.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
@@ -86,7 +87,7 @@ function Index() {
             <img
               src={logo}
               alt="Poke N Bowl"
-              className="h-11 w-11 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,.35)] sm:h-14 sm:w-14"
+              className="h-10 w-10 object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,.35)] sm:h-14 sm:w-14"
             />
             <span className="ml-2 hidden text-white sm:block">
               <strong className="block text-base font-black leading-none">Poke N Bowl</strong>
@@ -165,29 +166,25 @@ function Index() {
       </header>
 
       <main>
-        <section className="relative flex min-h-[680px] items-center overflow-hidden bg-[#071713] text-white sm:min-h-[720px]">
-          <div className="absolute inset-0">
-            <div className="absolute -right-28 top-28 h-[430px] w-[430px] rounded-full border border-white/10 sm:right-[5%] sm:top-1/2 sm:-translate-y-1/2" />
-            <div className="absolute -right-12 top-40 h-[340px] w-[340px] rounded-full border border-[#d7ff45]/20 shadow-[0_0_100px_-25px_rgba(215,255,69,.7)] sm:right-[9%] sm:top-1/2 sm:-translate-y-1/2" />
-            <div className="absolute right-5 top-52 h-[250px] w-[250px] rounded-full border-[17px] border-[#f7f4ec]/90 shadow-[0_0_70px_-20px_rgba(255,255,255,.55)] sm:right-[14%] sm:top-1/2 sm:-translate-y-1/2">
-              <div className="absolute inset-[21%] rounded-full bg-[#071713]" />
-              <div className="absolute left-1/2 top-1/2 h-3 w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f7f4ec]" />
-              <span className="absolute left-[14%] top-[26%] h-3 w-3 rounded-full bg-[#ff705f] shadow-[0_0_20px_#ff705f]" />
-              <span className="absolute right-[16%] top-[30%] h-3 w-3 rounded-full bg-[#d7ff45] shadow-[0_0_18px_#d7ff45]" />
-              <span className="absolute bottom-[20%] left-[22%] h-2.5 w-2.5 rounded-full bg-white" />
-              <span className="absolute bottom-[17%] right-[23%] h-4 w-4 rounded-full bg-[#ff705f]" />
-            </div>
-            <div className="absolute right-[-30px] top-1/2 hidden h-[390px] w-[390px] -translate-y-1/2 animate-[spin_24s_linear_infinite] rounded-full border border-dashed border-white/15 sm:right-[7%] sm:block" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_45%,rgba(215,255,69,.09),transparent_30%),linear-gradient(115deg,#071713_0%,#071713_55%,#10251f_100%)]" />
+        <section className="relative isolate flex min-h-[620px] items-end overflow-hidden bg-[#071713] text-white sm:min-h-[720px] sm:items-center">
+          <div className="absolute inset-0 -z-20">
+            <img
+              src={heroPoke}
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-cover object-center sm:object-[center_45%]"
+            />
           </div>
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.72)_0%,rgba(7,23,19,.32)_35%,rgba(7,23,19,.78)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.58)_48%,rgba(7,23,19,.22)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_78%_38%,rgba(215,255,69,.16),transparent_30%)]" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1320px] px-5 pb-16 pt-28 sm:px-6 lg:px-8">
+          <div className="relative z-10 mx-auto w-full max-w-[1320px] px-5 pb-28 pt-32 sm:px-6 sm:pb-20 sm:pt-36 lg:px-8">
             <div className="max-w-[700px]">
-              <div className="mb-5 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] text-white/70">
+              <div className="mb-4 flex flex-wrap gap-2">
+                <span className="rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] text-white/80 backdrop-blur-md sm:text-[9px]">
                   Fresh · préparé minute
                 </span>
-                <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em]">
+                <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] shadow-lg sm:text-[9px]">
                   On recrute
                 </Link>
               </div>
@@ -196,33 +193,33 @@ function Index() {
                 Poke N Bowl · Visé
               </p>
 
-              <h1 className="mt-3 max-w-[680px] text-[clamp(2.7rem,12vw,5.7rem)] font-black leading-[0.98] tracking-[-0.02em] sm:text-7xl lg:text-[5.9rem]">
+              <h1 className="mt-3 max-w-[650px] text-[clamp(2.65rem,13vw,5.9rem)] font-black leading-[.92] tracking-[-0.045em] sm:text-7xl lg:text-[5.9rem]">
                 Ton bowl.
                 <br />
                 <span className="text-[#d7ff45]">Tes règles.</span>
               </h1>
 
-              <p className="mt-5 max-w-[480px] text-sm leading-6 text-white/70 sm:text-base">
+              <p className="mt-5 max-w-[450px] text-[13px] leading-5 text-white/80 sm:text-base sm:leading-6">
                 Choisis ta recette, personnalise-la et commande ton bowl simplement.
               </p>
 
-              <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
+              <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
                 <Link
                   to="/commander"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black shadow-[0_18px_45px_-18px_rgba(255,112,95,.9)]"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black shadow-[0_18px_45px_-18px_rgba(255,112,95,.9)]"
                 >
                   Composer mon bowl
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <a
                   href="#carte"
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-bold backdrop-blur"
+                  className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/25 bg-black/20 px-6 py-3.5 text-sm font-bold backdrop-blur-md"
                 >
                   Voir la carte
                 </a>
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[8px] font-black uppercase tracking-[0.12em] text-white/45 sm:text-[9px]">
+              <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[8px] font-black uppercase tracking-[0.12em] text-white/55 sm:gap-x-5 sm:text-[9px]">
                 <span>9 recettes</span>
                 <span>À partir de 9,50 €</span>
                 <span>Visé</span>
