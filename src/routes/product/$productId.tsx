@@ -108,13 +108,13 @@ function ProductPage() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-8 pb-28 sm:pb-8">
         <Link
           to="/commander"
-          className="mb-8 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-6 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="mr-2 h-4 w-4" /> {t("product.back")}
         </Link>
 
-        <div className="grid gap-10 md:grid-cols-2 lg:gap-16">
-          <div className="relative flex max-h-[500px] overflow-hidden rounded-3xl shadow-lift">
+        <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-16">
+          <div className="relative flex max-h-[420px] overflow-hidden rounded-3xl shadow-lift sm:max-h-[500px]">
             <img
               src={product.image}
               alt={product.name}
@@ -134,7 +134,7 @@ function ProductPage() {
                 € {product.price.toFixed(2)}
               </span>
             </div>
-            <p className="mb-6 leading-relaxed text-muted-foreground">{product.desc}</p>
+            <p className="mb-6 text-[15px] leading-relaxed text-muted-foreground">{product.desc}</p>
 
             {!productOk && (
               <div className="mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral">
@@ -142,7 +142,7 @@ function ProductPage() {
               </div>
             )}
 
-            <div className="flex flex-1 flex-col rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
+            <div className="flex flex-1 flex-col rounded-2xl border border-border/50 bg-secondary/50 p-4 sm:p-6">
               <div className="mb-4 flex items-baseline justify-between gap-2">
                 <h2 className="text-lg font-bold">{t("toppings.title")}</h2>
                 <span className="shrink-0 text-xs font-semibold text-muted-foreground">
@@ -157,7 +157,7 @@ function ProductPage() {
                   const isDisabled =
                     !toppingOk || (!isChecked && selectedToppings.length >= 5) || !productOk;
                   return (
-                    <div key={topping} className="flex items-center space-x-2">
+                    <div key={topping} className="flex min-h-[28px] items-center space-x-2">
                       <Checkbox
                         id={topping}
                         checked={isChecked}
@@ -181,7 +181,8 @@ function ProductPage() {
               </div>
             </div>
 
-            <div className="mt-8">
+            {/* Desktop CTA */}
+            <div className="mt-8 hidden sm:block">
               <Button
                 onClick={handleAddToCart}
                 disabled={!productOk}
@@ -194,6 +195,20 @@ function ProductPage() {
           </div>
         </div>
       </main>
+
+      {/* Mobile sticky CTA — always visible for faster order flow */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-background/95 p-3 backdrop-blur-xl sm:hidden">
+        <Button
+          onClick={handleAddToCart}
+          disabled={!productOk}
+          size="lg"
+          className="h-12 w-full rounded-full bg-coral text-base font-black text-white hover:bg-coral/90 disabled:opacity-50"
+        >
+          {productOk
+            ? `${t("menu.add_to_cart")} · € ${product.price.toFixed(2)}`
+            : t("product.out_of_stock")}
+        </Button>
+      </div>
     </div>
   );
 }
