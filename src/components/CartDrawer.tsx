@@ -14,49 +14,64 @@ export function CartDrawer() {
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-      <SheetContent className="flex flex-col w-full sm:max-w-md">
+      <SheetContent className="flex w-full flex-col sm:max-w-md">
         <SheetHeader>
           <SheetTitle>{t("cart.title")}</SheetTitle>
         </SheetHeader>
-        
+
         {items.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">
-            {t("cart.empty")}
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 px-2 text-center">
+            <p className="text-muted-foreground">{t("cart.empty")}</p>
+            <Button
+              asChild
+              className="rounded-full bg-coral px-6 text-white hover:bg-coral/90"
+              onClick={() => setIsCartOpen(false)}
+            >
+              <Link to="/commander">{t("cart.empty_cta")}</Link>
+            </Button>
           </div>
         ) : (
           <>
-            <ScrollArea className="flex-1 -mx-6 px-6">
+            <ScrollArea className="-mx-6 flex-1 px-6">
               <div className="flex flex-col gap-5 py-4">
                 {items.map((item) => (
                   <div key={`${item.id}-${JSON.stringify(item.toppings)}`} className="flex gap-4">
                     {item.image && (
-                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-md object-cover" />
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-16 w-16 rounded-md object-cover"
+                      />
                     )}
-                    <div className="flex-1 flex flex-col justify-between">
+                    <div className="flex flex-1 flex-col justify-between">
                       <div>
-                        <h4 className="font-semibold text-sm leading-tight">{item.name}</h4>
+                        <h4 className="text-sm font-semibold leading-tight">{item.name}</h4>
                         {item.toppings.length > 0 && (
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="mt-1 text-xs text-muted-foreground">
                             {item.toppings.join(", ")}
                           </p>
                         )}
                       </div>
-                      <div className="flex items-center justify-between mt-2">
+                      <div className="mt-2 flex items-center justify-between">
                         <div className="font-medium">€ {(item.price * item.quantity).toFixed(2)}</div>
                         <div className="flex items-center gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="icon" 
-                            className="h-7 w-7" 
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-7 w-7"
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           >
-                            {item.quantity === 1 ? <Trash2 className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
+                            {item.quantity === 1 ? (
+                              <Trash2 className="h-3 w-3" />
+                            ) : (
+                              <Minus className="h-3 w-3" />
+                            )}
                           </Button>
-                          <span className="text-sm w-4 text-center">{item.quantity}</span>
-                          <Button 
-                            variant="outline" 
-                            size="icon" 
-                            className="h-7 w-7" 
+                          <span className="w-4 text-center text-sm">{item.quantity}</span>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-7 w-7"
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Plus className="h-3 w-3" />
@@ -68,16 +83,16 @@ export function CartDrawer() {
                 ))}
               </div>
             </ScrollArea>
-            
-            <div className="pt-4 mt-auto">
+
+            <div className="mt-auto pt-4">
               <Separator className="mb-4" />
-              <div className="flex items-center justify-between mb-4">
+              <div className="mb-4 flex items-center justify-between">
                 <span className="font-semibold">{t("cart.total")}</span>
-                <span className="font-display font-bold text-coral text-xl">€ {total.toFixed(2)}</span>
+                <span className="font-display text-xl font-bold text-coral">€ {total.toFixed(2)}</span>
               </div>
               <Button
                 asChild
-                className="w-full bg-coral hover:bg-coral/90 text-white"
+                className="w-full bg-coral text-white hover:bg-coral/90"
                 size="lg"
                 onClick={() => setIsCartOpen(false)}
               >
