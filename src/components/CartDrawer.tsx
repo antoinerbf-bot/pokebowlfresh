@@ -1,5 +1,6 @@
 import React from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "./ui/sheet";
+import { Link } from "@tanstack/react-router";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { useCart } from "../context/CartContext";
 import { useTranslation } from "../context/I18nContext";
@@ -74,8 +75,13 @@ export function CartDrawer() {
                 <span className="font-semibold">{t("cart.total")}</span>
                 <span className="font-display font-bold text-coral text-xl">€ {total.toFixed(2)}</span>
               </div>
-              <Button className="w-full bg-coral hover:bg-coral/90 text-white" size="lg">
-                {t("cart.checkout")}
+              <Button
+                asChild
+                className="w-full bg-coral hover:bg-coral/90 text-white"
+                size="lg"
+                onClick={() => setIsCartOpen(false)}
+              >
+                <Link to="/checkout">{t("cart.checkout")}</Link>
               </Button>
             </div>
           </>
