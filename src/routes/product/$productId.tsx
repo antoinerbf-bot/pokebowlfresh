@@ -55,7 +55,7 @@ function ProductPage() {
       name: product.name,
       price: product.price,
       quantity: 1,
-      toppings: selectedToppings.filter((t) => available(toppingKey(t))),
+      toppings: selectedToppings.filter((tp) => available(toppingKey(tp))),
       image: product.image,
     });
     setIsCartOpen(true);
@@ -105,7 +105,7 @@ function ProductPage() {
         </nav>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-8">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-8 pb-28 sm:pb-8">
         <Link
           to="/commander"
           className="mb-8 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -121,7 +121,7 @@ function ProductPage() {
               className={`w-full object-cover ${!productOk ? "grayscale" : ""}`}
             />
             <span className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-bold text-primary shadow-sm">
-              {productOk ? product.tag : "Épuisé"}
+              {productOk ? product.tag : t("cmd.sold_out")}
             </span>
           </div>
 
@@ -134,11 +134,11 @@ function ProductPage() {
                 € {product.price.toFixed(2)}
               </span>
             </div>
-            <p className="mb-8 leading-relaxed text-muted-foreground">{product.desc}</p>
+            <p className="mb-6 leading-relaxed text-muted-foreground">{product.desc}</p>
 
             {!productOk && (
               <div className="mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral">
-                Ce bowl est temporairement indisponible.
+                {t("product.unavailable")}
               </div>
             )}
 
@@ -146,7 +146,7 @@ function ProductPage() {
               <div className="mb-4 flex items-baseline justify-between gap-2">
                 <h2 className="text-lg font-bold">{t("toppings.title")}</h2>
                 <span className="shrink-0 text-xs font-semibold text-muted-foreground">
-                  {selectedToppings.length}/5
+                  {selectedToppings.length}/5 · {t("toppings.max")}
                 </span>
               </div>
 
@@ -171,7 +171,9 @@ function ProductPage() {
                         }`}
                       >
                         {topping}
-                        {!toppingOk && <span className="ml-1 text-[10px] text-coral">(épuisé)</span>}
+                        {!toppingOk && (
+                          <span className="ml-1 text-[10px] text-coral">({t("cmd.sold_out")})</span>
+                        )}
                       </label>
                     </div>
                   );
@@ -186,7 +188,7 @@ function ProductPage() {
                 size="lg"
                 className="h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90 disabled:opacity-50"
               >
-                {productOk ? t("menu.add_to_cart") : "Indisponible"}
+                {productOk ? t("menu.add_to_cart") : t("product.out_of_stock")}
               </Button>
             </div>
           </div>
