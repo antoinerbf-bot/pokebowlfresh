@@ -8,10 +8,10 @@
     "directory": ".output/public",
     "binding": "ASSETS"
   },
+  "build": {
+    "command": "npm run build"
+  },
   "observability": {
     "enabled": true
-  },
-  "vars": {
-    "STOCK_ADMIN_PIN": "vise2026"
   }
 }
