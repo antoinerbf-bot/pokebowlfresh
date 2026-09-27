@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
 import logo from "@/assets/logo.png";
+import { useStock } from "../../hooks/useStock";
+import { toppingKey } from "../../lib/stock";
 
 export const Route = createFileRoute("/product/$productId")({
   component: ProductPage,
@@ -18,6 +20,7 @@ function ProductPage() {
   const product = bowls.find((b) => b.id === productId);
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
+  const { available } = useStock();
   const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
@@ -25,14 +28,17 @@ function ProductPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-5">
         <div className="text-center">
-          <h1 className="break-words text-3xl font-bold mb-4">{t("product.not_found")}</h1>
+          <h1 className="mb-4 break-words text-3xl font-bold">{t("product.not_found")}</h1>
           <Link to="/commander" className="text-coral underline">{t("product.back")}</Link>
         </div>
       </div>
     );
   }
 
+  const productOk = available(product.id);
+
   const handleToppingChange = (topping: string, checked: boolean) => {
+    if (!available(toppingKey(topping))) return;
     if (checked) {
       if (selectedToppings.length < 5) {
         setSelectedToppings([...selectedToppings, topping]);
@@ -43,12 +49,13 @@ function ProductPage() {
   };
 
   const handleAddToCart = () => {
+    if (!productOk) return;
     addItem({
       id: product.id,
       name: product.name,
       price: product.price,
       quantity: 1,
-      toppings: selectedToppings,
+      toppings: selectedToppings.filter((t) => available(toppingKey(t))),
       image: product.image,
     });
     setIsCartOpen(true);
@@ -60,7 +67,7 @@ function ProductPage() {
 
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-          <Link to="/" className="flex min-w-0 items-center gap-2.5 group" aria-label="Poke N Bowl">
+          <Link to="/" className="group flex min-w-0 items-center gap-2.5" aria-label="Poke N Bowl">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
               <img src={logo} alt="Logo" className="h-full w-full object-contain" />
             </span>
@@ -108,12 +115,14 @@ function ProductPage() {
 
         <div className="grid gap-10 md:grid-cols-2 lg:gap-16">
           <div className="relative flex max-h-[500px] overflow-hidden rounded-3xl shadow-lift">
-            <img src={product.image} alt={product.name} className="w-full object-cover" />
-            {product.tag && (
-              <span className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-bold text-primary shadow-sm">
-                {product.tag}
-              </span>
-            )}
+            <img
+              src={product.image}
+              alt={product.name}
+              className={`w-full object-cover ${!productOk ? "grayscale" : ""}`}
+            />
+            <span className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-bold text-primary shadow-sm">
+              {productOk ? product.tag : "Épuisé"}
+            </span>
           </div>
 
           <div className="flex flex-col">
@@ -127,6 +136,12 @@ function ProductPage() {
             </div>
             <p className="mb-8 leading-relaxed text-muted-foreground">{product.desc}</p>
 
+            {!productOk && (
+              <div className="mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral">
+                Ce bowl est temporairement indisponible.
+              </div>
+            )}
+
             <div className="flex flex-1 flex-col rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
               <div className="mb-4 flex items-baseline justify-between gap-2">
                 <h2 className="text-lg font-bold">{t("toppings.title")}</h2>
@@ -135,10 +150,12 @@ function ProductPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 gap-y-3 gap-x-2 sm:grid-cols-2 sm:gap-y-4 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-2 gap-y-3 sm:grid-cols-2 sm:gap-y-4 lg:grid-cols-3">
                 {allToppings.map((topping) => {
+                  const toppingOk = available(toppingKey(topping));
                   const isChecked = selectedToppings.includes(topping);
-                  const isDisabled = !isChecked && selectedToppings.length >= 5;
+                  const isDisabled =
+                    !toppingOk || (!isChecked && selectedToppings.length >= 5) || !productOk;
                   return (
                     <div key={topping} className="flex items-center space-x-2">
                       <Checkbox
@@ -149,9 +166,12 @@ function ProductPage() {
                       />
                       <label
                         htmlFor={topping}
-                        className={`cursor-pointer text-sm font-medium leading-snug ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`}
+                        className={`text-sm font-medium leading-snug ${
+                          isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                        }`}
                       >
                         {topping}
+                        {!toppingOk && <span className="ml-1 text-[10px] text-coral">(épuisé)</span>}
                       </label>
                     </div>
                   );
@@ -162,10 +182,11 @@ function ProductPage() {
             <div className="mt-8">
               <Button
                 onClick={handleAddToCart}
+                disabled={!productOk}
                 size="lg"
-                className="h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90"
+                className="h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90 disabled:opacity-50"
               >
-                {t("menu.add_to_cart")}
+                {productOk ? t("menu.add_to_cart") : "Indisponible"}
               </Button>
             </div>
           </div>
