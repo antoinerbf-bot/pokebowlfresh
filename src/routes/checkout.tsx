@@ -332,35 +332,35 @@ function CheckoutPage() {
 function buildPickupSlots(): string[] {
   const slots: string[] = [];
   const now = new Date();
-  const days = [0, 1];
+  const windows = [
+    { day: 1, start: 12 * 60, end: 14 * 60 },
+    { day: 1, start: 17 * 60, end: 21 * 60 },
+    { day: 2, start: 12 * 60, end: 14 * 60 },
+    { day: 2, start: 17 * 60, end: 21 * 60 },
+    { day: 3, start: 12 * 60, end: 14 * 60 },
+    { day: 3, start: 17 * 60, end: 21 * 60 },
+    { day: 4, start: 12 * 60, end: 14 * 60 },
+    { day: 4, start: 17 * 60, end: 21 * 60 },
+    { day: 5, start: 12 * 60, end: 14 * 60 },
+    { day: 5, start: 17 * 60, end: 21 * 60 },
+    { day: 6, start: 18 * 60, end: 21 * 60 },
+  ];
 
-  for (const dayOffset of days) {
+  for (let dayOffset = 0; dayOffset <= 7; dayOffset += 1) {
     const d = new Date(now);
-    d.setDate(d.getDate() + dayOffset);
-    const dayName = dayOffset === 0 ? "Aujourd'hui" : "Demain";
-    const isSunday = d.getDay() === 0;
-    if (isSunday) continue;
-
-    const startHour = 17;
-    const startMin = d.getDay() === 6 ? 45 : 15;
-    const endHour = 20;
-    const endMin = 30;
-
-    for (let h = startHour; h <= endHour; h++) {
-      for (const m of [0, 15, 30, 45]) {
-        if (h === startHour && m < startMin) continue;
-        if (h === endHour && m > endMin) continue;
-
+    d.setDate(now.getDate() + dayOffset);
+    const day = d.getDay();
+    const dayWindows = windows.filter((w) => w.day === day);
+    for (const window of dayWindows) {
+      for (let minute = window.start; minute <= window.end; minute += 15) {
         const slotDate = new Date(d);
-        slotDate.setHours(h, m, 0, 0);
-
+        slotDate.setHours(Math.floor(minute / 60), minute % 60, 0, 0);
         if (slotDate.getTime() < now.getTime() + 20 * 60 * 1000) continue;
-
-        const label = `${dayName} ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
-        slots.push(label);
+        const labelDay = dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : d.toLocaleDateString("fr-BE", { weekday: "short", day: "2-digit", month: "2-digit" });
+        slots.push(labelDay + " " + slotDate.toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit", hour12: false }));
       }
     }
   }
 
-  return slots.slice(0, 24);
+  return slots.slice(0, 48);
 }
