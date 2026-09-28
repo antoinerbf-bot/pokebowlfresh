@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, CreditCard, Store, Loader2 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useCart } from "../context/CartContext";
-import { submitCheckout } from "../server/checkout";
+import { submitCheckout } from "../fn/checkout";
 import type { PaymentMethod } from "../lib/orders";
 
 export const Route = createFileRoute("/checkout")({
@@ -68,7 +68,6 @@ function CheckoutPage() {
       });
 
       if (result.type === "online") {
-        // Redirect to Mollie hosted checkout
         window.location.href = result.redirectUrl;
         return;
       }
@@ -279,23 +278,19 @@ function CheckoutPage() {
   );
 }
 
-/** Slots for today/tomorrow within typical opening hours (approx.) */
 function buildPickupSlots(): string[] {
   const slots: string[] = [];
   const now = new Date();
-  const days = [0, 1]; // today, tomorrow
+  const days = [0, 1];
 
   for (const dayOffset of days) {
     const d = new Date(now);
     d.setDate(d.getDate() + dayOffset);
-    const dayName =
-      dayOffset === 0
-        ? "Aujourd'hui"
-        : "Demain";
+    const dayName = dayOffset === 0 ? "Aujourd'hui" : "Demain";
     const isSunday = d.getDay() === 0;
     if (isSunday) continue;
 
-    const startHour = d.getDay() === 6 ? 17 : 17; // aligned with site hours
+    const startHour = 17;
     const startMin = d.getDay() === 6 ? 45 : 15;
     const endHour = 20;
     const endMin = 30;
@@ -308,7 +303,6 @@ function buildPickupSlots(): string[] {
         const slotDate = new Date(d);
         slotDate.setHours(h, m, 0, 0);
 
-        // Only future slots (+20 min prep)
         if (slotDate.getTime() < now.getTime() + 20 * 60 * 1000) continue;
 
         const label = `${dayName} ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;

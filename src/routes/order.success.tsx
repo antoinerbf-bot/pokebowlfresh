@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2, Clock, Store, CreditCard, Loader2 } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { getOrderStatus } from "../server/checkout";
+import { getOrderStatus } from "../fn/checkout";
 import { useCart } from "../context/CartContext";
 
 type Search = {
@@ -69,11 +69,9 @@ function OrderSuccessPage() {
   }
 
   const isPaid = order?.status === "paid";
-  const isOnSite =
-    order?.paymentMethod === "on_site" || method === "on_site";
+  const isOnSite = order?.paymentMethod === "on_site" || method === "on_site";
   const isPending = order?.status === "pending_payment";
-  const isFailed =
-    order?.status === "cancelled" || order?.status === "expired";
+  const isFailed = order?.status === "cancelled" || order?.status === "expired";
 
   return (
     <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
