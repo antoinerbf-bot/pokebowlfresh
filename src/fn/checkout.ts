@@ -68,7 +68,7 @@ export const submitCheckout = createServerFn({ method: "POST" })
     };
 
     if (data.paymentMethod === "on_site") {
-      upsertOrder(order);
+      await upsertOrder(order);
       return {
         type: "on_site" as const,
         orderId: order.id,
@@ -95,7 +95,7 @@ export const submitCheckout = createServerFn({ method: "POST" })
     });
 
     order.molliePaymentId = payment.id;
-    upsertOrder(order);
+    await upsertOrder(order);
 
     const checkoutUrl = payment._links?.checkout?.href;
     if (!checkoutUrl) {
@@ -114,14 +114,14 @@ export const submitCheckout = createServerFn({ method: "POST" })
 export const getOrderStatus = createServerFn({ method: "GET" })
   .validator(z.object({ orderId: z.string().min(1) }))
   .handler(async ({ data }) => {
-    let order = getOrderFromStore(data.orderId);
+    let order = await getOrderFromStore(data.orderId);
 
     if (order?.molliePaymentId && order.status === "pending_payment") {
       try {
         const payment = await getMolliePayment(order.molliePaymentId);
         if (payment.status === "paid") {
           order = { ...order, status: "paid" };
-          upsertOrder(order);
+          await upsertOrder(order);
         } else if (
           payment.status === "canceled" ||
           payment.status === "expired" ||
@@ -131,7 +131,7 @@ export const getOrderStatus = createServerFn({ method: "GET" })
             ...order,
             status: payment.status === "expired" ? "expired" : "cancelled",
           };
-          upsertOrder(order);
+          await upsertOrder(order);
         }
       } catch {
         // Keep local status if Mollie unreachable
