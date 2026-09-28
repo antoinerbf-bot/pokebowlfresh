@@ -133,35 +133,42 @@ function Index() {
       </header>
 
       <main>
-        <section className="relative isolate flex min-h-[560px] items-end overflow-hidden bg-[#071713] text-white sm:min-h-[680px] sm:items-center">
+        <section className="relative isolate flex min-h-[520px] items-end overflow-hidden bg-[#071713] text-white sm:min-h-[640px] sm:items-center">
           <div className="absolute inset-0 -z-20">
             <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center sm:object-[center_45%]" />
           </div>
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.72)_0%,rgba(7,23,19,.32)_35%,rgba(7,23,19,.78)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.58)_48%,rgba(7,23,19,.22)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.75)_0%,rgba(7,23,19,.4)_40%,rgba(7,23,19,.82)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.55)_50%,rgba(7,23,19,.2)_100%)]" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1320px] min-w-0 px-5 pb-32 pt-28 sm:px-6 sm:pb-20 sm:pt-36 lg:px-8">
-            <div className="max-w-[700px]">
-              <div className="mb-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] text-white/80 backdrop-blur-md sm:text-[9px]">{t("hero.badge")}</span>
-                <Link to="/recrutement" className="rounded-full bg-[#ff705f] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.15em] shadow-lg sm:text-[9px]">{t("nav.recruit")}</Link>
-              </div>
-              <p className="text-[8px] font-black uppercase tracking-[0.25em] text-[#d7ff45] sm:text-[9px]">{t("hero.location")}</p>
-              <h1 className="mt-3 max-w-[min(100%,28rem)] text-balance font-black tracking-[-0.03em] text-[clamp(1.875rem,7.2vw,3.75rem)] leading-[1.2] sm:max-w-[34rem] sm:text-5xl sm:leading-[1.15] lg:text-6xl">
-                <span className="block">{t("hero.title1")}</span>
-                <span className="mt-0.5 block text-[#d7ff45]">{t("hero.title2")}</span>
+          <div className="relative z-10 mx-auto w-full max-w-[1320px] min-w-0 px-5 pb-28 pt-24 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8">
+            <div className="max-w-xl">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
+                {t("hero.location")}
+              </p>
+              {/* Compact 2-line title — never wraps mid-word */}
+              <h1 className="mt-3 font-black tracking-tight text-[2rem] leading-[1.15] sm:text-4xl sm:leading-[1.12] lg:text-5xl">
+                <span className="block whitespace-nowrap">{t("hero.title1")}</span>
+                <span className="mt-1 block whitespace-nowrap text-[#d7ff45]">{t("hero.title2")}</span>
               </h1>
-              <p className="mt-5 max-w-[450px] text-[13px] leading-6 text-white/80 sm:text-base sm:leading-7">{t("hero.desc")}</p>
-              <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
-                <Link to="/commander" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-6 py-3.5 text-sm font-black shadow-[0_18px_45px_-18px_rgba(255,112,95,.9)]">
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-white/75 sm:text-[15px]">
+                {t("hero.desc")}
+              </p>
+              <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center">
+                <Link
+                  to="/commander"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_14px_40px_-12px_rgba(255,112,95,.85)] transition hover:brightness-110"
+                >
                   {t("hero.order")} <ArrowRight className="h-4 w-4" />
                 </Link>
-                <a href="#carte" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/25 bg-black/20 px-6 py-3.5 text-sm font-bold backdrop-blur-md">{t("hero.menu")}</a>
+                <a
+                  href="#carte"
+                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/25 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10"
+                >
+                  {t("hero.menu")}
+                </a>
               </div>
-              <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-[8px] font-black uppercase tracking-[0.12em] text-white/55 sm:text-[9px]">
-                <span>{t("hero.recipes")}</span>
-                <span>{t("hero.from")}</span>
-                <span>{t("hero.city")}</span>
-              </div>
+              <p className="mt-5 text-[11px] font-semibold tracking-wide text-white/50">
+                {t("hero.recipes")} · {t("hero.from")} · {t("hero.city")}
+              </p>
             </div>
           </div>
         </section>
@@ -179,7 +186,7 @@ function Index() {
             <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">{t("menu.eyebrow")}</p>
-                <h2 className="mt-3 max-w-2xl text-balance text-[1.75rem] font-black leading-[1.2] tracking-[-0.02em] sm:text-4xl sm:leading-[1.15] lg:text-5xl">
+                <h2 className="mt-3 max-w-2xl text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
                   <span className="block">{t("menu.title1")}</span>
                   <span className="mt-0.5 block text-[#7d8b83]">{t("menu.title2")}</span>
                 </h2>
@@ -223,7 +230,7 @@ function Index() {
           <div className="mx-auto max-w-[1200px]">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">{t("journey.eyebrow")}</p>
-              <h2 className="mt-3 max-w-3xl text-balance text-[1.75rem] font-black leading-[1.2] tracking-[-0.02em] sm:text-4xl sm:leading-[1.15] lg:text-5xl">
+              <h2 className="mt-3 max-w-3xl text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
                 <span className="block">{t("journey.title1")}</span>
                 <span className="mt-0.5 block text-white/40">{t("journey.title2")}</span>
               </h2>
@@ -305,7 +312,7 @@ function Index() {
           <div className="mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">{t("info.eyebrow")}</p>
-              <h2 className="mt-3 text-balance text-[1.75rem] font-black leading-[1.2] tracking-[-0.02em] sm:text-4xl sm:leading-[1.15] lg:text-5xl">
+              <h2 className="mt-3 text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
                 <span className="block">{t("info.title1")}</span>
                 <span className="mt-0.5 block text-[#7d8b83]">{t("info.title2")}</span>
               </h2>
