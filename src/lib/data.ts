@@ -1,75 +1,109 @@
-export const allToppings = [
-  "Avocat", "Mangue", "Edamame", "Maïs", "Feta", "Algues", "Tomates cerises",
-  "Oignons croustillants", "Sésame mixte", "Jalapeños", "Poivrons", "Concombre",
-  "Radis", "Ananas", "Grenade", "Coriandre", "Ciboulette", "Cacahuètes", "Nachos",
-  "Oignons rouges", "Graines de chia", "Noix de cajou", "Sauce Sriracha", "Citron vert",
-  "Gingembre mariné", "Champignons shiitake", "Oignons frits", "Bambou", "Petit pois", "Piment frais"
+export const customBases = [
+  "Riz blanc",
+  "Riz brun",
+  "Pâtes",
+  "Nachos",
+  "Salade",
 ];
+
+export const customMixIns = [
+  "Guacamole",
+  "Brocolis",
+  "Patates douces",
+  "Avocat",
+  "Carottes",
+  "Feta",
+  "Salade d'algues",
+  "Mangue",
+  "Oignons",
+  "Maïs",
+  "Tomates",
+  "Poivrons",
+  "Edamame",
+  "Jalapeños",
+  "Concombres",
+  "Houmous",
+];
+
+export const customProteins = [
+  "Poulet",
+  "Gyros",
+  "Saumon",
+  "Scampis",
+];
+
+export const customSauces = [
+  "Mayo",
+  "Mayo-Wasabi",
+  "Spicy-Mayo",
+  "Sésame (salée ou sucrée)",
+  "Chili doux",
+  "Teriyaki",
+  "Soja (salé ou sucré)",
+  "Mayo truffe",
+];
+
+export const customToppings = [
+  "Oignons frits",
+  "Sésame seeds",
+  "Noix de cajou",
+  "Nachos",
+  "Flocons-Chili",
+  "Wazabi",
+];
+
+export const allToppings = customToppings;
 
 export const bowls = [
   {
-    id: "sweet-chicken",
-    name: "Sweet chicken",
+    id: "mighty-gyros",
+    name: "Mighty Gyros",
     price: 10.00,
-    desc: "Poulet maison, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants, nachos, sésame mixte.",
-    tag: "Best-seller",
-  },
-  {
-    id: "saumon-wasabi",
-    name: "Saumon wasabi",
-    price: 11.00,
-    desc: "Saumon, avocat, salade d'algues, mangue, maïs, edamame, mayo wasabi, sésame mixte, nachos.",
+    desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
     tag: "Signature",
   },
   {
-    id: "scampis-royaux",
-    name: "Scampis royaux",
+    id: "sweet-chicken",
+    name: "Sweet Chicken",
     price: 10.00,
-    desc: "Scampis, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños, flocons de chili, nachos.",
-    tag: "Relevé",
+    desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+    tag: "Best-seller",
   },
   {
-    id: "crousty-chicken",
-    name: "Crousty Chicken",
-    price: 11.50,
-    desc: "Riz, poulet croustillant, sauce blanche, curry onctueux ou mix, oignons frits croustillants.",
-    tag: "Réconfort",
+    id: "scampis-royaux",
+    name: "Scampis Royal",
+    price: 10.00,
+    desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+    tag: "Signature",
+  },
+  {
+    id: "saumon-wasabi",
+    name: "Saumon Wasabi",
+    price: 11.00,
+    desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
+    tag: "Premium",
   },
   {
     id: "spicy-chicken",
-    name: "Spicy chicken",
+    name: "Spicy Chicken",
     price: 10.00,
-    desc: "Poulet maison, avocat, patates douces, maïs, jalapeños, feta, spicy mayo, flocons de chili, nachos, sésame mix.",
+    desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
     tag: "Épicé",
   },
   {
-    id: "aloha-classic",
-    name: "Aloha Classic",
-    price: 12.00,
-    desc: "Thon mariné, ananas, avocat, concombre, oignons rouges, coriandre, graines de sésame, sauce ponzu, riz vinaigré.",
+    id: "crousty-chicken-curry",
+    name: "Crousty Chicken Curry",
+    price: 11.00,
+    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
     tag: "Nouveau",
   },
   {
-    id: "vegan-tofu",
-    name: "Vegan Tofu",
-    price: 9.50,
-    desc: "Tofu frit, edamame, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
-    tag: "Vegan",
+    id: "crousty-chicken-sauce-blanche",
+    name: "Crousty Chicken Sauce Blanche",
+    price: 11.00,
+    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
+    tag: "Nouveau",
   },
-  {
-    id: "beef-teriyaki",
-    name: "Beef Teriyaki",
-    price: 13.00,
-    desc: "Émincé de boeuf, riz, brocolis, champignons shiitake, sésame, ciboulette, sauce teriyaki sucrée.",
-    tag: "Gourmand",
-  },
-  {
-    id: "shrimp-mango",
-    name: "Shrimp Mango",
-    price: 11.50,
-    desc: "Crevettes, mangue fraîche, avocat, tomates cerises, concombre, citron vert, coriandre, sauce piment doux.",
-    tag: "Frais",
-  }
 ];
 
 export const drinks = [

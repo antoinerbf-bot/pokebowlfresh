@@ -89,6 +89,15 @@ function CommanderPage() {
             >
               <ArrowLeft className="h-4 w-4" /> {t("cmd.back")}
             </Link>
+            <div className="mb-6 flex items-center gap-3">
+              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-lg">
+                <img src={logo} alt="Poke N Bowl" className="h-full w-full object-contain" />
+              </span>
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-white">Poke N Bowl</p>
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">Visé · Fresh food</p>
+              </div>
+            </div>
             <div className="mt-8 max-w-3xl">
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#d7ff45]">
                 {t("cmd.eyebrow")}

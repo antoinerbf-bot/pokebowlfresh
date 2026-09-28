@@ -29,12 +29,12 @@ const MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 const PHONE = "+32491281456";
 
 const HOUR_ROWS = [
-  ["info.day.mon", "17:15 – 20:30"],
-  ["info.day.tue", "17:15 – 20:30"],
-  ["info.day.wed", "17:15 – 20:30"],
-  ["info.day.thu", "17:15 – 20:30"],
-  ["info.day.fri", "17:15 – 20:30"],
-  ["info.day.sat", "17:45 – 20:30"],
+  ["info.day.mon", "12:00 – 14:00 · 17:00 – 21:00"],
+  ["info.day.tue", "12:00 – 14:00 · 17:00 – 21:00"],
+  ["info.day.wed", "12:00 – 14:00 · 17:00 – 21:00"],
+  ["info.day.thu", "12:00 – 14:00 · 17:00 – 21:00"],
+  ["info.day.fri", "12:00 – 14:00 · 17:00 – 21:00"],
+  ["info.day.sat", "18:00 – 21:00"],
   ["info.day.sun", "closed"],
 ] as const;
 

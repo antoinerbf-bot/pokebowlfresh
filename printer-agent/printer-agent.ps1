@@ -17,7 +17,15 @@ function Build-ReceiptBytes {
   Add-Line $stream ("Heure : "+(Get-Date).ToString("dd/MM/yyyy HH:mm")) $encoding
   Add-Line $stream ("Client : "+$Order.customer.name) $encoding
   Add-Line $stream ("Tel : "+$Order.customer.phone) $encoding
-  Add-Line $stream ("Retrait : "+$Order.customer.pickupTime) $encoding
+  if ($Order.customer.fulfillment -eq "delivery") {
+    Add-Line $stream "LIVRAISON" $encoding
+    Add-Line $stream ("Adresse : "+$Order.customer.address) $encoding
+    Add-Line $stream (($Order.customer.postalCode+" "+$Order.customer.city).Trim()) $encoding
+    Add-Line $stream ("Créneau : "+$Order.customer.requestedTime) $encoding
+    Add-Line $stream ("Livraison : "+([decimal]$Order.customer.deliveryFee).ToString("0.00")+" EUR") $encoding
+  } else {
+    Add-Line $stream ("RETRAIT : "+$Order.customer.requestedTime) $encoding
+  }
   if ($Order.customer.notes) { Add-Line $stream ("Note : "+$Order.customer.notes) $encoding }
   Add-Line $stream ("-"*42) $encoding
   foreach ($item in $Order.items) {
