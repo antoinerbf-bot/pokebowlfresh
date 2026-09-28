@@ -9,6 +9,7 @@ import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { bowls, drinks, desserts } from "../lib/data";
+import { DishImage } from "../components/DishImage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -203,8 +204,8 @@ function Index() {
             {bowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.03}>
                 <Link to="/product/$productId" params={{ productId: bowl.id }} className="group block overflow-hidden rounded-[20px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1 sm:rounded-[24px]">
-                  <div className="relative aspect-[1.12] overflow-hidden sm:aspect-[1.08]">
-                    <img src={bowl.image} alt={bowl.name} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+                  <div className="relative aspect-[1.48] overflow-hidden sm:aspect-[1.48]">
+                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-500 group-hover:scale-[1.03]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-[0.1em]">{bowl.tag}</span>
                     <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black">€ {bowl.price.toFixed(2)}</span>

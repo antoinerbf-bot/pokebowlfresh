@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { bowls, allToppings } from "../../lib/data";
+import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ function ProductPage() {
       price: product.price,
       quantity: 1,
       toppings: selectedToppings.filter((tp) => available(toppingKey(tp))),
-      image: product.image,
+      
     });
     setIsCartOpen(true);
   };
@@ -114,11 +115,11 @@ function ProductPage() {
         </Link>
 
         <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-16">
-          <div className="relative flex max-h-[420px] overflow-hidden rounded-3xl shadow-lift sm:max-h-[500px]">
-            <img
-              src={product.image}
+          <div className="relative aspect-[1.48] overflow-hidden rounded-3xl shadow-lift sm:max-h-[500px]">
+            <DishImage
+              dishId={product.id}
               alt={product.name}
-              className={`w-full object-cover ${!productOk ? "grayscale" : ""}`}
+              className={`h-full w-full transition duration-500 ${!productOk ? "grayscale" : ""}`}
             />
             <span className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-bold text-primary shadow-sm">
               {productOk ? product.tag : t("cmd.sold_out")}

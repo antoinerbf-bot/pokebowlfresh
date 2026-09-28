@@ -1,13 +1,7 @@
-import heroPoke from "@/assets/hero-poke.jpg";
-import bowlChicken from "@/assets/bowl-chicken.jpg";
-import bowlScampi from "@/assets/bowl-scampi.jpg";
-import bowlCrousty from "@/assets/bowl-crousty.jpg";
-import dessert from "@/assets/dessert.jpg";
-
 export const allToppings = [
-  "Avocat", "Mangue", "Edamame", "Maïs", "Feta", "Algues", "Tomates cerises", 
-  "Oignons croustillants", "Sésame mixte", "Jalapeños", "Poivrons", "Concombre", 
-  "Radis", "Ananas", "Grenade", "Coriandre", "Ciboulette", "Cacahuètes", "Nachos", 
+  "Avocat", "Mangue", "Edamame", "Maïs", "Feta", "Algues", "Tomates cerises",
+  "Oignons croustillants", "Sésame mixte", "Jalapeños", "Poivrons", "Concombre",
+  "Radis", "Ananas", "Grenade", "Coriandre", "Ciboulette", "Cacahuètes", "Nachos",
   "Oignons rouges", "Graines de chia", "Noix de cajou", "Sauce Sriracha", "Citron vert",
   "Gingembre mariné", "Champignons shiitake", "Oignons frits", "Bambou", "Petit pois", "Piment frais"
 ];
@@ -17,7 +11,6 @@ export const bowls = [
     id: "sweet-chicken",
     name: "Sweet chicken",
     price: 10.00,
-    image: bowlChicken,
     desc: "Poulet maison, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants, nachos, sésame mixte.",
     tag: "Best-seller",
   },
@@ -25,7 +18,6 @@ export const bowls = [
     id: "saumon-wasabi",
     name: "Saumon wasabi",
     price: 11.00,
-    image: heroPoke,
     desc: "Saumon, avocat, salade d'algues, mangue, maïs, edamame, mayo wasabi, sésame mixte, nachos.",
     tag: "Signature",
   },
@@ -33,7 +25,6 @@ export const bowls = [
     id: "scampis-royaux",
     name: "Scampis royaux",
     price: 10.00,
-    image: bowlScampi,
     desc: "Scampis, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños, flocons de chili, nachos.",
     tag: "Relevé",
   },
@@ -41,7 +32,6 @@ export const bowls = [
     id: "crousty-chicken",
     name: "Crousty Chicken",
     price: 11.50,
-    image: bowlCrousty,
     desc: "Riz, poulet croustillant, sauce blanche, curry onctueux ou mix, oignons frits croustillants.",
     tag: "Réconfort",
   },
@@ -49,7 +39,6 @@ export const bowls = [
     id: "spicy-chicken",
     name: "Spicy chicken",
     price: 10.00,
-    image: bowlChicken, // Fallback image
     desc: "Poulet maison, avocat, patates douces, maïs, jalapeños, feta, spicy mayo, flocons de chili, nachos, sésame mix.",
     tag: "Épicé",
   },
@@ -57,7 +46,6 @@ export const bowls = [
     id: "aloha-classic",
     name: "Aloha Classic",
     price: 12.00,
-    image: heroPoke, // Fallback image
     desc: "Thon mariné, ananas, avocat, concombre, oignons rouges, coriandre, graines de sésame, sauce ponzu, riz vinaigré.",
     tag: "Nouveau",
   },
@@ -65,7 +53,6 @@ export const bowls = [
     id: "vegan-tofu",
     name: "Vegan Tofu",
     price: 9.50,
-    image: bowlScampi, // Fallback image
     desc: "Tofu frit, edamame, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
     tag: "Vegan",
   },
@@ -73,7 +60,6 @@ export const bowls = [
     id: "beef-teriyaki",
     name: "Beef Teriyaki",
     price: 13.00,
-    image: bowlCrousty, // Fallback image
     desc: "Émincé de boeuf, riz, brocolis, champignons shiitake, sésame, ciboulette, sauce teriyaki sucrée.",
     tag: "Gourmand",
   },
@@ -81,7 +67,6 @@ export const bowls = [
     id: "shrimp-mango",
     name: "Shrimp Mango",
     price: 11.50,
-    image: bowlScampi, // Fallback image
     desc: "Crevettes, mangue fraîche, avocat, tomates cerises, concombre, citron vert, coriandre, sauce piment doux.",
     tag: "Frais",
   }
