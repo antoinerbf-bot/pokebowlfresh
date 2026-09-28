@@ -1,26 +1,35 @@
-# Greet & Showcase
+# Poke N Bowl Visé
 
-https://maps.app.goo.gl/TkddDsG9pwYb62558?g_st=ic Fait moi un site pour cette établissement récupère les infos images logo tout ce que tu peux insère le dans le site de manière modern dans le thème belle home page
+Restaurant ordering website for Poke N Bowl Visé.
 
-This project was built with [Lovable](https://lovable.dev).
+## Deployment
 
-**Live app**: https://pokebowlfresh.lovable.app
+Production deployment is **GitHub + Vercel + Nitro**.
 
-## Build with Lovable
+Cloudflare Workers, Wrangler, and Cloudflare configuration are intentionally not used by this project.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/0c445f0c-5fa1-4d7e-8f3b-42a709dcf0ac).
+## Payments
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Online payments use Mollie. The website receives Mollie webhooks and fetches the latest payment status before an order is treated as paid.
 
-## Development
+## Printing
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+A small custom Windows printer agent is included in `printer-agent/`.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+It:
+- runs on the restaurant's Windows computer;
+- polls the website for paid/on-site orders;
+- sends ESC/POS directly to the MUNBYN printer over the local network;
+- automatically retries failed prints;
+- has no QZ Tray dependency and no recurring printer-software subscription.
+
+The MUNBYN ITPP047 must be connected by Ethernet to the same local network as the Windows computer. MUNBYN documents Epson mode and ESC/POS support for this printer family.
+
+## Required Vercel environment variables
+
+- `MOLLIE_API_KEY`
+- `DATABASE_URL`
+- `PRINTER_AGENT_SECRET`
+
+Secrets belong in Vercel Environment Variables, not in GitHub.
+
