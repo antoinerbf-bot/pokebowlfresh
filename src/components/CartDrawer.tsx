@@ -7,6 +7,8 @@ import { useTranslation } from "../context/I18nContext";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
 import { Separator } from "./ui/separator";
+import { DishImage } from "./DishImage";
+import { bowls } from "../lib/data";
 
 export function CartDrawer() {
   const { isCartOpen, setIsCartOpen, items, updateQuantity, removeItem, total } = useCart();
@@ -36,13 +38,11 @@ export function CartDrawer() {
               <div className="flex flex-col gap-5 py-4">
                 {items.map((item) => (
                   <div key={`${item.id}-${JSON.stringify(item.toppings)}`} className="flex gap-4">
-                    {item.image && (
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-16 w-16 rounded-md object-cover"
-                      />
-                    )}
+                    {bowls.some((bowl) => bowl.id === item.id) ? (
+                      <DishImage dishId={item.id} alt={item.name} className="h-16 w-16 shrink-0 rounded-md bg-[#081612]" />
+                    ) : item.image ? (
+                      <img src={item.image} alt={item.name} className="h-16 w-16 shrink-0 rounded-md object-cover" />
+                    ) : null}
                     <div className="flex flex-1 flex-col justify-between">
                       <div>
                         <h4 className="text-sm font-semibold leading-tight">{item.name}</h4>
