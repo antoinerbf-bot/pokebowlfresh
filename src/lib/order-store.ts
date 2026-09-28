@@ -13,6 +13,7 @@ type DbRow = {
   currency: "EUR";
   print_status: "pending" | "printing" | "printed";
   printed_at: string | null;
+  print_claimed_at: string | null;
   print_attempts: number;
   print_error: string | null;
 };
@@ -47,12 +48,16 @@ async function ensureSchema(): Promise<void> {
           print_status TEXT NOT NULL DEFAULT 'pending',
           printed_at TIMESTAMPTZ,
           print_attempts INTEGER NOT NULL DEFAULT 0,
+          print_claimed_at TIMESTAMPTZ,
           print_error TEXT
         )
       `;
       await sql`
         CREATE INDEX IF NOT EXISTS orders_print_queue_idx
         ON orders (print_status, status, created_at)
+      `;
+      await sql`
+        ALTER TABLE orders ADD COLUMN IF NOT EXISTS print_claimed_at TIMESTAMPTZ
       `;
       await sql`
         CREATE INDEX IF NOT EXISTS orders_mollie_idx
@@ -86,7 +91,7 @@ export async function getOrderFromStore(id: string): Promise<Order | undefined> 
   const rows = await sql<DbRow>`
     SELECT id, created_at, status, payment_method, mollie_payment_id,
            customer_json, items_json, total, currency,
-           print_status, printed_at, print_attempts, print_error
+           print_status, printed_at, print_claimed_at, print_attempts, print_error
     FROM orders
     WHERE id = ${id}
     LIMIT 1
@@ -146,13 +151,17 @@ export async function claimNextPrintJob(): Promise<Order | undefined> {
     UPDATE orders
     SET
       print_status = 'printing',
+      print_claimed_at = NOW(),
       print_attempts = print_attempts + 1,
       print_error = NULL
     WHERE id = (
       SELECT id
       FROM orders
-      WHERE print_status = 'pending'
-        AND status IN ('paid', 'awaiting_pickup')
+      WHERE status IN ('paid', 'awaiting_pickup')
+        AND (
+          print_status = 'pending'
+          OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
+        )
       ORDER BY created_at ASC
       LIMIT 1
       FOR UPDATE SKIP LOCKED
@@ -178,6 +187,7 @@ export async function acknowledgePrint(
       UPDATE orders
       SET print_status = 'printed',
           printed_at = NOW(),
+          print_claimed_at = NULL,
           print_error = NULL
       WHERE id = ${orderId}
     `;
