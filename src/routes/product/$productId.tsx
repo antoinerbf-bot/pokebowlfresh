@@ -4,7 +4,6 @@ import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
 import logo from "@/assets/logo.png";
