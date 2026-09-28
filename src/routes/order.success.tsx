@@ -27,7 +27,7 @@ function OrderSuccessPage() {
     status: string;
     paymentMethod: string;
     total: number;
-    customer: { name: string; phone: string; pickupTime: string; notes?: string };
+    customer: { name: string; phone: string; fulfillment: "delivery" | "pickup"; requestedTime: string; address?: string; postalCode?: string; city?: string; deliveryFee?: number; notes?: string };
     items: { name: string; quantity: number; price: number; toppings: string[] }[];
   } | null>(null);
 
@@ -39,7 +39,8 @@ function OrderSuccessPage() {
 
     let cancelled = false;
 
-    (async () => {
+    let attempts = 0;
+    const poll = async () => {
       try {
         const res = await getOrderStatus({ data: { orderId } });
         if (!cancelled && res.found) {
@@ -47,13 +48,24 @@ function OrderSuccessPage() {
           if (res.order.status === "paid" || res.order.paymentMethod === "on_site") {
             clearCart();
           }
+          if (res.order.status !== "pending_payment") {
+            setLoading(false);
+            return;
+          }
         }
       } catch (e) {
         console.error(e);
-      } finally {
-        if (!cancelled) setLoading(false);
       }
-    })();
+
+      if (!cancelled && attempts < 20) {
+        attempts += 1;
+        window.setTimeout(poll, 3000);
+      } else if (!cancelled) {
+        setLoading(false);
+      }
+    };
+
+    poll();
 
     return () => {
       cancelled = true;
@@ -128,8 +140,10 @@ function OrderSuccessPage() {
                 {isPaid ? "Commande payée !" : "Commande confirmée !"}
               </h1>
               <p className="mt-2 text-[#758079]">
-                Merci {order.customer.name}. On prépare ton bowl pour{" "}
-                <strong>{order.customer.pickupTime}</strong>.
+                Merci {order.customer.name}.{" "}
+                {order.customer.fulfillment === "delivery"
+                  ? <>On prépare ta commande pour la livraison à <strong>{order.customer.requestedTime}</strong>.</>
+                  : <>On prépare ton bowl pour <strong>{order.customer.requestedTime}</strong>.</>}
               </p>
               <p className="mt-4 rounded-full bg-[#f7f4ec] px-4 py-2 font-mono text-sm font-black">
                 {order.id}
@@ -137,6 +151,14 @@ function OrderSuccessPage() {
             </div>
 
             <div className="mt-8 space-y-3 border-t border-black/5 pt-6">
+              {order.customer.fulfillment === "delivery" && (
+                <div className="rounded-2xl bg-[#f7f4ec] p-4 text-sm">
+                  <strong>Livraison</strong>
+                  <div className="mt-1 text-[#758079]">{order.customer.address}</div>
+                  <div className="text-[#758079]">{order.customer.postalCode} {order.customer.city}</div>
+                  <div className="mt-2 font-bold">Frais de livraison : {order.customer.deliveryFee ? `€ ${order.customer.deliveryFee.toFixed(2)}` : "Gratuits"}</div>
+                </div>
+              )}
               <div className="flex items-center gap-2 text-sm">
                 {isOnSite && !isPaid ? (
                   <>
