@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
 import { bowls, drinks, desserts } from "../lib/data";
+import { DishImage } from "../components/DishImage";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { useStock } from "../hooks/useStock";
@@ -244,13 +245,11 @@ function BowlCard({
 }) {
   return (
     <>
-      <div className="relative aspect-[1.12] overflow-hidden">
-        <img
-          src={bowl.image}
+      <div className="relative aspect-[1.48] overflow-hidden">
+        <DishImage
+          dishId={bowl.id}
           alt={bowl.name}
-          className={`h-full w-full object-cover transition duration-700 ${
-            ok ? "group-hover:scale-105" : "grayscale"
-          }`}
+          className={`h-full w-full transition duration-700 ${ok ? "group-hover:scale-105" : "grayscale"}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-wider sm:left-4 sm:top-4 sm:text-[9px]">
