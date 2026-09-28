@@ -229,7 +229,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    line-height: 1.08;
+    line-height: 1.22;
     letter-spacing: -0.015em;
   }
 
@@ -246,7 +246,7 @@
 @media (max-width: 767px) {
   h1, h2, h3, h4 {
     letter-spacing: -0.01em;
-    line-height: 1.1;
+    line-height: 1.28;
   }
 }
 
@@ -261,12 +261,12 @@
   }
 
   html {
-    overflow-x: hidden;
+    overflow-x: clip;
     overscroll-behavior-x: none;
   }
 
   body {
     min-height: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
