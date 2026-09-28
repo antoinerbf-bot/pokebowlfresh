@@ -16,6 +16,7 @@ import {
   upsertOrder,
 } from "../lib/order-store";
 import { allToppings, bowls, drinks, desserts } from "../lib/data";
+import { getDeliveryZone } from "../lib/delivery";
 
 const orderItemSchema = z.object({
   id: z.string(),
@@ -31,7 +32,11 @@ const checkoutSchema = z.object({
     phone: z.string().min(8),
     email: z.string().email().optional().or(z.literal("")),
     notes: z.string().max(500).optional(),
-    pickupTime: z.string().min(1),
+    fulfillment: z.enum(["delivery", "pickup"]),
+    requestedTime: z.string().min(1),
+    address: z.string().max(300).optional(),
+    postalCode: z.string().max(10).optional(),
+    city: z.string().max(100).optional(),
   }),
   items: z.array(orderItemSchema).min(1),
   paymentMethod: z.enum(["online", "on_site"]),
@@ -72,7 +77,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
   });
 }
 
-function computeTotal(items: OrderItem[]): number {
+function computeSubtotal(items: OrderItem[]): number {
   return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
@@ -80,11 +85,27 @@ export const submitCheckout = createServerFn({ method: "POST" })
   .validator(checkoutSchema)
   .handler(async ({ data }) => {
     const items = canonicalizeItems(data.items);
-    const total = computeTotal(items);
-    if (total <= 0) {
+    const subtotal = computeSubtotal(items);
+    if (subtotal <= 0) {
       throw new Error("Panier invalide");
     }
 
+    const deliveryZone = data.customer.fulfillment === "delivery"
+      ? getDeliveryZone(data.customer.postalCode ?? "")
+      : null;
+
+    if (data.customer.fulfillment === "delivery") {
+      if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
+      if (subtotal < deliveryZone.minimumOrder) {
+        throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+      }
+      if (!data.customer.address?.trim() || !data.customer.city?.trim()) {
+        throw new Error("Adresse de livraison incomplète.");
+      }
+    }
+
+    const deliveryFee = deliveryZone ? (subtotal >= 50 ? 0 : deliveryZone.feeUnder50) : 0;
+    const total = subtotal + deliveryFee;
     const orderId = generateOrderId();
     const order: Order = {
       id: orderId,
@@ -96,7 +117,12 @@ export const submitCheckout = createServerFn({ method: "POST" })
         phone: data.customer.phone.trim(),
         email: data.customer.email?.trim() || undefined,
         notes: data.customer.notes?.trim() || undefined,
-        pickupTime: data.customer.pickupTime,
+        fulfillment: data.customer.fulfillment,
+        requestedTime: data.customer.requestedTime,
+        address: data.customer.address?.trim() || undefined,
+        postalCode: data.customer.postalCode?.trim().replace(/\s+/g, "") || undefined,
+        city: data.customer.city?.trim() || undefined,
+        deliveryFee,
       },
       items,
       total,
@@ -125,7 +151,7 @@ export const submitCheckout = createServerFn({ method: "POST" })
         orderId: order.id,
         customerName: order.customer.name,
         customerPhone: order.customer.phone,
-        pickupTime: order.customer.pickupTime,
+        requestedTime: order.customer.requestedTime,
       },
       locale: "fr_BE",
     });
