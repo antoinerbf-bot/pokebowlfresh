@@ -6,8 +6,6 @@ Restaurant ordering website for Poke N Bowl Visé.
 
 Production deployment is **GitHub + Vercel + Nitro**.
 
-Cloudflare Workers, Wrangler, and Cloudflare configuration are intentionally not used by this project.
-
 ## Payments
 
 Online payments use Mollie. The website receives Mollie webhooks and fetches the latest payment status before an order is treated as paid.
