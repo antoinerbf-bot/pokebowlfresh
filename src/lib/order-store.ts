@@ -157,7 +157,7 @@ export async function claimNextPrintJob(): Promise<Order | undefined> {
     WHERE id = (
       SELECT id
       FROM orders
-      WHERE status IN ('paid', 'awaiting_pickup')
+      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery')
         AND (
           print_status = 'pending'
           OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
