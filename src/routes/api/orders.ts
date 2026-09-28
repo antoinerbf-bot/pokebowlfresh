@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { listOrdersFromStore } from "../../server/checkout";
+import { listOrdersFromStore } from "../../lib/order-store";
 
 /**
  * GET /api/orders
  * Liste les commandes en mémoire (MVP).
- * Quand le logiciel d'impression sera prêt, on branchera une vraie base
- * et éventuellement une clé API (header Authorization).
  */
 export const Route = createFileRoute("/api/orders")({
   server: {

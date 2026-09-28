@@ -3,7 +3,7 @@ import { getMolliePayment } from "../../lib/mollie.server";
 import {
   getOrderFromStore,
   upsertOrder,
-} from "../../server/checkout";
+} from "../../lib/order-store";
 
 export const Route = createFileRoute("/api/mollie-webhook")({
   server: {
@@ -17,7 +17,6 @@ export const Route = createFileRoute("/api/mollie-webhook")({
             const body = (await request.json()) as { id?: string };
             paymentId = body.id ?? null;
           } else {
-            // Mollie often sends application/x-www-form-urlencoded with id=
             const text = await request.text();
             const params = new URLSearchParams(text);
             paymentId = params.get("id");
@@ -29,14 +28,12 @@ export const Route = createFileRoute("/api/mollie-webhook")({
 
           const payment = await getMolliePayment(paymentId);
           const orderId = payment.metadata?.orderId;
-
           if (!orderId) {
             return new Response("OK", { status: 200 });
           }
 
           const order = getOrderFromStore(orderId);
           if (!order) {
-            // Order may have been lost after cold start — still acknowledge
             return new Response("OK", { status: 200 });
           }
 
@@ -55,10 +52,9 @@ export const Route = createFileRoute("/api/mollie-webhook")({
           }
 
           return new Response("OK", { status: 200 });
-        } catch (err) {
-          console.error("[mollie-webhook]", err);
-          // Always 200 to avoid Mollie retries storm on transient errors
-          return new Response("OK", { status: 200 });
+        } catch (e) {
+          console.error("[mollie-webhook]", e);
+          return new Response("Error", { status: 500 });
         }
       },
     },
