@@ -4,7 +4,8 @@ import { ArrowLeft, CreditCard, Store, Loader2 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useCart } from "../context/CartContext";
 import { submitCheckout } from "../fn/checkout";
-import type { PaymentMethod } from "../lib/orders";
+import type { FulfillmentMethod, PaymentMethod } from "../lib/orders";
+import { getDeliveryZone } from "../lib/delivery";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -18,12 +19,19 @@ function CheckoutPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
-  const [pickupTime, setPickupTime] = useState("");
+  const [fulfillment, setFulfillment] = useState<FulfillmentMethod>("delivery");
+  const [requestedTime, setRequestedTime] = useState("");
+  const [address, setAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("online");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const pickupOptions = useMemo(() => buildPickupSlots(), []);
+  const deliveryZone = useMemo(() => getDeliveryZone(postalCode), [postalCode]);
+  const deliveryFee = fulfillment === "delivery" && deliveryZone ? (total >= 50 ? 0 : deliveryZone.feeUnder50) : 0;
+  const orderTotal = total + deliveryFee;
 
   if (items.length === 0) {
     return (
@@ -53,7 +61,11 @@ function CheckoutPage() {
             phone,
             email: email || "",
             notes: notes || undefined,
-            pickupTime,
+            fulfillment,
+            requestedTime,
+            address: address || undefined,
+            postalCode: postalCode || undefined,
+            city: city || undefined,
           },
           items: items.map((item) => ({
             id: item.id,
@@ -115,11 +127,25 @@ function CheckoutPage() {
           Ta commande.
         </h1>
         <p className="mt-3 max-w-xl text-sm text-[#758079]">
-          Renseigne tes coordonnées, choisis l’heure de retrait et le mode de paiement.
+          Renseigne tes coordonnées, ton adresse de livraison et le mode de paiement.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-10 grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-6">
+            <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
+              <h2 className="text-lg font-black">Mode de réception</h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <button type="button" onClick={() => setFulfillment("delivery")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec]"}`}>
+                  <span className="text-sm font-black">Livraison</span>
+                  <span className="mt-1 block text-xs text-[#7a847e]">À domicile selon ton code postal</span>
+                </button>
+                <button type="button" onClick={() => setFulfillment("pickup")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec]"}`}>
+                  <span className="text-sm font-black">Retrait sur place</span>
+                  <span className="mt-1 block text-xs text-[#7a847e]">Poke N Bowl Visé</span>
+                </button>
+              </div>
+            </section>
+
             <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
               <h2 className="text-lg font-black">Coordonnées</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -154,12 +180,31 @@ function CheckoutPage() {
                     placeholder="toi@email.com"
                   />
                 </label>
+                {fulfillment === "delivery" && (
+                  <>
+                    <label className="block sm:col-span-2">
+                      <span className="text-xs font-bold text-[#7a847e]">Adresse *</span>
+                      <input required value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Rue et numéro" />
+                    </label>
+                    <label className="block">
+                      <span className="text-xs font-bold text-[#7a847e]">Code postal *</span>
+                      <input required inputMode="numeric" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="4600" />
+                    </label>
+                    <label className="block">
+                      <span className="text-xs font-bold text-[#7a847e]">Ville *</span>
+                      <input required value={city} onChange={(e) => setCity(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Visé" />
+                    </label>
+                    <div className="sm:col-span-2 rounded-xl bg-[#f7f4ec] px-4 py-3 text-xs font-bold text-[#17231f]">
+                      {deliveryZone ? <>Minimum : € {deliveryZone.minimumOrder.toFixed(2)} · Livraison : {total >= 50 ? "gratuite" : `€ ${deliveryZone.feeUnder50.toFixed(2)}`}</> : "Entre ton code postal pour connaître les frais de livraison."}
+                    </div>
+                  </>
+                )}
                 <label className="block sm:col-span-2">
-                  <span className="text-xs font-bold text-[#7a847e]">Heure de retrait *</span>
+                  <span className="text-xs font-bold text-[#7a847e]">{fulfillment === "delivery" ? "Créneau souhaité *" : "Heure de retrait *"}</span>
                   <select
                     required
-                    value={pickupTime}
-                    onChange={(e) => setPickupTime(e.target.value)}
+                    value={requestedTime}
+                    onChange={(e) => setRequestedTime(e.target.value)}
                     className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                   >
                     <option value="">Choisir un créneau</option>
@@ -249,8 +294,14 @@ function CheckoutPage() {
               ))}
             </ul>
             <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="font-bold">Total</span>
-              <span className="text-2xl font-black text-[#d7ff45]">€ {total.toFixed(2)}</span>
+              <div>
+                <span className="font-bold">Total</span>
+                <div className="mt-1 text-right">
+                  <div className="text-xs text-white/50">Sous-total · € {total.toFixed(2)}</div>
+                  {fulfillment === "delivery" && <div className="text-xs text-white/50">Livraison · {deliveryFee === 0 ? "Gratuite" : `€ ${deliveryFee.toFixed(2)}`}</div>}
+                  <div className="text-2xl font-black text-[#d7ff45]">€ {orderTotal.toFixed(2)}</div>
+                </div>
+              </div>
             </div>
             <button
               type="submit"
@@ -269,7 +320,7 @@ function CheckoutPage() {
               )}
             </button>
             <p className="mt-3 text-center text-[10px] text-white/40">
-              Retrait uniquement · Poke N Bowl Visé
+              Livraison selon zone · retrait possible à Poke N Bowl Visé
             </p>
           </aside>
         </form>
