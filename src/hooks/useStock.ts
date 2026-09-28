@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { isItemAvailable, type StockSnapshot } from "../lib/stock";
-import { getStock } from "../server/stock";
+import { getStock } from "../fn/stock";
 
+/** Poll stock every 20s so menu reflects real-time availability */
 export function useStock(pollMs = 20000) {
   const [stock, setStock] = useState<StockSnapshot | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [persistent, setPersistent] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
       const res = await getStock();
       setStock(res.stock);
-    } catch (e) {
-      console.error("[useStock]", e);
-    } finally {
-      setLoading(false);
+      setPersistent(res.persistent);
+    } catch {
+      // keep last known stock on network error
     }
   }, []);
 
@@ -28,5 +28,5 @@ export function useStock(pollMs = 20000) {
     [stock],
   );
 
-  return { stock, loading, available, refresh };
+  return { stock, persistent, available, refresh };
 }
