@@ -32,19 +32,19 @@ export const Route = createFileRoute("/api/mollie-webhook")({
             return new Response("OK", { status: 200 });
           }
 
-          const order = getOrderFromStore(orderId);
+          const order = await getOrderFromStore(orderId);
           if (!order) {
             return new Response("OK", { status: 200 });
           }
 
           if (payment.status === "paid") {
-            upsertOrder({ ...order, status: "paid", molliePaymentId: paymentId });
+            await upsertOrder({ ...order, status: "paid", molliePaymentId: paymentId });
           } else if (
             payment.status === "canceled" ||
             payment.status === "expired" ||
             payment.status === "failed"
           ) {
-            upsertOrder({
+            await upsertOrder({
               ...order,
               status: payment.status === "expired" ? "expired" : "cancelled",
               molliePaymentId: paymentId,
