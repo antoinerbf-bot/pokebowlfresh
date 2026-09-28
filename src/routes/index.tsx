@@ -144,9 +144,9 @@ function Index() {
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
                 {t("hero.location")}
               </p>
-              <h1 className="mt-3 font-black tracking-tight text-[1.875rem] sm:text-4xl lg:text-5xl">
-                <span className="block leading-[1.2] drop-shadow-[0_2px_10px_rgba(0,0,0,.55)]">{t("hero.title1")}</span>
-                <span className="mt-2 block leading-[1.35] pb-[0.3em] text-[#d7ff45] drop-shadow-[0_2px_12px_rgba(0,0,0,.65)]">{t("hero.title2")}</span>
+              <h1 className="mt-3 font-sans font-extrabold tracking-tight text-[1.875rem] leading-[1.3] sm:text-4xl sm:leading-[1.25] lg:text-5xl">
+                <span className="block drop-shadow-[0_2px_10px_rgba(0,0,0,.55)]">{t("hero.title1")}</span>
+                <span className="mt-1 block pb-1 text-[#d7ff45] drop-shadow-[0_2px_12px_rgba(0,0,0,.65)]">{t("hero.title2")}</span>
               </h1>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-[15px]">
                 {t("hero.desc")}
