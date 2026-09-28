@@ -1,4 +1,5 @@
 export type PaymentMethod = "online" | "on_site";
+export type FulfillmentMethod = "delivery" | "pickup";
 export type OrderStatus =
   | "pending_payment"
   | "paid"
@@ -19,7 +20,12 @@ export interface OrderCustomer {
   phone: string;
   email?: string;
   notes?: string;
-  pickupTime: string;
+  fulfillment: FulfillmentMethod;
+  requestedTime: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  deliveryFee?: number;
 }
 
 export interface Order {
