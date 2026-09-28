@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { bowls, allToppings } from "../../lib/data";
+import { bowls } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
@@ -22,7 +22,7 @@ function ProductPage() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
-  const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
+
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   if (!product) {
@@ -38,17 +38,6 @@ function ProductPage() {
 
   const productOk = available(product.id);
 
-  const handleToppingChange = (topping: string, checked: boolean) => {
-    if (!available(toppingKey(topping))) return;
-    if (checked) {
-      if (selectedToppings.length < 5) {
-        setSelectedToppings([...selectedToppings, topping]);
-      }
-    } else {
-      setSelectedToppings(selectedToppings.filter((x) => x !== topping));
-    }
-  };
-
   const handleAddToCart = () => {
     if (!productOk) return;
     addItem({
@@ -56,8 +45,7 @@ function ProductPage() {
       name: product.name,
       price: product.price,
       quantity: 1,
-      toppings: selectedToppings.filter((tp) => available(toppingKey(tp))),
-      
+      toppings: [],
     });
     setIsCartOpen(true);
   };
@@ -143,42 +131,14 @@ function ProductPage() {
               </div>
             )}
 
-            <div className="flex flex-1 flex-col rounded-2xl border border-border/50 bg-secondary/50 p-4 sm:p-6">
-              <div className="mb-4 flex items-baseline justify-between gap-2">
-                <h2 className="text-lg font-bold">{t("toppings.title")}</h2>
-                <span className="shrink-0 text-xs font-semibold text-muted-foreground">
-                  {selectedToppings.length}/5 · {t("toppings.max")}
-                </span>
+            <div className="rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h2 className="text-lg font-bold">Composition</h2>
+                <span className="text-xs font-semibold text-muted-foreground">Recette originale</span>
               </div>
-
-              <div className="grid grid-cols-1 gap-x-2 gap-y-3 sm:grid-cols-2 sm:gap-y-4 lg:grid-cols-3">
-                {allToppings.map((topping) => {
-                  const toppingOk = available(toppingKey(topping));
-                  const isChecked = selectedToppings.includes(topping);
-                  const isDisabled =
-                    !toppingOk || (!isChecked && selectedToppings.length >= 5) || !productOk;
-                  return (
-                    <div key={topping} className="flex min-h-[28px] items-center space-x-2">
-                      <Checkbox
-                        id={topping}
-                        checked={isChecked}
-                        onCheckedChange={(checked) => handleToppingChange(topping, checked as boolean)}
-                        disabled={isDisabled}
-                      />
-                      <label
-                        htmlFor={topping}
-                        className={`text-sm font-medium leading-snug ${
-                          isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-                        }`}
-                      >
-                        {topping}
-                        {!toppingOk && (
-                          <span className="ml-1 text-[10px] text-coral">({t("cmd.sold_out")})</span>
-                        )}
-                      </label>
-                    </div>
-                  );
-                })}
+              <p className="text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
+              <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground">
+                Les recettes affichées correspondent au menu du restaurant. Pour composer ton propre bowl, utilise l’option « Sur mesure ».
               </div>
             </div>
 
