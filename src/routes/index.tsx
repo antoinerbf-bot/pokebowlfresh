@@ -133,7 +133,8 @@ function Index() {
       </header>
 
       <main>
-        <section className="relative isolate flex min-h-[520px] items-end overflow-hidden bg-[#071713] text-white sm:min-h-[640px] sm:items-center">
+        {/* overflow-x only — never clip title descenders (g, y, p) */}
+        <section className="relative isolate flex min-h-[520px] items-end overflow-x-hidden bg-[#071713] text-white sm:min-h-[640px] sm:items-center">
           <div className="absolute inset-0 -z-20">
             <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center sm:object-[center_45%]" />
           </div>
@@ -144,10 +145,10 @@ function Index() {
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
                 {t("hero.location")}
               </p>
-              {/* Compact 2-line title — never wraps mid-word */}
-              <h1 className="mt-3 font-black tracking-tight text-[2rem] leading-[1.15] sm:text-4xl sm:leading-[1.12] lg:text-5xl">
+              {/* Extra line-height + padding so the g in « règles » is never clipped */}
+              <h1 className="mt-3 overflow-visible pb-1 font-black tracking-tight text-[2rem] leading-[1.28] sm:text-4xl sm:leading-[1.25] lg:text-5xl">
                 <span className="block whitespace-nowrap">{t("hero.title1")}</span>
-                <span className="mt-1 block whitespace-nowrap text-[#d7ff45]">{t("hero.title2")}</span>
+                <span className="mt-1.5 block whitespace-nowrap pb-1 text-[#d7ff45]">{t("hero.title2")}</span>
               </h1>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-white/75 sm:text-[15px]">
                 {t("hero.desc")}
