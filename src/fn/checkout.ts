@@ -15,6 +15,7 @@ import {
   getOrderFromStore,
   upsertOrder,
 } from "../lib/order-store";
+import { allToppings, bowls, drinks, desserts } from "../lib/data";
 
 const orderItemSchema = z.object({
   id: z.string(),
@@ -37,6 +38,40 @@ const checkoutSchema = z.object({
   origin: z.string().url(),
 });
 
+function canonicalizeItems(items: OrderItem[]): OrderItem[] {
+  const catalog = new Map<string, number>([
+    ...bowls.map((item) => [item.id, item.price] as const),
+    ...drinks.map((item) => [item.id, item.price] as const),
+    ...desserts.map((item) => [item.id, item.price] as const),
+  ]);
+  const toppingSet = new Set(allToppings);
+
+  return items.map((item) => {
+    const canonicalPrice = catalog.get(item.id);
+    if (canonicalPrice == null) {
+      throw new Error("Article invalide");
+    }
+
+    const toppings = [...new Set(item.toppings ?? [])];
+    if (!bowls.some((bowl) => bowl.id === item.id) && toppings.length > 0) {
+      throw new Error("Garnitures invalides");
+    }
+    if (toppings.length > 5 || toppings.some((topping) => !toppingSet.has(topping))) {
+      throw new Error("Garnitures invalides");
+    }
+
+    return {
+      ...item,
+      name: bowls.find((bowl) => bowl.id === item.id)?.name
+        ?? drinks.find((drink) => drink.id === item.id)?.name
+        ?? desserts.find((dessert) => dessert.id === item.id)?.name
+        ?? item.name,
+      price: canonicalPrice,
+      toppings,
+    };
+  });
+}
+
 function computeTotal(items: OrderItem[]): number {
   return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
@@ -44,7 +79,8 @@ function computeTotal(items: OrderItem[]): number {
 export const submitCheckout = createServerFn({ method: "POST" })
   .validator(checkoutSchema)
   .handler(async ({ data }) => {
-    const total = computeTotal(data.items);
+    const items = canonicalizeItems(data.items);
+    const total = computeTotal(items);
     if (total <= 0) {
       throw new Error("Panier invalide");
     }
@@ -62,7 +98,7 @@ export const submitCheckout = createServerFn({ method: "POST" })
         notes: data.customer.notes?.trim() || undefined,
         pickupTime: data.customer.pickupTime,
       },
-      items: data.items,
+      items,
       total,
       currency: "EUR",
     };
