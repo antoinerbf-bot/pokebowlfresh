@@ -4,6 +4,7 @@ export type OrderStatus =
   | "pending_payment"
   | "paid"
   | "awaiting_pickup"
+  | "awaiting_delivery"
   | "cancelled"
   | "expired";
 
