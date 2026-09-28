@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loader2, RefreshCw, Shield } from "lucide-react";
 import { catalogLabels, type StockSnapshot } from "../../lib/stock";
-import { getStock, resetStock, setStockItem } from "../../server/stock";
+import { getStock, resetStock, setStockItem } from "../../fn/stock";
 
 export const Route = createFileRoute("/admin/stocks")({
   component: AdminStocksPage,
