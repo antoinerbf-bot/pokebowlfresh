@@ -3,13 +3,13 @@ import { listOrdersFromStore } from "../../lib/order-store";
 
 /**
  * GET /api/orders
- * Liste les commandes en mémoire (MVP).
+ * Liste les commandes persistées.
  */
 export const Route = createFileRoute("/api/orders")({
   server: {
     handlers: {
       GET: async () => {
-        const orders = listOrdersFromStore();
+        const orders = await listOrdersFromStore();
         return new Response(JSON.stringify({ orders }), {
           status: 200,
           headers: {
