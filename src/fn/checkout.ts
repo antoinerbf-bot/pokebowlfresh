@@ -110,7 +110,7 @@ export const submitCheckout = createServerFn({ method: "POST" })
     const order: Order = {
       id: orderId,
       createdAt: new Date().toISOString(),
-      status: data.paymentMethod === "online" ? "pending_payment" : "awaiting_pickup",
+      status: data.paymentMethod === "online" ? "pending_payment" : (data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup"),
       paymentMethod: data.paymentMethod as PaymentMethod,
       customer: {
         name: data.customer.name.trim(),
