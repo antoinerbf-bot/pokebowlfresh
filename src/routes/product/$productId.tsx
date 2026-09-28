@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { bowls } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
@@ -10,7 +9,6 @@ import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
 import logo from "@/assets/logo.png";
 import { useStock } from "../../hooks/useStock";
-import { toppingKey } from "../../lib/stock";
 
 export const Route = createFileRoute("/product/$productId")({
   component: ProductPage,
