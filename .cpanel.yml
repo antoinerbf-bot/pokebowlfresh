@@ -1,0 +1,16 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/puzo3938/pokenbowl.be/
+    - /bin/mkdir -p $DEPLOYPATH
+    - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' -exec /bin/rm -rf {} +
+    - /bin/cp -R src $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp package.json $DEPLOYPATH
+    - /bin/cp package-lock.json $DEPLOYPATH
+    - /bin/cp vite.config.ts $DEPLOYPATH
+    - /bin/cp tsconfig.json $DEPLOYPATH
+    - /bin/cp server.js $DEPLOYPATH
+    - cd $DEPLOYPATH && /usr/bin/npm ci
+    - cd $DEPLOYPATH && /usr/bin/npm run build
+    - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
