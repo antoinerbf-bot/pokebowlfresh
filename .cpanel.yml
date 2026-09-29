@@ -11,6 +11,6 @@ deployment:
     - /bin/cp vite.config.ts $DEPLOYPATH
     - /bin/cp tsconfig.json $DEPLOYPATH
     - /bin/cp server.js $DEPLOYPATH
-    - cd $DEPLOYPATH && /usr/bin/npm ci
+    - cd $DEPLOYPATH && /usr/bin/npm ci --include=dev
     - cd $DEPLOYPATH && /usr/bin/npm run build
     - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
