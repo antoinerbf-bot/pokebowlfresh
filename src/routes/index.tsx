@@ -134,45 +134,81 @@ function Index() {
       </header>
 
       <main>
-        <section className="relative isolate flex min-h-[520px] items-end bg-[#071713] text-white sm:min-h-[640px] sm:items-center">
+        <section className="relative isolate overflow-hidden bg-[#071713] text-white">
           <div className="absolute inset-0 -z-20">
-            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center sm:object-[center_45%]" />
+            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-30" />
           </div>
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.75)_0%,rgba(7,23,19,.4)_40%,rgba(7,23,19,.82)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.55)_50%,rgba(7,23,19,.2)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_45%,rgba(215,255,69,.13),transparent_28%),linear-gradient(90deg,#071713_0%,rgba(7,23,19,.96)_48%,rgba(7,23,19,.78)_100%)]" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1320px] min-w-0 px-5 pb-20 pt-24 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8">
+          <div className="relative z-10 mx-auto grid min-h-[650px] max-w-[1320px] items-center gap-8 px-5 pb-10 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[.92fr_1.08fr] lg:gap-12 lg:px-8 lg:py-16">
             <div className="max-w-xl">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
-                {t("hero.location")}
-              </p>
-              <h1 className="mt-3 font-sans font-extrabold tracking-tight text-[1.875rem] leading-[1.3] sm:text-4xl sm:leading-[1.25] lg:text-5xl">
-                <span className="block drop-shadow-[0_2px_10px_rgba(0,0,0,.55)]">{t("hero.title1")}</span>
-                <span className="mt-1 block pb-1 text-[#d7ff45] drop-shadow-[0_2px_12px_rgba(0,0,0,.65)]">{t("hero.title2")}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45]" />
+                Crousty Chicken · best-seller
+              </div>
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">{t("hero.location")}</p>
+              <h1 className="mt-3 font-sans text-[2.25rem] font-black leading-[.98] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
+                <span className="block">{t("hero.title1")}</span>
+                <span className="mt-2 block text-[#d7ff45]">{t("hero.title2")}</span>
               </h1>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-[15px]">
-                {t("hero.desc")}
-              </p>
-              <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center">
-                <Link
-                  to="/commander"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_14px_40px_-12px_rgba(255,112,95,.85)] transition hover:brightness-110"
-                >
+              <p className="mt-5 max-w-md text-sm leading-6 text-white/70 sm:text-base">{t("hero.desc")}</p>
+              <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
+                <Link to="/commander" className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_18px_45px_-16px_rgba(255,112,95,.9)] transition hover:brightness-110">
                   {t("hero.order")} <ArrowRight className="h-4 w-4" />
                 </Link>
-                <a
-                  href="#carte"
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/25 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10"
-                >
+                <a href="#carte" className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10">
                   {t("hero.menu")}
                 </a>
               </div>
-              <p className="mt-5 text-[11px] font-semibold tracking-wide text-white/50">
+              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">
                 {t("hero.recipes")} · {t("hero.from")} · {t("hero.city")}
               </p>
             </div>
+
+            <Reveal delay={0.08}>
+              <div className="relative">
+                <div className="absolute -inset-8 rounded-[50px] bg-[#d7ff45]/5 blur-3xl" />
+                <div className="relative grid gap-3 sm:grid-cols-[1.12fr_.88fr] sm:items-end">
+                  <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[#f7f4ec] shadow-[0_35px_90px_-35px_rgba(0,0,0,.95)] transition duration-500 hover:-translate-y-1">
+                    <div className="relative aspect-[.9] overflow-hidden sm:aspect-[.82]">
+                      <DishImage dishId="crousty-chicken-curry" alt={t("feature.curry")} className="h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.08]" />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.03)_30%,rgba(0,0,0,.78)_100%)]" />
+                      <div className="absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.14em] text-[#10251f]">11€ · menu étudiant</div>
+                      <div className="absolute bottom-5 left-5 right-5 text-white">
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/65">Signature · Crousty Chicken</p>
+                        <h2 className="mt-1 text-3xl font-black leading-none tracking-tight sm:text-4xl">{t("feature.curry")}</h2>
+                        <p className="mt-2 max-w-xs text-xs leading-5 text-white/75">{t("feature.curry_desc")}</p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <div className="grid gap-3">
+                    <Link to="/product/$productId" params={{ productId: "crousty-chicken-sauce-blanche" }} className="group overflow-hidden rounded-[26px] border border-white/10 bg-[#f7f4ec] shadow-[0_25px_65px_-30px_rgba(0,0,0,.9)] transition duration-500 hover:-translate-y-1">
+                      <div className="relative aspect-[1.18] overflow-hidden">
+                        <DishImage dishId="crousty-chicken-sauce-blanche" alt={t("feature.white")} className="h-full w-full transition duration-700 group-hover:scale-[1.08]" />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
+                        <div className="absolute bottom-4 left-4 right-4 text-white">
+                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/65">Signature</p>
+                          <h3 className="mt-1 text-xl font-black leading-none">{t("feature.white")}</h3>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="rounded-[24px] border border-[#d7ff45]/15 bg-white/[0.05] p-4 backdrop-blur-sm sm:p-5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">Crousty Mix</p>
+                          <p className="mt-1 text-sm font-black text-white">Curry + Sauce blanche</p>
+                        </div>
+                        <ArrowRight className="h-5 w-5 shrink-0 text-[#d7ff45]" />
+                      </div>
+                      <p className="mt-2 text-[11px] leading-5 text-white/45">{t("feature.hero_hint")}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
-
         <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="flex w-max whitespace-nowrap">
             {Array.from({ length: 8 }).map((_, i) => (
