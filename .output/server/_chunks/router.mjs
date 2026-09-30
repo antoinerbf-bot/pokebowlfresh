@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-9qtqINk5.css";
+var styles_default = "/assets/styles-oTBj5r19.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -673,32 +673,31 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
-//#region src/assets/dish-sprite.webp
-var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
+//#region src/assets/bowl-chicken.jpg
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+//#endregion
+//#region src/assets/bowl-crousty.jpg
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+//#endregion
+//#region src/assets/bowl-scampi.jpg
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
-var positions = {
-	"beef-teriyaki": "0% 0%",
-	"crousty-chicken": "50% 0%",
-	"sweet-chicken": "100% 0%",
-	"saumon-wasabi": "0% 50%",
-	"scampis-royaux": "50% 50%",
-	"spicy-chicken": "100% 50%",
-	"aloha-classic": "0% 100%",
-	"vegan-tofu": "50% 100%",
-	"shrimp-mango": "100% 100%"
+var images = {
+	"mighty-gyros": bowl_crousty_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
+	"saumon-wasabi": bowl_scampi_default,
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId] ?? "0% 0%";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		role: "img",
-		"aria-label": alt,
-		className: `overflow-hidden bg-[#081612] bg-no-repeat ${className}`,
-		style: {
-			backgroundImage: `url(${dish_sprite_default})`,
-			backgroundSize: "300% 300%",
-			backgroundPosition: position
-		}
+	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src: image,
+		alt,
+		className: `block h-full w-full object-cover ${className}`
 	});
 }
 var allToppings = [

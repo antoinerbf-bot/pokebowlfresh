@@ -11,32 +11,27 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CjQ0F_vi.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BGv6nlaf.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
-var positions = {
-	"beef-teriyaki": "0% 0%",
-	"crousty-chicken": "50% 0%",
-	"sweet-chicken": "100% 0%",
-	"saumon-wasabi": "0% 50%",
-	"scampis-royaux": "50% 50%",
-	"spicy-chicken": "100% 50%",
-	"aloha-classic": "0% 100%",
-	"vegan-tofu": "50% 100%",
-	"shrimp-mango": "100% 100%"
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+var images = {
+	"mighty-gyros": bowl_crousty_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
+	"saumon-wasabi": bowl_scampi_default,
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId] ?? "0% 0%";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		role: "img",
-		"aria-label": alt,
-		className: `overflow-hidden bg-[#081612] bg-no-repeat ${className}`,
-		style: {
-			backgroundImage: `url(${dish_sprite_default})`,
-			backgroundSize: "300% 300%",
-			backgroundPosition: position
-		}
+	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src: image,
+		alt,
+		className: `block h-full w-full object-cover ${className}`
 	});
 }
 function cn(...inputs) {
