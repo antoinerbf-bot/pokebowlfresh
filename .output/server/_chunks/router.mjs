@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-D4mJ409f.css";
+var styles_default = "/assets/styles-5otTdnNH.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -60,7 +60,7 @@ var translations = {
 		"hero.order": "Découvrir le Crousty",
 		"hero.menu": "Voir la carte",
 		"hero.recipes": "7 recettes",
-		"hero.from": "À partir de 9,50 €",
+		"hero.from": "À partir de 10 €",
 		"hero.city": "Visé",
 		"feature.eyebrow": "Le produit phare",
 		"feature.title": "Le crousty qui fait la différence.",
@@ -124,7 +124,7 @@ var translations = {
 		"cart.checkout": "Commander",
 		"cart.customize": "Personnaliser",
 		"toppings.title": "Choisis tes garnitures",
-		"toppings.max": "Max 5 gratuits",
+		"toppings.max": "2 toppings inclus",
 		"toppings.confirm": "Valider",
 		"product.back": "Retour à la carte",
 		"product.not_found": "Produit introuvable",
@@ -135,7 +135,7 @@ var translations = {
 		"cmd.eyebrow": "Commande",
 		"cmd.title1": "Tout le menu.",
 		"cmd.title2": "À toi de jouer.",
-		"cmd.desc": "Choisis un bowl, ajoute jusqu’à 5 toppings, puis une boisson ou un dessert si tu veux.",
+		"cmd.desc": "Choisis un bowl, puis vérifie les bases, mix-ins, protéines, sauces et toppings du menu. Les toppings sont limités à 2 choix.",
 		"cmd.bowls_eyebrow": "Les bowls",
 		"cmd.bowls_title": "Choisis ton bowl.",
 		"cmd.bowls_hint": "Tape une recette pour la personnaliser",
@@ -143,7 +143,14 @@ var translations = {
 		"cmd.unavailable": "Indisponible",
 		"cmd.drinks": "Boissons",
 		"cmd.desserts": "Desserts maison",
-		"cmd.sold_out": "Épuisé"
+		"cmd.sold_out": "Épuisé",
+		"cmd.customization_title": "Personnalisation du menu",
+		"cmd.customization_note": "Informations reprises du menu restaurant : les mix-ins sont au choix de 5 et les toppings au choix de 2.",
+		"cmd.bases": "Bases",
+		"cmd.mixins": "Mix-ins · choix de 5",
+		"cmd.protein": "Protéines",
+		"cmd.sauces": "Sauces",
+		"cmd.toppings": "Toppings · choix de 2"
 	},
 	en: {
 		"nav.menu": "Menu",
@@ -244,7 +251,14 @@ var translations = {
 		"cmd.unavailable": "Unavailable",
 		"cmd.drinks": "Drinks",
 		"cmd.desserts": "House desserts",
-		"cmd.sold_out": "Sold out"
+		"cmd.sold_out": "Sold out",
+		"cmd.customization_title": "Menu customization",
+		"cmd.customization_note": "Menu information: choose 5 mix-ins and 2 toppings.",
+		"cmd.bases": "Bases",
+		"cmd.mixins": "Mix-ins · choose 5",
+		"cmd.protein": "Proteins",
+		"cmd.sauces": "Sauces",
+		"cmd.toppings": "Toppings · choose 2"
 	},
 	nl: {
 		"nav.menu": "Menu",
@@ -345,7 +359,14 @@ var translations = {
 		"cmd.unavailable": "Niet beschikbaar",
 		"cmd.drinks": "Dranken",
 		"cmd.desserts": "Huisdesserts",
-		"cmd.sold_out": "Uitverkocht"
+		"cmd.sold_out": "Uitverkocht",
+		"cmd.customization_title": "Menu personalisatie",
+		"cmd.customization_note": "Menu-informatie: kies 5 mix-ins en 2 toppings.",
+		"cmd.bases": "Bases",
+		"cmd.mixins": "Mix-ins · kies 5",
+		"cmd.protein": "Proteïnen",
+		"cmd.sauces": "Sauzen",
+		"cmd.toppings": "Toppings · kies 2"
 	}
 };
 var I18nContext = (0, import_react.createContext)(void 0);
@@ -747,7 +768,50 @@ function DishImage({ dishId, alt, className = "" }) {
 		})]
 	});
 }
-var allToppings = [
+//#endregion
+//#region src/lib/data.ts
+var customBases = [
+	"Riz blanc",
+	"Riz brun",
+	"Pâtes",
+	"Nachos",
+	"Salade"
+];
+var customMixIns = [
+	"Guacamole",
+	"Brocolis",
+	"Patates douces",
+	"Avocat",
+	"Carottes",
+	"Feta",
+	"Salade d'algues",
+	"Mangue",
+	"Oignons",
+	"Maïs",
+	"Tomates",
+	"Poivrons",
+	"Edamame",
+	"Jalapeños",
+	"Concombres",
+	"Houmous"
+];
+var customProteins = [
+	"Poulet",
+	"Gyros",
+	"Saumon + 1 €",
+	"Scampis"
+];
+var customSauces = [
+	"Mayo",
+	"Mayo-Wasabi",
+	"Spicy-Mayo",
+	"Sésame (salée ou sucrée)",
+	"Chili doux",
+	"Teriyaki",
+	"Soja (salé ou sucré)",
+	"Mayo truffe"
+];
+var customToppings = [
 	"Oignons frits",
 	"Sésame",
 	"Noix de cajou",
@@ -755,6 +819,7 @@ var allToppings = [
 	"Flocons-Chili",
 	"Wazabi"
 ];
+var allToppings = customToppings;
 var bowls = [
 	{
 		id: "mighty-gyros",
@@ -795,14 +860,14 @@ var bowls = [
 		id: "crousty-chicken-curry",
 		name: "Crousty Chicken Curry",
 		price: 11,
-		desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse, oignon frit croustillant, aigre douce. Menu étudiant : 11€ avec boisson incluse.",
+		desc: "Poulet croustillant, riz curry onctueux, sauce curry maison, oignons frits et herbes fraîches. Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
 		tag: "Nouveau"
 	},
 	{
 		id: "crousty-chicken-sauce-blanche",
 		name: "Crousty Chicken Sauce Blanche",
 		price: 11,
-		desc: "Poulet croustillant, riz parfumé, blanche maison, oignon frit croustillant, aigre douce. Menu étudiant : 11€ avec boisson incluse.",
+		desc: "Poulet croustillant, riz jasmin parfumé, sauce blanche maison et oignons frits. Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
 		tag: "Nouveau"
 	}
 ];
@@ -1014,6 +1079,7 @@ function Index() {
 	const { items, setIsCartOpen } = useCart();
 	const [mobileOpen, setMobileOpen] = import_react.useState(false);
 	const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+	const displayedBowls = [...bowls.filter((b) => b.id.startsWith("crousty-")), ...bowls.filter((b) => !b.id.startsWith("crousty-"))];
 	const closeMobile = () => setMobileOpen(false);
 	const goHome = () => {
 		setMobileOpen(false);
@@ -1513,12 +1579,12 @@ function Index() {
 						})]
 					}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
-						children: bowls.map((bowl, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+						children: displayedBowls.map((bowl, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
 							delay: index * .03,
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 								to: "/product/$productId",
 								params: { productId: bowl.id },
-								className: "group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1",
+								className: `group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1 ${bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45] ring-offset-2" : ""}`,
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "relative aspect-[1.18] overflow-hidden bg-[#ece8dc]",
 									children: [
@@ -3076,6 +3142,7 @@ function CommanderPage() {
 	const { addItem, setIsCartOpen, items } = useCart();
 	const { available } = useStock();
 	const count = items.reduce((sum, item) => sum + item.quantity, 0);
+	const displayedBowls = [...bowls.filter((b) => b.id.startsWith("crousty-")), ...bowls.filter((b) => !b.id.startsWith("crousty-"))];
 	const quickAdd = (item) => {
 		if (!available(item.id)) return;
 		addItem({
@@ -3220,7 +3287,7 @@ function CommanderPage() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3",
-						children: bowls.map((bowl, i) => {
+						children: displayedBowls.map((bowl, i) => {
 							const ok = available(bowl.id);
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 								initial: {
@@ -3257,7 +3324,41 @@ function CommanderPage() {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mt-14 grid gap-5 sm:mt-16 lg:mt-20 lg:grid-cols-2 lg:gap-6",
+						className: "mt-14 rounded-[28px] bg-[#10251f] p-6 text-white sm:mt-16 sm:p-8 lg:mt-20",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "max-w-xl",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]",
+								children: t("cmd.customization_title")
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm leading-6 text-white/60",
+								children: t("cmd.customization_note")
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5",
+							children: [
+								[t("cmd.bases"), customBases],
+								[t("cmd.mixins"), customMixIns],
+								[t("cmd.protein"), customProteins],
+								[t("cmd.sauces"), customSauces],
+								[t("cmd.toppings"), customToppings]
+							].map(([title, values]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-2xl border border-white/10 bg-white/[0.04] p-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "text-[10px] font-black uppercase tracking-[0.12em] text-[#d7ff45]",
+									children: title
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "mt-3 space-y-1.5",
+									children: values.map((value) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[11px] leading-4 text-white/70",
+										children: value
+									}, value))
+								})]
+							}, title))
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-5 grid gap-5 sm:mt-6 lg:grid-cols-2 lg:gap-6",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "rounded-[24px] bg-white p-6 sm:rounded-[28px] sm:p-8",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -4292,6 +4393,16 @@ function ProductPage() {
 								className: "mb-6 text-[15px] leading-relaxed text-muted-foreground",
 								children: product.desc
 							}),
+							product.id.startsWith("crousty-") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mb-6 rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 px-4 py-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-sm font-black text-[#8f5b12]",
+									children: "Menu étudiant · 11€ · boisson incluse"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-1 text-xs font-semibold text-[#6e6255]",
+									children: "Sauce extra : +1€"
+								})]
+							}),
 							!productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral",
 								children: t("product.unavailable")
@@ -4306,7 +4417,7 @@ function ProductPage() {
 											children: "Composition"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-xs font-semibold text-muted-foreground",
-											children: "Recette originale"
+											children: product.id.startsWith("crousty-") ? "Recette signature" : "Recette originale"
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
