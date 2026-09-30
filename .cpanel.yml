@@ -4,6 +4,7 @@ deployment:
     - export DEPLOYPATH=/home/puzo3938/pokenbowl.be/
     - export NODEENV=/home/puzo3938/nodevenv/pokenbowl.be/22
     - export NPM=$NODEENV/bin/npm
+    - export NODE_OPTIONS=--max-old-space-size=1024
     - /bin/mkdir -p $DEPLOYPATH
     - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' -exec /bin/rm -rf {} +
     - /bin/cp -R src $DEPLOYPATH
