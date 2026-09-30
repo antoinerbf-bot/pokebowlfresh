@@ -1,11 +1,13 @@
-name: Build check
+name: Build and publish O2Switch artifact
 
 on:
   push:
     branches:
-      - main
-      - "fix/**"
+      - o2switch-clean
   pull_request:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -13,12 +15,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - name: Install
-        run: npm install
+        run: npm ci
+
       - name: Build
         run: npm run build
+
+      - name: Publish build artifact
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f .output
+          if git diff --cached --quiet; then
+            echo "No build changes to publish."
+            exit 0
+          fi
+          git commit -m "chore: publish O2Switch build [skip ci]"
+          git push
