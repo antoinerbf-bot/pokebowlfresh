@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-oTBj5r19.css";
+var styles_default = "/assets/styles-WI8HwJje.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -673,41 +673,26 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
-//#region src/assets/bowl-chicken.jpg
-var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
-//#endregion
-//#region src/assets/bowl-crousty.jpg
-var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
-//#endregion
-//#region src/assets/bowl-scampi.jpg
-var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
-//#endregion
 //#region src/components/DishImage.tsx
 var images = {
-	"mighty-gyros": bowl_crousty_default,
-	"sweet-chicken": bowl_chicken_default,
-	"scampis-royaux": bowl_scampi_default,
-	"saumon-wasabi": bowl_scampi_default,
-	"spicy-chicken": bowl_chicken_default,
-	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_crousty_default
+	"mighty-gyros": "/assets/bowl-crousty-DhSdFdMk.jpg",
+	"sweet-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
+	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"saumon-wasabi": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"spicy-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
+	"crousty-chicken-curry": "/assets/bowl-crousty-DhSdFdMk.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-DhSdFdMk.jpg"
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-		src: image,
-		alt,
-		width: 800,
-		height: 540,
-		loading: "eager",
-		decoding: "async",
+	const image = images[dishId] ?? images["sweet-chicken"];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		role: "img",
+		"aria-label": alt,
+		className: `h-full w-full overflow-hidden bg-cover bg-center bg-no-repeat ${className}`,
 		style: {
-			display: "block",
-			width: "100%",
-			height: "100%",
-			objectFit: "cover"
-		},
-		className
+			backgroundImage: `url("${image}")`,
+			minHeight: "100%"
+		}
 	});
 }
 var allToppings = [
