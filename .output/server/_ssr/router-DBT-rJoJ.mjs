@@ -10,7 +10,7 @@ import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as g
 import { t as Route$12 } from "./order.success-hj7Emnn4.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Bu-WfdpG.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DBT-rJoJ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-WI8HwJje.css";
@@ -191,7 +191,7 @@ var Route$9 = createFileRoute("/")({
 });
 var $$splitComponentImporter$4 = () => import("./checkout-CWyHNEBL.mjs");
 var Route$8 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./commander-t5ExtD52.mjs");
+var $$splitComponentImporter$3 = () => import("./commander-DjqDE2On.mjs");
 var Route$7 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
 var $$splitComponentImporter$2 = () => import("./contact-BvrEJfBM.mjs");
 var Route$6 = createFileRoute("/contact")({
