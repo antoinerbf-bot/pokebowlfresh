@@ -28,7 +28,7 @@ export const customMixIns = [
 export const customProteins = [
   "Poulet",
   "Gyros",
-  "Saumon",
+  "Saumon + 1 €",
   "Scampis",
 ];
 
@@ -45,7 +45,7 @@ export const customSauces = [
 
 export const customToppings = [
   "Oignons frits",
-  "Sésame seeds",
+  "Sésame",
   "Noix de cajou",
   "Nachos",
   "Flocons-Chili",
