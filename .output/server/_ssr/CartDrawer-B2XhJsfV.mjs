@@ -11,7 +11,7 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DAO2yO6y.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-B2XhJsfV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
@@ -24,7 +24,7 @@ var images = {
 	"saumon-wasabi": bowl_scampi_default,
 	"spicy-chicken": bowl_chicken_default,
 	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_crousty_default
+	"crousty-chicken-sauce-blanche": bowl_chicken_default
 };
 function DishImage({ dishId, alt, className = "" }) {
 	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
