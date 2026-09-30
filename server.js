@@ -1,3 +1,2 @@
-// TanStack Start / Nitro server entry.
-// Passenger is configured to start the generated production server directly.
-export { default } from "./src/server";
+// Passenger entry point for the production Nitro build.
+import "./.output/server/index.mjs";
