@@ -2,15 +2,15 @@ import { i as __toESM } from "../_runtime.mjs";
 import { i as drinks, n as bowls, r as desserts } from "./data-B_XMLlun.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { n as useTranslation } from "./I18nContext-BAI406Sn.mjs";
+import { n as useTranslation } from "./I18nContext-BcGvp03s.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { f as Menu, o as ShoppingBag, p as MapPin, t as X, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage } from "./CartDrawer-S5s0R9Rz.mjs";
+import { n as CartDrawer, r as DishImage } from "./CartDrawer-Br21mjwB.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-C6wTZmD2.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Dn0jH-LD.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -303,6 +303,117 @@ function Index() {
 								children: "✦"
 							})]
 						}, i))
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					className: "bg-[#10251f] px-5 py-12 text-white sm:px-6 sm:py-16 lg:px-8 lg:py-20",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mx-auto max-w-[1200px]",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "max-w-2xl",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]",
+											children: t("feature.eyebrow")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "mt-3 text-[1.9rem] font-black leading-[1.05] tracking-tight sm:text-4xl lg:text-5xl",
+											children: t("feature.title")
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mt-3 max-w-xl text-sm leading-6 text-white/60 sm:text-base",
+											children: t("feature.desc")
+										})
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex w-fit items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-2xl font-black text-[#d7ff45]",
+										children: "11€"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[9px] font-black uppercase leading-4 tracking-[0.12em] text-white/65",
+										children: t("feature.student")
+									})]
+								})]
+							}) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-7 grid gap-4 md:grid-cols-2",
+								children: [{
+									id: "crousty-chicken-curry",
+									nameKey: "feature.curry",
+									descKey: "feature.curry_desc"
+								}, {
+									id: "crousty-chicken-sauce-blanche",
+									nameKey: "feature.white",
+									descKey: "feature.white_desc"
+								}].map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+									delay: index * .06,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+										to: "/product/$productId",
+										params: { productId: item.id },
+										className: "group block overflow-hidden rounded-[24px] bg-[#f7f4ec] text-[#17231f] shadow-[0_20px_60px_-35px_rgba(0,0,0,.7)] transition duration-300 hover:-translate-y-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "relative aspect-[1.55] overflow-hidden",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+													dishId: item.id,
+													alt: t(item.nameKey),
+													className: "h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.06]"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em]",
+													children: t("feature.badge")
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-[10px] font-black uppercase tracking-[0.14em] text-white/75",
+														children: "Crousty Chicken"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+														className: "mt-1 text-xl font-black sm:text-2xl",
+														children: t(item.nameKey)
+													})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "shrink-0 rounded-full bg-white px-3 py-2 text-sm font-black text-[#17231f]",
+														children: "11€"
+													})]
+												})
+											]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between gap-4 p-4 sm:p-5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "max-w-md text-sm leading-5 text-[#68756f]",
+												children: t(item.descKey)
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white transition group-hover:translate-x-1",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+											})]
+										})]
+									})
+								}, item.id))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+								delay: .08,
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-5 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs font-bold text-white/65",
+										children: t("feature.bottom")
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+										to: "/commander",
+										className: "inline-flex w-fit items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#d7ff45]",
+										children: [
+											t("feature.cta"),
+											" ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+										]
+									})]
+								})
+							})
+						]
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
