@@ -168,7 +168,7 @@ var translations = {
 		"hero.order": "Discover Crousty",
 		"hero.menu": "View menu",
 		"hero.recipes": "7 recipes",
-		"hero.from": "From €9.50",
+		"hero.from": "From €10",
 		"hero.city": "Visé",
 		"feature.eyebrow": "The signature",
 		"feature.title": "The crispy chicken that stands out.",
@@ -232,7 +232,7 @@ var translations = {
 		"cart.checkout": "Order",
 		"cart.customize": "Customize",
 		"toppings.title": "Choose your toppings",
-		"toppings.max": "Max 5 free",
+		"toppings.max": "2 toppings included",
 		"toppings.confirm": "Confirm",
 		"product.back": "Back to menu",
 		"product.not_found": "Product not found",
@@ -243,7 +243,7 @@ var translations = {
 		"cmd.eyebrow": "Order",
 		"cmd.title1": "Full menu.",
 		"cmd.title2": "Your turn.",
-		"cmd.desc": "Pick a bowl, add up to 5 toppings, then a drink or dessert if you like.",
+		"cmd.desc": "Pick a bowl, then check the 5 mix-ins and 2 toppings available on the menu. Add a drink or dessert if you like.",
 		"cmd.bowls_eyebrow": "Bowls",
 		"cmd.bowls_title": "Pick your bowl.",
 		"cmd.bowls_hint": "Tap a recipe to customize it",
@@ -276,7 +276,7 @@ var translations = {
 		"hero.order": "Ontdek Crousty",
 		"hero.menu": "Bekijk het menu",
 		"hero.recipes": "7 recepten",
-		"hero.from": "Vanaf €9,50",
+		"hero.from": "Vanaf €10",
 		"hero.city": "Visé",
 		"feature.eyebrow": "Onze topper",
 		"feature.title": "De crousty die het verschil maakt.",
@@ -340,7 +340,7 @@ var translations = {
 		"cart.checkout": "Bestellen",
 		"cart.customize": "Aanpassen",
 		"toppings.title": "Kies je toppings",
-		"toppings.max": "Max 5 gratis",
+		"toppings.max": "2 toppings inbegrepen",
 		"toppings.confirm": "Bevestigen",
 		"product.back": "Terug naar het menu",
 		"product.not_found": "Product niet gevonden",
@@ -351,7 +351,7 @@ var translations = {
 		"cmd.eyebrow": "Bestelling",
 		"cmd.title1": "Volledig menu.",
 		"cmd.title2": "Aan jou.",
-		"cmd.desc": "Kies een bowl, voeg tot 5 toppings toe, daarna eventueel een drank of dessert.",
+		"cmd.desc": "Kies een bowl, bekijk de 5 mix-ins en 2 toppings van het menu en voeg eventueel een drank of dessert toe.",
 		"cmd.bowls_eyebrow": "Bowls",
 		"cmd.bowls_title": "Kies je bowl.",
 		"cmd.bowls_hint": "Tik op een recept om te personaliseren",
@@ -4426,7 +4426,7 @@ function ProductPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground",
-										children: "Les recettes affichées correspondent au menu du restaurant. Pour composer ton propre bowl, utilise l’option « Sur mesure »."
+										children: "Les recettes affichées correspondent au menu du restaurant. Pour voir les bases, mix-ins, protéines, sauces et toppings disponibles, consulte la section personnalisation de la page Commande."
 									})
 								]
 							}),

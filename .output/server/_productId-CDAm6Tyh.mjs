@@ -1,14 +1,14 @@
 import { n as bowls } from "./_ssr/data-C7JT6IkA.mjs";
 import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.mjs";
-import { n as useTranslation } from "./_ssr/I18nContext-CRKB3J4k.mjs";
+import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-B23nKdxE.mjs";
+import { t as Route } from "./_productId-DPLpN2BH.mjs";
 import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
 import { a as ShoppingCart, b as ArrowLeft } from "./_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-BRo9BiBj.mjs";
+import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-BRR_gc0I.mjs";
 import { t as useStock } from "./_ssr/useStock-Con-sCMe.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-DaXGEgtH.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-CDAm6Tyh.js
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {
 	const { productId } = Route.useParams();
@@ -164,7 +164,7 @@ function ProductPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground",
-										children: "Les recettes affichées correspondent au menu du restaurant. Pour composer ton propre bowl, utilise l’option « Sur mesure »."
+										children: "Les recettes affichées correspondent au menu du restaurant. Pour voir les bases, mix-ins, protéines, sauces et toppings disponibles, consulte la section personnalisation de la page Commande."
 									})
 								]
 							}),
