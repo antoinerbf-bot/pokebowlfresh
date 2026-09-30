@@ -199,7 +199,7 @@ function Index() {
               </div>
             </Reveal>
 
-            <div className="mt-7 grid gap-4 md:grid-cols-2">
+            <div className="mt-7 grid gap-4 lg:grid-cols-[1.35fr_.85fr]">
               {[
                 {
                   id: "crousty-chicken-curry",
@@ -216,29 +216,31 @@ function Index() {
                   <Link
                     to="/product/$productId"
                     params={{ productId: item.id }}
-                    className="group block overflow-hidden rounded-[24px] bg-[#f7f4ec] text-[#17231f] shadow-[0_20px_60px_-35px_rgba(0,0,0,.7)] transition duration-300 hover:-translate-y-1"
+                    className="group block h-full overflow-hidden rounded-[28px] bg-[#f7f4ec] text-[#17231f] shadow-[0_24px_70px_-38px_rgba(0,0,0,.85)] transition duration-300 hover:-translate-y-1"
                   >
-                    <div className="relative aspect-[1.55] overflow-hidden">
+                    <div className="relative aspect-[1.35] overflow-hidden sm:aspect-[1.55] lg:aspect-[1.65]">
                       <DishImage
                         dishId={item.id}
                         alt={t(item.nameKey)}
-                        className="h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.06]"
+                        className="h-full w-full scale-[1.01] transition duration-700 group-hover:scale-[1.055]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" />
-                      <div className="absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em]">
-                        {t("feature.badge")}
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.05)_15%,rgba(0,0,0,.02)_40%,rgba(0,0,0,.72)_100%)]" />
+                      <div className="absolute left-4 top-4 flex items-center gap-2">
+                        <span className="rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em]">
+                          {t("feature.badge")}
+                        </span>
+                        <span className="rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+                          11€
+                        </span>
                       </div>
-                      <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white">
-                        <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/75">Crousty Chicken</p>
-                          <h3 className="mt-1 text-xl font-black sm:text-2xl">{t(item.nameKey)}</h3>
-                        </div>
-                        <span className="shrink-0 rounded-full bg-white px-3 py-2 text-sm font-black text-[#17231f]">11€</span>
+                      <div className="absolute bottom-4 left-4 right-4 text-white">
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/70">Poke N Bowl · Signature</p>
+                        <h3 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">{t(item.nameKey)}</h3>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between gap-4 p-4 sm:p-5">
-                      <p className="max-w-md text-sm leading-5 text-[#68756f]">{t(item.descKey)}</p>
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white transition group-hover:translate-x-1">
+                    <div className="flex min-h-[96px] items-center justify-between gap-4 p-5 sm:p-6">
+                      <p className="max-w-xl text-sm leading-6 text-[#68756f]">{t(item.descKey)}</p>
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white transition group-hover:translate-x-1">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
@@ -277,25 +279,29 @@ function Index() {
             </div>
           </Reveal>
 
-          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {bowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.03}>
-                <Link to="/product/$productId" params={{ productId: bowl.id }} className="group block overflow-hidden rounded-[20px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1 sm:rounded-[24px]">
-                  <div className="relative aspect-[1.48] overflow-hidden sm:aspect-[1.48]">
-                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-500 group-hover:scale-[1.03]" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-[0.1em]">{bowl.tag}</span>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black">€ {bowl.price.toFixed(2)}</span>
+                <Link
+                  to="/product/$productId"
+                  params={{ productId: bowl.id }}
+                  className="group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1"
+                >
+                  <div className="relative aspect-[1.18] overflow-hidden bg-[#ece8dc]">
+                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-700 group-hover:scale-[1.04]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02)_35%,rgba(0,0,0,.5)_100%)]" />
+                    <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.12em]">{bowl.tag}</span>
+                    <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-xs font-black">€ {bowl.price.toFixed(2)}</span>
                   </div>
-                  <div className="p-4 sm:p-5">
+                  <div className="flex h-full flex-col p-5 sm:p-6">
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="min-w-0 flex-1 break-words text-[15px] font-black leading-snug sm:text-lg">{bowl.name}</h3>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white">
+                      <h3 className="min-w-0 flex-1 break-words text-[16px] font-black leading-tight sm:text-xl">{bowl.name}</h3>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079]">{bowl.desc}</p>
-                    <p className="mt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]">{t("menu.customize")} →</p>
+                    <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
+                    <div className="mt-auto pt-5 text-[9px] font-black uppercase tracking-[0.14em] text-[#ff705f]">{t("menu.customize")} · {t("menu.order")} →</div>
                   </div>
                 </Link>
               </Reveal>
