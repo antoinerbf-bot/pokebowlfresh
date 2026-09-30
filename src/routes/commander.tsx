@@ -305,7 +305,7 @@ function BowlCard({
             </span>
           )}
         </div>
-        <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:line-clamp-3">{bowl.desc}</p>
+        <p className="mt-2 text-[13px] leading-5 text-[#758079]">{bowl.desc}</p>
         <div
           className={`mt-4 text-[9px] font-black uppercase tracking-[0.14em] ${
             ok ? "text-[#ff705f]" : "text-[#9aa39c]"
