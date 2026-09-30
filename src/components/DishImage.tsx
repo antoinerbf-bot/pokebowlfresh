@@ -9,7 +9,7 @@ const images: Record<string, string> = {
   "saumon-wasabi": bowlScampi,
   "spicy-chicken": bowlChicken,
   "crousty-chicken-curry": bowlCrousty,
-  "crousty-chicken-sauce-blanche": bowlCrousty,
+  "crousty-chicken-sauce-blanche": bowlChicken,
 };
 
 export function DishImage({
