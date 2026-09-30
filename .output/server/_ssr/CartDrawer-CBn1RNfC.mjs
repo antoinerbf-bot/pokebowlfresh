@@ -11,7 +11,7 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-Br21mjwB.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CBn1RNfC.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
@@ -28,14 +28,21 @@ var images = {
 };
 function DishImage({ dishId, alt, className = "" }) {
 	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		role: "img",
 		"aria-label": alt,
-		className: `h-full w-full overflow-hidden bg-cover bg-center bg-no-repeat ${className}`,
-		style: {
-			backgroundImage: `url("${image}")`,
-			minHeight: "100%"
-		}
+		className: "relative h-full w-full overflow-hidden bg-[#ece8dc]",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: `h-full w-full bg-cover bg-center bg-no-repeat transition-[filter] duration-500 ${className}`,
+			style: {
+				backgroundImage: `url("${image}")`,
+				minHeight: "100%",
+				filter: "saturate(.92) contrast(.98)"
+			}
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"aria-hidden": "true",
+			className: "pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,248,230,.08),transparent_45%,rgba(12,31,24,.08))]"
+		})]
 	});
 }
 function cn(...inputs) {

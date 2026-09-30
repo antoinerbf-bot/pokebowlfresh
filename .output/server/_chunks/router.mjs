@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-C-EzRVmA.css";
+var styles_default = "/assets/styles-Bmp8eBK5.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -727,14 +727,21 @@ var images = {
 };
 function DishImage({ dishId, alt, className = "" }) {
 	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		role: "img",
 		"aria-label": alt,
-		className: `h-full w-full overflow-hidden bg-cover bg-center bg-no-repeat ${className}`,
-		style: {
-			backgroundImage: `url("${image}")`,
-			minHeight: "100%"
-		}
+		className: "relative h-full w-full overflow-hidden bg-[#ece8dc]",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: `h-full w-full bg-cover bg-center bg-no-repeat transition-[filter] duration-500 ${className}`,
+			style: {
+				backgroundImage: `url("${image}")`,
+				minHeight: "100%",
+				filter: "saturate(.92) contrast(.98)"
+			}
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			"aria-hidden": "true",
+			className: "pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,248,230,.08),transparent_45%,rgba(12,31,24,.08))]"
+		})]
 	});
 }
 var allToppings = [
@@ -1287,7 +1294,7 @@ function Index() {
 								})]
 							}) }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "mt-7 grid gap-4 md:grid-cols-2",
+								className: "mt-7 grid gap-4 lg:grid-cols-[1.35fr_.85fr]",
 								children: [{
 									id: "crousty-chicken-curry",
 									nameKey: "feature.curry",
@@ -1301,41 +1308,44 @@ function Index() {
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 										to: "/product/$productId",
 										params: { productId: item.id },
-										className: "group block overflow-hidden rounded-[24px] bg-[#f7f4ec] text-[#17231f] shadow-[0_20px_60px_-35px_rgba(0,0,0,.7)] transition duration-300 hover:-translate-y-1",
+										className: "group block h-full overflow-hidden rounded-[28px] bg-[#f7f4ec] text-[#17231f] shadow-[0_24px_70px_-38px_rgba(0,0,0,.85)] transition duration-300 hover:-translate-y-1",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "relative aspect-[1.55] overflow-hidden",
+											className: "relative aspect-[1.35] overflow-hidden sm:aspect-[1.55] lg:aspect-[1.65]",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 													dishId: item.id,
 													alt: t(item.nameKey),
-													className: "h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.06]"
+													className: "h-full w-full scale-[1.01] transition duration-700 group-hover:scale-[1.055]"
 												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" }),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: "absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em]",
-													children: t("feature.badge")
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.05)_15%,rgba(0,0,0,.02)_40%,rgba(0,0,0,.72)_100%)]" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "absolute left-4 top-4 flex items-center gap-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em]",
+														children: t("feature.badge")
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em] text-white backdrop-blur-sm",
+														children: "11€"
+													})]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 text-white",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-														className: "text-[10px] font-black uppercase tracking-[0.14em] text-white/75",
-														children: "Crousty Chicken"
+													className: "absolute bottom-4 left-4 right-4 text-white",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-[9px] font-black uppercase tracking-[0.16em] text-white/70",
+														children: "Poke N Bowl · Signature"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-														className: "mt-1 text-xl font-black sm:text-2xl",
+														className: "mt-1 text-2xl font-black tracking-tight sm:text-3xl",
 														children: t(item.nameKey)
-													})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "shrink-0 rounded-full bg-white px-3 py-2 text-sm font-black text-[#17231f]",
-														children: "11€"
 													})]
 												})
 											]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex items-center justify-between gap-4 p-4 sm:p-5",
+											className: "flex min-h-[96px] items-center justify-between gap-4 p-5 sm:p-6",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "max-w-md text-sm leading-5 text-[#68756f]",
+												className: "max-w-xl text-sm leading-6 text-[#68756f]",
 												children: t(item.descKey)
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white transition group-hover:translate-x-1",
+												className: "flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white transition group-hover:translate-x-1",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
 											})]
 										})]
@@ -1396,51 +1406,56 @@ function Index() {
 							})]
 						})]
 					}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3",
+						className: "mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
 						children: bowls.map((bowl, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
 							delay: index * .03,
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 								to: "/product/$productId",
 								params: { productId: bowl.id },
-								className: "group block overflow-hidden rounded-[20px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1 sm:rounded-[24px]",
+								className: "group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "relative aspect-[1.48] overflow-hidden sm:aspect-[1.48]",
+									className: "relative aspect-[1.18] overflow-hidden bg-[#ece8dc]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 											dishId: bowl.id,
 											alt: bowl.name,
-											className: "h-full w-full transition duration-500 group-hover:scale-[1.03]"
+											className: "h-full w-full transition duration-700 group-hover:scale-[1.04]"
 										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02)_35%,rgba(0,0,0,.5)_100%)]" }),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-[0.1em]",
+											className: "absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.12em]",
 											children: bowl.tag
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black",
+											className: "absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-xs font-black",
 											children: ["€ ", bowl.price.toFixed(2)]
 										})
 									]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "p-4 sm:p-5",
+									className: "flex h-full flex-col p-5 sm:p-6",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex items-start justify-between gap-3",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-												className: "min-w-0 flex-1 break-words text-[15px] font-black leading-snug sm:text-lg",
+												className: "min-w-0 flex-1 break-words text-[16px] font-black leading-tight sm:text-xl",
 												children: bowl.name
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white",
+												className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079]",
+											className: "mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]",
 											children: bowl.desc
 										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-											className: "mt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]",
-											children: [t("menu.customize"), " →"]
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-auto pt-5 text-[9px] font-black uppercase tracking-[0.14em] text-[#ff705f]",
+											children: [
+												t("menu.customize"),
+												" · ",
+												t("menu.order"),
+												" →"
+											]
 										})
 									]
 								})]
