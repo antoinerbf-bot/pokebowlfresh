@@ -135,6 +135,10 @@ function CommanderPage() {
               return (
                 <motion.div
                   key={bowl.id}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04 }}
                   className={`overflow-hidden rounded-[24px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)] sm:rounded-[28px] ${
                     !ok ? "opacity-55" : ""
                   }`}
