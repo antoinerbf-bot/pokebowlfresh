@@ -121,6 +121,12 @@ function ProductPage() {
               </span>
             </div>
             <p className="mb-6 text-[15px] leading-relaxed text-muted-foreground">{product.desc}</p>
+            {product.id.startsWith("crousty-") && (
+              <div className="mb-6 rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 px-4 py-3">
+                <p className="text-sm font-black text-[#8f5b12]">Menu étudiant · 11€ · boisson incluse</p>
+                <p className="mt-1 text-xs font-semibold text-[#6e6255]">Sauce extra : +1€</p>
+              </div>
+            )}
 
             {!productOk && (
               <div className="mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral">
@@ -131,7 +137,7 @@ function ProductPage() {
             <div className="rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-bold">Composition</h2>
-                <span className="text-xs font-semibold text-muted-foreground">Recette originale</span>
+                <span className="text-xs font-semibold text-muted-foreground">{product.id.startsWith("crousty-") ? "Recette signature" : "Recette originale"}</span>
               </div>
               <p className="text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
               <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground">

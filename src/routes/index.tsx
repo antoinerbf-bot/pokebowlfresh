@@ -56,6 +56,7 @@ function Index() {
   const { items, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const displayedBowls = [...bowls.filter((b) => b.id.startsWith("crousty-")), ...bowls.filter((b) => !b.id.startsWith("crousty-"))];
   const closeMobile = () => setMobileOpen(false);
   const goHome = () => {
     setMobileOpen(false);
@@ -318,12 +319,12 @@ function Index() {
           </Reveal>
 
           <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {bowls.map((bowl, index) => (
+            {displayedBowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.03}>
                 <Link
                   to="/product/$productId"
                   params={{ productId: bowl.id }}
-                  className="group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1"
+                  className={`group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1 ${bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45] ring-offset-2" : ""}`}
                 >
                   <div className="relative aspect-[1.18] overflow-hidden bg-[#ece8dc]">
                     <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-700 group-hover:scale-[1.04]" />
