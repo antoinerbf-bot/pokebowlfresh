@@ -9,7 +9,7 @@ import { n as CartDrawer, r as DishImage } from "./CartDrawer-BRR_gc0I.mjs";
 import { t as useStock } from "./useStock-Con-sCMe.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/commander-DvYB-d04.js
+//#region node_modules/.nitro/vite/services/ssr/assets/commander-Bfidc7rF.js
 var import_jsx_runtime = require_jsx_runtime();
 function CommanderPage() {
 	const { t, language, setLanguage } = useTranslation();
@@ -346,7 +346,7 @@ function BowlCard({ bowl, ok, composeLabel, soldOut }) {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:line-clamp-3",
+				className: "mt-2 text-[13px] leading-5 text-[#758079]",
 				children: bowl.desc
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {

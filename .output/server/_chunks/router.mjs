@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-5otTdnNH.css";
+var styles_default = "/assets/styles-5CXnXjNg.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -3472,7 +3472,7 @@ function BowlCard({ bowl, ok, composeLabel, soldOut }) {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:line-clamp-3",
+				className: "mt-2 text-[13px] leading-5 text-[#758079]",
 				children: bowl.desc
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
