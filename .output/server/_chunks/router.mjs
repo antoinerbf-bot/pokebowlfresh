@@ -673,18 +673,27 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
+//#region src/assets/bowl-chicken.jpg
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+//#endregion
+//#region src/assets/bowl-crousty.jpg
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+//#endregion
+//#region src/assets/bowl-scampi.jpg
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+//#endregion
 //#region src/components/DishImage.tsx
 var images = {
-	"mighty-gyros": "/assets/bowl-crousty-DhSdFdMk.jpg",
-	"sweet-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
-	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
-	"saumon-wasabi": "/assets/bowl-scampi-CKbANxtN.jpg",
-	"spicy-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
-	"crousty-chicken-curry": "/assets/bowl-crousty-DhSdFdMk.jpg",
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-DhSdFdMk.jpg"
+	"mighty-gyros": bowl_crousty_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
+	"saumon-wasabi": bowl_scampi_default,
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const image = images[dishId] ?? images["sweet-chicken"];
+	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		role: "img",
 		"aria-label": alt,
