@@ -2,6 +2,8 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/puzo3938/pokenbowl.be/
+    - export NODEENV=/home/puzo3938/nodevenv/pokenbowl.be/22
+    - export NPM=$NODEENV/bin/npm
     - /bin/mkdir -p $DEPLOYPATH
     - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' -exec /bin/rm -rf {} +
     - /bin/cp -R src $DEPLOYPATH
@@ -11,6 +13,6 @@ deployment:
     - /bin/cp vite.config.ts $DEPLOYPATH
     - /bin/cp tsconfig.json $DEPLOYPATH
     - /bin/cp server.js $DEPLOYPATH
-    - cd $DEPLOYPATH && /usr/bin/npm ci --include=dev
-    - cd $DEPLOYPATH && /usr/bin/npm run build
+    - cd $DEPLOYPATH && $NPM ci --include=dev
+    - cd $DEPLOYPATH && $NPM run build
     - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
