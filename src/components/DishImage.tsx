@@ -1,11 +1,15 @@
+import bowlChicken from "@/assets/bowl-chicken.jpg";
+import bowlCrousty from "@/assets/bowl-crousty.jpg";
+import bowlScampi from "@/assets/bowl-scampi.jpg";
+
 const images: Record<string, string> = {
-  "mighty-gyros": "/assets/bowl-crousty-DhSdFdMk.jpg",
-  "sweet-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
-  "scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
-  "saumon-wasabi": "/assets/bowl-scampi-CKbANxtN.jpg",
-  "spicy-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
-  "crousty-chicken-curry": "/assets/bowl-crousty-DhSdFdMk.jpg",
-  "crousty-chicken-sauce-blanche": "/assets/bowl-crousty-DhSdFdMk.jpg",
+  "mighty-gyros": bowlCrousty,
+  "sweet-chicken": bowlChicken,
+  "scampis-royaux": bowlScampi,
+  "saumon-wasabi": bowlScampi,
+  "spicy-chicken": bowlChicken,
+  "crousty-chicken-curry": bowlCrousty,
+  "crousty-chicken-sauce-blanche": bowlCrousty,
 };
 
 export function DishImage({
@@ -17,7 +21,7 @@ export function DishImage({
   alt: string;
   className?: string;
 }) {
-  const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
+  const image = images[dishId] ?? bowlChicken;
 
   return (
     <img
