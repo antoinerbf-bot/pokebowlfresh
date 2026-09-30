@@ -11,27 +11,34 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BGv6nlaf.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CYfNOE6_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
-var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
-var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
 var images = {
-	"mighty-gyros": bowl_crousty_default,
-	"sweet-chicken": bowl_chicken_default,
-	"scampis-royaux": bowl_scampi_default,
-	"saumon-wasabi": bowl_scampi_default,
-	"spicy-chicken": bowl_chicken_default,
-	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_crousty_default
+	"mighty-gyros": "/assets/bowl-crousty-DhSdFdMk.jpg",
+	"sweet-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
+	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"saumon-wasabi": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"spicy-chicken": "/assets/bowl-chicken-DVKFm73l.jpg",
+	"crousty-chicken-curry": "/assets/bowl-crousty-DhSdFdMk.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-DhSdFdMk.jpg"
 };
 function DishImage({ dishId, alt, className = "" }) {
 	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 		src: image,
 		alt,
-		className: `block h-full w-full object-cover ${className}`
+		width: 800,
+		height: 540,
+		loading: "eager",
+		decoding: "async",
+		style: {
+			display: "block",
+			width: "100%",
+			height: "100%",
+			objectFit: "cover"
+		},
+		className
 	});
 }
 function cn(...inputs) {
