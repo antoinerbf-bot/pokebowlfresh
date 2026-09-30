@@ -1,0 +1,4195 @@
+import { i as __toESM } from "../_runtime.mjs";
+import { i as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
+import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
+import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
+import { _ as useNavigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
+import { a as DialogOverlay, d as Slot, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { _ as CircleCheck, a as ShoppingCart, b as ArrowLeft, c as RefreshCw, d as Minus, f as Menu, g as Clock, h as CreditCard, i as Store, l as Plus, m as LoaderCircle, n as UtensilsCrossed, o as ShoppingBag, p as MapPin, r as Trash2, s as Shield, t as X, u as PhoneCall, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
+import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
+import { t as twMerge } from "../_libs/tailwind-merge.mjs";
+import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
+import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
+import { a as numberType, i as literalType, n as booleanType, o as objectType, r as enumType, s as stringType, t as arrayType } from "../_libs/zod.mjs";
+import { t as cs } from "../_libs/neondatabase__serverless.mjs";
+import { t as motion } from "../_libs/framer-motion+[...].mjs";
+import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
+import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
+//#region src/styles.css?transform-only
+var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
+//#endregion
+//#region src/styles.css?url
+var styles_default = "/assets/styles-9qtqINk5.css";
+//#endregion
+//#region src/lib/lovable-error-reporting.ts
+function reportLovableError(error, context = {}) {
+	if (typeof window === "undefined") return;
+	window.__lovableEvents?.captureException?.(error, {
+		source: "react_error_boundary",
+		route: window.location.pathname,
+		...context
+	}, {
+		mechanism: "react_error_boundary",
+		handled: false,
+		severity: "error"
+	});
+	const message = error instanceof Response ? `Response ${error.status}${error.url ? ` at ${error.url}` : ""}` : error instanceof Error ? error.message : String(error);
+	const stack = error instanceof Error ? error.stack : void 0;
+	window.__lovableReportRuntimeError?.({
+		message,
+		...stack !== void 0 && { stack },
+		filename: window.location.pathname
+	});
+}
+//#endregion
+//#region src/context/I18nContext.tsx
+var import_jsx_runtime = require_jsx_runtime();
+var translations = {
+	fr: {
+		"nav.menu": "La carte",
+		"nav.create": "Composer",
+		"nav.info": "Infos",
+		"nav.contact": "Contact",
+		"nav.order": "Commander",
+		"nav.recruit": "On recrute",
+		"nav.home": "Accueil",
+		"hero.badge": "Fresh · préparé minute",
+		"hero.location": "Poke N Bowl · Visé",
+		"hero.title1": "Ton bowl.",
+		"hero.title2": "Tes règles.",
+		"hero.desc": "Choisis ta recette, personnalise-la et commande ton bowl simplement.",
+		"hero.order": "Composer mon bowl",
+		"hero.menu": "Voir la carte",
+		"hero.recipes": "7 recettes",
+		"hero.from": "À partir de 9,50 €",
+		"hero.city": "Visé",
+		"menu.eyebrow": "La carte",
+		"menu.title1": "Choisis ton bowl.",
+		"menu.title2": "Puis rends-le unique.",
+		"menu.desc": "Toute la carte est ici. Choisis une recette, puis personnalise ton bowl.",
+		"menu.order": "Commander",
+		"menu.customize": "Personnaliser",
+		"menu.add_to_cart": "Ajouter au panier",
+		"menu.drinks": "Boissons",
+		"menu.drinks_title": "Une boisson avec ça ?",
+		"menu.desserts": "Desserts",
+		"menu.desserts_title": "Garde une place pour le dessert.",
+		"menu.desserts_cta": "Voir les desserts",
+		"journey.eyebrow": "Comment ça marche",
+		"journey.title1": "4 gestes.",
+		"journey.title2": "Et c’est prêt.",
+		"journey.s1": "Choisis un bowl",
+		"journey.s1d": "7 recettes originales du restaurant.",
+		"journey.s2": "Choisis ou personnalise",
+		"journey.s2d": "Recettes originales ou bowl sur mesure.",
+		"journey.s3": "Valide le panier",
+		"journey.s3d": "Boisson ou dessert en option.",
+		"journey.s4": "Livraison ou retrait",
+		"journey.s4d": "Choisis le mode et le créneau qui te conviennent.",
+		"journey.ready": "Prêt à commander ?",
+		"journey.ready_desc": "Toute la carte en un clic — sans app intermédiaire.",
+		"journey.cta": "Commander maintenant",
+		"recruit.banner_tag": "Poke N Bowl recrute",
+		"recruit.banner_title": "Et si ta prochaine aventure était ici ?",
+		"info.eyebrow": "Infos pratiques",
+		"info.title1": "Passe nous voir",
+		"info.title2": "à Visé.",
+		"info.address": "Adresse",
+		"info.phone": "Téléphone",
+		"info.hours": "Horaires",
+		"info.closed": "Fermé",
+		"info.maps": "Google Maps",
+		"info.day.mon": "Lundi",
+		"info.day.tue": "Mardi",
+		"info.day.wed": "Mercredi",
+		"info.day.thu": "Jeudi",
+		"info.day.fri": "Vendredi",
+		"info.day.sat": "Samedi",
+		"info.day.sun": "Dimanche",
+		"cart.title": "Ton panier",
+		"cart.empty": "Ton panier est vide.",
+		"cart.empty_cta": "Voir la carte",
+		"cart.total": "Total",
+		"cart.checkout": "Commander",
+		"cart.customize": "Personnaliser",
+		"toppings.title": "Choisis tes garnitures",
+		"toppings.max": "Max 5 gratuits",
+		"toppings.confirm": "Valider",
+		"product.back": "Retour à la carte",
+		"product.not_found": "Produit introuvable",
+		"product.unavailable": "Ce bowl est temporairement indisponible.",
+		"product.out_of_stock": "Indisponible",
+		"footer.recruit": "Recrutement",
+		"cmd.back": "Retour à l’accueil",
+		"cmd.eyebrow": "Commande",
+		"cmd.title1": "Tout le menu.",
+		"cmd.title2": "À toi de jouer.",
+		"cmd.desc": "Choisis un bowl, ajoute jusqu’à 5 toppings, puis une boisson ou un dessert si tu veux.",
+		"cmd.bowls_eyebrow": "Les bowls",
+		"cmd.bowls_title": "Choisis ton bowl.",
+		"cmd.bowls_hint": "Tape une recette pour la personnaliser",
+		"cmd.compose": "Composer →",
+		"cmd.unavailable": "Indisponible",
+		"cmd.drinks": "Boissons",
+		"cmd.desserts": "Desserts maison",
+		"cmd.sold_out": "Épuisé"
+	},
+	en: {
+		"nav.menu": "Menu",
+		"nav.create": "Build",
+		"nav.info": "Info",
+		"nav.contact": "Contact",
+		"nav.order": "Order",
+		"nav.recruit": "We're hiring",
+		"nav.home": "Home",
+		"hero.badge": "Fresh · made to order",
+		"hero.location": "Poke N Bowl · Visé",
+		"hero.title1": "Your bowl.",
+		"hero.title2": "Your rules.",
+		"hero.desc": "Pick a recipe, customize it, and order your bowl in a few taps.",
+		"hero.order": "Build my bowl",
+		"hero.menu": "View menu",
+		"hero.recipes": "7 recipes",
+		"hero.from": "From €9.50",
+		"hero.city": "Visé",
+		"menu.eyebrow": "The menu",
+		"menu.title1": "Pick your bowl.",
+		"menu.title2": "Then make it yours.",
+		"menu.desc": "The full menu is here. Choose a recipe, then customize your bowl.",
+		"menu.order": "Order",
+		"menu.customize": "Customize",
+		"menu.add_to_cart": "Add to cart",
+		"menu.drinks": "Drinks",
+		"menu.drinks_title": "A drink with that?",
+		"menu.desserts": "Desserts",
+		"menu.desserts_title": "Save room for dessert.",
+		"menu.desserts_cta": "See desserts",
+		"journey.eyebrow": "How it works",
+		"journey.title1": "4 simple steps.",
+		"journey.title2": "Then it’s ready.",
+		"journey.s1": "Pick a bowl",
+		"journey.s1d": "7 original restaurant recipes.",
+		"journey.s2": "Choose or customize",
+		"journey.s2d": "Original recipes or a custom bowl.",
+		"journey.s3": "Check your cart",
+		"journey.s3d": "Drinks or desserts optional.",
+		"journey.s4": "Delivery or pickup",
+		"journey.s4d": "Choose the option and time that suits you.",
+		"journey.ready": "Ready to order?",
+		"journey.ready_desc": "Full menu in one tap — no third-party app.",
+		"journey.cta": "Order now",
+		"recruit.banner_tag": "Poke N Bowl is hiring",
+		"recruit.banner_title": "What if your next adventure starts here?",
+		"info.eyebrow": "Practical info",
+		"info.title1": "Come see us",
+		"info.title2": "in Visé.",
+		"info.address": "Address",
+		"info.phone": "Phone",
+		"info.hours": "Opening hours",
+		"info.closed": "Closed",
+		"info.maps": "Google Maps",
+		"info.day.mon": "Monday",
+		"info.day.tue": "Tuesday",
+		"info.day.wed": "Wednesday",
+		"info.day.thu": "Thursday",
+		"info.day.fri": "Friday",
+		"info.day.sat": "Saturday",
+		"info.day.sun": "Sunday",
+		"cart.title": "Your cart",
+		"cart.empty": "Your cart is empty.",
+		"cart.empty_cta": "View menu",
+		"cart.total": "Total",
+		"cart.checkout": "Order",
+		"cart.customize": "Customize",
+		"toppings.title": "Choose your toppings",
+		"toppings.max": "Max 5 free",
+		"toppings.confirm": "Confirm",
+		"product.back": "Back to menu",
+		"product.not_found": "Product not found",
+		"product.unavailable": "This bowl is temporarily unavailable.",
+		"product.out_of_stock": "Unavailable",
+		"footer.recruit": "Careers",
+		"cmd.back": "Back to home",
+		"cmd.eyebrow": "Order",
+		"cmd.title1": "Full menu.",
+		"cmd.title2": "Your turn.",
+		"cmd.desc": "Pick a bowl, add up to 5 toppings, then a drink or dessert if you like.",
+		"cmd.bowls_eyebrow": "Bowls",
+		"cmd.bowls_title": "Pick your bowl.",
+		"cmd.bowls_hint": "Tap a recipe to customize it",
+		"cmd.compose": "Build →",
+		"cmd.unavailable": "Unavailable",
+		"cmd.drinks": "Drinks",
+		"cmd.desserts": "House desserts",
+		"cmd.sold_out": "Sold out"
+	},
+	nl: {
+		"nav.menu": "Menu",
+		"nav.create": "Samenstellen",
+		"nav.info": "Info",
+		"nav.contact": "Contact",
+		"nav.order": "Bestellen",
+		"nav.recruit": "We zoeken collega's",
+		"nav.home": "Home",
+		"hero.badge": "Vers · ter plaatse bereid",
+		"hero.location": "Poke N Bowl · Visé",
+		"hero.title1": "Jouw bowl.",
+		"hero.title2": "Jouw regels.",
+		"hero.desc": "Kies een recept, personaliseer het en bestel je bowl in een paar tikken.",
+		"hero.order": "Mijn bowl samenstellen",
+		"hero.menu": "Bekijk het menu",
+		"hero.recipes": "7 recepten",
+		"hero.from": "Vanaf €9,50",
+		"hero.city": "Visé",
+		"menu.eyebrow": "Het menu",
+		"menu.title1": "Kies je bowl.",
+		"menu.title2": "Maak hem uniek.",
+		"menu.desc": "Het volledige menu staat hier. Kies een recept en personaliseer je bowl.",
+		"menu.order": "Bestellen",
+		"menu.customize": "Personaliseren",
+		"menu.add_to_cart": "In winkelmandje",
+		"menu.drinks": "Dranken",
+		"menu.drinks_title": "Een drankje erbij?",
+		"menu.desserts": "Desserts",
+		"menu.desserts_title": "Houd plaats voor dessert.",
+		"menu.desserts_cta": "Bekijk desserts",
+		"journey.eyebrow": "Zo werkt het",
+		"journey.title1": "4 stappen.",
+		"journey.title2": "En klaar.",
+		"journey.s1": "Kies een bowl",
+		"journey.s1d": "7 originele recepten van het restaurant.",
+		"journey.s2": "Kies of stel samen",
+		"journey.s2d": "Originele recepten of een bowl op maat.",
+		"journey.s3": "Check je mandje",
+		"journey.s3d": "Drank of dessert optioneel.",
+		"journey.s4": "Levering of afhalen",
+		"journey.s4d": "Kies de optie en het uur dat jou past.",
+		"journey.ready": "Klaar om te bestellen?",
+		"journey.ready_desc": "Volledig menu in één klik — zonder tussenapp.",
+		"journey.cta": "Nu bestellen",
+		"recruit.banner_tag": "Poke N Bowl zoekt collega's",
+		"recruit.banner_title": "Misschien begint jouw volgende avontuur hier?",
+		"info.eyebrow": "Praktische info",
+		"info.title1": "Kom langs",
+		"info.title2": "in Visé.",
+		"info.address": "Adres",
+		"info.phone": "Telefoon",
+		"info.hours": "Openingsuren",
+		"info.closed": "Gesloten",
+		"info.maps": "Google Maps",
+		"info.day.mon": "Maandag",
+		"info.day.tue": "Dinsdag",
+		"info.day.wed": "Woensdag",
+		"info.day.thu": "Donderdag",
+		"info.day.fri": "Vrijdag",
+		"info.day.sat": "Zaterdag",
+		"info.day.sun": "Zondag",
+		"cart.title": "Jouw mandje",
+		"cart.empty": "Je mandje is leeg.",
+		"cart.empty_cta": "Bekijk het menu",
+		"cart.total": "Totaal",
+		"cart.checkout": "Bestellen",
+		"cart.customize": "Aanpassen",
+		"toppings.title": "Kies je toppings",
+		"toppings.max": "Max 5 gratis",
+		"toppings.confirm": "Bevestigen",
+		"product.back": "Terug naar het menu",
+		"product.not_found": "Product niet gevonden",
+		"product.unavailable": "Deze bowl is tijdelijk niet beschikbaar.",
+		"product.out_of_stock": "Niet beschikbaar",
+		"footer.recruit": "Jobs",
+		"cmd.back": "Terug naar home",
+		"cmd.eyebrow": "Bestelling",
+		"cmd.title1": "Volledig menu.",
+		"cmd.title2": "Aan jou.",
+		"cmd.desc": "Kies een bowl, voeg tot 5 toppings toe, daarna eventueel een drank of dessert.",
+		"cmd.bowls_eyebrow": "Bowls",
+		"cmd.bowls_title": "Kies je bowl.",
+		"cmd.bowls_hint": "Tik op een recept om te personaliseren",
+		"cmd.compose": "Samenstellen →",
+		"cmd.unavailable": "Niet beschikbaar",
+		"cmd.drinks": "Dranken",
+		"cmd.desserts": "Huisdesserts",
+		"cmd.sold_out": "Uitverkocht"
+	}
+};
+var I18nContext = (0, import_react.createContext)(void 0);
+function I18nProvider({ children }) {
+	const [language, setLanguage] = (0, import_react.useState)("fr");
+	const t = (key) => {
+		return translations[language][key] || translations.fr[key] || key;
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nContext.Provider, {
+		value: {
+			language,
+			setLanguage,
+			t
+		},
+		children
+	});
+}
+function useTranslation() {
+	const context = (0, import_react.useContext)(I18nContext);
+	if (!context) throw new Error("useTranslation must be used within an I18nProvider");
+	return context;
+}
+//#endregion
+//#region src/context/CartContext.tsx
+var CartContext = (0, import_react.createContext)(void 0);
+function CartProvider({ children }) {
+	const [items, setItems] = (0, import_react.useState)([]);
+	const [isCartOpen, setIsCartOpen] = (0, import_react.useState)(false);
+	const addItem = (newItem) => {
+		setItems((prev) => {
+			if (prev.find((item) => item.id === newItem.id && JSON.stringify(item.toppings) === JSON.stringify(newItem.toppings))) return prev.map((item) => item.id === newItem.id && JSON.stringify(item.toppings) === JSON.stringify(newItem.toppings) ? {
+				...item,
+				quantity: item.quantity + newItem.quantity
+			} : item);
+			return [...prev, newItem];
+		});
+		setIsCartOpen(true);
+	};
+	const removeItem = (id) => {
+		setItems((prev) => prev.filter((item) => item.id !== id));
+	};
+	const updateQuantity = (id, quantity) => {
+		if (quantity <= 0) {
+			removeItem(id);
+			return;
+		}
+		setItems((prev) => prev.map((item) => item.id === id ? {
+			...item,
+			quantity
+		} : item));
+	};
+	const clearCart = () => {
+		setItems([]);
+	};
+	const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartContext.Provider, {
+		value: {
+			items,
+			addItem,
+			removeItem,
+			updateQuantity,
+			clearCart,
+			total,
+			isCartOpen,
+			setIsCartOpen
+		},
+		children
+	});
+}
+function useCart() {
+	const context = (0, import_react.useContext)(CartContext);
+	if (!context) throw new Error("useCart must be used within a CartProvider");
+	return context;
+}
+//#endregion
+//#region src/routes/__root.tsx
+function NotFoundComponent() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "flex min-h-screen items-center justify-center bg-background px-4",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "max-w-md text-center",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-7xl font-bold text-foreground",
+					children: "404"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "mt-4 text-xl font-semibold text-foreground",
+					children: "Page introuvable"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 text-sm text-muted-foreground",
+					children: "La page que tu recherches n’existe pas ou a été déplacée."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						to: "/",
+						className: "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90",
+						children: "Go home"
+					})
+				})
+			]
+		})
+	});
+}
+function ErrorComponent({ error, reset }) {
+	console.error(error);
+	const router = useRouter();
+	(0, import_react.useEffect)(() => {
+		reportLovableError(error, { boundary: "tanstack_root_error_component" });
+	}, [error]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "flex min-h-screen items-center justify-center bg-background px-4",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "max-w-md text-center",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-xl font-semibold tracking-tight text-foreground",
+					children: "This page didn't load"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 text-sm text-muted-foreground",
+					children: "Un problème est survenu. Tu peux réessayer ou revenir à l’accueil."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-6 flex flex-wrap justify-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						onClick: () => {
+							router.invalidate();
+							reset();
+						},
+						className: "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90",
+						children: "Try again"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+						href: "/",
+						className: "inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent",
+						children: "Go home"
+					})]
+				})
+			]
+		})
+	});
+}
+var Route$12 = createRootRouteWithContext()({
+	head: () => ({
+		meta: [
+			{ charSet: "utf-8" },
+			{
+				name: "viewport",
+				content: "width=device-width, initial-scale=1"
+			},
+			{
+				name: "author",
+				content: "Poke N Bowl Visé"
+			},
+			{
+				property: "og:type",
+				content: "website"
+			},
+			{
+				name: "twitter:card",
+				content: "summary_large_image"
+			}
+		],
+		links: [
+			{
+				rel: "stylesheet",
+				href: styles_default
+			},
+			{
+				rel: "preconnect",
+				href: "https://fonts.googleapis.com"
+			},
+			{
+				rel: "preconnect",
+				href: "https://fonts.gstatic.com",
+				crossOrigin: "anonymous"
+			},
+			{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+			},
+			{
+				rel: "icon",
+				type: "image/png",
+				href: "/favicon.png"
+			}
+		]
+	}),
+	shellComponent: RootShell,
+	component: RootComponent,
+	notFoundComponent: NotFoundComponent,
+	errorComponent: ErrorComponent
+});
+function RootShell({ children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("html", {
+		lang: "fr",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("head", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", { children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})] })]
+	});
+}
+function RootComponent() {
+	const { queryClient } = Route$12.useRouteContext();
+	const pathname = useRouterState({ select: (state) => state.location.pathname });
+	(0, import_react.useEffect)(() => {
+		window.history.scrollRestoration = "manual";
+		const resetScroll = () => {
+			window.scrollTo(0, 0);
+			document.documentElement.scrollTop = 0;
+			document.body.scrollTop = 0;
+		};
+		resetScroll();
+		const frame = window.requestAnimationFrame(resetScroll);
+		const frame2 = window.requestAnimationFrame(() => window.requestAnimationFrame(resetScroll));
+		return () => {
+			window.cancelAnimationFrame(frame);
+			window.cancelAnimationFrame(frame2);
+		};
+	}, [pathname]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryClientProvider, {
+		client: queryClient,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
+	});
+}
+//#endregion
+//#region src/assets/logo.png
+var logo_default = "/assets/logo-yR8iNRjN.png";
+//#endregion
+//#region src/assets/hero-poke.jpg
+var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
+//#endregion
+//#region src/assets/dessert.jpg
+var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
+//#endregion
+//#region src/lib/utils.ts
+function cn(...inputs) {
+	return twMerge(clsx(inputs));
+}
+//#endregion
+//#region src/components/ui/sheet.tsx
+var Sheet = Dialog;
+var SheetPortal = DialogPortal;
+var SheetOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogOverlay, {
+	className: cn("fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
+	...props,
+	ref
+}));
+SheetOverlay.displayName = DialogOverlay.displayName;
+var sheetVariants = cva("fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out", {
+	variants: { side: {
+		top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+		bottom: "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+		left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+		right: "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm"
+	} },
+	defaultVariants: { side: "right" }
+});
+var SheetContent = import_react.forwardRef(({ side = "right", className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetPortal, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetOverlay, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+	ref,
+	className: cn(sheetVariants({ side }), className),
+	...props,
+	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogClose, {
+		className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background cursor-pointer transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "sr-only",
+			children: "Close"
+		})]
+	}), children]
+})] }));
+SheetContent.displayName = DialogContent.displayName;
+var SheetHeader = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	className: cn("flex flex-col space-y-2 text-center sm:text-left", className),
+	...props
+});
+SheetHeader.displayName = "SheetHeader";
+var SheetFooter = ({ className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
+	...props
+});
+SheetFooter.displayName = "SheetFooter";
+var SheetTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, {
+	ref,
+	className: cn("text-lg font-semibold text-foreground", className),
+	...props
+}));
+SheetTitle.displayName = DialogTitle.displayName;
+var SheetDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, {
+	ref,
+	className: cn("text-sm text-muted-foreground", className),
+	...props
+}));
+SheetDescription.displayName = DialogDescription.displayName;
+//#endregion
+//#region src/components/ui/button.tsx
+var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", {
+	variants: {
+		variant: {
+			default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+			destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+			outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+			secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+			ghost: "hover:bg-accent hover:text-accent-foreground",
+			link: "text-primary underline-offset-4 hover:underline"
+		},
+		size: {
+			default: "h-9 px-4 py-2",
+			sm: "h-8 rounded-md px-3 text-xs",
+			lg: "h-10 rounded-md px-8",
+			icon: "h-9 w-9"
+		}
+	},
+	defaultVariants: {
+		variant: "default",
+		size: "default"
+	}
+});
+var Button = import_react.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(asChild ? Slot : "button", {
+		className: cn(buttonVariants({
+			variant,
+			size,
+			className
+		})),
+		ref,
+		...props
+	});
+});
+Button.displayName = "Button";
+//#endregion
+//#region src/components/ui/scroll-area.tsx
+var ScrollArea = import_react.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Root, {
+	ref,
+	className: cn("relative overflow-hidden", className),
+	...props,
+	children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Viewport, {
+			className: "h-full w-full rounded-[inherit]",
+			children
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollBar, {}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Corner, {})
+	]
+}));
+ScrollArea.displayName = Root.displayName;
+var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaScrollbar, {
+	ref,
+	orientation,
+	className: cn("flex touch-none select-none transition-colors", orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent p-[1px]", orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent p-[1px]", className),
+	...props,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" })
+}));
+ScrollBar.displayName = ScrollAreaScrollbar.displayName;
+//#endregion
+//#region src/components/ui/separator.tsx
+var Separator = import_react.forwardRef(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$1, {
+	ref,
+	decorative,
+	orientation,
+	className: cn("shrink-0 bg-border", orientation === "horizontal" ? "h-[1px] w-full" : "h-full w-[1px]", className),
+	...props
+}));
+Separator.displayName = Root$1.displayName;
+//#endregion
+//#region src/assets/dish-sprite.webp
+var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
+//#endregion
+//#region src/components/DishImage.tsx
+var positions = {
+	"beef-teriyaki": "0% 0%",
+	"crousty-chicken": "50% 0%",
+	"sweet-chicken": "100% 0%",
+	"saumon-wasabi": "0% 50%",
+	"scampis-royaux": "50% 50%",
+	"spicy-chicken": "100% 50%",
+	"aloha-classic": "0% 100%",
+	"vegan-tofu": "50% 100%",
+	"shrimp-mango": "100% 100%"
+};
+function DishImage({ dishId, alt, className = "" }) {
+	const position = positions[dishId] ?? "0% 0%";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		role: "img",
+		"aria-label": alt,
+		className: `overflow-hidden bg-[#081612] bg-no-repeat ${className}`,
+		style: {
+			backgroundImage: `url(${dish_sprite_default})`,
+			backgroundSize: "300% 300%",
+			backgroundPosition: position
+		}
+	});
+}
+var allToppings = [
+	"Oignons frits",
+	"Sésame seeds",
+	"Noix de cajou",
+	"Nachos",
+	"Flocons-Chili",
+	"Wazabi"
+];
+var bowls = [
+	{
+		id: "mighty-gyros",
+		name: "Mighty Gyros",
+		price: 10,
+		desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
+		tag: "Signature"
+	},
+	{
+		id: "sweet-chicken",
+		name: "Sweet Chicken",
+		price: 10,
+		desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+		tag: "Best-seller"
+	},
+	{
+		id: "scampis-royaux",
+		name: "Scampis Royal",
+		price: 10,
+		desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+		tag: "Signature"
+	},
+	{
+		id: "saumon-wasabi",
+		name: "Saumon Wasabi",
+		price: 11,
+		desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
+		tag: "Premium"
+	},
+	{
+		id: "spicy-chicken",
+		name: "Spicy Chicken",
+		price: 10,
+		desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
+		tag: "Épicé"
+	},
+	{
+		id: "crousty-chicken-curry",
+		name: "Crousty Chicken Curry",
+		price: 11,
+		desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
+		tag: "Nouveau"
+	},
+	{
+		id: "crousty-chicken-sauce-blanche",
+		name: "Crousty Chicken Sauce Blanche",
+		price: 11,
+		desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
+		tag: "Nouveau"
+	}
+];
+var drinks = [
+	{
+		id: "coca",
+		name: "Coca-Cola (33 cl)",
+		price: 2
+	},
+	{
+		id: "coca-zero",
+		name: "Coca-Cola Zero (33 cl)",
+		price: 2
+	},
+	{
+		id: "fanta",
+		name: "Fanta (33 cl)",
+		price: 2
+	},
+	{
+		id: "ice-tea",
+		name: "Ice-Tea (33 cl)",
+		price: 2
+	},
+	{
+		id: "eau-plate",
+		name: "Eau plate",
+		price: 2
+	},
+	{
+		id: "eau-gaz",
+		name: "Eau gazeuse (50 cl)",
+		price: 2
+	}
+];
+var desserts = [
+	{
+		id: "tira-oreo",
+		name: "Tiramisu Oreo",
+		price: 4
+	},
+	{
+		id: "tira-nutella",
+		name: "Tiramisu Nutella",
+		price: 4
+	},
+	{
+		id: "tira-spec",
+		name: "Tiramisu Spéculoos",
+		price: 4
+	}
+];
+//#endregion
+//#region src/components/CartDrawer.tsx
+function CartDrawer() {
+	const { isCartOpen, setIsCartOpen, items, updateQuantity, removeItem, total } = useCart();
+	const { t } = useTranslation();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sheet, {
+		open: isCartOpen,
+		onOpenChange: setIsCartOpen,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
+			className: "flex w-full flex-col sm:max-w-md",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetTitle, { children: t("cart.title") }) }), items.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-1 flex-col items-center justify-center gap-4 px-2 text-center",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-muted-foreground",
+					children: t("cart.empty")
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					asChild: true,
+					className: "rounded-full bg-coral px-6 text-white hover:bg-coral/90",
+					onClick: () => setIsCartOpen(false),
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						to: "/commander",
+						children: t("cart.empty_cta")
+					})
+				})]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollArea, {
+				className: "-mx-6 flex-1 px-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex flex-col gap-5 py-4",
+					children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex gap-4",
+						children: [bowls.some((bowl) => bowl.id === item.id) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+							dishId: item.id,
+							alt: item.name,
+							className: "h-16 w-16 shrink-0 rounded-md bg-[#081612]"
+						}) : item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: item.image,
+							alt: item.name,
+							className: "h-16 w-16 shrink-0 rounded-md object-cover"
+						}) : null, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-1 flex-col justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+								className: "text-sm font-semibold leading-tight",
+								children: item.name
+							}), item.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-1 text-xs text-muted-foreground",
+								children: item.toppings.join(", ")
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-2 flex items-center justify-between",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "font-medium",
+									children: ["€ ", (item.price * item.quantity).toFixed(2)]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+											variant: "outline",
+											size: "icon",
+											className: "h-7 w-7",
+											onClick: () => updateQuantity(item.id, item.quantity - 1),
+											children: item.quantity === 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "h-3 w-3" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3" })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "w-4 text-center text-sm",
+											children: item.quantity
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+											variant: "outline",
+											size: "icon",
+											className: "h-7 w-7",
+											onClick: () => updateQuantity(item.id, item.quantity + 1),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" })
+										})
+									]
+								})]
+							})]
+						})]
+					}, `${item.id}-${JSON.stringify(item.toppings)}`))
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-auto pt-4",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Separator, { className: "mb-4" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mb-4 flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "font-semibold",
+							children: t("cart.total")
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "font-display text-xl font-bold text-coral",
+							children: ["€ ", total.toFixed(2)]
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						asChild: true,
+						className: "w-full bg-coral text-white hover:bg-coral/90",
+						size: "lg",
+						onClick: () => setIsCartOpen(false),
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: "/checkout",
+							children: t("cart.checkout")
+						})
+					})
+				]
+			})] })]
+		})
+	});
+}
+//#endregion
+//#region src/routes/index.tsx
+var Route$11 = createFileRoute("/")({
+	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais à emporter" }, {
+		name: "description",
+		content: "Poke N Bowl à Visé : poké bowls frais, crousty chicken et desserts maison. Compose ton bowl et commande directement."
+	}] }),
+	component: Index
+});
+var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
+var PHONE = "+32491281456";
+var HOUR_ROWS = [
+	["info.day.mon", "12:00 – 14:00 · 17:00 – 21:00"],
+	["info.day.tue", "12:00 – 14:00 · 17:00 – 21:00"],
+	["info.day.wed", "12:00 – 14:00 · 17:00 – 21:00"],
+	["info.day.thu", "12:00 – 14:00 · 17:00 – 21:00"],
+	["info.day.fri", "12:00 – 14:00 · 17:00 – 21:00"],
+	["info.day.sat", "18:00 – 21:00"],
+	["info.day.sun", "closed"]
+];
+function Reveal({ children, delay = 0 }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+		initial: {
+			opacity: 0,
+			y: 18
+		},
+		whileInView: {
+			opacity: 1,
+			y: 0
+		},
+		viewport: {
+			once: true,
+			amount: .1
+		},
+		transition: {
+			duration: .5,
+			delay,
+			ease: [
+				.22,
+				1,
+				.36,
+				1
+			]
+		},
+		children
+	});
+}
+function Index() {
+	const { t, language, setLanguage } = useTranslation();
+	const { items, setIsCartOpen } = useCart();
+	const [mobileOpen, setMobileOpen] = import_react.useState(false);
+	const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+	const closeMobile = () => setMobileOpen(false);
+	const goHome = () => {
+		setMobileOpen(false);
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: "auto"
+		});
+	};
+	import_react.useEffect(() => {
+		const previous = window.history.scrollRestoration;
+		window.history.scrollRestoration = "manual";
+		const reset = () => window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: "auto"
+		});
+		reset();
+		const frame = window.requestAnimationFrame(reset);
+		return () => {
+			window.cancelAnimationFrame(frame);
+			window.history.scrollRestoration = previous;
+		};
+	}, []);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen overflow-x-clip bg-[#f7f4ec] text-[#17231f]",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartDrawer, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				className: "absolute inset-x-0 top-0 z-50",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+					className: "mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/",
+							onClick: goHome,
+							className: "flex min-w-0 shrink-0 items-center gap-2.5",
+							"aria-label": "Poke N Bowl",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,.25)] sm:h-14 sm:w-14",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									src: logo_default,
+									alt: "Logo Poke N Bowl",
+									className: "h-full w-full object-contain"
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "min-w-0 text-white",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+									className: "block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg",
+									children: "Poke N Bowl"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]",
+									children: "Visé · Fresh food"
+								})]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "hidden items-center gap-7 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "#carte",
+									className: "hover:text-[#d7ff45]",
+									children: t("nav.menu")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "#composer",
+									className: "hover:text-[#d7ff45]",
+									children: t("nav.create")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "#infos",
+									className: "hover:text-[#d7ff45]",
+									children: t("nav.info")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/contact",
+									className: "hover:text-[#d7ff45]",
+									children: t("nav.contact")
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/recrutement",
+									className: "hidden rounded-full bg-[#ff705f] px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] text-white sm:block",
+									children: t("nav.recruit")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "hidden rounded-full border border-white/15 bg-black/20 p-1 backdrop-blur md:flex",
+									children: [
+										"fr",
+										"en",
+										"nl"
+									].map((lang) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										onClick: () => setLanguage(lang),
+										className: `rounded-full px-2 py-1 text-[9px] font-bold uppercase ${language === lang ? "bg-white text-black" : "text-white/60"}`,
+										children: lang
+									}, lang))
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setIsCartOpen(true),
+									"aria-label": "Cart",
+									className: "relative rounded-full border border-white/20 bg-black/20 p-2.5 text-white backdrop-blur",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }), cartCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black",
+										children: cartCount
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									"aria-label": "Menu",
+									onClick: () => setMobileOpen((o) => !o),
+									className: "rounded-full border border-white/20 bg-black/20 p-2.5 text-white backdrop-blur md:hidden",
+									children: mobileOpen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-4 w-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Menu, { className: "h-4 w-4" })
+								})
+							]
+						})
+					]
+				}), mobileOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mx-3 max-h-[calc(100vh-88px)] overflow-y-auto rounded-3xl border border-white/10 bg-[#10251f]/95 p-3 shadow-2xl backdrop-blur-xl md:hidden",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid gap-1",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								onClick: closeMobile,
+								href: "#carte",
+								className: "rounded-2xl px-4 py-3 text-sm font-black text-white",
+								children: t("nav.menu")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								onClick: closeMobile,
+								href: "#composer",
+								className: "rounded-2xl px-4 py-3 text-sm font-black text-white",
+								children: t("nav.create")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								onClick: closeMobile,
+								href: "#infos",
+								className: "rounded-2xl px-4 py-3 text-sm font-black text-white",
+								children: t("nav.info")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								onClick: closeMobile,
+								to: "/contact",
+								className: "rounded-2xl px-4 py-3 text-sm font-black text-white",
+								children: t("nav.contact")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								onClick: closeMobile,
+								to: "/recrutement",
+								className: "rounded-2xl bg-[#ff705f] px-4 py-3 text-center text-sm font-black text-white",
+								children: t("nav.recruit")
+							})
+						]
+					})
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "relative isolate flex min-h-[520px] items-end bg-[#071713] text-white sm:min-h-[640px] sm:items-center",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "absolute inset-0 -z-20",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: hero_poke_default,
+								alt: "",
+								"aria-hidden": "true",
+								className: "h-full w-full object-cover object-center sm:object-[center_45%]"
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.75)_0%,rgba(7,23,19,.4)_40%,rgba(7,23,19,.82)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.55)_50%,rgba(7,23,19,.2)_100%)]" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "relative z-10 mx-auto w-full max-w-[1320px] min-w-0 px-5 pb-20 pt-24 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "max-w-xl",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]",
+										children: t("hero.location")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+										className: "mt-3 font-sans font-extrabold tracking-tight text-[1.875rem] leading-[1.3] sm:text-4xl sm:leading-[1.25] lg:text-5xl",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "block drop-shadow-[0_2px_10px_rgba(0,0,0,.55)]",
+											children: t("hero.title1")
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "mt-1 block pb-1 text-[#d7ff45] drop-shadow-[0_2px_12px_rgba(0,0,0,.65)]",
+											children: t("hero.title2")
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-[15px]",
+										children: t("hero.desc")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+											to: "/commander",
+											className: "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_14px_40px_-12px_rgba(255,112,95,.85)] transition hover:brightness-110",
+											children: [
+												t("hero.order"),
+												" ",
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+											]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+											href: "#carte",
+											className: "inline-flex h-12 items-center justify-center rounded-full border border-white/25 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10",
+											children: t("hero.menu")
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "mt-5 text-[11px] font-semibold tracking-wide text-white/50",
+										children: [
+											t("hero.recipes"),
+											" · ",
+											t("hero.from"),
+											" · ",
+											t("hero.city")
+										]
+									})
+								]
+							})
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					className: "overflow-hidden bg-[#d7ff45] py-3",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+						animate: { x: ["0%", "-50%"] },
+						transition: {
+							duration: 24,
+							repeat: Infinity,
+							ease: "linear"
+						},
+						className: "flex w-max whitespace-nowrap",
+						children: Array.from({ length: 8 }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs",
+							children: ["Poke N Bowl · Fresh food · Visé ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "mx-6",
+								children: "✦"
+							})]
+						}, i))
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					id: "carte",
+					className: "scroll-mt-10 mx-auto max-w-[1320px] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col gap-5 md:flex-row md:items-end md:justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]",
+							children: t("menu.eyebrow")
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+							className: "mt-3 max-w-2xl text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "block",
+								children: t("menu.title1")
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "mt-0.5 block text-[#7d8b83]",
+								children: t("menu.title2")
+							})]
+						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "max-w-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm leading-6 text-[#68756f]",
+								children: t("menu.desc")
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+								to: "/commander",
+								className: "mt-3 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#ff705f]",
+								children: [
+									t("menu.order"),
+									" ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+								]
+							})]
+						})]
+					}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3",
+						children: bowls.map((bowl, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+							delay: index * .03,
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+								to: "/product/$productId",
+								params: { productId: bowl.id },
+								className: "group block overflow-hidden rounded-[20px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1 sm:rounded-[24px]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative aspect-[1.48] overflow-hidden sm:aspect-[1.48]",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+											dishId: bowl.id,
+											alt: bowl.name,
+											className: "h-full w-full transition duration-500 group-hover:scale-[1.03]"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-[0.1em]",
+											children: bowl.tag
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black",
+											children: ["€ ", bowl.price.toFixed(2)]
+										})
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "p-4 sm:p-5",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-start justify-between gap-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+												className: "min-w-0 flex-1 break-words text-[15px] font-black leading-snug sm:text-lg",
+												children: bowl.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079]",
+											children: bowl.desc
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+											className: "mt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]",
+											children: [t("menu.customize"), " →"]
+										})
+									]
+								})]
+							})
+						}, bowl.id))
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					id: "composer",
+					className: "scroll-mt-10 bg-[#10251f] px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mx-auto max-w-[1200px]",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]",
+								children: t("journey.eyebrow")
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+								className: "mt-3 max-w-3xl text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "block",
+									children: t("journey.title1")
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "mt-0.5 block text-white/40",
+									children: t("journey.title2")
+								})]
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-4",
+								children: [
+									[
+										"01",
+										"journey.s1",
+										"journey.s1d"
+									],
+									[
+										"02",
+										"journey.s2",
+										"journey.s2d"
+									],
+									[
+										"03",
+										"journey.s3",
+										"journey.s3d"
+									],
+									[
+										"04",
+										"journey.s4",
+										"journey.s4d"
+									]
+								].map(([num, titleKey, descKey], index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+									delay: index * .05,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "h-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-3xl font-black text-[#ff705f]",
+												children: num
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+												className: "mt-5 text-lg font-black",
+												children: t(titleKey)
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "mt-2 text-sm leading-5 text-white/55",
+												children: t(descKey)
+											})
+										]
+									})
+								}, num))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs font-black uppercase tracking-[0.15em] text-[#d7ff45]",
+									children: t("journey.ready")
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-1 text-sm text-white/55",
+									children: t("journey.ready_desc")
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									to: "/commander",
+									className: "inline-flex items-center justify-center gap-2 rounded-full bg-[#ff705f] px-5 py-3 text-sm font-black",
+									children: [
+										t("journey.cta"),
+										" ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+									]
+								})]
+							})
+						]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					className: "mx-auto max-w-[1200px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid gap-4 lg:grid-cols-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-[24px] bg-white p-5 shadow-[0_15px_50px_-35px_rgba(0,0,0,.3)] sm:p-8",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]",
+									children: t("menu.drinks")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "mt-2 text-2xl font-black sm:text-3xl",
+									children: t("menu.drinks_title")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "mt-6 grid gap-2 sm:grid-cols-2",
+									children: drinks.map((drink) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+										to: "/commander",
+										className: "flex items-center justify-between gap-2 rounded-xl bg-[#f5f4ee] px-4 py-3 hover:bg-[#d7ff45]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "min-w-0 break-words text-sm font-bold",
+											children: drink.name
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "shrink-0 text-xs font-black",
+											children: ["€ ", drink.price.toFixed(2)]
+										})]
+									}, drink.id))
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-[24px] bg-[#ff705f] p-5 text-white sm:p-8",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-black uppercase tracking-[0.18em] text-white/70",
+									children: t("menu.desserts")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "mt-2 text-2xl font-black sm:text-3xl",
+									children: t("menu.desserts_title")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-7 flex items-center gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: dessert_default,
+										alt: "",
+										loading: "lazy",
+										className: "h-20 w-20 shrink-0 rounded-2xl object-cover"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "min-w-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-sm text-white/75",
+											children: desserts.map((item) => item.name).join(" · ")
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+											to: "/commander",
+											className: "mt-2 inline-block text-xs font-black uppercase tracking-[0.12em] underline underline-offset-4",
+											children: [t("menu.desserts_cta"), " →"]
+										})]
+									})]
+								})
+							]
+						})]
+					}) })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					className: "px-5 pb-14 sm:px-6 sm:pb-20 lg:px-8",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/recrutement",
+						className: "group mx-auto flex max-w-[1200px] items-center justify-between gap-5 rounded-[24px] bg-[#d7ff45] p-5 transition hover:-translate-y-1 sm:rounded-[30px] sm:p-8",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "min-w-0",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-[#536018]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BriefcaseBusiness, { className: "h-4 w-4 shrink-0" }), t("recruit.banner_tag")]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "mt-2 break-words text-balance text-xl font-black leading-snug sm:text-3xl",
+								children: t("recruit.banner_title")
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-5 w-5" })
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					id: "infos",
+					className: "scroll-mt-10 bg-[#ece9df] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]",
+								children: t("info.eyebrow")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+								className: "mt-3 text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "block",
+									children: t("info.title1")
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "mt-0.5 block text-[#7d8b83]",
+									children: t("info.title2")
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-6 grid gap-2.5 sm:mt-8 sm:gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: MAPS_URL,
+									target: "_blank",
+									rel: "noreferrer",
+									className: "flex min-w-0 items-center gap-4 rounded-2xl bg-white p-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5" })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "min-w-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]",
+											children: t("info.address")
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "mt-1 block break-words text-sm font-bold",
+											children: "Av. du Pont 12, 4600 Visé, Belgique"
+										})]
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: `tel:${PHONE}`,
+									className: "flex items-center gap-4 rounded-2xl bg-white p-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
+										children: "☎"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]",
+										children: t("info.phone")
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "mt-1 block text-sm font-bold",
+										children: "+32 491 28 14 56"
+									})] })]
+								})]
+							})
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+							delay: .06,
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-[24px] bg-[#10251f] p-5 text-white sm:p-7",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-2xl font-black",
+										children: t("info.hours")
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-5 divide-y divide-white/10",
+										children: HOUR_ROWS.map(([dayKey, value]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between gap-3 py-3 text-sm",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "min-w-0 font-bold text-white/65",
+												children: t(dayKey)
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: `shrink-0 text-right font-black ${value === "closed" ? "text-[#ff705f]" : ""}`,
+												children: value === "closed" ? t("info.closed") : value
+											})]
+										}, dayKey))
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: MAPS_URL,
+										target: "_blank",
+										rel: "noreferrer",
+										className: "mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#d7ff45]",
+										children: [
+											t("info.maps"),
+											" ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+										]
+									})
+								]
+							})
+						})]
+					})
+				})
+			] }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
+				className: "bg-[#0b1a16] px-5 py-8 pb-24 text-white sm:px-6 sm:pb-8 lg:px-8",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/",
+							className: "flex items-center gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: logo_default,
+								alt: "Poke N Bowl",
+								className: "h-11 w-auto max-w-[170px] object-contain object-left"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "font-black",
+								children: "Poke N Bowl"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-[8px] font-bold uppercase tracking-[0.18em] text-white/35",
+								children: "Visé · Fresh food"
+							})] })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-wrap gap-4 text-[9px] font-black uppercase tracking-[0.12em] text-white/45",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "#carte",
+									children: t("nav.menu")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/commander",
+									children: t("nav.order")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/recrutement",
+									children: t("footer.recruit")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/contact",
+									children: t("nav.contact")
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-[9px] font-bold uppercase tracking-[0.12em] text-white/25",
+							children: [
+								"© ",
+								(/* @__PURE__ */ new Date()).getFullYear(),
+								" Poke N Bowl"
+							]
+						})
+					]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+				to: "/commander",
+				className: "fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-2 rounded-full bg-[#ff705f] px-5 py-3.5 text-sm font-black text-white shadow-xl md:hidden",
+				children: [
+					t("hero.order"),
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+				]
+			})
+		]
+	});
+}
+//#endregion
+//#region src/lib/orders.ts
+function generateOrderId() {
+	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+}
+//#endregion
+//#region src/lib/mollie.server.ts
+/**
+* Server-only Mollie helpers.
+* Requires env: MOLLIE_API_KEY (test_… or live_…)
+*/
+var MOLLIE_API = "https://api.mollie.com/v2";
+function getApiKey() {
+	const key = process.env.MOLLIE_API_KEY;
+	if (!key) throw new Error("MOLLIE_API_KEY manquante. Ajoute-la dans les variables d'environnement Vercel.");
+	return key;
+}
+async function createMolliePayment(params) {
+	const res = await fetch(`${MOLLIE_API}/payments`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${getApiKey()}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			amount: {
+				currency: "EUR",
+				value: params.amountValue
+			},
+			description: params.description,
+			redirectUrl: params.redirectUrl,
+			webhookUrl: params.webhookUrl,
+			metadata: params.metadata,
+			locale: params.locale ?? "fr_BE"
+		})
+	});
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie create payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
+async function getMolliePayment(paymentId) {
+	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
+function formatEurAmount(total) {
+	return total.toFixed(2);
+}
+//#endregion
+//#region src/lib/order-store.ts
+var schemaReady;
+function getSql() {
+	const url = process.env.DATABASE_URL;
+	if (!url) throw new Error("DATABASE_URL manquante. Connecte une base Postgres Neon au projet Vercel.");
+	return cs(url);
+}
+async function ensureSchema() {
+	if (!schemaReady) schemaReady = (async () => {
+		const sql = getSql();
+		await sql`
+        CREATE TABLE IF NOT EXISTS orders (
+          id TEXT PRIMARY KEY,
+          created_at TIMESTAMPTZ NOT NULL,
+          status TEXT NOT NULL,
+          payment_method TEXT NOT NULL,
+          mollie_payment_id TEXT,
+          customer_json TEXT NOT NULL,
+          items_json TEXT NOT NULL,
+          total NUMERIC(12, 2) NOT NULL,
+          currency TEXT NOT NULL DEFAULT 'EUR',
+          print_status TEXT NOT NULL DEFAULT 'pending',
+          printed_at TIMESTAMPTZ,
+          print_attempts INTEGER NOT NULL DEFAULT 0,
+          print_claimed_at TIMESTAMPTZ,
+          print_error TEXT
+        )
+      `;
+		await sql`
+        CREATE INDEX IF NOT EXISTS orders_print_queue_idx
+        ON orders (print_status, status, created_at)
+      `;
+		await sql`
+        ALTER TABLE orders ADD COLUMN IF NOT EXISTS print_claimed_at TIMESTAMPTZ
+      `;
+		await sql`
+        CREATE INDEX IF NOT EXISTS orders_mollie_idx
+        ON orders (mollie_payment_id)
+      `;
+	})().catch((error) => {
+		schemaReady = void 0;
+		throw error;
+	});
+	await schemaReady;
+}
+function rowToOrder(row) {
+	return {
+		id: row.id,
+		createdAt: row.created_at,
+		status: row.status,
+		paymentMethod: row.payment_method,
+		molliePaymentId: row.mollie_payment_id ?? void 0,
+		customer: JSON.parse(row.customer_json),
+		items: JSON.parse(row.items_json),
+		total: Number(row.total),
+		currency: row.currency
+	};
+}
+async function getOrderFromStore(id) {
+	await ensureSchema();
+	const row = (await getSql()`
+    SELECT id, created_at, status, payment_method, mollie_payment_id,
+           customer_json, items_json, total, currency,
+           print_status, printed_at, print_claimed_at, print_attempts, print_error
+    FROM orders
+    WHERE id = ${id}
+    LIMIT 1
+  `)[0];
+	return row ? rowToOrder(row) : void 0;
+}
+async function listOrdersFromStore() {
+	await ensureSchema();
+	return (await getSql()`
+    SELECT id, created_at, status, payment_method, mollie_payment_id,
+           customer_json, items_json, total, currency,
+           print_status, printed_at, print_attempts, print_error
+    FROM orders
+    ORDER BY created_at DESC
+    LIMIT 200
+  `).map(rowToOrder);
+}
+async function upsertOrder(order) {
+	await ensureSchema();
+	await getSql()`
+    INSERT INTO orders (
+      id, created_at, status, payment_method, mollie_payment_id,
+      customer_json, items_json, total, currency
+    )
+    VALUES (
+      ${order.id},
+      ${order.createdAt},
+      ${order.status},
+      ${order.paymentMethod},
+      ${order.molliePaymentId ?? null},
+      ${JSON.stringify(order.customer)},
+      ${JSON.stringify(order.items)},
+      ${order.total},
+      ${order.currency}
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      status = EXCLUDED.status,
+      payment_method = EXCLUDED.payment_method,
+      mollie_payment_id = EXCLUDED.mollie_payment_id,
+      customer_json = EXCLUDED.customer_json,
+      items_json = EXCLUDED.items_json,
+      total = EXCLUDED.total,
+      currency = EXCLUDED.currency
+  `;
+}
+async function claimNextPrintJob() {
+	await ensureSchema();
+	const row = (await getSql()`
+    UPDATE orders
+    SET
+      print_status = 'printing',
+      print_claimed_at = NOW(),
+      print_attempts = print_attempts + 1,
+      print_error = NULL
+    WHERE id = (
+      SELECT id
+      FROM orders
+      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery')
+        AND (
+          print_status = 'pending'
+          OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
+        )
+      ORDER BY created_at ASC
+      LIMIT 1
+      FOR UPDATE SKIP LOCKED
+    )
+    RETURNING id, created_at, status, payment_method, mollie_payment_id,
+              customer_json, items_json, total, currency,
+              print_status, printed_at, print_attempts, print_error
+  `)[0];
+	return row ? rowToOrder(row) : void 0;
+}
+async function acknowledgePrint(orderId, success, errorMessage) {
+	await ensureSchema();
+	const sql = getSql();
+	if (success) {
+		await sql`
+      UPDATE orders
+      SET print_status = 'printed',
+          printed_at = NOW(),
+          print_claimed_at = NULL,
+          print_error = NULL
+      WHERE id = ${orderId}
+    `;
+		return;
+	}
+	await sql`
+    UPDATE orders
+    SET print_status = 'pending',
+        print_error = ${errorMessage ?? "Printer agent failed"}
+    WHERE id = ${orderId}
+  `;
+}
+//#endregion
+//#region src/lib/delivery.ts
+var deliveryZones = [
+	{
+		postalCode: "3790",
+		minimumOrder: 15,
+		feeUnder50: 2
+	},
+	{
+		postalCode: "3798",
+		minimumOrder: 25,
+		feeUnder50: 3
+	},
+	{
+		postalCode: "4040",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4458",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4600",
+		minimumOrder: 15,
+		feeUnder50: 2
+	},
+	{
+		postalCode: "4601",
+		minimumOrder: 25,
+		feeUnder50: 3
+	},
+	{
+		postalCode: "4602",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4606",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4607",
+		minimumOrder: 25,
+		feeUnder50: 3
+	},
+	{
+		postalCode: "4608",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4670",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4671",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4672",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4680",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4681",
+		minimumOrder: 15,
+		feeUnder50: 2
+	},
+	{
+		postalCode: "4682",
+		minimumOrder: 25,
+		feeUnder50: 3
+	},
+	{
+		postalCode: "4683",
+		minimumOrder: 40,
+		feeUnder50: 5
+	},
+	{
+		postalCode: "4684",
+		minimumOrder: 15,
+		feeUnder50: 2
+	},
+	{
+		postalCode: "4690",
+		minimumOrder: 40,
+		feeUnder50: 5
+	}
+];
+function getDeliveryZone(postalCode) {
+	const normalized = postalCode.trim().replace(/\s+/g, "");
+	return deliveryZones.find((zone) => zone.postalCode === normalized) ?? null;
+}
+//#endregion
+//#region src/fn/checkout.ts
+var orderItemSchema = objectType({
+	id: stringType(),
+	name: stringType(),
+	price: numberType().positive(),
+	quantity: numberType().int().positive(),
+	toppings: arrayType(stringType())
+});
+var checkoutSchema = objectType({
+	customer: objectType({
+		name: stringType().min(2),
+		phone: stringType().min(8),
+		email: stringType().email().optional().or(literalType("")),
+		notes: stringType().max(500).optional(),
+		fulfillment: enumType(["delivery", "pickup"]),
+		requestedTime: stringType().min(1),
+		address: stringType().max(300).optional(),
+		postalCode: stringType().max(10).optional(),
+		city: stringType().max(100).optional()
+	}),
+	items: arrayType(orderItemSchema).min(1),
+	paymentMethod: enumType(["online", "on_site"]),
+	origin: stringType().url()
+});
+function canonicalizeItems(items) {
+	const catalog = new Map([
+		...bowls.map((item) => [item.id, item.price]),
+		...drinks.map((item) => [item.id, item.price]),
+		...desserts.map((item) => [item.id, item.price])
+	]);
+	const toppingSet = new Set(allToppings);
+	return items.map((item) => {
+		const canonicalPrice = catalog.get(item.id);
+		if (canonicalPrice == null) throw new Error("Article invalide");
+		const toppings = [...new Set(item.toppings ?? [])];
+		if (!bowls.some((bowl) => bowl.id === item.id) && toppings.length > 0) throw new Error("Garnitures invalides");
+		if (toppings.length > 5 || toppings.some((topping) => !toppingSet.has(topping))) throw new Error("Garnitures invalides");
+		return {
+			...item,
+			name: bowls.find((bowl) => bowl.id === item.id)?.name ?? drinks.find((drink) => drink.id === item.id)?.name ?? desserts.find((dessert) => dessert.id === item.id)?.name ?? item.name,
+			price: canonicalPrice,
+			toppings
+		};
+	});
+}
+function computeSubtotal(items) {
+	return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema).handler(async ({ data }) => {
+	const items = canonicalizeItems(data.items);
+	const subtotal = computeSubtotal(items);
+	if (subtotal <= 0) throw new Error("Panier invalide");
+	const deliveryZone = data.customer.fulfillment === "delivery" ? getDeliveryZone(data.customer.postalCode ?? "") : null;
+	if (data.customer.fulfillment === "delivery") {
+		if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
+		if (subtotal < deliveryZone.minimumOrder) throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+		if (!data.customer.address?.trim() || !data.customer.city?.trim()) throw new Error("Adresse de livraison incomplète.");
+	}
+	const deliveryFee = deliveryZone ? subtotal >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
+	const total = subtotal + deliveryFee;
+	const orderId = generateOrderId();
+	const order = {
+		id: orderId,
+		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+		status: data.paymentMethod === "online" ? "pending_payment" : data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup",
+		paymentMethod: data.paymentMethod,
+		customer: {
+			name: data.customer.name.trim(),
+			phone: data.customer.phone.trim(),
+			email: data.customer.email?.trim() || void 0,
+			notes: data.customer.notes?.trim() || void 0,
+			fulfillment: data.customer.fulfillment,
+			requestedTime: data.customer.requestedTime,
+			address: data.customer.address?.trim() || void 0,
+			postalCode: data.customer.postalCode?.trim().replace(/\s+/g, "") || void 0,
+			city: data.customer.city?.trim() || void 0,
+			deliveryFee
+		},
+		items,
+		total,
+		currency: "EUR"
+	};
+	if (data.paymentMethod === "on_site") {
+		await upsertOrder(order);
+		return {
+			type: "on_site",
+			orderId: order.id,
+			total: order.total,
+			redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
+		};
+	}
+	const webhookUrl = `${data.origin}/api/mollie-webhook`;
+	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=online`;
+	const payment = await createMolliePayment({
+		amountValue: formatEurAmount(total),
+		description: `Poke N Bowl ${orderId}`,
+		redirectUrl,
+		webhookUrl,
+		metadata: {
+			orderId: order.id,
+			customerName: order.customer.name,
+			customerPhone: order.customer.phone,
+			requestedTime: order.customer.requestedTime
+		},
+		locale: "fr_BE"
+	});
+	order.molliePaymentId = payment.id;
+	await upsertOrder(order);
+	const checkoutUrl = payment._links?.checkout?.href;
+	if (!checkoutUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement");
+	return {
+		type: "online",
+		orderId: order.id,
+		total: order.total,
+		molliePaymentId: payment.id,
+		redirectUrl: checkoutUrl
+	};
+});
+var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
+	let order = await getOrderFromStore(data.orderId);
+	if (order?.molliePaymentId && order.status === "pending_payment") try {
+		const payment = await getMolliePayment(order.molliePaymentId);
+		if (payment.status === "paid") {
+			order = {
+				...order,
+				status: "paid"
+			};
+			await upsertOrder(order);
+		} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
+			order = {
+				...order,
+				status: payment.status === "expired" ? "expired" : "cancelled"
+			};
+			await upsertOrder(order);
+		}
+	} catch {}
+	if (!order) return { found: false };
+	return {
+		found: true,
+		order: {
+			id: order.id,
+			status: order.status,
+			paymentMethod: order.paymentMethod,
+			total: order.total,
+			customer: order.customer,
+			items: order.items,
+			createdAt: order.createdAt
+		}
+	};
+});
+//#endregion
+//#region src/routes/checkout.tsx
+var Route$10 = createFileRoute("/checkout")({ component: CheckoutPage });
+function CheckoutPage() {
+	const { items, total, clearCart } = useCart();
+	const navigate = useNavigate();
+	const [name, setName] = (0, import_react.useState)("");
+	const [phone, setPhone] = (0, import_react.useState)("");
+	const [email, setEmail] = (0, import_react.useState)("");
+	const [notes, setNotes] = (0, import_react.useState)("");
+	const [fulfillment, setFulfillment] = (0, import_react.useState)("delivery");
+	const [requestedTime, setRequestedTime] = (0, import_react.useState)("");
+	const [address, setAddress] = (0, import_react.useState)("");
+	const [postalCode, setPostalCode] = (0, import_react.useState)("");
+	const [city, setCity] = (0, import_react.useState)("");
+	const [paymentMethod, setPaymentMethod] = (0, import_react.useState)("online");
+	const [loading, setLoading] = (0, import_react.useState)(false);
+	const [error, setError] = (0, import_react.useState)(null);
+	const pickupOptions = (0, import_react.useMemo)(() => buildPickupSlots(), []);
+	const deliveryZone = (0, import_react.useMemo)(() => getDeliveryZone(postalCode), [postalCode]);
+	const deliveryFee = fulfillment === "delivery" && deliveryZone ? total >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
+	const orderTotal = total + deliveryFee;
+	if (items.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] flex flex-col items-center justify-center px-5",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-lg font-bold text-[#17231f]",
+			children: "Votre panier est vide."
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+			to: "/commander",
+			className: "mt-6 rounded-full bg-[#ff705f] px-6 py-3 text-sm font-black text-white",
+			children: "Voir la carte"
+		})]
+	});
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError(null);
+		setLoading(true);
+		try {
+			const origin = window.location.origin;
+			const result = await submitCheckout({ data: {
+				customer: {
+					name,
+					phone,
+					email: email || "",
+					notes: notes || void 0,
+					fulfillment,
+					requestedTime,
+					address: address || void 0,
+					postalCode: postalCode || void 0,
+					city: city || void 0
+				},
+				items: items.map((item) => ({
+					id: item.id,
+					name: item.name,
+					price: item.price,
+					quantity: item.quantity,
+					toppings: item.toppings
+				})),
+				paymentMethod,
+				origin
+			} });
+			if (result.type === "online") {
+				window.location.href = result.redirectUrl;
+				return;
+			}
+			clearCart();
+			navigate({
+				to: "/order/success",
+				search: {
+					orderId: result.orderId,
+					method: "on_site"
+				}
+			});
+		} catch (err) {
+			console.error(err);
+			setError(err instanceof Error ? err.message : "Une erreur est survenue. Réessaie ou choisis « Payer sur place ».");
+			setLoading(false);
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] text-[#17231f]",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+			className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+				className: "mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/",
+					className: "flex items-center gap-2.5",
+					"aria-label": "Accueil",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo",
+							className: "h-full w-full object-contain"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-base font-black sm:text-lg",
+						children: "Poke N Bowl"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/commander",
+					className: "inline-flex items-center gap-2 text-xs font-bold text-[#7a847e] hover:text-[#17231f]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-4 w-4" }), " Retour"]
+				})]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+			className: "mx-auto max-w-[900px] px-5 py-10 sm:px-8",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]",
+					children: "Finaliser"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "mt-2 text-4xl font-black tracking-tight sm:text-5xl",
+					children: "Ta commande."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-3 max-w-xl text-sm text-[#758079]",
+					children: "Renseigne tes coordonnées, ton adresse de livraison et le mode de paiement."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleSubmit,
+					className: "mt-10 grid gap-8 lg:grid-cols-[1fr_320px]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-6",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+								className: "rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "text-lg font-black",
+									children: "Mode de réception"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-4 grid gap-3 sm:grid-cols-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setFulfillment("delivery"),
+										className: `rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec]"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-sm font-black",
+											children: "Livraison"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "mt-1 block text-xs text-[#7a847e]",
+											children: "À domicile selon ton code postal"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setFulfillment("pickup"),
+										className: `rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec]"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-sm font-black",
+											children: "Retrait sur place"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "mt-1 block text-xs text-[#7a847e]",
+											children: "Poke N Bowl Visé"
+										})]
+									})]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+								className: "rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "text-lg font-black",
+									children: "Coordonnées"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-4 grid gap-4 sm:grid-cols-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "block sm:col-span-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-bold text-[#7a847e]",
+												children: "Nom *"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												required: true,
+												value: name,
+												onChange: (e) => setName(e.target.value),
+												className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+												placeholder: "Prénom Nom"
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "block",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-bold text-[#7a847e]",
+												children: "Téléphone *"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												required: true,
+												type: "tel",
+												value: phone,
+												onChange: (e) => setPhone(e.target.value),
+												className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+												placeholder: "04xx xx xx xx"
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "block",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-bold text-[#7a847e]",
+												children: "Email (optionnel)"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "email",
+												value: email,
+												onChange: (e) => setEmail(e.target.value),
+												className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+												placeholder: "toi@email.com"
+											})]
+										}),
+										fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+												className: "block sm:col-span-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-bold text-[#7a847e]",
+													children: "Adresse *"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													required: true,
+													value: address,
+													onChange: (e) => setAddress(e.target.value),
+													className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+													placeholder: "Rue et numéro"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+												className: "block",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-bold text-[#7a847e]",
+													children: "Code postal *"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													required: true,
+													inputMode: "numeric",
+													value: postalCode,
+													onChange: (e) => setPostalCode(e.target.value),
+													className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+													placeholder: "4600"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+												className: "block",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-bold text-[#7a847e]",
+													children: "Ville *"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													required: true,
+													value: city,
+													onChange: (e) => setCity(e.target.value),
+													className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+													placeholder: "Visé"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "sm:col-span-2 rounded-xl bg-[#f7f4ec] px-4 py-3 text-xs font-bold text-[#17231f]",
+												children: deliveryZone ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+													"Minimum : € ",
+													deliveryZone.minimumOrder.toFixed(2),
+													" · Livraison : ",
+													total >= 50 ? "gratuite" : `€ ${deliveryZone.feeUnder50.toFixed(2)}`
+												] }) : "Entre ton code postal pour connaître les frais de livraison."
+											})
+										] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "block sm:col-span-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-bold text-[#7a847e]",
+												children: fulfillment === "delivery" ? "Créneau souhaité *" : "Heure de retrait *"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+												required: true,
+												value: requestedTime,
+												onChange: (e) => setRequestedTime(e.target.value),
+												className: "mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "",
+													children: "Choisir un créneau"
+												}), pickupOptions.map((slot) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: slot,
+													children: slot
+												}, slot))]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "block sm:col-span-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-bold text-[#7a847e]",
+												children: "Notes (allergies, etc.)"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+												value: notes,
+												onChange: (e) => setNotes(e.target.value),
+												rows: 3,
+												className: "mt-1 w-full resize-none rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]",
+												placeholder: "Optionnel"
+											})]
+										})
+									]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+								className: "rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "text-lg font-black",
+									children: "Paiement"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-4 grid gap-3 sm:grid-cols-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setPaymentMethod("online"),
+										className: `flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${paymentMethod === "online" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec] hover:border-black/20"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-sm font-black",
+												children: "Payer en ligne"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-[#7a847e]",
+												children: "Bancontact, carte — via Mollie"
+											})
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setPaymentMethod("on_site"),
+										className: `flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${paymentMethod === "on_site" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec] hover:border-black/20"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Store, { className: "h-5 w-5 text-[#ff705f]" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-sm font-black",
+												children: "Payer sur place"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-[#7a847e]",
+												children: "À la récupération — sans frais en ligne"
+											})
+										]
+									})]
+								})]
+							}),
+							error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700",
+								children: error
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", {
+						className: "h-fit rounded-[24px] bg-[#10251f] p-6 text-white lg:sticky lg:top-24",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-lg font-black",
+								children: "Récapitulatif"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+								className: "mt-4 space-y-3",
+								children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+									className: "flex justify-between gap-3 text-sm",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "min-w-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+											className: "font-bold",
+											children: [
+												item.quantity,
+												"× ",
+												item.name
+											]
+										}), item.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-white/50",
+											children: item.toppings.join(", ")
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "shrink-0 font-bold",
+										children: ["€ ", (item.price * item.quantity).toFixed(2)]
+									})]
+								}, `${item.id}-${JSON.stringify(item.toppings)}`))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-6 flex items-center justify-between border-t border-white/10 pt-4",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-bold",
+									children: "Total"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-1 text-right",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-xs text-white/50",
+											children: ["Sous-total · € ", total.toFixed(2)]
+										}),
+										fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-xs text-white/50",
+											children: ["Livraison · ", deliveryFee === 0 ? "Gratuite" : `€ ${deliveryFee.toFixed(2)}`]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-2xl font-black text-[#d7ff45]",
+											children: ["€ ", orderTotal.toFixed(2)]
+										})
+									]
+								})] })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "submit",
+								disabled: loading,
+								className: "mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#ff705f] py-3.5 text-sm font-black text-white transition hover:bg-[#ff705f]/90 disabled:opacity-60",
+								children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-4 w-4 animate-spin" }), "Traitement…"] }) : paymentMethod === "online" ? "Payer en ligne" : "Confirmer la commande"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-3 text-center text-[10px] text-white/40",
+								children: "Livraison selon zone · retrait possible à Poke N Bowl Visé"
+							})
+						]
+					})]
+				})
+			]
+		})]
+	});
+}
+function buildPickupSlots() {
+	const slots = [];
+	const now = /* @__PURE__ */ new Date();
+	const windows = [
+		{
+			day: 1,
+			start: 720,
+			end: 840
+		},
+		{
+			day: 1,
+			start: 1020,
+			end: 1260
+		},
+		{
+			day: 2,
+			start: 720,
+			end: 840
+		},
+		{
+			day: 2,
+			start: 1020,
+			end: 1260
+		},
+		{
+			day: 3,
+			start: 720,
+			end: 840
+		},
+		{
+			day: 3,
+			start: 1020,
+			end: 1260
+		},
+		{
+			day: 4,
+			start: 720,
+			end: 840
+		},
+		{
+			day: 4,
+			start: 1020,
+			end: 1260
+		},
+		{
+			day: 5,
+			start: 720,
+			end: 840
+		},
+		{
+			day: 5,
+			start: 1020,
+			end: 1260
+		},
+		{
+			day: 6,
+			start: 1080,
+			end: 1260
+		}
+	];
+	for (let dayOffset = 0; dayOffset <= 7; dayOffset += 1) {
+		const d = new Date(now);
+		d.setDate(now.getDate() + dayOffset);
+		const day = d.getDay();
+		const dayWindows = windows.filter((w) => w.day === day);
+		for (const window of dayWindows) for (let minute = window.start; minute <= window.end; minute += 15) {
+			const slotDate = new Date(d);
+			slotDate.setHours(Math.floor(minute / 60), minute % 60, 0, 0);
+			if (slotDate.getTime() < now.getTime() + 12e5) continue;
+			const labelDay = dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : d.toLocaleDateString("fr-BE", {
+				weekday: "short",
+				day: "2-digit",
+				month: "2-digit"
+			});
+			slots.push(labelDay + " " + slotDate.toLocaleTimeString("fr-BE", {
+				hour: "2-digit",
+				minute: "2-digit",
+				hour12: false
+			}));
+		}
+	}
+	return slots.slice(0, 48);
+}
+//#endregion
+//#region src/lib/stock.ts
+function toppingKey(name) {
+	return `topping:${name}`;
+}
+function buildDefaultStock() {
+	const items = {};
+	for (const b of bowls) items[b.id] = {
+		available: true,
+		qty: null
+	};
+	for (const d of drinks) items[d.id] = {
+		available: true,
+		qty: null
+	};
+	for (const d of desserts) items[d.id] = {
+		available: true,
+		qty: null
+	};
+	for (const t of allToppings) items[toppingKey(t)] = {
+		available: true,
+		qty: null
+	};
+	return {
+		updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		items
+	};
+}
+function isItemAvailable(stock, id) {
+	if (!stock?.items) return true;
+	const entry = stock.items[id];
+	if (!entry) return true;
+	if (!entry.available) return false;
+	if (entry.qty != null && entry.qty <= 0) return false;
+	return true;
+}
+function catalogLabels() {
+	return [
+		...bowls.map((b) => ({
+			id: b.id,
+			label: b.name,
+			group: "bowl"
+		})),
+		...drinks.map((d) => ({
+			id: d.id,
+			label: d.name,
+			group: "drink"
+		})),
+		...desserts.map((d) => ({
+			id: d.id,
+			label: d.name,
+			group: "dessert"
+		})),
+		...allToppings.map((t) => ({
+			id: toppingKey(t),
+			label: t,
+			group: "topping"
+		}))
+	];
+}
+//#endregion
+//#region src/lib/stock-store.ts
+var STOCK_KEY = "pokenbowl:stock";
+/** Fallback when Redis is not configured (not shared across serverless instances) */
+var memoryStock = null;
+function redisConfigured() {
+	return Boolean((process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL) && (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN));
+}
+function redisCreds() {
+	return {
+		url: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || "",
+		token: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || ""
+	};
+}
+async function redisCommand(command) {
+	const { url, token } = redisCreds();
+	const res = await fetch(`${url}`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(command)
+	});
+	if (!res.ok) {
+		const text = await res.text();
+		throw new Error(`Redis error ${res.status}: ${text}`);
+	}
+	return (await res.json()).result;
+}
+function mergeWithDefaults(partial) {
+	const base = buildDefaultStock();
+	return {
+		updatedAt: partial.updatedAt || base.updatedAt,
+		items: {
+			...base.items,
+			...partial.items
+		}
+	};
+}
+async function loadStock() {
+	if (redisConfigured()) try {
+		const raw = await redisCommand(["GET", STOCK_KEY]);
+		if (typeof raw === "string" && raw) {
+			const parsed = JSON.parse(raw);
+			if (parsed?.items) return mergeWithDefaults(parsed);
+		}
+	} catch (e) {
+		console.error("[stock] redis load failed", e);
+	}
+	if (memoryStock) return mergeWithDefaults(memoryStock);
+	const fresh = buildDefaultStock();
+	memoryStock = fresh;
+	return fresh;
+}
+async function saveStock(stock) {
+	stock.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+	memoryStock = stock;
+	if (redisConfigured()) await redisCommand([
+		"SET",
+		STOCK_KEY,
+		JSON.stringify(stock)
+	]);
+}
+function assertAdminPin(pin) {
+	if (pin !== (process.env.STOCK_ADMIN_PIN || "vise2026")) throw new Error("Code admin incorrect");
+}
+//#endregion
+//#region src/fn/stock.ts
+var getStock = createServerFn({ method: "GET" }).handler(async () => {
+	return {
+		stock: await loadStock(),
+		persistent: redisConfigured()
+	};
+});
+var setStockItem = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().min(1),
+	id: stringType().min(1),
+	available: booleanType(),
+	qty: numberType().int().min(0).nullable().optional()
+})).handler(async ({ data }) => {
+	assertAdminPin(data.pin);
+	const stock = await loadStock();
+	const prev = stock.items[data.id] ?? {
+		available: true,
+		qty: null
+	};
+	stock.items[data.id] = {
+		available: data.available,
+		qty: data.qty === void 0 ? prev.qty : data.qty
+	};
+	await saveStock(stock);
+	return {
+		stock,
+		persistent: redisConfigured()
+	};
+});
+createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().min(1),
+	updates: arrayType(objectType({
+		id: stringType(),
+		available: booleanType(),
+		qty: numberType().int().min(0).nullable().optional()
+	}))
+})).handler(async ({ data }) => {
+	assertAdminPin(data.pin);
+	const stock = await loadStock();
+	for (const u of data.updates) {
+		const prev = stock.items[u.id] ?? {
+			available: true,
+			qty: null
+		};
+		stock.items[u.id] = {
+			available: u.available,
+			qty: u.qty === void 0 ? prev.qty : u.qty
+		};
+	}
+	await saveStock(stock);
+	return {
+		stock,
+		persistent: redisConfigured()
+	};
+});
+var resetStock = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().min(1) })).handler(async ({ data }) => {
+	assertAdminPin(data.pin);
+	const stock = buildDefaultStock();
+	await saveStock(stock);
+	return {
+		stock,
+		persistent: redisConfigured()
+	};
+});
+//#endregion
+//#region src/hooks/useStock.ts
+/** Poll stock every 20s so menu reflects real-time availability */
+function useStock(pollMs = 2e4) {
+	const [stock, setStock] = (0, import_react.useState)(null);
+	const [persistent, setPersistent] = (0, import_react.useState)(false);
+	const refresh = (0, import_react.useCallback)(async () => {
+		try {
+			const res = await getStock();
+			setStock(res.stock);
+			setPersistent(res.persistent);
+		} catch {}
+	}, []);
+	(0, import_react.useEffect)(() => {
+		refresh();
+		const id = window.setInterval(() => void refresh(), pollMs);
+		return () => window.clearInterval(id);
+	}, [refresh, pollMs]);
+	return {
+		stock,
+		persistent,
+		available: (0, import_react.useCallback)((id) => isItemAvailable(stock, id), [stock]),
+		refresh
+	};
+}
+//#endregion
+//#region src/routes/commander.tsx
+var Route$9 = createFileRoute("/commander")({ component: CommanderPage });
+function CommanderPage() {
+	const { t, language, setLanguage } = useTranslation();
+	const { addItem, setIsCartOpen, items } = useCart();
+	const { available } = useStock();
+	const count = items.reduce((sum, item) => sum + item.quantity, 0);
+	const quickAdd = (item) => {
+		if (!available(item.id)) return;
+		addItem({
+			id: item.id,
+			name: item.name,
+			price: item.price,
+			quantity: 1,
+			toppings: [],
+			image: item.image || "/assets/dessert-9PIP1ns9.jpg"
+		});
+		setIsCartOpen(true);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] text-[#17231f]",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartDrawer, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+				className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+					className: "mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/",
+						className: "flex min-w-0 items-center gap-2.5",
+						"aria-label": "Poke N Bowl — Accueil",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: logo_default,
+								alt: "Logo Poke N Bowl",
+								className: "h-full w-full object-contain"
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "truncate text-base font-black sm:text-lg",
+							children: "Poke N Bowl"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "hidden rounded-full border border-black/10 bg-white p-1 sm:flex",
+								children: [
+									"fr",
+									"en",
+									"nl"
+								].map((lang) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => setLanguage(lang),
+									className: `rounded-full px-2 py-1 text-[9px] font-bold uppercase ${language === lang ? "bg-[#10251f] text-white" : "text-[#7a847e]"}`,
+									children: lang
+								}, lang))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/",
+								className: "hidden rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider sm:flex",
+								children: t("nav.home")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setIsCartOpen(true),
+								className: "relative rounded-full bg-[#10251f] p-3 text-white",
+								"aria-label": t("cart.title"),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }), count > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black",
+									children: count
+								})]
+							})
+						]
+					})]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+				className: "bg-[#10251f] px-5 py-12 text-white sm:px-8 sm:py-16 lg:py-20",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mx-auto max-w-[1200px]",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/",
+							className: "inline-flex items-center gap-2 text-xs font-bold text-white/50 hover:text-white",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-4 w-4" }),
+								" ",
+								t("cmd.back")
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mb-6 flex items-center gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-lg",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									src: logo_default,
+									alt: "Poke N Bowl",
+									className: "h-full w-full object-contain"
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-black uppercase tracking-[0.18em] text-white",
+								children: "Poke N Bowl"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45",
+								children: "Visé · Fresh food"
+							})] })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-8 max-w-3xl",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#d7ff45]",
+									children: t("cmd.eyebrow")
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+									className: "mt-3 text-[clamp(2.25rem,9vw,4.5rem)] font-black leading-[1.08] tracking-[-0.02em]",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "block",
+										children: t("cmd.title1")
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "mt-1 block text-white/40",
+										children: t("cmd.title2")
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-5 max-w-xl text-[15px] leading-6 text-white/60 sm:text-base sm:leading-7",
+									children: t("cmd.desc")
+								})
+							]
+						})
+					]
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+				className: "mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16 lg:py-20",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mb-8 flex items-end justify-between gap-5 sm:mb-10",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]",
+							children: t("cmd.bowls_eyebrow")
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mt-2 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl",
+							children: t("cmd.bowls_title")
+						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "hidden max-w-[200px] text-right text-sm text-[#7a847e] sm:block",
+							children: t("cmd.bowls_hint")
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3",
+						children: bowls.map((bowl, i) => {
+							const ok = available(bowl.id);
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+								className: `overflow-hidden rounded-[24px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)] sm:rounded-[28px] ${!ok ? "opacity-55" : ""}`,
+								children: ok ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+									to: "/product/$productId",
+									params: { productId: bowl.id },
+									className: "group block",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BowlCard, {
+										bowl,
+										ok: true,
+										composeLabel: t("cmd.compose"),
+										soldOut: t("cmd.sold_out")
+									})
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "block cursor-not-allowed",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BowlCard, {
+										bowl,
+										ok: false,
+										composeLabel: t("cmd.compose"),
+										soldOut: t("cmd.sold_out")
+									})
+								})
+							}, bowl.id);
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-14 grid gap-5 sm:mt-16 lg:mt-20 lg:grid-cols-2 lg:gap-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-[24px] bg-white p-6 sm:rounded-[28px] sm:p-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UtensilsCrossed, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "text-xl font-black sm:text-2xl",
+									children: t("cmd.drinks")
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-5 grid gap-2 sm:grid-cols-2",
+								children: drinks.map((drink) => {
+									const ok = available(drink.id);
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										disabled: !ok,
+										onClick: () => quickAdd(drink),
+										className: `flex min-h-[48px] items-center justify-between gap-2 rounded-2xl px-4 py-3 text-left ${ok ? "bg-[#f5f4ee] hover:bg-[#d7ff45] active:scale-[0.99]" : "cursor-not-allowed bg-[#f0f0ea] opacity-60"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "min-w-0 break-words text-sm font-bold",
+											children: drink.name
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "shrink-0 text-xs font-black",
+											children: ok ? `€ ${drink.price.toFixed(2)}` : t("cmd.sold_out")
+										})]
+									}, drink.id);
+								})
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-[24px] bg-[#ff705f] p-6 text-white sm:rounded-[28px] sm:p-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-xl font-black sm:text-2xl",
+								children: t("cmd.desserts")
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-5 flex flex-col gap-4 sm:flex-row sm:gap-5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									src: dessert_default,
+									alt: "",
+									className: "h-24 w-full rounded-2xl object-cover sm:h-28 sm:w-28 sm:shrink-0"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "flex-1 space-y-2",
+									children: desserts.map((d) => {
+										const ok = available(d.id);
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											disabled: !ok,
+											onClick: () => quickAdd(d),
+											className: `flex min-h-[44px] w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm ${ok ? "bg-white/10 hover:bg-white/20 active:scale-[0.99]" : "cursor-not-allowed bg-white/5 opacity-60"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "min-w-0 break-words",
+												children: d.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "shrink-0 font-black",
+												children: ok ? `€ ${d.price.toFixed(2)}` : t("cmd.sold_out")
+											})]
+										}, d.id);
+									})
+								})]
+							})]
+						})]
+					})
+				]
+			})] }),
+			count > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-white/95 p-3 backdrop-blur-xl sm:hidden",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: () => setIsCartOpen(true),
+					className: "flex w-full items-center justify-center gap-2 rounded-full bg-[#ff705f] py-3.5 text-sm font-black text-white shadow-lg",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }),
+						t("cart.title"),
+						" (",
+						count,
+						") →"
+					]
+				})
+			})
+		]
+	});
+}
+function BowlCard({ bowl, ok, composeLabel, soldOut }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "relative aspect-[1.48] overflow-hidden",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+				dishId: bowl.id,
+				alt: bowl.name,
+				className: `h-full w-full transition duration-700 ${ok ? "group-hover:scale-105" : "grayscale"}`
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-wider sm:left-4 sm:top-4 sm:text-[9px]",
+				children: ok ? bowl.tag : soldOut
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+				className: "absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black sm:bottom-4 sm:right-4 sm:px-3 sm:py-1.5 sm:text-sm",
+				children: ["€ ", bowl.price.toFixed(2)]
+			})
+		]
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "p-4 sm:p-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-start justify-between gap-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					className: "min-w-0 flex-1 break-words text-[17px] font-black leading-[1.2] sm:text-xl",
+					children: bowl.name
+				}), ok && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:line-clamp-3",
+				children: bowl.desc
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: `mt-4 text-[9px] font-black uppercase tracking-[0.14em] ${ok ? "text-[#ff705f]" : "text-[#9aa39c]"}`,
+				children: ok ? composeLabel : soldOut
+			})
+		]
+	})] });
+}
+//#endregion
+//#region src/routes/contact.tsx
+var Route$8 = createFileRoute("/contact")({
+	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
+	component: ContactPage
+});
+function ContactPage() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-background text-foreground",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+			className: "sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/",
+					className: "flex min-w-0 items-center gap-2.5",
+					"aria-label": "Poke N Bowl — Accueil",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo Poke N Bowl",
+							className: "h-full w-full object-contain"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "truncate text-base font-black",
+						children: "Poke N Bowl"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/",
+					className: "inline-flex items-center gap-2 text-sm font-bold",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-4 w-4" }), " Accueil"]
+				})]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+			className: "mx-auto max-w-6xl px-5 py-16 md:py-24",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "max-w-3xl",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "eyebrow text-coral",
+							children: "Contact"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+							className: "mt-3 break-words text-5xl font-black leading-[1.1] tracking-[-0.02em] md:text-7xl",
+							children: "On se parle ?"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-6 text-lg leading-relaxed text-muted-foreground",
+							children: "Une question, une commande ou une demande particulière ? Retrouve-nous à Visé ou appelle directement l’équipe."
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-12 grid gap-5 md:grid-cols-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: "tel:+32491281456",
+							className: "group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneCall, { className: "h-6 w-6 text-coral" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground",
+									children: "Téléphone"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-2 break-words text-xl font-black",
+									children: "+32 491 28 14 56"
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
+							target: "_blank",
+							rel: "noreferrer",
+							className: "group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-6 w-6 text-coral" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground",
+									children: "Adresse"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-2 text-xl font-black",
+									children: "Av. du Pont 12"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-muted-foreground",
+									children: "4600 Visé, Belgique"
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/commander",
+							className: "group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-6 w-6 text-coral" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground",
+									children: "Commande"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-2 text-xl font-black",
+									children: "Commander en ligne"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-muted-foreground",
+									children: "Compose ton bowl"
+								})
+							]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-10 overflow-hidden rounded-[2rem] border border-border shadow-lift",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("iframe", {
+						title: "Poke N Bowl Visé",
+						src: "https://www.google.com/maps?q=Poke+N+Bowl,+Avenue+du+Pont+12,+4600+Vis%C3%A9&output=embed",
+						width: "100%",
+						height: "420",
+						loading: "lazy",
+						referrerPolicy: "no-referrer-when-downgrade",
+						style: { border: 0 }
+					})
+				})
+			]
+		})]
+	});
+}
+//#endregion
+//#region src/routes/recrutement.tsx
+var Route$7 = createFileRoute("/recrutement")({
+	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
+	component: RecruitmentPage
+});
+function RecruitmentPage() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-background text-foreground",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+			className: "sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/",
+					className: "flex min-w-0 items-center gap-2.5",
+					"aria-label": "Poke N Bowl — Accueil",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo Poke N Bowl",
+							className: "h-full w-full object-contain"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "truncate text-base font-black",
+						children: "Poke N Bowl"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/",
+					className: "inline-flex items-center gap-2 text-sm font-bold",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-4 w-4" }), " Accueil"]
+				})]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+			className: "mx-auto max-w-6xl px-5 py-16 md:py-24",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "relative overflow-hidden rounded-[2.5rem] bg-[linear-gradient(135deg,oklch(0.24_0.045_195),oklch(0.38_0.08_175))] p-8 text-white shadow-lift md:p-14",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime/20 blur-3xl" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative max-w-3xl",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-widest",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BriefcaseBusiness, { className: "h-4 w-4" }), " On recrute"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "mt-6 break-words text-5xl font-black leading-[1.08] tracking-[-0.02em] md:text-7xl",
+								children: "Rejoins l’aventure Poke N Bowl."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-6 max-w-2xl text-lg leading-relaxed text-white/75",
+								children: "Nous cherchons des personnes énergiques, fiables et souriantes pour faire vivre l’expérience Poke N Bowl à Visé."
+							})
+						]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-10 grid gap-5 md:grid-cols-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-3xl border border-border bg-card p-7 shadow-soft",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-6 w-6 text-coral" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "mt-5 text-xl font-black",
+									children: "À Visé"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-2 text-sm leading-relaxed text-muted-foreground",
+									children: "Av. du Pont 12, 4600 Visé, Belgique."
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-3xl border border-border bg-card p-7 shadow-soft",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneCall, { className: "h-6 w-6 text-coral" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "mt-5 text-xl font-black",
+									children: "Un premier contact"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+									href: "tel:+32491281456",
+									className: "mt-2 inline-block text-sm font-bold hover:text-coral",
+									children: "+32 491 28 14 56"
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-3xl border border-border bg-card p-7 shadow-soft",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BriefcaseBusiness, { className: "h-6 w-6 text-coral" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "mt-5 text-xl font-black",
+									children: "Candidature"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-2 text-sm leading-relaxed text-muted-foreground",
+									children: "CV + quelques lignes sur toi pour commencer l’échange."
+								})
+							]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "mt-10 rounded-3xl border border-coral/20 bg-coral/5 p-8 md:p-10",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "text-2xl font-black",
+							children: "Envoyer ma candidature"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-3 max-w-2xl text-muted-foreground",
+							children: "Envoie ton CV et quelques lignes sur toi directement à notre équipe."
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+							href: "mailto:pokenbowl1@gmail.com?subject=Candidature%20—%20Poke%20N%20Bowl",
+							className: "mt-6 inline-flex rounded-full bg-coral px-6 py-3 font-black text-white shadow-lift transition hover:scale-105",
+							children: "pokenbowl1@gmail.com"
+						})
+					]
+				})
+			]
+		})]
+	});
+}
+//#endregion
+//#region src/routes/admin/stocks.tsx
+var Route$6 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var PIN_KEY = "pnb_stock_pin";
+function AdminStocksPage() {
+	const [pin, setPin] = (0, import_react.useState)("");
+	const [unlocked, setUnlocked] = (0, import_react.useState)(false);
+	const [stock, setStock] = (0, import_react.useState)(null);
+	const [persistent, setPersistent] = (0, import_react.useState)(false);
+	const [loading, setLoading] = (0, import_react.useState)(false);
+	const [error, setError] = (0, import_react.useState)(null);
+	const [savingId, setSavingId] = (0, import_react.useState)(null);
+	const [filter, setFilter] = (0, import_react.useState)("all");
+	const catalog = (0, import_react.useMemo)(() => catalogLabels(), []);
+	const load = (0, import_react.useCallback)(async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const res = await getStock();
+			setStock(res.stock);
+			setPersistent(res.persistent);
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "Erreur de chargement");
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+	(0, import_react.useEffect)(() => {
+		const saved = sessionStorage.getItem(PIN_KEY);
+		if (saved) {
+			setPin(saved);
+			setUnlocked(true);
+		}
+		load();
+		const interval = window.setInterval(() => void load(), 15e3);
+		return () => window.clearInterval(interval);
+	}, [load]);
+	const unlock = () => {
+		if (!pin.trim()) return;
+		sessionStorage.setItem(PIN_KEY, pin.trim());
+		setUnlocked(true);
+	};
+	const toggle = async (id, available) => {
+		if (!unlocked) return;
+		setSavingId(id);
+		setError(null);
+		try {
+			const res = await setStockItem({ data: {
+				pin: pin.trim(),
+				id,
+				available
+			} });
+			setStock(res.stock);
+			setPersistent(res.persistent);
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "Erreur de sauvegarde");
+			if (e instanceof Error && e.message.includes("incorrect")) {
+				setUnlocked(false);
+				sessionStorage.removeItem(PIN_KEY);
+			}
+		} finally {
+			setSavingId(null);
+		}
+	};
+	const handleReset = async () => {
+		if (!unlocked || !confirm("Tout remettre disponible ?")) return;
+		setLoading(true);
+		try {
+			const res = await resetStock({ data: { pin: pin.trim() } });
+			setStock(res.stock);
+			setPersistent(res.persistent);
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "Erreur");
+		} finally {
+			setLoading(false);
+		}
+	};
+	const rows = catalog.filter((c) => filter === "all" || c.group === filter);
+	const groupLabel = {
+		bowl: "Bowls",
+		drink: "Boissons",
+		dessert: "Desserts",
+		topping: "Toppings"
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] text-[#17231f]",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+			className: "border-b border-black/5 bg-white",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mx-auto flex max-w-3xl items-center justify-between px-5 py-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						className: "text-lg font-black",
+						children: "Stocks — Poke N Bowl"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: () => void load(),
+					className: "inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3 py-2 text-xs font-bold text-white",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-3.5 w-3.5 ${loading ? "animate-spin" : ""}` }), "Actualiser"]
+				})]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+			className: "mx-auto max-w-3xl px-5 py-8",
+			children: !unlocked ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rounded-3xl bg-white p-6 shadow-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-sm text-[#758079]",
+					children: [
+						"Entre le code admin pour modifier les stocks (variable d’environnement",
+						" ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", {
+							className: "rounded bg-[#f0f1ea] px-1",
+							children: "STOCK_ADMIN_PIN"
+						}),
+						", défaut",
+						" ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", {
+							className: "rounded bg-[#f0f1ea] px-1",
+							children: "vise2026"
+						}),
+						")."
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-4 flex gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "password",
+						value: pin,
+						onChange: (e) => setPin(e.target.value),
+						onKeyDown: (e) => e.key === "Enter" && unlock(),
+						placeholder: "Code admin",
+						className: "flex-1 rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: unlock,
+						className: "rounded-xl bg-[#ff705f] px-5 py-3 text-sm font-black text-white",
+						children: "OK"
+					})]
+				})]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mb-4 flex flex-wrap items-center gap-2",
+					children: [
+						"all",
+						"bowl",
+						"drink",
+						"dessert",
+						"topping"
+					].map((f) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => setFilter(f),
+						className: `rounded-full px-3 py-1.5 text-xs font-black uppercase tracking-wide ${filter === f ? "bg-[#10251f] text-white" : "bg-white text-[#758079]"}`,
+						children: f === "all" ? "Tout" : groupLabel[f]
+					}, f))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white px-4 py-3 text-xs",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+						"Stockage :",
+						" ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+							className: persistent ? "text-green-700" : "text-amber-700",
+							children: persistent ? "Redis (temps réel partagé)" : "Mémoire (temporaire)"
+						})
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => void handleReset(),
+						className: "font-bold text-[#ff705f]",
+						children: "Tout réactiver"
+					})]
+				}),
+				!persistent && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900",
+					children: [
+						"Pour un stock ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "vraiment partagé en temps réel" }),
+						" entre tous les clients, branche ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Upstash Redis" }),
+						" (gratuit) sur Vercel — voir instructions en bas."
+					]
+				}),
+				error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700",
+					children: error
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "space-y-2",
+					children: rows.map((row) => {
+						const entry = stock?.items[row.id];
+						const available = entry?.available !== false && !(entry?.qty != null && entry.qty <= 0);
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "min-w-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "truncate text-sm font-bold",
+									children: row.label
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-bold uppercase tracking-wider text-[#9aa39c]",
+									children: groupLabel[row.group]
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								disabled: savingId === row.id,
+								onClick: () => void toggle(row.id, !available),
+								className: `shrink-0 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide transition ${available ? "bg-[#d7ff45] text-[#10251f]" : "bg-[#ff705f]/15 text-[#ff705f]"}`,
+								children: savingId === row.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-3.5 w-3.5 animate-spin" }) : available ? "Dispo" : "Épuisé"
+							})]
+						}, row.id);
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-10 rounded-2xl border border-black/5 bg-white p-5 text-xs leading-relaxed text-[#758079]",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "font-black text-[#17231f]",
+							children: "Activer Redis (recommandé)"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", {
+							className: "mt-2 list-decimal space-y-1 pl-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Vercel → projet pokebowlfresh → Storage / Marketplace → Upstash Redis (gratuit)" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+									"Variables créées : ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "UPSTASH_REDIS_REST_URL" }),
+									" +",
+									" ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "UPSTASH_REDIS_REST_TOKEN" })
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+									"Optionnel : ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "STOCK_ADMIN_PIN" }),
+									" = ton code secret"
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Redéploie le site" })
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-3",
+							children: ["Dernière MAJ : ", stock?.updatedAt ? new Date(stock.updatedAt).toLocaleString("fr-BE") : "—"]
+						})
+					]
+				})
+			] })
+		})]
+	});
+}
+//#endregion
+//#region src/routes/api/mollie-webhook.ts
+var Route$5 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
+	try {
+		const contentType = request.headers.get("content-type") ?? "";
+		let paymentId = null;
+		if (contentType.includes("application/json")) paymentId = (await request.json()).id ?? null;
+		else {
+			const text = await request.text();
+			paymentId = new URLSearchParams(text).get("id");
+		}
+		if (!paymentId) return new Response("Missing payment id", { status: 400 });
+		const payment = await getMolliePayment(paymentId);
+		const orderId = payment.metadata?.orderId;
+		if (!orderId) return new Response("OK", { status: 200 });
+		const order = await getOrderFromStore(orderId);
+		if (!order) return new Response("OK", { status: 200 });
+		if (payment.status === "paid") await upsertOrder({
+			...order,
+			status: "paid",
+			molliePaymentId: paymentId
+		});
+		else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") await upsertOrder({
+			...order,
+			status: payment.status === "expired" ? "expired" : "cancelled",
+			molliePaymentId: paymentId
+		});
+		return new Response("OK", { status: 200 });
+	} catch (e) {
+		console.error("[mollie-webhook]", e);
+		return new Response("Error", { status: 500 });
+	}
+} } } });
+//#endregion
+//#region src/routes/api/orders.ts
+/**
+* GET /api/orders
+* Liste les commandes persistées.
+*/
+var Route$4 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
+	const expected = process.env.ADMIN_SECRET;
+	if (!expected || request.headers.get("x-admin-secret") !== expected) return new Response("Unauthorized", { status: 401 });
+	const orders = await listOrdersFromStore();
+	return new Response(JSON.stringify({ orders }), {
+		status: 200,
+		headers: {
+			"content-type": "application/json",
+			"cache-control": "no-store"
+		}
+	});
+} } } });
+//#endregion
+//#region src/routes/order.success.tsx
+var Route$3 = createFileRoute("/order/success")({
+	validateSearch: (search) => ({
+		orderId: typeof search.orderId === "string" ? search.orderId : void 0,
+		method: typeof search.method === "string" ? search.method : void 0
+	}),
+	component: OrderSuccessPage
+});
+function OrderSuccessPage() {
+	const { orderId, method } = Route$3.useSearch();
+	const { clearCart } = useCart();
+	const [loading, setLoading] = (0, import_react.useState)(true);
+	const [order, setOrder] = (0, import_react.useState)(null);
+	(0, import_react.useEffect)(() => {
+		if (!orderId) {
+			setLoading(false);
+			return;
+		}
+		let cancelled = false;
+		let attempts = 0;
+		const poll = async () => {
+			try {
+				const res = await getOrderStatus({ data: { orderId } });
+				if (!cancelled && res.found) {
+					setOrder(res.order);
+					if (res.order.status === "paid" || res.order.paymentMethod === "on_site") clearCart();
+					if (res.order.status !== "pending_payment") {
+						setLoading(false);
+						return;
+					}
+				}
+			} catch (e) {
+				console.error(e);
+			}
+			if (!cancelled && attempts < 20) {
+				attempts += 1;
+				window.setTimeout(poll, 3e3);
+			} else if (!cancelled) setLoading(false);
+		};
+		poll();
+		return () => {
+			cancelled = true;
+		};
+	}, [orderId, clearCart]);
+	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "flex min-h-screen items-center justify-center bg-[#f7f4ec]",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-8 w-8 animate-spin text-[#ff705f]" })
+	});
+	const isPaid = order?.status === "paid";
+	const isOnSite = order?.paymentMethod === "on_site" || method === "on_site";
+	const isPending = order?.status === "pending_payment";
+	const isFailed = order?.status === "cancelled" || order?.status === "expired";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] text-[#17231f]",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+			className: "border-b border-black/5 bg-[#f7f4ec]/90",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
+				className: "mx-auto flex max-w-[700px] items-center px-5 py-3 sm:px-8",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/",
+					className: "flex items-center gap-2.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo",
+							className: "h-full w-full object-contain"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-base font-black",
+						children: "Poke N Bowl"
+					})]
+				})
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+			className: "mx-auto max-w-[700px] px-5 py-12 sm:px-8",
+			children: !orderId || !order ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "text-center",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl font-black",
+					children: "Commande introuvable"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					to: "/commander",
+					className: "mt-6 inline-block rounded-full bg-[#ff705f] px-6 py-3 text-sm font-black text-white",
+					children: "Retour à la carte"
+				})]
+			}) : isFailed ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rounded-[28px] bg-white p-8 text-center shadow-lg",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						className: "text-3xl font-black",
+						children: "Paiement non finalisé"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-3 text-[#758079]",
+						children: "Le paiement a été annulé ou a expiré. Tu peux réessayer depuis le panier."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						to: "/checkout",
+						className: "mt-6 inline-block rounded-full bg-[#ff705f] px-6 py-3 text-sm font-black text-white",
+						children: "Réessayer"
+					})
+				]
+			}) : isPending ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rounded-[28px] bg-white p-8 text-center shadow-lg",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "mx-auto h-12 w-12 text-[#ff705f]" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+						className: "mt-4 text-3xl font-black",
+						children: "Paiement en cours…"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-3 text-[#758079]",
+						children: "Si tu as payé, cette page se mettra à jour. Sinon, retourne sur Mollie ou choisis « Payer sur place »."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-4 font-mono text-sm font-bold",
+						children: order.id
+					})
+				]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rounded-[28px] bg-white p-8 shadow-lg",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col items-center text-center",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "h-14 w-14 text-[#d7ff45]" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+								className: "mt-4 text-3xl font-black sm:text-4xl",
+								children: isPaid ? "Commande payée !" : "Commande confirmée !"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-2 text-[#758079]",
+								children: [
+									"Merci ",
+									order.customer.name,
+									".",
+									" ",
+									order.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+										"On prépare ta commande pour la livraison à ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: order.customer.requestedTime }),
+										"."
+									] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+										"On prépare ton bowl pour ",
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: order.customer.requestedTime }),
+										"."
+									] })
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-4 rounded-full bg-[#f7f4ec] px-4 py-2 font-mono text-sm font-black",
+								children: order.id
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-8 space-y-3 border-t border-black/5 pt-6",
+						children: [
+							order.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-2xl bg-[#f7f4ec] p-4 text-sm",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Livraison" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-1 text-[#758079]",
+										children: order.customer.address
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-[#758079]",
+										children: [
+											order.customer.postalCode,
+											" ",
+											order.customer.city
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mt-2 font-bold",
+										children: ["Frais de livraison : ", order.customer.deliveryFee ? `€ ${order.customer.deliveryFee.toFixed(2)}` : "Gratuits"]
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex items-center gap-2 text-sm",
+								children: isOnSite && !isPaid ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Store, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Payer sur place" }),
+									" à la récupération — €",
+									" ",
+									order.total.toFixed(2)
+								] })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Payé en ligne" }),
+									" — € ",
+									order.total.toFixed(2)
+								] })] })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+								className: "mt-4 space-y-2 text-sm",
+								children: order.items.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+									className: "flex justify-between gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+										item.quantity,
+										"× ",
+										item.name,
+										item.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "block text-xs text-[#7a847e]",
+											children: item.toppings.join(", ")
+										})
+									] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "font-bold",
+										children: ["€ ", (item.price * item.quantity).toFixed(2)]
+									})]
+								}, i))
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: "/",
+							className: "rounded-full bg-[#10251f] px-6 py-3 text-center text-sm font-black text-white",
+							children: "Retour à l'accueil"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: "/commander",
+							className: "rounded-full bg-[#ff705f] px-6 py-3 text-center text-sm font-black text-white",
+							children: "Commander encore"
+						})]
+					})
+				]
+			})
+		})]
+	});
+}
+//#endregion
+//#region src/routes/product/$productId.tsx
+var Route$2 = createFileRoute("/product/$productId")({ component: ProductPage });
+function ProductPage() {
+	const { productId } = Route$2.useParams();
+	const product = bowls.find((b) => b.id === productId);
+	const { t, language, setLanguage } = useTranslation();
+	const { addItem, setIsCartOpen, items } = useCart();
+	const { available } = useStock();
+	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
+	if (!product) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "flex min-h-screen items-center justify-center bg-background px-5",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "text-center",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "mb-4 break-words text-3xl font-bold",
+				children: t("product.not_found")
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				to: "/commander",
+				className: "text-coral underline",
+				children: t("product.back")
+			})]
+		})
+	});
+	const productOk = available(product.id);
+	const handleAddToCart = () => {
+		if (!productOk) return;
+		addItem({
+			id: product.id,
+			name: product.name,
+			price: product.price,
+			quantity: 1,
+			toppings: []
+		});
+		setIsCartOpen(true);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex min-h-screen flex-col bg-background text-foreground",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartDrawer, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+				className: "sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/",
+						className: "group flex min-w-0 items-center gap-2.5",
+						"aria-label": "Poke N Bowl",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: logo_default,
+								alt: "Logo",
+								className: "h-full w-full object-contain"
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "truncate text-base font-black tracking-tight sm:text-lg",
+							children: "Poke N Bowl"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3 sm:gap-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex items-center gap-1 rounded-full bg-secondary p-1",
+							children: [
+								"fr",
+								"en",
+								"nl"
+							].map((lang) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setLanguage(lang),
+								className: `rounded-full px-2 py-1 text-xs font-bold uppercase transition-colors ${language === lang ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground"}`,
+								children: lang
+							}, lang))
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => setIsCartOpen(true),
+							className: "relative rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/80",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingCart, { className: "h-5 w-5" }), cartItemsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[10px] font-bold text-white",
+								children: cartItemsCount
+							})]
+						})]
+					})]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+				className: "mx-auto w-full max-w-6xl flex-1 px-5 py-8 pb-28 sm:pb-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/commander",
+					className: "mb-6 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "mr-2 h-4 w-4" }),
+						" ",
+						t("product.back")
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-16",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative aspect-[1.48] overflow-hidden rounded-3xl shadow-lift sm:max-h-[500px]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+							dishId: product.id,
+							alt: product.name,
+							className: `h-full w-full transition duration-500 ${!productOk ? "grayscale" : ""}`
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-bold text-primary shadow-sm",
+							children: productOk ? product.tag : t("cmd.sold_out")
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mb-2 flex items-start justify-between gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+									className: "min-w-0 flex-1 break-words pb-1 text-3xl font-extrabold leading-[1.15]",
+									children: product.name
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "shrink-0 text-2xl font-display font-bold text-coral",
+									children: ["€ ", product.price.toFixed(2)]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mb-6 text-[15px] leading-relaxed text-muted-foreground",
+								children: product.desc
+							}),
+							!productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral",
+								children: t("product.unavailable")
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-3 flex items-center justify-between gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "text-lg font-bold",
+											children: "Composition"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-semibold text-muted-foreground",
+											children: "Recette originale"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-sm leading-relaxed text-muted-foreground",
+										children: product.desc
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground",
+										children: "Les recettes affichées correspondent au menu du restaurant. Pour composer ton propre bowl, utilise l’option « Sur mesure »."
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-8 hidden sm:block",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									onClick: handleAddToCart,
+									disabled: !productOk,
+									size: "lg",
+									className: "h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90 disabled:opacity-50",
+									children: productOk ? t("menu.add_to_cart") : t("product.out_of_stock")
+								})
+							})
+						]
+					})]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-background/95 p-3 backdrop-blur-xl sm:hidden",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					onClick: handleAddToCart,
+					disabled: !productOk,
+					size: "lg",
+					className: "h-12 w-full rounded-full bg-coral text-base font-black text-white hover:bg-coral/90 disabled:opacity-50",
+					children: productOk ? `${t("menu.add_to_cart")} · € ${product.price.toFixed(2)}` : t("product.out_of_stock")
+				})
+			})
+		]
+	});
+}
+//#endregion
+//#region src/routes/api/printer/ack.ts
+var ackSchema = objectType({
+	orderId: stringType().min(1),
+	success: booleanType(),
+	error: stringType().max(500).optional()
+});
+function authorized$1(request) {
+	const expected = process.env.PRINTER_AGENT_SECRET;
+	return Boolean(expected && request.headers.get("x-printer-secret") === expected);
+}
+var Route$1 = createFileRoute("/api/printer/ack")({ server: { handlers: { POST: async ({ request }) => {
+	if (!authorized$1(request)) return new Response("Unauthorized", { status: 401 });
+	try {
+		const data = ackSchema.parse(await request.json());
+		await acknowledgePrint(data.orderId, data.success, data.error);
+		return new Response(JSON.stringify({ ok: true }), {
+			status: 200,
+			headers: { "content-type": "application/json" }
+		});
+	} catch (error) {
+		console.error("[printer-ack]", error);
+		return new Response("Invalid printer acknowledgement", { status: 400 });
+	}
+} } } });
+//#endregion
+//#region src/routes/api/printer/queue.ts
+function authorized(request) {
+	const expected = process.env.PRINTER_AGENT_SECRET;
+	return Boolean(expected && request.headers.get("x-printer-secret") === expected);
+}
+var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: async ({ request }) => {
+	if (!authorized(request)) return new Response("Unauthorized", { status: 401 });
+	try {
+		const order = await claimNextPrintJob();
+		return new Response(JSON.stringify({ job: order ?? null }), {
+			status: 200,
+			headers: {
+				"content-type": "application/json",
+				"cache-control": "no-store"
+			}
+		});
+	} catch (error) {
+		console.error("[printer-queue]", error);
+		return new Response("Printer queue unavailable", { status: 500 });
+	}
+} } } });
+//#endregion
+//#region src/routeTree.gen.ts
+var rootRouteChildren = {
+	IndexRoute: Route$11.update({
+		id: "/",
+		path: "/",
+		getParentRoute: () => Route$12
+	}),
+	CheckoutRoute: Route$10.update({
+		id: "/checkout",
+		path: "/checkout",
+		getParentRoute: () => Route$12
+	}),
+	CommanderRoute: Route$9.update({
+		id: "/commander",
+		path: "/commander",
+		getParentRoute: () => Route$12
+	}),
+	ContactRoute: Route$8.update({
+		id: "/contact",
+		path: "/contact",
+		getParentRoute: () => Route$12
+	}),
+	RecrutementRoute: Route$7.update({
+		id: "/recrutement",
+		path: "/recrutement",
+		getParentRoute: () => Route$12
+	}),
+	AdminStocksRoute: Route$6.update({
+		id: "/admin/stocks",
+		path: "/admin/stocks",
+		getParentRoute: () => Route$12
+	}),
+	ApiMollieWebhookRoute: Route$5.update({
+		id: "/api/mollie-webhook",
+		path: "/api/mollie-webhook",
+		getParentRoute: () => Route$12
+	}),
+	ApiOrdersRoute: Route$4.update({
+		id: "/api/orders",
+		path: "/api/orders",
+		getParentRoute: () => Route$12
+	}),
+	OrderSuccessRoute: Route$3.update({
+		id: "/order/success",
+		path: "/order/success",
+		getParentRoute: () => Route$12
+	}),
+	ProductProductIdRoute: Route$2.update({
+		id: "/product/$productId",
+		path: "/product/$productId",
+		getParentRoute: () => Route$12
+	}),
+	ApiPrinterAckRoute: Route$1.update({
+		id: "/api/printer/ack",
+		path: "/api/printer/ack",
+		getParentRoute: () => Route$12
+	}),
+	ApiPrinterQueueRoute: Route.update({
+		id: "/api/printer/queue",
+		path: "/api/printer/queue",
+		getParentRoute: () => Route$12
+	})
+};
+var routeTree = Route$12._addFileChildren(rootRouteChildren)._addFileTypes();
+//#endregion
+//#region src/router.tsx
+var getRouter = () => {
+	const queryClient = new QueryClient();
+	return createRouter({
+		routeTree,
+		context: { queryClient },
+		scrollRestoration: true,
+		defaultPreloadStaleTime: 0
+	});
+};
+//#endregion
+export { getRouter };
