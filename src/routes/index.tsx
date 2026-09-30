@@ -217,68 +217,68 @@ function Index() {
           </motion.div>
         </section>
 
-        <section className="bg-[#10251f] px-5 py-12 text-white sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-          <div className="mx-auto max-w-[1200px]">
+        <section className="bg-[#ead9bb] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-[1180px]">
             <Reveal>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div className="max-w-2xl">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">{t("feature.eyebrow")}</p>
-                  <h2 className="mt-3 text-[1.9rem] font-black leading-[1.05] tracking-tight sm:text-4xl lg:text-5xl">
-                    {t("feature.title")}
-                  </h2>
-                  <p className="mt-3 max-w-xl text-sm leading-6 text-white/60 sm:text-base">{t("feature.desc")}</p>
-                </div>
-                <div className="flex w-fit items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3">
-                  <span className="text-2xl font-black text-[#d7ff45]">11€</span>
-                  <span className="text-[9px] font-black uppercase leading-4 tracking-[0.12em] text-white/65">{t("feature.student")}</span>
+              <div className="text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Poke N Bowl · Signature</p>
+                <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
+                  Le croustillant
+                </h2>
+                <h3 className="mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#a96b0d] sm:text-4xl lg:text-5xl">
+                  qui fait la différence
+                </h3>
+                <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-black uppercase tracking-[0.08em] sm:text-sm">
+                  <span>✦ Fait maison</span>
+                  <span className="text-[#a96b0d]">•</span>
+                  <span>🔥 Ultra croustillant</span>
+                  <span className="text-[#a96b0d]">•</span>
+                  <span>♡ Healthy</span>
                 </div>
               </div>
             </Reveal>
 
-            <div className="mt-7 grid gap-4 lg:grid-cols-[1.35fr_.85fr]">
+            <div className="mt-9 grid gap-6 md:grid-cols-2">
               {[
                 {
-                  id: "crousty-chicken-curry",
-                  nameKey: "feature.curry",
-                  descKey: "feature.curry_desc",
+                  id: "crousty-chicken-sauce-blanche",
+                  name: "Crousty Chicken · Sauce blanche",
+                  label: "Riz jasmin",
+                  desc: "Riz jasmin parfumé, poulet croustillant, sauce blanche maison et oignons frits.",
                 },
                 {
-                  id: "crousty-chicken-sauce-blanche",
-                  nameKey: "feature.white",
-                  descKey: "feature.white_desc",
+                  id: "crousty-chicken-curry",
+                  name: "Crousty Chicken · Curry",
+                  label: "Riz curry",
+                  desc: "Riz au curry onctueux, poulet croustillant, sauce curry maison et oignons frits.",
                 },
               ].map((item, index) => (
                 <Reveal key={item.id} delay={index * 0.06}>
                   <Link
                     to="/product/$productId"
                     params={{ productId: item.id }}
-                    className="group block h-full overflow-hidden rounded-[28px] bg-[#f7f4ec] text-[#17231f] shadow-[0_24px_70px_-38px_rgba(0,0,0,.85)] transition duration-300 hover:-translate-y-1"
+                    className="group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-[#f8f0df] shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1"
                   >
-                    <div className="relative aspect-[1.35] overflow-hidden sm:aspect-[1.55] lg:aspect-[1.65]">
+                    <div className="relative aspect-[1.22] overflow-hidden bg-[#e7d4b4]">
                       <DishImage
                         dishId={item.id}
-                        alt={t(item.nameKey)}
-                        className="h-full w-full scale-[1.01] transition duration-700 group-hover:scale-[1.055]"
+                        alt={item.name}
+                        className="h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.06]"
                       />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.05)_15%,rgba(0,0,0,.02)_40%,rgba(0,0,0,.72)_100%)]" />
-                      <div className="absolute left-4 top-4 flex items-center gap-2">
-                        <span className="rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em]">
-                          {t("feature.badge")}
+                      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+                        <span className="bg-[#8b5510] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white">
+                          {item.label}
                         </span>
-                        <span className="rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.12em] text-white backdrop-blur-sm">
-                          11€
-                        </span>
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 text-white">
-                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/70">Poke N Bowl · Signature</p>
-                        <h3 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">{t(item.nameKey)}</h3>
+                        <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black">11€</span>
                       </div>
                     </div>
-                    <div className="flex min-h-[96px] items-center justify-between gap-4 p-5 sm:p-6">
-                      <p className="max-w-xl text-sm leading-6 text-[#68756f]">{t(item.descKey)}</p>
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white transition group-hover:translate-x-1">
-                        <ArrowRight className="h-4 w-4" />
-                      </span>
+                    <div className="p-5 text-center sm:p-7">
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#a96b0d]">Crousty Chicken</p>
+                      <h3 className="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">{item.name.split(" · ")[1]}</h3>
+                      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#6e6255]">{item.desc}</p>
+                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#241a12] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#a96b0d]">
+                        Découvrir la recette <ArrowRight className="h-4 w-4" />
+                      </div>
                     </div>
                   </Link>
                 </Reveal>
@@ -286,11 +286,13 @@ function Index() {
             </div>
 
             <Reveal delay={0.08}>
-              <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-                <p className="text-xs font-bold text-white/65">{t("feature.bottom")}</p>
-                <Link to="/commander" className="inline-flex w-fit items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#d7ff45]">
-                  {t("feature.cta")} <ArrowRight className="h-4 w-4" />
-                </Link>
+              <div className="mt-7 text-center">
+                <span className="inline-flex items-center gap-3 bg-[#a96b0d] px-6 py-3 text-white shadow-lg">
+                  <span className="text-[11px] font-black uppercase tracking-[0.14em]">Menu étudiant</span>
+                  <span className="text-xl font-black">11€</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.1em]">· boisson incluse</span>
+                </span>
+                <p className="mt-3 text-xs font-bold text-[#6e6255]">Sauce extra +1€ · Viens goûter la différence.</p>
               </div>
             </Reveal>
           </div>
