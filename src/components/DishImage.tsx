@@ -27,11 +27,20 @@ export function DishImage({
     <div
       role="img"
       aria-label={alt}
-      className={`h-full w-full overflow-hidden bg-cover bg-center bg-no-repeat ${className}`}
-      style={{
-        backgroundImage: `url("${image}")`,
-        minHeight: "100%",
-      }}
-    />
+      className="relative h-full w-full overflow-hidden bg-[#ece8dc]"
+    >
+      <div
+        className={`h-full w-full bg-cover bg-center bg-no-repeat transition-[filter] duration-500 ${className}`}
+        style={{
+          backgroundImage: `url("${image}")`,
+          minHeight: "100%",
+          filter: "saturate(.92) contrast(.98)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,248,230,.08),transparent_45%,rgba(12,31,24,.08))]"
+      />
+    </div>
   );
 }
