@@ -94,14 +94,14 @@ export const bowls = [
     id: "crousty-chicken-curry",
     name: "Crousty Chicken Curry",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
+    desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse, oignon frit croustillant, aigre douce. Menu étudiant : 11€ avec boisson incluse.",
     tag: "Nouveau",
   },
   {
     id: "crousty-chicken-sauce-blanche",
     name: "Crousty Chicken Sauce Blanche",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
+    desc: "Poulet croustillant, riz parfumé, blanche maison, oignon frit croustillant, aigre douce. Menu étudiant : 11€ avec boisson incluse.",
     tag: "Nouveau",
   },
 ];
