@@ -2965,8 +2965,8 @@ function CommanderPage() {
 							const ok = available(bowl.id);
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 								initial: {
-									opacity: 0,
-									y: 18
+									opacity: 1,
+									y: 0
 								},
 								whileInView: {
 									opacity: 1,

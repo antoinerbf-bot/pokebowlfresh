@@ -9,7 +9,7 @@ import { n as CartDrawer, r as DishImage } from "./CartDrawer-DBLcPSKk.mjs";
 import { t as useStock } from "./useStock-DWoS1kUS.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/commander-CA7pevYW.js
+//#region node_modules/.nitro/vite/services/ssr/assets/commander-CS1WPV14.js
 var import_jsx_runtime = require_jsx_runtime();
 function CommanderPage() {
 	const { t, language, setLanguage } = useTranslation();
@@ -164,8 +164,8 @@ function CommanderPage() {
 							const ok = available(bowl.id);
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 								initial: {
-									opacity: 0,
-									y: 18
+									opacity: 1,
+									y: 0
 								},
 								whileInView: {
 									opacity: 1,
