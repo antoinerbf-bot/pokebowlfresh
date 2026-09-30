@@ -1,15 +1,15 @@
-import dishSprite from "@/assets/dish-sprite.webp";
+import bowlChicken from "@/assets/bowl-chicken.jpg";
+import bowlCrousty from "@/assets/bowl-crousty.jpg";
+import bowlScampi from "@/assets/bowl-scampi.jpg";
 
-const positions: Record<string, string> = {
-  "beef-teriyaki": "0% 0%",
-  "crousty-chicken": "50% 0%",
-  "sweet-chicken": "100% 0%",
-  "saumon-wasabi": "0% 50%",
-  "scampis-royaux": "50% 50%",
-  "spicy-chicken": "100% 50%",
-  "aloha-classic": "0% 100%",
-  "vegan-tofu": "50% 100%",
-  "shrimp-mango": "100% 100%",
+const images: Record<string, string> = {
+  "mighty-gyros": bowlCrousty,
+  "sweet-chicken": bowlChicken,
+  "scampis-royaux": bowlScampi,
+  "saumon-wasabi": bowlScampi,
+  "spicy-chicken": bowlChicken,
+  "crousty-chicken-curry": bowlCrousty,
+  "crousty-chicken-sauce-blanche": bowlCrousty,
 };
 
 export function DishImage({
@@ -21,18 +21,13 @@ export function DishImage({
   alt: string;
   className?: string;
 }) {
-  const position = positions[dishId] ?? "0% 0%";
+  const image = images[dishId] ?? bowlChicken;
 
   return (
-    <div
-      role="img"
-      aria-label={alt}
-      className={`overflow-hidden bg-[#081612] bg-no-repeat ${className}`}
-      style={{
-        backgroundImage: `url(${dishSprite})`,
-        backgroundSize: "300% 300%",
-        backgroundPosition: position,
-      }}
+    <img
+      src={image}
+      alt={alt}
+      className={`block h-full w-full object-cover ${className}`}
     />
   );
 }
