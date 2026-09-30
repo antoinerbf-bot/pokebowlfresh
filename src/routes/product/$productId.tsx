@@ -141,7 +141,7 @@ function ProductPage() {
               </div>
               <p className="text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
               <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground">
-                Les recettes affichées correspondent au menu du restaurant. Pour composer ton propre bowl, utilise l’option « Sur mesure ».
+                Les recettes affichées correspondent au menu du restaurant. Pour voir les bases, mix-ins, protéines, sauces et toppings disponibles, consulte la section personnalisation de la page Commande.
               </div>
             </div>
 
