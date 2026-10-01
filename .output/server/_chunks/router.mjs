@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-Dr9w-arL.css";
+var styles_default = "/assets/styles-D_wbfK8R.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -730,42 +730,43 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
-//#region src/assets/bowl-chicken.jpg
-var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
-//#endregion
-//#region src/assets/bowl-crousty.jpg
-var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
-//#endregion
-//#region src/assets/bowl-scampi.jpg
-var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+//#region src/assets/poke-menu-collage.jpg
+var poke_menu_collage_default = "/assets/poke-menu-collage-Bo5XEq9g.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
-var images = {
-	"mighty-gyros": bowl_crousty_default,
-	"sweet-chicken": bowl_chicken_default,
-	"scampis-royaux": bowl_scampi_default,
-	"saumon-wasabi": bowl_scampi_default,
-	"spicy-chicken": bowl_chicken_default,
-	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_chicken_default
+var positions = {
+	"mighty-gyros": "0% 0%",
+	"sweet-chicken": "50% 0%",
+	"scampis-royaux": "100% 0%",
+	"saumon-wasabi": "0% 100%",
+	"spicy-chicken": "33.333% 100%",
+	"crousty-chicken-curry": "66.666% 100%",
+	"crousty-chicken-sauce-blanche": "100% 100%"
 };
+var bottomIds = /* @__PURE__ */ new Set([
+	"saumon-wasabi",
+	"spicy-chicken",
+	"crousty-chicken-curry",
+	"crousty-chicken-sauce-blanche"
+]);
 function DishImage({ dishId, alt, className = "" }) {
-	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	const position = positions[dishId];
+	if (!position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
+		children: "Photo produit"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		role: "img",
 		"aria-label": alt,
-		className: "relative h-full w-full overflow-hidden bg-[#ece8dc]",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: `h-full w-full bg-cover bg-center bg-no-repeat transition-[filter] duration-500 ${className}`,
+		className: `overflow-hidden rounded-2xl bg-[#eee8dc] ${className}`,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "h-full w-full bg-cover bg-no-repeat",
 			style: {
-				backgroundImage: `url("${image}")`,
-				minHeight: "100%",
-				filter: "saturate(.92) contrast(.98)"
+				backgroundImage: `url(${poke_menu_collage_default})`,
+				backgroundPosition: position,
+				backgroundSize: `${bottomIds.has(dishId) ? "400%" : "300%"} 200%`
 			}
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			"aria-hidden": "true",
-			className: "pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,248,230,.08),transparent_45%,rgba(12,31,24,.08))]"
-		})]
+		})
 	});
 }
 //#endregion

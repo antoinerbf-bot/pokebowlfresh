@@ -3,12 +3,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-Dq3xzneh.mjs";
+import { t as Route } from "./_productId-BaEX8756.mjs";
 import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
 import { a as ShoppingCart, v as Check, x as ArrowLeft } from "./_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-BRR_gc0I.mjs";
+import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-D99f9MjN.mjs";
 import { t as useStock } from "./_ssr/useStock-Con-sCMe.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-Dw9iqdlv.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-CvCMio3r.js
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {
 	const { productId } = Route.useParams();
