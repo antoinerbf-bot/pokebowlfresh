@@ -136,7 +136,7 @@ function CommanderPage() {
               return (
                 <motion.div
                   key={bowl.id}
-                  initial={{ opacity: 0, y: 18 }}
+                  initial={{ opacity: 1, y: 0 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.04 }}
