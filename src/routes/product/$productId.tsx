@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { bowls } from "../../lib/data";
+import { bowls, customToppings } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
 import logo from "@/assets/logo.png";
 import { useStock } from "../../hooks/useStock";
@@ -19,6 +19,8 @@ function ProductPage() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
+  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
+  const [extraSauce, setExtraSauce] = React.useState(false);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
@@ -35,14 +37,31 @@ function ProductPage() {
 
   const productOk = available(product.id);
 
+  const isCrousty = product.id.startsWith("crousty-");
+  const finalPrice = product.price + (isCrousty && extraSauce ? 1 : 0);
+
+  const toggleTopping = (topping: string) => {
+    setSelectedToppings((current) =>
+      current.includes(topping)
+        ? current.filter((item) => item !== topping)
+        : current.length < 2
+          ? [...current, topping]
+          : current,
+    );
+  };
+
   const handleAddToCart = () => {
     if (!productOk) return;
+    const options = [
+      ...selectedToppings.map((item) => "Topping : " + item),
+      ...(isCrousty && extraSauce ? ["Sauce extra +1€"] : []),
+    ];
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: finalPrice,
       quantity: 1,
-      toppings: [],
+      toppings: options,
     });
     setIsCartOpen(true);
   };
@@ -134,10 +153,47 @@ function ProductPage() {
               </div>
             )}
 
+            {isCrousty && productOk && (
+              <div className="mb-6 rounded-3xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">Personnalise ton Crousty</p>
+                    <h2 className="mt-1 text-xl font-black text-[#241a12]">Ajoute ta touche</h2>
+                  </div>
+                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">2 toppings max</span>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-[#6e6255]">La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire.</p>
+                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {customToppings.map((topping) => {
+                    const selected = selectedToppings.includes(topping);
+                    return (
+                      <button
+                        key={topping}
+                        type="button"
+                        onClick={() => toggleTopping(topping)}
+                        className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`}
+                      >
+                        <span>{topping}</span>
+                        {selected && <Check className="h-3.5 w-3.5 shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setExtraSauce((value) => !value)}
+                  className={`mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`}
+                >
+                  <span>Sauce extra</span>
+                  <span>+1€</span>
+                </button>
+              </div>
+            )}
+
             <div className="rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-bold">Composition</h2>
-                <span className="text-xs font-semibold text-muted-foreground">{product.id.startsWith("crousty-") ? "Recette signature" : "Recette originale"}</span>
+                <span className="text-xs font-semibold text-muted-foreground">{isCrousty ? "Recette signature" : "Recette originale"}</span>
               </div>
               <p className="text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
               <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground">
@@ -153,7 +209,7 @@ function ProductPage() {
                 size="lg"
                 className="h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90 disabled:opacity-50"
               >
-                {productOk ? t("menu.add_to_cart") : t("product.out_of_stock")}
+                {productOk ? "Ajouter au panier · € " + finalPrice.toFixed(2) : t("product.out_of_stock")}
               </Button>
             </div>
           </div>
@@ -169,7 +225,7 @@ function ProductPage() {
           className="h-12 w-full rounded-full bg-coral text-base font-black text-white hover:bg-coral/90 disabled:opacity-50"
         >
           {productOk
-            ? `${t("menu.add_to_cart")} · € ${product.price.toFixed(2)}`
+            ? "Ajouter au panier · € " + finalPrice.toFixed(2)
             : t("product.out_of_stock")}
         </Button>
       </div>
