@@ -37,7 +37,7 @@ export function DishImage({
       src={src}
       alt={alt}
       className={`h-full w-full rounded-2xl object-cover ${className}`}
-      loading="lazy"
+      loading="eager"
       decoding="async"
     />
   );
