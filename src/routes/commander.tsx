@@ -141,7 +141,7 @@ function CommanderPage() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.04 }}
                   className={`overflow-hidden rounded-[24px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)] sm:rounded-[28px] ${
-                    !ok ? "opacity-55" : ""
+                    !ok ? "opacity-55" : bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45]/70 shadow-[0_25px_70px_-35px_rgba(215,255,69,.55)]" : ""
                   }`}
                 >
                   {ok ? (

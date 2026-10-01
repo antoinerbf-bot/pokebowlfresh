@@ -153,25 +153,31 @@ function ProductPage() {
               </div>
             )}
 
-            {isCrousty && productOk && (
+            {productOk && (
               <div className="mb-6 rounded-3xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 p-5 sm:p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">Personnalise ton Crousty</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">{t("toppings.title")}</p>
                     <h2 className="mt-1 text-xl font-black text-[#241a12]">Ajoute ta touche</h2>
                   </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">2 toppings max</span>
+                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">{t("toppings.max")}</span>
                 </div>
-                <p className="mt-2 text-xs leading-5 text-[#6e6255]">La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire.</p>
+                <p className="mt-2 text-xs leading-5 text-[#6e6255]">
+                  {isCrousty
+                    ? "La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire."
+                    : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings inclus."}
+                </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
                     const selected = selectedToppings.includes(topping);
+                    const disabled = !selected && selectedToppings.length >= 2;
                     return (
                       <button
                         key={topping}
                         type="button"
                         onClick={() => toggleTopping(topping)}
-                        className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`}
+                        disabled={disabled}
+                        className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : disabled ? "cursor-not-allowed border-[#8d5a18]/10 bg-white/60 text-[#9a8e80]" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`}
                       >
                         <span>{topping}</span>
                         {selected && <Check className="h-3.5 w-3.5 shrink-0" />}
@@ -179,14 +185,16 @@ function ProductPage() {
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setExtraSauce((value) => !value)}
-                  className={`mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`}
-                >
-                  <span>Sauce extra</span>
-                  <span>+1€</span>
-                </button>
+                {isCrousty && (
+                  <button
+                    type="button"
+                    onClick={() => setExtraSauce((value) => !value)}
+                    className={`mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`}
+                  >
+                    <span>Sauce extra</span>
+                    <span>+1€</span>
+                  </button>
+                )}
               </div>
             )}
 
