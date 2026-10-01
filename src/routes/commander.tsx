@@ -306,6 +306,21 @@ function BowlCard({
           )}
         </div>
         <p className="mt-2 text-[13px] leading-5 text-[#758079]">{bowl.desc}</p>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {bowl.composition.map((item) => (
+            <span
+              key={item}
+              className="rounded-full bg-[#f2f1ea] px-2.5 py-1 text-[9px] font-bold leading-3 text-[#66736d]"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+        {"menuNote" in bowl && bowl.menuNote ? (
+          <p className="mt-3 rounded-xl bg-[#fff6df] px-3 py-2 text-[10px] font-black leading-4 text-[#8a5a0b]">
+            {bowl.menuNote}
+          </p>
+        ) : null}
         <div
           className={`mt-4 text-[9px] font-black uppercase tracking-[0.14em] ${
             ok ? "text-[#ff705f]" : "text-[#9aa39c]"
