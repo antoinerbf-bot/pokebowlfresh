@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BbycFW9G.css";
+var styles_default = "/assets/styles-CBxpvzDG.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -855,14 +855,14 @@ var bowls = [
 		id: "crousty-chicken-curry",
 		name: "Crousty Chicken Curry",
 		price: 11,
-		desc: "Poulet croustillant, riz curry onctueux, sauce curry maison, oignons frits et herbes fraîches. Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+		desc: "Riz au curry onctueux, poulet croustillant, sauce curry maison, herbes fraîches. Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
 		tag: "Nouveau"
 	},
 	{
 		id: "crousty-chicken-sauce-blanche",
 		name: "Crousty Chicken Sauce Blanche",
 		price: 11,
-		desc: "Poulet croustillant, riz jasmin parfumé, sauce blanche maison et oignons frits. Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+		desc: "Riz jasmin parfumé, poulet croustillant, sauce crémeuse, oignons frits, herbes fraîches. Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
 		tag: "Nouveau"
 	}
 ];
@@ -3295,7 +3295,7 @@ function CommanderPage() {
 								},
 								viewport: { once: true },
 								transition: { delay: i * .04 },
-								className: `overflow-hidden rounded-[24px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)] sm:rounded-[28px] ${!ok ? "opacity-55" : ""}`,
+								className: `overflow-hidden rounded-[24px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)] sm:rounded-[28px] ${!ok ? "opacity-55" : bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45]/70 shadow-[0_25px_70px_-35px_rgba(215,255,69,.55)]" : ""}`,
 								children: ok ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 									to: "/product/$productId",
 									params: { productId: bowl.id },
@@ -4410,39 +4410,41 @@ function ProductPage() {
 								className: "mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral",
 								children: t("product.unavailable")
 							}),
-							isCrousty && productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mb-6 rounded-3xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 p-5 sm:p-6",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-start justify-between gap-4",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]",
-											children: "Personnalise ton Crousty"
+											children: t("toppings.title")
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "mt-1 text-xl font-black text-[#241a12]",
 											children: "Ajoute ta touche"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]",
-											children: "2 toppings max"
+											children: t("toppings.max")
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "mt-2 text-xs leading-5 text-[#6e6255]",
-										children: "La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire."
+										children: isCrousty ? "La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire." : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings inclus."
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3",
 										children: customToppings.map((topping) => {
 											const selected = selectedToppings.includes(topping);
+											const disabled = !selected && selectedToppings.length >= 2;
 											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 												type: "button",
 												onClick: () => toggleTopping(topping),
-												className: `flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`,
+												disabled,
+												className: `flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : disabled ? "cursor-not-allowed border-[#8d5a18]/10 bg-white/60 text-[#9a8e80]" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`,
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping }), selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3.5 w-3.5 shrink-0" })]
 											}, topping);
 										})
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									isCrousty && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
 										onClick: () => setExtraSauce((value) => !value),
 										className: `mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`,
