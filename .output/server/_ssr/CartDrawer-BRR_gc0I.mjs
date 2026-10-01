@@ -11,20 +11,28 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BXF4ACer.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BRR_gc0I.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
 var images = {
-	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
-	"crousty-chicken-curry": "/assets/bowl-crousty-DhSdFdMk.jpg"
+	"mighty-gyros": bowl_crousty_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
+	"saumon-wasabi": bowl_scampi_default,
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_chicken_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const image = images[dishId];
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	const image = images[dishId] ?? "/assets/bowl-chicken-DVKFm73l.jpg";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		role: "img",
 		"aria-label": alt,
 		className: "relative h-full w-full overflow-hidden bg-[#ece8dc]",
-		children: image ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: `h-full w-full bg-cover bg-center bg-no-repeat transition-[filter] duration-500 ${className}`,
 			style: {
 				backgroundImage: `url("${image}")`,
@@ -34,13 +42,7 @@ function DishImage({ dishId, alt, className = "" }) {
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			"aria-hidden": "true",
 			className: "pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,248,230,.08),transparent_45%,rgba(12,31,24,.08))]"
-		})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "flex h-full min-h-[220px] items-center justify-center bg-[#f1eee5] px-6 text-center",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-xs font-semibold uppercase tracking-[0.18em] text-[#758079]",
-				children: "Photo produit à venir"
-			})
-		})
+		})]
 	});
 }
 function cn(...inputs) {
