@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
-import { f as Menu, o as ShoppingBag, p as MapPin, t as X, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
+import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
 import { n as CartDrawer, r as DishImage } from "./CartDrawer-BRR_gc0I.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { t as motion } from "../_libs/framer-motion+[...].mjs";

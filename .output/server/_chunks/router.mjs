@@ -4,7 +4,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { _ as useNavigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, d as Slot, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { _ as CircleCheck, a as ShoppingCart, b as ArrowLeft, c as RefreshCw, d as Minus, f as Menu, g as Clock, h as CreditCard, i as Store, l as Plus, m as LoaderCircle, n as UtensilsCrossed, o as ShoppingBag, p as MapPin, r as Trash2, s as Shield, t as X, u as PhoneCall, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
+import { _ as CircleCheck, a as ShoppingCart, b as ArrowRight, c as RefreshCw, d as Minus, f as Menu, g as Clock, h as CreditCard, i as Store, l as Plus, m as LoaderCircle, n as UtensilsCrossed, o as ShoppingBag, p as MapPin, r as Trash2, s as Shield, t as X, u as PhoneCall, v as Check, x as ArrowLeft, y as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-5CXnXjNg.css";
+var styles_default = "/assets/styles-Dr9w-arL.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -4278,6 +4278,8 @@ function ProductPage() {
 	const { t, language, setLanguage } = useTranslation();
 	const { addItem, setIsCartOpen, items } = useCart();
 	const { available } = useStock();
+	const [selectedToppings, setSelectedToppings] = React.useState([]);
+	const [extraSauce, setExtraSauce] = React.useState(false);
 	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 	if (!product) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-background px-5",
@@ -4294,14 +4296,20 @@ function ProductPage() {
 		})
 	});
 	const productOk = available(product.id);
+	const isCrousty = product.id.startsWith("crousty-");
+	const finalPrice = product.price + (isCrousty && extraSauce ? 1 : 0);
+	const toggleTopping = (topping) => {
+		setSelectedToppings((current) => current.includes(topping) ? current.filter((item) => item !== topping) : current.length < 2 ? [...current, topping] : current);
+	};
 	const handleAddToCart = () => {
 		if (!productOk) return;
+		const options = [...selectedToppings.map((item) => "Topping : " + item), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
 		addItem({
 			id: product.id,
 			name: product.name,
-			price: product.price,
+			price: finalPrice,
 			quantity: 1,
-			toppings: []
+			toppings: options
 		});
 		setIsCartOpen(true);
 	};
@@ -4407,6 +4415,46 @@ function ProductPage() {
 								className: "mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral",
 								children: t("product.unavailable")
 							}),
+							isCrousty && productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mb-6 rounded-3xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 p-5 sm:p-6",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-start justify-between gap-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]",
+											children: "Personnalise ton Crousty"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "mt-1 text-xl font-black text-[#241a12]",
+											children: "Ajoute ta touche"
+										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]",
+											children: "2 toppings max"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-2 text-xs leading-5 text-[#6e6255]",
+										children: "La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire."
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3",
+										children: customToppings.map((topping) => {
+											const selected = selectedToppings.includes(topping);
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => toggleTopping(topping),
+												className: `flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping }), selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3.5 w-3.5 shrink-0" })]
+											}, topping);
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setExtraSauce((value) => !value),
+										className: `mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sauce extra" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+1€" })]
+									})
+								]
+							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6",
 								children: [
@@ -4417,7 +4465,7 @@ function ProductPage() {
 											children: "Composition"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-xs font-semibold text-muted-foreground",
-											children: product.id.startsWith("crousty-") ? "Recette signature" : "Recette originale"
+											children: isCrousty ? "Recette signature" : "Recette originale"
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -4437,7 +4485,7 @@ function ProductPage() {
 									disabled: !productOk,
 									size: "lg",
 									className: "h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90 disabled:opacity-50",
-									children: productOk ? t("menu.add_to_cart") : t("product.out_of_stock")
+									children: productOk ? "Ajouter au panier · € " + finalPrice.toFixed(2) : t("product.out_of_stock")
 								})
 							})
 						]
@@ -4451,7 +4499,7 @@ function ProductPage() {
 					disabled: !productOk,
 					size: "lg",
 					className: "h-12 w-full rounded-full bg-coral text-base font-black text-white hover:bg-coral/90 disabled:opacity-50",
-					children: productOk ? `${t("menu.add_to_cart")} · € ${product.price.toFixed(2)}` : t("product.out_of_stock")
+					children: productOk ? "Ajouter au panier · € " + finalPrice.toFixed(2) : t("product.out_of_stock")
 				})
 			})
 		]

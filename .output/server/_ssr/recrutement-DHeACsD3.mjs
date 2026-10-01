@@ -1,7 +1,7 @@
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
-import { b as ArrowLeft, p as MapPin, u as PhoneCall, v as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
+import { p as MapPin, u as PhoneCall, x as ArrowLeft, y as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/recrutement-DHeACsD3.js
 var import_jsx_runtime = require_jsx_runtime();
 function RecruitmentPage() {
