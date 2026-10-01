@@ -4,7 +4,7 @@ Restaurant ordering website for Poke N Bowl Visé.
 
 ## Deployment
 
-Production deployment is **GitHub + Vercel + Nitro**.
+Production deployment is **O2Switch** from the `o2switch-clean` branch.
 
 ## Payments
 
@@ -23,11 +23,4 @@ It:
 
 The MUNBYN ITPP047 must be connected by Ethernet to the same local network as the Windows computer. MUNBYN documents Epson mode and ESC/POS support for this printer family.
 
-## Required Vercel environment variables
-
-- `MOLLIE_API_KEY`
-- `DATABASE_URL`
-- `PRINTER_AGENT_SECRET`
-
-Secrets belong in Vercel Environment Variables, not in GitHub.
-
+Secrets belong in deployment environment variables, not in GitHub.
