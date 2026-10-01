@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, ShoppingBag, UtensilsCrossed } from "lucide-reac
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
-import { bowls, drinks, desserts } from "../lib/data";
+import { bowls, drinks, desserts, customBases, customMixIns, customProteins, customSauces, customToppings } from "../lib/data";
 import { DishImage } from "../components/DishImage";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
@@ -17,6 +17,7 @@ function CommanderPage() {
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
+  const displayedBowls = [...bowls.filter((b) => b.id.startsWith("crousty-")), ...bowls.filter((b) => !b.id.startsWith("crousty-"))];
 
   const quickAdd = (item: { id: string; name: string; price: number; image?: string }) => {
     if (!available(item.id)) return;
@@ -130,17 +131,17 @@ function CommanderPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-            {bowls.map((bowl, i) => {
+            {displayedBowls.map((bowl, i) => {
               const ok = available(bowl.id);
               return (
                 <motion.div
                   key={bowl.id}
-                  initial={{ opacity: 0, y: 18 }}
+                  initial={{ opacity: 1, y: 0 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.04 }}
                   className={`overflow-hidden rounded-[24px] bg-white shadow-[0_20px_60px_-38px_rgba(0,0,0,.4)] sm:rounded-[28px] ${
-                    !ok ? "opacity-55" : ""
+                    !ok ? "opacity-55" : bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45]/70 shadow-[0_25px_70px_-35px_rgba(215,255,69,.55)]" : ""
                   }`}
                 >
                   {ok ? (
@@ -157,7 +158,32 @@ function CommanderPage() {
             })}
           </div>
 
-          <div className="mt-14 grid gap-5 sm:mt-16 lg:mt-20 lg:grid-cols-2 lg:gap-6">
+          <div className="mt-14 rounded-[28px] bg-[#10251f] p-6 text-white sm:mt-16 sm:p-8 lg:mt-20">
+            <div className="max-w-xl">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">{t("cmd.customization_title")}</p>
+              <p className="mt-2 text-sm leading-6 text-white/60">{t("cmd.customization_note")}</p>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {[
+                [t("cmd.bases"), customBases],
+                [t("cmd.mixins"), customMixIns],
+                [t("cmd.protein"), customProteins],
+                [t("cmd.sauces"), customSauces],
+                [t("cmd.toppings"), customToppings],
+              ].map(([title, values]) => (
+                <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.12em] text-[#d7ff45]">{title}</h3>
+                  <div className="mt-3 space-y-1.5">
+                    {(values as string[]).map((value) => (
+                      <p key={value} className="text-[11px] leading-4 text-white/70">{value}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-5 sm:mt-6 lg:grid-cols-2 lg:gap-6">
             <div className="rounded-[24px] bg-white p-6 sm:rounded-[28px] sm:p-8">
               <div className="flex items-center gap-3">
                 <UtensilsCrossed className="h-5 w-5 text-[#ff705f]" />
@@ -279,7 +305,7 @@ function BowlCard({
             </span>
           )}
         </div>
-        <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079] sm:line-clamp-3">{bowl.desc}</p>
+        <p className="mt-2 text-[13px] leading-5 text-[#758079]">{bowl.desc}</p>
         <div
           className={`mt-4 text-[9px] font-black uppercase tracking-[0.14em] ${
             ok ? "text-[#ff705f]" : "text-[#9aa39c]"

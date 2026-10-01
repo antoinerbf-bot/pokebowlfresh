@@ -14,4 +14,7 @@ deployment:
     - /bin/cat > $DEPLOYPATH/server.js <<'EOF'
 import "./.output/server/index.mjs";
 EOF
+    - /bin/mkdir -p $DEPLOYPATH/tmp
     - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
+# O2Switch production deployment trigger.
+# Force fresh production sync.

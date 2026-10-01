@@ -1,3 +1,4 @@
+import React from "react";
 import bowlChicken from "@/assets/bowl-chicken.jpg";
 import bowlCrousty from "@/assets/bowl-crousty.jpg";
 import bowlScampi from "@/assets/bowl-scampi.jpg";
@@ -9,7 +10,7 @@ const images: Record<string, string> = {
   "saumon-wasabi": bowlScampi,
   "spicy-chicken": bowlChicken,
   "crousty-chicken-curry": bowlCrousty,
-  "crousty-chicken-sauce-blanche": bowlCrousty,
+  "crousty-chicken-sauce-blanche": bowlChicken,
 };
 
 export function DishImage({
@@ -21,17 +22,23 @@ export function DishImage({
   alt: string;
   className?: string;
 }) {
-  const image = images[dishId] ?? bowlChicken;
+  const src = images[dishId];
+
+  if (!src) {
+    return (
+      <div className={`flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`}>
+        Photo produit
+      </div>
+    );
+  }
 
   return (
-    <div
-      role="img"
-      aria-label={alt}
-      className={`h-full w-full overflow-hidden bg-cover bg-center bg-no-repeat ${className}`}
-      style={{
-        backgroundImage: `url("${image}")`,
-        minHeight: "100%",
-      }}
+    <img
+      src={src}
+      alt={alt}
+      className={`h-full w-full rounded-2xl object-cover ${className}`}
+      loading="lazy"
+      decoding="async"
     />
   );
 }

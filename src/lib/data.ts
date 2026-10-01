@@ -28,7 +28,7 @@ export const customMixIns = [
 export const customProteins = [
   "Poulet",
   "Gyros",
-  "Saumon",
+  "Saumon + 1 €",
   "Scampis",
 ];
 
@@ -45,7 +45,7 @@ export const customSauces = [
 
 export const customToppings = [
   "Oignons frits",
-  "Sésame seeds",
+  "Sésame",
   "Noix de cajou",
   "Nachos",
   "Flocons-Chili",
@@ -60,6 +60,7 @@ export const bowls = [
     name: "Mighty Gyros",
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
+    composition: ["Guacamole", "Maïs", "Tomates cerises", "Concombre", "Oignons", "Gyros maison", "Spicy mayo", "Flocons de chili"],
     tag: "Signature",
   },
   {
@@ -67,6 +68,7 @@ export const bowls = [
     name: "Sweet Chicken",
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+    composition: ["Guacamole", "Maïs", "Tomates cerises", "Mangue", "Feta", "Poulet maison", "Sauce teriyaki", "Oignons croustillants", "Sésame mix", "Nachos"],
     tag: "Best-seller",
   },
   {
@@ -74,6 +76,7 @@ export const bowls = [
     name: "Scampis Royal",
     price: 10.00,
     desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+    composition: ["Guacamole", "Edamame", "Tomates", "Concombre", "Poivrons", "Scampis", "Spicy mayo", "Jalapeños", "Nachos", "Flocons de chili"],
     tag: "Signature",
   },
   {
@@ -81,6 +84,7 @@ export const bowls = [
     name: "Saumon Wasabi",
     price: 11.00,
     desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
+    composition: ["Avocat", "Salade d'algues", "Mangue", "Maïs", "Edamame", "Saumon", "Mayo wasabi", "Sésame mix", "Nachos"],
     tag: "Premium",
   },
   {
@@ -88,6 +92,7 @@ export const bowls = [
     name: "Spicy Chicken",
     price: 10.00,
     desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
+    composition: ["Avocat", "Patates douces", "Maïs", "Jalapeños", "Feta", "Poulet maison", "Spicy mayo", "Flocons de chili", "Sésame mix", "Nachos"],
     tag: "Épicé",
   },
   {
@@ -95,14 +100,18 @@ export const bowls = [
     name: "Crousty Chicken Curry",
     price: 11.00,
     desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
+    composition: ["Riz parfumé", "Poulet croustillant", "Oignons frits croustillants", "Sauce curry onctueuse"],
     tag: "Nouveau",
+    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
   },
   {
     id: "crousty-chicken-sauce-blanche",
     name: "Crousty Chicken Sauce Blanche",
     price: 11.00,
     desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
+    composition: ["Riz parfumé", "Poulet croustillant", "Oignons frits croustillants", "Sauce blanche maison"],
     tag: "Nouveau",
+    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
   },
 ];
 

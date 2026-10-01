@@ -41,7 +41,7 @@ const HOUR_ROWS = [
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18 }}
+      initial={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
@@ -56,6 +56,7 @@ function Index() {
   const { items, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const displayedBowls = [...bowls.filter((b) => b.id.startsWith("crousty-")), ...bowls.filter((b) => !b.id.startsWith("crousty-"))];
   const closeMobile = () => setMobileOpen(false);
   const goHome = () => {
     setMobileOpen(false);
@@ -134,51 +135,168 @@ function Index() {
       </header>
 
       <main>
-        <section className="relative isolate flex min-h-[520px] items-end bg-[#071713] text-white sm:min-h-[640px] sm:items-center">
+        <section className="relative isolate overflow-hidden bg-[#071713] text-white">
           <div className="absolute inset-0 -z-20">
-            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center sm:object-[center_45%]" />
+            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-30" />
           </div>
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(7,23,19,.75)_0%,rgba(7,23,19,.4)_40%,rgba(7,23,19,.82)_100%)] sm:bg-[linear-gradient(90deg,rgba(7,23,19,.92)_0%,rgba(7,23,19,.55)_50%,rgba(7,23,19,.2)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_45%,rgba(215,255,69,.13),transparent_28%),linear-gradient(90deg,#071713_0%,rgba(7,23,19,.96)_48%,rgba(7,23,19,.78)_100%)]" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1320px] min-w-0 px-5 pb-20 pt-24 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8">
+          <div className="relative z-10 mx-auto grid min-h-[650px] max-w-[1320px] items-center gap-8 px-5 pb-10 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[.92fr_1.08fr] lg:gap-12 lg:px-8 lg:py-16">
             <div className="max-w-xl">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
-                {t("hero.location")}
-              </p>
-              <h1 className="mt-3 font-sans font-extrabold tracking-tight text-[1.875rem] leading-[1.3] sm:text-4xl sm:leading-[1.25] lg:text-5xl">
-                <span className="block drop-shadow-[0_2px_10px_rgba(0,0,0,.55)]">{t("hero.title1")}</span>
-                <span className="mt-1 block pb-1 text-[#d7ff45] drop-shadow-[0_2px_12px_rgba(0,0,0,.65)]">{t("hero.title2")}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45]" />
+                Crousty Chicken · best-seller
+              </div>
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">{t("hero.location")}</p>
+              <h1 className="mt-3 font-sans text-[2.25rem] font-black leading-[.98] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
+                <span className="block">{t("hero.title1")}</span>
+                <span className="mt-2 block text-[#d7ff45]">{t("hero.title2")}</span>
               </h1>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-white/80 sm:text-[15px]">
-                {t("hero.desc")}
-              </p>
-              <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center">
-                <Link
-                  to="/commander"
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_14px_40px_-12px_rgba(255,112,95,.85)] transition hover:brightness-110"
-                >
+              <p className="mt-5 max-w-md text-sm leading-6 text-white/70 sm:text-base">{t("hero.desc")}</p>
+              <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
+                <Link to="/commander" className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_18px_45px_-16px_rgba(255,112,95,.9)] transition hover:brightness-110">
                   {t("hero.order")} <ArrowRight className="h-4 w-4" />
                 </Link>
-                <a
-                  href="#carte"
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/25 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10"
-                >
+                <a href="#carte" className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10">
                   {t("hero.menu")}
                 </a>
               </div>
-              <p className="mt-5 text-[11px] font-semibold tracking-wide text-white/50">
+              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">
                 {t("hero.recipes")} · {t("hero.from")} · {t("hero.city")}
               </p>
             </div>
+
+            <Reveal delay={0.08}>
+              <div className="relative">
+                <div className="absolute -inset-8 rounded-[50px] bg-[#d7ff45]/5 blur-3xl" />
+                <div className="relative grid gap-3 sm:grid-cols-[1.12fr_.88fr] sm:items-end">
+                  <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[#f7f4ec] shadow-[0_35px_90px_-35px_rgba(0,0,0,.95)] transition duration-500 hover:-translate-y-1">
+                    <div className="relative aspect-[.9] overflow-hidden sm:aspect-[.82]">
+                      <DishImage dishId="crousty-chicken-curry" alt={t("feature.curry")} className="h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.08]" />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.03)_30%,rgba(0,0,0,.78)_100%)]" />
+                      <div className="absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.14em] text-[#10251f]">11€ · menu étudiant</div>
+                      <div className="absolute bottom-5 left-5 right-5 text-white">
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/65">Signature · Crousty Chicken</p>
+                        <h2 className="mt-1 text-3xl font-black leading-none tracking-tight sm:text-4xl">{t("feature.curry")}</h2>
+                        <p className="mt-2 max-w-xs text-xs leading-5 text-white/75">{t("feature.curry_desc")}</p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <div className="grid gap-3">
+                    <Link to="/product/$productId" params={{ productId: "crousty-chicken-sauce-blanche" }} className="group overflow-hidden rounded-[26px] border border-white/10 bg-[#f7f4ec] shadow-[0_25px_65px_-30px_rgba(0,0,0,.9)] transition duration-500 hover:-translate-y-1">
+                      <div className="relative aspect-[1.18] overflow-hidden">
+                        <DishImage dishId="crousty-chicken-sauce-blanche" alt={t("feature.white")} className="h-full w-full transition duration-700 group-hover:scale-[1.08]" />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
+                        <div className="absolute bottom-4 left-4 right-4 text-white">
+                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/65">Signature</p>
+                          <h3 className="mt-1 text-xl font-black leading-none">{t("feature.white")}</h3>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="rounded-[24px] border border-[#d7ff45]/15 bg-white/[0.05] p-4 backdrop-blur-sm sm:p-5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">Crousty Mix</p>
+                          <p className="mt-1 text-sm font-black text-white">Curry + Sauce blanche</p>
+                        </div>
+                        <ArrowRight className="h-5 w-5 shrink-0 text-[#d7ff45]" />
+                      </div>
+                      <p className="mt-2 text-[11px] leading-5 text-white/45">{t("feature.hero_hint")}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
-
         <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="flex w-max whitespace-nowrap">
             {Array.from({ length: 8 }).map((_, i) => (
               <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Poke N Bowl · Fresh food · Visé <span className="mx-6">✦</span></span>
             ))}
           </motion.div>
+        </section>
+
+        <section className="bg-[#ead9bb] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-[1180px]">
+            <Reveal>
+              <div className="text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Poke N Bowl · Signature</p>
+                <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
+                  Le croustillant
+                </h2>
+                <h3 className="mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#a96b0d] sm:text-4xl lg:text-5xl">
+                  qui fait la différence
+                </h3>
+                <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-black uppercase tracking-[0.08em] sm:text-sm">
+                  <span>✦ Fait maison</span>
+                  <span className="text-[#a96b0d]">•</span>
+                  <span>🔥 Ultra croustillant</span>
+                  <span className="text-[#a96b0d]">•</span>
+                  <span>♡ Healthy</span>
+                </div>
+              </div>
+            </Reveal>
+
+            <div className="mt-9 grid gap-6 md:grid-cols-2">
+              {[
+                {
+                  id: "crousty-chicken-sauce-blanche",
+                  name: "Crousty Chicken · Sauce blanche",
+                  label: "Riz jasmin",
+                  desc: "Riz jasmin parfumé, poulet croustillant, sauce blanche maison et oignons frits.",
+                },
+                {
+                  id: "crousty-chicken-curry",
+                  name: "Crousty Chicken · Curry",
+                  label: "Riz curry",
+                  desc: "Riz au curry onctueux, poulet croustillant, sauce curry maison et oignons frits.",
+                },
+              ].map((item, index) => (
+                <Reveal key={item.id} delay={index * 0.06}>
+                  <Link
+                    to="/product/$productId"
+                    params={{ productId: item.id }}
+                    className="group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-[#f8f0df] shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1"
+                  >
+                    <div className="relative aspect-[1.22] overflow-hidden bg-[#e7d4b4]">
+                      <DishImage
+                        dishId={item.id}
+                        alt={item.name}
+                        className="h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.06]"
+                      />
+                      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+                        <span className="bg-[#8b5510] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white">
+                          {item.label}
+                        </span>
+                        <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black">11€</span>
+                      </div>
+                    </div>
+                    <div className="p-5 text-center sm:p-7">
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#a96b0d]">Crousty Chicken</p>
+                      <h3 className="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">{item.name.split(" · ")[1]}</h3>
+                      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#6e6255]">{item.desc}</p>
+                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#241a12] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#a96b0d]">
+                        Découvrir la recette <ArrowRight className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal delay={0.08}>
+              <div className="mt-7 text-center">
+                <span className="inline-flex items-center gap-3 bg-[#a96b0d] px-6 py-3 text-white shadow-lg">
+                  <span className="text-[11px] font-black uppercase tracking-[0.14em]">Menu étudiant</span>
+                  <span className="text-xl font-black">11€</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.1em]">· boisson incluse</span>
+                </span>
+                <p className="mt-3 text-xs font-bold text-[#6e6255]">Sauce extra +1€ · Viens goûter la différence.</p>
+              </div>
+            </Reveal>
+          </div>
         </section>
 
         <section id="carte" className="scroll-mt-10 mx-auto max-w-[1320px] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
@@ -200,25 +318,29 @@ function Index() {
             </div>
           </Reveal>
 
-          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {bowls.map((bowl, index) => (
+          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {displayedBowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.03}>
-                <Link to="/product/$productId" params={{ productId: bowl.id }} className="group block overflow-hidden rounded-[20px] bg-white shadow-[0_14px_45px_-30px_rgba(0,0,0,.35)] transition duration-300 hover:-translate-y-1 sm:rounded-[24px]">
-                  <div className="relative aspect-[1.48] overflow-hidden sm:aspect-[1.48]">
-                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-500 group-hover:scale-[1.03]" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-[0.1em]">{bowl.tag}</span>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-2.5 py-1 text-xs font-black">€ {bowl.price.toFixed(2)}</span>
+                <Link
+                  to="/product/$productId"
+                  params={{ productId: bowl.id }}
+                  className={`group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1 ${bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45] ring-offset-2" : ""}`}
+                >
+                  <div className="relative aspect-[1.18] overflow-hidden bg-[#ece8dc]">
+                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-700 group-hover:scale-[1.04]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02)_35%,rgba(0,0,0,.5)_100%)]" />
+                    <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.12em]">{bowl.tag}</span>
+                    <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-xs font-black">€ {bowl.price.toFixed(2)}</span>
                   </div>
-                  <div className="p-4 sm:p-5">
+                  <div className="flex h-full flex-col p-5 sm:p-6">
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="min-w-0 flex-1 break-words text-[15px] font-black leading-snug sm:text-lg">{bowl.name}</h3>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] group-hover:bg-[#ff705f] group-hover:text-white">
+                      <h3 className="min-w-0 flex-1 break-words text-[16px] font-black leading-tight sm:text-xl">{bowl.name}</h3>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#758079]">{bowl.desc}</p>
-                    <p className="mt-3 text-[9px] font-black uppercase tracking-[0.12em] text-[#ff705f]">{t("menu.customize")} →</p>
+                    <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
+                    <div className="mt-auto pt-5 text-[9px] font-black uppercase tracking-[0.14em] text-[#ff705f]">{t("menu.customize")} · {t("menu.order")} →</div>
                   </div>
                 </Link>
               </Reveal>

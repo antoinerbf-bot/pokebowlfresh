@@ -1,4 +1,5 @@
 name: Build and publish O2Switch artifact
+# O2Switch deployment pipeline
 
 on:
   push:
