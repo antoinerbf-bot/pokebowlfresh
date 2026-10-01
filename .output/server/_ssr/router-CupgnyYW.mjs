@@ -10,7 +10,7 @@ import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as g
 import { t as Route$12 } from "./order.success-BgUYhwd7.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Du4VuNd5.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CupgnyYW.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-CZ-XHhkt.css";
@@ -181,7 +181,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$5 = () => import("./routes-B9kFJsII.mjs");
+var $$splitComponentImporter$5 = () => import("./routes-DHc6XXqi.mjs");
 var Route$9 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais à emporter" }, {
 		name: "description",
@@ -191,7 +191,7 @@ var Route$9 = createFileRoute("/")({
 });
 var $$splitComponentImporter$4 = () => import("./checkout-DcjxEzDp.mjs");
 var Route$8 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./commander-BwsPBahw.mjs");
+var $$splitComponentImporter$3 = () => import("./commander-B9DWxMDv.mjs");
 var Route$7 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
 var $$splitComponentImporter$2 = () => import("./contact-BvrEJfBM.mjs");
 var Route$6 = createFileRoute("/contact")({

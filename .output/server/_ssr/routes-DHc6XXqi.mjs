@@ -10,7 +10,7 @@ import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as
 import { n as CartDrawer, r as DishImage } from "./CartDrawer-DQNXeaNT.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-B9kFJsII.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DHc6XXqi.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -28,8 +28,8 @@ var HOUR_ROWS = [
 function Reveal({ children, delay = 0 }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 		initial: {
-			opacity: 0,
-			y: 18
+			opacity: 1,
+			y: 0
 		},
 		whileInView: {
 			opacity: 1,
