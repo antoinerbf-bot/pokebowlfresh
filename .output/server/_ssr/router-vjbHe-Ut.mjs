@@ -4,16 +4,16 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-v6B2RrbN.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$11 } from "../_productId-BpzcMUog.mjs";
+import { t as Route$11 } from "../_productId-CHSbJlwX.mjs";
 import { n as booleanType, o as objectType, s as stringType } from "../_libs/zod.mjs";
 import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as getOrderFromStore, s as listOrdersFromStore, t as acknowledgePrint } from "./order-store-C20kjW_r.mjs";
 import { t as Route$12 } from "./order.success-BgUYhwd7.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CupgnyYW.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-vjbHe-Ut.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-CZ-XHhkt.css";
+var styles_default = "/assets/styles-zDTSZcLB.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -181,7 +181,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$5 = () => import("./routes-DHc6XXqi.mjs");
+var $$splitComponentImporter$5 = () => import("./routes-ju7593oJ.mjs");
 var Route$9 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais à emporter" }, {
 		name: "description",
@@ -191,7 +191,7 @@ var Route$9 = createFileRoute("/")({
 });
 var $$splitComponentImporter$4 = () => import("./checkout-DcjxEzDp.mjs");
 var Route$8 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./commander-B9DWxMDv.mjs");
+var $$splitComponentImporter$3 = () => import("./commander-CypUbl6r.mjs");
 var Route$7 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
 var $$splitComponentImporter$2 = () => import("./contact-BvrEJfBM.mjs");
 var Route$6 = createFileRoute("/contact")({

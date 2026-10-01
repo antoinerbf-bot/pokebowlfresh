@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CZ-XHhkt.css";
+var styles_default = "/assets/styles-zDTSZcLB.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -759,7 +759,7 @@ function DishImage({ dishId, alt, className = "" }) {
 		src,
 		alt,
 		className: `h-full w-full rounded-2xl object-cover ${className}`,
-		loading: "lazy",
+		loading: "eager",
 		decoding: "async"
 	});
 }
@@ -3541,6 +3541,17 @@ function BowlCard({ bowl, ok, composeLabel, soldOut }) {
 				className: "mt-2 text-[13px] leading-5 text-[#758079]",
 				children: bowl.desc
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3 flex flex-wrap gap-1.5",
+				children: bowl.composition.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "rounded-full bg-[#f2f1ea] px-2.5 py-1 text-[9px] font-bold leading-3 text-[#66736d]",
+					children: item
+				}, item))
+			}),
+			"menuNote" in bowl && bowl.menuNote ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-3 rounded-xl bg-[#fff6df] px-3 py-2 text-[10px] font-black leading-4 text-[#8a5a0b]",
+				children: bowl.menuNote
+			}) : null,
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: `mt-4 text-[9px] font-black uppercase tracking-[0.14em] ${ok ? "text-[#ff705f]" : "text-[#9aa39c]"}`,
 				children: ok ? composeLabel : soldOut

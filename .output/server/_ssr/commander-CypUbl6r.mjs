@@ -5,11 +5,11 @@ import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { b as ArrowRight, n as UtensilsCrossed, o as ShoppingBag, x as ArrowLeft } from "../_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage } from "./CartDrawer-DQNXeaNT.mjs";
+import { n as CartDrawer, r as DishImage } from "./CartDrawer-CP8O_Ahj.mjs";
 import { t as useStock } from "./useStock-BJLw6Bgd.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/commander-B9DWxMDv.js
+//#region node_modules/.nitro/vite/services/ssr/assets/commander-CypUbl6r.js
 var import_jsx_runtime = require_jsx_runtime();
 function CommanderPage() {
 	const { t, language, setLanguage } = useTranslation();
@@ -349,6 +349,17 @@ function BowlCard({ bowl, ok, composeLabel, soldOut }) {
 				className: "mt-2 text-[13px] leading-5 text-[#758079]",
 				children: bowl.desc
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3 flex flex-wrap gap-1.5",
+				children: bowl.composition.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "rounded-full bg-[#f2f1ea] px-2.5 py-1 text-[9px] font-bold leading-3 text-[#66736d]",
+					children: item
+				}, item))
+			}),
+			"menuNote" in bowl && bowl.menuNote ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-3 rounded-xl bg-[#fff6df] px-3 py-2 text-[10px] font-black leading-4 text-[#8a5a0b]",
+				children: bowl.menuNote
+			}) : null,
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: `mt-4 text-[9px] font-black uppercase tracking-[0.14em] ${ok ? "text-[#ff705f]" : "text-[#9aa39c]"}`,
 				children: ok ? composeLabel : soldOut

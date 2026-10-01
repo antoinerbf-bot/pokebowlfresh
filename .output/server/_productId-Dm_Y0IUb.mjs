@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-BpzcMUog.mjs";
+import { t as Route } from "./_productId-CHSbJlwX.mjs";
 import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
 import { a as ShoppingCart, v as Check, x as ArrowLeft } from "./_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-DQNXeaNT.mjs";
+import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-CP8O_Ahj.mjs";
 import { t as useStock } from "./_ssr/useStock-BJLw6Bgd.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-mfp99OGb.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-Dm_Y0IUb.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {

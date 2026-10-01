@@ -11,7 +11,7 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DQNXeaNT.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CP8O_Ahj.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
@@ -36,7 +36,7 @@ function DishImage({ dishId, alt, className = "" }) {
 		src,
 		alt,
 		className: `h-full w-full rounded-2xl object-cover ${className}`,
-		loading: "lazy",
+		loading: "eager",
 		decoding: "async"
 	});
 }
