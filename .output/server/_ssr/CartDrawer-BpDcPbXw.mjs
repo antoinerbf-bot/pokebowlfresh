@@ -11,43 +11,33 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-D99f9MjN.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BpDcPbXw.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var poke_menu_collage_default = "/assets/poke-menu-collage-Bo5XEq9g.jpg";
-var positions = {
-	"mighty-gyros": "0% 0%",
-	"sweet-chicken": "50% 0%",
-	"scampis-royaux": "100% 0%",
-	"saumon-wasabi": "0% 100%",
-	"spicy-chicken": "33.333% 100%",
-	"crousty-chicken-curry": "66.666% 100%",
-	"crousty-chicken-sauce-blanche": "100% 100%"
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+var images = {
+	"mighty-gyros": bowl_crousty_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
+	"saumon-wasabi": bowl_scampi_default,
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_chicken_default
 };
-var bottomIds = /* @__PURE__ */ new Set([
-	"saumon-wasabi",
-	"spicy-chicken",
-	"crousty-chicken-curry",
-	"crousty-chicken-sauce-blanche"
-]);
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId];
-	if (!position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	const src = images[dishId];
+	if (!src) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
 		children: "Photo produit"
 	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		role: "img",
-		"aria-label": alt,
-		className: `overflow-hidden rounded-2xl bg-[#eee8dc] ${className}`,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "h-full w-full bg-cover bg-no-repeat",
-			style: {
-				backgroundImage: `url(${poke_menu_collage_default})`,
-				backgroundPosition: position,
-				backgroundSize: `${bottomIds.has(dishId) ? "400%" : "300%"} 200%`
-			}
-		})
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src,
+		alt,
+		className: `h-full w-full rounded-2xl object-cover ${className}`,
+		loading: "lazy",
+		decoding: "async"
 	});
 }
 function cn(...inputs) {
