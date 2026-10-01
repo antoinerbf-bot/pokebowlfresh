@@ -4,16 +4,16 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-v6B2RrbN.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$11 } from "../_productId-B4fe7u9Z.mjs";
+import { t as Route$11 } from "../_productId-BpzcMUog.mjs";
 import { n as booleanType, o as objectType, s as stringType } from "../_libs/zod.mjs";
 import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as getOrderFromStore, s as listOrdersFromStore, t as acknowledgePrint } from "./order-store-C20kjW_r.mjs";
 import { t as Route$12 } from "./order.success-BgUYhwd7.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-yF7C5vwf.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Du4VuNd5.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-CBxpvzDG.css";
+var styles_default = "/assets/styles-CZ-XHhkt.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {

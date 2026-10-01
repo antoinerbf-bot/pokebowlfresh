@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CBxpvzDG.css";
+var styles_default = "/assets/styles-CZ-XHhkt.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -4344,8 +4344,8 @@ function ProductPage() {
 	const { t, language, setLanguage } = useTranslation();
 	const { addItem, setIsCartOpen, items } = useCart();
 	const { available } = useStock();
-	const [selectedToppings, setSelectedToppings] = React.useState([]);
-	const [extraSauce, setExtraSauce] = React.useState(false);
+	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [extraSauce, setExtraSauce] = import_react.useState(false);
 	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 	if (!product) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-background px-5",
@@ -4467,14 +4467,14 @@ function ProductPage() {
 								className: "mb-6 text-[15px] leading-relaxed text-muted-foreground",
 								children: product.desc
 							}),
-							product.id.startsWith("crousty-") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							product.menuNote && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mb-6 rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 px-4 py-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-sm font-black text-[#8f5b12]",
-									children: "Menu étudiant · 11€ · boisson incluse"
+									children: product.menuNote
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "mt-1 text-xs font-semibold text-[#6e6255]",
-									children: "Sauce extra : +1€"
+									children: "Sauce extra disponible : +1€"
 								})]
 							}),
 							!productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -4527,22 +4527,29 @@ function ProductPage() {
 								className: "rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "mb-3 flex items-center justify-between gap-3",
+										className: "mb-4 flex items-center justify-between gap-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "text-lg font-bold",
 											children: "Composition"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-xs font-semibold text-muted-foreground",
+											className: "shrink-0 text-xs font-semibold text-muted-foreground",
 											children: isCrousty ? "Recette signature" : "Recette originale"
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-sm leading-relaxed text-muted-foreground",
+										className: "mb-4 text-sm leading-relaxed text-muted-foreground",
 										children: product.desc
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-bold text-muted-foreground",
-										children: "Les recettes affichées correspondent au menu du restaurant. Pour voir les bases, mix-ins, protéines, sauces et toppings disponibles, consulte la section personnalisation de la page Commande."
+										className: "flex flex-wrap gap-2",
+										children: product.composition.map((ingredient) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-background px-3 py-1.5 text-xs font-bold text-foreground shadow-sm",
+											children: ingredient
+										}, ingredient))
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground",
+										children: "Tu peux ajouter jusqu’à 2 toppings inclus. Les options supplémentaires sont affichées juste au-dessus."
 									})
 								]
 							}),
