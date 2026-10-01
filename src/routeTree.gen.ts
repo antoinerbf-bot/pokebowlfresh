@@ -10,19 +10,31 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CommanderRouteImport } from './routes/commander'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
-import { Route as CommanderRouteImport } from './routes/commander'
+import { Route as AdminStocksRouteImport } from './routes/admin/stocks'
+import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
+import { Route as ApiOrdersRouteImport } from './routes/api/orders'
+import { Route as OrderSuccessRouteImport } from './routes/order.success'
+import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
+import { Route as ApiPrinterAckRouteImport } from './routes/api/printer/ack'
+import { Route as ApiPrinterQueueRouteImport } from './routes/api/printer/queue'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProductProductIdRoute = ProductProductIdRouteImport.update({
-  id: '/product/$productId',
-  path: '/product/$productId',
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommanderRoute = CommanderRouteImport.update({
+  id: '/commander',
+  path: '/commander',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -35,48 +47,143 @@ const RecrutementRoute = RecrutementRouteImport.update({
   path: '/recrutement',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CommanderRoute = CommanderRouteImport.update({
-  id: '/commander',
-  path: '/commander',
+const AdminStocksRoute = AdminStocksRouteImport.update({
+  id: '/admin/stocks',
+  path: '/admin/stocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMollieWebhookRoute = ApiMollieWebhookRouteImport.update({
+  id: '/api/mollie-webhook',
+  path: '/api/mollie-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOrdersRoute = ApiOrdersRouteImport.update({
+  id: '/api/orders',
+  path: '/api/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderSuccessRoute = OrderSuccessRouteImport.update({
+  id: '/order/success',
+  path: '/order/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductProductIdRoute = ProductProductIdRouteImport.update({
+  id: '/product/$productId',
+  path: '/product/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPrinterAckRoute = ApiPrinterAckRouteImport.update({
+  id: '/api/printer/ack',
+  path: '/api/printer/ack',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPrinterQueueRoute = ApiPrinterQueueRouteImport.update({
+  id: '/api/printer/queue',
+  path: '/api/printer/queue',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/product/$productId': typeof ProductProductIdRoute
+  '/checkout': typeof CheckoutRoute
+  '/commander': typeof CommanderRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
-  '/commander': typeof CommanderRoute
+  '/admin/stocks': typeof AdminStocksRoute
+  '/api/mollie-webhook': typeof ApiMollieWebhookRoute
+  '/api/orders': typeof ApiOrdersRoute
+  '/order/success': typeof OrderSuccessRoute
+  '/product/$productId': typeof ProductProductIdRoute
+  '/api/printer/ack': typeof ApiPrinterAckRoute
+  '/api/printer/queue': typeof ApiPrinterQueueRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/product/$productId': typeof ProductProductIdRoute
+  '/checkout': typeof CheckoutRoute
+  '/commander': typeof CommanderRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
-  '/commander': typeof CommanderRoute
+  '/admin/stocks': typeof AdminStocksRoute
+  '/api/mollie-webhook': typeof ApiMollieWebhookRoute
+  '/api/orders': typeof ApiOrdersRoute
+  '/order/success': typeof OrderSuccessRoute
+  '/product/$productId': typeof ProductProductIdRoute
+  '/api/printer/ack': typeof ApiPrinterAckRoute
+  '/api/printer/queue': typeof ApiPrinterQueueRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/product/$productId': typeof ProductProductIdRoute
+  '/checkout': typeof CheckoutRoute
+  '/commander': typeof CommanderRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
-  '/commander': typeof CommanderRoute
+  '/admin/stocks': typeof AdminStocksRoute
+  '/api/mollie-webhook': typeof ApiMollieWebhookRoute
+  '/api/orders': typeof ApiOrdersRoute
+  '/order/success': typeof OrderSuccessRoute
+  '/product/$productId': typeof ProductProductIdRoute
+  '/api/printer/ack': typeof ApiPrinterAckRoute
+  '/api/printer/queue': typeof ApiPrinterQueueRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/product/$productId' | '/contact' | '/recrutement' | '/commander'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/commander'
+    | '/contact'
+    | '/recrutement'
+    | '/admin/stocks'
+    | '/api/mollie-webhook'
+    | '/api/orders'
+    | '/order/success'
+    | '/product/$productId'
+    | '/api/printer/ack'
+    | '/api/printer/queue'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/product/$productId' | '/contact' | '/recrutement' | '/commander'
-  id: '__root__' | '/' | '/product/$productId' | '/contact' | '/recrutement' | '/commander'
+  to:
+    | '/'
+    | '/checkout'
+    | '/commander'
+    | '/contact'
+    | '/recrutement'
+    | '/admin/stocks'
+    | '/api/mollie-webhook'
+    | '/api/orders'
+    | '/order/success'
+    | '/product/$productId'
+    | '/api/printer/ack'
+    | '/api/printer/queue'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/commander'
+    | '/contact'
+    | '/recrutement'
+    | '/admin/stocks'
+    | '/api/mollie-webhook'
+    | '/api/orders'
+    | '/order/success'
+    | '/product/$productId'
+    | '/api/printer/ack'
+    | '/api/printer/queue'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProductProductIdRoute: typeof ProductProductIdRoute
+  CheckoutRoute: typeof CheckoutRoute
+  CommanderRoute: typeof CommanderRoute
   ContactRoute: typeof ContactRoute
   RecrutementRoute: typeof RecrutementRoute
-  CommanderRoute: typeof CommanderRoute
+  AdminStocksRoute: typeof AdminStocksRoute
+  ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
+  ApiOrdersRoute: typeof ApiOrdersRoute
+  OrderSuccessRoute: typeof OrderSuccessRoute
+  ProductProductIdRoute: typeof ProductProductIdRoute
+  ApiPrinterAckRoute: typeof ApiPrinterAckRoute
+  ApiPrinterQueueRoute: typeof ApiPrinterQueueRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -88,11 +195,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/product/$productId': {
-      id: '/product/$productId'
-      path: '/product/$productId'
-      fullPath: '/product/$productId'
-      preLoaderRoute: typeof ProductProductIdRouteImport
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/commander': {
+      id: '/commander'
+      path: '/commander'
+      fullPath: '/commander'
+      preLoaderRoute: typeof CommanderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -109,11 +223,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecrutementRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/commander': {
-      id: '/commander'
-      path: '/commander'
-      fullPath: '/commander'
-      preLoaderRoute: typeof CommanderRouteImport
+    '/admin/stocks': {
+      id: '/admin/stocks'
+      path: '/admin/stocks'
+      fullPath: '/admin/stocks'
+      preLoaderRoute: typeof AdminStocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mollie-webhook': {
+      id: '/api/mollie-webhook'
+      path: '/api/mollie-webhook'
+      fullPath: '/api/mollie-webhook'
+      preLoaderRoute: typeof ApiMollieWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/orders': {
+      id: '/api/orders'
+      path: '/api/orders'
+      fullPath: '/api/orders'
+      preLoaderRoute: typeof ApiOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order/success': {
+      id: '/order/success'
+      path: '/order/success'
+      fullPath: '/order/success'
+      preLoaderRoute: typeof OrderSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product/$productId': {
+      id: '/product/$productId'
+      path: '/product/$productId'
+      fullPath: '/product/$productId'
+      preLoaderRoute: typeof ProductProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/printer/ack': {
+      id: '/api/printer/ack'
+      path: '/api/printer/ack'
+      fullPath: '/api/printer/ack'
+      preLoaderRoute: typeof ApiPrinterAckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/printer/queue': {
+      id: '/api/printer/queue'
+      path: '/api/printer/queue'
+      fullPath: '/api/printer/queue'
+      preLoaderRoute: typeof ApiPrinterQueueRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -121,10 +277,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProductProductIdRoute: ProductProductIdRoute,
+  CheckoutRoute: CheckoutRoute,
+  CommanderRoute: CommanderRoute,
   ContactRoute: ContactRoute,
   RecrutementRoute: RecrutementRoute,
-  CommanderRoute: CommanderRoute,
+  AdminStocksRoute: AdminStocksRoute,
+  ApiMollieWebhookRoute: ApiMollieWebhookRoute,
+  ApiOrdersRoute: ApiOrdersRoute,
+  OrderSuccessRoute: OrderSuccessRoute,
+  ProductProductIdRoute: ProductProductIdRoute,
+  ApiPrinterAckRoute: ApiPrinterAckRoute,
+  ApiPrinterQueueRoute: ApiPrinterQueueRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

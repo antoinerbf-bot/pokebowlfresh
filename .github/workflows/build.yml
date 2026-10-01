@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - o2switch-clean
+      - main
   pull_request:
 
 permissions:
