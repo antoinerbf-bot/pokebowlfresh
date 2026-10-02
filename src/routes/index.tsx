@@ -145,7 +145,7 @@ function Index() {
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45]" />
-                Crousty Chicken · Incontournable
+                Crousty Chicken · À découvrir
               </div>
               <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">{t("hero.location")}</p>
               <h1 className="mt-3 font-sans text-[2.25rem] font-black leading-[.98] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
@@ -312,7 +312,7 @@ function Index() {
                       <h3 className="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">{item.name.split(" · ")[1]}</h3>
                       <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#6e6255]">{item.desc}</p>
                       <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#241a12] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#a96b0d]">
-                        Découvrir la recette <ArrowRight className="h-4 w-4" />
+                        Découvrir le plat <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
                   </Link>
