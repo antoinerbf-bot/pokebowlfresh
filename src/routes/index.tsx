@@ -322,9 +322,9 @@ function Index() {
                 </h3>
                 <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-black uppercase tracking-[0.08em] sm:text-sm">
                   <span>✦ Fait maison</span>
-                  <span className="text-[#a96b0d]">•</span>
+                  <span className="text-[#ff705f]">•</span>
                   <span>🔥 Ultra croustillant</span>
-                  <span className="text-[#a96b0d]">•</span>
+                  <span className="text-[#ff705f]">•</span>
                   <span>♡ Frais</span>
                 </div>
               </div>
@@ -336,7 +336,7 @@ function Index() {
                   id: "crousty-chicken-sauce-blanche",
                   name: "Crousty Chicken · Sauce blanche",
                   label: "Riz basmati",
-                  desc: "Riz jasmin parfumé, poulet croustillant, sauce blanche maison et oignons frits.",
+                  desc: "Riz basmati aux grains longs et séparés, poulet croustillant, sauce blanche maison et oignons frits.",
                 },
                 {
                   id: "crousty-chicken-curry",
@@ -365,7 +365,7 @@ function Index() {
                       </div>
                     </div>
                     <div className="p-5 text-center sm:p-7">
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#a96b0d]">Crousty Chicken</p>
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#ff705f]">Crousty Chicken</p>
                       <h3 className="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">{item.name.split(" · ")[1]}</h3>
                       <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#68756f]">{item.desc}</p>
                       <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#17231f] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#ff705f]">
