@@ -10,10 +10,10 @@ import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as g
 import { t as Route$12 } from "./order.success-yZad2A8U.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BP07I3Ri.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-B2hwo4hR.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-EeZyFjPP.css";
+var styles_default = "/assets/styles-oFTkryaf.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -181,7 +181,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$5 = () => import("./routes-DEsCTjRC.mjs");
+var $$splitComponentImporter$5 = () => import("./routes-Dndvy1lD.mjs");
 var Route$9 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Pokénball — Poké bowls & Crusty Chicken" }, {
 		name: "description",

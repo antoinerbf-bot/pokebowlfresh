@@ -10,7 +10,7 @@ import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as
 import { a as bowl_crousty_default, i as bowl_chicken_default, n as CartDrawer, r as DishImage } from "./CartDrawer-C9CKY9Il.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DEsCTjRC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Dndvy1lD.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -263,11 +263,11 @@ function Index() {
 												className: "block",
 												children: "Poké Bowls"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "mt-2 block text-white/90",
+												className: "mt-3 block text-[1.15rem] tracking-[0.01em] text-white/70 sm:text-2xl lg:text-3xl",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-[#ff705f]",
-													children: "&"
-												}), " Crusty Chicken"]
+													children: "+"
+												}), " Crusty Chicken en signature"]
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -318,7 +318,7 @@ function Index() {
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 																className: "absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]",
-																children: "Pokéballs · Maison"
+																children: "Pokénball · Maison"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 																className: "absolute bottom-5 left-5 right-5",
