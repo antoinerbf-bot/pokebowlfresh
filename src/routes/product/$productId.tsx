@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { bowls, customToppings } from "../../lib/data";
+import { bowls, customToppings, toppingPrices } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
@@ -39,7 +39,10 @@ function ProductPage() {
   const productOk = available(product.id);
 
   const isCrousty = product.id.startsWith("crousty-");
-  const finalPrice = product.price + (isCrousty && extraSauce ? 1 : 0);
+  const toppingsPrice = selectedToppings.reduce((sum, topping) => sum + (toppingPrices[topping] ?? 0), 0);
+  const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
+
+  const toppingLabel = (topping: string) => `Topping : ${topping}`;
 
   const toggleTopping = (topping: string) => {
     setSelectedToppings((current) =>
@@ -54,7 +57,7 @@ function ProductPage() {
   const handleAddToCart = () => {
     if (!productOk) return;
     const options = [
-      ...selectedToppings.map((item) => "Topping : " + item),
+      ...selectedToppings.map((item) => `${toppingLabel(item)} +${(toppingPrices[item] ?? 0).toFixed(2)}€`),
       ...(isCrousty && extraSauce ? ["Sauce extra +1€"] : []),
     ];
     addItem({
@@ -161,12 +164,12 @@ function ProductPage() {
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">{t("toppings.title")}</p>
                     <h2 className="mt-1 text-xl font-black text-[#241a12]">Ajoute ta touche</h2>
                   </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">{t("toppings.max")}</span>
+                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">+ supplément</span>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-[#6e6255]">
                   {isCrousty
-                    ? "La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire."
-                    : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings inclus."}
+                    ? "La recette reste signature. Ajoute jusqu’à 2 toppings payants et, si tu veux, une sauce supplémentaire."
+                    : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings payants."}
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
@@ -181,6 +184,7 @@ function ProductPage() {
                         className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : disabled ? "cursor-not-allowed border-[#8d5a18]/10 bg-white/60 text-[#9a8e80]" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`}
                       >
                         <span>{topping}</span>
+                        <span className="shrink-0 text-[10px] font-black">+€ {(toppingPrices[topping] ?? 0).toFixed(2)}</span>
                         {selected && <Check className="h-3.5 w-3.5 shrink-0" />}
                       </button>
                     );
@@ -213,7 +217,7 @@ function ProductPage() {
                 ))}
               </div>
               <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground">
-                Tu peux ajouter jusqu’à 2 toppings inclus. Les options supplémentaires sont affichées juste au-dessus.
+                Jusqu’à 2 toppings supplémentaires peuvent être ajoutés. Leur supplément est calculé automatiquement dans le total.
               </div>
             </div>
 
