@@ -63,6 +63,7 @@ function Index() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const displayedBowls = [...bowls.filter((b) => !b.id.startsWith("crousty-")), ...bowls.filter((b) => b.id.startsWith("crousty-"))];
+  const toppingHighlights = ["Oignons frits", "Sésame seeds", "Noix de cajou", "Nachos", "Flocons-Chili", "Wazabi"];
   const closeMobile = () => setMobileOpen(false);
   const goHome = () => {
     setMobileOpen(false);
@@ -261,7 +262,7 @@ function Index() {
           </Reveal>
 
           <div className="mb-7 flex flex-wrap gap-2">
-            {["Guacamole", "Avocat", "Mangue", "Feta", "Edamame", "Maïs", "Tomates", "Oignons", "Sésame", "Nachos"].map((item, i) => {
+            {toppingHighlights.map((item, i) => {
               const tone = i % 4;
               return (
                 <span key={item} className={
@@ -278,7 +279,7 @@ function Index() {
             <span className="rounded-full bg-[#17231f] px-4 py-2 text-[9px] font-black uppercase tracking-[0.15em] text-white">Tous nos bowls · toppings disponibles</span>
             <span className="h-px flex-1 bg-[#e7dfd1]" />
           </div>
-          <p className="mb-5 max-w-3xl text-sm leading-6 text-[#68756f]">Chaque recette suit une direction photo cohérente : lumière naturelle maîtrisée, ingrédients généreux, textures réalistes et présentation premium. Lorsqu’il y a du riz, il est présenté en grains longs, fins et bien séparés, façon basmati.</p>
+          <p className="mb-5 max-w-3xl text-sm leading-6 text-[#68756f]">Même direction photo sur toute la carte : lumière naturelle maîtrisée, textures réalistes, couleurs franches et présentation premium. Le riz est toujours présenté en grains longs, fins et bien séparés, façon basmati.</p>
           <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {displayedBowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.03}>
@@ -390,7 +391,7 @@ function Index() {
           </div>
         </section>
 
-        <section id="composer" className="scroll-mt-10 bg-[#10251f] px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <section id="composer" className="scroll-mt-10 bg-[#17231f] px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-[1200px]">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">{t("journey.eyebrow")}</p>
