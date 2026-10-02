@@ -49,7 +49,12 @@ jobs:
       # Configure these repository secrets to enable the real server deployment:
       # O2SWITCH_HOST, O2SWITCH_USERNAME, O2SWITCH_PASSWORD, O2SWITCH_SERVER_DIR.
       - name: Deploy .output to O2Switch
-        if: github.event_name == 'push' && secrets.O2SWITCH_HOST != '' && secrets.O2SWITCH_USERNAME != '' && secrets.O2SWITCH_PASSWORD != '' && secrets.O2SWITCH_SERVER_DIR != ''
+        if: github.event_name == 'push'
+        env:
+          O2SWITCH_HOST: ${{ secrets.O2SWITCH_HOST }}
+          O2SWITCH_USERNAME: ${{ secrets.O2SWITCH_USERNAME }}
+          O2SWITCH_PASSWORD: ${{ secrets.O2SWITCH_PASSWORD }}
+          O2SWITCH_SERVER_DIR: ${{ secrets.O2SWITCH_SERVER_DIR }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.O2SWITCH_HOST }}
