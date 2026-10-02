@@ -157,7 +157,7 @@ function Index() {
                 </div>
                 <h1 className="mt-5 text-[3.25rem] font-black leading-[.86] tracking-[-0.065em] sm:text-6xl lg:text-[5.7rem]">
                   <span className="block">Poké Bowls</span>
-                  <span className="mt-2 block text-white/90"><span className="text-[#ff705f]">&amp;</span> Crusty Chicken</span>
+                  <span className="mt-3 block text-[1.15rem] tracking-[0.01em] text-white/70 sm:text-2xl lg:text-3xl"><span className="text-[#ff705f]">+</span> Crusty Chicken en signature</span>
                 </h1>
                 <p className="mt-7 max-w-lg text-base leading-7 text-white/75 sm:text-lg">
                   Des poké bowls frais, généreux et colorés. Et pour les plus gourmands, notre Crusty Chicken fait la différence.
@@ -185,7 +185,7 @@ function Index() {
                       <div className="relative aspect-[.88] overflow-hidden">
                         <img src={bowlChicken} alt="Sweet Chicken" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.045]" />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" />
-                        <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Pokéballs · Maison</div>
+                        <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Pokénball · Maison</div>
                         <div className="absolute bottom-5 left-5 right-5">
                           <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/65">Le classique généreux</p>
                           <h2 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">Sweet Chicken</h2>
