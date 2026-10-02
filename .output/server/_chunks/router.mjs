@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BGmnMQq2.css";
+var styles_default = "/assets/styles-B34tJNsk.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -833,6 +833,14 @@ var customToppings = [
 	"Wazabi"
 ];
 var allToppings = customToppings;
+var toppingPrices = {
+	"Oignons frits": .5,
+	"Sésame": .5,
+	"Noix de cajou": .5,
+	"Nachos": .5,
+	"Flocons-Chili": .5,
+	"Wazabi": .5
+};
 var bowls = [
 	{
 		id: "mighty-gyros",
@@ -1552,6 +1560,94 @@ function Index() {
 							})]
 						})
 					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+					className: "relative overflow-hidden bg-[#0a1714] px-5 py-8 text-white sm:px-6 sm:py-12 lg:px-8",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mx-auto max-w-[1320px]",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_30px_90px_-45px_rgba(0,0,0,.9)] lg:grid-cols-[1.15fr_.85fr]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "relative min-h-[300px] overflow-hidden sm:min-h-[420px]",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
+										className: "absolute inset-0 h-full w-full object-cover",
+										autoPlay: true,
+										muted: true,
+										loop: true,
+										playsInline: true,
+										preload: "metadata",
+										poster: hero_poke_default,
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
+											src: "/hero-video.mp4",
+											type: "video/mp4"
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-r from-black/10 via-black/5 to-[#0a1714]/80 lg:to-[#0a1714]" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "inline-flex rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f]",
+											children: "Fresh · croustillant · Hawaii"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "mt-3 max-w-xl text-3xl font-black leading-none tracking-tight sm:text-5xl",
+											children: "Voir. Craquer. Commander."
+										})]
+									})
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-col justify-center p-6 sm:p-8 lg:p-10",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]",
+									children: "Deux signatures · une adresse"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-5 grid gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+										to: "/commander",
+										className: "group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between gap-4",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-[9px] font-black uppercase tracking-[0.16em] text-white/45",
+													children: "01 · Hawaii"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "mt-1 text-2xl font-black",
+													children: "Pokéballs"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "mt-1 text-xs leading-5 text-white/55",
+													children: "Frais, colorés, généreux et personnalisables."
+												})
+											] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-5 w-5 text-[#d7ff45]" })]
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+										to: "/product/$productId",
+										params: { productId: "crousty-chicken-curry" },
+										className: "group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between gap-4",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-[9px] font-black uppercase tracking-[0.16em] text-white/45",
+													children: "02 · Signature"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "mt-1 text-2xl font-black",
+													children: "Krusty Chicken"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "mt-1 text-xs leading-5 text-white/55",
+													children: "Poulet ultra croustillant, riz et sauces maison."
+												})
+											] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-5 w-5 text-[#ff705f]" })]
+										})
+									})]
+								})]
+							})]
+						})
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					className: "overflow-hidden bg-[#d7ff45] py-3",
@@ -4449,13 +4545,15 @@ function ProductPage() {
 	});
 	const productOk = available(product.id);
 	const isCrousty = product.id.startsWith("crousty-");
-	const finalPrice = product.price + (isCrousty && extraSauce ? 1 : 0);
+	const toppingsPrice = selectedToppings.reduce((sum, topping) => sum + (toppingPrices[topping] ?? 0), 0);
+	const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
+	const toppingLabel = (topping) => `Topping : ${topping}`;
 	const toggleTopping = (topping) => {
 		setSelectedToppings((current) => current.includes(topping) ? current.filter((item) => item !== topping) : current.length < 2 ? [...current, topping] : current);
 	};
 	const handleAddToCart = () => {
 		if (!productOk) return;
-		const options = [...selectedToppings.map((item) => "Topping : " + item), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
+		const options = [...selectedToppings.map((item) => `${toppingLabel(item)} +${(toppingPrices[item] ?? 0).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
 		addItem({
 			id: product.id,
 			name: product.name,
@@ -4580,12 +4678,12 @@ function ProductPage() {
 											children: "Ajoute ta touche"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]",
-											children: t("toppings.max")
+											children: "+ supplément"
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "mt-2 text-xs leading-5 text-[#6e6255]",
-										children: isCrousty ? "La recette reste signature. Tu peux ajouter jusqu’à 2 toppings et, si tu veux, une sauce supplémentaire." : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings inclus."
+										children: isCrousty ? "La recette reste signature. Ajoute jusqu’à 2 toppings payants et, si tu veux, une sauce supplémentaire." : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings payants."
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3",
@@ -4597,7 +4695,14 @@ function ProductPage() {
 												onClick: () => toggleTopping(topping),
 												disabled,
 												className: `flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : disabled ? "cursor-not-allowed border-[#8d5a18]/10 bg-white/60 text-[#9a8e80]" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`,
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping }), selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3.5 w-3.5 shrink-0" })]
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping }),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "shrink-0 text-[10px] font-black",
+														children: ["+€ ", (toppingPrices[topping] ?? 0).toFixed(2)]
+													}),
+													selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3.5 w-3.5 shrink-0" })
+												]
 											}, topping);
 										})
 									}),
@@ -4635,7 +4740,7 @@ function ProductPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground",
-										children: "Tu peux ajouter jusqu’à 2 toppings inclus. Les options supplémentaires sont affichées juste au-dessus."
+										children: "Jusqu’à 2 toppings supplémentaires peuvent être ajoutés. Leur supplément est calculé automatiquement dans le total."
 									})
 								]
 							}),
