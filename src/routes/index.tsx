@@ -278,7 +278,7 @@ function Index() {
             <span className="rounded-full bg-[#17231f] px-4 py-2 text-[9px] font-black uppercase tracking-[0.15em] text-white">Tous nos bowls · toppings disponibles</span>
             <span className="h-px flex-1 bg-[#e7dfd1]" />
           </div>
-          <p className="mb-5 max-w-3xl text-sm leading-6 text-[#68756f]">Chaque recette est présentée dans le même esprit artisanal : bol chaleureux, lumière naturelle, ingrédients généreux et textures réalistes. Le riz reste long et bien séparé, comme sur notre référence photo.</p>
+          <p className="mb-5 max-w-3xl text-sm leading-6 text-[#68756f]">Chaque recette suit une direction photo cohérente : lumière naturelle maîtrisée, ingrédients généreux, textures réalistes et présentation premium. Lorsqu’il y a du riz, il est présenté en grains longs, fins et bien séparés, façon basmati.</p>
           <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {displayedBowls.map((bowl, index) => (
               <Reveal key={bowl.id} delay={index * 0.03}>
@@ -309,15 +309,15 @@ function Index() {
           </div>
         </section>
 
-        <section className="bg-[#ead9bb] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <section className="bg-[linear-gradient(135deg,#fffaf0_0%,#f5f0e7_55%,#fff3ee_100%)] px-5 py-14 text-[#17231f] sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-[1180px]">
             <Reveal>
               <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Pokénball · Maison</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]">Pokénball · Maison</p>
                 <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
                   Le croustillant
                 </h2>
-                <h3 className="mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#a96b0d] sm:text-4xl lg:text-5xl">
+                <h3 className="mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#ff705f] sm:text-4xl lg:text-5xl">
                   qui fait la différence
                 </h3>
                 <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-black uppercase tracking-[0.08em] sm:text-sm">
@@ -335,13 +335,13 @@ function Index() {
                 {
                   id: "crousty-chicken-sauce-blanche",
                   name: "Crousty Chicken · Sauce blanche",
-                  label: "Riz jasmin",
+                  label: "Riz basmati",
                   desc: "Riz jasmin parfumé, poulet croustillant, sauce blanche maison et oignons frits.",
                 },
                 {
                   id: "crousty-chicken-curry",
                   name: "Crousty Chicken · Curry",
-                  label: "Riz curry",
+                  label: "Riz basmati · curry",
                   desc: "Riz au curry onctueux, poulet croustillant, sauce curry maison et oignons frits.",
                 },
               ].map((item, index) => (
@@ -349,16 +349,16 @@ function Index() {
                   <Link
                     to="/product/$productId"
                     params={{ productId: item.id }}
-                    className="group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-[#f8f0df] shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1"
+                    className="group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-white shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1"
                   >
-                    <div className="relative aspect-[1.22] overflow-hidden bg-[#e7d4b4]">
+                    <div className="relative aspect-[1.22] overflow-hidden bg-[#eee8dc]">
                       <DishImage
                         dishId={item.id}
                         alt={item.name}
                         className="h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.06]"
                       />
                       <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
-                        <span className="bg-[#8b5510] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white">
+                        <span className="bg-[#17231f] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white">
                           {item.label}
                         </span>
                         <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black">11€</span>
@@ -367,8 +367,8 @@ function Index() {
                     <div className="p-5 text-center sm:p-7">
                       <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#a96b0d]">Crousty Chicken</p>
                       <h3 className="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">{item.name.split(" · ")[1]}</h3>
-                      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#6e6255]">{item.desc}</p>
-                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#241a12] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#a96b0d]">
+                      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#68756f]">{item.desc}</p>
+                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#17231f] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#ff705f]">
                         Découvrir le plat <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
@@ -379,12 +379,12 @@ function Index() {
 
             <Reveal delay={0.08}>
               <div className="mt-7 text-center">
-                <span className="inline-flex items-center gap-3 bg-[#a96b0d] px-6 py-3 text-white shadow-lg">
+                <span className="inline-flex items-center gap-3 bg-[#ff705f] px-6 py-3 text-white shadow-lg">
                   <span className="text-[11px] font-black uppercase tracking-[0.14em]">Menu étudiant</span>
                   <span className="text-xl font-black">11€</span>
                   <span className="text-[10px] font-black uppercase tracking-[0.1em]">· boisson incluse</span>
                 </span>
-                <p className="mt-3 text-xs font-bold text-[#6e6255]">Sauce extra +1€ · Viens goûter la différence.</p>
+                <p className="mt-3 text-xs font-bold text-[#68756f]">Sauce extra +1€ · Viens goûter la différence.</p>
               </div>
             </Reveal>
           </div>
