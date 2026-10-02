@@ -36,11 +36,11 @@ export function DishImage({
 
   if (position) {
     return (
-      <div className={`h-full w-full bg-[linear-gradient(145deg,#f1e2c6,#d7b98b)] p-2.5 sm:p-3 ${className}`}>
+      <div className={`h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`}>
         <div
           role="img"
           aria-label={alt}
-          className="h-full w-full overflow-hidden rounded-[18px] bg-[#081612] bg-no-repeat shadow-[0_16px_30px_-18px_rgba(55,32,12,.55)]"
+          className="h-full w-full overflow-hidden rounded-[18px] bg-[#eef0eb] bg-no-repeat shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]"
           style={{
             backgroundImage: `url(${dishSprite})`,
             backgroundSize: "300% 300%",
@@ -53,7 +53,7 @@ export function DishImage({
 
   if (fallback) {
     return (
-      <div className={`h-full w-full bg-[linear-gradient(145deg,#f1e2c6,#d7b98b)] p-2.5 sm:p-3 ${className}`}>
+      <div className={`h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`}>
         <img
           src={fallback}
           alt={alt}
