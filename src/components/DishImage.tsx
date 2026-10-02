@@ -3,6 +3,7 @@ import dishSprite from "@/assets/dish-sprite.webp";
 import bowlChicken from "@/assets/bowl-chicken.jpg";
 import bowlCrousty from "@/assets/bowl-crousty.jpg";
 import bowlScampi from "@/assets/bowl-scampi.jpg";
+import heroPoke from "@/assets/hero-poke.jpg";
 
 const positions: Record<string, string> = {
   "beef-teriyaki": "0% 0%",
@@ -17,8 +18,11 @@ const positions: Record<string, string> = {
 };
 
 const fallbackImages: Record<string, string> = {
+  "sweet-chicken": bowlChicken,
+  "scampis-royaux": bowlScampi,
   "crousty-chicken-curry": bowlCrousty,
   "crousty-chicken-sauce-blanche": bowlCrousty,
+  "mighty-gyros": heroPoke,
 };
 
 export function DishImage({
@@ -30,8 +34,8 @@ export function DishImage({
   alt: string;
   className?: string;
 }) {
-  const position = positions[dishId];
   const fallback = fallbackImages[dishId];
+  const position = fallback ? undefined : positions[dishId];
 
   if (position) {
     return (
