@@ -44,4 +44,4 @@ jobs:
             exit 0
           fi
           git commit -m "chore: publish O2Switch build [skip ci]"
-          git push
+          git push origin HEAD:${GITHUB_REF_NAME} HEAD:o2switch-clean
