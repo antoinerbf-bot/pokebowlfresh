@@ -216,7 +216,7 @@ function Index() {
                       </Link>
                     </div>
                   </div>
-                  <div className="mt-3 rounded-[22px] border border-white/10 bg-black/20 px-5 py-3 backdrop-blur-md">
+                  <div className="mt-3 rounded-[22px] border border-white/10 bg-white/[0.08] px-5 py-3 backdrop-blur-md">
                     <div className="flex items-center justify-between gap-4">
                       <span className="text-[9px] font-black uppercase tracking-[0.18em] text-[#d7ff45]">Notre ADN · Poké Bowls d’abord · Crusty Chicken en signature</span>
                       <ArrowRight className="h-4 w-4 text-white/60" />
