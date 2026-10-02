@@ -11,6 +11,7 @@ deployment:
     - /bin/cp package-lock.json $DEPLOYPATH
     - /bin/cp vite.config.ts $DEPLOYPATH
     - /bin/cp tsconfig.json $DEPLOYPATH
+    - /bin/cp .htaccess $DEPLOYPATH
     - /bin/cat > $DEPLOYPATH/server.js <<'EOF'
 import "./.output/server/index.mjs";
 EOF
