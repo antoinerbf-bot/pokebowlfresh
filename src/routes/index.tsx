@@ -82,7 +82,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-[#f7f4ec] text-[#17231f]">
+    <div className="min-h-screen overflow-x-clip bg-[#f5f6f4] text-[#17231f]">
       <CartDrawer />
 
       <header className="absolute inset-x-0 top-0 z-50">
@@ -199,7 +199,7 @@ function Index() {
                           <img src={bowlScampi} alt="Scampis Royal" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]" />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
-                            <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Pokéball · Premium</p>
+                            <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Pokénball · Premium</p>
                             <h3 className="mt-1 text-xl font-black">Scampis Royal</h3>
                           </div>
                         </div>
@@ -241,7 +241,7 @@ function Index() {
           </motion.div>
         </section>
 
-        <section id="carte" className="scroll-mt-10 bg-[#fffaf0] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <section id="carte" className="scroll-mt-10 bg-white px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Reveal>
             <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
@@ -472,7 +472,7 @@ function Index() {
           </Link>
         </section>
 
-        <section id="infos" className="scroll-mt-10 bg-[#ece9df] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <section id="infos" className="scroll-mt-10 bg-[#f0f3f1] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <div className="mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">{t("info.eyebrow")}</p>
