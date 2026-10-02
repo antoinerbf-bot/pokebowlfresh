@@ -87,7 +87,7 @@ function Index() {
             </span>
             <span className="min-w-0 text-white">
               <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Poke N Bowl</strong>
-              <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Visé · Fresh food</span>
+              <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Visé · Cuisine fraîche</span>
             </span>
           </Link>
 
@@ -145,7 +145,7 @@ function Index() {
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45]" />
-                Crousty Chicken · best-seller
+                Crousty Chicken · Incontournable
               </div>
               <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">{t("hero.location")}</p>
               <h1 className="mt-3 font-sans text-[2.25rem] font-black leading-[.98] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
@@ -176,7 +176,7 @@ function Index() {
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.03)_30%,rgba(0,0,0,.78)_100%)]" />
                       <div className="absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.14em] text-[#10251f]">11€ · menu étudiant</div>
                       <div className="absolute bottom-5 left-5 right-5 text-white">
-                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/65">Signature · Crousty Chicken</p>
+                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/65">Maison · Crousty Chicken</p>
                         <h2 className="mt-1 text-3xl font-black leading-none tracking-tight sm:text-4xl">{t("feature.curry")}</h2>
                         <p className="mt-2 max-w-xs text-xs leading-5 text-white/75">{t("feature.curry_desc")}</p>
                       </div>
@@ -189,7 +189,7 @@ function Index() {
                         <DishImage dishId="crousty-chicken-sauce-blanche" alt={t("feature.white")} className="h-full w-full transition duration-700 group-hover:scale-[1.08]" />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                         <div className="absolute bottom-4 left-4 right-4 text-white">
-                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/65">Signature</p>
+                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/65">Maison</p>
                           <h3 className="mt-1 text-xl font-black leading-none">{t("feature.white")}</h3>
                         </div>
                       </div>
@@ -197,7 +197,7 @@ function Index() {
                     <div className="rounded-[24px] border border-[#d7ff45]/15 bg-white/[0.05] p-4 backdrop-blur-sm sm:p-5">
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">Crousty Mix</p>
+                          <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">Duo Crousty</p>
                           <p className="mt-1 text-sm font-black text-white">Curry + Sauce blanche</p>
                         </div>
                         <ArrowRight className="h-5 w-5 shrink-0 text-[#d7ff45]" />
@@ -219,22 +219,22 @@ function Index() {
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/5 to-[#0a1714]/80 lg:to-[#0a1714]" />
                 <div className="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7">
-                  <span className="inline-flex rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f]">Fresh · croustillant · Hawaii</span>
+                  <span className="inline-flex rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f]">Frais · croustillant · esprit hawaïen</span>
                   <h2 className="mt-3 max-w-xl text-3xl font-black leading-none tracking-tight sm:text-5xl">Voir. Craquer. Commander.</h2>
                 </div>
               </div>
               <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">Deux signatures · une adresse</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">Deux incontournables · une adresse</p>
                 <div className="mt-5 grid gap-3">
                   <Link to="/commander" className="group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]">
                     <div className="flex items-center justify-between gap-4">
-                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">01 · Hawaii</p><h3 className="mt-1 text-2xl font-black">Pokéballs</h3><p className="mt-1 text-xs leading-5 text-white/55">Frais, colorés, généreux et personnalisables.</p></div>
+                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">01 · Esprit hawaïen</p><h3 className="mt-1 text-2xl font-black">Poké bowls</h3><p className="mt-1 text-xs leading-5 text-white/55">Frais, colorés, généreux et personnalisables.</p></div>
                       <ArrowRight className="h-5 w-5 text-[#d7ff45]" />
                     </div>
                   </Link>
                   <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]">
                     <div className="flex items-center justify-between gap-4">
-                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">02 · Signature</p><h3 className="mt-1 text-2xl font-black">Krusty Chicken</h3><p className="mt-1 text-xs leading-5 text-white/55">Poulet ultra croustillant, riz et sauces maison.</p></div>
+                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">02 · Maison</p><h3 className="mt-1 text-2xl font-black">Crousty Chicken</h3><p className="mt-1 text-xs leading-5 text-white/55">Poulet ultra croustillant, riz et sauces maison.</p></div>
                       <ArrowRight className="h-5 w-5 text-[#ff705f]" />
                     </div>
                   </Link>
@@ -247,7 +247,7 @@ function Index() {
         <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="flex w-max whitespace-nowrap">
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Poke N Bowl · Fresh food · Visé <span className="mx-6">✦</span></span>
+              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Poke N Bowl · Cuisine fraîche · Visé <span className="mx-6">✦</span></span>
             ))}
           </motion.div>
         </section>
@@ -256,7 +256,7 @@ function Index() {
           <div className="mx-auto max-w-[1180px]">
             <Reveal>
               <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Poke N Bowl · Signature</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Poke N Bowl · Maison</p>
                 <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
                   Le croustillant
                 </h2>
@@ -268,7 +268,7 @@ function Index() {
                   <span className="text-[#a96b0d]">•</span>
                   <span>🔥 Ultra croustillant</span>
                   <span className="text-[#a96b0d]">•</span>
-                  <span>♡ Healthy</span>
+                  <span>♡ Frais</span>
                 </div>
               </div>
             </Reveal>
@@ -517,7 +517,7 @@ function Index() {
             <img src={logo} alt="Poke N Bowl" className="h-11 w-auto max-w-[170px] object-contain object-left" />
             <div>
               <div className="font-black">Poke N Bowl</div>
-              <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Visé · Fresh food</div>
+              <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Visé · Cuisine fraîche</div>
             </div>
           </Link>
           <div className="flex flex-wrap gap-4 text-[9px] font-black uppercase tracking-[0.12em] text-white/45">
