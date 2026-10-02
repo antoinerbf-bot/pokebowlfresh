@@ -45,7 +45,7 @@ export const customSauces = [
 
 export const customToppings = [
   "Oignons frits",
-  "Sésame",
+  "Sésame seeds",
   "Noix de cajou",
   "Nachos",
   "Flocons-Chili",
@@ -54,10 +54,11 @@ export const customToppings = [
 
 export const allToppings = customToppings;
 
-// Prix des suppléments toppings.
+// Les six toppings sont sélectionnables jusqu'à 2 par produit.
+// Le supplément est appliqué automatiquement au total.
 export const toppingPrices: Record<string, number> = {
   "Oignons frits": 0.50,
-  "Sésame": 0.50,
+  "Sésame seeds": 0.50,
   "Noix de cajou": 0.50,
   "Nachos": 0.50,
   "Flocons-Chili": 0.50,
@@ -71,7 +72,7 @@ export const bowls = [
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
     composition: ["Guacamole", "Maïs", "Tomates cerises", "Concombre", "Oignons", "Gyros maison", "Spicy mayo", "Flocons de chili"],
-    tag: "Signature",
+    tag: "Maison",
   },
   {
     id: "sweet-chicken",
@@ -79,7 +80,7 @@ export const bowls = [
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
     composition: ["Guacamole", "Maïs", "Tomates cerises", "Mangue", "Feta", "Poulet maison", "Sauce teriyaki", "Oignons croustillants", "Sésame mix", "Nachos"],
-    tag: "Best-seller",
+    tag: "Incontournable",
   },
   {
     id: "scampis-royaux",
@@ -87,7 +88,7 @@ export const bowls = [
     price: 10.00,
     desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
     composition: ["Guacamole", "Edamame", "Tomates", "Concombre", "Poivrons", "Scampis", "Spicy mayo", "Jalapeños", "Nachos", "Flocons de chili"],
-    tag: "Signature",
+    tag: "Maison",
   },
   {
     id: "saumon-wasabi",
@@ -106,43 +107,11 @@ export const bowls = [
     tag: "Épicé",
   },
   {
-    id: "aloha-classic",
-    name: "Aloha Classic",
-    price: 12.00,
-    desc: "Thon mariné, ananas, avocat, concombre, oignons rouges, coriandre, graines de sésame, sauce ponzu, riz vinaigré.",
-    composition: ["Thon mariné", "Ananas", "Avocat", "Concombre", "Oignons rouges", "Coriandre", "Graines de sésame", "Sauce ponzu", "Riz vinaigré"],
-    tag: "Nouveau",
-  },
-  {
-    id: "vegan-tofu",
-    name: "Vegan Tofu",
-    price: 9.50,
-    desc: "Tofu frit, edamame, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
-    composition: ["Tofu frit", "Edamame", "Patate douce", "Chou rouge", "Grenade", "Algues wakame", "Sauce cacahuète", "Sésame"],
-    tag: "Vegan",
-  },
-  {
-    id: "beef-teriyaki",
-    name: "Beef Teriyaki",
-    price: 13.00,
-    desc: "Émincé de bœuf, riz, brocolis, champignons shiitake, sésame, ciboulette, sauce teriyaki sucrée.",
-    composition: ["Émincé de bœuf", "Riz", "Brocolis", "Champignons shiitake", "Sésame", "Ciboulette", "Sauce teriyaki sucrée"],
-    tag: "Gourmand",
-  },
-  {
-    id: "shrimp-mango",
-    name: "Shrimp Mango",
-    price: 11.50,
-    desc: "Crevettes, mangue fraîche, avocat, tomates cerises, concombre, citron vert, coriandre, sauce piment doux.",
-    composition: ["Crevettes", "Mangue fraîche", "Avocat", "Tomates cerises", "Concombre", "Citron vert", "Coriandre", "Sauce piment doux"],
-    tag: "Frais",
-  },
-  {
     id: "crousty-chicken-curry",
     name: "Crousty Chicken Curry",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
-    composition: ["Riz parfumé", "Poulet croustillant", "Oignons frits croustillants", "Sauce curry onctueuse"],
+    desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse et oignons frits croustillants.",
+    composition: ["Poulet croustillant", "Riz parfumé", "Sauce curry onctueuse", "Oignons frits croustillants"],
     tag: "Nouveau",
     menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
   },
@@ -150,8 +119,8 @@ export const bowls = [
     id: "crousty-chicken-sauce-blanche",
     name: "Crousty Chicken Sauce Blanche",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
-    composition: ["Riz parfumé", "Poulet croustillant", "Oignons frits croustillants", "Sauce blanche maison"],
+    desc: "Poulet croustillant, riz parfumé, sauce blanche et oignons frits croustillants.",
+    composition: ["Poulet croustillant", "Riz parfumé", "Sauce blanche", "Oignons frits croustillants"],
     tag: "Nouveau",
     menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
   },
