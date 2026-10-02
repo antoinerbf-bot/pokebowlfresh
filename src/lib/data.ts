@@ -54,6 +54,16 @@ export const customToppings = [
 
 export const allToppings = customToppings;
 
+// Prix des suppléments toppings.
+export const toppingPrices: Record<string, number> = {
+  "Oignons frits": 0.50,
+  "Sésame": 0.50,
+  "Noix de cajou": 0.50,
+  "Nachos": 0.50,
+  "Flocons-Chili": 0.50,
+  "Wazabi": 0.50,
+};
+
 export const bowls = [
   {
     id: "mighty-gyros",
