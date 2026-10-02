@@ -826,7 +826,7 @@ var customSauces = [
 ];
 var customToppings = [
 	"Oignons frits",
-	"Sésame",
+	"Sésame seeds",
 	"Noix de cajou",
 	"Nachos",
 	"Flocons-Chili",
@@ -835,7 +835,7 @@ var customToppings = [
 var allToppings = customToppings;
 var toppingPrices = {
 	"Oignons frits": .5,
-	"Sésame": .5,
+	"Sésame seeds": .5,
 	"Noix de cajou": .5,
 	"Nachos": .5,
 	"Flocons-Chili": .5,
@@ -857,7 +857,7 @@ var bowls = [
 			"Spicy mayo",
 			"Flocons de chili"
 		],
-		tag: "Signature"
+		tag: "Maison"
 	},
 	{
 		id: "sweet-chicken",
@@ -876,7 +876,7 @@ var bowls = [
 			"Sésame mix",
 			"Nachos"
 		],
-		tag: "Best-seller"
+		tag: "Incontournable"
 	},
 	{
 		id: "scampis-royaux",
@@ -895,7 +895,7 @@ var bowls = [
 			"Nachos",
 			"Flocons de chili"
 		],
-		tag: "Signature"
+		tag: "Maison"
 	},
 	{
 		id: "saumon-wasabi",
@@ -935,83 +935,15 @@ var bowls = [
 		tag: "Épicé"
 	},
 	{
-		id: "aloha-classic",
-		name: "Aloha Classic",
-		price: 12,
-		desc: "Thon mariné, ananas, avocat, concombre, oignons rouges, coriandre, graines de sésame, sauce ponzu, riz vinaigré.",
-		composition: [
-			"Thon mariné",
-			"Ananas",
-			"Avocat",
-			"Concombre",
-			"Oignons rouges",
-			"Coriandre",
-			"Graines de sésame",
-			"Sauce ponzu",
-			"Riz vinaigré"
-		],
-		tag: "Nouveau"
-	},
-	{
-		id: "vegan-tofu",
-		name: "Vegan Tofu",
-		price: 9.5,
-		desc: "Tofu frit, edamame, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
-		composition: [
-			"Tofu frit",
-			"Edamame",
-			"Patate douce",
-			"Chou rouge",
-			"Grenade",
-			"Algues wakame",
-			"Sauce cacahuète",
-			"Sésame"
-		],
-		tag: "Vegan"
-	},
-	{
-		id: "beef-teriyaki",
-		name: "Beef Teriyaki",
-		price: 13,
-		desc: "Émincé de bœuf, riz, brocolis, champignons shiitake, sésame, ciboulette, sauce teriyaki sucrée.",
-		composition: [
-			"Émincé de bœuf",
-			"Riz",
-			"Brocolis",
-			"Champignons shiitake",
-			"Sésame",
-			"Ciboulette",
-			"Sauce teriyaki sucrée"
-		],
-		tag: "Gourmand"
-	},
-	{
-		id: "shrimp-mango",
-		name: "Shrimp Mango",
-		price: 11.5,
-		desc: "Crevettes, mangue fraîche, avocat, tomates cerises, concombre, citron vert, coriandre, sauce piment doux.",
-		composition: [
-			"Crevettes",
-			"Mangue fraîche",
-			"Avocat",
-			"Tomates cerises",
-			"Concombre",
-			"Citron vert",
-			"Coriandre",
-			"Sauce piment doux"
-		],
-		tag: "Frais"
-	},
-	{
 		id: "crousty-chicken-curry",
 		name: "Crousty Chicken Curry",
 		price: 11,
-		desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
+		desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse et oignons frits croustillants.",
 		composition: [
-			"Riz parfumé",
 			"Poulet croustillant",
-			"Oignons frits croustillants",
-			"Sauce curry onctueuse"
+			"Riz parfumé",
+			"Sauce curry onctueuse",
+			"Oignons frits croustillants"
 		],
 		tag: "Nouveau",
 		menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€."
@@ -1020,12 +952,12 @@ var bowls = [
 		id: "crousty-chicken-sauce-blanche",
 		name: "Crousty Chicken Sauce Blanche",
 		price: 11,
-		desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
+		desc: "Poulet croustillant, riz parfumé, sauce blanche et oignons frits croustillants.",
 		composition: [
-			"Riz parfumé",
 			"Poulet croustillant",
-			"Oignons frits croustillants",
-			"Sauce blanche maison"
+			"Riz parfumé",
+			"Sauce blanche",
+			"Oignons frits croustillants"
 		],
 		tag: "Nouveau",
 		menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€."
@@ -1292,7 +1224,7 @@ function Index() {
 									children: "Poke N Bowl"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]",
-									children: "Visé · Fresh food"
+									children: "Visé · Cuisine fraîche"
 								})]
 							})]
 						}),
@@ -1422,7 +1354,7 @@ function Index() {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1.5 w-1.5 rounded-full bg-[#d7ff45]" }), "Crousty Chicken · best-seller"]
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1.5 w-1.5 rounded-full bg-[#d7ff45]" }), "Crousty Chicken · Incontournable"]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45",
@@ -1497,7 +1429,7 @@ function Index() {
 														children: [
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																className: "text-[9px] font-black uppercase tracking-[0.16em] text-white/65",
-																children: "Signature · Crousty Chicken"
+																children: "Maison · Crousty Chicken"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 																className: "mt-1 text-3xl font-black leading-none tracking-tight sm:text-4xl",
@@ -1530,7 +1462,7 @@ function Index() {
 															className: "absolute bottom-4 left-4 right-4 text-white",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																className: "text-[8px] font-black uppercase tracking-[0.14em] text-white/65",
-																children: "Signature"
+																children: "Maison"
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 																className: "mt-1 text-xl font-black leading-none",
 																children: t("feature.white")
@@ -1544,7 +1476,7 @@ function Index() {
 													className: "flex items-center justify-between gap-3",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 														className: "text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff45]",
-														children: "Crousty Mix"
+														children: "Duo Crousty"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 														className: "mt-1 text-sm font-black text-white",
 														children: "Curry + Sauce blanche"
@@ -1588,7 +1520,7 @@ function Index() {
 										className: "absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "inline-flex rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f]",
-											children: "Fresh · croustillant · Hawaii"
+											children: "Frais · croustillant · esprit hawaïen"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "mt-3 max-w-xl text-3xl font-black leading-none tracking-tight sm:text-5xl",
 											children: "Voir. Craquer. Commander."
@@ -1599,7 +1531,7 @@ function Index() {
 								className: "flex flex-col justify-center p-6 sm:p-8 lg:p-10",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]",
-									children: "Deux signatures · une adresse"
+									children: "Deux incontournables · une adresse"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "mt-5 grid gap-3",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
@@ -1610,11 +1542,11 @@ function Index() {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 													className: "text-[9px] font-black uppercase tracking-[0.16em] text-white/45",
-													children: "01 · Hawaii"
+													children: "01 · Esprit hawaïen"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 													className: "mt-1 text-2xl font-black",
-													children: "Pokéballs"
+													children: "Poké bowls"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 													className: "mt-1 text-xs leading-5 text-white/55",
@@ -1631,11 +1563,11 @@ function Index() {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 													className: "text-[9px] font-black uppercase tracking-[0.16em] text-white/45",
-													children: "02 · Signature"
+													children: "02 · Maison"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 													className: "mt-1 text-2xl font-black",
-													children: "Krusty Chicken"
+													children: "Crousty Chicken"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 													className: "mt-1 text-xs leading-5 text-white/55",
@@ -1661,7 +1593,7 @@ function Index() {
 						className: "flex w-max whitespace-nowrap",
 						children: Array.from({ length: 8 }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs",
-							children: ["Poke N Bowl · Fresh food · Visé ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							children: ["Poke N Bowl · Cuisine fraîche · Visé ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "mx-6",
 								children: "✦"
 							})]
@@ -1678,7 +1610,7 @@ function Index() {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]",
-										children: "Poke N Bowl · Signature"
+										children: "Poke N Bowl · Maison"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 										className: "mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl",
@@ -1701,7 +1633,7 @@ function Index() {
 												className: "text-[#a96b0d]",
 												children: "•"
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "♡ Healthy" })
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "♡ Frais" })
 										]
 									})
 								]
@@ -2162,7 +2094,7 @@ function Index() {
 								children: "Poke N Bowl"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "text-[8px] font-bold uppercase tracking-[0.18em] text-white/35",
-								children: "Visé · Fresh food"
+								children: "Visé · Cuisine fraîche"
 							})] })]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
