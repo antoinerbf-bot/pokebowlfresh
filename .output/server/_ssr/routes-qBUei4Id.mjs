@@ -7,14 +7,15 @@ import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
-import { a as bowl_crousty_default, i as bowl_chicken_default, n as CartDrawer, r as DishImage } from "./CartDrawer-C9CKY9Il.mjs";
+import { i as bowl_crousty_default, n as CartDrawer, r as DishImage } from "./CartDrawer-D_8QPSJT.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Dndvy1lD.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-qBUei4Id.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
 var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 var PHONE = "+32491281456";
 var HOUR_ROWS = [
@@ -87,7 +88,7 @@ function Index() {
 		};
 	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-screen overflow-x-clip bg-[#f7f4ec] text-[#17231f]",
+		className: "min-h-screen overflow-x-clip bg-[#f5f6f4] text-[#17231f]",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartDrawer, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
@@ -351,7 +352,7 @@ function Index() {
 																	className: "absolute bottom-4 left-4 right-4",
 																	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																		className: "text-[8px] font-black uppercase tracking-[0.15em] text-white/65",
-																		children: "Pokéball · Premium"
+																		children: "Pokénball · Premium"
 																	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 																		className: "mt-1 text-xl font-black",
 																		children: "Scampis Royal"
@@ -429,7 +430,7 @@ function Index() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					id: "carte",
-					className: "scroll-mt-10 bg-[#fffaf0] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					className: "scroll-mt-10 bg-white px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex flex-col gap-5 md:flex-row md:items-end md:justify-between",
@@ -851,7 +852,7 @@ function Index() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					id: "infos",
-					className: "scroll-mt-10 bg-[#ece9df] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					className: "scroll-mt-10 bg-[#f0f3f1] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, { children: [

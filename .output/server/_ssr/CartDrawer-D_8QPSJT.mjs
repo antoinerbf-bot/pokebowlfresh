@@ -11,11 +11,10 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-C9CKY9Il.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-D_8QPSJT.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
-var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
 var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
 var positions = {
 	"beef-teriyaki": "0% 0%",
@@ -29,9 +28,8 @@ var positions = {
 	"shrimp-mango": "100% 100%"
 };
 var fallbackImages = {
-	"mighty-gyros": bowl_crousty_default,
 	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_chicken_default
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
 	const position = positions[dishId];
@@ -289,4 +287,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_crousty_default as a, bowl_chicken_default as i, CartDrawer as n, DishImage as r, Button as t };
+export { bowl_crousty_default as i, CartDrawer as n, DishImage as r, Button as t };

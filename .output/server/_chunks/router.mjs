@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-oFTkryaf.css";
+var styles_default = "/assets/styles-BYR761qE.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -755,9 +755,8 @@ var positions = {
 	"shrimp-mango": "100% 100%"
 };
 var fallbackImages = {
-	"mighty-gyros": bowl_crousty_default,
 	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_chicken_default
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
 	const position = positions[dishId];
@@ -1210,7 +1209,7 @@ function Index() {
 		};
 	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-screen overflow-x-clip bg-[#f7f4ec] text-[#17231f]",
+		className: "min-h-screen overflow-x-clip bg-[#f5f6f4] text-[#17231f]",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartDrawer, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
@@ -1474,7 +1473,7 @@ function Index() {
 																	className: "absolute bottom-4 left-4 right-4",
 																	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																		className: "text-[8px] font-black uppercase tracking-[0.15em] text-white/65",
-																		children: "Pokéball · Premium"
+																		children: "Pokénball · Premium"
 																	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 																		className: "mt-1 text-xl font-black",
 																		children: "Scampis Royal"
@@ -1552,7 +1551,7 @@ function Index() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					id: "carte",
-					className: "scroll-mt-10 bg-[#fffaf0] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					className: "scroll-mt-10 bg-white px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex flex-col gap-5 md:flex-row md:items-end md:justify-between",
@@ -1974,7 +1973,7 @@ function Index() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					id: "infos",
-					className: "scroll-mt-10 bg-[#ece9df] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					className: "scroll-mt-10 bg-[#f0f3f1] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, { children: [
