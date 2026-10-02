@@ -11,11 +11,14 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-D_8QPSJT.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-B2z64lON.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
 var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
 var positions = {
 	"beef-teriyaki": "0% 0%",
 	"crousty-chicken": "50% 0%",
@@ -28,12 +31,15 @@ var positions = {
 	"shrimp-mango": "100% 100%"
 };
 var fallbackImages = {
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
 	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_crousty_default
+	"crousty-chicken-sauce-blanche": bowl_crousty_default,
+	"mighty-gyros": hero_poke_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId];
 	const fallback = fallbackImages[dishId];
+	const position = fallback ? void 0 : positions[dishId];
 	if (position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -287,4 +293,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_crousty_default as i, CartDrawer as n, DishImage as r, Button as t };
+export { bowl_crousty_default as a, bowl_chicken_default as i, CartDrawer as n, bowl_scampi_default as o, DishImage as r, hero_poke_default as s, Button as t };

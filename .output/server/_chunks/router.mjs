@@ -755,12 +755,15 @@ var positions = {
 	"shrimp-mango": "100% 100%"
 };
 var fallbackImages = {
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": bowl_scampi_default,
 	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_crousty_default
+	"crousty-chicken-sauce-blanche": bowl_crousty_default,
+	"mighty-gyros": hero_poke_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId];
 	const fallback = fallbackImages[dishId];
+	const position = fallback ? void 0 : positions[dishId];
 	if (position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -1184,6 +1187,14 @@ function Index() {
 	const [mobileOpen, setMobileOpen] = import_react.useState(false);
 	const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 	const displayedBowls = [...bowls.filter((b) => !b.id.startsWith("crousty-")), ...bowls.filter((b) => b.id.startsWith("crousty-"))];
+	const toppingHighlights = [
+		"Oignons frits",
+		"Sésame seeds",
+		"Noix de cajou",
+		"Nachos",
+		"Flocons-Chili",
+		"Wazabi"
+	];
 	const closeMobile = () => setMobileOpen(false);
 	const goHome = () => {
 		setMobileOpen(false);
@@ -1585,18 +1596,7 @@ function Index() {
 						}) }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "mb-7 flex flex-wrap gap-2",
-							children: [
-								"Guacamole",
-								"Avocat",
-								"Mangue",
-								"Feta",
-								"Edamame",
-								"Maïs",
-								"Tomates",
-								"Oignons",
-								"Sésame",
-								"Nachos"
-							].map((item, i) => {
+							children: toppingHighlights.map((item, i) => {
 								const tone = i % 4;
 								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: tone === 0 ? "rounded-full border border-[#ff705f]/20 bg-[#fff0ec] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#c94e3f]" : tone === 1 ? "rounded-full border border-[#d7ff45]/60 bg-[#f2ffd0] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#536018]" : tone === 2 ? "rounded-full border border-[#f3c46b]/50 bg-[#fff4dc] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#9a650f]" : "rounded-full border border-[#79cfc0]/40 bg-[#e9fbf7] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#277d70]",
@@ -1617,7 +1617,7 @@ function Index() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "mb-5 max-w-3xl text-sm leading-6 text-[#68756f]",
-							children: "Chaque recette suit une direction photo cohérente : lumière naturelle maîtrisée, ingrédients généreux, textures réalistes et présentation premium. Lorsqu’il y a du riz, il est présenté en grains longs, fins et bien séparés, façon basmati."
+							children: "Même direction photo sur toute la carte : lumière naturelle maîtrisée, textures réalistes, couleurs franches et présentation premium. Le riz est toujours présenté en grains longs, fins et bien séparés, façon basmati."
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
@@ -1805,7 +1805,7 @@ function Index() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					id: "composer",
-					className: "scroll-mt-10 bg-[#10251f] px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					className: "scroll-mt-10 bg-[#17231f] px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mx-auto max-w-[1200px]",
 						children: [
