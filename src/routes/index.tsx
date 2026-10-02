@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import * as React from "react";
 import { ArrowRight, BriefcaseBusiness, MapPin, Menu, ShoppingBag, X } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -44,10 +44,10 @@ const HOUR_ROWS = [
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -56,6 +56,9 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 
 function Index() {
   const { t, language, setLanguage } = useTranslation();
+  const { scrollY } = useScroll();
+  const heroImageY = useTransform(scrollY, [0, 800], [0, 105]);
+  const heroContentY = useTransform(scrollY, [0, 800], [0, -34]);
   const { items, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -90,7 +93,7 @@ function Index() {
             </span>
             <span className="min-w-0 text-white">
               <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Pokénball</strong>
-              <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Visé · Cuisine fraîche</span>
+              <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Poké Bowls · Crusty Chicken</span>
             </span>
           </Link>
 
@@ -139,14 +142,14 @@ function Index() {
 
       <main>
         <section className="relative isolate min-h-[720px] overflow-hidden bg-[#10251f] text-white sm:min-h-[780px]">
-          <div className="absolute inset-0 -z-20">
-            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-55" />
-          </div>
+          <motion.div style={{ y: heroImageY }} className="absolute -inset-y-[105px] -z-20">
+            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-58 scale-[1.06]" />
+          </motion.div>
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_68%_55%,rgba(255,112,95,.18),transparent_25%),radial-gradient(circle_at_28%_45%,rgba(215,255,69,.08),transparent_28%)]" />
 
           <div className="relative z-10 mx-auto flex min-h-[720px] max-w-[1380px] items-center px-5 pb-12 pt-28 sm:min-h-[780px] sm:px-6 lg:px-10 lg:pt-24">
-            <div className="grid w-full items-center gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-14">
+            <motion.div style={{ y: heroContentY }} className="grid w-full items-center gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-14">
               <div className="max-w-xl">
                 <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/60">FRESH FOOD · GOOD MOOD</p>
                 <h1 className="mt-5 text-[3.25rem] font-black leading-[.86] tracking-[-0.065em] sm:text-6xl lg:text-[5.7rem]">
@@ -218,7 +221,7 @@ function Index() {
                   </div>
                 </div>
               </Reveal>
-            </div>
+            </motion.div>
           </div>
 
           <div className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[8px] font-black uppercase tracking-[0.28em] text-white/55 sm:flex">
