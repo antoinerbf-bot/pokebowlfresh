@@ -17,9 +17,8 @@ const positions: Record<string, string> = {
 };
 
 const fallbackImages: Record<string, string> = {
-  "mighty-gyros": bowlCrousty,
   "crousty-chicken-curry": bowlCrousty,
-  "crousty-chicken-sauce-blanche": bowlChicken,
+  "crousty-chicken-sauce-blanche": bowlCrousty,
 };
 
 export function DishImage({
