@@ -36,28 +36,32 @@ export function DishImage({
 
   if (position) {
     return (
-      <div
-        role="img"
-        aria-label={alt}
-        className={`overflow-hidden rounded-2xl bg-[#081612] bg-no-repeat ${className}`}
-        style={{
-          backgroundImage: `url(${dishSprite})`,
-          backgroundSize: "300% 300%",
-          backgroundPosition: position,
-        }}
-      />
+      <div className={`h-full w-full bg-[linear-gradient(145deg,#f1e2c6,#d7b98b)] p-2.5 sm:p-3 ${className}`}>
+        <div
+          role="img"
+          aria-label={alt}
+          className="h-full w-full overflow-hidden rounded-[18px] bg-[#081612] bg-no-repeat shadow-[0_16px_30px_-18px_rgba(55,32,12,.55)]"
+          style={{
+            backgroundImage: `url(${dishSprite})`,
+            backgroundSize: "300% 300%",
+            backgroundPosition: position,
+          }}
+        />
+      </div>
     );
   }
 
   if (fallback) {
     return (
-      <img
-        src={fallback}
-        alt={alt}
-        className={`h-full w-full rounded-2xl object-cover ${className}`}
-        loading="lazy"
-        decoding="async"
-      />
+      <div className={`h-full w-full bg-[linear-gradient(145deg,#f1e2c6,#d7b98b)] p-2.5 sm:p-3 ${className}`}>
+        <img
+          src={fallback}
+          alt={alt}
+          className="h-full w-full rounded-[18px] object-cover shadow-[0_16px_30px_-18px_rgba(55,32,12,.55)]"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
     );
   }
 
