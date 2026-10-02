@@ -10,7 +10,7 @@ import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as
 import { i as bowl_crousty_default, n as CartDrawer, r as DishImage } from "./CartDrawer-D_8QPSJT.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-qBUei4Id.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CyQGbnqZ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -389,7 +389,7 @@ function Index() {
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "mt-3 rounded-[22px] border border-white/10 bg-black/20 px-5 py-3 backdrop-blur-md",
+												className: "mt-3 rounded-[22px] border border-white/10 bg-white/[0.08] px-5 py-3 backdrop-blur-md",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center justify-between gap-4",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {

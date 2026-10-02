@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BYR761qE.css";
+var styles_default = "/assets/styles-CNg4bYxr.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -1510,7 +1510,7 @@ function Index() {
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "mt-3 rounded-[22px] border border-white/10 bg-black/20 px-5 py-3 backdrop-blur-md",
+												className: "mt-3 rounded-[22px] border border-white/10 bg-white/[0.08] px-5 py-3 backdrop-blur-md",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex items-center justify-between gap-4",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
