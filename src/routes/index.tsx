@@ -4,6 +4,9 @@ import * as React from "react";
 import { ArrowRight, BriefcaseBusiness, MapPin, Menu, ShoppingBag, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import heroPoke from "@/assets/hero-poke.jpg";
+import bowlScampi from "@/assets/bowl-scampi.jpg";
+import bowlCrousty from "@/assets/bowl-crousty.jpg";
+import bowlChicken from "@/assets/bowl-chicken.jpg";
 import dessert from "@/assets/dessert.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
@@ -14,11 +17,11 @@ import { DishImage } from "../components/DishImage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Poke N Bowl Visé — Poké bowls frais à emporter" },
+      { title: "Pokénball — Poké bowls & Crusty Chicken" },
       {
         name: "description",
         content:
-          "Poke N Bowl à Visé : poké bowls frais, crousty chicken et desserts maison. Compose ton bowl et commande directement.",
+          "Pokénball : poké bowls frais, généreux et Crusty Chicken croustillant. Découvrez nos recettes maison et commandez en ligne.",
       },
     ],
   }),
@@ -56,7 +59,7 @@ function Index() {
   const { items, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const displayedBowls = [...bowls.filter((b) => b.id.startsWith("crousty-")), ...bowls.filter((b) => !b.id.startsWith("crousty-"))];
+  const displayedBowls = [...bowls.filter((b) => !b.id.startsWith("crousty-")), ...bowls.filter((b) => b.id.startsWith("crousty-"))];
   const closeMobile = () => setMobileOpen(false);
   const goHome = () => {
     setMobileOpen(false);
@@ -81,12 +84,12 @@ function Index() {
 
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
-          <Link to="/" onClick={goHome} className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="Poke N Bowl">
+          <Link to="/" onClick={goHome} className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="Pokénball">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,.25)] sm:h-14 sm:w-14">
-              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain" />
+              <img src={logo} alt="Logo Pokénball" className="h-full w-full object-contain" />
             </span>
             <span className="min-w-0 text-white">
-              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Poke N Bowl</strong>
+              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Pokénball</strong>
               <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Visé · Cuisine fraîche</span>
             </span>
           </Link>
@@ -135,119 +138,99 @@ function Index() {
       </header>
 
       <main>
-        <section className="relative isolate overflow-hidden bg-[#071713] text-white">
+        <section className="relative isolate min-h-[720px] overflow-hidden bg-[#10251f] text-white sm:min-h-[780px]">
           <div className="absolute inset-0 -z-20">
-            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-30" />
+            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-55" />
           </div>
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_45%,rgba(215,255,69,.13),transparent_28%),linear-gradient(90deg,#071713_0%,rgba(7,23,19,.96)_48%,rgba(7,23,19,.78)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_68%_55%,rgba(255,112,95,.18),transparent_25%),radial-gradient(circle_at_28%_45%,rgba(215,255,69,.08),transparent_28%)]" />
 
-          <div className="relative z-10 mx-auto grid min-h-[650px] max-w-[1320px] items-center gap-8 px-5 pb-10 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[.92fr_1.08fr] lg:gap-12 lg:px-8 lg:py-16">
-            <div className="max-w-xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45]" />
-                Crousty Chicken · À découvrir
-              </div>
-              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">{t("hero.location")}</p>
-              <h1 className="mt-3 font-sans text-[2.25rem] font-black leading-[.98] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
-                <span className="block">{t("hero.title1")}</span>
-                <span className="mt-2 block text-[#d7ff45]">{t("hero.title2")}</span>
-              </h1>
-              <p className="mt-5 max-w-md text-sm leading-6 text-white/70 sm:text-base">{t("hero.desc")}</p>
-              <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
-                <Link to="/commander" className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 text-sm font-black shadow-[0_18px_45px_-16px_rgba(255,112,95,.9)] transition hover:brightness-110">
-                  {t("hero.order")} <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a href="#carte" className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/10">
-                  {t("hero.menu")}
-                </a>
-              </div>
-              <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/35">
-                {t("hero.recipes")} · {t("hero.from")} · {t("hero.city")}
-              </p>
-            </div>
-
-            <Reveal delay={0.08}>
-              <div className="relative">
-                <div className="absolute -inset-8 rounded-[50px] bg-[#d7ff45]/5 blur-3xl" />
-                <div className="relative grid gap-3 sm:grid-cols-[1.12fr_.88fr] sm:items-end">
-                  <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[#f7f4ec] shadow-[0_35px_90px_-35px_rgba(0,0,0,.95)] transition duration-500 hover:-translate-y-1">
-                    <div className="relative aspect-[.9] overflow-hidden sm:aspect-[.82]">
-                      <DishImage dishId="crousty-chicken-curry" alt={t("feature.curry")} className="h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.08]" />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.03)_30%,rgba(0,0,0,.78)_100%)]" />
-                      <div className="absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.14em] text-[#10251f]">11€ · menu étudiant</div>
-                      <div className="absolute bottom-5 left-5 right-5 text-white">
-                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/65">Maison · Crousty Chicken</p>
-                        <h2 className="mt-1 text-3xl font-black leading-none tracking-tight sm:text-4xl">{t("feature.curry")}</h2>
-                        <p className="mt-2 max-w-xs text-xs leading-5 text-white/75">{t("feature.curry_desc")}</p>
-                      </div>
-                    </div>
+          <div className="relative z-10 mx-auto flex min-h-[720px] max-w-[1380px] items-center px-5 pb-12 pt-28 sm:min-h-[780px] sm:px-6 lg:px-10 lg:pt-24">
+            <div className="grid w-full items-center gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-14">
+              <div className="max-w-xl">
+                <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/60">FRESH FOOD · GOOD MOOD</p>
+                <h1 className="mt-5 text-[3.25rem] font-black leading-[.86] tracking-[-0.065em] sm:text-6xl lg:text-[5.7rem]">
+                  <span className="block">Pokéballs</span>
+                  <span className="mt-2 block"><span className="text-[#ff705f]">&amp;</span> Crusty Chicken</span>
+                </h1>
+                <p className="mt-7 max-w-lg text-base leading-7 text-white/75 sm:text-lg">
+                  Des bowls frais, généreux et colorés, accompagnés d’un poulet ultra croustillant et de sauces maison.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link to="/commander" className="inline-flex h-13 items-center justify-center gap-2 rounded-full bg-[#ff705f] px-7 py-3.5 text-sm font-black shadow-[0_20px_50px_-18px_rgba(255,112,95,.95)] transition hover:-translate-y-0.5 hover:brightness-110">
+                    Commander <ArrowRight className="h-4 w-4" />
                   </Link>
+                  <a href="#carte" className="inline-flex h-13 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-black backdrop-blur-md transition hover:bg-white/15">
+                    Voir nos plats <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+                <div className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-[9px] font-black uppercase tracking-[0.16em] text-white/65">
+                  <span>✦ Ingrédients frais</span>
+                  <span>♡ Recettes maison</span>
+                  <span>⌁ Livraison rapide</span>
+                </div>
+              </div>
 
-                  <div className="grid gap-3">
-                    <Link to="/product/$productId" params={{ productId: "crousty-chicken-sauce-blanche" }} className="group overflow-hidden rounded-[26px] border border-white/10 bg-[#f7f4ec] shadow-[0_25px_65px_-30px_rgba(0,0,0,.9)] transition duration-500 hover:-translate-y-1">
-                      <div className="relative aspect-[1.18] overflow-hidden">
-                        <DishImage dishId="crousty-chicken-sauce-blanche" alt={t("feature.white")} className="h-full w-full transition duration-700 group-hover:scale-[1.08]" />
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
-                        <div className="absolute bottom-4 left-4 right-4 text-white">
-                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/65">Maison</p>
-                          <h3 className="mt-1 text-xl font-black leading-none">{t("feature.white")}</h3>
+              <Reveal delay={0.06}>
+                <div className="relative mx-auto w-full max-w-[760px]">
+                  <div className="absolute -inset-8 rounded-[60px] bg-[#d7ff45]/10 blur-3xl" />
+                  <div className="relative grid items-end gap-3 sm:grid-cols-[1.15fr_.85fr]">
+                    <Link to="/product/$productId" params={{ productId: "sweet-chicken" }} className="group relative overflow-hidden rounded-[34px] border border-white/15 bg-[#eee8dc] shadow-[0_45px_100px_-40px_rgba(0,0,0,.95)]">
+                      <div className="relative aspect-[.88] overflow-hidden">
+                        <img src={bowlChicken} alt="Sweet Chicken" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.045]" />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" />
+                        <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Pokéballs · Maison</div>
+                        <div className="absolute bottom-5 left-5 right-5">
+                          <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/65">Le classique généreux</p>
+                          <h2 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">Sweet Chicken</h2>
                         </div>
                       </div>
                     </Link>
-                    <div className="rounded-[24px] border border-[#d7ff45]/15 bg-white/[0.05] p-4 backdrop-blur-sm sm:p-5">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">Duo Crousty</p>
-                          <p className="mt-1 text-sm font-black text-white">Curry + Sauce blanche</p>
+
+                    <div className="grid gap-3">
+                      <Link to="/product/$productId" params={{ productId: "scampis-royaux" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
+                        <div className="relative aspect-[1.08] overflow-hidden">
+                          <img src={bowlScampi} alt="Scampis Royal" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]" />
+                          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Pokéball · Premium</p>
+                            <h3 className="mt-1 text-xl font-black">Scampis Royal</h3>
+                          </div>
                         </div>
-                        <ArrowRight className="h-5 w-5 shrink-0 text-[#d7ff45]" />
-                      </div>
-                      <p className="mt-2 text-[11px] leading-5 text-white/45">{t("feature.hero_hint")}</p>
+                      </Link>
+                      <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
+                        <div className="relative aspect-[1.08] overflow-hidden">
+                          <img src={bowlCrousty} alt="Crusty Chicken Curry" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]" />
+                          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" />
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Crusty Chicken · Maison</p>
+                            <h3 className="mt-1 text-xl font-black">Curry croustillant</h3>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="mt-3 rounded-[22px] border border-white/10 bg-black/20 px-5 py-3 backdrop-blur-md">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-[9px] font-black uppercase tracking-[0.18em] text-[#d7ff45]">Pokénball · Fresh bowls &amp; Crusty Chicken</span>
+                      <ArrowRight className="h-4 w-4 text-white/60" />
                     </div>
                   </div>
                 </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-        <section className="relative overflow-hidden bg-[#0a1714] px-5 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
-          <div className="mx-auto max-w-[1320px]">
-            <div className="grid overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_30px_90px_-45px_rgba(0,0,0,.9)] lg:grid-cols-[1.15fr_.85fr]">
-              <div className="relative min-h-[300px] overflow-hidden sm:min-h-[420px]">
-                <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline preload="metadata" poster={heroPoke}>
-                  <source src="/hero-video.mp4" type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/5 to-[#0a1714]/80 lg:to-[#0a1714]" />
-                <div className="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7">
-                  <span className="inline-flex rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f]">Frais · croustillant · esprit hawaïen</span>
-                  <h2 className="mt-3 max-w-xl text-3xl font-black leading-none tracking-tight sm:text-5xl">Voir. Craquer. Commander.</h2>
-                </div>
-              </div>
-              <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">Deux incontournables · une adresse</p>
-                <div className="mt-5 grid gap-3">
-                  <Link to="/commander" className="group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]">
-                    <div className="flex items-center justify-between gap-4">
-                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">01 · Esprit hawaïen</p><h3 className="mt-1 text-2xl font-black">Poké bowls</h3><p className="mt-1 text-xs leading-5 text-white/55">Frais, colorés, généreux et personnalisables.</p></div>
-                      <ArrowRight className="h-5 w-5 text-[#d7ff45]" />
-                    </div>
-                  </Link>
-                  <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]">
-                    <div className="flex items-center justify-between gap-4">
-                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">02 · Maison</p><h3 className="mt-1 text-2xl font-black">Crousty Chicken</h3><p className="mt-1 text-xs leading-5 text-white/55">Poulet ultra croustillant, riz et sauces maison.</p></div>
-                      <ArrowRight className="h-5 w-5 text-[#ff705f]" />
-                    </div>
-                  </Link>
-                </div>
-              </div>
+              </Reveal>
             </div>
+          </div>
+
+          <div className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[8px] font-black uppercase tracking-[0.28em] text-white/55 sm:flex">
+            <span>Découvrir nos plats</span>
+            <span className="h-8 w-px bg-white/40" />
           </div>
         </section>
 
         <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="flex w-max whitespace-nowrap">
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Poke N Bowl · Cuisine fraîche · Visé <span className="mx-6">✦</span></span>
+              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Pokénball · Cuisine fraîche · Visé <span className="mx-6">✦</span></span>
             ))}
           </motion.div>
         </section>
@@ -256,7 +239,7 @@ function Index() {
           <div className="mx-auto max-w-[1180px]">
             <Reveal>
               <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Poke N Bowl · Maison</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">Pokénball · Maison</p>
                 <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
                   Le croustillant
                 </h2>
@@ -514,9 +497,9 @@ function Index() {
       <footer className="bg-[#0b1a16] px-5 py-8 pb-24 text-white sm:px-6 sm:pb-8 lg:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Poke N Bowl" className="h-11 w-auto max-w-[170px] object-contain object-left" />
+            <img src={logo} alt="Pokénball" className="h-11 w-auto max-w-[170px] object-contain object-left" />
             <div>
-              <div className="font-black">Poke N Bowl</div>
+              <div className="font-black">Pokénball</div>
               <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Visé · Cuisine fraîche</div>
             </div>
           </Link>
@@ -526,7 +509,7 @@ function Index() {
             <Link to="/recrutement">{t("footer.recruit")}</Link>
             <Link to="/contact">{t("nav.contact")}</Link>
           </div>
-          <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/25">© {new Date().getFullYear()} Poke N Bowl</div>
+          <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/25">© {new Date().getFullYear()} Pokénball</div>
         </div>
       </footer>
 
