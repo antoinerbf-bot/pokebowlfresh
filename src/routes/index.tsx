@@ -210,6 +210,40 @@ function Index() {
             </Reveal>
           </div>
         </section>
+        <section className="relative overflow-hidden bg-[#0a1714] px-5 py-8 text-white sm:px-6 sm:py-12 lg:px-8">
+          <div className="mx-auto max-w-[1320px]">
+            <div className="grid overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_30px_90px_-45px_rgba(0,0,0,.9)] lg:grid-cols-[1.15fr_.85fr]">
+              <div className="relative min-h-[300px] overflow-hidden sm:min-h-[420px]">
+                <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline preload="metadata" poster={heroPoke}>
+                  <source src="/hero-video.mp4" type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/5 to-[#0a1714]/80 lg:to-[#0a1714]" />
+                <div className="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7">
+                  <span className="inline-flex rounded-full bg-[#d7ff45] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f]">Fresh · croustillant · Hawaii</span>
+                  <h2 className="mt-3 max-w-xl text-3xl font-black leading-none tracking-tight sm:text-5xl">Voir. Craquer. Commander.</h2>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">Deux signatures · une adresse</p>
+                <div className="mt-5 grid gap-3">
+                  <Link to="/commander" className="group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]">
+                    <div className="flex items-center justify-between gap-4">
+                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">01 · Hawaii</p><h3 className="mt-1 text-2xl font-black">Pokéballs</h3><p className="mt-1 text-xs leading-5 text-white/55">Frais, colorés, généreux et personnalisables.</p></div>
+                      <ArrowRight className="h-5 w-5 text-[#d7ff45]" />
+                    </div>
+                  </Link>
+                  <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group rounded-3xl border border-white/10 bg-white/[0.05] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]">
+                    <div className="flex items-center justify-between gap-4">
+                      <div><p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/45">02 · Signature</p><h3 className="mt-1 text-2xl font-black">Krusty Chicken</h3><p className="mt-1 text-xs leading-5 text-white/55">Poulet ultra croustillant, riz et sauces maison.</p></div>
+                      <ArrowRight className="h-5 w-5 text-[#ff705f]" />
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="flex w-max whitespace-nowrap">
             {Array.from({ length: 8 }).map((_, i) => (
