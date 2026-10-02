@@ -97,6 +97,7 @@ export const bowls = [
     desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
     composition: ["Avocat", "Salade d'algues", "Mangue", "Maïs", "Edamame", "Saumon", "Mayo wasabi", "Sésame mix", "Nachos"],
     tag: "Premium",
+    menuNote: "Supplément saumon : +1 €.",
   },
   {
     id: "spicy-chicken",
@@ -113,7 +114,7 @@ export const bowls = [
     desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse et oignons frits croustillants.",
     composition: ["Poulet croustillant", "Riz parfumé", "Sauce curry onctueuse", "Oignons frits croustillants"],
     tag: "Nouveau",
-    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+    menuNote: "Menu étudiant : 11 € avec boisson incluse. Sauce extra : +1 €.",
   },
   {
     id: "crousty-chicken-sauce-blanche",
@@ -122,7 +123,7 @@ export const bowls = [
     desc: "Poulet croustillant, riz parfumé, sauce blanche et oignons frits croustillants.",
     composition: ["Poulet croustillant", "Riz parfumé", "Sauce blanche", "Oignons frits croustillants"],
     tag: "Nouveau",
-    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+    menuNote: "Menu étudiant : 11 € avec boisson incluse. Sauce extra : +1 €.",
   },
 ];
 
