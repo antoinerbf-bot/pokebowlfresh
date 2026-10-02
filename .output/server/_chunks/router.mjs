@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BebIPy-P.css";
+var styles_default = "/assets/styles-EeZyFjPP.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -763,11 +763,11 @@ function DishImage({ dishId, alt, className = "" }) {
 	const position = positions[dishId];
 	const fallback = fallbackImages[dishId];
 	if (position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `h-full w-full bg-[linear-gradient(145deg,#f1e2c6,#d7b98b)] p-2.5 sm:p-3 ${className}`,
+		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			role: "img",
 			"aria-label": alt,
-			className: "h-full w-full overflow-hidden rounded-[18px] bg-[#081612] bg-no-repeat shadow-[0_16px_30px_-18px_rgba(55,32,12,.55)]",
+			className: "h-full w-full overflow-hidden rounded-[18px] bg-[#eef0eb] bg-no-repeat shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]",
 			style: {
 				backgroundImage: `url(${dish_sprite_default})`,
 				backgroundSize: "300% 300%",
@@ -776,7 +776,7 @@ function DishImage({ dishId, alt, className = "" }) {
 		})
 	});
 	if (fallback) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `h-full w-full bg-[linear-gradient(145deg,#f1e2c6,#d7b98b)] p-2.5 sm:p-3 ${className}`,
+		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src: fallback,
 			alt,
@@ -793,8 +793,8 @@ function DishImage({ dishId, alt, className = "" }) {
 //#endregion
 //#region src/lib/data.ts
 var customBases = [
-	"Riz blanc",
-	"Riz brun",
+	"Riz basmati",
+	"Riz basmati complet",
 	"Pâtes",
 	"Nachos",
 	"Salade"
@@ -951,7 +951,7 @@ var bowls = [
 		desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse et oignons frits croustillants.",
 		composition: [
 			"Poulet croustillant",
-			"Riz parfumé",
+			"Riz basmati",
 			"Sauce curry onctueuse",
 			"Oignons frits croustillants"
 		],
@@ -965,7 +965,7 @@ var bowls = [
 		desc: "Poulet croustillant, riz parfumé, sauce blanche et oignons frits croustillants.",
 		composition: [
 			"Poulet croustillant",
-			"Riz parfumé",
+			"Riz basmati",
 			"Sauce blanche",
 			"Oignons frits croustillants"
 		],
@@ -1618,7 +1618,7 @@ function Index() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "mb-5 max-w-3xl text-sm leading-6 text-[#68756f]",
-							children: "Chaque recette est présentée dans le même esprit artisanal : bol chaleureux, lumière naturelle, ingrédients généreux et textures réalistes. Le riz reste long et bien séparé, comme sur notre référence photo."
+							children: "Chaque recette suit une direction photo cohérente : lumière naturelle maîtrisée, ingrédients généreux, textures réalistes et présentation premium. Lorsqu’il y a du riz, il est présenté en grains longs, fins et bien séparés, façon basmati."
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
@@ -1680,7 +1680,7 @@ function Index() {
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
-					className: "bg-[#ead9bb] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24",
+					className: "bg-[linear-gradient(135deg,#fffaf0_0%,#f5f0e7_55%,#fff3ee_100%)] px-5 py-14 text-[#17231f] sm:px-6 sm:py-20 lg:px-8 lg:py-24",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mx-auto max-w-[1180px]",
 						children: [
@@ -1688,7 +1688,7 @@ function Index() {
 								className: "text-center",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]",
+										className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]",
 										children: "Pokénball · Maison"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
@@ -1696,7 +1696,7 @@ function Index() {
 										children: "Le croustillant"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#a96b0d] sm:text-4xl lg:text-5xl",
+										className: "mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#ff705f] sm:text-4xl lg:text-5xl",
 										children: "qui fait la différence"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1704,12 +1704,12 @@ function Index() {
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "✦ Fait maison" }),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-[#a96b0d]",
+												className: "text-[#ff705f]",
 												children: "•"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🔥 Ultra croustillant" }),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-[#a96b0d]",
+												className: "text-[#ff705f]",
 												children: "•"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "♡ Frais" })
@@ -1722,21 +1722,21 @@ function Index() {
 								children: [{
 									id: "crousty-chicken-sauce-blanche",
 									name: "Crousty Chicken · Sauce blanche",
-									label: "Riz jasmin",
-									desc: "Riz jasmin parfumé, poulet croustillant, sauce blanche maison et oignons frits."
+									label: "Riz basmati",
+									desc: "Riz basmati aux grains longs et séparés, poulet croustillant, sauce blanche maison et oignons frits."
 								}, {
 									id: "crousty-chicken-curry",
 									name: "Crousty Chicken · Curry",
-									label: "Riz curry",
+									label: "Riz basmati · curry",
 									desc: "Riz au curry onctueux, poulet croustillant, sauce curry maison et oignons frits."
 								}].map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
 									delay: index * .06,
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 										to: "/product/$productId",
 										params: { productId: item.id },
-										className: "group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-[#f8f0df] shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1",
+										className: "group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-white shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "relative aspect-[1.22] overflow-hidden bg-[#e7d4b4]",
+											className: "relative aspect-[1.22] overflow-hidden bg-[#eee8dc]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 												dishId: item.id,
 												alt: item.name,
@@ -1744,7 +1744,7 @@ function Index() {
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "absolute inset-x-0 top-0 flex items-center justify-between p-4",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "bg-[#8b5510] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white",
+													className: "bg-[#17231f] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white",
 													children: item.label
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "rounded-full bg-white px-3 py-1.5 text-xs font-black",
@@ -1755,7 +1755,7 @@ function Index() {
 											className: "p-5 text-center sm:p-7",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "text-[10px] font-black uppercase tracking-[0.16em] text-[#a96b0d]",
+													className: "text-[10px] font-black uppercase tracking-[0.16em] text-[#ff705f]",
 													children: "Crousty Chicken"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
@@ -1763,11 +1763,11 @@ function Index() {
 													children: item.name.split(" · ")[1]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "mx-auto mt-3 max-w-md text-sm leading-6 text-[#6e6255]",
+													className: "mx-auto mt-3 max-w-md text-sm leading-6 text-[#68756f]",
 													children: item.desc
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "mt-5 inline-flex items-center gap-2 rounded-full bg-[#241a12] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#a96b0d]",
+													className: "mt-5 inline-flex items-center gap-2 rounded-full bg-[#17231f] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#ff705f]",
 													children: ["Découvrir le plat ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
 												})
 											]
@@ -1780,7 +1780,7 @@ function Index() {
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "mt-7 text-center",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "inline-flex items-center gap-3 bg-[#a96b0d] px-6 py-3 text-white shadow-lg",
+										className: "inline-flex items-center gap-3 bg-[#ff705f] px-6 py-3 text-white shadow-lg",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[11px] font-black uppercase tracking-[0.14em]",
@@ -1796,7 +1796,7 @@ function Index() {
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "mt-3 text-xs font-bold text-[#6e6255]",
+										className: "mt-3 text-xs font-bold text-[#68756f]",
 										children: "Sauce extra +1€ · Viens goûter la différence."
 									})]
 								})
