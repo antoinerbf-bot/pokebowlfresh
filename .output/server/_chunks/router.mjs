@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CZ-XHhkt.css";
+var styles_default = "/assets/styles-BGmnMQq2.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -730,37 +730,55 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
+//#region src/assets/dish-sprite.webp
+var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
+//#endregion
 //#region src/assets/bowl-chicken.jpg
 var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
 //#endregion
 //#region src/assets/bowl-crousty.jpg
 var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
 //#endregion
-//#region src/assets/bowl-scampi.jpg
-var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
-//#endregion
 //#region src/components/DishImage.tsx
-var images = {
+var positions = {
+	"beef-teriyaki": "0% 0%",
+	"crousty-chicken": "50% 0%",
+	"sweet-chicken": "100% 0%",
+	"saumon-wasabi": "0% 50%",
+	"scampis-royaux": "50% 50%",
+	"spicy-chicken": "100% 50%",
+	"aloha-classic": "0% 100%",
+	"vegan-tofu": "50% 100%",
+	"shrimp-mango": "100% 100%"
+};
+var fallbackImages = {
 	"mighty-gyros": bowl_crousty_default,
-	"sweet-chicken": bowl_chicken_default,
-	"scampis-royaux": bowl_scampi_default,
-	"saumon-wasabi": bowl_scampi_default,
-	"spicy-chicken": bowl_chicken_default,
 	"crousty-chicken-curry": bowl_crousty_default,
 	"crousty-chicken-sauce-blanche": bowl_chicken_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const src = images[dishId];
-	if (!src) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
-		children: "Photo produit"
+	const position = positions[dishId];
+	const fallback = fallbackImages[dishId];
+	if (position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		role: "img",
+		"aria-label": alt,
+		className: `overflow-hidden rounded-2xl bg-[#081612] bg-no-repeat ${className}`,
+		style: {
+			backgroundImage: `url(${dish_sprite_default})`,
+			backgroundSize: "300% 300%",
+			backgroundPosition: position
+		}
 	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-		src,
+	if (fallback) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src: fallback,
 		alt,
 		className: `h-full w-full rounded-2xl object-cover ${className}`,
 		loading: "lazy",
 		decoding: "async"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
+		children: "Photo produit"
 	});
 }
 //#endregion
@@ -907,6 +925,74 @@ var bowls = [
 			"Nachos"
 		],
 		tag: "Épicé"
+	},
+	{
+		id: "aloha-classic",
+		name: "Aloha Classic",
+		price: 12,
+		desc: "Thon mariné, ananas, avocat, concombre, oignons rouges, coriandre, graines de sésame, sauce ponzu, riz vinaigré.",
+		composition: [
+			"Thon mariné",
+			"Ananas",
+			"Avocat",
+			"Concombre",
+			"Oignons rouges",
+			"Coriandre",
+			"Graines de sésame",
+			"Sauce ponzu",
+			"Riz vinaigré"
+		],
+		tag: "Nouveau"
+	},
+	{
+		id: "vegan-tofu",
+		name: "Vegan Tofu",
+		price: 9.5,
+		desc: "Tofu frit, edamame, patate douce, chou rouge, grenade, algues wakame, sauce cacahuète, sésame.",
+		composition: [
+			"Tofu frit",
+			"Edamame",
+			"Patate douce",
+			"Chou rouge",
+			"Grenade",
+			"Algues wakame",
+			"Sauce cacahuète",
+			"Sésame"
+		],
+		tag: "Vegan"
+	},
+	{
+		id: "beef-teriyaki",
+		name: "Beef Teriyaki",
+		price: 13,
+		desc: "Émincé de bœuf, riz, brocolis, champignons shiitake, sésame, ciboulette, sauce teriyaki sucrée.",
+		composition: [
+			"Émincé de bœuf",
+			"Riz",
+			"Brocolis",
+			"Champignons shiitake",
+			"Sésame",
+			"Ciboulette",
+			"Sauce teriyaki sucrée"
+		],
+		tag: "Gourmand"
+	},
+	{
+		id: "shrimp-mango",
+		name: "Shrimp Mango",
+		price: 11.5,
+		desc: "Crevettes, mangue fraîche, avocat, tomates cerises, concombre, citron vert, coriandre, sauce piment doux.",
+		composition: [
+			"Crevettes",
+			"Mangue fraîche",
+			"Avocat",
+			"Tomates cerises",
+			"Concombre",
+			"Citron vert",
+			"Coriandre",
+			"Sauce piment doux"
+		],
+		tag: "Frais"
 	},
 	{
 		id: "crousty-chicken-curry",
