@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import * as React from "react";
 import { ArrowRight, BriefcaseBusiness, MapPin, Menu, ShoppingBag, X } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-poke-n-bowl.svg";
 import dessert from "@/assets/dessert.jpg";
 import heroPoke from "@/assets/hero-poke.jpg";
 import { useTranslation } from "../context/I18nContext";
@@ -86,7 +86,7 @@ function Index() {
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
           <Link to="/" onClick={goHome} className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="Poke N Bowl">
-            <span className="flex h-14 w-[150px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[175px]">
+            <span className="flex h-14 w-[190px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[220px]">
               <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]" />
             </span>
             <span className="min-w-0 text-white">
@@ -531,7 +531,7 @@ function Index() {
       <footer className="bg-[#0b1a16] px-5 py-8 pb-24 text-white sm:px-6 sm:pb-8 lg:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Poke N Bowl" className="h-11 w-auto max-w-[170px] object-contain object-left" />
+            <img src={logo} alt="Poke N Bowl" className="h-12 w-auto max-w-[220px] object-contain object-left" />
             <div>
               <div className="font-black">Poke N Bowl</div>
               <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Poké Bowls · Crusty Chicken</div>
