@@ -169,16 +169,6 @@ var BriefcaseBusiness = createLucideIcon("briefcase-business", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-var Check = createLucideIcon("check", [["path", {
-	d: "M20 6 9 17l-5-5",
-	key: "1gmf2c"
-}]]);
-/**
-* @license lucide-react v0.575.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
 var CircleCheck = createLucideIcon("circle-check", [["circle", {
 	cx: "12",
 	cy: "12",
@@ -475,4 +465,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { CircleCheck as _, ShoppingCart as a, ArrowRight as b, RefreshCw as c, Minus as d, Menu as f, Clock as g, CreditCard as h, Store as i, Plus as l, LoaderCircle as m, UtensilsCrossed as n, ShoppingBag as o, MapPin as p, Trash2 as r, Shield as s, X as t, PhoneCall as u, Check as v, ArrowLeft as x, BriefcaseBusiness as y };
+export { CircleCheck as _, ShoppingCart as a, ArrowLeft as b, RefreshCw as c, Minus as d, Menu as f, Clock as g, CreditCard as h, Store as i, Plus as l, LoaderCircle as m, UtensilsCrossed as n, ShoppingBag as o, MapPin as p, Trash2 as r, Shield as s, X as t, PhoneCall as u, BriefcaseBusiness as v, ArrowRight as y };
