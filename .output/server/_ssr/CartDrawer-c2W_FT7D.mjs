@@ -11,36 +11,32 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DrtzwuJ4.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-c2W_FT7D.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var poke_products_default = "/assets/poke-products-Dl5IOuj0.webp";
-var positions = {
-	"mighty-gyros": "0% 0%",
-	"sweet-chicken": "50% 0%",
-	"scampis-royaux": "100% 0%",
-	"saumon-wasabi": "0% 50%",
-	"spicy-chicken": "50% 50%",
-	"crousty-chicken-curry": "100% 50%",
-	"crousty-chicken-sauce-blanche": "0% 100%"
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+var images = {
+	"mighty-gyros": bowl_chicken_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"saumon-wasabi": "/assets/hero-poke-Dk38LgOY.jpg",
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId];
-	if (!position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	const src = images[dishId];
+	if (!src) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
 		children: "Photo produit"
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			role: "img",
-			"aria-label": alt,
-			className: "h-full w-full overflow-hidden rounded-[18px] bg-[#eef0eb] bg-no-repeat shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]",
-			style: {
-				backgroundImage: `url(${poke_products_default})`,
-				backgroundSize: "300% 300%",
-				backgroundPosition: position
-			}
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+			src,
+			alt,
+			className: "h-full w-full rounded-[18px] object-cover shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]"
 		})
 	});
 }

@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-DH5_focx.mjs";
+import { t as Route } from "./_productId-COzEqdk-.mjs";
 import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
 import { a as ShoppingCart, v as Check, x as ArrowLeft } from "./_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-DrtzwuJ4.mjs";
+import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-c2W_FT7D.mjs";
 import { t as useStock } from "./_ssr/useStock-BnqFMs3d.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-CHC0Mu7b.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-3CNXSX3I.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {
@@ -19,7 +19,7 @@ function ProductPage() {
 	const { t, language, setLanguage } = useTranslation();
 	const { addItem, setIsCartOpen, items } = useCart();
 	const { available } = useStock();
-	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [selectedToppings, setSelectedToppings] = import_react.useState({});
 	const [extraSauce, setExtraSauce] = import_react.useState(false);
 	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 	if (!product) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -38,15 +38,12 @@ function ProductPage() {
 	});
 	const productOk = available(product.id);
 	const isCrousty = product.id.startsWith("crousty-");
-	const toppingsPrice = selectedToppings.reduce((sum, topping) => sum + (toppingPrices[topping] ?? 0), 0);
+	const toppingsPrice = Object.entries(selectedToppings).reduce((sum, [topping, quantity]) => sum + (toppingPrices[topping] ?? 0) * quantity, 0);
 	const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
 	const toppingLabel = (topping) => `Topping : ${topping}`;
-	const toggleTopping = (topping) => {
-		setSelectedToppings((current) => current.includes(topping) ? current.filter((item) => item !== topping) : [...current, topping]);
-	};
 	const handleAddToCart = () => {
 		if (!productOk) return;
-		const options = [...selectedToppings.map((item) => `${toppingLabel(item)} +${(toppingPrices[item] ?? 0).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
+		const options = [...Object.entries(selectedToppings).map(([item, quantity]) => `${toppingLabel(item)} ×${quantity} +${((toppingPrices[item] ?? 0) * quantity).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
 		addItem({
 			id: product.id,
 			name: product.name,
@@ -181,10 +178,10 @@ function ProductPage() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3",
 										children: customToppings.map((topping) => {
-											const selected = selectedToppings.includes(topping);
+											const selected = (selectedToppings[topping] ?? 0) > 0;
 											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 												type: "button",
-												onClick: () => toggleTopping(topping),
+												onClick: () => changeToppingQuantity(topping, 1),
 												className: `flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`,
 												children: [
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping }),
@@ -231,7 +228,7 @@ function ProductPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground",
-										children: "Tu peux ajouter ou retirer les toppings que tu veux. Chaque topping supplémentaire est facturé au tarif affiché."
+										children: "Tu peux ajouter ou retirer autant de toppings que tu veux, y compris plusieurs fois le même topping. Chaque ajout est facturé au tarif affiché."
 									})
 								]
 							}),

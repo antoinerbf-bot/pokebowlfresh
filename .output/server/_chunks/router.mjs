@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-B6b-6S8G.css";
+var styles_default = "/assets/styles-BW6hYHhV.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -727,36 +727,34 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
-//#region src/assets/poke-products.webp
-var poke_products_default = "/assets/poke-products-Dl5IOuj0.webp";
+//#region src/assets/bowl-chicken.jpg
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+//#endregion
+//#region src/assets/bowl-crousty.jpg
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
-var positions = {
-	"mighty-gyros": "0% 0%",
-	"sweet-chicken": "50% 0%",
-	"scampis-royaux": "100% 0%",
-	"saumon-wasabi": "0% 50%",
-	"spicy-chicken": "50% 50%",
-	"crousty-chicken-curry": "100% 50%",
-	"crousty-chicken-sauce-blanche": "0% 100%"
+var images = {
+	"mighty-gyros": bowl_chicken_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"saumon-wasabi": "/assets/hero-poke-Dk38LgOY.jpg",
+	"spicy-chicken": bowl_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId];
-	if (!position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	const src = images[dishId];
+	if (!src) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
 		children: "Photo produit"
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			role: "img",
-			"aria-label": alt,
-			className: "h-full w-full overflow-hidden rounded-[18px] bg-[#eef0eb] bg-no-repeat shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]",
-			style: {
-				backgroundImage: `url(${poke_products_default})`,
-				backgroundSize: "300% 300%",
-				backgroundPosition: position
-			}
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+			src,
+			alt,
+			className: "h-full w-full rounded-[18px] object-cover shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]"
 		})
 	});
 }
@@ -4412,7 +4410,7 @@ function ProductPage() {
 	const { t, language, setLanguage } = useTranslation();
 	const { addItem, setIsCartOpen, items } = useCart();
 	const { available } = useStock();
-	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [selectedToppings, setSelectedToppings] = import_react.useState({});
 	const [extraSauce, setExtraSauce] = import_react.useState(false);
 	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 	if (!product) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -4431,15 +4429,12 @@ function ProductPage() {
 	});
 	const productOk = available(product.id);
 	const isCrousty = product.id.startsWith("crousty-");
-	const toppingsPrice = selectedToppings.reduce((sum, topping) => sum + (toppingPrices[topping] ?? 0), 0);
+	const toppingsPrice = Object.entries(selectedToppings).reduce((sum, [topping, quantity]) => sum + (toppingPrices[topping] ?? 0) * quantity, 0);
 	const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
 	const toppingLabel = (topping) => `Topping : ${topping}`;
-	const toggleTopping = (topping) => {
-		setSelectedToppings((current) => current.includes(topping) ? current.filter((item) => item !== topping) : [...current, topping]);
-	};
 	const handleAddToCart = () => {
 		if (!productOk) return;
-		const options = [...selectedToppings.map((item) => `${toppingLabel(item)} +${(toppingPrices[item] ?? 0).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
+		const options = [...Object.entries(selectedToppings).map(([item, quantity]) => `${toppingLabel(item)} ×${quantity} +${((toppingPrices[item] ?? 0) * quantity).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
 		addItem({
 			id: product.id,
 			name: product.name,
@@ -4574,10 +4569,10 @@ function ProductPage() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3",
 										children: customToppings.map((topping) => {
-											const selected = selectedToppings.includes(topping);
+											const selected = (selectedToppings[topping] ?? 0) > 0;
 											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 												type: "button",
-												onClick: () => toggleTopping(topping),
+												onClick: () => changeToppingQuantity(topping, 1),
 												className: `flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`,
 												children: [
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping }),
@@ -4624,7 +4619,7 @@ function ProductPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground",
-										children: "Tu peux ajouter ou retirer les toppings que tu veux. Chaque topping supplémentaire est facturé au tarif affiché."
+										children: "Tu peux ajouter ou retirer autant de toppings que tu veux, y compris plusieurs fois le même topping. Chaque ajout est facturé au tarif affiché."
 									})
 								]
 							}),
