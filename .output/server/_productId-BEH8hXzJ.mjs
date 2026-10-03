@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-CmaP3fGR.mjs";
+import { t as Route } from "./_productId-DjA6hUlw.mjs";
 import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
 import { a as ShoppingCart, b as ArrowLeft, d as Minus, l as Plus } from "./_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-c2W_FT7D.mjs";
+import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-D15eMxef.mjs";
 import { t as useStock } from "./_ssr/useStock-BnqFMs3d.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-DuWdm1iq.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-BEH8hXzJ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {
@@ -82,7 +82,7 @@ function ProductPage() {
 								className: "h-full w-full object-contain"
 							})
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "truncate text-base font-black tracking-tight sm:text-lg",
+							className: "truncate font-display text-base font-bold tracking-[-0.01em] sm:text-lg",
 							children: "Poke N Bowl"
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -139,7 +139,7 @@ function ProductPage() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mb-2 flex items-start justify-between gap-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-									className: "min-w-0 flex-1 break-words pb-1 text-3xl font-extrabold leading-[1.15]",
+									className: "min-w-0 flex-1 break-words pb-1 font-display text-[clamp(2rem,5vw,3.4rem)] font-bold leading-[.98] tracking-[-0.03em]",
 									children: product.name
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "shrink-0 text-2xl font-display font-bold text-coral",
@@ -173,7 +173,7 @@ function ProductPage() {
 											className: "text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]",
 											children: t("toppings.title")
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-											className: "mt-1 text-xl font-black text-[#241a12]",
+											className: "mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#241a12]",
 											children: "Ajoute ta touche"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]",
@@ -251,7 +251,7 @@ function ProductPage() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "mb-4 flex items-center justify-between gap-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-											className: "text-lg font-bold",
+											className: "font-display text-xl font-bold tracking-[-0.01em]",
 											children: "Composition"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "shrink-0 text-xs font-semibold text-muted-foreground",

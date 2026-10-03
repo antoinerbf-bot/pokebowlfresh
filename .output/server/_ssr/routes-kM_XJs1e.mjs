@@ -7,10 +7,10 @@ import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { f as Menu, o as ShoppingBag, p as MapPin, t as X, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage } from "./CartDrawer-c2W_FT7D.mjs";
+import { n as CartDrawer, r as DishImage } from "./CartDrawer-D15eMxef.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BPU08Z-2.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-kM_XJs1e.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
@@ -262,12 +262,12 @@ function Index() {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-											className: "mt-5 text-[3.25rem] font-black leading-[.86] tracking-[-0.065em] sm:text-6xl lg:text-[5.7rem]",
+											className: "mt-5 max-w-[680px] break-words font-display text-[clamp(3rem,8vw,5.7rem)] font-bold leading-[.88] tracking-[-0.045em]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "block",
 												children: "Poké Bowls"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "mt-3 block text-[1.15rem] tracking-[0.01em] text-white/70 sm:text-2xl lg:text-3xl",
+												className: "mt-4 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-[#ff705f]",
 													children: "+"
@@ -330,7 +330,7 @@ function Index() {
 																	className: "text-[9px] font-black uppercase tracking-[0.18em] text-white/65",
 																	children: "Le classique généreux"
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-																	className: "mt-1 text-3xl font-black tracking-tight sm:text-4xl",
+																	className: "mt-1 break-words font-display text-3xl font-bold tracking-[-0.02em] sm:text-4xl",
 																	children: "Sweet Chicken"
 																})]
 															})
@@ -357,7 +357,7 @@ function Index() {
 																		className: "text-[8px] font-black uppercase tracking-[0.15em] text-white/65",
 																		children: "Pokénball · Premium"
 																	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-																		className: "mt-1 text-xl font-black",
+																		className: "mt-1 break-words font-display text-xl font-bold tracking-[-0.015em]",
 																		children: "Scampis Royal"
 																	})]
 																})
@@ -522,7 +522,7 @@ function Index() {
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex items-start justify-between gap-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-													className: "min-w-0 flex-1 break-words text-[16px] font-black leading-tight sm:text-xl",
+													className: "min-w-0 flex-1 break-words font-display text-[18px] font-bold leading-[1.05] tracking-[-0.015em] sm:text-[21px]",
 													children: bowl.name
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white",
@@ -533,8 +533,15 @@ function Index() {
 												className: "mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]",
 												children: bowl.desc
 											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "mt-4 flex flex-wrap gap-1.5",
+												children: bowl.composition.slice(0, 4).map((ingredient) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "rounded-full bg-[#f4f2eb] px-2.5 py-1 text-[9px] font-bold text-[#66736d]",
+													children: ingredient
+												}, ingredient))
+											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "mt-auto pt-5 text-[9px] font-black uppercase tracking-[0.14em] text-[#ff705f]",
+												className: "mt-auto pt-5 font-display text-[9px] font-semibold uppercase tracking-[0.14em] text-[#ff705f]",
 												children: [
 													t("menu.customize"),
 													" · ",
@@ -853,7 +860,7 @@ function Index() {
 								children: t("info.eyebrow")
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
-								className: "mt-3 text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl",
+								className: "mt-3 break-words font-display text-[1.7rem] font-bold leading-[1.02] tracking-[-0.02em] sm:text-3xl lg:text-4xl",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "block",
 									children: t("info.title1")
