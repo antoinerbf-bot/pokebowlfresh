@@ -14,4 +14,5 @@ deployment:
     - /usr/bin/printf '%s\n' 'import "./.output/server/index.mjs";' > $DEPLOYPATH/server.js
     - /bin/mkdir -p $DEPLOYPATH/tmp
     - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
+    - /bin/cp .htaccess $DEPLOYPATH/.htaccess
     - /usr/bin/printf '%s\n' "$(git rev-parse HEAD)" > $DEPLOYPATH/.deployed-commit
