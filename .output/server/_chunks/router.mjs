@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DHixQNf8.css";
+var styles_default = "/assets/styles-BHwfiszK.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -592,8 +592,8 @@ function RootComponent() {
 	});
 }
 //#endregion
-//#region src/assets/logo.png
-var logo_default = "/assets/logo-yR8iNRjN.png";
+//#region src/assets/logo-poke-n-bowl.svg
+var logo_poke_n_bowl_default = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgMTcwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+UG9rZSBOIEJvd2w8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5Qb2tlIE4gQm93bCB3b3JkbWFyayB3aXRoIHRoZSBOIGVuY2xvc2VkIGluIGEgY2lyY2xlLjwvZGVzYz4KICA8ZyBmaWxsPSIjZmZmZmZmIiBmb250LWZhbWlseT0iQXJpYWwgTmFycm93LCBIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiPgogICAgPHRleHQgeD0iOCIgeT0iNzYiIGZvbnQtc2l6ZT0iNzAiIGxldHRlci1zcGFjaW5nPSIxIj5QT0tFPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMzY1IiBjeT0iNTEiIHI9IjMxIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNiIvPgogICAgPHRleHQgeD0iMzQ1IiB5PSI3MyIgZm9udC1zaXplPSI1OCI+TjwvdGV4dD4KICAgIDx0ZXh0IHg9IjQwNyIgeT0iNzYiIGZvbnQtc2l6ZT0iNzAiIGxldHRlci1zcGFjaW5nPSIxIj5CT1dMPC90ZXh0PgogIDwvZz4KICA8ZyBmaWxsPSIjZmZmZmZmIiBmb250LWZhbWlseT0iQXJpYWwgTmFycm93LCBIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSI3Ij4KICAgIDx0ZXh0IHg9IjE3NiIgeT0iMTIzIiBmb250LXNpemU9IjE4Ij5QT0tFIMK3IFJJQ0UgwrcgQk9XTDwvdGV4dD4KICA8L2c+CiAgPHBhdGggZD0iTTE2OCAxMzJIMTQ1IE01OTYgMTMySDYxOSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==";
 //#endregion
 //#region src/assets/dessert.jpg
 var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
@@ -1128,9 +1128,9 @@ function CartDrawer() {
 //#endregion
 //#region src/routes/index.tsx
 var Route$11 = createFileRoute("/")({
-	head: () => ({ meta: [{ title: "Pokénball — Poké bowls & Crusty Chicken" }, {
+	head: () => ({ meta: [{ title: "Poke N Bowl — Poké bowls & Crusty Chicken" }, {
 		name: "description",
-		content: "Pokénball : poké bowls frais, généreux et Crusty Chicken croustillant. Découvrez nos recettes maison et commandez en ligne."
+		content: "Poke N Bowl : poké bowls frais, généreux et Crusty Chicken croustillant. Découvrez nos recettes maison et commandez en ligne."
 	}] }),
 	component: Index
 });
@@ -1226,19 +1226,19 @@ function Index() {
 							to: "/",
 							onClick: goHome,
 							className: "flex min-w-0 shrink-0 items-center gap-2.5",
-							"aria-label": "Pokénball",
+							"aria-label": "Poke N Bowl",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-14 w-[150px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[175px]",
+								className: "flex h-14 w-[190px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[220px]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									src: logo_default,
-									alt: "Logo Pokénball",
+									src: logo_poke_n_bowl_default,
+									alt: "Logo Poke N Bowl",
 									className: "h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]"
 								})
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "min-w-0 text-white",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
 									className: "block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg",
-									children: "Pokénball"
+									children: "Poke N Bowl"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]",
 									children: "Poké Bowls · Crusty Chicken"
@@ -1464,7 +1464,7 @@ function Index() {
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 																className: "absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]",
-																children: "Pokénball · Maison"
+																children: "Poke N Bowl · Maison"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 																className: "absolute bottom-5 left-5 right-5",
@@ -1498,7 +1498,7 @@ function Index() {
 																	className: "absolute bottom-4 left-4 right-4",
 																	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																		className: "text-[8px] font-black uppercase tracking-[0.15em] text-white/65",
-																		children: "Pokénball · Premium"
+																		children: "Poke N Bowl · Premium"
 																	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 																		className: "mt-1 break-words font-script text-2xl font-bold tracking-[-0.015em]",
 																		children: "Scampis Royal"
@@ -1568,7 +1568,7 @@ function Index() {
 						className: "flex w-max whitespace-nowrap",
 						children: Array.from({ length: 8 }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs",
-							children: ["Pokénball · Cuisine fraîche · Visé ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							children: ["Poke N Bowl · Cuisine fraîche · Visé ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "mx-6",
 								children: "✦"
 							})]
@@ -1722,7 +1722,7 @@ function Index() {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]",
-										children: "Pokénball · Maison"
+										children: "Poke N Bowl · Maison"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 										className: "mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl",
@@ -2108,12 +2108,12 @@ function Index() {
 							to: "/",
 							className: "flex items-center gap-3",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
-								alt: "Pokénball",
-								className: "h-11 w-auto max-w-[170px] object-contain object-left"
+								src: logo_poke_n_bowl_default,
+								alt: "Poke N Bowl",
+								className: "h-12 w-auto max-w-[220px] object-contain object-left"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "font-black",
-								children: "Pokénball"
+								children: "Poke N Bowl"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "text-[8px] font-bold uppercase tracking-[0.18em] text-white/35",
 								children: "Poké Bowls · Crusty Chicken"
@@ -2145,7 +2145,7 @@ function Index() {
 							children: [
 								"© ",
 								(/* @__PURE__ */ new Date()).getFullYear(),
-								" Pokénball"
+								" Poke N Bowl"
 							]
 						})
 					]
@@ -2163,6 +2163,9 @@ function Index() {
 		]
 	});
 }
+//#endregion
+//#region src/assets/logo.png
+var logo_default = "/assets/logo-yR8iNRjN.png";
 //#endregion
 //#region src/lib/orders.ts
 function generateOrderId() {
