@@ -33,14 +33,14 @@ export function DishImage({
   const src = images[dishId];
 
   return (
-    <div className={`relative h-full w-full overflow-hidden bg-[#f4f1e9] ${className}`}>
+    <div className={`relative h-full w-full overflow-hidden bg-[#f7f5ef] ${className}`}>
       <img
         src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={priority ? "high" : "auto"}
-        className="absolute inset-0 h-full w-full object-contain object-center p-3 sm:p-4"
+        className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
     </div>
