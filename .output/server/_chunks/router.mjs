@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DfA2DtA8.css";
+var styles_default = "/assets/styles-DHixQNf8.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -598,6 +598,9 @@ var logo_default = "/assets/logo-yR8iNRjN.png";
 //#region src/assets/dessert.jpg
 var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
 //#endregion
+//#region src/assets/hero-poke.jpg
+var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
+//#endregion
 //#region src/lib/utils.ts
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
@@ -727,39 +730,33 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 }));
 Separator.displayName = Root$1.displayName;
 //#endregion
-//#region src/assets/poke-products.webp
-var poke_products_default = "/assets/poke-products-Dl5IOuj0.webp";
+//#region src/assets/bowl-chicken.jpg
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
+//#endregion
+//#region src/assets/bowl-crousty.jpg
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
-var positions = {
-	"mighty-gyros": "0% 0%",
-	"sweet-chicken": "50% 0%",
-	"scampis-royaux": "100% 0%",
-	"saumon-wasabi": "0% 50%",
-	"spicy-chicken": "50% 50%",
-	"crousty-chicken-curry": "100% 50%",
-	"crousty-chicken-sauce-blanche": "0% 100%"
+var images = {
+	"mighty-gyros": hero_poke_default,
+	"sweet-chicken": bowl_chicken_default,
+	"scampis-royaux": "/assets/bowl-scampi-CKbANxtN.jpg",
+	"saumon-wasabi": hero_poke_default,
+	"spicy-chicken": hero_poke_default,
+	"crousty-chicken-curry": bowl_crousty_default,
+	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const position = positions[dishId];
-	if (!position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		role: "img",
-		"aria-label": alt,
-		className: `flex items-center justify-center rounded-[22px] bg-[#eee8dc] text-[10px] font-black uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
-		children: "Photo produit"
-	});
+	const src = images[dishId] ?? "/assets/hero-poke-Dk38LgOY.jpg";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `relative h-full w-full overflow-hidden bg-[#efe9dd] ${className}`,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			role: "img",
-			"aria-label": alt,
-			className: "absolute inset-0 bg-cover bg-no-repeat",
-			style: {
-				backgroundImage: `url(${poke_products_default})`,
-				backgroundPosition: position,
-				backgroundSize: "300% 300%"
-			}
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.03),transparent_35%,rgba(0,0,0,.05))]" })]
+		className: `relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+			src,
+			alt,
+			loading: "lazy",
+			decoding: "async",
+			className: "absolute inset-0 h-full w-full object-cover object-center"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.02),transparent_42%,rgba(0,0,0,.06))]" })]
 	});
 }
 //#endregion
@@ -814,6 +811,32 @@ var customToppings = [
 	"Wazabi"
 ];
 var allToppings = customToppings;
+var toppingMeta = {
+	"Oignons frits": {
+		emoji: "🧅",
+		label: "Croustillant"
+	},
+	"Sésame seeds": {
+		emoji: "🌱",
+		label: "Sésame"
+	},
+	"Noix de cajou": {
+		emoji: "🥜",
+		label: "Croquant"
+	},
+	"Nachos": {
+		emoji: "🌽",
+		label: "Nachos"
+	},
+	"Flocons-Chili": {
+		emoji: "🌶️",
+		label: "Chili"
+	},
+	"Wazabi": {
+		emoji: "💚",
+		label: "Wasabi"
+	}
+};
 var toppingPrices = {
 	"Oignons frits": .5,
 	"Sésame seeds": .5,
@@ -1204,11 +1227,11 @@ function Index() {
 							className: "flex min-w-0 shrink-0 items-center gap-2.5",
 							"aria-label": "Pokénball",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,.25)] sm:h-14 sm:w-14",
+								className: "flex h-14 w-[150px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[175px]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 									src: logo_default,
 									alt: "Logo Pokénball",
-									className: "h-full w-full object-contain"
+									className: "h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]"
 								})
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "min-w-0 text-white",
@@ -1333,11 +1356,31 @@ function Index() {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 							style: { y: heroImageY },
 							className: "absolute -inset-y-[105px] -z-20",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "h-full w-full bg-[radial-gradient(circle_at_72%_45%,rgba(215,255,69,.18),transparent_30%),linear-gradient(135deg,#10251f,#17231f)]",
-								"aria-hidden": "true"
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.img, {
+								src: hero_poke_default,
+								alt: "",
+								"aria-hidden": "true",
+								className: "h-full w-full object-cover object-center opacity-80 saturate-[1.08]",
+								animate: {
+									scale: [
+										1.02,
+										1.08,
+										1.02
+									],
+									x: [
+										0,
+										-10,
+										0
+									]
+								},
+								transition: {
+									duration: 18,
+									repeat: Infinity,
+									ease: "easeInOut"
+								}
 							})
 						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-20 bg-[radial-gradient(circle_at_72%_42%,rgba(215,255,69,.2),transparent_28%),linear-gradient(110deg,rgba(8,23,19,.96)_0%,rgba(8,23,19,.72)_42%,rgba(8,23,19,.18)_78%,rgba(8,23,19,.52)_100%)]" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 bg-[radial-gradient(circle_at_68%_55%,rgba(255,112,95,.18),transparent_25%),radial-gradient(circle_at_28%_45%,rgba(215,255,69,.08),transparent_28%)]" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -1359,7 +1402,7 @@ function Index() {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-											className: "mt-5 max-w-[680px] break-words font-display text-[clamp(3rem,8vw,5.7rem)] font-bold leading-[.88] tracking-[-0.045em]",
+											className: "mt-5 max-w-[720px] break-words font-script text-[clamp(4.1rem,10vw,7.4rem)] font-bold leading-[.78] tracking-[-0.035em]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "block",
 												children: "Poké Bowls"
@@ -1427,7 +1470,7 @@ function Index() {
 																	className: "text-[9px] font-black uppercase tracking-[0.18em] text-white/65",
 																	children: "Le classique généreux"
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-																	className: "mt-1 break-words font-display text-3xl font-bold tracking-[-0.02em] sm:text-4xl",
+																	className: "mt-1 break-words font-script text-3xl font-bold tracking-[-0.02em] sm:text-4xl",
 																	children: "Sweet Chicken"
 																})]
 															})
@@ -1454,7 +1497,7 @@ function Index() {
 																		className: "text-[8px] font-black uppercase tracking-[0.15em] text-white/65",
 																		children: "Pokénball · Premium"
 																	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-																		className: "mt-1 break-words font-display text-xl font-bold tracking-[-0.015em]",
+																		className: "mt-1 break-words font-script text-2xl font-bold tracking-[-0.015em]",
 																		children: "Scampis Royal"
 																	})]
 																})
@@ -1566,9 +1609,21 @@ function Index() {
 							className: "mb-7 flex flex-wrap gap-2",
 							children: toppingHighlights.map((item, i) => {
 								const tone = i % 4;
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: tone === 0 ? "rounded-full border border-[#ff705f]/20 bg-[#fff0ec] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#c94e3f]" : tone === 1 ? "rounded-full border border-[#d7ff45]/60 bg-[#f2ffd0] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#536018]" : tone === 2 ? "rounded-full border border-[#f3c46b]/50 bg-[#fff4dc] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#9a650f]" : "rounded-full border border-[#79cfc0]/40 bg-[#e9fbf7] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#277d70]",
-									children: item
+								const meta = toppingMeta[item];
+								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: tone === 0 ? "group inline-flex items-center gap-2 rounded-full border border-[#ff705f]/20 bg-[#fff0ec] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#c94e3f] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" : tone === 1 ? "group inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/60 bg-[#f2ffd0] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#536018] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" : tone === 2 ? "group inline-flex items-center gap-2 rounded-full border border-[#ffb347]/30 bg-[#fff5e5] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#9b5d16] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" : "group inline-flex items-center gap-2 rounded-full border border-[#35c7b5]/25 bg-[#e9fffb] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#17796e] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-base transition group-hover:scale-110",
+											"aria-hidden": "true",
+											children: meta?.emoji ?? "✦"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: item }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-white/80 px-2 py-0.5 text-[8px] font-black",
+											children: "+€ 0,50"
+										})
+									]
 								}, item);
 							})
 						}),
@@ -3492,9 +3547,19 @@ function CommanderPage() {
 									children: title
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "mt-3 space-y-1.5",
-									children: values.map((value) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-[11px] leading-4 text-white/70",
-										children: value
+									children: values.map((value) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "flex items-center gap-1.5 text-[11px] leading-4 text-white/70",
+										children: [
+											title === t("cmd.toppings") && toppingMeta[value] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												"aria-hidden": "true",
+												children: toppingMeta[value].emoji
+											}) : null,
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: value }),
+											title === t("cmd.toppings") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "ml-auto rounded-full bg-white/10 px-1.5 py-0.5 text-[9px] font-black text-[#d7ff45]",
+												children: "+0,50€"
+											}) : null
+										]
 									}, value))
 								})]
 							}, title))
@@ -4541,7 +4606,7 @@ function ProductPage() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mb-2 flex items-start justify-between gap-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-									className: "min-w-0 flex-1 break-words pb-1 font-display text-[clamp(2rem,5vw,3.4rem)] font-bold leading-[.98] tracking-[-0.03em]",
+									className: "min-w-0 flex-1 break-words pb-1 font-script text-[clamp(2.5rem,5.5vw,4rem)] font-bold leading-[.98] tracking-[-0.03em]",
 									children: product.name
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "shrink-0 text-2xl font-display font-bold text-coral",
@@ -4558,7 +4623,7 @@ function ProductPage() {
 									className: "text-sm font-black text-[#8f5b12]",
 									children: product.menuNote
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-1 text-xs font-semibold text-[#6e6255]",
+									className: "mt-1 text-xs font-semibold text-[#68756f]",
 									children: "Sauce extra disponible : +1€"
 								})]
 							}),
@@ -4567,7 +4632,7 @@ function ProductPage() {
 								children: t("product.unavailable")
 							}),
 							productOk && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "mb-6 rounded-3xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 p-5 sm:p-6",
+								className: "mb-6 rounded-[28px] border border-[#d7ff45]/50 bg-[linear-gradient(135deg,#f7fff0,#ffffff_55%,#fff3ef)] p-5 shadow-[0_24px_70px_-38px_rgba(23,35,31,.35)] sm:p-6",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-start justify-between gap-4",
@@ -4575,17 +4640,17 @@ function ProductPage() {
 											className: "text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]",
 											children: t("toppings.title")
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-											className: "mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#241a12]",
+											className: "mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#17231f]",
 											children: "Ajoute ta touche"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]",
+											className: "rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#c94e3f]",
 											children: "+ supplément"
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 										className: "mt-2 text-xs leading-5 text-[#6e6255]",
 										children: [isCrousty ? "La recette reste signature. Ajoute autant de toppings payants que tu veux et, si tu veux, une sauce supplémentaire." : "Garde la recette du restaurant et ajoute autant de toppings payants que tu veux.", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "mt-1 block font-black text-[#8f5b12]",
+											className: "mt-1 block font-black text-[#c94e3f]",
 											children: "Aucune limite : tu peux ajouter plusieurs fois le même topping. Chaque ajout est facturé."
 										})]
 									}),
@@ -4595,18 +4660,26 @@ function ProductPage() {
 											const quantity = selectedToppings[topping] ?? 0;
 											const selected = quantity > 0;
 											return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: `rounded-xl border px-3 py-2 transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`,
+												className: `rounded-xl border px-3 py-2 transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#34433d]"}`,
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex min-h-11 items-center justify-between gap-2",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "min-w-0",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-															className: "truncate text-xs font-black",
-															children: topping
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+															className: "flex items-center gap-1.5 truncate text-xs font-black",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																className: "text-base",
+																"aria-hidden": "true",
+																children: toppingMeta[topping]?.emoji ?? "✦"
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																className: "truncate",
+																children: topping
+															})]
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-															className: `text-[10px] font-bold ${selected ? "text-white/75" : "text-[#8a7b6b]"}`,
+															className: `text-[10px] font-bold ${selected ? "text-white/75" : "text-[#718078]"}`,
 															children: [
-																"+€ ",
+																toppingMeta[topping]?.label ?? "Extra",
+																" · +€ ",
 																(toppingPrices[topping] ?? 0).toFixed(2),
 																" / ajout"
 															]
