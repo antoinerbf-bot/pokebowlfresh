@@ -89,10 +89,6 @@ function Index() {
             <span className="flex h-14 w-[190px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[220px]">
               <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]" />
             </span>
-            <span className="min-w-0 text-white">
-              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Poke N Bowl</strong>
-              <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Poké Bowls · Crusty Chicken</span>
-            </span>
           </Link>
 
           <div className="hidden items-center gap-7 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex">
