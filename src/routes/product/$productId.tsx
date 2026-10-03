@@ -80,7 +80,7 @@ function ProductPage() {
             <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
               <img src={logo} alt="Logo" className="h-full w-full object-contain" />
             </span>
-            <span className="truncate text-base font-black tracking-tight sm:text-lg">Poke N Bowl</span>
+            <span className="truncate font-display text-base font-bold tracking-[-0.01em] sm:text-lg">Poke N Bowl</span>
           </Link>
 
           <div className="flex items-center gap-3 sm:gap-4">
@@ -136,7 +136,7 @@ function ProductPage() {
 
           <div className="flex flex-col">
             <div className="mb-2 flex items-start justify-between gap-3">
-              <h1 className="min-w-0 flex-1 break-words pb-1 text-3xl font-extrabold leading-[1.15]">
+              <h1 className="min-w-0 flex-1 break-words pb-1 font-display text-[clamp(2rem,5vw,3.4rem)] font-bold leading-[.98] tracking-[-0.03em]">
                 {product.name}
               </h1>
               <span className="shrink-0 text-2xl font-display font-bold text-coral">
@@ -162,7 +162,7 @@ function ProductPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">{t("toppings.title")}</p>
-                    <h2 className="mt-1 text-xl font-black text-[#241a12]">Ajoute ta touche</h2>
+                    <h2 className="mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#241a12]">Ajoute ta touche</h2>
                   </div>
                   <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">+ supplément</span>
                 </div>
@@ -241,7 +241,7 @@ function ProductPage() {
 
             <div className="rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
               <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="text-lg font-bold">Composition</h2>
+                <h2 className="font-display text-xl font-bold tracking-[-0.01em]">Composition</h2>
                 <span className="shrink-0 text-xs font-semibold text-muted-foreground">{isCrousty ? "Recette signature" : "Recette originale"}</span>
               </div>
               <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
