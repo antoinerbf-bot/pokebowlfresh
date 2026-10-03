@@ -54,6 +54,15 @@ export const customToppings = [
 
 export const allToppings = customToppings;
 
+export const toppingMeta: Record<string, { emoji: string; label: string }> = {
+  "Oignons frits": { emoji: "🧅", label: "Croustillant" },
+  "Sésame seeds": { emoji: "🌱", label: "Sésame" },
+  "Noix de cajou": { emoji: "🥜", label: "Croquant" },
+  "Nachos": { emoji: "🌽", label: "Nachos" },
+  "Flocons-Chili": { emoji: "🌶️", label: "Chili" },
+  "Wazabi": { emoji: "💚", label: "Wasabi" },
+};
+
 // Chaque topping est sélectionnable sans limite de quantité de toppings.
 // Le supplément de chaque topping est appliqué automatiquement au total.
 export const toppingPrices: Record<string, number> = {
