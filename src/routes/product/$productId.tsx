@@ -7,7 +7,7 @@ import { useCart } from "../../context/CartContext";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ShoppingCart, Minus, Plus } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-poke-n-bowl.svg";
 import { useStock } from "../../hooks/useStock";
 
 export const Route = createFileRoute("/product/$productId")({
@@ -76,11 +76,10 @@ function ProductPage() {
 
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-          <Link to="/" className="group flex min-w-0 items-center gap-2.5" aria-label="Poke N Bowl">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
-              <img src={logo} alt="Logo" className="h-full w-full object-contain" />
+          <Link to="/" className="group flex min-w-0 items-center" aria-label="Poke N Bowl">
+            <span className="flex h-11 w-[175px] shrink-0 items-center overflow-hidden sm:h-12 sm:w-[195px]">
+              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain object-left" />
             </span>
-            <span className="truncate font-display text-base font-bold tracking-[-0.01em] sm:text-lg">Poke N Bowl</span>
           </Link>
 
           <div className="flex items-center gap-3 sm:gap-4">
