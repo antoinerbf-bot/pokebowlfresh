@@ -297,7 +297,12 @@ function Index() {
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>\n                    <div className="mt-4 flex flex-wrap gap-1.5">\n                      {bowl.composition.slice(0, 4).map((ingredient) => (\n                        <span key={ingredient} className="rounded-full bg-[#f4f2eb] px-2.5 py-1 text-[9px] font-bold text-[#66736d]">{ingredient}</span>\n                      ))}\n                    </div>
+                    <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {bowl.composition.slice(0, 4).map((ingredient) => (
+                        <span key={ingredient} className="rounded-full bg-[#f4f2eb] px-2.5 py-1 text-[9px] font-bold text-[#66736d]">{ingredient}</span>
+                      ))}
+                    </div>
                     <div className="mt-auto pt-5 font-display text-[9px] font-semibold uppercase tracking-[0.14em] text-[#ff705f]">{t("menu.customize")} · {t("menu.order")} →</div>
                   </div>
                 </Link>
