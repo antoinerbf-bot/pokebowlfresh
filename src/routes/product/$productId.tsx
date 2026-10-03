@@ -136,7 +136,7 @@ function ProductPage() {
 
           <div className="flex flex-col">
             <div className="mb-2 flex items-start justify-between gap-3">
-              <h1 className="min-w-0 flex-1 break-words pb-1 font-display text-[clamp(2rem,5vw,3.4rem)] font-bold leading-[.98] tracking-[-0.03em]">
+              <h1 className="min-w-0 flex-1 break-words pb-1 font-script text-[clamp(2.5rem,5.5vw,4rem)] font-bold leading-[.98] tracking-[-0.03em]">
                 {product.name}
               </h1>
               <span className="shrink-0 text-2xl font-display font-bold text-coral">
