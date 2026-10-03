@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-C3kM0UVV.css";
+var styles_default = "/assets/styles-DX0S-6aI.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -593,13 +593,10 @@ function RootComponent() {
 }
 //#endregion
 //#region src/assets/logo-poke-n-bowl.svg
-var logo_poke_n_bowl_default = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MjAgOTAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5Qb2tlIE4gQm93bDwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlBva2UgTiBCb3dsIHdvcmRtYXJrIHdpdGggdGhlIE4gZW5jbG9zZWQgaW4gYSBjaXJjbGUuPC9kZXNjPgogIDxnIGZpbGw9IiNmZmZmZmYiIGZvbnQtZmFtaWx5PSJBcmlhbCBOYXJyb3csIEhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjgwMCI+CiAgICA8dGV4dCB4PSI0IiB5PSI2NCIgZm9udC1zaXplPSI2NiIgbGV0dGVyLXNwYWNpbmc9IjAiPlBPS0U8L3RleHQ+CiAgICA8Y2lyY2xlIGN4PSIyNTgiIGN5PSI0MCIgcj0iMjgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI1Ii8+CiAgICA8dGV4dCB4PSIyNDEiIHk9IjYxIiBmb250LXNpemU9IjUyIj5OPC90ZXh0PgogICAgPHRleHQgeD0iMjk0IiB5PSI2NCIgZm9udC1zaXplPSI2NiIgbGV0dGVyLXNwYWNpbmc9IjAiPkJPV0w8L3RleHQ+CiAgPC9nPgo8L3N2Zz4=";
+var logo_poke_n_bowl_default = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5Qb2tlIE4gQm93bDwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlBva2UgTiBCb3dsIGNvbXBhY3Qgd29yZG1hcmsuPC9kZXNjPgogIDxnIGZpbGw9IiNmZmZmZmYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIj4KICAgIDx0ZXh0IHg9IjAiIHk9IjY5IiBmb250LXNpemU9IjY0IiBsZXR0ZXItc3BhY2luZz0iLTEuNSI+UE9LRTwvdGV4dD4KICAgIDx0ZXh0IHg9IjI0MiIgeT0iNjkiIGZvbnQtc2l6ZT0iNTIiIGxldHRlci1zcGFjaW5nPSItMSI+TjwvdGV4dD4KICAgIDx0ZXh0IHg9IjI4NiIgeT0iNjkiIGZvbnQtc2l6ZT0iNjQiIGxldHRlci1zcGFjaW5nPSItMS41Ij5CT1dMPC90ZXh0PgogIDwvZz4KPC9zdmc+";
 //#endregion
 //#region src/assets/dessert.jpg
 var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
-//#endregion
-//#region src/assets/hero-poke.jpg
-var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
 //#endregion
 //#region src/lib/utils.ts
 function cn(...inputs) {
@@ -764,16 +761,16 @@ var images = {
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId];
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: `relative h-full w-full overflow-hidden bg-[#f4f1e9] ${className}`,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src,
 			alt,
 			loading: priority ? "eager" : "lazy",
 			decoding: "async",
 			fetchPriority: priority ? "high" : "auto",
-			className: "absolute inset-0 h-full w-full object-cover object-center"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.02),transparent_42%,rgba(0,0,0,.06))]" })]
+			className: "absolute inset-0 h-full w-full object-contain object-center p-3 sm:p-4"
+		})
 	});
 }
 //#endregion
@@ -1363,30 +1360,7 @@ function Index() {
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 							style: { y: heroImageY },
-							className: "absolute -inset-y-[105px] -z-20",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.img, {
-								src: hero_poke_default,
-								alt: "",
-								"aria-hidden": "true",
-								className: "h-full w-full object-cover object-center opacity-80 saturate-[1.08]",
-								animate: {
-									scale: [
-										1.02,
-										1.08,
-										1.02
-									],
-									x: [
-										0,
-										-10,
-										0
-									]
-								},
-								transition: {
-									duration: 18,
-									repeat: Infinity,
-									ease: "easeInOut"
-								}
-							})
+							className: "absolute -inset-y-[105px] -z-20 bg-[radial-gradient(circle_at_78%_38%,rgba(215,255,69,.18),transparent_24%),radial-gradient(circle_at_58%_72%,rgba(255,112,95,.14),transparent_28%),linear-gradient(125deg,#10251f_0%,#18382e_52%,#0e211b_100%)]"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-20 bg-[radial-gradient(circle_at_72%_42%,rgba(215,255,69,.2),transparent_28%),linear-gradient(110deg,rgba(8,23,19,.96)_0%,rgba(8,23,19,.72)_42%,rgba(8,23,19,.18)_78%,rgba(8,23,19,.52)_100%)]" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" }),
@@ -1461,7 +1435,7 @@ function Index() {
 													params: { productId: "sweet-chicken" },
 													className: "group relative overflow-hidden rounded-[34px] border border-white/15 bg-[#eee8dc] shadow-[0_45px_100px_-40px_rgba(0,0,0,.95)]",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-														className: "relative aspect-[.88] overflow-hidden",
+														className: "relative aspect-square overflow-hidden",
 														children: [
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																dishId: "sweet-chicken",
@@ -1493,13 +1467,13 @@ function Index() {
 														params: { productId: "scampis-royaux" },
 														className: "group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															className: "relative aspect-[1.08] overflow-hidden",
+															className: "relative aspect-square overflow-hidden",
 															children: [
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "scampis-royaux",
 																	alt: "Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili",
 																	priority: true,
-																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
+																	className: "h-full w-full transition duration-500 group-hover:scale-[1.015]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1663,12 +1637,12 @@ function Index() {
 									params: { productId: bowl.id },
 									className: `group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1 ${bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45] ring-offset-2" : ""}`,
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "relative aspect-[1.18] overflow-hidden bg-[#ece8dc]",
+										className: "relative aspect-square overflow-hidden bg-[#f4f1e9]",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 												dishId: bowl.id,
 												alt: bowl.name,
-												className: "h-full w-full transition duration-700 group-hover:scale-[1.04]"
+												className: "h-full w-full transition duration-500 group-hover:scale-[1.015]"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02)_35%,rgba(0,0,0,.5)_100%)]" }),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -4591,7 +4565,7 @@ function ProductPage() {
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-16",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "relative aspect-[1.48] overflow-hidden rounded-3xl shadow-lift sm:max-h-[500px]",
+						className: "relative aspect-square overflow-hidden rounded-3xl bg-[#f4f1e9] shadow-lift sm:max-h-[560px]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 							dishId: product.id,
 							alt: product.name,
@@ -4606,7 +4580,7 @@ function ProductPage() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mb-2 flex items-start justify-between gap-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-									className: "min-w-0 flex-1 break-words pb-1 font-script text-[clamp(2.5rem,5.5vw,4rem)] font-bold leading-[.98] tracking-[-0.03em]",
+									className: "min-w-0 flex-1 break-words pb-1 font-display text-[clamp(2.35rem,5.5vw,4rem)] font-bold leading-[.98] tracking-[-0.03em]",
 									children: product.name
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "shrink-0 text-2xl font-display font-bold text-coral",
