@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-COzEqdk-.mjs";
+import { t as Route } from "./_productId-CCcMnNqd.mjs";
 import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
 import { a as ShoppingCart, v as Check, x as ArrowLeft } from "./_libs/lucide-react.mjs";
 import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-c2W_FT7D.mjs";
 import { t as useStock } from "./_ssr/useStock-BnqFMs3d.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-3CNXSX3I.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-71yPRUup.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {
@@ -41,6 +41,15 @@ function ProductPage() {
 	const toppingsPrice = Object.entries(selectedToppings).reduce((sum, [topping, quantity]) => sum + (toppingPrices[topping] ?? 0) * quantity, 0);
 	const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
 	const toppingLabel = (topping) => `Topping : ${topping}`;
+	const changeToppingQuantity = (topping, delta) => {
+		setSelectedToppings((current) => {
+			const nextQuantity = (current[topping] ?? 0) + delta;
+			const next = { ...current };
+			if (nextQuantity <= 0) delete next[topping];
+			else next[topping] = nextQuantity;
+			return next;
+		});
+	};
 	const handleAddToCart = () => {
 		if (!productOk) return;
 		const options = [...Object.entries(selectedToppings).map(([item, quantity]) => `${toppingLabel(item)} ×${quantity} +${((toppingPrices[item] ?? 0) * quantity).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];

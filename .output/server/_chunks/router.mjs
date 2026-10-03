@@ -4432,6 +4432,15 @@ function ProductPage() {
 	const toppingsPrice = Object.entries(selectedToppings).reduce((sum, [topping, quantity]) => sum + (toppingPrices[topping] ?? 0) * quantity, 0);
 	const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
 	const toppingLabel = (topping) => `Topping : ${topping}`;
+	const changeToppingQuantity = (topping, delta) => {
+		setSelectedToppings((current) => {
+			const nextQuantity = (current[topping] ?? 0) + delta;
+			const next = { ...current };
+			if (nextQuantity <= 0) delete next[topping];
+			else next[topping] = nextQuantity;
+			return next;
+		});
+	};
 	const handleAddToCart = () => {
 		if (!productOk) return;
 		const options = [...Object.entries(selectedToppings).map(([item, quantity]) => `${toppingLabel(item)} ×${quantity} +${((toppingPrices[item] ?? 0) * quantity).toFixed(2)}€`), ...isCrousty && extraSauce ? ["Sauce extra +1€"] : []];
