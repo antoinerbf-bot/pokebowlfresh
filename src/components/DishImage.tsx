@@ -40,7 +40,7 @@ export function DishImage({
         loading={priority ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={priority ? "high" : "auto"}
-        className="absolute inset-0 h-full w-full object-contain object-center p-3 sm:p-4"
+        className="absolute inset-0 h-full w-full object-contain object-center"
       />
 
     </div>
