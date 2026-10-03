@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DX0S-6aI.css";
+var styles_default = "/assets/styles-CCf2L-xo.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -762,14 +762,14 @@ var images = {
 function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `relative h-full w-full overflow-hidden bg-[#f4f1e9] ${className}`,
+		className: `relative h-full w-full overflow-hidden bg-[#f7f5ef] ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src,
 			alt,
 			loading: priority ? "eager" : "lazy",
 			decoding: "async",
 			fetchPriority: priority ? "high" : "auto",
-			className: "absolute inset-0 h-full w-full object-contain object-center p-3 sm:p-4"
+			className: "absolute inset-0 h-full w-full object-cover object-center"
 		})
 	});
 }
@@ -1441,7 +1441,7 @@ function Index() {
 																dishId: "sweet-chicken",
 																alt: "Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos",
 																priority: true,
-																className: "h-full w-full transition duration-700 group-hover:scale-[1.045]"
+																className: "h-full w-full transition duration-700 group-hover:scale-[1.01]"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -1454,7 +1454,7 @@ function Index() {
 																	className: "text-[9px] font-black uppercase tracking-[0.18em] text-white/65",
 																	children: "Le classique généreux"
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-																	className: "mt-1 break-words font-script text-3xl font-bold tracking-[-0.02em] sm:text-4xl",
+																	className: "mt-1 break-words font-display text-3xl font-bold tracking-[-0.02em] sm:text-4xl",
 																	children: "Sweet Chicken"
 																})]
 															})
@@ -1482,7 +1482,7 @@ function Index() {
 																		className: "text-[8px] font-black uppercase tracking-[0.15em] text-white/65",
 																		children: "Poke N Bowl · Premium"
 																	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-																		className: "mt-1 break-words font-script text-2xl font-bold tracking-[-0.015em]",
+																		className: "mt-1 break-words font-display text-2xl font-bold tracking-[-0.015em]",
 																		children: "Scampis Royal"
 																	})]
 																})
@@ -1493,13 +1493,13 @@ function Index() {
 														params: { productId: "crousty-chicken-curry" },
 														className: "group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															className: "relative aspect-[1.08] overflow-hidden",
+															className: "relative aspect-square overflow-hidden",
 															children: [
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "crousty-chicken-curry",
 																	alt: "Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits",
 																	priority: true,
-																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
+																	className: "h-full w-full transition duration-700 group-hover:scale-[1.01]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1751,11 +1751,11 @@ function Index() {
 										params: { productId: item.id },
 										className: "group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-white shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "relative aspect-[1.22] overflow-hidden bg-[#eee8dc]",
+											className: "relative aspect-square overflow-hidden bg-[#eee8dc]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 												dishId: item.id,
 												alt: item.name,
-												className: "h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.06]"
+												className: "h-full w-full transition duration-700 group-hover:scale-[1.01]"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "absolute inset-x-0 top-0 flex items-center justify-between p-4",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {

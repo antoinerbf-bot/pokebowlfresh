@@ -11,7 +11,7 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CtZo4osU.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CnOKzUCY.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var logo_poke_n_bowl_default = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5Qb2tlIE4gQm93bDwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlBva2UgTiBCb3dsIGNvbXBhY3Qgd29yZG1hcmsuPC9kZXNjPgogIDxnIGZpbGw9IiNmZmZmZmYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIj4KICAgIDx0ZXh0IHg9IjAiIHk9IjY5IiBmb250LXNpemU9IjY0IiBsZXR0ZXItc3BhY2luZz0iLTEuNSI+UE9LRTwvdGV4dD4KICAgIDx0ZXh0IHg9IjI0MiIgeT0iNjkiIGZvbnQtc2l6ZT0iNTIiIGxldHRlci1zcGFjaW5nPSItMSI+TjwvdGV4dD4KICAgIDx0ZXh0IHg9IjI4NiIgeT0iNjkiIGZvbnQtc2l6ZT0iNjQiIGxldHRlci1zcGFjaW5nPSItMS41Ij5CT1dMPC90ZXh0PgogIDwvZz4KPC9zdmc+";
@@ -35,14 +35,14 @@ var images = {
 function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `relative h-full w-full overflow-hidden bg-[#f4f1e9] ${className}`,
+		className: `relative h-full w-full overflow-hidden bg-[#f7f5ef] ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src,
 			alt,
 			loading: priority ? "eager" : "lazy",
 			decoding: "async",
 			fetchPriority: priority ? "high" : "auto",
-			className: "absolute inset-0 h-full w-full object-contain object-center p-3 sm:p-4"
+			className: "absolute inset-0 h-full w-full object-cover object-center"
 		})
 	});
 }
