@@ -1,11 +1,13 @@
+// ─── BASES ────────────────────────────────────────────────────────────────────
 export const customBases = [
-  "Riz basmati",
-  "Riz basmati complet",
+  "Riz blanc",
+  "Riz brun",
   "Pâtes",
   "Nachos",
   "Salade",
 ];
 
+// ─── MIX-INS ──────────────────────────────────────────────────────────────────
 export const customMixIns = [
   "Guacamole",
   "Brocolis",
@@ -25,6 +27,7 @@ export const customMixIns = [
   "Houmous",
 ];
 
+// ─── PROTÉINES ────────────────────────────────────────────────────────────────
 export const customProteins = [
   "Poulet",
   "Gyros",
@@ -32,6 +35,7 @@ export const customProteins = [
   "Scampis",
 ];
 
+// ─── SAUCES ───────────────────────────────────────────────────────────────────
 export const customSauces = [
   "Mayo",
   "Mayo-Wasabi",
@@ -43,110 +47,209 @@ export const customSauces = [
   "Mayo truffe",
 ];
 
-export const customToppings = [
-  "Oignons frits",
-  "Sésame seeds",
-  "Noix de cajou",
-  "Nachos",
-  "Flocons-Chili",
-  "Wazabi",
+// ─── TOPPINGS (structure extensible) ─────────────────────────────────────────
+// Pour ajouter un nouveau topping : ajouter un objet à ce tableau.
+// Aucune autre modification n'est nécessaire.
+export interface Topping {
+  id: string;
+  name: string;
+  emoji: string;
+  price: number;       // 0 = inclus
+  available: boolean;
+  category?: "crunch" | "spice" | "fresh" | "creamy";
+}
+
+export const toppings: Topping[] = [
+  { id: "oignons-frits",  name: "Oignons frits",   emoji: "🧅", price: 0, available: true, category: "crunch" },
+  { id: "sesame",         name: "Sésame",           emoji: "🌱", price: 0, available: true, category: "crunch" },
+  { id: "noix-cajou",     name: "Noix de cajou",   emoji: "🥜", price: 0, available: true, category: "crunch" },
+  { id: "nachos",         name: "Nachos",           emoji: "🌽", price: 0, available: true, category: "crunch" },
+  { id: "flocons-chili",  name: "Flocons chili",   emoji: "🌶️", price: 0, available: true, category: "spice" },
+  { id: "wasabi",         name: "Wasabi",           emoji: "🟢", price: 0, available: true, category: "spice" },
 ];
 
+// Pour les données legacy (commander.tsx, etc.)
+export const customToppings = toppings.map((t) => t.name);
 export const allToppings = customToppings;
 
-export const toppingMeta: Record<string, { emoji: string; label: string }> = {
-  "Oignons frits": { emoji: "🧅", label: "Croustillant" },
-  "Sésame seeds": { emoji: "🌱", label: "Sésame" },
-  "Noix de cajou": { emoji: "🥜", label: "Croquant" },
-  "Nachos": { emoji: "🌽", label: "Nachos" },
-  "Flocons-Chili": { emoji: "🌶️", label: "Chili" },
-  "Wazabi": { emoji: "💚", label: "Wasabi" },
-};
+// ─── INGRÉDIENTS RETIRABLES ───────────────────────────────────────────────────
+// Chaque ingrédient de composition peut être marqué comme "removable: true"
+// pour permettre au client de le retirer du bowl.
+export interface Ingredient {
+  name: string;
+  emoji?: string;
+  removable: boolean;  // true = le client peut le retirer
+  isProtein?: boolean;
+  isSauce?: boolean;
+  isBase?: boolean;
+}
 
-// Chaque topping est sélectionnable sans limite de quantité de toppings.
-// Le supplément de chaque topping est appliqué automatiquement au total.
-export const toppingPrices: Record<string, number> = {
-  "Oignons frits": 0.50,
-  "Sésame seeds": 0.50,
-  "Noix de cajou": 0.50,
-  "Nachos": 0.50,
-  "Flocons-Chili": 0.50,
-  "Wazabi": 0.50,
-};
+// ─── BOWLS ────────────────────────────────────────────────────────────────────
+export interface Bowl {
+  id: string;
+  name: string;
+  price: number;
+  desc: string;
+  ingredients: Ingredient[];  // composition détaillée avec removable
+  tag: string;
+  tagColor?: "signature" | "bestseller" | "premium" | "spicy" | "new";
+  menuNote?: string;
+}
 
-export const bowls = [
+export const bowls: Bowl[] = [
   {
     id: "mighty-gyros",
     name: "Mighty Gyros",
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
-    composition: ["Guacamole", "Maïs", "Tomates cerises", "Concombre", "Oignons", "Gyros maison", "Spicy mayo", "Flocons de chili"],
-    tag: "Maison",
+    tag: "Signature",
+    tagColor: "signature",
+    ingredients: [
+      { name: "Riz blanc",        emoji: "🍚", removable: false, isBase: true },
+      { name: "Gyros maison",     emoji: "🥙", removable: false, isProtein: true },
+      { name: "Guacamole",        emoji: "🥑", removable: true },
+      { name: "Maïs",             emoji: "🌽", removable: true },
+      { name: "Tomates cerises",  emoji: "🍅", removable: true },
+      { name: "Concombre",        emoji: "🥒", removable: true },
+      { name: "Oignons",          emoji: "🧅", removable: true },
+      { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
+      { name: "Flocons de chili", emoji: "🔥", removable: true },
+    ],
   },
   {
     id: "sweet-chicken",
     name: "Sweet Chicken",
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
-    composition: ["Guacamole", "Maïs", "Tomates cerises", "Mangue", "Feta", "Poulet maison", "Sauce teriyaki", "Oignons croustillants", "Sésame mix", "Nachos"],
-    tag: "Incontournable",
+    tag: "Best-seller",
+    tagColor: "bestseller",
+    ingredients: [
+      { name: "Riz blanc",             emoji: "🍚", removable: false, isBase: true },
+      { name: "Poulet maison",         emoji: "🍗", removable: false, isProtein: true },
+      { name: "Guacamole",             emoji: "🥑", removable: true },
+      { name: "Maïs",                  emoji: "🌽", removable: true },
+      { name: "Tomates cerises",       emoji: "🍅", removable: true },
+      { name: "Mangue",                emoji: "🥭", removable: true },
+      { name: "Feta",                  emoji: "🧀", removable: true },
+      { name: "Sauce teriyaki",        emoji: "🍯", removable: true, isSauce: true },
+      { name: "Oignons croustillants", emoji: "🧅", removable: true },
+      { name: "Sésame mix",            emoji: "🌱", removable: true },
+      { name: "Nachos",                emoji: "🫓", removable: true },
+    ],
   },
   {
     id: "scampis-royaux",
     name: "Scampis Royal",
     price: 10.00,
     desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
-    composition: ["Guacamole", "Edamame", "Tomates", "Concombre", "Poivrons", "Scampis", "Spicy mayo", "Jalapeños", "Nachos", "Flocons de chili"],
-    tag: "Maison",
+    tag: "Signature",
+    tagColor: "signature",
+    ingredients: [
+      { name: "Riz blanc",        emoji: "🍚", removable: false, isBase: true },
+      { name: "Scampis",          emoji: "🦐", removable: false, isProtein: true },
+      { name: "Guacamole",        emoji: "🥑", removable: true },
+      { name: "Edamame",          emoji: "🫘", removable: true },
+      { name: "Tomates",          emoji: "🍅", removable: true },
+      { name: "Concombre",        emoji: "🥒", removable: true },
+      { name: "Poivrons",         emoji: "🫑", removable: true },
+      { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
+      { name: "Jalapeños",        emoji: "🌶️", removable: true },
+      { name: "Nachos",           emoji: "🫓", removable: true },
+      { name: "Flocons de chili", emoji: "🔥", removable: true },
+    ],
   },
   {
     id: "saumon-wasabi",
     name: "Saumon Wasabi",
     price: 11.00,
     desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
-    composition: ["Avocat", "Salade d'algues", "Mangue", "Maïs", "Edamame", "Saumon", "Mayo wasabi", "Sésame mix", "Nachos"],
     tag: "Premium",
-    menuNote: "Supplément saumon : +1 €.",
+    tagColor: "premium",
+    ingredients: [
+      { name: "Riz blanc",      emoji: "🍚", removable: false, isBase: true },
+      { name: "Saumon",         emoji: "🐟", removable: false, isProtein: true },
+      { name: "Avocat",         emoji: "🥑", removable: true },
+      { name: "Salade d'algues",emoji: "🌿", removable: true },
+      { name: "Mangue",         emoji: "🥭", removable: true },
+      { name: "Maïs",           emoji: "🌽", removable: true },
+      { name: "Edamame",        emoji: "🫘", removable: true },
+      { name: "Mayo wasabi",    emoji: "🟢", removable: true, isSauce: true },
+      { name: "Sésame mix",     emoji: "🌱", removable: true },
+      { name: "Nachos",         emoji: "🫓", removable: true },
+    ],
   },
   {
     id: "spicy-chicken",
     name: "Spicy Chicken",
     price: 10.00,
     desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
-    composition: ["Avocat", "Patates douces", "Maïs", "Jalapeños", "Feta", "Poulet maison", "Spicy mayo", "Flocons de chili", "Sésame mix", "Nachos"],
     tag: "Épicé",
+    tagColor: "spicy",
+    ingredients: [
+      { name: "Riz blanc",        emoji: "🍚", removable: false, isBase: true },
+      { name: "Poulet maison",    emoji: "🍗", removable: false, isProtein: true },
+      { name: "Avocat",           emoji: "🥑", removable: true },
+      { name: "Patates douces",   emoji: "🍠", removable: true },
+      { name: "Maïs",             emoji: "🌽", removable: true },
+      { name: "Jalapeños",        emoji: "🌶️", removable: true },
+      { name: "Feta",             emoji: "🧀", removable: true },
+      { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
+      { name: "Flocons de chili", emoji: "🔥", removable: true },
+      { name: "Sésame mix",       emoji: "🌱", removable: true },
+      { name: "Nachos",           emoji: "🫓", removable: true },
+    ],
   },
   {
     id: "crousty-chicken-curry",
     name: "Crousty Chicken Curry",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, sauce curry onctueuse et oignons frits croustillants.",
-    composition: ["Poulet croustillant", "Riz basmati", "Sauce curry onctueuse", "Oignons frits croustillants"],
+    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
     tag: "Nouveau",
-    menuNote: "Menu étudiant : 11 € avec boisson incluse. Sauce extra : +1 €.",
+    tagColor: "new",
+    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+    ingredients: [
+      { name: "Riz parfumé",             emoji: "🍚", removable: false, isBase: true },
+      { name: "Poulet croustillant",     emoji: "🍗", removable: false, isProtein: true },
+      { name: "Oignons frits",           emoji: "🧅", removable: true },
+      { name: "Sauce curry onctueuse",   emoji: "🍛", removable: false, isSauce: true },
+    ],
   },
   {
     id: "crousty-chicken-sauce-blanche",
     name: "Crousty Chicken Sauce Blanche",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, sauce blanche et oignons frits croustillants.",
-    composition: ["Poulet croustillant", "Riz basmati", "Sauce blanche", "Oignons frits croustillants"],
+    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
     tag: "Nouveau",
-    menuNote: "Menu étudiant : 11 € avec boisson incluse. Sauce extra : +1 €.",
+    tagColor: "new",
+    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+    ingredients: [
+      { name: "Riz parfumé",         emoji: "🍚", removable: false, isBase: true },
+      { name: "Poulet croustillant", emoji: "🍗", removable: false, isProtein: true },
+      { name: "Oignons frits",       emoji: "🧅", removable: true },
+      { name: "Sauce blanche maison",emoji: "🤍", removable: false, isSauce: true },
+    ],
   },
 ];
 
+// Helper: backward compat pour CartDrawer / useStock (utilise l'id + nom)
+// Expose aussi composition en tableau de strings pour compatibilité
+export function bowlComposition(bowl: Bowl): string[] {
+  return bowl.ingredients.map((i) => i.name);
+}
+
+// ─── BOISSONS ─────────────────────────────────────────────────────────────────
 export const drinks = [
-  { id: "coca", name: "Coca-Cola (33 cl)", price: 2.00 },
-  { id: "coca-zero", name: "Coca-Cola Zero (33 cl)", price: 2.00 },
-  { id: "fanta", name: "Fanta (33 cl)", price: 2.00 },
-  { id: "ice-tea", name: "Ice-Tea (33 cl)", price: 2.00 },
-  { id: "eau-plate", name: "Eau plate", price: 2.00 },
-  { id: "eau-gaz", name: "Eau gazeuse (50 cl)", price: 2.00 },
+  { id: "coca",      name: "Coca-Cola (33 cl)",    price: 2.00 },
+  { id: "coca-zero", name: "Coca-Cola Zero (33 cl)",price: 2.00 },
+  { id: "fanta",     name: "Fanta (33 cl)",         price: 2.00 },
+  { id: "ice-tea",   name: "Ice-Tea (33 cl)",        price: 2.00 },
+  { id: "eau-plate", name: "Eau plate",              price: 2.00 },
+  { id: "eau-gaz",   name: "Eau gazeuse (50 cl)",   price: 2.00 },
 ];
 
+// ─── DESSERTS ─────────────────────────────────────────────────────────────────
 export const desserts = [
-  { id: "tira-oreo", name: "Tiramisu Oreo", price: 4.00 },
-  { id: "tira-nutella", name: "Tiramisu Nutella", price: 4.00 },
-  { id: "tira-spec", name: "Tiramisu Spéculoos", price: 4.00 },
+  { id: "tira-oreo",    name: "Tiramisu Oreo",      price: 4.00 },
+  { id: "tira-nutella", name: "Tiramisu Nutella",   price: 4.00 },
+  { id: "tira-spec",    name: "Tiramisu Spéculoos", price: 4.00 },
 ];

@@ -3,17 +3,19 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 export interface CartItem {
   id: string;
   name: string;
-  price: number;
+  basePrice: number;     // prix de base du produit
+  price: number;         // prix final (base + toppings payants)
   quantity: number;
-  toppings: string[];
+  toppings: string[];    // toppings ajoutés
+  removedIngredients: string[];  // ingrédients retirés
   image?: string;
 }
 
 interface CartContextType {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, toppings: string[], removedIngredients: string[]) => void;
+  updateQuantity: (id: string, toppings: string[], removedIngredients: string[], quantity: number) => void;
   clearCart: () => void;
   total: number;
   isCartOpen: boolean;
@@ -22,18 +24,21 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+function itemKey(item: Pick<CartItem, "id" | "toppings" | "removedIngredients">) {
+  return `${item.id}::${[...item.toppings].sort().join(",")}::${[...item.removedIngredients].sort().join(",")}`;
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addItem = (newItem: CartItem) => {
     setItems((prev) => {
-      const existing = prev.find(
-        (item) => item.id === newItem.id && JSON.stringify(item.toppings) === JSON.stringify(newItem.toppings)
-      );
+      const key = itemKey(newItem);
+      const existing = prev.find((item) => itemKey(item) === key);
       if (existing) {
         return prev.map((item) =>
-          item.id === newItem.id && JSON.stringify(item.toppings) === JSON.stringify(newItem.toppings)
+          itemKey(item) === key
             ? { ...item, quantity: item.quantity + newItem.quantity }
             : item
         );
@@ -43,23 +48,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen(true);
   };
 
-  const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  const removeItem = (id: string, toppings: string[], removedIngredients: string[]) => {
+    const key = itemKey({ id, toppings, removedIngredients });
+    setItems((prev) => prev.filter((item) => itemKey(item) !== key));
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = (
+    id: string,
+    toppings: string[],
+    removedIngredients: string[],
+    quantity: number
+  ) => {
     if (quantity <= 0) {
-      removeItem(id);
+      removeItem(id, toppings, removedIngredients);
       return;
     }
+    const key = itemKey({ id, toppings, removedIngredients });
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+      prev.map((item) => (itemKey(item) === key ? { ...item, quantity } : item))
     );
   };
 
-  const clearCart = () => {
-    setItems([]);
-  };
+  const clearCart = () => setItems([]);
 
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 

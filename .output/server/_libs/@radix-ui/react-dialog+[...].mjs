@@ -357,7 +357,6 @@ function createSlot(ownerName) {
 	return Slot2;
 }
 __name$8(createSlot, "createSlot");
-var Slot$1 = /* @__PURE__ */ createSlot("Slot");
 var SLOTTABLE_IDENTIFIER = Symbol.for("radix.slottable");
 // @__NO_SIDE_EFFECTS__
 function createSlottable(ownerName) {
@@ -2188,4 +2187,4 @@ function getState(open) {
 }
 __name(getState, "getState");
 //#endregion
-export { DialogOverlay as a, Presence as c, Slot$1 as d, useLayoutEffect2 as f, DialogDescription as i, useCallbackRef$1 as l, DialogClose as n, DialogPortal as o, require_react_dom as p, DialogContent as r, DialogTitle as s, Dialog as t, Primitive as u };
+export { DialogOverlay as a, Presence as c, useLayoutEffect2 as d, require_react_dom as f, DialogDescription as i, useCallbackRef$1 as l, DialogClose as n, DialogPortal as o, DialogContent as r, DialogTitle as s, Dialog as t, Primitive as u };

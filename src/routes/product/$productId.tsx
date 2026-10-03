@@ -1,110 +1,270 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { bowls, customToppings, toppingPrices, toppingMeta } from "../../lib/data";
+import { bowls, toppings, type Topping } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Minus, Plus } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, Minus, Plus, X } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
-import logo from "@/assets/logo-poke-n-bowl.svg";
+import logo from "@/assets/logo.png";
 import { useStock } from "../../hooks/useStock";
 
 export const Route = createFileRoute("/product/$productId")({
   component: ProductPage,
 });
 
+/* ─── Tag colors ─────────────────────────────────────────────────── */
+const TAG_STYLES: Record<string, string> = {
+  signature:  "bg-[#10251f] text-[#d7ff45]",
+  bestseller: "bg-[#ff705f] text-white",
+  premium:    "bg-[#7c4f1a] text-[#ffe9c2]",
+  spicy:      "bg-[#c0350f] text-white",
+  new:        "bg-[#d7ff45] text-[#10251f]",
+};
+
+/* ─── Topping chip component ─────────────────────────────────────── */
+function ToppingChip({
+  topping,
+  selected,
+  disabled,
+  onToggle,
+}: {
+  topping: Topping;
+  selected: boolean;
+  disabled: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      disabled={disabled && !selected}
+      aria-pressed={selected}
+      aria-label={`${topping.name}${topping.price > 0 ? ` +${topping.price.toFixed(2)}€` : " inclus"}`}
+      className={[
+        "topping-chip relative select-none",
+        selected
+          ? "border-[#ff705f] bg-[#fff1ee] shadow-[0_4px_14px_-6px_rgba(255,112,95,.55)]"
+          : disabled
+          ? "cursor-not-allowed opacity-40"
+          : "border-[#e8e2d9] hover:border-[#ff705f]/50",
+      ].join(" ")}
+    >
+      {/* Selected checkmark */}
+      {selected && (
+        <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f]">
+          <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+        </span>
+      )}
+      <span className="text-2xl leading-none" role="img" aria-hidden="true">
+        {topping.emoji}
+      </span>
+      <span className="text-[11px] font-bold leading-tight text-[#2e2619]">
+        {topping.name}
+      </span>
+      {topping.price > 0 ? (
+        <span className="text-[10px] font-black text-[#ff705f]">+{topping.price.toFixed(2)}€</span>
+      ) : (
+        <span className="text-[10px] font-semibold text-[#a09a92]">inclus</span>
+      )}
+    </button>
+  );
+}
+
+/* ─── Ingredient pill (removable) ────────────────────────────────── */
+function IngredientPill({
+  name,
+  emoji,
+  removable,
+  removed,
+  onToggle,
+}: {
+  name: string;
+  emoji: string | undefined;
+  removable: boolean;
+  removed: boolean;
+  onToggle?: (() => void) | undefined;
+}) {
+  if (!removable) {
+    return (
+      <span className="ingredient-pill ingredient-pill--locked" title="Ingrédient fixe">
+        {emoji && <span role="img" aria-hidden="true">{emoji}</span>}
+        {name}
+      </span>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={removed}
+      aria-label={removed ? `Remettre ${name}` : `Retirer ${name}`}
+      className={["ingredient-pill", removed ? "ingredient-pill--removed" : ""].join(" ")}
+    >
+      {emoji && <span role="img" aria-hidden="true">{emoji}</span>}
+      {name}
+      {removed ? (
+        <span className="ml-1 text-[#ff705f]">✕</span>
+      ) : (
+        <X className="h-3 w-3 shrink-0 text-[#a09a92] opacity-60" />
+      )}
+    </button>
+  );
+}
+
+/* ─── Quantity selector ──────────────────────────────────────────── */
+function QuantitySelector({
+  qty,
+  onMinus,
+  onPlus,
+}: {
+  qty: number;
+  onMinus: () => void;
+  onPlus: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <button
+        type="button"
+        onClick={onMinus}
+        aria-label="Diminuer la quantité"
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e8e2d9] bg-white text-[#2e2619] transition hover:border-[#ff705f] hover:text-[#ff705f] active:scale-90"
+      >
+        <Minus className="h-4 w-4" />
+      </button>
+      <span className="w-6 text-center text-lg font-black tabular-nums">{qty}</span>
+      <button
+        type="button"
+        onClick={onPlus}
+        aria-label="Augmenter la quantité"
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e8e2d9] bg-white text-[#2e2619] transition hover:border-[#ff705f] hover:text-[#ff705f] active:scale-90"
+      >
+        <Plus className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
+
+/* ─── Main page ──────────────────────────────────────────────────── */
 function ProductPage() {
   const { productId } = Route.useParams();
   const product = bowls.find((b) => b.id === productId);
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
-  const [selectedToppings, setSelectedToppings] = React.useState<Record<string, number>>({});
+
+  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
+  const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
   const [extraSauce, setExtraSauce] = React.useState(false);
+  const [qty, setQty] = React.useState(1);
+  const [added, setAdded] = React.useState(false);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   if (!product) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-5">
+      <div className="flex min-h-screen items-center justify-center bg-[#f7f4ec] px-5">
         <div className="text-center">
-          <h1 className="mb-4 break-words text-3xl font-bold">{t("product.not_found")}</h1>
-          <Link to="/commander" className="text-coral underline">{t("product.back")}</Link>
+          <h1 className="mb-4 text-3xl font-black">{t("product.not_found")}</h1>
+          <Link to="/commander" className="text-[#ff705f] underline font-bold">
+            {t("product.back")}
+          </Link>
         </div>
       </div>
     );
   }
 
   const productOk = available(product.id);
-
   const isCrousty = product.id.startsWith("crousty-");
-  const toppingsPrice = Object.entries(selectedToppings).reduce((sum, [topping, quantity]) => sum + (toppingPrices[topping] ?? 0) * quantity, 0);
-  const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
 
-  const toppingLabel = (topping: string) => `Topping : ${topping}`;
+  /* ── Prix dynamique ─────────────────────────────────────── */
+  const toppingExtra = selectedToppings.reduce((sum, tid) => {
+    const t = toppings.find((t) => t.id === tid || t.name === tid);
+    return sum + (t?.price ?? 0);
+  }, 0);
+  const extraSaucePrice = isCrousty && extraSauce ? 1 : 0;
+  const unitPrice = product.price + toppingExtra + extraSaucePrice;
+  const totalPrice = unitPrice * qty;
 
-  const changeToppingQuantity = (topping: string, delta: number) => {
-    setSelectedToppings((current) => {
-      const nextQuantity = (current[topping] ?? 0) + delta;
-      const next = { ...current };
-      if (nextQuantity <= 0) delete next[topping];
-      else next[topping] = nextQuantity;
-      return next;
+  const toggleTopping = (topping: Topping) => {
+    setSelectedToppings((cur) => {
+      if (cur.includes(topping.name)) return cur.filter((t) => t !== topping.name);
+      if (cur.length >= 2) return cur;
+      return [...cur, topping.name];
     });
+  };
+
+  const toggleIngredient = (name: string) => {
+    setRemovedIngredients((cur) =>
+      cur.includes(name) ? cur.filter((n) => n !== name) : [...cur, name]
+    );
   };
 
   const handleAddToCart = () => {
     if (!productOk) return;
     const options = [
-      ...Object.entries(selectedToppings).map(([item, quantity]) => `${toppingLabel(item)} ×${quantity} +${((toppingPrices[item] ?? 0) * quantity).toFixed(2)}€`),
+      ...selectedToppings.map((t) => "Topping : " + t),
       ...(isCrousty && extraSauce ? ["Sauce extra +1€"] : []),
     ];
     addItem({
       id: product.id,
       name: product.name,
-      price: finalPrice,
-      quantity: 1,
+      basePrice: product.price,
+      price: unitPrice,
+      quantity: qty,
       toppings: options,
+      removedIngredients,
     });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1800);
     setIsCartOpen(true);
   };
 
+  const removableIngredients = product.ingredients.filter((i) => i.removable);
+  const fixedIngredients = product.ingredients.filter((i) => !i.removable);
+  const tagStyle = TAG_STYLES[product.tagColor ?? "signature"] ?? "bg-[#10251f] text-white";
+
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-[#f7f4ec] text-[#17231f]">
       <CartDrawer />
 
-      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
-          <Link to="/" className="group flex min-w-0 items-center" aria-label="Poke N Bowl">
-            <span className="flex h-11 w-[175px] shrink-0 items-center overflow-hidden sm:h-12 sm:w-[195px]">
-              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain object-left" />
+      {/* ── Header ─────────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6">
+          <Link to="/" className="group flex min-w-0 items-center gap-2.5" aria-label="Poke N Bowl">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-card p-1.5">
+              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain" />
             </span>
+            <span className="truncate text-base font-black tracking-tight sm:text-lg">Poke N Bowl</span>
           </Link>
 
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="flex items-center gap-1 rounded-full bg-secondary p-1">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Language switcher */}
+            <div className="hidden rounded-full border border-black/10 bg-white p-1 sm:flex">
               {(["fr", "en", "nl"] as const).map((lang) => (
                 <button
                   key={lang}
                   type="button"
                   onClick={() => setLanguage(lang)}
-                  className={`rounded-full px-2 py-1 text-xs font-bold uppercase transition-colors ${
-                    language === lang ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground"
+                  className={`rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${
+                    language === lang ? "bg-[#10251f] text-white" : "text-[#7a847e] hover:text-[#17231f]"
                   }`}
                 >
                   {lang}
                 </button>
               ))}
             </div>
+            {/* Cart button */}
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
-              className="relative rounded-full bg-secondary p-2 transition-colors hover:bg-secondary/80"
+              className="relative rounded-full bg-[#10251f] p-2.5 text-white transition hover:bg-[#1e3d33]"
+              aria-label={t("cart.title")}
             >
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className="h-4 w-4" />
               {cartItemsCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-coral text-[10px] font-bold text-white">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black">
                   {cartItemsCount}
                 </span>
               )}
@@ -113,175 +273,246 @@ function ProductPage() {
         </nav>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-8 pb-28 sm:pb-8">
+      {/* ── Main ───────────────────────────────────────────── */}
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 pb-32 sm:px-6 sm:pb-10 lg:px-8">
         <Link
           to="/commander"
-          className="mb-6 inline-flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-8 inline-flex items-center gap-1.5 text-sm font-bold text-[#7a847e] transition hover:text-[#17231f]"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> {t("product.back")}
+          <ArrowLeft className="h-4 w-4" />
+          {t("product.back")}
         </Link>
 
-        <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-16">
-          <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#f4f1e9] shadow-lift sm:max-h-[560px]">
-            <DishImage
-              dishId={product.id}
-              alt={product.name}
-              className={`h-full w-full transition duration-500 ${!productOk ? "grayscale" : ""}`}
-            />
-            <span className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-bold text-primary shadow-sm">
-              {productOk ? product.tag : t("cmd.sold_out")}
-            </span>
-          </div>
-
-          <div className="flex flex-col">
-            <div className="mb-2 flex items-start justify-between gap-3">
-              <h1 className="min-w-0 flex-1 break-words pb-1 font-display text-[clamp(2.35rem,5.5vw,4rem)] font-bold leading-[.98] tracking-[-0.03em]">
-                {product.name}
-              </h1>
-              <span className="shrink-0 text-2xl font-display font-bold text-coral">
+        <div className="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
+          {/* ── Image ──────────────────────────────────────── */}
+          <div>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] shadow-lift sm:rounded-[36px]">
+              <DishImage
+                dishId={product.id}
+                alt={product.name}
+                priority
+                className={`h-full w-full object-cover transition duration-700 ${!productOk ? "grayscale" : ""}`}
+              />
+              {/* Tag */}
+              <span className={`badge-tag absolute left-4 top-4 shadow-card ${tagStyle}`}>
+                {productOk ? product.tag : t("cmd.sold_out")}
+              </span>
+              {/* Prix affiché sur l'image */}
+              <span className="absolute bottom-4 right-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-sm font-black text-[#10251f] shadow-card">
                 € {product.price.toFixed(2)}
               </span>
             </div>
-            <p className="mb-6 text-[15px] leading-relaxed text-muted-foreground">{product.desc}</p>
+          </div>
+
+          {/* ── Content ────────────────────────────────────── */}
+          <div className="flex flex-col gap-6">
+            {/* Nom + prix */}
+            <div>
+              <h1 className="text-3xl font-black leading-tight sm:text-4xl">{product.name}</h1>
+              <p className="mt-2 text-[15px] leading-relaxed text-[#68756f]">{product.desc}</p>
+            </div>
+
+            {/* Menu note (crousty) */}
             {product.menuNote && (
-              <div className="mb-6 rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 px-4 py-3">
+              <div className="rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/40 px-4 py-3">
                 <p className="text-sm font-black text-[#8f5b12]">{product.menuNote}</p>
-                <p className="mt-1 text-xs font-semibold text-[#68756f]">Sauce extra disponible : +1€</p>
               </div>
             )}
 
+            {/* Indisponible */}
             {!productOk && (
-              <div className="mb-6 rounded-2xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm font-bold text-coral">
+              <div className="rounded-2xl border border-[#ff705f]/30 bg-[#ff705f]/10 px-4 py-3 text-sm font-bold text-[#ff705f]">
                 {t("product.unavailable")}
               </div>
             )}
 
             {productOk && (
-              <div className="mb-6 rounded-[28px] border border-[#d7ff45]/50 bg-[linear-gradient(135deg,#f7fff0,#ffffff_55%,#fff3ef)] p-5 shadow-[0_24px_70px_-38px_rgba(23,35,31,.35)] sm:p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">{t("toppings.title")}</p>
-                    <h2 className="mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#17231f]">Ajoute ta touche</h2>
+              <>
+                {/* ══ 1. COMPOSITION (ingrédients retirables) ════════ */}
+                <section aria-labelledby="composition-title">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h2 id="composition-title" className="text-base font-black text-[#17231f]">
+                      Composition du bowl
+                    </h2>
+                    <span className="text-[11px] font-bold text-[#a09a92]">
+                      {isCrousty ? "Recette signature" : "Recette originale"}
+                    </span>
                   </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#c94e3f]">+ supplément</span>
-                </div>
-                <p className="mt-2 text-xs leading-5 text-[#6e6255]">
-                  {isCrousty
-                    ? "La recette reste signature. Ajoute autant de toppings payants que tu veux et, si tu veux, une sauce supplémentaire."
-                    : "Garde la recette du restaurant et ajoute autant de toppings payants que tu veux."}
-                  <span className="mt-1 block font-black text-[#c94e3f]">Aucune limite : tu peux ajouter plusieurs fois le même topping. Chaque ajout est facturé.</span>
-                </p>
-                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {customToppings.map((topping) => {
-                    const quantity = selectedToppings[topping] ?? 0;
-                    const selected = quantity > 0;
-                    return (
-                      <div
-                        key={topping}
-                        className={`rounded-xl border px-3 py-2 transition ${
-                          selected
-                            ? "border-[#a96b0d] bg-[#a96b0d] text-white"
-                            : "border-[#8d5a18]/15 bg-white text-[#34433d]"
-                        }`}
-                      >
-                        <div className="flex min-h-11 items-center justify-between gap-2">
-                          <div className="min-w-0">
-                            <p className="flex items-center gap-1.5 truncate text-xs font-black"><span className="text-base" aria-hidden="true">{toppingMeta[topping]?.emoji ?? "✦"}</span><span className="truncate">{topping}</span></p>
-                            <p className={`text-[10px] font-bold ${selected ? "text-white/75" : "text-[#718078]"}`}>{toppingMeta[topping]?.label ?? "Extra"} · 
-                              +€ {(toppingPrices[topping] ?? 0).toFixed(2)} / ajout
-                            </p>
-                          </div>
-                          <div className="flex shrink-0 items-center gap-1.5">
-                            <button
-                              type="button"
-                              onClick={() => changeToppingQuantity(topping, -1)}
-                              disabled={!selected}
-                              aria-label={`Retirer ${topping}`}
-                              className={`flex h-8 w-8 items-center justify-center rounded-full transition ${
-                                selected
-                                  ? "bg-white/20 text-white hover:bg-white/30"
-                                  : "bg-[#f1eee8] text-[#b5aa9d]"
-                              }`}
-                            >
-                              <Minus className="h-3.5 w-3.5" />
-                            </button>
-                            <span className="flex min-w-7 justify-center text-sm font-black">{quantity}</span>
-                            <button
-                              type="button"
-                              onClick={() => changeToppingQuantity(topping, 1)}
-                              aria-label={`Ajouter ${topping}`}
-                              className={`flex h-8 w-8 items-center justify-center rounded-full transition ${
-                                selected
-                                  ? "bg-white/20 text-white hover:bg-white/30"
-                                  : "bg-[#a96b0d] text-white hover:bg-[#8f5b12]"
-                              }`}
-                            >
-                              <Plus className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        </div>
+
+                  {/* Fixés */}
+                  {fixedIngredients.length > 0 && (
+                    <div className="mb-3">
+                      <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#a09a92]">
+                        Inclus · non modifiables
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {fixedIngredients.map((ing) => (
+                          <IngredientPill
+                            key={ing.name}
+                            name={ing.name}
+                            emoji={ing.emoji}
+                            removable={false}
+                            removed={false}
+                          />
+                        ))}
                       </div>
-                    );
-                  })}                </div>
-                {isCrousty && (
+                    </div>
+                  )}
+
+                  {/* Retirables */}
+                  {removableIngredients.length > 0 && (
+                    <div>
+                      <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
+                        Retirer un ingrédient — appuie pour supprimer
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {removableIngredients.map((ing) => (
+                          <IngredientPill
+                            key={ing.name}
+                            name={ing.name}
+                            emoji={ing.emoji}
+                            removable
+                            removed={removedIngredients.includes(ing.name)}
+                            onToggle={() => toggleIngredient(ing.name)}
+                          />
+                        ))}
+                      </div>
+                      {removedIngredients.length > 0 && (
+                        <p className="mt-2 text-[11px] font-bold text-[#ff705f]">
+                          Retiré : {removedIngredients.join(", ")}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </section>
+
+                {/* ══ 2. TOPPINGS ADDITIONNELS ══════════════════════ */}
+                <section
+                  aria-labelledby="toppings-title"
+                  className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card sm:p-6"
+                >
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div>
+                      <h2
+                        id="toppings-title"
+                        className="text-base font-black text-[#17231f]"
+                      >
+                        Ajoute ta touche
+                      </h2>
+                      <p className="mt-0.5 text-[11px] text-[#a09a92]">
+                        Jusqu'à 2 toppings inclus
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-[#f5f4ee] px-3 py-1 text-[10px] font-black text-[#8f5b12]">
+                      {selectedToppings.length}/2
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-3">
+                    {toppings
+                      .filter((t) => t.available)
+                      .map((topping) => {
+                        const selected = selectedToppings.includes(topping.name);
+                        const disabled = !selected && selectedToppings.length >= 2;
+                        return (
+                          <ToppingChip
+                            key={topping.id}
+                            topping={topping}
+                            selected={selected}
+                            disabled={disabled}
+                            onToggle={() => toggleTopping(topping)}
+                          />
+                        );
+                      })}
+                  </div>
+
+                  {/* Sauce extra (Crousty uniquement) */}
+                  {isCrousty && (
+                    <button
+                      type="button"
+                      onClick={() => setExtraSauce((v) => !v)}
+                      aria-pressed={extraSauce}
+                      className={[
+                        "mt-3 flex w-full items-center justify-between rounded-xl border-2 px-4 py-3 text-left text-sm font-black transition",
+                        extraSauce
+                          ? "border-[#ff705f] bg-[#fff1ee] text-[#ff705f]"
+                          : "border-[#e8e2d9] bg-white text-[#2e2619] hover:border-[#ff705f]/40",
+                      ].join(" ")}
+                    >
+                      <span>Sauce extra</span>
+                      <span>+1.00€</span>
+                    </button>
+                  )}
+                </section>
+
+                {/* ══ 3. QUANTITÉ + PRIX DYNAMIQUE ══════════════════ */}
+                <div className="rounded-[20px] border border-[#e8e2d9] bg-white p-4 shadow-card sm:p-5">
+                  <div className="flex items-center justify-between gap-4">
+                    <QuantitySelector
+                      qty={qty}
+                      onMinus={() => setQty((q) => Math.max(1, q - 1))}
+                      onPlus={() => setQty((q) => Math.min(20, q + 1))}
+                    />
+                    <div className="text-right">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#a09a92]">
+                        {qty > 1 ? `${qty} × ${unitPrice.toFixed(2)}€` : "Prix total"}
+                      </p>
+                      <p className="mt-0.5 text-2xl font-black text-[#17231f]">
+                        € {totalPrice.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Desktop CTA ──────────────────────────────── */}
+                <div className="hidden sm:block">
                   <button
                     type="button"
-                    onClick={() => setExtraSauce((value) => !value)}
-                    className={`mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${
-                      extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"
-                    }`}
+                    onClick={handleAddToCart}
+                    className={[
+                      "btn-primary w-full",
+                      added ? "bg-[#10251f]" : "",
+                    ].join(" ")}
                   >
-                    <span>Sauce extra</span>
-                    <span>+1€</span>
+                    {added ? (
+                      <>
+                        <Check className="h-5 w-5" /> Ajouté !
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="h-5 w-5" />
+                        Ajouter au panier · € {totalPrice.toFixed(2)}
+                      </>
+                    )}
                   </button>
-                )}
-              </div>
+                </div>
+              </>
             )}
-
-            <div className="rounded-2xl border border-border/50 bg-secondary/50 p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="font-display text-xl font-bold tracking-[-0.01em]">Composition</h2>
-                <span className="shrink-0 text-xs font-semibold text-muted-foreground">{isCrousty ? "Recette signature" : "Recette originale"}</span>
-              </div>
-              <p className="mb-4 text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
-              <div className="flex flex-wrap gap-2">
-                {product.composition.map((ingredient) => (
-                  <span key={ingredient} className="rounded-full bg-background px-3 py-1.5 text-xs font-bold text-foreground shadow-sm">
-                    {ingredient}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground">
-                Tu peux ajouter ou retirer autant de toppings que tu veux, y compris plusieurs fois le même topping. Chaque ajout est facturé au tarif affiché.
-              </div>
-            </div>
-
-            <div className="mt-8 hidden sm:block">
-              <Button
-                onClick={handleAddToCart}
-                disabled={!productOk}
-                size="lg"
-                className="h-14 w-full rounded-xl bg-coral text-lg text-white shadow-lift transition-transform hover:scale-[1.02] hover:bg-coral/90 disabled:opacity-50"
-              >
-                {productOk ? "Ajouter au panier · € " + finalPrice.toFixed(2) : t("product.out_of_stock")}
-              </Button>
-            </div>
           </div>
         </div>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-background/95 p-3 backdrop-blur-xl sm:hidden">
-        <Button
-          onClick={handleAddToCart}
-          disabled={!productOk}
-          size="lg"
-          className="h-12 w-full rounded-full bg-coral text-base font-black text-white hover:bg-coral/90 disabled:opacity-50"
-        >
-          {productOk
-            ? "Ajouter au panier · € " + finalPrice.toFixed(2)
-            : t("product.out_of_stock")}
-        </Button>
-      </div>
+      {/* ── Mobile sticky CTA ──────────────────────────────────── */}
+      {productOk && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-[#f7f4ec]/95 p-3 backdrop-blur-xl sm:hidden">
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            className={["btn-primary w-full", added ? "bg-[#10251f]" : ""].join(" ")}
+          >
+            {added ? (
+              <>
+                <Check className="h-5 w-5" /> Ajouté !
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-4 w-4" />
+                Ajouter · € {totalPrice.toFixed(2)}
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

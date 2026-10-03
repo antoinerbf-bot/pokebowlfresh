@@ -2,7 +2,7 @@ import { i as __toESM, r as __require, t as __commonJSMin } from "../../_runtime
 import { n as require_react } from "../@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../radix-ui__react-context+react.mjs";
 import { r as parseHref } from "../tanstack__history.mjs";
-import { p as require_react_dom } from "../@radix-ui/react-dialog+[...].mjs";
+import { f as require_react_dom } from "../@radix-ui/react-dialog+[...].mjs";
 import { PassThrough, Readable } from "node:stream";
 import { ReadableStream as ReadableStream$1 } from "node:stream/web";
 //#region node_modules/@tanstack/react-router/dist/esm/utils.js
