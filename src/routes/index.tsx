@@ -163,20 +163,14 @@ function Index() {
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
-            className="flex min-w-0 shrink-0 items-center gap-2.5"
+            className="flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-90"
             aria-label="Poke N Bowl"
           >
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_8px_25px_rgba(0,0,0,.22)] sm:h-14 sm:w-14">
-              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain" />
-            </span>
-            <span className="min-w-0 text-white">
-              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">
-                Poke N Bowl
-              </strong>
-              <span className="mt-0.5 block truncate text-[7px] font-bold uppercase tracking-[0.2em] text-white/55 sm:text-[8px]">
-                Visé · Fresh food
-              </span>
-            </span>
+            <img
+              src={logo}
+              alt="Logo Poke N Bowl"
+              className="h-10 sm:h-12 w-auto object-contain rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.18)]"
+            />
           </Link>
 
           {/* Desktop nav */}

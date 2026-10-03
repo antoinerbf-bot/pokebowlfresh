@@ -17,7 +17,7 @@ import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DvgZqJr_.css";
+var styles_default = "/assets/styles-gQal2pfl.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -604,7 +604,7 @@ function RootComponent() {
 }
 //#endregion
 //#region src/assets/logo.png
-var logo_default = "/assets/logo-yR8iNRjN.png";
+var logo_default = "/assets/logo-BXG0pe7R.png";
 //#endregion
 //#region src/assets/hero-poke.jpg
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -1545,31 +1545,19 @@ function Index() {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3.5 sm:px-6 sm:py-4 lg:px-8",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 							to: "/",
 							onClick: () => window.scrollTo({
 								top: 0,
 								behavior: "auto"
 							}),
-							className: "flex min-w-0 shrink-0 items-center gap-2.5",
+							className: "flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-90",
 							"aria-label": "Poke N Bowl",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_8px_25px_rgba(0,0,0,.22)] sm:h-14 sm:w-14",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									src: logo_default,
-									alt: "Logo Poke N Bowl",
-									className: "h-full w-full object-contain"
-								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "min-w-0 text-white",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-									className: "block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg",
-									children: "Poke N Bowl"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "mt-0.5 block truncate text-[7px] font-bold uppercase tracking-[0.2em] text-white/55 sm:text-[8px]",
-									children: "Visé · Fresh food"
-								})]
-							})]
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: logo_default,
+								alt: "Logo Poke N Bowl",
+								className: "h-10 sm:h-12 w-auto object-contain rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.18)]"
+							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "hidden items-center gap-6 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex",
@@ -3001,21 +2989,15 @@ function CheckoutPage() {
 			className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 				className: "mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex items-center gap-2.5",
+					className: "flex items-center gap-2.5 transition hover:opacity-90",
 					"aria-label": "Accueil",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo",
-							className: "h-full w-full object-contain"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-base font-black sm:text-lg",
-						children: "Poke N Bowl"
-					})]
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						src: logo_default,
+						alt: "Poke N Bowl",
+						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/commander",
 					className: "inline-flex items-center gap-2 text-xs font-bold text-[#7a847e] hover:text-[#17231f]",
@@ -3662,21 +3644,15 @@ function CommanderPage() {
 				className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "flex min-w-0 items-center gap-2.5",
+						className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
 						"aria-label": "Poke N Bowl — Accueil",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-card p-1.5",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
-								alt: "Logo Poke N Bowl",
-								className: "h-full w-full object-contain"
-							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "truncate text-base font-black sm:text-lg",
-							children: "Poke N Bowl"
-						})]
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo Poke N Bowl",
+							className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
 						children: [
@@ -4010,21 +3986,15 @@ function ContactPage() {
 			className: "sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex min-w-0 items-center gap-2.5",
+					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
 					"aria-label": "Poke N Bowl — Accueil",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo Poke N Bowl",
-							className: "h-full w-full object-contain"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "truncate text-base font-black",
-						children: "Poke N Bowl"
-					})]
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						src: logo_default,
+						alt: "Logo Poke N Bowl",
+						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
 					className: "inline-flex items-center gap-2 text-sm font-bold",
@@ -4140,21 +4110,15 @@ function RecruitmentPage() {
 			className: "sticky top-0 z-50 border-b border-border/60 bg-background/90 backdrop-blur-xl",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex min-w-0 items-center gap-2.5",
+					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
 					"aria-label": "Poke N Bowl — Accueil",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo Poke N Bowl",
-							className: "h-full w-full object-contain"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "truncate text-base font-black",
-						children: "Poke N Bowl"
-					})]
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						src: logo_default,
+						alt: "Logo Poke N Bowl",
+						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
 					className: "inline-flex items-center gap-2 text-sm font-bold",
@@ -4612,20 +4576,14 @@ function OrderSuccessPage() {
 			className: "border-b border-black/5 bg-[#f7f4ec]/90",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {
 				className: "mx-auto flex max-w-[700px] items-center px-5 py-3 sm:px-8",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex items-center gap-2.5",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo",
-							className: "h-full w-full object-contain"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-base font-black",
-						children: "Poke N Bowl"
-					})]
+					className: "flex items-center gap-2.5 transition hover:opacity-90",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+						src: logo_default,
+						alt: "Poke N Bowl",
+						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+					})
 				})
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
@@ -4960,21 +4918,15 @@ function ProductPage() {
 				className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "group flex min-w-0 items-center gap-2.5",
+						className: "group flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
 						"aria-label": "Poke N Bowl",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-card p-1.5",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
-								alt: "Logo Poke N Bowl",
-								className: "h-full w-full object-contain"
-							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "truncate text-base font-black tracking-tight sm:text-lg",
-							children: "Poke N Bowl"
-						})]
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo Poke N Bowl",
+							className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2.5 sm:gap-3",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {

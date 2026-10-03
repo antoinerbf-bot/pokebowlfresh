@@ -232,11 +232,8 @@ function ProductPage() {
       {/* ── Header ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6">
-          <Link to="/" className="group flex min-w-0 items-center gap-2.5" aria-label="Poke N Bowl">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-card p-1.5">
-              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain" />
-            </span>
-            <span className="truncate text-base font-black tracking-tight sm:text-lg">Poke N Bowl</span>
+          <Link to="/" className="group flex min-w-0 items-center gap-2.5 transition hover:opacity-90" aria-label="Poke N Bowl">
+            <img src={logo} alt="Logo Poke N Bowl" className="h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm" />
           </Link>
 
           <div className="flex items-center gap-2.5 sm:gap-3">

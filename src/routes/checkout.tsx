@@ -104,11 +104,8 @@ function CheckoutPage() {
     <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8">
-          <Link to="/" className="flex items-center gap-2.5" aria-label="Accueil">
-            <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
-              <img src={logo} alt="Logo" className="h-full w-full object-contain" />
-            </span>
-            <span className="text-base font-black sm:text-lg">Poke N Bowl</span>
+          <Link to="/" className="flex items-center gap-2.5 transition hover:opacity-90" aria-label="Accueil">
+            <img src={logo} alt="Poke N Bowl" className="h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm" />
           </Link>
           <Link
             to="/commander"

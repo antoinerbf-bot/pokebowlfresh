@@ -89,11 +89,8 @@ function OrderSuccessPage() {
     <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
       <header className="border-b border-black/5 bg-[#f7f4ec]/90">
         <nav className="mx-auto flex max-w-[700px] items-center px-5 py-3 sm:px-8">
-          <Link to="/" className="flex items-center gap-2.5">
-            <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
-              <img src={logo} alt="Logo" className="h-full w-full object-contain" />
-            </span>
-            <span className="text-base font-black">Poke N Bowl</span>
+          <Link to="/" className="flex items-center gap-2.5 transition hover:opacity-90">
+            <img src={logo} alt="Poke N Bowl" className="h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm" />
           </Link>
         </nav>
       </header>
