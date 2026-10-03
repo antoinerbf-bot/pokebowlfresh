@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ShoppingBag, UtensilsCrossed } from "lucide-react";
 import { motion } from "framer-motion";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-poke-n-bowl.svg";
 import dessert from "@/assets/dessert.jpg";
 import { bowls, drinks, desserts, customBases, customMixIns, customProteins, customSauces, customToppings, toppingMeta } from "../lib/data";
 import { DishImage } from "../components/DishImage";
@@ -37,11 +37,10 @@ function CommanderPage() {
       <CartDrawer />
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="Poke N Bowl — Accueil">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5">
-              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain" />
+          <Link to="/" className="flex min-w-0 items-center" aria-label="Poke N Bowl — Accueil">
+            <span className="flex h-11 w-[170px] shrink-0 items-center overflow-hidden sm:h-12 sm:w-[190px]">
+              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain object-left" />
             </span>
-            <span className="truncate text-base font-black sm:text-lg">Poke N Bowl</span>
           </Link>
           <div className="flex items-center gap-2">
             <div className="hidden rounded-full border border-black/10 bg-white p-1 sm:flex">
@@ -90,14 +89,8 @@ function CommanderPage() {
             >
               <ArrowLeft className="h-4 w-4" /> {t("cmd.back")}
             </Link>
-            <div className="mb-6 flex items-center gap-3">
-              <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-lg">
-                <img src={logo} alt="Poke N Bowl" className="h-full w-full object-contain" />
-              </span>
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-white">Poke N Bowl</p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">Visé · Fresh food</p>
-              </div>
+            <div className="mb-6 flex items-center">
+              <img src={logo} alt="Poke N Bowl" className="h-auto w-[210px] object-contain object-left sm:w-[250px]" />
             </div>
             <div className="mt-8 max-w-3xl">
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#d7ff45]">
