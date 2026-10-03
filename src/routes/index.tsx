@@ -4,10 +4,11 @@ import * as React from "react";
 import { ArrowRight, BriefcaseBusiness, MapPin, Menu, ShoppingBag, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
+import heroPoke from "@/assets/hero-poke.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
-import { bowls, drinks, desserts } from "../lib/data";
+import { bowls, drinks, desserts, toppingMeta } from "../lib/data";
 import { DishImage } from "../components/DishImage";
 
 export const Route = createFileRoute("/")({
@@ -85,8 +86,8 @@ function Index() {
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
           <Link to="/" onClick={goHome} className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="Pokénball">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/95 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,.25)] sm:h-14 sm:w-14">
-              <img src={logo} alt="Logo Pokénball" className="h-full w-full object-contain" />
+            <span className="flex h-14 w-[150px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[175px]">
+              <img src={logo} alt="Logo Pokénball" className="h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]" />
             </span>
             <span className="min-w-0 text-white">
               <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Pokénball</strong>
@@ -140,8 +141,9 @@ function Index() {
       <main>
         <section className="relative isolate min-h-[720px] overflow-hidden bg-[#10251f] text-white sm:min-h-[780px]">
           <motion.div style={{ y: heroImageY }} className="absolute -inset-y-[105px] -z-20">
-            <div className="h-full w-full bg-[radial-gradient(circle_at_72%_45%,rgba(215,255,69,.18),transparent_30%),linear-gradient(135deg,#10251f,#17231f)]" aria-hidden="true" />
+            <motion.img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-80 saturate-[1.08]" animate={{ scale: [1.02, 1.08, 1.02], x: [0, -10, 0] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} />
           </motion.div>
+          <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_72%_42%,rgba(215,255,69,.2),transparent_28%),linear-gradient(110deg,rgba(8,23,19,.96)_0%,rgba(8,23,19,.72)_42%,rgba(8,23,19,.18)_78%,rgba(8,23,19,.52)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_68%_55%,rgba(255,112,95,.18),transparent_25%),radial-gradient(circle_at_28%_45%,rgba(215,255,69,.08),transparent_28%)]" />
 
@@ -260,13 +262,18 @@ function Index() {
           <div className="mb-7 flex flex-wrap gap-2">
             {toppingHighlights.map((item, i) => {
               const tone = i % 4;
+              const meta = toppingMeta[item];
               return (
                 <span key={item} className={
-                  tone === 0 ? "rounded-full border border-[#ff705f]/20 bg-[#fff0ec] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#c94e3f]" :
-                  tone === 1 ? "rounded-full border border-[#d7ff45]/60 bg-[#f2ffd0] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#536018]" :
-                  tone === 2 ? "rounded-full border border-[#f3c46b]/50 bg-[#fff4dc] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#9a650f]" :
-                  "rounded-full border border-[#79cfc0]/40 bg-[#e9fbf7] px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#277d70]"
-                }>{item}</span>
+                  tone === 0 ? "group inline-flex items-center gap-2 rounded-full border border-[#ff705f]/20 bg-[#fff0ec] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#c94e3f] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" :
+                  tone === 1 ? "group inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/60 bg-[#f2ffd0] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#536018] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" :
+                  tone === 2 ? "group inline-flex items-center gap-2 rounded-full border border-[#ffb347]/30 bg-[#fff5e5] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#9b5d16] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" :
+                  "group inline-flex items-center gap-2 rounded-full border border-[#35c7b5]/25 bg-[#e9fffb] px-3.5 py-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-[#17796e] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                }>
+                  <span className="text-base transition group-hover:scale-110" aria-hidden="true">{meta?.emoji ?? "✦"}</span>
+                  <span>{item}</span>
+                  <span className="rounded-full bg-white/80 px-2 py-0.5 text-[8px] font-black">+€ 0,50</span>
+                </span>
               );
             })}
           </div>
