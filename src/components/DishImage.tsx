@@ -1,17 +1,14 @@
 import React from "react";
-import bowlChicken from "@/assets/bowl-chicken.jpg";
-import bowlCrousty from "@/assets/bowl-crousty.jpg";
-import bowlScampi from "@/assets/bowl-scampi.jpg";
-import heroPoke from "@/assets/hero-poke.jpg";
+import pokeProducts from "@/assets/poke-products.webp";
 
-const images: Record<string, string> = {
-  "mighty-gyros": bowlChicken,
-  "sweet-chicken": bowlChicken,
-  "scampis-royaux": bowlScampi,
-  "saumon-wasabi": heroPoke,
-  "spicy-chicken": bowlChicken,
-  "crousty-chicken-curry": bowlCrousty,
-  "crousty-chicken-sauce-blanche": bowlCrousty,
+const positions: Record<string, string> = {
+  "mighty-gyros": "0% 0%",
+  "sweet-chicken": "50% 0%",
+  "scampis-royaux": "100% 0%",
+  "saumon-wasabi": "0% 50%",
+  "spicy-chicken": "50% 50%",
+  "crousty-chicken-curry": "100% 50%",
+  "crousty-chicken-sauce-blanche": "0% 100%",
 };
 
 export function DishImage({
@@ -23,23 +20,33 @@ export function DishImage({
   alt: string;
   className?: string;
 }) {
-  const src = images[dishId];
+  const position = positions[dishId];
 
-  if (!src) {
+  if (!position) {
     return (
-      <div className={`flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`}>
+      <div
+        role="img"
+        aria-label={alt}
+        className={`flex items-center justify-center rounded-[22px] bg-[#eee8dc] text-[10px] font-black uppercase tracking-[0.12em] text-[#7d8b83] ${className}`}
+      >
         Photo produit
       </div>
     );
   }
 
   return (
-    <div className={`h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`}>
-      <img
-        src={src}
-        alt={alt}
-        className="h-full w-full rounded-[18px] object-cover shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]"
+    <div className={`relative h-full w-full overflow-hidden bg-[#efe9dd] ${className}`}>
+      <div
+        role="img"
+        aria-label={alt}
+        className="absolute inset-0 bg-cover bg-no-repeat"
+        style={{
+          backgroundImage: `url(${pokeProducts})`,
+          backgroundPosition: position,
+          backgroundSize: "300% 300%",
+        }}
       />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.03),transparent_35%,rgba(0,0,0,.05))]" />
     </div>
   );
 }
