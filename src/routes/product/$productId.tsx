@@ -48,9 +48,7 @@ function ProductPage() {
     setSelectedToppings((current) =>
       current.includes(topping)
         ? current.filter((item) => item !== topping)
-        : current.length < 2
-          ? [...current, topping]
-          : current,
+        : [...current, topping],
     );
   };
 
@@ -168,20 +166,22 @@ function ProductPage() {
                 </div>
                 <p className="mt-2 text-xs leading-5 text-[#6e6255]">
                   {isCrousty
-                    ? "La recette reste signature. Ajoute jusqu’à 2 toppings payants et, si tu veux, une sauce supplémentaire."
-                    : "Garde la recette du restaurant et ajoute jusqu’à 2 toppings payants."}
+                    ? "La recette reste signature. Ajoute autant de toppings payants que tu veux et, si tu veux, une sauce supplémentaire."
+                    : "Garde la recette du restaurant et ajoute autant de toppings payants que tu veux."}
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
                     const selected = selectedToppings.includes(topping);
-                    const disabled = !selected && selectedToppings.length >= 2;
                     return (
                       <button
                         key={topping}
                         type="button"
                         onClick={() => toggleTopping(topping)}
-                        disabled={disabled}
-                        className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${selected ? "border-[#a96b0d] bg-[#a96b0d] text-white" : disabled ? "cursor-not-allowed border-[#8d5a18]/10 bg-white/60 text-[#9a8e80]" : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"}`}
+                        className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${
+                          selected
+                            ? "border-[#a96b0d] bg-[#a96b0d] text-white"
+                            : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"
+                        }`}
                       >
                         <span>{topping}</span>
                         <span className="shrink-0 text-[10px] font-black">+€ {(toppingPrices[topping] ?? 0).toFixed(2)}</span>
@@ -194,7 +194,9 @@ function ProductPage() {
                   <button
                     type="button"
                     onClick={() => setExtraSauce((value) => !value)}
-                    className={`mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"}`}
+                    className={`mt-3 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-black transition ${
+                      extraSauce ? "border-[#a96b0d] bg-[#a96b0d] text-white" : "border-[#8d5a18]/15 bg-white text-[#4d4134]"
+                    }`}
                   >
                     <span>Sauce extra</span>
                     <span>+1€</span>
@@ -217,11 +219,10 @@ function ProductPage() {
                 ))}
               </div>
               <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground">
-                Jusqu’à 2 toppings supplémentaires peuvent être ajoutés. Leur supplément est calculé automatiquement dans le total.
+                Tu peux ajouter ou retirer les toppings que tu veux. Chaque topping supplémentaire est facturé au tarif affiché.
               </div>
             </div>
 
-            {/* Desktop CTA */}
             <div className="mt-8 hidden sm:block">
               <Button
                 onClick={handleAddToCart}
@@ -236,7 +237,6 @@ function ProductPage() {
         </div>
       </main>
 
-      {/* Mobile sticky CTA — always visible for faster order flow */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-background/95 p-3 backdrop-blur-xl sm:hidden">
         <Button
           onClick={handleAddToCart}
