@@ -54,8 +54,8 @@ export const customToppings = [
 
 export const allToppings = customToppings;
 
-// Les six toppings sont sélectionnables jusqu'à 2 par produit.
-// Le supplément est appliqué automatiquement au total.
+// Chaque topping est sélectionnable sans limite de quantité de toppings.
+// Le supplément de chaque topping est appliqué automatiquement au total.
 export const toppingPrices: Record<string, number> = {
   "Oignons frits": 0.50,
   "Sésame seeds": 0.50,
