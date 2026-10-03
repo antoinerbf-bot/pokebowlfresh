@@ -14,11 +14,11 @@ import { DishImage } from "../components/DishImage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Pokénball — Poké bowls & Crusty Chicken" },
+      { title: "Poke N Bowl — Poké bowls & Crusty Chicken" },
       {
         name: "description",
         content:
-          "Pokénball : poké bowls frais, généreux et Crusty Chicken croustillant. Découvrez nos recettes maison et commandez en ligne.",
+          "Poke N Bowl : poké bowls frais, généreux et Crusty Chicken croustillant. Découvrez nos recettes maison et commandez en ligne.",
       },
     ],
   }),
@@ -85,12 +85,12 @@ function Index() {
 
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
-          <Link to="/" onClick={goHome} className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="Pokénball">
+          <Link to="/" onClick={goHome} className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="Poke N Bowl">
             <span className="flex h-14 w-[150px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[175px]">
-              <img src={logo} alt="Logo Pokénball" className="h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]" />
+              <img src={logo} alt="Logo Poke N Bowl" className="h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]" />
             </span>
             <span className="min-w-0 text-white">
-              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Pokénball</strong>
+              <strong className="block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg">Poke N Bowl</strong>
               <span className="mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]">Poké Bowls · Crusty Chicken</span>
             </span>
           </Link>
@@ -184,7 +184,7 @@ function Index() {
                       <div className="relative aspect-[.88] overflow-hidden">
                         <DishImage dishId="sweet-chicken" alt="Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos" priority className="h-full w-full transition duration-700 group-hover:scale-[1.045]" />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" />
-                        <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Pokénball · Maison</div>
+                        <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Poke N Bowl · Maison</div>
                         <div className="absolute bottom-5 left-5 right-5">
                           <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/65">Le classique généreux</p>
                           <h2 className="mt-1 break-words font-script text-3xl font-bold tracking-[-0.02em] sm:text-4xl">Sweet Chicken</h2>
@@ -198,7 +198,7 @@ function Index() {
                           <DishImage dishId="scampis-royaux" alt="Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili" priority className="h-full w-full transition duration-700 group-hover:scale-[1.06]" />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
-                            <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Pokénball · Premium</p>
+                            <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Poke N Bowl · Premium</p>
                             <h3 className="mt-1 break-words font-script text-2xl font-bold tracking-[-0.015em]">Scampis Royal</h3>
                           </div>
                         </div>
@@ -235,7 +235,7 @@ function Index() {
         <section className="overflow-hidden bg-[#d7ff45] py-3">
           <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="flex w-max whitespace-nowrap">
             {Array.from({ length: 8 }).map((_, i) => (
-              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Pokénball · Cuisine fraîche · Visé <span className="mx-6">✦</span></span>
+              <span key={i} className="mx-6 text-[9px] font-black uppercase tracking-[0.12em] sm:text-xs">Poke N Bowl · Cuisine fraîche · Visé <span className="mx-6">✦</span></span>
             ))}
           </motion.div>
         </section>
@@ -322,7 +322,7 @@ function Index() {
           <div className="mx-auto max-w-[1180px]">
             <Reveal>
               <div className="text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]">Pokénball · Maison</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]">Poke N Bowl · Maison</p>
                 <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.9] tracking-tight sm:text-5xl lg:text-6xl">
                   Le croustillant
                 </h2>
@@ -531,9 +531,9 @@ function Index() {
       <footer className="bg-[#0b1a16] px-5 py-8 pb-24 text-white sm:px-6 sm:pb-8 lg:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Pokénball" className="h-11 w-auto max-w-[170px] object-contain object-left" />
+            <img src={logo} alt="Poke N Bowl" className="h-11 w-auto max-w-[170px] object-contain object-left" />
             <div>
-              <div className="font-black">Pokénball</div>
+              <div className="font-black">Poke N Bowl</div>
               <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/35">Poké Bowls · Crusty Chicken</div>
             </div>
           </Link>
@@ -543,7 +543,7 @@ function Index() {
             <Link to="/recrutement">{t("footer.recruit")}</Link>
             <Link to="/contact">{t("nav.contact")}</Link>
           </div>
-          <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/25">© {new Date().getFullYear()} Pokénball</div>
+          <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/25">© {new Date().getFullYear()} Poke N Bowl</div>
         </div>
       </footer>
 
