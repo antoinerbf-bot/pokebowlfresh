@@ -171,7 +171,8 @@ function ProductPage() {
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
-                    const quantity = selectedToppings[topping] ?? 0;\n                    const selected = quantity > 0;
+                    const quantity = selectedToppings[topping] ?? 0;
+                    const selected = quantity > 0;
                     return (
                       <button
                         key={topping}
