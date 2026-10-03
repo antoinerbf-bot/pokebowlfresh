@@ -152,9 +152,9 @@ function Index() {
                   <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/60">FRESH FOOD · GOOD MOOD</p>
                   <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-[8px] font-black uppercase tracking-[0.14em] text-[#17231f]">80% Poké · 20% Crusty</span>
                 </div>
-                <h1 className="mt-5 text-[3.25rem] font-black leading-[.86] tracking-[-0.065em] sm:text-6xl lg:text-[5.7rem]">
+                <h1 className="mt-5 max-w-[680px] break-words font-display text-[clamp(3rem,8vw,5.7rem)] font-bold leading-[.88] tracking-[-0.045em]">
                   <span className="block">Poké Bowls</span>
-                  <span className="mt-3 block text-[1.15rem] tracking-[0.01em] text-white/70 sm:text-2xl lg:text-3xl"><span className="text-[#ff705f]">+</span> Crusty Chicken en signature</span>
+                  <span className="mt-4 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70"><span className="text-[#ff705f]">+</span> Crusty Chicken en signature</span>
                 </h1>
                 <p className="mt-7 max-w-lg text-base leading-7 text-white/75 sm:text-lg">
                   Des poké bowls frais, généreux et colorés. Et pour les plus gourmands, notre Crusty Chicken fait la différence.
@@ -185,7 +185,7 @@ function Index() {
                         <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Pokénball · Maison</div>
                         <div className="absolute bottom-5 left-5 right-5">
                           <p className="text-[9px] font-black uppercase tracking-[0.18em] text-white/65">Le classique généreux</p>
-                          <h2 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">Sweet Chicken</h2>
+                          <h2 className="mt-1 break-words font-display text-3xl font-bold tracking-[-0.02em] sm:text-4xl">Sweet Chicken</h2>
                         </div>
                       </div>
                     </Link>
@@ -197,7 +197,7 @@ function Index() {
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Pokénball · Premium</p>
-                            <h3 className="mt-1 text-xl font-black">Scampis Royal</h3>
+                            <h3 className="mt-1 break-words font-display text-xl font-bold tracking-[-0.015em]">Scampis Royal</h3>
                           </div>
                         </div>
                       </Link>
@@ -292,13 +292,13 @@ function Index() {
                   </div>
                   <div className="flex h-full flex-col p-5 sm:p-6">
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="min-w-0 flex-1 break-words text-[16px] font-black leading-tight sm:text-xl">{bowl.name}</h3>
+                      <h3 className="min-w-0 flex-1 break-words font-display text-[18px] font-bold leading-[1.05] tracking-[-0.015em] sm:text-[21px]">{bowl.name}</h3>
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f0f1ea] transition group-hover:bg-[#ff705f] group-hover:text-white">
                         <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>
-                    <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
-                    <div className="mt-auto pt-5 text-[9px] font-black uppercase tracking-[0.14em] text-[#ff705f]">{t("menu.customize")} · {t("menu.order")} →</div>
+                    <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>\n                    <div className="mt-4 flex flex-wrap gap-1.5">\n                      {bowl.composition.slice(0, 4).map((ingredient) => (\n                        <span key={ingredient} className="rounded-full bg-[#f4f2eb] px-2.5 py-1 text-[9px] font-bold text-[#66736d]">{ingredient}</span>\n                      ))}\n                    </div>
+                    <div className="mt-auto pt-5 font-display text-[9px] font-semibold uppercase tracking-[0.14em] text-[#ff705f]">{t("menu.customize")} · {t("menu.order")} →</div>
                   </div>
                 </Link>
               </Reveal>
@@ -473,7 +473,7 @@ function Index() {
           <div className="mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
             <Reveal>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">{t("info.eyebrow")}</p>
-              <h2 className="mt-3 text-[1.625rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
+              <h2 className="mt-3 break-words font-display text-[1.7rem] font-bold leading-[1.02] tracking-[-0.02em] sm:text-3xl lg:text-4xl">
                 <span className="block">{t("info.title1")}</span>
                 <span className="mt-0.5 block text-[#7d8b83]">{t("info.title2")}</span>
               </h2>
