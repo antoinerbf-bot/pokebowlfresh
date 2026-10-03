@@ -199,7 +199,7 @@ function Index() {
                       <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
                         <div className="relative aspect-[1.08] overflow-hidden">
                           <DishImage dishId="crousty-chicken-curry" alt="Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits" priority className="h-full w-full transition duration-700 group-hover:scale-[1.06]" />
-                          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)] />
+                          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Crusty Chicken · Maison</p>
                             <h3 className="mt-1 text-xl font-black">Curry croustillant</h3>
