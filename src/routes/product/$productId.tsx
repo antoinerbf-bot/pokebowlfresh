@@ -122,7 +122,7 @@ function ProductPage() {
         </Link>
 
         <div className="grid gap-8 md:grid-cols-2 md:gap-10 lg:gap-16">
-          <div className="relative aspect-[1.48] overflow-hidden rounded-3xl shadow-lift sm:max-h-[500px]">
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#f4f1e9] shadow-lift sm:max-h-[560px]">
             <DishImage
               dishId={product.id}
               alt={product.name}
