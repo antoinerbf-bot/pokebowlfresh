@@ -175,7 +175,7 @@ function Index() {
                   <div className="relative grid items-end gap-3 sm:grid-cols-[1.15fr_.85fr]">
                     <Link to="/product/$productId" params={{ productId: "sweet-chicken" }} className="group relative overflow-hidden rounded-[34px] border border-white/15 bg-[#eee8dc] shadow-[0_45px_100px_-40px_rgba(0,0,0,.95)]">
                       <div className="relative aspect-square overflow-hidden">
-                        <DishImage dishId="sweet-chicken" alt="Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos" priority className="h-full w-full transition duration-700 group-hover:scale-[1.01]" />
+                        <DishImage dishId="sweet-chicken" alt="Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos" priority className="h-full w-full transition duration-700 group-hover:scale-[1.045]" />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" />
                         <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Poke N Bowl · Maison</div>
                         <div className="absolute bottom-5 left-5 right-5">
@@ -188,7 +188,7 @@ function Index() {
                     <div className="grid gap-3">
                       <Link to="/product/$productId" params={{ productId: "scampis-royaux" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
                         <div className="relative aspect-square overflow-hidden">
-                          <DishImage dishId="scampis-royaux" alt="Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili" priority className="h-full w-full transition duration-500 group-hover:scale-[1.015]" />
+                          <DishImage dishId="scampis-royaux" alt="Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili" priority className="h-full w-full transition duration-500 group-hover:scale-[1.06]" />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Poke N Bowl · Premium</p>
@@ -197,9 +197,9 @@ function Index() {
                         </div>
                       </Link>
                       <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
-                        <div className="relative aspect-square overflow-hidden">
-                          <DishImage dishId="crousty-chicken-curry" alt="Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits" priority className="h-full w-full transition duration-700 group-hover:scale-[1.01]" />
-                          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" />
+                        <div className="relative aspect-[1.08] overflow-hidden">
+                          <DishImage dishId="crousty-chicken-curry" alt="Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits" priority className="h-full w-full transition duration-700 group-hover:scale-[1.06]" />
+                          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)] />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Crusty Chicken · Maison</p>
                             <h3 className="mt-1 text-xl font-black">Curry croustillant</h3>
@@ -353,11 +353,11 @@ function Index() {
                     params={{ productId: item.id }}
                     className="group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-white shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1"
                   >
-                    <div className="relative aspect-square overflow-hidden bg-[#eee8dc]">
+                    <div className="relative aspect-[1.22] overflow-hidden bg-[#eee8dc]">
                       <DishImage
                         dishId={item.id}
                         alt={item.name}
-                        className="h-full w-full transition duration-700 group-hover:scale-[1.01]"
+                        className="h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.06]"
                       />
                       <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
                         <span className="bg-[#17231f] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-white">
