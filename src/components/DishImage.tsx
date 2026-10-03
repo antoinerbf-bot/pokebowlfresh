@@ -30,7 +30,7 @@ export function DishImage({
   className?: string;
   priority?: boolean;
 }) {
-  const src = images[dishId] ?? images["sweet-chicken"];
+  const src = images[dishId];
 
   return (
     <div className={`relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`}>
