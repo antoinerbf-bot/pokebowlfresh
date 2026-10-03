@@ -11,10 +11,7 @@ deployment:
     - /bin/cp package-lock.json $DEPLOYPATH
     - /bin/cp vite.config.ts $DEPLOYPATH
     - /bin/cp tsconfig.json $DEPLOYPATH
-    - /bin/cat > $DEPLOYPATH/server.js <<'EOF'
-import "./.output/server/index.mjs";
-EOF
+    - /usr/bin/printf '%s\n' 'import "./.output/server/index.mjs";' > $DEPLOYPATH/server.js
     - /bin/mkdir -p $DEPLOYPATH/tmp
     - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
-# O2Switch production deployment trigger.
-# Force fresh production sync.
+    - /usr/bin/printf '%s\n' "$(git rev-parse HEAD)" > $DEPLOYPATH/.deployed-commit
