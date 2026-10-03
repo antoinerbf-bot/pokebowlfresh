@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 170" role="img" aria-labelledby="title desc">
+  <title id="title">Poke N Bowl</title>
+  <desc id="desc">Poke N Bowl wordmark with the N enclosed in a circle.</desc>
+  <g fill="#ffffff" font-family="Arial Narrow, Helvetica Neue, Arial, sans-serif" font-weight="800">
+    <text x="8" y="76" font-size="70" letter-spacing="1">POKE</text>
+    <circle cx="365" cy="51" r="31" fill="none" stroke="#ffffff" stroke-width="6"/>
+    <text x="345" y="73" font-size="58">N</text>
+    <text x="407" y="76" font-size="70" letter-spacing="1">BOWL</text>
+  </g>
+  <g fill="#ffffff" font-family="Arial Narrow, Helvetica Neue, Arial, sans-serif" font-weight="700" letter-spacing="7">
+    <text x="176" y="123" font-size="18">POKE · RICE · BOWL</text>
+  </g>
+  <path d="M168 132H145 M596 132H619" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
