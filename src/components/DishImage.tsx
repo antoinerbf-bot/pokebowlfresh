@@ -1,4 +1,5 @@
 import React from "react";
+// Production sync marker: O2Switch must serve this build.
 import mightyGyrosB64 from "@/assets/dishes/mighty-gyros.webp.b64?raw";
 import sweetChickenB64 from "@/assets/dishes/sweet-chicken.webp.b64?raw";
 import scampisRoyauxB64 from "@/assets/dishes/scampis-royaux.webp.b64?raw";
