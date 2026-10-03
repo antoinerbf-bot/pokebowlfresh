@@ -154,9 +154,9 @@ function Index() {
                   <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/60">FRESH FOOD · GOOD MOOD</p>
                   <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-[8px] font-black uppercase tracking-[0.14em] text-[#17231f]">80% Poké · 20% Crusty</span>
                 </div>
-                <h1 className="mt-5 max-w-[720px] break-words font-script text-[clamp(4.1rem,10vw,7.4rem)] font-bold leading-[.78] tracking-[-0.035em]">
-                  <span className="block">Poké Bowls</span>
-                  <span className="mt-4 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70"><span className="text-[#ff705f]">+</span> Crusty Chicken en signature</span>
+                <h1 className="mt-5 max-w-[720px]">
+                  <img src={logo} alt="Poke N Bowl" className="h-auto w-full max-w-[610px] object-contain object-left drop-shadow-[0_14px_30px_rgba(0,0,0,.28)]" />
+                  <span className="mt-5 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70"><span className="text-[#ff705f]">+</span> Crusty Chicken en signature</span>
                 </h1>
                 <p className="mt-7 max-w-lg text-base leading-7 text-white/75 sm:text-lg">
                   Des poké bowls frais, généreux et colorés. Et pour les plus gourmands, notre Crusty Chicken fait la différence.
