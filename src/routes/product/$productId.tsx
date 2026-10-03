@@ -5,7 +5,7 @@ import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Check, Minus, Plus } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Minus, Plus } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
 import logo from "@/assets/logo.png";
 import { useStock } from "../../hooks/useStock";
@@ -170,29 +170,60 @@ function ProductPage() {
                   {isCrousty
                     ? "La recette reste signature. Ajoute autant de toppings payants que tu veux et, si tu veux, une sauce supplémentaire."
                     : "Garde la recette du restaurant et ajoute autant de toppings payants que tu veux."}
+                  <span className="mt-1 block font-black text-[#8f5b12]">Aucune limite : tu peux ajouter plusieurs fois le même topping. Chaque ajout est facturé.</span>
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
                     const quantity = selectedToppings[topping] ?? 0;
                     const selected = quantity > 0;
                     return (
-                      <button
+                      <div
                         key={topping}
-                        type="button"
-                        onClick={() => changeToppingQuantity(topping, 1)}
-                        className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${
+                        className={`rounded-xl border px-3 py-2 transition ${
                           selected
                             ? "border-[#a96b0d] bg-[#a96b0d] text-white"
-                            : "border-[#8d5a18]/15 bg-white text-[#4d4134] hover:border-[#a96b0d]/40"
+                            : "border-[#8d5a18]/15 bg-white text-[#4d4134]"
                         }`}
                       >
-                        <span>{topping}</span>
-                        <span className="shrink-0 text-[10px] font-black">+€ {(toppingPrices[topping] ?? 0).toFixed(2)}</span>
-                        {selected && <Check className="h-3.5 w-3.5 shrink-0" />}
-                      </button>
+                        <div className="flex min-h-11 items-center justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="truncate text-xs font-black">{topping}</p>
+                            <p className={`text-[10px] font-bold ${selected ? "text-white/75" : "text-[#8a7b6b]"}`}>
+                              +€ {(toppingPrices[topping] ?? 0).toFixed(2)} / ajout
+                            </p>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => changeToppingQuantity(topping, -1)}
+                              disabled={!selected}
+                              aria-label={`Retirer ${topping}`}
+                              className={`flex h-8 w-8 items-center justify-center rounded-full transition ${
+                                selected
+                                  ? "bg-white/20 text-white hover:bg-white/30"
+                                  : "bg-[#f1eee8] text-[#b5aa9d]"
+                              }`}
+                            >
+                              <Minus className="h-3.5 w-3.5" />
+                            </button>
+                            <span className="flex min-w-7 justify-center text-sm font-black">{quantity}</span>
+                            <button
+                              type="button"
+                              onClick={() => changeToppingQuantity(topping, 1)}
+                              aria-label={`Ajouter ${topping}`}
+                              className={`flex h-8 w-8 items-center justify-center rounded-full transition ${
+                                selected
+                                  ? "bg-white/20 text-white hover:bg-white/30"
+                                  : "bg-[#a96b0d] text-white hover:bg-[#8f5b12]"
+                              }`}
+                            >
+                              <Plus className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     );
-                  })}
-                </div>
+                  })}                </div>
                 {isCrousty && (
                   <button
                     type="button"
