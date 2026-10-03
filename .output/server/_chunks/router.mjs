@@ -768,7 +768,7 @@ var toppings = [
 		id: "oignons-frits",
 		name: "Oignons frits",
 		emoji: "🧅",
-		price: 0,
+		price: .5,
 		available: true,
 		category: "crunch"
 	},
@@ -776,7 +776,7 @@ var toppings = [
 		id: "sesame",
 		name: "Sésame",
 		emoji: "🌱",
-		price: 0,
+		price: .5,
 		available: true,
 		category: "crunch"
 	},
@@ -784,7 +784,7 @@ var toppings = [
 		id: "noix-cajou",
 		name: "Noix de cajou",
 		emoji: "🥜",
-		price: 0,
+		price: .5,
 		available: true,
 		category: "crunch"
 	},
@@ -792,7 +792,7 @@ var toppings = [
 		id: "nachos",
 		name: "Nachos",
 		emoji: "🌽",
-		price: 0,
+		price: .5,
 		available: true,
 		category: "crunch"
 	},
@@ -800,7 +800,7 @@ var toppings = [
 		id: "flocons-chili",
 		name: "Flocons chili",
 		emoji: "🌶️",
-		price: 0,
+		price: .5,
 		available: true,
 		category: "spice"
 	},
@@ -808,7 +808,7 @@ var toppings = [
 		id: "wasabi",
 		name: "Wasabi",
 		emoji: "🟢",
-		price: 0,
+		price: .5,
 		available: true,
 		category: "spice"
 	}
@@ -4882,11 +4882,7 @@ function ProductPage() {
 	const unitPrice = product.price + toppingExtra + extraSaucePrice;
 	const totalPrice = unitPrice * qty;
 	const toggleTopping = (topping) => {
-		setSelectedToppings((cur) => {
-			if (cur.includes(topping.name)) return cur.filter((t) => t !== topping.name);
-			if (cur.length >= 2) return cur;
-			return [...cur, topping.name];
-		});
+		setSelectedToppings((cur) => cur.includes(topping.name) ? cur.filter((t) => t !== topping.name) : [...cur, topping.name]);
 	};
 	const toggleIngredient = (name) => {
 		setRemovedIngredients((cur) => cur.includes(name) ? cur.filter((n) => n !== name) : [...cur, name]);
@@ -5062,24 +5058,27 @@ function ProductPage() {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 												id: "toppings-title",
 												className: "text-base font-black text-[#17231f]",
-												children: "Ajoute ta touche"
+												children: "Ajoute des toppings"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "mt-0.5 text-[11px] text-[#a09a92]",
-												children: "Jusqu'à 2 toppings inclus"
-											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "rounded-full bg-[#f5f4ee] px-3 py-1 text-[10px] font-black text-[#8f5b12]",
-												children: [selectedToppings.length, "/2"]
+												children: "Sélection libre · choisis tous les toppings que tu aimes"
+											})] }), selectedToppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "rounded-full bg-[#ff705f]/10 px-3 py-1 text-[10px] font-black text-[#ff705f]",
+												children: [
+													selectedToppings.length,
+													" sélectionné",
+													selectedToppings.length > 1 ? "s" : ""
+												]
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "grid grid-cols-3 gap-2 sm:grid-cols-3",
 											children: toppings.filter((t) => t.available).map((topping) => {
 												const selected = selectedToppings.includes(topping.name);
-												const disabled = !selected && selectedToppings.length >= 2;
 												return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToppingChip, {
 													topping,
 													selected,
-													disabled,
+													disabled: false,
 													onToggle: () => toggleTopping(topping)
 												}, topping.id);
 											})

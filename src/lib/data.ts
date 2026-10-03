@@ -60,12 +60,12 @@ export interface Topping {
 }
 
 export const toppings: Topping[] = [
-  { id: "oignons-frits",  name: "Oignons frits",   emoji: "🧅", price: 0, available: true, category: "crunch" },
-  { id: "sesame",         name: "Sésame",           emoji: "🌱", price: 0, available: true, category: "crunch" },
-  { id: "noix-cajou",     name: "Noix de cajou",   emoji: "🥜", price: 0, available: true, category: "crunch" },
-  { id: "nachos",         name: "Nachos",           emoji: "🌽", price: 0, available: true, category: "crunch" },
-  { id: "flocons-chili",  name: "Flocons chili",   emoji: "🌶️", price: 0, available: true, category: "spice" },
-  { id: "wasabi",         name: "Wasabi",           emoji: "🟢", price: 0, available: true, category: "spice" },
+  { id: "oignons-frits",  name: "Oignons frits",   emoji: "🧅", price: 0.50, available: true, category: "crunch" },
+  { id: "sesame",         name: "Sésame",           emoji: "🌱", price: 0.50, available: true, category: "crunch" },
+  { id: "noix-cajou",     name: "Noix de cajou",   emoji: "🥜", price: 0.50, available: true, category: "crunch" },
+  { id: "nachos",         name: "Nachos",           emoji: "🌽", price: 0.50, available: true, category: "crunch" },
+  { id: "flocons-chili",  name: "Flocons chili",   emoji: "🌶️", price: 0.50, available: true, category: "spice" },
+  { id: "wasabi",         name: "Wasabi",           emoji: "🟢", price: 0.50, available: true, category: "spice" },
 ];
 
 // Pour les données legacy (commander.tsx, etc.)

@@ -188,11 +188,11 @@ function ProductPage() {
   const totalPrice = unitPrice * qty;
 
   const toggleTopping = (topping: Topping) => {
-    setSelectedToppings((cur) => {
-      if (cur.includes(topping.name)) return cur.filter((t) => t !== topping.name);
-      if (cur.length >= 2) return cur;
-      return [...cur, topping.name];
-    });
+    setSelectedToppings((cur) =>
+      cur.includes(topping.name)
+        ? cur.filter((t) => t !== topping.name)
+        : [...cur, topping.name]
+    );
   };
 
   const toggleIngredient = (name: string) => {
@@ -394,15 +394,17 @@ function ProductPage() {
                         id="toppings-title"
                         className="text-base font-black text-[#17231f]"
                       >
-                        Ajoute ta touche
+                        Ajoute des toppings
                       </h2>
                       <p className="mt-0.5 text-[11px] text-[#a09a92]">
-                        Jusqu'à 2 toppings inclus
+                        Sélection libre · choisis tous les toppings que tu aimes
                       </p>
                     </div>
-                    <span className="rounded-full bg-[#f5f4ee] px-3 py-1 text-[10px] font-black text-[#8f5b12]">
-                      {selectedToppings.length}/2
-                    </span>
+                    {selectedToppings.length > 0 && (
+                      <span className="rounded-full bg-[#ff705f]/10 px-3 py-1 text-[10px] font-black text-[#ff705f]">
+                        {selectedToppings.length} sélectionné{selectedToppings.length > 1 ? "s" : ""}
+                      </span>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-3 gap-2 sm:grid-cols-3">
@@ -410,13 +412,12 @@ function ProductPage() {
                       .filter((t) => t.available)
                       .map((topping) => {
                         const selected = selectedToppings.includes(topping.name);
-                        const disabled = !selected && selectedToppings.length >= 2;
                         return (
                           <ToppingChip
                             key={topping.id}
                             topping={topping}
                             selected={selected}
-                            disabled={disabled}
+                            disabled={false}
                             onToggle={() => toggleTopping(topping)}
                           />
                         );
