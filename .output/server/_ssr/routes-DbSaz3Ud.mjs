@@ -10,13 +10,9 @@ import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as
 import { n as CartDrawer, r as DishImage } from "./CartDrawer-DrtzwuJ4.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DJ6AvJEu.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DbSaz3Ud.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
-var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
-var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
-var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 var PHONE = "+32491281456";
 var HOUR_ROWS = [
@@ -240,11 +236,9 @@ function Index() {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 							style: { y: heroImageY },
 							className: "absolute -inset-y-[105px] -z-20",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: hero_poke_default,
-								alt: "",
-								"aria-hidden": "true",
-								className: "h-full w-full object-cover object-center opacity-58 scale-[1.06]"
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "h-full w-full bg-[radial-gradient(circle_at_72%_45%,rgba(215,255,69,.18),transparent_30%),linear-gradient(135deg,#10251f,#17231f)]",
+								"aria-hidden": "true"
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" }),
@@ -320,10 +314,10 @@ function Index() {
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "relative aspect-[.88] overflow-hidden",
 														children: [
-															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-																src: bowl_chicken_default,
-																alt: "Sweet Chicken",
-																className: "h-full w-full object-cover transition duration-700 group-hover:scale-[1.045]"
+															/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+																dishId: "sweet-chicken",
+																alt: "Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos",
+																className: "h-full w-full transition duration-700 group-hover:scale-[1.045]"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -351,10 +345,10 @@ function Index() {
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "relative aspect-[1.08] overflow-hidden",
 															children: [
-																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-																	src: bowl_scampi_default,
-																	alt: "Scampis Royal",
-																	className: "h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+																	dishId: "scampis-royaux",
+																	alt: "Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili",
+																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -376,10 +370,10 @@ function Index() {
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "relative aspect-[1.08] overflow-hidden",
 															children: [
-																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-																	src: bowl_crousty_default,
-																	alt: "Crusty Chicken Curry",
-																	className: "h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+																	dishId: "crousty-chicken-curry",
+																	alt: "Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits",
+																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
