@@ -3,13 +3,12 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useTranslation } from "./I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { b as ArrowLeft, n as UtensilsCrossed, o as ShoppingBag, y as ArrowRight } from "../_libs/lucide-react.mjs";
-import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage } from "./CartDrawer-jcLDvjhu.mjs";
-import { t as useStock } from "./useStock-CyTLUBuU.mjs";
-import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
-import { r as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/commander-DHuDUeq7.js
+import { n as UtensilsCrossed, o as ShoppingBag, v as ArrowRight, y as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { a as useStock, i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage } from "./useStock-BgGM-cHy.mjs";
+import { t as motion } from "../_libs/framer-motion+[...].mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/commander-DKTdxyhr.js
 var import_jsx_runtime = require_jsx_runtime();
+var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
 function CommanderPage() {
 	const { t, language, setLanguage } = useTranslation();
 	const { addItem, setIsCartOpen, items } = useCart();

@@ -4,16 +4,16 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-DJzdD15j.mjs";
 import { t as CartProvider } from "./CartContext-v6B2RrbN.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$11 } from "../_productId-DXkkYanJ.mjs";
+import { t as Route$10 } from "../_productId-DmAjNDzj.mjs";
 import { n as booleanType, o as objectType, s as stringType } from "../_libs/zod.mjs";
 import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as getOrderFromStore, s as listOrdersFromStore, t as acknowledgePrint } from "./order-store-C20kjW_r.mjs";
-import { t as Route$12 } from "./order.success-D9MAlQ4G.mjs";
+import { t as Route$11 } from "./order.success-D9MAlQ4G.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Cb9rINLn.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CpRFMVep.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-pTOBvNiD.css";
+var styles_default = "/assets/styles-BSufhPvT.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -101,7 +101,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$10 = createRootRouteWithContext()({
+var Route$9 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -159,7 +159,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$10.useRouteContext();
+	const { queryClient } = Route$9.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -181,17 +181,9 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$5 = () => import("./routes-DL0OWCkW.mjs");
-var Route$9 = createFileRoute("/")({
-	head: () => ({ meta: [{ title: "Poke N Bowl — Poké bowls & Crusty Chicken" }, {
-		name: "description",
-		content: "Poke N Bowl : poké bowls frais, généreux et Crusty Chicken croustillant. Découvrez nos recettes maison et commandez en ligne."
-	}] }),
-	component: lazyRouteComponent($$splitComponentImporter$5, "component")
-});
 var $$splitComponentImporter$4 = () => import("./checkout-CxwzAlOx.mjs");
 var Route$8 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./commander-DHuDUeq7.mjs");
+var $$splitComponentImporter$3 = () => import("./commander-DKTdxyhr.mjs");
 var Route$7 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
 var $$splitComponentImporter$2 = () => import("./contact-BvrEJfBM.mjs");
 var Route$6 = createFileRoute("/contact")({
@@ -296,68 +288,63 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 	}
 } } } });
 var rootRouteChildren = {
-	IndexRoute: Route$9.update({
-		id: "/",
-		path: "/",
-		getParentRoute: () => Route$10
-	}),
 	CheckoutRoute: Route$8.update({
 		id: "/checkout",
 		path: "/checkout",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	CommanderRoute: Route$7.update({
 		id: "/commander",
 		path: "/commander",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	ContactRoute: Route$6.update({
 		id: "/contact",
 		path: "/contact",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	RecrutementRoute: Route$5.update({
 		id: "/recrutement",
 		path: "/recrutement",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	AdminStocksRoute: Route$4.update({
 		id: "/admin/stocks",
 		path: "/admin/stocks",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	ApiMollieWebhookRoute: Route$3.update({
 		id: "/api/mollie-webhook",
 		path: "/api/mollie-webhook",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	ApiOrdersRoute: Route$2.update({
 		id: "/api/orders",
 		path: "/api/orders",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
-	OrderSuccessRoute: Route$12.update({
+	OrderSuccessRoute: Route$11.update({
 		id: "/order/success",
 		path: "/order/success",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
-	ProductProductIdRoute: Route$11.update({
+	ProductProductIdRoute: Route$10.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$10
+		getParentRoute: () => Route$9
 	})
 };
-var routeTree = Route$10._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$9._addFileChildren(rootRouteChildren)._addFileTypes();
 var getRouter = () => {
 	const queryClient = new QueryClient();
 	return createRouter({

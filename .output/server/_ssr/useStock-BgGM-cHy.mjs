@@ -6,12 +6,14 @@ import { n as useTranslation } from "./I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, d as Slot, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { r as isItemAvailable } from "./stock-DOWa0GBm.mjs";
+import { t as getStock } from "./stock-Bm3SwSzF.mjs";
 import { d as Minus, l as Plus, r as Trash2, t as X } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-jcLDvjhu.js
+//#region node_modules/.nitro/vite/services/ssr/assets/useStock-BgGM-cHy.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var logo_poke_n_bowl_default = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgOTYiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5Qb2tlIE4gQm93bDwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlBva2UgTiBCb3dsIGNvbXBhY3Qgd29yZG1hcmsuPC9kZXNjPgogIDxnIGZpbGw9IiNmZmZmZmYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iODAwIj4KICAgIDx0ZXh0IHg9IjAiIHk9IjY5IiBmb250LXNpemU9IjY0IiBsZXR0ZXItc3BhY2luZz0iLTEuNSI+UE9LRTwvdGV4dD4KICAgIDx0ZXh0IHg9IjI0MiIgeT0iNjkiIGZvbnQtc2l6ZT0iNTIiIGxldHRlci1zcGFjaW5nPSItMSI+TjwvdGV4dD4KICAgIDx0ZXh0IHg9IjI4NiIgeT0iNjkiIGZvbnQtc2l6ZT0iNjQiIGxldHRlci1zcGFjaW5nPSItMS41Ij5CT1dMPC90ZXh0PgogIDwvZz4KPC9zdmc+";
@@ -270,5 +272,28 @@ function CartDrawer() {
 		})
 	});
 }
+/** Poll stock every 20s so menu reflects real-time availability */
+function useStock(pollMs = 2e4) {
+	const [stock, setStock] = (0, import_react.useState)(null);
+	const [persistent, setPersistent] = (0, import_react.useState)(false);
+	const refresh = (0, import_react.useCallback)(async () => {
+		try {
+			const res = await getStock();
+			setStock(res.stock);
+			setPersistent(res.persistent);
+		} catch {}
+	}, []);
+	(0, import_react.useEffect)(() => {
+		refresh();
+		const id = window.setInterval(() => void refresh(), pollMs);
+		return () => window.clearInterval(id);
+	}, [refresh, pollMs]);
+	return {
+		stock,
+		persistent,
+		available: (0, import_react.useCallback)((id) => isItemAvailable(stock, id), [stock]),
+		refresh
+	};
+}
 //#endregion
-export { logo_poke_n_bowl_default as i, CartDrawer as n, DishImage as r, Button as t };
+export { useStock as a, logo_poke_n_bowl_default as i, CartDrawer as n, DishImage as r, Button as t };
