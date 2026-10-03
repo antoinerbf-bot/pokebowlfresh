@@ -44,12 +44,14 @@ function ProductPage() {
 
   const toppingLabel = (topping: string) => `Topping : ${topping}`;
 
-  const toggleTopping = (topping: string) => {
-    setSelectedToppings((current) =>
-      current.includes(topping)
-        ? current.filter((item) => item !== topping)
-        : [...current, topping],
-    );
+  const changeToppingQuantity = (topping: string, delta: number) => {
+    setSelectedToppings((current) => {
+      const nextQuantity = (current[topping] ?? 0) + delta;
+      const next = { ...current };
+      if (nextQuantity <= 0) delete next[topping];
+      else next[topping] = nextQuantity;
+      return next;
+    });
   };
 
   const handleAddToCart = () => {
