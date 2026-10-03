@@ -1,17 +1,22 @@
 import React from "react";
-import bowlChicken from "@/assets/bowl-chicken.jpg";
-import bowlCrousty from "@/assets/bowl-crousty.jpg";
-import bowlScampi from "@/assets/bowl-scampi.jpg";
-import heroPoke from "@/assets/hero-poke.jpg";
+import mightyGyrosB64 from "@/assets/dishes/mighty-gyros.webp.b64?raw";
+import sweetChickenB64 from "@/assets/dishes/sweet-chicken.webp.b64?raw";
+import scampisRoyauxB64 from "@/assets/dishes/scampis-royaux.webp.b64?raw";
+import saumonWasabiB64 from "@/assets/dishes/saumon-wasabi.webp.b64?raw";
+import spicyChickenB64 from "@/assets/dishes/spicy-chicken.webp.b64?raw";
+import croustyChickenCurryB64 from "@/assets/dishes/crousty-chicken-curry.webp.b64?raw";
+import croustyChickenSauceBlancheB64 from "@/assets/dishes/crousty-chicken-sauce-blanche.webp.b64?raw";
+
+const toDataUrl = (value: string) => `data:image/webp;base64,${value.replace(/\s+/g, "")}`;
 
 const images: Record<string, string> = {
-  "mighty-gyros": heroPoke,
-  "sweet-chicken": bowlChicken,
-  "scampis-royaux": bowlScampi,
-  "saumon-wasabi": heroPoke,
-  "spicy-chicken": heroPoke,
-  "crousty-chicken-curry": bowlCrousty,
-  "crousty-chicken-sauce-blanche": bowlCrousty,
+  "mighty-gyros": toDataUrl(mightyGyrosB64),
+  "sweet-chicken": toDataUrl(sweetChickenB64),
+  "scampis-royaux": toDataUrl(scampisRoyauxB64),
+  "saumon-wasabi": toDataUrl(saumonWasabiB64),
+  "spicy-chicken": toDataUrl(spicyChickenB64),
+  "crousty-chicken-curry": toDataUrl(croustyChickenCurryB64),
+  "crousty-chicken-sauce-blanche": toDataUrl(croustyChickenSauceBlancheB64),
 };
 
 export function DishImage({
@@ -25,7 +30,7 @@ export function DishImage({
   className?: string;
   priority?: boolean;
 }) {
-  const src = images[dishId] ?? heroPoke;
+  const src = images[dishId] ?? images["sweet-chicken"];
 
   return (
     <div className={`relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`}>
