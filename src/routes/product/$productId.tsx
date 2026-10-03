@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { bowls, customToppings, toppingPrices } from "../../lib/data";
+import { bowls, customToppings, toppingPrices, toppingMeta } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
@@ -187,8 +187,8 @@ function ProductPage() {
                       >
                         <div className="flex min-h-11 items-center justify-between gap-2">
                           <div className="min-w-0">
-                            <p className="truncate text-xs font-black">{topping}</p>
-                            <p className={`text-[10px] font-bold ${selected ? "text-white/75" : "text-[#8a7b6b]"}`}>
+                            <p className="flex items-center gap-1.5 truncate text-xs font-black"><span className="text-base" aria-hidden="true">{toppingMeta[topping]?.emoji ?? "✦"}</span><span className="truncate">{topping}</span></p>
+                            <p className={`text-[10px] font-bold ${selected ? "text-white/75" : "text-[#8a7b6b]"}`}>{toppingMeta[topping]?.label ?? "Extra"} · 
                               +€ {(toppingPrices[topping] ?? 0).toFixed(2)} / ajout
                             </p>
                           </div>
