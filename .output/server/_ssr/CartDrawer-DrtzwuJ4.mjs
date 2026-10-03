@@ -11,61 +11,37 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-B2z64lON.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DrtzwuJ4.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var dish_sprite_default = "/assets/dish-sprite-DSDdURuX.webp";
-var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
-var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
-var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
-var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
+var poke_products_default = "/assets/poke-products-Dl5IOuj0.webp";
 var positions = {
-	"beef-teriyaki": "0% 0%",
-	"crousty-chicken": "50% 0%",
-	"sweet-chicken": "100% 0%",
+	"mighty-gyros": "0% 0%",
+	"sweet-chicken": "50% 0%",
+	"scampis-royaux": "100% 0%",
 	"saumon-wasabi": "0% 50%",
-	"scampis-royaux": "50% 50%",
-	"spicy-chicken": "100% 50%",
-	"aloha-classic": "0% 100%",
-	"vegan-tofu": "50% 100%",
-	"shrimp-mango": "100% 100%"
-};
-var fallbackImages = {
-	"sweet-chicken": bowl_chicken_default,
-	"scampis-royaux": bowl_scampi_default,
-	"crousty-chicken-curry": bowl_crousty_default,
-	"crousty-chicken-sauce-blanche": bowl_crousty_default,
-	"mighty-gyros": hero_poke_default
+	"spicy-chicken": "50% 50%",
+	"crousty-chicken-curry": "100% 50%",
+	"crousty-chicken-sauce-blanche": "0% 100%"
 };
 function DishImage({ dishId, alt, className = "" }) {
-	const fallback = fallbackImages[dishId];
-	const position = fallback ? void 0 : positions[dishId];
-	if (position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	const position = positions[dishId];
+	if (!position) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
+		children: "Photo produit"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			role: "img",
 			"aria-label": alt,
 			className: "h-full w-full overflow-hidden rounded-[18px] bg-[#eef0eb] bg-no-repeat shadow-[0_18px_38px_-22px_rgba(23,35,31,.35)]",
 			style: {
-				backgroundImage: `url(${dish_sprite_default})`,
+				backgroundImage: `url(${poke_products_default})`,
 				backgroundSize: "300% 300%",
 				backgroundPosition: position
 			}
 		})
-	});
-	if (fallback) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `h-full w-full bg-[#f3f3ee] p-2 sm:p-2.5 ${className}`,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-			src: fallback,
-			alt,
-			className: "h-full w-full rounded-[18px] object-cover shadow-[0_16px_30px_-18px_rgba(55,32,12,.55)]",
-			loading: "lazy",
-			decoding: "async"
-		})
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
-		children: "Photo produit"
 	});
 }
 function cn(...inputs) {
@@ -293,4 +269,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_crousty_default as a, bowl_chicken_default as i, CartDrawer as n, bowl_scampi_default as o, DishImage as r, hero_poke_default as s, Button as t };
+export { CartDrawer as n, DishImage as r, Button as t };

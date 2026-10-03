@@ -7,12 +7,16 @@ import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { b as ArrowRight, f as Menu, o as ShoppingBag, p as MapPin, t as X, y as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
-import { a as bowl_crousty_default, i as bowl_chicken_default, n as CartDrawer, o as bowl_scampi_default, r as DishImage, s as hero_poke_default } from "./CartDrawer-B2z64lON.mjs";
+import { n as CartDrawer, r as DishImage } from "./CartDrawer-DrtzwuJ4.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-C4J3ACDX.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DJ6AvJEu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
+var bowl_scampi_default = "/assets/bowl-scampi-CKbANxtN.jpg";
+var bowl_crousty_default = "/assets/bowl-crousty-DhSdFdMk.jpg";
+var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 var PHONE = "+32491281456";
 var HOUR_ROWS = [
