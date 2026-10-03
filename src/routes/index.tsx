@@ -4,7 +4,6 @@ import * as React from "react";
 import { ArrowRight, BriefcaseBusiness, MapPin, Menu, ShoppingBag, X } from "lucide-react";
 import logo from "@/assets/logo-poke-n-bowl.svg";
 import dessert from "@/assets/dessert.jpg";
-import heroPoke from "@/assets/hero-poke.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
@@ -136,9 +135,7 @@ function Index() {
 
       <main>
         <section className="relative isolate min-h-[720px] overflow-hidden bg-[#10251f] text-white sm:min-h-[780px]">
-          <motion.div style={{ y: heroImageY }} className="absolute -inset-y-[105px] -z-20">
-            <motion.img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-80 saturate-[1.08]" animate={{ scale: [1.02, 1.08, 1.02], x: [0, -10, 0] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} />
-          </motion.div>
+          <motion.div style={{ y: heroImageY }} className="absolute -inset-y-[105px] -z-20 bg-[radial-gradient(circle_at_78%_38%,rgba(215,255,69,.18),transparent_24%),radial-gradient(circle_at_58%_72%,rgba(255,112,95,.14),transparent_28%),linear-gradient(125deg,#10251f_0%,#18382e_52%,#0e211b_100%)]" />
           <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_72%_42%,rgba(215,255,69,.2),transparent_28%),linear-gradient(110deg,rgba(8,23,19,.96)_0%,rgba(8,23,19,.72)_42%,rgba(8,23,19,.18)_78%,rgba(8,23,19,.52)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_68%_55%,rgba(255,112,95,.18),transparent_25%),radial-gradient(circle_at_28%_45%,rgba(215,255,69,.08),transparent_28%)]" />
@@ -177,7 +174,7 @@ function Index() {
                   <div className="absolute -inset-8 rounded-[60px] bg-[#d7ff45]/10 blur-3xl" />
                   <div className="relative grid items-end gap-3 sm:grid-cols-[1.15fr_.85fr]">
                     <Link to="/product/$productId" params={{ productId: "sweet-chicken" }} className="group relative overflow-hidden rounded-[34px] border border-white/15 bg-[#eee8dc] shadow-[0_45px_100px_-40px_rgba(0,0,0,.95)]">
-                      <div className="relative aspect-[.88] overflow-hidden">
+                      <div className="relative aspect-square overflow-hidden">
                         <DishImage dishId="sweet-chicken" alt="Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos" priority className="h-full w-full transition duration-700 group-hover:scale-[1.045]" />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" />
                         <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Poke N Bowl · Maison</div>
@@ -190,8 +187,8 @@ function Index() {
 
                     <div className="grid gap-3">
                       <Link to="/product/$productId" params={{ productId: "scampis-royaux" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
-                        <div className="relative aspect-[1.08] overflow-hidden">
-                          <DishImage dishId="scampis-royaux" alt="Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili" priority className="h-full w-full transition duration-700 group-hover:scale-[1.06]" />
+                        <div className="relative aspect-square overflow-hidden">
+                          <DishImage dishId="scampis-royaux" alt="Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili" priority className="h-full w-full transition duration-500 group-hover:scale-[1.015]" />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Poke N Bowl · Premium</p>
@@ -287,8 +284,8 @@ function Index() {
                   params={{ productId: bowl.id }}
                   className={`group block h-full overflow-hidden rounded-[24px] bg-white shadow-[0_18px_50px_-32px_rgba(0,0,0,.45)] transition duration-300 hover:-translate-y-1 ${bowl.id.startsWith("crousty-") ? "ring-2 ring-[#d7ff45] ring-offset-2" : ""}`}
                 >
-                  <div className="relative aspect-[1.18] overflow-hidden bg-[#ece8dc]">
-                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-700 group-hover:scale-[1.04]" />
+                  <div className="relative aspect-square overflow-hidden bg-[#f4f1e9]">
+                    <DishImage dishId={bowl.id} alt={bowl.name} className="h-full w-full transition duration-500 group-hover:scale-[1.015]" />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02)_35%,rgba(0,0,0,.5)_100%)]" />
                     <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.12em]">{bowl.tag}</span>
                     <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-xs font-black">€ {bowl.price.toFixed(2)}</span>
