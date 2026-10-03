@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, ShoppingBag, UtensilsCrossed } from "lucide-reac
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import dessert from "@/assets/dessert.jpg";
-import { bowls, drinks, desserts, customBases, customMixIns, customProteins, customSauces, customToppings } from "../lib/data";
+import { bowls, drinks, desserts, customBases, customMixIns, customProteins, customSauces, customToppings, toppingMeta } from "../lib/data";
 import { DishImage } from "../components/DishImage";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
@@ -175,7 +175,7 @@ function CommanderPage() {
                   <h3 className="text-[10px] font-black uppercase tracking-[0.12em] text-[#d7ff45]">{title}</h3>
                   <div className="mt-3 space-y-1.5">
                     {(values as string[]).map((value) => (
-                      <p key={value} className="text-[11px] leading-4 text-white/70">{value}</p>
+                      <p key={value} className="flex items-center gap-1.5 text-[11px] leading-4 text-white/70">{title === t("cmd.toppings") && toppingMeta[value] ? <span aria-hidden="true">{toppingMeta[value].emoji}</span> : null}<span>{value}</span>{title === t("cmd.toppings") ? <span className="ml-auto rounded-full bg-white/10 px-1.5 py-0.5 text-[9px] font-black text-[#d7ff45]">+0,50€</span> : null}</p>
                     ))}
                   </div>
                 </div>
