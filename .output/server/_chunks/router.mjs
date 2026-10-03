@@ -17,7 +17,7 @@ import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-gQal2pfl.css";
+var styles_default = "/assets/styles-C2c-7fbt.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -604,7 +604,7 @@ function RootComponent() {
 }
 //#endregion
 //#region src/assets/logo.png
-var logo_default = "/assets/logo-BXG0pe7R.png";
+var logo_default = "data:image/png;base64,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AAECBAgQMAD9AAECBAgQIEAgJmAAxgoXlwABAgQIECBgAPoBAgQIECBAgEBMwACMFS4uAQIECBAgQMAA9AMECBAgQIAAgZiAARgrXFwCBAgQIECAgAHoBwgQIECAAAECMQEDMFa4uAQIECBAgAABA9APECBAgAABAgRiAgZgrHBxCRAgQIAAAQIGoB8gQIAAAQIECMQEDMBY4eISIECAAAECBAxAP0CAAAECBAgQiAkYgLHCxSVAgAABAgQIGIB+gAABAgQIECAQEzAAY4WLS4AAAQIECBAwAP0AAQIECBAgQCAmYADGCheXAAECBAgQIGAA+gECBAgQIECAQEzAAIwVLi4BAgQIECBAwAD0AwQIECBAgACBmIABGCtcXAIECBAgQICAAegHCBAgQIAAAQIxAQMwVri4BAgQIECAAAED0A8QIECAAAECBGICBmCscHEJECBAgAABAgagHyBAgAABAgQIxAQMwFjh4hIgQIAAAQIEDEA/QIAAAQIECBCICRiAscLFJUCAAAECBAgYgH6AAAECBAgQIBATMABjhYtLgAABAgQIEDAA/QABAgQIECBAICZgAMYKF5cAAQIECBAgYAD6AQIECBAgQIBATMAAjBUuLgECBAgQIEDAAPQDBAgQIECAAIGYgAEYK1xcAgQIECBAgIAB6AcIECBAgAABAjEBAzBWuLgECBAgQIAAAQPQDxAgQIAAAQIEYgIGYKxwcQkQIECAAAECBqAfIECAAAECBAjEBAzAWOHiEiBAgAABAgQMQD9AgAABAgQIEIgJGICxwsUlQIAAAQIECBiAfoAAAQIECBAgEBMwAGOFi0uAAAECBAgQMAD9AAECBAgQIEAgJmAAxgoXlwABAgQIECBgAPoBAgQIECBAgEBMwACMFS4uAQIECBAgQMAA9AMECBAgQIAAgZiAARgrXFwCBAgQIECAgAHoBwgQIECAAAECMQEDMFa4uAQIECBAgAABA9APECBAgAABAgRiAgZgrHBxCRAgQIAAAQIGoB8gQIAAAQIECMQEDMBY4eISIECAAAECBC6KawUobfJpVwAAAABJRU5ErkJggg==";
 //#endregion
 //#region src/assets/hero-poke.jpg
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -697,13 +697,13 @@ ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
 //#region src/components/DishImage.tsx
 var images = {
-	"mighty-gyros": "/assets/bowl-gyros-FF68v9gm.jpg",
-	"sweet-chicken": "/assets/bowl-sweet-chicken-jx3K9ohY.jpg",
-	"scampis-royaux": "/assets/bowl-scampis-BOlBSlcG.jpg",
-	"saumon-wasabi": "/assets/bowl-saumon-KgMKLlzT.jpg",
-	"spicy-chicken": "/assets/bowl-spicy-chicken-Bh5s8Reo.jpg",
-	"crousty-chicken-curry": "/assets/bowl-crousty-curry-D3DHpa0g.jpg",
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-DhSdFdMk.jpg"
+	"mighty-gyros": "/assets/bowl-gyros-BAHAeM5H.jpg",
+	"sweet-chicken": "/assets/bowl-sweet-chicken-sbn6VeN3.jpg",
+	"scampis-royaux": "/assets/bowl-scampis-WuS-dpfJ.jpg",
+	"saumon-wasabi": "/assets/bowl-saumon-DZ8yRlhg.jpg",
+	"spicy-chicken": "/assets/bowl-spicy-chicken-D83Dkldw.jpg",
+	"crousty-chicken-curry": "/assets/bowl-crousty-curry-BJ68lQb2.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-Dtil8hTC.jpg"
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId];
@@ -1551,12 +1551,12 @@ function Index() {
 								top: 0,
 								behavior: "auto"
 							}),
-							className: "flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-90",
+							className: "flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 							"aria-label": "Poke N Bowl",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 								src: logo_default,
 								alt: "Logo Poke N Bowl",
-								className: "h-10 sm:h-12 w-auto object-contain rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.18)]"
+								className: "h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.45)] border border-white/15"
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -2378,16 +2378,16 @@ function Index() {
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 							to: "/",
-							className: "flex items-center gap-3",
+							className: "flex items-center gap-3.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 								src: logo_default,
 								alt: "Poke N Bowl",
-								className: "h-10 w-auto max-w-[160px] object-contain object-left"
+								className: "h-12 sm:h-14 w-auto max-w-[240px] object-contain object-left rounded-xl border border-white/10 shadow-md"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "font-black",
+								className: "font-black text-white text-base",
 								children: "Poke N Bowl"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "text-[8px] font-bold uppercase tracking-[0.18em] text-white/30",
+								className: "text-[8px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]",
 								children: "Visé · Fresh food"
 							})] })]
 						}),
@@ -2991,12 +2991,12 @@ function CheckoutPage() {
 				className: "mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex items-center gap-2.5 transition hover:opacity-90",
+					className: "flex items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 					"aria-label": "Accueil",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 						src: logo_default,
 						alt: "Poke N Bowl",
-						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/commander",
@@ -3646,12 +3646,12 @@ function CommanderPage() {
 					className: "mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
+						className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 						"aria-label": "Poke N Bowl — Accueil",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 							src: logo_default,
 							alt: "Logo Poke N Bowl",
-							className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+							className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
 						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
@@ -3988,12 +3988,12 @@ function ContactPage() {
 				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
+					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 					"aria-label": "Poke N Bowl — Accueil",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 						src: logo_default,
 						alt: "Logo Poke N Bowl",
-						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
@@ -4112,12 +4112,12 @@ function RecruitmentPage() {
 				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
+					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 					"aria-label": "Poke N Bowl — Accueil",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 						src: logo_default,
 						alt: "Logo Poke N Bowl",
-						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
@@ -4578,11 +4578,11 @@ function OrderSuccessPage() {
 				className: "mx-auto flex max-w-[700px] items-center px-5 py-3 sm:px-8",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex items-center gap-2.5 transition hover:opacity-90",
+					className: "flex items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 						src: logo_default,
 						alt: "Poke N Bowl",
-						className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
 					})
 				})
 			})
@@ -4920,12 +4920,12 @@ function ProductPage() {
 					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "group flex min-w-0 items-center gap-2.5 transition hover:opacity-90",
+						className: "group flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
 						"aria-label": "Poke N Bowl",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 							src: logo_default,
 							alt: "Logo Poke N Bowl",
-							className: "h-9 sm:h-11 w-auto object-contain rounded-xl shadow-sm"
+							className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
 						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2.5 sm:gap-3",

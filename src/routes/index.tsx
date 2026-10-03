@@ -163,13 +163,13 @@ function Index() {
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
-            className="flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-90"
+            className="flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200"
             aria-label="Poke N Bowl"
           >
             <img
               src={logo}
               alt="Logo Poke N Bowl"
-              className="h-10 sm:h-12 w-auto object-contain rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.18)]"
+              className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.45)] border border-white/15"
             />
           </Link>
 
@@ -798,15 +798,15 @@ function Index() {
       {/* ════════════════════ FOOTER ════════════════════════════ */}
       <footer className="bg-[#0b1a16] px-5 py-8 pb-24 text-white sm:px-6 sm:pb-8 lg:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3.5 transition hover:opacity-95 hover:scale-[1.02] duration-200">
             <img
               src={logo}
               alt="Poke N Bowl"
-              className="h-10 w-auto max-w-[160px] object-contain object-left"
+              className="h-12 sm:h-14 w-auto max-w-[240px] object-contain object-left rounded-xl border border-white/10 shadow-md"
             />
             <div>
-              <div className="font-black">Poke N Bowl</div>
-              <div className="text-[8px] font-bold uppercase tracking-[0.18em] text-white/30">
+              <div className="font-black text-white text-base">Poke N Bowl</div>
+              <div className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
                 Visé · Fresh food
               </div>
             </div>

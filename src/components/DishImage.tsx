@@ -7,8 +7,7 @@ import bowlScampis      from "@/assets/bowl-scampis.jpg";
 import bowlSaumon       from "@/assets/bowl-saumon.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
-// Pour crousty-blanche : on utilise crousty-curry (même style) en attendant regen
-import bowlCroustyBlanche from "@/assets/bowl-crousty.jpg";
+import bowlCroustyBlanche from "@/assets/bowl-crousty-blanche.jpg";
 
 const images: Record<string, string> = {
   "mighty-gyros":                  bowlGyros,
