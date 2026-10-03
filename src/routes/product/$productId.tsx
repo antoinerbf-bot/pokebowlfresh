@@ -5,7 +5,7 @@ import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShoppingCart, Check } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Check, Minus, Plus } from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
 import logo from "@/assets/logo.png";
 import { useStock } from "../../hooks/useStock";
@@ -20,7 +20,7 @@ function ProductPage() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
-  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
+  const [selectedToppings, setSelectedToppings] = React.useState<Record<string, number>>({});
   const [extraSauce, setExtraSauce] = React.useState(false);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
@@ -39,7 +39,7 @@ function ProductPage() {
   const productOk = available(product.id);
 
   const isCrousty = product.id.startsWith("crousty-");
-  const toppingsPrice = selectedToppings.reduce((sum, topping) => sum + (toppingPrices[topping] ?? 0), 0);
+  const toppingsPrice = Object.entries(selectedToppings).reduce((sum, [topping, quantity]) => sum + (toppingPrices[topping] ?? 0) * quantity, 0);
   const finalPrice = product.price + toppingsPrice + (isCrousty && extraSauce ? 1 : 0);
 
   const toppingLabel = (topping: string) => `Topping : ${topping}`;
@@ -55,7 +55,7 @@ function ProductPage() {
   const handleAddToCart = () => {
     if (!productOk) return;
     const options = [
-      ...selectedToppings.map((item) => `${toppingLabel(item)} +${(toppingPrices[item] ?? 0).toFixed(2)}€`),
+      ...Object.entries(selectedToppings).map(([item, quantity]) => `${toppingLabel(item)} ×${quantity} +${((toppingPrices[item] ?? 0) * quantity).toFixed(2)}€`),
       ...(isCrousty && extraSauce ? ["Sauce extra +1€"] : []),
     ];
     addItem({
@@ -171,12 +171,12 @@ function ProductPage() {
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
-                    const selected = selectedToppings.includes(topping);
+                    const quantity = selectedToppings[topping] ?? 0;\n                    const selected = quantity > 0;
                     return (
                       <button
                         key={topping}
                         type="button"
-                        onClick={() => toggleTopping(topping)}
+                        onClick={() => changeToppingQuantity(topping, 1)}
                         className={`flex min-h-11 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs font-bold transition ${
                           selected
                             ? "border-[#a96b0d] bg-[#a96b0d] text-white"
@@ -219,7 +219,7 @@ function ProductPage() {
                 ))}
               </div>
               <div className="mt-5 rounded-xl bg-background/70 px-4 py-3 text-xs font-semibold text-muted-foreground">
-                Tu peux ajouter ou retirer les toppings que tu veux. Chaque topping supplémentaire est facturé au tarif affiché.
+                Tu peux ajouter ou retirer autant de toppings que tu veux, y compris plusieurs fois le même topping. Chaque ajout est facturé au tarif affiché.
               </div>
             </div>
 
