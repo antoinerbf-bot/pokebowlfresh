@@ -16,3 +16,4 @@ deployment:
     - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
     - /bin/cp .htaccess $DEPLOYPATH/.htaccess
     - /usr/bin/printf '%s\n' "$(git rev-parse HEAD)" > $DEPLOYPATH/.deployed-commit
+    - /usr/bin/printf '%s\n' "$(git rev-parse HEAD)" > $DEPLOYPATH/public/version.txt
