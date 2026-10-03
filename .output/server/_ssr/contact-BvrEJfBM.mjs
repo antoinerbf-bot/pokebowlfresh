@@ -1,6 +1,6 @@
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { f as MapPin, o as ShoppingBag, u as PhoneCall, y as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { b as ArrowLeft, o as ShoppingBag, p as MapPin, u as PhoneCall } from "../_libs/lucide-react.mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/contact-BvrEJfBM.js
 var import_jsx_runtime = require_jsx_runtime();

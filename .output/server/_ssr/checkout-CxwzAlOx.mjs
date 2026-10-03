@@ -3,7 +3,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { _ as useNavigate, g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { i as Store, m as CreditCard, p as LoaderCircle, y as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { b as ArrowLeft, h as CreditCard, i as Store, m as LoaderCircle } from "../_libs/lucide-react.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { n as submitCheckout } from "./checkout-fOFduhpC.mjs";

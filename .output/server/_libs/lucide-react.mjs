@@ -244,6 +244,26 @@ var MapPin = createLucideIcon("map-pin", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Menu = createLucideIcon("menu", [
+	["path", {
+		d: "M4 5h16",
+		key: "1tepv9"
+	}],
+	["path", {
+		d: "M4 12h16",
+		key: "1lakjw"
+	}],
+	["path", {
+		d: "M4 19h16",
+		key: "1djgab"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Minus = createLucideIcon("minus", [["path", {
 	d: "M5 12h14",
 	key: "1ays0h"
@@ -445,4 +465,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { BriefcaseBusiness as _, ShoppingCart as a, RefreshCw as c, Minus as d, MapPin as f, CircleCheck as g, Clock as h, Store as i, Plus as l, CreditCard as m, UtensilsCrossed as n, ShoppingBag as o, LoaderCircle as p, Trash2 as r, Shield as s, X as t, PhoneCall as u, ArrowRight as v, ArrowLeft as y };
+export { CircleCheck as _, ShoppingCart as a, ArrowLeft as b, RefreshCw as c, Minus as d, Menu as f, Clock as g, CreditCard as h, Store as i, Plus as l, LoaderCircle as m, UtensilsCrossed as n, ShoppingBag as o, MapPin as p, Trash2 as r, Shield as s, X as t, PhoneCall as u, BriefcaseBusiness as v, ArrowRight as y };
