@@ -3,10 +3,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import * as React from "react";
 import { ArrowRight, BriefcaseBusiness, MapPin, Menu, ShoppingBag, X } from "lucide-react";
 import logo from "@/assets/logo.png";
-import heroPoke from "@/assets/hero-poke.jpg";
-import bowlScampi from "@/assets/bowl-scampi.jpg";
-import bowlCrousty from "@/assets/bowl-crousty.jpg";
-import bowlChicken from "@/assets/bowl-chicken.jpg";
 import dessert from "@/assets/dessert.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
@@ -144,7 +140,7 @@ function Index() {
       <main>
         <section className="relative isolate min-h-[720px] overflow-hidden bg-[#10251f] text-white sm:min-h-[780px]">
           <motion.div style={{ y: heroImageY }} className="absolute -inset-y-[105px] -z-20">
-            <img src={heroPoke} alt="" aria-hidden="true" className="h-full w-full object-cover object-center opacity-58 scale-[1.06]" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_72%_45%,rgba(215,255,69,.18),transparent_30%),linear-gradient(135deg,#10251f,#17231f)]" aria-hidden="true" />
           </motion.div>
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,23,19,.94)_0%,rgba(8,23,19,.72)_38%,rgba(8,23,19,.18)_72%,rgba(8,23,19,.42)_100%)]" />
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_68%_55%,rgba(255,112,95,.18),transparent_25%),radial-gradient(circle_at_28%_45%,rgba(215,255,69,.08),transparent_28%)]" />
@@ -184,7 +180,7 @@ function Index() {
                   <div className="relative grid items-end gap-3 sm:grid-cols-[1.15fr_.85fr]">
                     <Link to="/product/$productId" params={{ productId: "sweet-chicken" }} className="group relative overflow-hidden rounded-[34px] border border-white/15 bg-[#eee8dc] shadow-[0_45px_100px_-40px_rgba(0,0,0,.95)]">
                       <div className="relative aspect-[.88] overflow-hidden">
-                        <img src={bowlChicken} alt="Sweet Chicken" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.045]" />
+                        <DishImage dishId="sweet-chicken" alt="Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos" className="h-full w-full transition duration-700 group-hover:scale-[1.045]" />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" />
                         <div className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.16em] text-[#10251f]">Pokénball · Maison</div>
                         <div className="absolute bottom-5 left-5 right-5">
@@ -197,7 +193,7 @@ function Index() {
                     <div className="grid gap-3">
                       <Link to="/product/$productId" params={{ productId: "scampis-royaux" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
                         <div className="relative aspect-[1.08] overflow-hidden">
-                          <img src={bowlScampi} alt="Scampis Royal" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]" />
+                          <DishImage dishId="scampis-royaux" alt="Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili" className="h-full w-full transition duration-700 group-hover:scale-[1.06]" />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Pokénball · Premium</p>
@@ -207,7 +203,7 @@ function Index() {
                       </Link>
                       <Link to="/product/$productId" params={{ productId: "crousty-chicken-curry" }} className="group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]">
                         <div className="relative aspect-[1.08] overflow-hidden">
-                          <img src={bowlCrousty} alt="Crusty Chicken Curry" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]" />
+                          <DishImage dishId="crousty-chicken-curry" alt="Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits" className="h-full w-full transition duration-700 group-hover:scale-[1.06]" />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" />
                           <div className="absolute bottom-4 left-4 right-4">
                             <p className="text-[8px] font-black uppercase tracking-[0.15em] text-white/65">Crusty Chicken · Maison</p>
