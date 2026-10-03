@@ -33,16 +33,16 @@ export function DishImage({
   const src = images[dishId];
 
   return (
-    <div className={`relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`}>
+    <div className={`relative h-full w-full overflow-hidden bg-[#f4f1e9] ${className}`}>
       <img
         src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
         fetchPriority={priority ? "high" : "auto"}
-        className="absolute inset-0 h-full w-full object-cover object-center"
+        className="absolute inset-0 h-full w-full object-contain object-center p-3 sm:p-4"
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.02),transparent_42%,rgba(0,0,0,.06))]" />
+
     </div>
   );
 }
