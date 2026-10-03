@@ -10,7 +10,7 @@ import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as g
 import { t as Route$12 } from "./order.success-D9MAlQ4G.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CM2ICvsq.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Cuamg5QB.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-COZzOtBJ.css";
@@ -181,7 +181,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$5 = () => import("./routes-DKipZ_cE.mjs");
+var $$splitComponentImporter$5 = () => import("./routes-C9Zf6Qj-.mjs");
 var Route$9 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl — Poké bowls & Crusty Chicken" }, {
 		name: "description",
