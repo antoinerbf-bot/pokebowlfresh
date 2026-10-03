@@ -147,7 +147,7 @@ function ProductPage() {
             {product.menuNote && (
               <div className="mb-6 rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 px-4 py-3">
                 <p className="text-sm font-black text-[#8f5b12]">{product.menuNote}</p>
-                <p className="mt-1 text-xs font-semibold text-[#6e6255]">Sauce extra disponible : +1€</p>
+                <p className="mt-1 text-xs font-semibold text-[#68756f]">Sauce extra disponible : +1€</p>
               </div>
             )}
 
@@ -158,19 +158,19 @@ function ProductPage() {
             )}
 
             {productOk && (
-              <div className="mb-6 rounded-3xl border border-[#a96b0d]/20 bg-[#ead9bb]/35 p-5 sm:p-6">
+              <div className="mb-6 rounded-[28px] border border-[#d7ff45]/50 bg-[linear-gradient(135deg,#f7fff0,#ffffff_55%,#fff3ef)] p-5 shadow-[0_24px_70px_-38px_rgba(23,35,31,.35)] sm:p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8f5b12]">{t("toppings.title")}</p>
-                    <h2 className="mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#241a12]">Ajoute ta touche</h2>
+                    <h2 className="mt-1 font-display text-xl font-bold tracking-[-0.01em] text-[#17231f]">Ajoute ta touche</h2>
                   </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#8f5b12]">+ supplément</span>
+                  <span className="rounded-full bg-white px-3 py-1 text-[10px] font-black text-[#c94e3f]">+ supplément</span>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-[#6e6255]">
                   {isCrousty
                     ? "La recette reste signature. Ajoute autant de toppings payants que tu veux et, si tu veux, une sauce supplémentaire."
                     : "Garde la recette du restaurant et ajoute autant de toppings payants que tu veux."}
-                  <span className="mt-1 block font-black text-[#8f5b12]">Aucune limite : tu peux ajouter plusieurs fois le même topping. Chaque ajout est facturé.</span>
+                  <span className="mt-1 block font-black text-[#c94e3f]">Aucune limite : tu peux ajouter plusieurs fois le même topping. Chaque ajout est facturé.</span>
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {customToppings.map((topping) => {
@@ -182,13 +182,13 @@ function ProductPage() {
                         className={`rounded-xl border px-3 py-2 transition ${
                           selected
                             ? "border-[#a96b0d] bg-[#a96b0d] text-white"
-                            : "border-[#8d5a18]/15 bg-white text-[#4d4134]"
+                            : "border-[#8d5a18]/15 bg-white text-[#34433d]"
                         }`}
                       >
                         <div className="flex min-h-11 items-center justify-between gap-2">
                           <div className="min-w-0">
                             <p className="flex items-center gap-1.5 truncate text-xs font-black"><span className="text-base" aria-hidden="true">{toppingMeta[topping]?.emoji ?? "✦"}</span><span className="truncate">{topping}</span></p>
-                            <p className={`text-[10px] font-bold ${selected ? "text-white/75" : "text-[#8a7b6b]"}`}>{toppingMeta[topping]?.label ?? "Extra"} · 
+                            <p className={`text-[10px] font-bold ${selected ? "text-white/75" : "text-[#718078]"}`}>{toppingMeta[topping]?.label ?? "Extra"} · 
                               +€ {(toppingPrices[topping] ?? 0).toFixed(2)} / ajout
                             </p>
                           </div>
