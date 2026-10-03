@@ -11,7 +11,7 @@ import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs"
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
 import { t as Root$1 } from "../_libs/radix-ui__react-separator.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-4X9LW55z.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-8Vb-1p8q.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var bowl_chicken_default = "/assets/bowl-chicken-DVKFm73l.jpg";
@@ -27,15 +27,16 @@ var images = {
 	"crousty-chicken-curry": bowl_crousty_default,
 	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
-function DishImage({ dishId, alt, className = "" }) {
+function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId] ?? "/assets/hero-poke-Dk38LgOY.jpg";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: `relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src,
 			alt,
-			loading: "lazy",
+			loading: priority ? "eager" : "lazy",
 			decoding: "async",
+			fetchPriority: priority ? "high" : "auto",
 			className: "absolute inset-0 h-full w-full object-cover object-center"
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.02),transparent_42%,rgba(0,0,0,.06))]" })]
 	});

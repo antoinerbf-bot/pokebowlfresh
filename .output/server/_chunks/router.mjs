@@ -746,15 +746,16 @@ var images = {
 	"crousty-chicken-curry": bowl_crousty_default,
 	"crousty-chicken-sauce-blanche": bowl_crousty_default
 };
-function DishImage({ dishId, alt, className = "" }) {
+function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId] ?? "/assets/hero-poke-Dk38LgOY.jpg";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: `relative h-full w-full overflow-hidden bg-[#eee8dc] ${className}`,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 			src,
 			alt,
-			loading: "lazy",
+			loading: priority ? "eager" : "lazy",
 			decoding: "async",
+			fetchPriority: priority ? "high" : "auto",
 			className: "absolute inset-0 h-full w-full object-cover object-center"
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.02),transparent_42%,rgba(0,0,0,.06))]" })]
 	});
@@ -1457,6 +1458,7 @@ function Index() {
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																dishId: "sweet-chicken",
 																alt: "Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos",
+																priority: true,
 																className: "h-full w-full transition duration-700 group-hover:scale-[1.045]"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
@@ -1488,6 +1490,7 @@ function Index() {
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "scampis-royaux",
 																	alt: "Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili",
+																	priority: true,
 																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" }),
@@ -1513,6 +1516,7 @@ function Index() {
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "crousty-chicken-curry",
 																	alt: "Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits",
+																	priority: true,
 																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" }),

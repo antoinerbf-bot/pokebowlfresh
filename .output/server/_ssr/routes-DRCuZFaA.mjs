@@ -7,10 +7,10 @@ import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { f as Menu, o as ShoppingBag, p as MapPin, t as X, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
-import { i as hero_poke_default, n as CartDrawer, r as DishImage } from "./CartDrawer-4X9LW55z.mjs";
+import { i as hero_poke_default, n as CartDrawer, r as DishImage } from "./CartDrawer-8Vb-1p8q.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CDmMOYAC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DRCuZFaA.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
@@ -337,6 +337,7 @@ function Index() {
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																dishId: "sweet-chicken",
 																alt: "Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos",
+																priority: true,
 																className: "h-full w-full transition duration-700 group-hover:scale-[1.045]"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
@@ -368,6 +369,7 @@ function Index() {
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "scampis-royaux",
 																	alt: "Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili",
+																	priority: true,
 																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" }),
@@ -393,6 +395,7 @@ function Index() {
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "crousty-chicken-curry",
 																	alt: "Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits",
+																	priority: true,
 																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" }),
