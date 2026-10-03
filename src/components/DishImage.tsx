@@ -18,10 +18,12 @@ export function DishImage({
   dishId,
   alt,
   className = "",
+  priority = false,
 }: {
   dishId: string;
   alt: string;
   className?: string;
+  priority?: boolean;
 }) {
   const src = images[dishId] ?? heroPoke;
 
@@ -30,8 +32,9 @@ export function DishImage({
       <img
         src={src}
         alt={alt}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
+        fetchPriority={priority ? "high" : "auto"}
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.02),transparent_42%,rgba(0,0,0,.06))]" />
