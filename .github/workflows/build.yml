@@ -8,6 +8,10 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: o2switch-build-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
