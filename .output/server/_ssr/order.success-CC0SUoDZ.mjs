@@ -3,8 +3,8 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { _ as CircleCheck, g as Clock, h as CreditCard, i as Store, m as LoaderCircle } from "../_libs/lucide-react.mjs";
+import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { t as getOrderStatus } from "./checkout-fOFduhpC.mjs";
 import { t as Route } from "./order.success-D9MAlQ4G.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/order.success-CC0SUoDZ.js

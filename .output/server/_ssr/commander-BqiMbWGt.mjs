@@ -3,13 +3,12 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useTranslation } from "./I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as logo_default } from "./logo-C4WRcUkf.mjs";
 import { b as ArrowLeft, n as UtensilsCrossed, o as ShoppingBag, y as ArrowRight } from "../_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage } from "./CartDrawer-8Vb-1p8q.mjs";
+import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage } from "./CartDrawer-B18P274B.mjs";
 import { t as useStock } from "./useStock-CyTLUBuU.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { r as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/commander-DNUg0wEL.js
+//#region node_modules/.nitro/vite/services/ssr/assets/commander-BqiMbWGt.js
 var import_jsx_runtime = require_jsx_runtime();
 function CommanderPage() {
 	const { t, language, setLanguage } = useTranslation();
@@ -37,21 +36,18 @@ function CommanderPage() {
 				className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "flex min-w-0 items-center gap-2.5",
+						className: "flex min-w-0 items-center",
 						"aria-label": "Poke N Bowl — Accueil",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex h-11 w-[170px] shrink-0 items-center overflow-hidden sm:h-12 sm:w-[190px]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
+								src: logo_poke_n_bowl_default,
 								alt: "Logo Poke N Bowl",
-								className: "h-full w-full object-contain"
+								className: "h-full w-full object-contain object-left"
 							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "truncate text-base font-black sm:text-lg",
-							children: "Poke N Bowl"
-						})]
+						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
 						children: [
@@ -101,22 +97,13 @@ function CommanderPage() {
 								t("cmd.back")
 							]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "mb-6 flex items-center gap-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-lg",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									src: logo_default,
-									alt: "Poke N Bowl",
-									className: "h-full w-full object-contain"
-								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs font-black uppercase tracking-[0.18em] text-white",
-								children: "Poke N Bowl"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45",
-								children: "Visé · Fresh food"
-							})] })]
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mb-6 flex items-center",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: logo_poke_n_bowl_default,
+								alt: "Poke N Bowl",
+								className: "h-auto w-[210px] object-contain object-left sm:w-[250px]"
+							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "mt-8 max-w-3xl",

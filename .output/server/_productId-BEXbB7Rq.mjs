@@ -5,12 +5,11 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-C3RK_DMT.mjs";
-import { t as logo_default } from "./_ssr/logo-C4WRcUkf.mjs";
+import { t as Route } from "./_productId-DEs9X0at.mjs";
 import { a as ShoppingCart, b as ArrowLeft, d as Minus, l as Plus } from "./_libs/lucide-react.mjs";
-import { n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-8Vb-1p8q.mjs";
+import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-B18P274B.mjs";
 import { t as useStock } from "./_ssr/useStock-CyTLUBuU.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-vLCBzaLz.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-BEXbB7Rq.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {
@@ -70,21 +69,18 @@ function ProductPage() {
 				className: "sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "group flex min-w-0 items-center gap-2.5",
+						className: "group flex min-w-0 items-center",
 						"aria-label": "Poke N Bowl",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-foreground/5 p-1.5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "flex h-11 w-[175px] shrink-0 items-center overflow-hidden sm:h-12 sm:w-[195px]",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
-								alt: "Logo",
-								className: "h-full w-full object-contain"
+								src: logo_poke_n_bowl_default,
+								alt: "Logo Poke N Bowl",
+								className: "h-full w-full object-contain object-left"
 							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "truncate font-display text-base font-bold tracking-[-0.01em] sm:text-lg",
-							children: "Poke N Bowl"
-						})]
+						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-3 sm:gap-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
