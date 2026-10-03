@@ -9,7 +9,7 @@ import { f as Menu, o as ShoppingBag, p as MapPin, t as X, v as BriefcaseBusines
 import { i as hero_poke_default, n as CartDrawer, r as DishImage } from "./CartDrawer-8Vb-1p8q.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CQhT69U3.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DKipZ_cE.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var logo_poke_n_bowl_default = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3NjAgMTcwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+UG9rZSBOIEJvd2w8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5Qb2tlIE4gQm93bCB3b3JkbWFyayB3aXRoIHRoZSBOIGVuY2xvc2VkIGluIGEgY2lyY2xlLjwvZGVzYz4KICA8ZyBmaWxsPSIjZmZmZmZmIiBmb250LWZhbWlseT0iQXJpYWwgTmFycm93LCBIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI4MDAiPgogICAgPHRleHQgeD0iOCIgeT0iNzYiIGZvbnQtc2l6ZT0iNzAiIGxldHRlci1zcGFjaW5nPSIxIj5QT0tFPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMzY1IiBjeT0iNTEiIHI9IjMxIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNiIvPgogICAgPHRleHQgeD0iMzQ1IiB5PSI3MyIgZm9udC1zaXplPSI1OCI+TjwvdGV4dD4KICAgIDx0ZXh0IHg9IjQwNyIgeT0iNzYiIGZvbnQtc2l6ZT0iNzAiIGxldHRlci1zcGFjaW5nPSIxIj5CT1dMPC90ZXh0PgogIDwvZz4KICA8ZyBmaWxsPSIjZmZmZmZmIiBmb250LWZhbWlseT0iQXJpYWwgTmFycm93LCBIZWx2ZXRpY2EgTmV1ZSwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSI3Ij4KICAgIDx0ZXh0IHg9IjE3NiIgeT0iMTIzIiBmb250LXNpemU9IjE4Ij5QT0tFIMK3IFJJQ0UgwrcgQk9XTDwvdGV4dD4KICA8L2c+CiAgPHBhdGggZD0iTTE2OCAxMzJIMTQ1IE01OTYgMTMySDYxOSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==";
@@ -101,28 +101,19 @@ function Index() {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 							to: "/",
 							onClick: goHome,
 							className: "flex min-w-0 shrink-0 items-center gap-2.5",
 							"aria-label": "Poke N Bowl",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "flex h-14 w-[190px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[220px]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 									src: logo_poke_n_bowl_default,
 									alt: "Logo Poke N Bowl",
 									className: "h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]"
 								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "min-w-0 text-white",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-									className: "block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg",
-									children: "Poke N Bowl"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]",
-									children: "Poké Bowls · Crusty Chicken"
-								})]
-							})]
+							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "hidden items-center gap-7 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex",
@@ -282,12 +273,13 @@ function Index() {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-											className: "mt-5 max-w-[720px] break-words font-script text-[clamp(4.1rem,10vw,7.4rem)] font-bold leading-[.78] tracking-[-0.035em]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block",
-												children: "Poké Bowls"
+											className: "mt-5 max-w-[720px]",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+												src: logo_poke_n_bowl_default,
+												alt: "Poke N Bowl",
+												className: "h-auto w-full max-w-[610px] object-contain object-left drop-shadow-[0_14px_30px_rgba(0,0,0,.28)]"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "mt-4 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70",
+												className: "mt-5 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-[#ff705f]",
 													children: "+"

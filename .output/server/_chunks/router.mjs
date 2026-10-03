@@ -18,7 +18,7 @@ import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BHwfiszK.css";
+var styles_default = "/assets/styles-COZzOtBJ.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -1222,28 +1222,19 @@ function Index() {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
 					className: "mx-auto flex max-w-[1320px] items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 							to: "/",
 							onClick: goHome,
 							className: "flex min-w-0 shrink-0 items-center gap-2.5",
 							"aria-label": "Poke N Bowl",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "flex h-14 w-[190px] shrink-0 items-center overflow-hidden sm:h-16 sm:w-[220px]",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 									src: logo_poke_n_bowl_default,
 									alt: "Logo Poke N Bowl",
 									className: "h-full w-full object-contain object-left drop-shadow-[0_8px_24px_rgba(0,0,0,.28)]"
 								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "min-w-0 text-white",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-									className: "block truncate text-[15px] font-black leading-none tracking-tight sm:text-lg",
-									children: "Poke N Bowl"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "mt-1 block truncate text-[7px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[8px]",
-									children: "Poké Bowls · Crusty Chicken"
-								})]
-							})]
+							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "hidden items-center gap-7 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex",
@@ -1403,12 +1394,13 @@ function Index() {
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-											className: "mt-5 max-w-[720px] break-words font-script text-[clamp(4.1rem,10vw,7.4rem)] font-bold leading-[.78] tracking-[-0.035em]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block",
-												children: "Poké Bowls"
+											className: "mt-5 max-w-[720px]",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+												src: logo_poke_n_bowl_default,
+												alt: "Poke N Bowl",
+												className: "h-auto w-full max-w-[610px] object-contain object-left drop-shadow-[0_14px_30px_rgba(0,0,0,.28)]"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "mt-4 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70",
+												className: "mt-5 block max-w-[560px] break-words font-display text-[clamp(1.05rem,2.6vw,1.8rem)] font-semibold tracking-[-0.015em] text-white/70",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-[#ff705f]",
 													children: "+"
