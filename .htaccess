@@ -1,0 +1,7 @@
+PassengerAppRoot "/home/puzo3938/pokenbowl.be"
+PassengerBaseURI "/"
+PassengerNodejs "/home/puzo3938/nodevenv/pokenbowl.be/22/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+PassengerEnabled on
+Options -Indexes
