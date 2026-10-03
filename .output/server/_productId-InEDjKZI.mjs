@@ -5,11 +5,11 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./_ssr/CartContext-v6B2RrbN.mjs";
 import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-DSc-k1xS.mjs";
+import { t as Route } from "./_productId-DXkkYanJ.mjs";
 import { a as ShoppingCart, b as ArrowLeft, d as Minus, l as Plus } from "./_libs/lucide-react.mjs";
-import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-CnOKzUCY.mjs";
+import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage, t as Button } from "./_ssr/CartDrawer-jcLDvjhu.mjs";
 import { t as useStock } from "./_ssr/useStock-CyTLUBuU.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-Bj3hwAFX.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-InEDjKZI.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function ProductPage() {

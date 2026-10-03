@@ -6,10 +6,10 @@ import { n as useTranslation } from "./I18nContext-DJzdD15j.mjs";
 import { n as useCart } from "./CartContext-v6B2RrbN.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { f as Menu, o as ShoppingBag, p as MapPin, t as X, v as BriefcaseBusiness, y as ArrowRight } from "../_libs/lucide-react.mjs";
-import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage } from "./CartDrawer-CnOKzUCY.mjs";
+import { i as logo_poke_n_bowl_default, n as CartDrawer, r as DishImage } from "./CartDrawer-jcLDvjhu.mjs";
 import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-aV-LJUFw.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DL0OWCkW.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
@@ -306,7 +306,7 @@ function Index() {
 																dishId: "sweet-chicken",
 																alt: "Sweet Chicken — guacamole, maïs, tomates cerises, mangue, feta, poulet maison, teriyaki, oignons croustillants, sésame et nachos",
 																priority: true,
-																className: "h-full w-full transition duration-700 group-hover:scale-[1.01]"
+																className: "h-full w-full transition duration-700 group-hover:scale-[1.045]"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,rgba(0,0,0,.78)_100%)]" }),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -338,7 +338,7 @@ function Index() {
 																	dishId: "scampis-royaux",
 																	alt: "Scampis Royal — guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos et chili",
 																	priority: true,
-																	className: "h-full w-full transition duration-500 group-hover:scale-[1.015]"
+																	className: "h-full w-full transition duration-500 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.72)_100%)]" }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -358,13 +358,13 @@ function Index() {
 														params: { productId: "crousty-chicken-curry" },
 														className: "group relative overflow-hidden rounded-[28px] border border-white/15 bg-[#eee8dc] shadow-[0_30px_75px_-35px_rgba(0,0,0,.9)]",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															className: "relative aspect-square overflow-hidden",
+															className: "relative aspect-[1.08] overflow-hidden",
 															children: [
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 																	dishId: "crousty-chicken-curry",
 																	alt: "Crusty Chicken Curry — poulet croustillant, riz basmati, sauce curry et oignons frits",
 																	priority: true,
-																	className: "h-full w-full transition duration-700 group-hover:scale-[1.01]"
+																	className: "h-full w-full transition duration-700 group-hover:scale-[1.06]"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,rgba(0,0,0,.78)_100%)]" }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -616,11 +616,11 @@ function Index() {
 										params: { productId: item.id },
 										className: "group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-white shadow-[0_22px_60px_-35px_rgba(55,30,10,.55)] transition duration-300 hover:-translate-y-1",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "relative aspect-square overflow-hidden bg-[#eee8dc]",
+											className: "relative aspect-[1.22] overflow-hidden bg-[#eee8dc]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 												dishId: item.id,
 												alt: item.name,
-												className: "h-full w-full transition duration-700 group-hover:scale-[1.01]"
+												className: "h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.06]"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "absolute inset-x-0 top-0 flex items-center justify-between p-4",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
