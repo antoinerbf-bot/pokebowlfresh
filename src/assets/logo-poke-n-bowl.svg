@@ -1,14 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 150" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 90" role="img" aria-labelledby="title desc">
   <title id="title">Poke N Bowl</title>
   <desc id="desc">Poke N Bowl wordmark with the N enclosed in a circle.</desc>
   <g fill="#ffffff" font-family="Arial Narrow, Helvetica Neue, Arial, sans-serif" font-weight="800">
-    <text x="8" y="68" font-size="66" letter-spacing="0">POKE</text>
-    <circle cx="258" cy="45" r="28" fill="none" stroke="#ffffff" stroke-width="5"/>
-    <text x="241" y="66" font-size="52">N</text>
-    <text x="294" y="68" font-size="66" letter-spacing="0">BOWL</text>
+    <text x="4" y="64" font-size="66" letter-spacing="0">POKE</text>
+    <circle cx="258" cy="40" r="28" fill="none" stroke="#ffffff" stroke-width="5"/>
+    <text x="241" y="61" font-size="52">N</text>
+    <text x="294" y="64" font-size="66" letter-spacing="0">BOWL</text>
   </g>
-  <g fill="#ffffff" font-family="Arial Narrow, Helvetica Neue, Arial, sans-serif" font-weight="700" letter-spacing="5">
-    <text x="154" y="112" font-size="16">POKE · RICE · BOWL</text>
-  </g>
-  <path d="M146 121H124 M492 121H514" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
 </svg>
