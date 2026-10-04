@@ -773,8 +773,8 @@ var toppings = [
 		category: "crunch"
 	},
 	{
-		id: "sesame",
-		name: "Sésame",
+		id: "sesame-seeds",
+		name: "Sésame seeds",
 		emoji: "🌱",
 		price: .5,
 		available: true,
@@ -798,15 +798,15 @@ var toppings = [
 	},
 	{
 		id: "flocons-chili",
-		name: "Flocons chili",
+		name: "Flocons-Chili",
 		emoji: "🌶️",
 		price: .5,
 		available: true,
 		category: "spice"
 	},
 	{
-		id: "wasabi",
-		name: "Wasabi",
+		id: "wazabi",
+		name: "Wazabi",
 		emoji: "🟢",
 		price: .5,
 		available: true,
