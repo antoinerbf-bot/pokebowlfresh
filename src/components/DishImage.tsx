@@ -17,6 +17,7 @@ const images: Record<string, string> = {
   "spicy-chicken":                 bowlSpicyChicken,
   "crousty-chicken-curry":         bowlCroustyCurry,
   "crousty-chicken-sauce-blanche": bowlCroustyBlanche,
+  "sur-mesure":                    bowlSpicyChicken,
 };
 
 export function DishImage({

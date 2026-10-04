@@ -14,6 +14,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CommanderRouteImport } from './routes/commander'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
+import { Route as SurMesureRouteImport } from './routes/sur-mesure'
 import { Route as AdminStocksRouteImport } from './routes/admin/stocks'
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
@@ -45,6 +46,11 @@ const ContactRoute = ContactRouteImport.update({
 const RecrutementRoute = RecrutementRouteImport.update({
   id: '/recrutement',
   path: '/recrutement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurMesureRoute = SurMesureRouteImport.update({
+  id: '/sur-mesure',
+  path: '/sur-mesure',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStocksRoute = AdminStocksRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/commander': typeof CommanderRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
+  '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/commander': typeof CommanderRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
+  '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/commander': typeof CommanderRoute
   '/contact': typeof ContactRoute
   '/recrutement': typeof RecrutementRoute
+  '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/commander'
     | '/contact'
     | '/recrutement'
+    | '/sur-mesure'
     | '/admin/stocks'
     | '/api/mollie-webhook'
     | '/api/orders'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/commander'
     | '/contact'
     | '/recrutement'
+    | '/sur-mesure'
     | '/admin/stocks'
     | '/api/mollie-webhook'
     | '/api/orders'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/commander'
     | '/contact'
     | '/recrutement'
+    | '/sur-mesure'
     | '/admin/stocks'
     | '/api/mollie-webhook'
     | '/api/orders'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   CommanderRoute: typeof CommanderRoute
   ContactRoute: typeof ContactRoute
   RecrutementRoute: typeof RecrutementRoute
+  SurMesureRoute: typeof SurMesureRoute
   AdminStocksRoute: typeof AdminStocksRoute
   ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
   ApiOrdersRoute: typeof ApiOrdersRoute
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/recrutement'
       fullPath: '/recrutement'
       preLoaderRoute: typeof RecrutementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sur-mesure': {
+      id: '/sur-mesure'
+      path: '/sur-mesure'
+      fullPath: '/sur-mesure'
+      preLoaderRoute: typeof SurMesureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/stocks': {
@@ -281,6 +301,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommanderRoute: CommanderRoute,
   ContactRoute: ContactRoute,
   RecrutementRoute: RecrutementRoute,
+  SurMesureRoute: SurMesureRoute,
   AdminStocksRoute: AdminStocksRoute,
   ApiMollieWebhookRoute: ApiMollieWebhookRoute,
   ApiOrdersRoute: ApiOrdersRoute,

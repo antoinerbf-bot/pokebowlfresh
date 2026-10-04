@@ -598,24 +598,23 @@ function Index() {
                 <span className="mt-0.5 block text-white/35">{t("journey.title2")}</span>
               </h2>
             </Reveal>
-            <div className="mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-4">
-              {(
-                [
-                  ["01", "journey.s1", "journey.s1d"],
-                  ["02", "journey.s2", "journey.s2d"],
-                  ["03", "journey.s3", "journey.s3d"],
-                  ["04", "journey.s4", "journey.s4d"],
-                ] as const
-              ).map(([num, titleKey, descKey], index) => (
-                <Reveal key={num} delay={index * 0.06}>
+            <div className="mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-5">
+              {[
+                { num: "01", title: "1. Ta Base", desc: "Riz blanc, riz brun, pâtes, nachos ou salade fraîche." },
+                { num: "02", title: "2. Mix-in", desc: "5 ingrédients frais parmi 16 (avocat, mangue, feta, maïs...)." },
+                { num: "03", title: "3. Protéine", desc: "Poulet mariné, gyros maison, saumon (+1€) ou scampis." },
+                { num: "04", title: "4. Sauce", desc: "Spicy-mayo, teriyaki, mayo truffe, sésame, chili doux..." },
+                { num: "05", title: "5. Toppings", desc: "Oignons frits, sésame seeds, noix de cajou, flocons chili..." },
+              ].map(({ num, title, desc }, index) => (
+                <Reveal key={num} delay={index * 0.05}>
                   <motion.div
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.25 }}
                     className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6"
                   >
-                    <span className="text-3xl font-black text-[#ff705f]">{num}</span>
-                    <h3 className="mt-5 text-lg font-black">{t(titleKey)}</h3>
-                    <p className="mt-2 text-sm leading-5 text-white/50">{t(descKey)}</p>
+                    <span className="text-3xl font-black text-[#d7ff45]">{num}</span>
+                    <h3 className="mt-4 text-base font-black">{title}</h3>
+                    <p className="mt-1.5 text-xs leading-relaxed text-white/55">{desc}</p>
                   </motion.div>
                 </Reveal>
               ))}
@@ -623,16 +622,26 @@ function Index() {
             <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.15em] text-[#d7ff45]">
-                  {t("journey.ready")}
+                  Formule Poke (n) Bowl sur mesure · 10.00 €
                 </p>
-                <p className="mt-1 text-sm text-white/50">{t("journey.ready_desc")}</p>
+                <p className="mt-1 text-sm text-white/60">
+                  Compose ton bol personnalisé en ligne ou découvre nos 7 recettes signatures.
+                </p>
               </div>
-              <Link
-                to="/commander"
-                className="btn-primary inline-flex items-center justify-center"
-              >
-                {t("journey.cta")} <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  to="/sur-mesure"
+                  className="btn-primary inline-flex items-center justify-center gap-2"
+                >
+                  Composer mon bowl <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/commander"
+                  className="rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:bg-white/10"
+                >
+                  Voir la carte
+                </Link>
+              </div>
             </div>
           </div>
         </section>

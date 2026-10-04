@@ -148,7 +148,42 @@ function CommanderPage() {
 
         {/* ── Bowls grid ───────────────────────────────────────── */}
         <section className="mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
-          <div className="mb-10 flex items-end justify-between gap-5">
+          {/* ── Banner Poke Bowl Sur Mesure ── */}
+          <div className="mb-10 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#10251f] via-[#153028] to-[#1c3a31] p-6 text-white shadow-lift sm:p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-5">
+                <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl shadow-md sm:h-28 sm:w-28">
+                  <DishImage dishId="sur-mesure" alt="Poke Bowl sur mesure" className="h-full w-full object-cover" />
+                  <span className="absolute bottom-1.5 left-1.5 rounded-full bg-[#10251f]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#d7ff45]">
+                    5 étapes
+                  </span>
+                </div>
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                    <Sparkles className="h-3 w-3" /> Fiche officielle restaurant
+                  </div>
+                  <h3 className="mt-1 text-2xl font-black sm:text-3xl">Poke (n) Bowl sur mesure</h3>
+                  <p className="mt-1 max-w-lg text-xs leading-relaxed text-white/75 sm:text-sm">
+                    Compose ton bowl idéal selon tes envies : 1 base, 5 mix-ins frais, 1 protéine, 1 sauce et tes toppings croustillants.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-white/50">Formule</span>
+                  <span className="text-2xl font-black text-[#d7ff45]">10.00 €</span>
+                </div>
+                <Link
+                  to="/sur-mesure"
+                  className="btn-primary inline-flex shrink-0 items-center gap-2 whitespace-nowrap px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-md transition hover:scale-105 active:scale-95"
+                >
+                  Composer mon bowl <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-8 flex items-end justify-between gap-5">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
                 {t("cmd.bowls_eyebrow")}
@@ -195,14 +230,22 @@ function CommanderPage() {
 
           {/* ── Personnalisation rapide ───────────────────────── */}
           <div className="mt-14 overflow-hidden rounded-[28px] bg-[#10251f] sm:mt-16 lg:mt-20">
-            <div className="flex items-center gap-3 border-b border-white/10 px-6 py-5 sm:px-8">
-              <Sparkles className="h-5 w-5 shrink-0 text-[#d7ff45]" />
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">
-                  {t("cmd.customization_title")}
-                </p>
-                <p className="mt-0.5 text-sm text-white/55">{t("cmd.customization_note")}</p>
+            <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-5 w-5 shrink-0 text-[#d7ff45]" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">
+                    {t("cmd.customization_title")}
+                  </p>
+                  <p className="mt-0.5 text-sm text-white/55">{t("cmd.customization_note")}</p>
+                </div>
               </div>
+              <Link
+                to="/sur-mesure"
+                className="btn-primary inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap px-4 py-2 text-xs font-black uppercase"
+              >
+                Composer en 5 étapes <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
             <div className="grid gap-3 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-5">
               {[

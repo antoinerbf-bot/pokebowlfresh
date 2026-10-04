@@ -46,33 +46,82 @@ const checkoutSchema = z.object({
 function canonicalizeItems(items: OrderItem[]): OrderItem[] {
   const catalog = new Map<string, number>([
     ...bowls.map((item) => [item.id, item.price] as const),
+    ["sur-mesure", 10.00],
     ...drinks.map((item) => [item.id, item.price] as const),
     ...desserts.map((item) => [item.id, item.price] as const),
   ]);
-  const toppingSet = new Set(allToppings);
 
   return items.map((item) => {
+    // ─── 1. Bowl sur mesure ───────────────────────────────────────────
+    if (item.id === "sur-mesure") {
+      let unitPrice = 10.00;
+      const opts = item.toppings ?? [];
+
+      // Supplément Saumon
+      const hasSalmon = opts.some((t) => /saumon/i.test(t));
+      if (hasSalmon) {
+        unitPrice += 1.00;
+      }
+
+      // Toppings payants (+0.50€ chacun)
+      const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
+      if (toppingLine) {
+        const parsed = toppingLine
+          .replace(/^Toppings?\s*:\s*/i, "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0 && !/aucun/i.test(s));
+        unitPrice += parsed.length * 0.50;
+      } else {
+        const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
+        unitPrice += individualToppings.length * 0.50;
+      }
+
+      return {
+        ...item,
+        name: "Poke Bowl sur mesure",
+        price: unitPrice,
+        toppings: opts,
+      };
+    }
+
+    // ─── 2. Bowls signatures ─────────────────────────────────────────
+    const bowl = bowls.find((b) => b.id === item.id);
+    if (bowl) {
+      let unitPrice = bowl.price;
+      const opts = item.toppings ?? [];
+
+      // Toppings (+0.50€ chacun)
+      const toppingEntries = opts.filter((t) => /^Topping\s*:/i.test(t));
+      unitPrice += toppingEntries.length * 0.50;
+
+      // Sauce extra crousty (+1.00€)
+      if (opts.some((t) => /sauce extra/i.test(t))) {
+        unitPrice += 1.00;
+      }
+
+      return {
+        ...item,
+        name: bowl.name,
+        price: unitPrice,
+        toppings: opts,
+      };
+    }
+
+    // ─── 3. Boissons & Desserts ──────────────────────────────────────
     const canonicalPrice = catalog.get(item.id);
     if (canonicalPrice == null) {
       throw new Error("Article invalide");
     }
 
-    const toppings = [...new Set(item.toppings ?? [])];
-    if (!bowls.some((bowl) => bowl.id === item.id) && toppings.length > 0) {
-      throw new Error("Garnitures invalides");
-    }
-    if (toppings.length > 5 || toppings.some((topping) => !toppingSet.has(topping))) {
-      throw new Error("Garnitures invalides");
-    }
+    const drink = drinks.find((d) => d.id === item.id);
+    const dessert = desserts.find((d) => d.id === item.id);
 
     return {
       ...item,
-      name: bowls.find((bowl) => bowl.id === item.id)?.name
-        ?? drinks.find((drink) => drink.id === item.id)?.name
-        ?? desserts.find((dessert) => dessert.id === item.id)?.name
-        ?? item.name,
+      name: drink?.name ?? dessert?.name ?? item.name,
       price: canonicalPrice,
-      toppings,
+      toppings: [],
     };
   });
 }

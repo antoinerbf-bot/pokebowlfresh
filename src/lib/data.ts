@@ -7,6 +7,21 @@ export const customBases = [
   "Salade",
 ];
 
+export interface CustomIngredientOption {
+  id: string;
+  name: string;
+  emoji: string;
+  extraPrice?: number;
+}
+
+export const detailedBases: CustomIngredientOption[] = [
+  { id: "riz-blanc", name: "Riz blanc", emoji: "🍚" },
+  { id: "riz-brun",  name: "Riz brun",  emoji: "🌾" },
+  { id: "pates",     name: "Pâtes",     emoji: "🍝" },
+  { id: "nachos",    name: "Nachos",    emoji: "🫓" },
+  { id: "salade",    name: "Salade",    emoji: "🥗" },
+];
+
 // ─── MIX-INS ──────────────────────────────────────────────────────────────────
 export const customMixIns = [
   "Guacamole",
@@ -27,12 +42,38 @@ export const customMixIns = [
   "Houmous",
 ];
 
+export const detailedMixIns: CustomIngredientOption[] = [
+  { id: "guacamole",      name: "Guacamole",       emoji: "🥑" },
+  { id: "brocolis",       name: "Brocolis",        emoji: "🥦" },
+  { id: "patates-douces", name: "Patates douces",  emoji: "🍠" },
+  { id: "avocat",         name: "Avocat",          emoji: "🥑" },
+  { id: "carottes",       name: "Carottes",        emoji: "🥕" },
+  { id: "feta",           name: "Feta",            emoji: "🧀" },
+  { id: "salade-algues",  name: "Salade d'algues", emoji: "🌿" },
+  { id: "mangue",         name: "Mangue",          emoji: "🥭" },
+  { id: "oignons",        name: "Oignons",         emoji: "🧅" },
+  { id: "mais",           name: "Maïs",            emoji: "🌽" },
+  { id: "tomates",        name: "Tomates",         emoji: "🍅" },
+  { id: "poivrons",       name: "Poivrons",        emoji: "🫑" },
+  { id: "edamame",        name: "Edamame",         emoji: "🫘" },
+  { id: "jalapenos",      name: "Jalapeños",       emoji: "🌶️" },
+  { id: "concombres",     name: "Concombres",      emoji: "🥒" },
+  { id: "houmous",        name: "Houmous",         emoji: "🧆" },
+];
+
 // ─── PROTÉINES ────────────────────────────────────────────────────────────────
 export const customProteins = [
   "Poulet",
   "Gyros",
   "Saumon + 1 €",
   "Scampis",
+];
+
+export const detailedProteins: CustomIngredientOption[] = [
+  { id: "poulet",  name: "Poulet",        emoji: "🍗", extraPrice: 0 },
+  { id: "gyros",   name: "Gyros",         emoji: "🥙", extraPrice: 0 },
+  { id: "saumon",  name: "Saumon (+1 €)", emoji: "🐟", extraPrice: 1.00 },
+  { id: "scampis", name: "Scampis",       emoji: "🦐", extraPrice: 0 },
 ];
 
 // ─── SAUCES ───────────────────────────────────────────────────────────────────
@@ -45,6 +86,17 @@ export const customSauces = [
   "Teriyaki",
   "Soja (salé ou sucré)",
   "Mayo truffe",
+];
+
+export const detailedSauces: CustomIngredientOption[] = [
+  { id: "mayo",        name: "Mayo",                     emoji: "🍶" },
+  { id: "mayo-wasabi", name: "Mayo-Wasabi",              emoji: "🟢" },
+  { id: "spicy-mayo",  name: "Spicy-Mayo",               emoji: "🌶️" },
+  { id: "sesame",      name: "Sésame (salée ou sucrée)", emoji: "🌰" },
+  { id: "chili-doux",  name: "Chili doux",               emoji: "🌶️" },
+  { id: "teriyaki",    name: "Teriyaki",                 emoji: "🍯" },
+  { id: "soja",        name: "Soja (salé ou sucré)",     emoji: "🥢" },
+  { id: "mayo-truffe", name: "Mayo truffe",              emoji: "🍄" },
 ];
 
 // ─── TOPPINGS (structure extensible) ─────────────────────────────────────────

@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { i as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { _ as useNavigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
+import { _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
 import { C as ArrowLeft, S as ArrowRight, _ as CreditCard, a as Sparkles, b as Check, c as Shield, d as Phone, f as PhoneCall, g as LoaderCircle, h as MapPin, i as Store, l as RefreshCw, m as Menu, n as UtensilsCrossed, o as ShoppingCart, p as Minus, r as Trash2, s as ShoppingBag, t as X, u as Plus, v as Clock, x as BriefcaseBusiness, y as CircleCheck } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
@@ -17,7 +17,7 @@ import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-C2c-7fbt.css";
+var styles_default = "/assets/styles-BlU-tQu1.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -522,7 +522,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$12 = createRootRouteWithContext()({
+var Route$13 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -580,7 +580,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$12.useRouteContext();
+	const { queryClient } = Route$13.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -695,15 +695,31 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 }));
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
+//#region src/assets/bowl-gyros.jpg
+var bowl_gyros_default = "/assets/bowl-gyros-BAHAeM5H.jpg";
+//#endregion
+//#region src/assets/bowl-sweet-chicken.jpg
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-sbn6VeN3.jpg";
+//#endregion
+//#region src/assets/bowl-scampis.jpg
+var bowl_scampis_default = "/assets/bowl-scampis-WuS-dpfJ.jpg";
+//#endregion
+//#region src/assets/bowl-saumon.jpg
+var bowl_saumon_default = "/assets/bowl-saumon-DZ8yRlhg.jpg";
+//#endregion
+//#region src/assets/bowl-spicy-chicken.jpg
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-D83Dkldw.jpg";
+//#endregion
 //#region src/components/DishImage.tsx
 var images = {
-	"mighty-gyros": "/assets/bowl-gyros-BAHAeM5H.jpg",
-	"sweet-chicken": "/assets/bowl-sweet-chicken-sbn6VeN3.jpg",
-	"scampis-royaux": "/assets/bowl-scampis-WuS-dpfJ.jpg",
-	"saumon-wasabi": "/assets/bowl-saumon-DZ8yRlhg.jpg",
-	"spicy-chicken": "/assets/bowl-spicy-chicken-D83Dkldw.jpg",
+	"mighty-gyros": bowl_gyros_default,
+	"sweet-chicken": bowl_sweet_chicken_default,
+	"scampis-royaux": bowl_scampis_default,
+	"saumon-wasabi": bowl_saumon_default,
+	"spicy-chicken": bowl_spicy_chicken_default,
 	"crousty-chicken-curry": "/assets/bowl-crousty-curry-BJ68lQb2.jpg",
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-Dtil8hTC.jpg"
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-Dtil8hTC.jpg",
+	"sur-mesure": bowl_spicy_chicken_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
 	const src = images[dishId];
@@ -729,6 +745,33 @@ var customBases = [
 	"Nachos",
 	"Salade"
 ];
+var detailedBases = [
+	{
+		id: "riz-blanc",
+		name: "Riz blanc",
+		emoji: "🍚"
+	},
+	{
+		id: "riz-brun",
+		name: "Riz brun",
+		emoji: "🌾"
+	},
+	{
+		id: "pates",
+		name: "Pâtes",
+		emoji: "🍝"
+	},
+	{
+		id: "nachos",
+		name: "Nachos",
+		emoji: "🫓"
+	},
+	{
+		id: "salade",
+		name: "Salade",
+		emoji: "🥗"
+	}
+];
 var customMixIns = [
 	"Guacamole",
 	"Brocolis",
@@ -747,11 +790,119 @@ var customMixIns = [
 	"Concombres",
 	"Houmous"
 ];
+var detailedMixIns = [
+	{
+		id: "guacamole",
+		name: "Guacamole",
+		emoji: "🥑"
+	},
+	{
+		id: "brocolis",
+		name: "Brocolis",
+		emoji: "🥦"
+	},
+	{
+		id: "patates-douces",
+		name: "Patates douces",
+		emoji: "🍠"
+	},
+	{
+		id: "avocat",
+		name: "Avocat",
+		emoji: "🥑"
+	},
+	{
+		id: "carottes",
+		name: "Carottes",
+		emoji: "🥕"
+	},
+	{
+		id: "feta",
+		name: "Feta",
+		emoji: "🧀"
+	},
+	{
+		id: "salade-algues",
+		name: "Salade d'algues",
+		emoji: "🌿"
+	},
+	{
+		id: "mangue",
+		name: "Mangue",
+		emoji: "🥭"
+	},
+	{
+		id: "oignons",
+		name: "Oignons",
+		emoji: "🧅"
+	},
+	{
+		id: "mais",
+		name: "Maïs",
+		emoji: "🌽"
+	},
+	{
+		id: "tomates",
+		name: "Tomates",
+		emoji: "🍅"
+	},
+	{
+		id: "poivrons",
+		name: "Poivrons",
+		emoji: "🫑"
+	},
+	{
+		id: "edamame",
+		name: "Edamame",
+		emoji: "🫘"
+	},
+	{
+		id: "jalapenos",
+		name: "Jalapeños",
+		emoji: "🌶️"
+	},
+	{
+		id: "concombres",
+		name: "Concombres",
+		emoji: "🥒"
+	},
+	{
+		id: "houmous",
+		name: "Houmous",
+		emoji: "🧆"
+	}
+];
 var customProteins = [
 	"Poulet",
 	"Gyros",
 	"Saumon + 1 €",
 	"Scampis"
+];
+var detailedProteins = [
+	{
+		id: "poulet",
+		name: "Poulet",
+		emoji: "🍗",
+		extraPrice: 0
+	},
+	{
+		id: "gyros",
+		name: "Gyros",
+		emoji: "🥙",
+		extraPrice: 0
+	},
+	{
+		id: "saumon",
+		name: "Saumon (+1 €)",
+		emoji: "🐟",
+		extraPrice: 1
+	},
+	{
+		id: "scampis",
+		name: "Scampis",
+		emoji: "🦐",
+		extraPrice: 0
+	}
 ];
 var customSauces = [
 	"Mayo",
@@ -762,6 +913,48 @@ var customSauces = [
 	"Teriyaki",
 	"Soja (salé ou sucré)",
 	"Mayo truffe"
+];
+var detailedSauces = [
+	{
+		id: "mayo",
+		name: "Mayo",
+		emoji: "🍶"
+	},
+	{
+		id: "mayo-wasabi",
+		name: "Mayo-Wasabi",
+		emoji: "🟢"
+	},
+	{
+		id: "spicy-mayo",
+		name: "Spicy-Mayo",
+		emoji: "🌶️"
+	},
+	{
+		id: "sesame",
+		name: "Sésame (salée ou sucrée)",
+		emoji: "🌰"
+	},
+	{
+		id: "chili-doux",
+		name: "Chili doux",
+		emoji: "🌶️"
+	},
+	{
+		id: "teriyaki",
+		name: "Teriyaki",
+		emoji: "🍯"
+	},
+	{
+		id: "soja",
+		name: "Soja (salé ou sucré)",
+		emoji: "🥢"
+	},
+	{
+		id: "mayo-truffe",
+		name: "Mayo truffe",
+		emoji: "🍄"
+	}
 ];
 var toppings = [
 	{
@@ -1395,7 +1588,7 @@ function CartDrawer() {
 }
 //#endregion
 //#region src/routes/index.tsx
-var Route$11 = createFileRoute("/")({
+var Route$12 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais à emporter" }, {
 		name: "description",
 		content: "Poke N Bowl à Visé : poké bowls frais, crousty chicken et desserts maison. Compose ton bowl et commande directement."
@@ -2123,46 +2316,51 @@ function Index() {
 								})]
 							})] }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-4",
+								className: "mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-5",
 								children: [
-									[
-										"01",
-										"journey.s1",
-										"journey.s1d"
-									],
-									[
-										"02",
-										"journey.s2",
-										"journey.s2d"
-									],
-									[
-										"03",
-										"journey.s3",
-										"journey.s3d"
-									],
-									[
-										"04",
-										"journey.s4",
-										"journey.s4d"
-									]
-								].map(([num, titleKey, descKey], index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
-									delay: index * .06,
+									{
+										num: "01",
+										title: "1. Ta Base",
+										desc: "Riz blanc, riz brun, pâtes, nachos ou salade fraîche."
+									},
+									{
+										num: "02",
+										title: "2. Mix-in",
+										desc: "5 ingrédients frais parmi 16 (avocat, mangue, feta, maïs...)."
+									},
+									{
+										num: "03",
+										title: "3. Protéine",
+										desc: "Poulet mariné, gyros maison, saumon (+1€) ou scampis."
+									},
+									{
+										num: "04",
+										title: "4. Sauce",
+										desc: "Spicy-mayo, teriyaki, mayo truffe, sésame, chili doux..."
+									},
+									{
+										num: "05",
+										title: "5. Toppings",
+										desc: "Oignons frits, sésame seeds, noix de cajou, flocons chili..."
+									}
+								].map(({ num, title, desc }, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
+									delay: index * .05,
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
 										whileHover: { y: -4 },
 										transition: { duration: .25 },
 										className: "h-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-3xl font-black text-[#ff705f]",
+												className: "text-3xl font-black text-[#d7ff45]",
 												children: num
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-												className: "mt-5 text-lg font-black",
-												children: t(titleKey)
+												className: "mt-4 text-base font-black",
+												children: title
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-2 text-sm leading-5 text-white/50",
-												children: t(descKey)
+												className: "mt-1.5 text-xs leading-relaxed text-white/55",
+												children: desc
 											})
 										]
 									})
@@ -2172,18 +2370,21 @@ function Index() {
 								className: "mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-xs font-black uppercase tracking-[0.15em] text-[#d7ff45]",
-									children: t("journey.ready")
+									children: "Formule Poke (n) Bowl sur mesure · 10.00 €"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-1 text-sm text-white/50",
-									children: t("journey.ready_desc")
-								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-									to: "/commander",
-									className: "btn-primary inline-flex items-center justify-center",
-									children: [
-										t("journey.cta"),
-										" ",
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
-									]
+									className: "mt-1 text-sm text-white/60",
+									children: "Compose ton bol personnalisé en ligne ou découvre nos 7 recettes signatures."
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-wrap items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+										to: "/sur-mesure",
+										className: "btn-primary inline-flex items-center justify-center gap-2",
+										children: ["Composer mon bowl ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+										to: "/commander",
+										className: "rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:bg-white/10",
+										children: "Voir la carte"
+									})]
 								})]
 							})
 						]
@@ -2781,21 +2982,53 @@ var checkoutSchema = objectType({
 function canonicalizeItems(items) {
 	const catalog = new Map([
 		...bowls.map((item) => [item.id, item.price]),
+		["sur-mesure", 10],
 		...drinks.map((item) => [item.id, item.price]),
 		...desserts.map((item) => [item.id, item.price])
 	]);
-	const toppingSet = new Set(allToppings);
 	return items.map((item) => {
+		if (item.id === "sur-mesure") {
+			let unitPrice = 10;
+			const opts = item.toppings ?? [];
+			if (opts.some((t) => /saumon/i.test(t))) unitPrice += 1;
+			const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
+			if (toppingLine) {
+				const parsed = toppingLine.replace(/^Toppings?\s*:\s*/i, "").split(",").map((s) => s.trim()).filter((s) => s.length > 0 && !/aucun/i.test(s));
+				unitPrice += parsed.length * .5;
+			} else {
+				const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
+				unitPrice += individualToppings.length * .5;
+			}
+			return {
+				...item,
+				name: "Poke Bowl sur mesure",
+				price: unitPrice,
+				toppings: opts
+			};
+		}
+		const bowl = bowls.find((b) => b.id === item.id);
+		if (bowl) {
+			let unitPrice = bowl.price;
+			const opts = item.toppings ?? [];
+			const toppingEntries = opts.filter((t) => /^Topping\s*:/i.test(t));
+			unitPrice += toppingEntries.length * .5;
+			if (opts.some((t) => /sauce extra/i.test(t))) unitPrice += 1;
+			return {
+				...item,
+				name: bowl.name,
+				price: unitPrice,
+				toppings: opts
+			};
+		}
 		const canonicalPrice = catalog.get(item.id);
 		if (canonicalPrice == null) throw new Error("Article invalide");
-		const toppings = [...new Set(item.toppings ?? [])];
-		if (!bowls.some((bowl) => bowl.id === item.id) && toppings.length > 0) throw new Error("Garnitures invalides");
-		if (toppings.length > 5 || toppings.some((topping) => !toppingSet.has(topping))) throw new Error("Garnitures invalides");
+		const drink = drinks.find((d) => d.id === item.id);
+		const dessert = desserts.find((d) => d.id === item.id);
 		return {
 			...item,
-			name: bowls.find((bowl) => bowl.id === item.id)?.name ?? drinks.find((drink) => drink.id === item.id)?.name ?? desserts.find((dessert) => dessert.id === item.id)?.name ?? item.name,
+			name: drink?.name ?? dessert?.name ?? item.name,
 			price: canonicalPrice,
-			toppings
+			toppings: []
 		};
 	});
 }
@@ -2906,7 +3139,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$10 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$11 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -3608,7 +3841,7 @@ function useStock(pollMs = 2e4) {
 }
 //#endregion
 //#region src/routes/commander.tsx
-var Route$9 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$10 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#10251f] text-[#d7ff45]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -3743,8 +3976,57 @@ function CommanderPage() {
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 				className: "mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16 lg:py-20",
 				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mb-10 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#10251f] via-[#153028] to-[#1c3a31] p-6 text-white shadow-lift sm:p-8",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl shadow-md sm:h-28 sm:w-28",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+										dishId: "sur-mesure",
+										alt: "Poke Bowl sur mesure",
+										className: "h-full w-full object-cover"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "absolute bottom-1.5 left-1.5 rounded-full bg-[#10251f]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#d7ff45]",
+										children: "5 étapes"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), " Fiche officielle restaurant"]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "mt-1 text-2xl font-black sm:text-3xl",
+										children: "Poke (n) Bowl sur mesure"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-1 max-w-lg text-xs leading-relaxed text-white/75 sm:text-sm",
+										children: "Compose ton bowl idéal selon tes envies : 1 base, 5 mix-ins frais, 1 protéine, 1 sauce et tes toppings croustillants."
+									})
+								] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-right",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "block text-[10px] font-bold uppercase tracking-wider text-white/50",
+										children: "Formule"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-2xl font-black text-[#d7ff45]",
+										children: "10.00 €"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									to: "/sur-mesure",
+									className: "btn-primary inline-flex shrink-0 items-center gap-2 whitespace-nowrap px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-md transition hover:scale-105 active:scale-95",
+									children: ["Composer mon bowl ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
+								})]
+							})]
+						})
+					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mb-10 flex items-end justify-between gap-5",
+						className: "mb-8 flex items-end justify-between gap-5",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]",
 							children: t("cmd.bowls_eyebrow")
@@ -3789,14 +4071,21 @@ function CommanderPage() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mt-14 overflow-hidden rounded-[28px] bg-[#10251f] sm:mt-16 lg:mt-20",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-3 border-b border-white/10 px-6 py-5 sm:px-8",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-5 w-5 shrink-0 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]",
-								children: t("cmd.customization_title")
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-0.5 text-sm text-white/55",
-								children: t("cmd.customization_note")
-							})] })]
+							className: "flex flex-col gap-4 border-b border-white/10 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-5 w-5 shrink-0 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]",
+									children: t("cmd.customization_title")
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "mt-0.5 text-sm text-white/55",
+									children: t("cmd.customization_note")
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+								to: "/sur-mesure",
+								className: "btn-primary inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap px-4 py-2 text-xs font-black uppercase",
+								children: ["Composer en 5 étapes ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
+							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "grid gap-3 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-5",
 							children: [
@@ -3975,7 +4264,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$8 = createFileRoute("/contact")({
+var Route$9 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -4099,7 +4388,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$7 = createFileRoute("/recrutement")({
+var Route$8 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -4216,6 +4505,561 @@ function RecruitmentPage() {
 				})
 			]
 		})]
+	});
+}
+//#endregion
+//#region src/routes/sur-mesure.tsx
+var Route$7 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var BASE_PRICE = 10;
+var MAX_MIX_INS = 5;
+function SurMesurePage() {
+	const { t, language, setLanguage } = useTranslation();
+	const { addItem, setIsCartOpen, items } = useCart();
+	useNavigate();
+	const count = items.reduce((sum, item) => sum + item.quantity, 0);
+	const [selectedBase, setSelectedBase] = import_react.useState(detailedBases[0]);
+	const [selectedMixIns, setSelectedMixIns] = import_react.useState([]);
+	const [selectedProtein, setSelectedProtein] = import_react.useState(detailedProteins[0]);
+	const [selectedSauce, setSelectedSauce] = import_react.useState(detailedSauces[0]);
+	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [qty, setQty] = import_react.useState(1);
+	const [added, setAdded] = import_react.useState(false);
+	const toggleMixIn = (name) => {
+		setSelectedMixIns((cur) => {
+			if (cur.includes(name)) return cur.filter((item) => item !== name);
+			if (cur.length >= MAX_MIX_INS) return cur;
+			return [...cur, name];
+		});
+	};
+	const toggleTopping = (name) => {
+		setSelectedToppings((cur) => cur.includes(name) ? cur.filter((t) => t !== name) : [...cur, name]);
+	};
+	const proteinExtra = selectedProtein?.extraPrice ?? 0;
+	const toppingsExtra = selectedToppings.length * .5;
+	const unitPrice = BASE_PRICE + proteinExtra + toppingsExtra;
+	const totalPrice = unitPrice * qty;
+	const isBaseReady = selectedBase !== null;
+	const isMixInsReady = selectedMixIns.length === MAX_MIX_INS;
+	const isProteinReady = selectedProtein !== null;
+	const isSauceReady = selectedSauce !== null;
+	const isValid = isBaseReady && isMixInsReady && isProteinReady && isSauceReady;
+	const getMissingReason = () => {
+		if (!isBaseReady) return "Étape 1 : Choisis une base";
+		if (selectedMixIns.length < MAX_MIX_INS) {
+			const remaining = MAX_MIX_INS - selectedMixIns.length;
+			return `Étape 2 : Choisis encore ${remaining} mix-in${remaining > 1 ? "s" : ""}`;
+		}
+		if (!isProteinReady) return "Étape 3 : Choisis une protéine";
+		if (!isSauceReady) return "Étape 4 : Choisis une sauce";
+		return null;
+	};
+	const handleAddToCart = () => {
+		if (!isValid) return;
+		const options = [
+			`Base : ${selectedBase.name}`,
+			`Mix-ins : ${selectedMixIns.join(", ")}`,
+			`Protéine : ${selectedProtein.name}`,
+			`Sauce : ${selectedSauce.name}`,
+			...selectedToppings.length > 0 ? [`Toppings : ${selectedToppings.join(", ")}`] : ["Toppings : Aucun"]
+		];
+		addItem({
+			id: "sur-mesure",
+			name: "Poke Bowl sur mesure",
+			basePrice: BASE_PRICE,
+			price: unitPrice,
+			quantity: qty,
+			toppings: options,
+			removedIngredients: [],
+			image: bowl_spicy_chicken_default
+		});
+		setAdded(true);
+		setTimeout(() => setAdded(false), 1500);
+		setIsCartOpen(true);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] text-[#17231f]",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartDrawer, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+				className: "sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+						to: "/",
+						className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
+						"aria-label": "Poke N Bowl — Accueil",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: logo_default,
+							alt: "Logo Poke N Bowl",
+							className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "hidden rounded-full border border-black/10 bg-white p-1 sm:flex",
+								children: [
+									"fr",
+									"en",
+									"nl"
+								].map((lang) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => setLanguage(lang),
+									className: `rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${language === lang ? "bg-[#10251f] text-white" : "text-[#7a847e] hover:text-[#17231f]"}`,
+									children: lang
+								}, lang))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/commander",
+								className: "hidden rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider text-[#17231f] hover:text-[#ff705f] sm:flex",
+								children: "La carte"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setIsCartOpen(true),
+								className: "relative rounded-full bg-[#10251f] p-3 text-white transition hover:bg-[#1e3d33]",
+								"aria-label": t("cart.title"),
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }), count > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black",
+									children: count
+								})]
+							})
+						]
+					})]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+				className: "mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/commander",
+						className: "mb-6 inline-flex items-center gap-2 text-xs font-bold text-[#7a847e] transition hover:text-[#17231f]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-4 w-4" }), " Retour aux bowls signatures"]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "mb-10 overflow-hidden rounded-[28px] bg-[#10251f] p-6 text-white shadow-lift sm:p-10",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col gap-6 md:flex-row md:items-center md:justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "max-w-xl",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#d7ff45]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5" }), " Fiche officielle restaurant"]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+										className: "mt-3 text-3xl font-black tracking-tight sm:text-5xl",
+										children: ["Poke (n) Bowl ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[#ff705f]",
+											children: "sur mesure"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-2 text-sm leading-relaxed text-white/70 sm:text-base",
+										children: "Compose ton bol personnalisé en 5 étapes exactement comme sur le ticket du restaurant : 1 base, 5 mix-ins frais, 1 protéine, 1 sauce onctueuse et tes toppings croustillants !"
+									})
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-4 rounded-2xl bg-white/[0.07] p-5 backdrop-blur-md sm:flex-col sm:items-start",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[11px] font-bold uppercase tracking-wider text-white/50",
+									children: "Formule de base"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-3xl font-black text-[#d7ff45] sm:text-4xl",
+									children: "10.00 €"
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-semibold text-white/60",
+									children: "Base + 5 mix-ins + protéine + sauce"
+								})]
+							})]
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid gap-10 lg:grid-cols-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-8 lg:col-span-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+									className: "rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-4 flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											children: "Étape 1"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "mt-1 text-xl font-black text-[#17231f]",
+											children: "Choisis ta Base"
+										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold text-[#ff705f]",
+											children: "1 choix requis"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
+										children: detailedBases.map((base) => {
+											const isSelected = selectedBase?.id === base.id;
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => setSelectedBase(base),
+												className: ["flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left transition-all duration-200", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30"].join(" "),
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-2xl",
+														children: base.emoji
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "min-w-0 flex-1",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+															className: "text-sm font-bold text-[#17231f]",
+															children: base.name
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+															className: "text-[10px] font-semibold text-[#7a847e]",
+															children: "Inclus"
+														})]
+													}),
+													isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3 w-3 stroke-[3]" })
+													})
+												]
+											}, base.id);
+										})
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+									className: "rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mb-4 flex items-center justify-between",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+												children: "Étape 2"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+												className: "mt-1 text-xl font-black text-[#17231f]",
+												children: "Mix In (Choix de 5 ingrédients)"
+											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: ["rounded-full px-3 py-1 text-xs font-black transition-colors", selectedMixIns.length === MAX_MIX_INS ? "bg-[#10251f] text-[#d7ff45]" : "bg-[#ff705f]/10 text-[#ff705f]"].join(" "),
+												children: [
+													selectedMixIns.length,
+													" / ",
+													MAX_MIX_INS,
+													" choisis"
+												]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mb-4 text-xs font-semibold text-[#7a847e]",
+											children: "Sélectionne exactement 5 ingrédients frais parmi les 16 proposés sur le ticket :"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "grid grid-cols-2 gap-2 sm:grid-cols-4",
+											children: detailedMixIns.map((mixIn) => {
+												const isSelected = selectedMixIns.includes(mixIn.name);
+												const isMaxReached = selectedMixIns.length >= MAX_MIX_INS && !isSelected;
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+													type: "button",
+													disabled: isMaxReached,
+													onClick: () => toggleMixIn(mixIn.name),
+													className: ["flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-150", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm scale-[1.01]" : isMaxReached ? "cursor-not-allowed border-[#ece8e1] bg-[#faf8f4] opacity-45" : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30"].join(" "),
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-xl",
+															children: mixIn.emoji
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "min-w-0 flex-1 truncate text-xs font-bold text-[#17231f]",
+															children: mixIn.name
+														}),
+														isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-2.5 w-2.5 stroke-[3]" })
+														})
+													]
+												}, mixIn.id);
+											})
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+									className: "rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-4 flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											children: "Étape 3"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "mt-1 text-xl font-black text-[#17231f]",
+											children: "Choisis ta Protéine"
+										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold text-[#ff705f]",
+											children: "1 choix requis"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "grid grid-cols-2 gap-3 sm:grid-cols-4",
+										children: detailedProteins.map((prot) => {
+											const isSelected = selectedProtein?.id === prot.id;
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => setSelectedProtein(prot),
+												className: ["flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center transition-all duration-200", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30"].join(" "),
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-3xl mb-1",
+														children: prot.emoji
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-sm font-bold text-[#17231f]",
+														children: prot.name
+													}),
+													prot.extraPrice ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "mt-1 rounded-full bg-[#ff705f] px-2 py-0.5 text-[10px] font-black text-white",
+														children: [
+															"+",
+															prot.extraPrice.toFixed(2),
+															" €"
+														]
+													}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "mt-1 text-[10px] font-semibold text-[#7a847e]",
+														children: "Inclus"
+													})
+												]
+											}, prot.id);
+										})
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+									className: "rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-4 flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											children: "Étape 4"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "mt-1 text-xl font-black text-[#17231f]",
+											children: "Choisis ta Sauce"
+										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold text-[#ff705f]",
+											children: "1 choix requis"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "grid grid-cols-2 gap-2.5 sm:grid-cols-4",
+										children: detailedSauces.map((sauce) => {
+											const isSelected = selectedSauce?.id === sauce.id;
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => setSelectedSauce(sauce),
+												className: ["flex items-center gap-2 rounded-2xl border-2 p-3 text-left transition-all duration-200", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30"].join(" "),
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-xl",
+														children: sauce.emoji
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "min-w-0 flex-1 truncate text-xs font-bold text-[#17231f]",
+														children: sauce.name
+													}),
+													isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-2.5 w-2.5 stroke-[3]" })
+													})
+												]
+											}, sauce.id);
+										})
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+									className: "rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mb-4 flex items-center justify-between",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+												children: "Étape 5"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+												className: "mt-1 text-xl font-black text-[#17231f]",
+												children: "Toppings croustillants"
+											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-[#10251f]/10 px-2.5 py-1 text-xs font-black text-[#10251f]",
+												children: "+0.50 € / topping"
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "mb-4 text-xs font-semibold text-[#7a847e]",
+											children: "Sélection libre : ajoute autant de toppings que tu veux pour le croquant parfait !"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
+											children: toppings.map((top) => {
+												const isSelected = selectedToppings.includes(top.name);
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+													type: "button",
+													onClick: () => toggleTopping(top.name),
+													className: ["flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-200", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30"].join(" "),
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-2xl",
+															children: top.emoji
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+															className: "min-w-0 flex-1",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+																className: "truncate text-xs font-bold text-[#17231f]",
+																children: top.name
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+																className: "text-[10px] font-black text-[#ff705f]",
+																children: "+0.50 €"
+															})]
+														}),
+														isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-2.5 w-2.5 stroke-[3]" })
+														})
+													]
+												}, top.id);
+											})
+										})
+									]
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "lg:col-span-1",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "sticky top-24 rounded-[28px] border border-[#e8e2d9] bg-white p-6 shadow-card",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "overflow-hidden rounded-2xl mb-5 shadow-sm",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											src: bowl_spicy_chicken_default,
+											alt: "Poke Bowl sur mesure",
+											className: "h-44 w-full object-cover"
+										})
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xl font-black text-[#17231f]",
+										children: "Ton Poke Bowl sur mesure"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "mt-1 text-xs text-[#7a847e]",
+										children: "Récapitulatif de ta composition :"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "my-5 space-y-3 divide-y divide-[#f0ece1] text-xs",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "pt-2 flex justify-between gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-[#7a847e]",
+													children: "Base :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-bold text-[#17231f] text-right",
+													children: selectedBase ? `${selectedBase.emoji} ${selectedBase.name}` : "Non choisie"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "pt-2 flex justify-between gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-[#7a847e]",
+													children: "Mix-ins :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-bold text-[#17231f] text-right",
+													children: selectedMixIns.length > 0 ? selectedMixIns.join(", ") : "0 / 5 choisis"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "pt-2 flex justify-between gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-[#7a847e]",
+													children: "Protéine :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-bold text-[#17231f] text-right",
+													children: selectedProtein ? `${selectedProtein.emoji} ${selectedProtein.name}` : "Non choisie"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "pt-2 flex justify-between gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-[#7a847e]",
+													children: "Sauce :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-bold text-[#17231f] text-right",
+													children: selectedSauce ? `${selectedSauce.emoji} ${selectedSauce.name}` : "Non choisie"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "pt-2 flex justify-between gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-[#7a847e]",
+													children: "Toppings :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-bold text-[#17231f] text-right",
+													children: selectedToppings.length > 0 ? selectedToppings.join(", ") : "Aucun topping"
+												})]
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "border-t border-[#e8e2d9] pt-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "mb-4 flex items-center justify-between",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-bold text-[#7a847e]",
+													children: "Quantité"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2",
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+															type: "button",
+															onClick: () => setQty((q) => Math.max(1, q - 1)),
+															className: "flex h-8 w-8 items-center justify-center rounded-full border border-[#e8e2d9] text-[#17231f] hover:border-[#ff705f] hover:text-[#ff705f]",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3.5 w-3.5" })
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "w-5 text-center font-black",
+															children: qty
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+															type: "button",
+															onClick: () => setQty((q) => q + 1),
+															className: "flex h-8 w-8 items-center justify-center rounded-full border border-[#e8e2d9] text-[#17231f] hover:border-[#ff705f] hover:text-[#ff705f]",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3.5 w-3.5" })
+														})
+													]
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "mb-5 flex items-baseline justify-between",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-sm font-bold text-[#7a847e]",
+													children: "Total"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													className: "text-3xl font-black text-[#17231f]",
+													children: [totalPrice.toFixed(2), " €"]
+												})]
+											}),
+											!isValid && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "mb-3 rounded-xl bg-[#fff1ee] p-3 text-center text-xs font-bold text-[#ff705f]",
+												children: getMissingReason()
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												disabled: !isValid,
+												onClick: handleAddToCart,
+												className: ["btn-primary flex w-full items-center justify-center gap-2 py-3.5 text-center text-sm font-black transition-all", !isValid ? "cursor-not-allowed bg-black/20 text-white/60 hover:bg-black/20" : "active:scale-[0.98]"].join(" "),
+												children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4" }), " Ajouté au panier !"] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+													"Ajouter au panier · ",
+													totalPrice.toFixed(2),
+													" €"
+												] })
+											})
+										]
+									})
+								]
+							})
+						})]
+					})
+				]
+			})
+		]
 	});
 }
 //#endregion
@@ -4859,6 +5703,10 @@ function ProductPage() {
 	const [qty, setQty] = import_react.useState(1);
 	const [added, setAdded] = import_react.useState(false);
 	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
+	if (productId === "sur-mesure") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, {
+		to: "/sur-mesure",
+		replace: true
+	});
 	if (!product) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-[#f7f4ec] px-5",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -5196,68 +6044,73 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 //#endregion
 //#region src/routeTree.gen.ts
 var rootRouteChildren = {
-	IndexRoute: Route$11.update({
+	IndexRoute: Route$12.update({
 		id: "/",
 		path: "/",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
-	CheckoutRoute: Route$10.update({
+	CheckoutRoute: Route$11.update({
 		id: "/checkout",
 		path: "/checkout",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
-	CommanderRoute: Route$9.update({
+	CommanderRoute: Route$10.update({
 		id: "/commander",
 		path: "/commander",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
-	ContactRoute: Route$8.update({
+	ContactRoute: Route$9.update({
 		id: "/contact",
 		path: "/contact",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
-	RecrutementRoute: Route$7.update({
+	RecrutementRoute: Route$8.update({
 		id: "/recrutement",
 		path: "/recrutement",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
+	}),
+	SurMesureRoute: Route$7.update({
+		id: "/sur-mesure",
+		path: "/sur-mesure",
+		getParentRoute: () => Route$13
 	}),
 	AdminStocksRoute: Route$6.update({
 		id: "/admin/stocks",
 		path: "/admin/stocks",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	ApiMollieWebhookRoute: Route$5.update({
 		id: "/api/mollie-webhook",
 		path: "/api/mollie-webhook",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	ApiOrdersRoute: Route$4.update({
 		id: "/api/orders",
 		path: "/api/orders",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	OrderSuccessRoute: Route$3.update({
 		id: "/order/success",
 		path: "/order/success",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	ProductProductIdRoute: Route$2.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	})
 };
-var routeTree = Route$12._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$13._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

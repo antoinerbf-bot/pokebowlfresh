@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { bowls, toppings, type Topping } from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
@@ -161,6 +161,10 @@ function ProductPage() {
   const [added, setAdded] = React.useState(false);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
+
+  if (productId === "sur-mesure") {
+    return <Navigate to="/sur-mesure" replace />;
+  }
 
   if (!product) {
     return (
