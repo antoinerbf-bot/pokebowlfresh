@@ -28,39 +28,91 @@ function ContactPage() {
             On se parle ?
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            Une question, une commande ou une demande particulière ? Retrouve-nous à Visé ou appelle directement
-            l’équipe.
+            Une question, une commande ou une demande particulière ? Retrouvez-nous dans nos restaurants à Visé et Fléron ou contactez nos équipes par téléphone.
           </p>
         </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          <a
-            href="tel:+32491281456"
-            className="group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift"
-          >
-            <PhoneCall className="h-6 w-6 text-coral" />
-            <p className="mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground">Téléphone</p>
-            <p className="mt-2 break-words text-xl font-black">+32 491 28 14 56</p>
-          </a>
-          <a
-            href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
-            target="_blank"
-            rel="noreferrer"
-            className="group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift"
-          >
-            <MapPin className="h-6 w-6 text-coral" />
-            <p className="mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground">Adresse</p>
-            <p className="mt-2 text-xl font-black">Av. du Pont 12</p>
-            <p className="text-muted-foreground">4600 Visé, Belgique</p>
-          </a>
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {/* Restaurant Visé */}
+          <div className="rounded-3xl border border-border bg-card p-7 shadow-soft">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff45] text-black font-black">1</span>
+              <div>
+                <h2 className="text-xl font-black">Poké & Bowl Visé</h2>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">Centre-ville Visé</p>
+              </div>
+            </div>
+            <div className="mt-5 space-y-3">
+              <a
+                href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-start gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
+              >
+                <MapPin className="h-5 w-5 shrink-0 text-coral" />
+                <div>
+                  <p className="font-bold">Avenue du Pont 12</p>
+                  <p className="text-sm text-muted-foreground">4600 Visé, Belgique</p>
+                </div>
+              </a>
+              <a
+                href="tel:+32491281456"
+                className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
+              >
+                <PhoneCall className="h-5 w-5 shrink-0 text-coral" />
+                <span className="font-bold">0491 28 14 56 (+32)</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Restaurant Fléron */}
+          <div className="rounded-3xl border border-border bg-card p-7 shadow-soft">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ff705f] text-white font-black">2</span>
+              <div>
+                <h2 className="text-xl font-black">Poké & Bowl Fléron</h2>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">Avenue des Martyrs</p>
+              </div>
+            </div>
+            <div className="mt-5 space-y-3">
+              <a
+                href="https://www.google.com/maps?q=Avenue+des+Martyrs+307,+4620+Fl%C3%A9ron"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-start gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
+              >
+                <MapPin className="h-5 w-5 shrink-0 text-coral" />
+                <div>
+                  <p className="font-bold">Avenue des Martyrs 307</p>
+                  <p className="text-sm text-muted-foreground">4620 Fléron, Belgique</p>
+                </div>
+              </a>
+              <a
+                href="tel:+32493423643"
+                className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
+              >
+                <PhoneCall className="h-5 w-5 shrink-0 text-coral" />
+                <span className="font-bold">0493 42 36 43 (+32)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/commander"
-            className="group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift"
+            className="flex items-center gap-2 rounded-2xl bg-[#ff705f] px-6 py-3.5 text-sm font-black text-white shadow-soft transition hover:scale-105"
           >
-            <ShoppingBag className="h-6 w-6 text-coral" />
-            <p className="mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground">Commande</p>
-            <p className="mt-2 text-xl font-black">Commander en ligne</p>
-            <p className="text-muted-foreground">Compose ton bowl</p>
+            <ShoppingBag className="h-5 w-5" />
+            Commander en ligne
           </Link>
+          <a
+            href="https://instagram.com/POKE_NBOWL"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 rounded-2xl border border-border bg-card px-6 py-3.5 text-sm font-black transition hover:bg-muted"
+          >
+            Instagram: @POKE_NBOWL
+          </a>
         </div>
         <div className="mt-10 overflow-hidden rounded-[2rem] border border-border shadow-lift">
           <iframe

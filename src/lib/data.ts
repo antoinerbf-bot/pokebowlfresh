@@ -172,7 +172,7 @@ export const bowls: Bowl[] = [
     id: "sweet-chicken",
     name: "Sweet Chicken",
     price: 10.00,
-    desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+    desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix.",
     tag: "Best-seller",
     tagColor: "bestseller",
     ingredients: [
@@ -186,14 +186,13 @@ export const bowls: Bowl[] = [
       { name: "Sauce teriyaki",        emoji: "🍯", removable: true, isSauce: true },
       { name: "Oignons croustillants", emoji: "🧅", removable: true },
       { name: "Sésame mix",            emoji: "🌱", removable: true },
-      { name: "Nachos",                emoji: "🫓", removable: true },
     ],
   },
   {
     id: "scampis-royaux",
     name: "Scampis Royal",
     price: 10.00,
-    desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+    desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, flocons de chili.",
     tag: "Signature",
     tagColor: "signature",
     ingredients: [
@@ -206,7 +205,6 @@ export const bowls: Bowl[] = [
       { name: "Poivrons",         emoji: "🫑", removable: true },
       { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
       { name: "Jalapeños",        emoji: "🌶️", removable: true },
-      { name: "Nachos",           emoji: "🫓", removable: true },
       { name: "Flocons de chili", emoji: "🔥", removable: true },
     ],
   },
@@ -214,7 +212,7 @@ export const bowls: Bowl[] = [
     id: "saumon-wasabi",
     name: "Saumon Wasabi",
     price: 11.00,
-    desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
+    desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix.",
     tag: "Premium",
     tagColor: "premium",
     ingredients: [
@@ -227,14 +225,13 @@ export const bowls: Bowl[] = [
       { name: "Edamame",        emoji: "🫘", removable: true },
       { name: "Mayo wasabi",    emoji: "🟢", removable: true, isSauce: true },
       { name: "Sésame mix",     emoji: "🌱", removable: true },
-      { name: "Nachos",         emoji: "🫓", removable: true },
     ],
   },
   {
     id: "spicy-chicken",
     name: "Spicy Chicken",
     price: 10.00,
-    desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
+    desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix.",
     tag: "Épicé",
     tagColor: "spicy",
     ingredients: [
@@ -248,7 +245,6 @@ export const bowls: Bowl[] = [
       { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
       { name: "Flocons de chili", emoji: "🔥", removable: true },
       { name: "Sésame mix",       emoji: "🌱", removable: true },
-      { name: "Nachos",           emoji: "🫓", removable: true },
     ],
   },
   {

@@ -733,38 +733,64 @@ function Index() {
                 <span className="mt-0.5 block text-[#7d8b83]">{t("info.title2")}</span>
               </h2>
               <div className="mt-6 grid gap-2.5 sm:mt-8 sm:gap-3">
-                <a
-                  href={MAPS_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex min-w-0 items-center gap-4 rounded-2xl bg-white p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]">
-                    <MapPin className="h-5 w-5" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]">
-                      {t("info.address")}
-                    </span>
-                    <span className="mt-1 block break-words text-sm font-bold">
-                      Av. du Pont 12, 4600 Visé, Belgique
-                    </span>
-                  </span>
-                </a>
-                <a
-                  href={`tel:${PHONE}`}
-                  className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
-                    <Phone className="h-5 w-5" />
-                  </span>
-                  <span>
-                    <span className="block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]">
-                      {t("info.phone")}
-                    </span>
-                    <span className="mt-1 block text-sm font-bold">+32 491 28 14 56</span>
-                  </span>
-                </a>
+                {/* Visé */}
+                <div className="rounded-2xl bg-white p-4 shadow-card">
+                  <div className="flex items-center justify-between border-b border-black/5 pb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#ff705f]">Restaurant Visé</span>
+                    <span className="rounded-full bg-[#d7ff45] px-2 py-0.5 text-[9px] font-black">Ouvert</span>
+                  </div>
+                  <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <a
+                      href={MAPS_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2.5 text-xs font-bold hover:text-[#ff705f]"
+                    >
+                      <MapPin className="h-4 w-4 shrink-0 text-[#ff705f]" />
+                      <span>Av. du Pont 12, 4600 Visé</span>
+                    </a>
+                    <a
+                      href="tel:+32491281456"
+                      className="flex items-center gap-2 text-xs font-black text-[#10251f] hover:text-[#ff705f]"
+                    >
+                      <Phone className="h-3.5 w-3.5 text-[#ff705f]" />
+                      <span>0491 28 14 56</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Fléron */}
+                <div className="rounded-2xl bg-white p-4 shadow-card">
+                  <div className="flex items-center justify-between border-b border-black/5 pb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#ff705f]">Restaurant Fléron</span>
+                    <span className="rounded-full bg-[#d7ff45] px-2 py-0.5 text-[9px] font-black">Ouvert</span>
+                  </div>
+                  <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <a
+                      href="https://www.google.com/maps?q=Avenue+des+Martyrs+307,+4620+Fl%C3%A9ron"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2.5 text-xs font-bold hover:text-[#ff705f]"
+                    >
+                      <MapPin className="h-4 w-4 shrink-0 text-[#ff705f]" />
+                      <span>Av. des Martyrs 307, 4620 Fléron</span>
+                    </a>
+                    <a
+                      href="tel:+32493423643"
+                      className="flex items-center gap-2 text-xs font-black text-[#10251f] hover:text-[#ff705f]"
+                    >
+                      <Phone className="h-3.5 w-3.5 text-[#ff705f]" />
+                      <span>0493 42 36 43</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between rounded-xl bg-[#f7f4ec] px-4 py-2 text-[10px] font-bold text-[#7d8b83]">
+                  <span>🛵 Livraison à domicile disponible</span>
+                  <a href="https://instagram.com/POKE_NBOWL" target="_blank" rel="noreferrer" className="text-[#10251f] font-black hover:underline">
+                    @POKE_NBOWL
+                  </a>
+                </div>
               </div>
             </Reveal>
             <Reveal delay={0.06}>

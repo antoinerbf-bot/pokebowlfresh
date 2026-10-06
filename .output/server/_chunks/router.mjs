@@ -17,7 +17,7 @@ import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BX1uNtWr.css";
+var styles_default = "/assets/styles-5YnkiGPA.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -744,19 +744,19 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
 //#region src/assets/bowl-gyros.jpg
-var bowl_gyros_default = "/assets/bowl-gyros-BAHAeM5H.jpg";
+var bowl_gyros_default = "/assets/bowl-gyros-B1pFJtFM.jpg";
 //#endregion
 //#region src/assets/bowl-sweet-chicken.jpg
-var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-B0IKJ6Vs.jpg";
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-BNKNb7aU.jpg";
 //#endregion
 //#region src/assets/bowl-scampis.jpg
-var bowl_scampis_default = "/assets/bowl-scampis-WuS-dpfJ.jpg";
+var bowl_scampis_default = "/assets/bowl-scampis-BJ2iekie.jpg";
 //#endregion
 //#region src/assets/bowl-saumon.jpg
-var bowl_saumon_default = "/assets/bowl-saumon-DZ8yRlhg.jpg";
+var bowl_saumon_default = "/assets/bowl-saumon-kMAAvE85.jpg";
 //#endregion
 //#region src/assets/bowl-spicy-chicken.jpg
-var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-D83Dkldw.jpg";
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-DrN3Ibvn.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
 var images = {
@@ -1118,7 +1118,7 @@ var bowls = [
 		id: "sweet-chicken",
 		name: "Sweet Chicken",
 		price: 10,
-		desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+		desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix.",
 		tag: "Best-seller",
 		tagColor: "bestseller",
 		ingredients: [
@@ -1174,11 +1174,6 @@ var bowls = [
 				name: "Sésame mix",
 				emoji: "🌱",
 				removable: true
-			},
-			{
-				name: "Nachos",
-				emoji: "🫓",
-				removable: true
 			}
 		]
 	},
@@ -1186,7 +1181,7 @@ var bowls = [
 		id: "scampis-royaux",
 		name: "Scampis Royal",
 		price: 10,
-		desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+		desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, flocons de chili.",
 		tag: "Signature",
 		tagColor: "signature",
 		ingredients: [
@@ -1239,11 +1234,6 @@ var bowls = [
 				removable: true
 			},
 			{
-				name: "Nachos",
-				emoji: "🫓",
-				removable: true
-			},
-			{
 				name: "Flocons de chili",
 				emoji: "🔥",
 				removable: true
@@ -1254,7 +1244,7 @@ var bowls = [
 		id: "saumon-wasabi",
 		name: "Saumon Wasabi",
 		price: 11,
-		desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix, nachos.",
+		desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix.",
 		tag: "Premium",
 		tagColor: "premium",
 		ingredients: [
@@ -1305,11 +1295,6 @@ var bowls = [
 				name: "Sésame mix",
 				emoji: "🌱",
 				removable: true
-			},
-			{
-				name: "Nachos",
-				emoji: "🫓",
-				removable: true
 			}
 		]
 	},
@@ -1317,7 +1302,7 @@ var bowls = [
 		id: "spicy-chicken",
 		name: "Spicy Chicken",
 		price: 10,
-		desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
+		desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix.",
 		tag: "Épicé",
 		tagColor: "spicy",
 		ingredients: [
@@ -1372,11 +1357,6 @@ var bowls = [
 			{
 				name: "Sésame mix",
 				emoji: "🌱",
-				removable: true
-			},
-			{
-				name: "Nachos",
-				emoji: "🫓",
 				removable: true
 			}
 		]
@@ -1644,7 +1624,6 @@ var Route$12 = createFileRoute("/")({
 	component: Index
 });
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
-var PHONE = "+32491281456";
 var HOUR_ROWS = [
 	["info.day.mon", "12:00 – 14:00 · 17:00 – 21:00"],
 	["info.day.tue", "12:00 – 14:00 · 17:00 – 21:00"],
@@ -2538,38 +2517,70 @@ function Index() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mt-6 grid gap-2.5 sm:mt-8 sm:gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-									href: MAPS_URL,
-									target: "_blank",
-									rel: "noreferrer",
-									className: "flex min-w-0 items-center gap-4 rounded-2xl bg-white p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d7ff45]",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5" })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "min-w-0",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]",
-											children: t("info.address")
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "mt-1 block break-words text-sm font-bold",
-											children: "Av. du Pont 12, 4600 Visé, Belgique"
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white p-4 shadow-card",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between border-b border-black/5 pb-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] font-black uppercase tracking-[0.15em] text-[#ff705f]",
+												children: "Restaurant Visé"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-[#d7ff45] px-2 py-0.5 text-[9px] font-black",
+												children: "Ouvert"
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: MAPS_URL,
+												target: "_blank",
+												rel: "noreferrer",
+												className: "flex items-center gap-2.5 text-xs font-bold hover:text-[#ff705f]",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-4 w-4 shrink-0 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Av. du Pont 12, 4600 Visé" })]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: "tel:+32491281456",
+												className: "flex items-center gap-2 text-xs font-black text-[#10251f] hover:text-[#ff705f]",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-3.5 w-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "0491 28 14 56" })]
+											})]
 										})]
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-									href: `tel:${PHONE}`,
-									className: "flex items-center gap-4 rounded-2xl bg-white p-4 shadow-card transition hover:-translate-y-0.5 hover:shadow-lift",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-5 w-5" })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "block text-[9px] font-black uppercase tracking-[0.15em] text-[#7d8b83]",
-										children: t("info.phone")
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "mt-1 block text-sm font-bold",
-										children: "+32 491 28 14 56"
-									})] })]
-								})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white p-4 shadow-card",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between border-b border-black/5 pb-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] font-black uppercase tracking-[0.15em] text-[#ff705f]",
+												children: "Restaurant Fléron"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-[#d7ff45] px-2 py-0.5 text-[9px] font-black",
+												children: "Ouvert"
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: "https://www.google.com/maps?q=Avenue+des+Martyrs+307,+4620+Fl%C3%A9ron",
+												target: "_blank",
+												rel: "noreferrer",
+												className: "flex items-center gap-2.5 text-xs font-bold hover:text-[#ff705f]",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-4 w-4 shrink-0 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Av. des Martyrs 307, 4620 Fléron" })]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: "tel:+32493423643",
+												className: "flex items-center gap-2 text-xs font-black text-[#10251f] hover:text-[#ff705f]",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-3.5 w-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "0493 42 36 43" })]
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between rounded-xl bg-[#f7f4ec] px-4 py-2 text-[10px] font-bold text-[#7d8b83]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🛵 Livraison à domicile disponible" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+											href: "https://instagram.com/POKE_NBOWL",
+											target: "_blank",
+											rel: "noreferrer",
+											className: "text-[#10251f] font-black hover:underline",
+											children: "@POKE_NBOWL"
+										})]
+									})
+								]
 							})
 						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
 							delay: .06,
@@ -4315,69 +4326,101 @@ function ContactPage() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "mt-6 text-lg leading-relaxed text-muted-foreground",
-							children: "Une question, une commande ou une demande particulière ? Retrouve-nous à Visé ou appelle directement l’équipe."
+							children: "Une question, une commande ou une demande particulière ? Retrouvez-nous dans nos restaurants à Visé et Fléron ou contactez nos équipes par téléphone."
 						})
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mt-12 grid gap-5 md:grid-cols-3",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-							href: "tel:+32491281456",
-							className: "group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneCall, { className: "h-6 w-6 text-coral" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground",
-									children: "Téléphone"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-2 break-words text-xl font-black",
-									children: "+32 491 28 14 56"
-								})
-							]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-							href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
-							target: "_blank",
-							rel: "noreferrer",
-							className: "group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-6 w-6 text-coral" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground",
-									children: "Adresse"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-2 text-xl font-black",
-									children: "Av. du Pont 12"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-muted-foreground",
+					className: "mt-12 grid gap-6 md:grid-cols-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-3xl border border-border bg-card p-7 shadow-soft",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff45] text-black font-black",
+								children: "1"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-xl font-black",
+								children: "Poké & Bowl Visé"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs uppercase tracking-wider text-muted-foreground",
+								children: "Centre-ville Visé"
+							})] })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-5 space-y-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
+								target: "_blank",
+								rel: "noreferrer",
+								className: "flex items-start gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5 shrink-0 text-coral" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "font-bold",
+									children: "Avenue du Pont 12"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-sm text-muted-foreground",
 									children: "4600 Visé, Belgique"
-								})
-							]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-							to: "/commander",
-							className: "group rounded-3xl border border-border bg-card p-7 shadow-soft transition hover:-translate-y-1 hover:shadow-lift",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-6 w-6 text-coral" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-5 text-xs font-black uppercase tracking-widest text-muted-foreground",
-									children: "Commande"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-2 text-xl font-black",
-									children: "Commander en ligne"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-muted-foreground",
-									children: "Compose ton bowl"
-								})
-							]
-						})
-					]
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: "tel:+32491281456",
+								className: "flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneCall, { className: "h-5 w-5 shrink-0 text-coral" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-bold",
+									children: "0491 28 14 56 (+32)"
+								})]
+							})]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-3xl border border-border bg-card p-7 shadow-soft",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex h-10 w-10 items-center justify-center rounded-full bg-[#ff705f] text-white font-black",
+								children: "2"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-xl font-black",
+								children: "Poké & Bowl Fléron"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs uppercase tracking-wider text-muted-foreground",
+								children: "Avenue des Martyrs"
+							})] })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-5 space-y-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: "https://www.google.com/maps?q=Avenue+des+Martyrs+307,+4620+Fl%C3%A9ron",
+								target: "_blank",
+								rel: "noreferrer",
+								className: "flex items-start gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5 shrink-0 text-coral" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "font-bold",
+									children: "Avenue des Martyrs 307"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-sm text-muted-foreground",
+									children: "4620 Fléron, Belgique"
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: "tel:+32493423643",
+								className: "flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhoneCall, { className: "h-5 w-5 shrink-0 text-coral" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-bold",
+									children: "0493 42 36 43 (+32)"
+								})]
+							})]
+						})]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-8 flex flex-wrap items-center justify-center gap-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/commander",
+						className: "flex items-center gap-2 rounded-2xl bg-[#ff705f] px-6 py-3.5 text-sm font-black text-white shadow-soft transition hover:scale-105",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5" }), "Commander en ligne"]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+						href: "https://instagram.com/POKE_NBOWL",
+						target: "_blank",
+						rel: "noreferrer",
+						className: "flex items-center gap-2 rounded-2xl border border-border bg-card px-6 py-3.5 text-sm font-black transition hover:bg-muted",
+						children: "Instagram: @POKE_NBOWL"
+					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mt-10 overflow-hidden rounded-[2rem] border border-border shadow-lift",
