@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ShoppingBag, UtensilsCrossed, Sparkles } from "lucide-react";
 import * as React from "react";
 import logo from "@/assets/logo.png";
+import { BrandLogo } from "@/components/BrandLogo";
 import dessert from "@/assets/dessert.jpg";
 import {
   bowls,
@@ -62,8 +63,8 @@ function CommanderPage() {
       {/* ── Header ─────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
-            <img src={logo} alt="Logo Poke N Bowl" className="h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10" />
+          <Link to="/" className="flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
+            <BrandLogo size="md" />
           </Link>
           <div className="flex items-center gap-2">
             <div className="hidden rounded-full border border-black/10 bg-white p-1 sm:flex">
@@ -120,17 +121,7 @@ function CommanderPage() {
 
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
               <div className="flex items-center gap-3">
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/10 p-2 backdrop-blur-sm">
-                  <img src={logo} alt="Poke N Bowl" className="h-full w-full object-contain" />
-                </span>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white">
-                    Poke N Bowl
-                  </p>
-                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/40">
-                    Visé · Fresh food
-                  </p>
-                </div>
+                <BrandLogo size="md" />
               </div>
 
               <div className="flex-1">

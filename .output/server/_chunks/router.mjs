@@ -17,7 +17,7 @@ import { n as useScroll, r as motion, t as useTransform } from "../_libs/framer-
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BlU-tQu1.css";
+var styles_default = "/assets/styles-BX1uNtWr.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -603,8 +603,56 @@ function RootComponent() {
 	});
 }
 //#endregion
-//#region src/assets/logo.png
-var logo_default = "data:image/png;base64,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AAECBAgQMAD9AAECBAgQIEAgJmAAxgoXlwABAgQIECBgAPoBAgQIECBAgEBMwACMFS4uAQIECBAgQMAA9AMECBAgQIAAgZiAARgrXFwCBAgQIECAgAHoBwgQIECAAAECMQEDMFa4uAQIECBAgAABA9APECBAgAABAgRiAgZgrHBxCRAgQIAAAQIGoB8gQIAAAQIECMQEDMBY4eISIECAAAECBAxAP0CAAAECBAgQiAkYgLHCxSVAgAABAgQIGIB+gAABAgQIECAQEzAAY4WLS4AAAQIECBAwAP0AAQIECBAgQCAmYADGCheXAAECBAgQIGAA+gECBAgQIECAQEzAAIwVLi4BAgQIECBAwAD0AwQIECBAgACBmIABGCtcXAIECBAgQICAAegHCBAgQIAAAQIxAQMwVri4BAgQIECAAAED0A8QIECAAAECBGICBmCscHEJECBAgAABAgagHyBAgAABAgQIxAQMwFjh4hIgQIAAAQIEDEA/QIAAAQIECBCICRiAscLFJUCAAAECBAgYgH6AAAECBAgQIBATMABjhYtLgAABAgQIEDAA/QABAgQIECBAICZgAMYKF5cAAQIECBAgYAD6AQIECBAgQIBATMAAjBUuLgECBAgQIEDAAPQDBAgQIECAAIGYgAEYK1xcAgQIECBAgIAB6AcIECBAgAABAjEBAzBWuLgECBAgQIAAAQPQDxAgQIAAAQIEYgIGYKxwcQkQIECAAAECBqAfIECAAAECBAjEBAzAWOHiEiBAgAABAgQMQD9AgAABAgQIEIgJGICxwsUlQIAAAQIECBiAfoAAAQIECBAgEBMwAGOFi0uAAAECBAgQMAD9AAECBAgQIEAgJmAAxgoXlwABAgQIECBgAPoBAgQIECBAgEBMwACMFS4uAQIECBAgQMAA9AMECBAgQIAAgZiAARgrXFwCBAgQIECAgAHoBwgQIECAAAECMQEDMFa4uAQIECBAgAABA9APECBAgAABAgRiAgZgrHBxCRAgQIAAAQIGoB8gQIAAAQIECMQEDMBY4eISIECAAAECBC6KawUobfJpVwAAAABJRU5ErkJggg==";
+//#region src/components/BrandLogo.tsx
+function BrandLogo({ className = "", compact = false, size = "md" }) {
+	const sizeClasses = {
+		sm: "px-3 py-1.5 gap-2",
+		md: "px-4 py-2 sm:px-5 sm:py-2.5 gap-2.5",
+		lg: "px-5 py-3 sm:px-6 sm:py-3.5 gap-3"
+	}[size];
+	const textClasses = {
+		sm: "text-sm sm:text-base",
+		md: "text-base sm:text-xl",
+		lg: "text-xl sm:text-2xl"
+	}[size];
+	const circleClasses = {
+		sm: "h-6 w-6 text-xs border-[2px]",
+		md: "h-7 w-7 sm:h-8 sm:w-8 text-xs sm:text-sm border-[2.5px]",
+		lg: "h-8 w-8 sm:h-9 sm:w-9 text-sm sm:text-base border-[2.5px]"
+	}[size];
+	const subtextClasses = {
+		sm: "text-[7px]",
+		md: "text-[8px] sm:text-[9px]",
+		lg: "text-[9px] sm:text-[10px]"
+	}[size];
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: `inline-flex items-center rounded-2xl bg-[#10251f] shadow-md border border-white/15 transition duration-200 select-none ${sizeClasses} ${className}`,
+		style: { boxShadow: "0 4px 20px -2px rgba(16, 37, 31, 0.45)" },
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: `font-black tracking-[0.18em] text-white uppercase ${textClasses}`,
+				style: { letterSpacing: "0.18em" },
+				children: "POKE"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: `flex shrink-0 items-center justify-center rounded-full border-white font-black text-white ${circleClasses}`,
+				children: "N"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col items-start leading-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: `font-black tracking-[0.18em] text-white uppercase ${textClasses}`,
+					style: { letterSpacing: "0.18em" },
+					children: "BOWL"
+				}), !compact && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: `mt-0.5 font-black uppercase tracking-[0.24em] text-[#d7ff45] ${subtextClasses}`,
+					style: { letterSpacing: "0.24em" },
+					children: "SUR MESURE"
+				})]
+			})
+		]
+	});
+}
 //#endregion
 //#region src/assets/hero-poke.jpg
 var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
@@ -699,7 +747,7 @@ ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 var bowl_gyros_default = "/assets/bowl-gyros-BAHAeM5H.jpg";
 //#endregion
 //#region src/assets/bowl-sweet-chicken.jpg
-var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-sbn6VeN3.jpg";
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-B0IKJ6Vs.jpg";
 //#endregion
 //#region src/assets/bowl-scampis.jpg
 var bowl_scampis_default = "/assets/bowl-scampis-WuS-dpfJ.jpg";
@@ -717,8 +765,8 @@ var images = {
 	"scampis-royaux": bowl_scampis_default,
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
-	"crousty-chicken-curry": "/assets/bowl-crousty-curry-BJ68lQb2.jpg",
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-Dtil8hTC.jpg",
+	"crousty-chicken-curry": "/assets/bowl-crousty-curry-L8U52Xrn.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-Bi5W1sXl.jpg",
 	"sur-mesure": bowl_spicy_chicken_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
@@ -1744,13 +1792,9 @@ function Index() {
 								top: 0,
 								behavior: "auto"
 							}),
-							className: "flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
-							"aria-label": "Poke N Bowl",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
-								alt: "Logo Poke N Bowl",
-								className: "h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.45)] border border-white/15"
-							})
+							className: "flex min-w-0 shrink-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
+							"aria-label": "Poke N Bowl — Accueil",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "hidden items-center gap-6 text-[10px] font-black uppercase tracking-[0.14em] text-white md:flex",
@@ -2577,20 +2621,10 @@ function Index() {
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 							to: "/",
 							className: "flex items-center gap-3.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: logo_default,
-								alt: "Poke N Bowl",
-								className: "h-12 sm:h-14 w-auto max-w-[240px] object-contain object-left rounded-xl border border-white/10 shadow-md"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "font-black text-white text-base",
-								children: "Poke N Bowl"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "text-[8px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]",
-								children: "Visé · Fresh food"
-							})] })]
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex flex-wrap gap-4 text-[9px] font-black uppercase tracking-[0.12em] text-white/40",
@@ -3224,13 +3258,9 @@ function CheckoutPage() {
 				className: "mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
-					"aria-label": "Accueil",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						src: logo_default,
-						alt: "Poke N Bowl",
-						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-					})
+					className: "flex items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
+					"aria-label": "Poke N Bowl — Accueil",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/commander",
 					className: "inline-flex items-center gap-2 text-xs font-bold text-[#7a847e] hover:text-[#17231f]",
@@ -3879,13 +3909,9 @@ function CommanderPage() {
 					className: "mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
+						className: "flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
 						"aria-label": "Poke N Bowl — Accueil",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo Poke N Bowl",
-							className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-						})
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
 						children: [
@@ -3938,22 +3964,9 @@ function CommanderPage() {
 							]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "flex items-center gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/10 p-2 backdrop-blur-sm",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										src: logo_default,
-										alt: "Poke N Bowl",
-										className: "h-full w-full object-contain"
-									})
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-[10px] font-black uppercase tracking-[0.22em] text-white",
-									children: "Poke N Bowl"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/40",
-									children: "Visé · Fresh food"
-								})] })]
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -4277,13 +4290,9 @@ function ContactPage() {
 				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
+					className: "flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
 					"aria-label": "Poke N Bowl — Accueil",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						src: logo_default,
-						alt: "Logo Poke N Bowl",
-						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-					})
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
 					className: "inline-flex items-center gap-2 text-sm font-bold",
@@ -4401,13 +4410,9 @@ function RecruitmentPage() {
 				className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
+					className: "flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
 					"aria-label": "Poke N Bowl — Accueil",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						src: logo_default,
-						alt: "Logo Poke N Bowl",
-						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-					})
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
 					className: "inline-flex items-center gap-2 text-sm font-bold",
@@ -4586,13 +4591,9 @@ function SurMesurePage() {
 					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
+						className: "flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
 						"aria-label": "Poke N Bowl — Accueil",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo Poke N Bowl",
-							className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-						})
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-3",
 						children: [
@@ -5422,12 +5423,9 @@ function OrderSuccessPage() {
 				className: "mx-auto flex max-w-[700px] items-center px-5 py-3 sm:px-8",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 					to: "/",
-					className: "flex items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-						src: logo_default,
-						alt: "Poke N Bowl",
-						className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-					})
+					className: "flex items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
+					"aria-label": "Poke N Bowl — Accueil",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 				})
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
@@ -5764,13 +5762,9 @@ function ProductPage() {
 					className: "mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 						to: "/",
-						className: "group flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200",
-						"aria-label": "Poke N Bowl",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-							src: logo_default,
-							alt: "Logo Poke N Bowl",
-							className: "h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-						})
+						className: "group flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200",
+						"aria-label": "Poke N Bowl — Accueil",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "md" })
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2.5 sm:gap-3",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {

@@ -12,6 +12,7 @@ import {
   Clock,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { BrandLogo } from "@/components/BrandLogo";
 import heroPoke from "@/assets/hero-poke.jpg";
 import dessert from "@/assets/dessert.jpg";
 import { useTranslation } from "../context/I18nContext";
@@ -163,14 +164,10 @@ function Index() {
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
-            className="flex min-w-0 shrink-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200"
-            aria-label="Poke N Bowl"
+            className="flex min-w-0 shrink-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200"
+            aria-label="Poke N Bowl — Accueil"
           >
-            <img
-              src={logo}
-              alt="Logo Poke N Bowl"
-              className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.45)] border border-white/15"
-            />
+            <BrandLogo size="md" />
           </Link>
 
           {/* Desktop nav */}
@@ -808,17 +805,7 @@ function Index() {
       <footer className="bg-[#0b1a16] px-5 py-8 pb-24 text-white sm:px-6 sm:pb-8 lg:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="flex items-center gap-3.5 transition hover:opacity-95 hover:scale-[1.02] duration-200">
-            <img
-              src={logo}
-              alt="Poke N Bowl"
-              className="h-12 sm:h-14 w-auto max-w-[240px] object-contain object-left rounded-xl border border-white/10 shadow-md"
-            />
-            <div>
-              <div className="font-black text-white text-base">Poke N Bowl</div>
-              <div className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
-                Visé · Fresh food
-              </div>
-            </div>
+            <BrandLogo size="md" />
           </Link>
           <div className="flex flex-wrap gap-4 text-[9px] font-black uppercase tracking-[0.12em] text-white/40">
             <a href="#carte" className="transition hover:text-white">{t("nav.menu")}</a>

@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, CreditCard, Store, Loader2 } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { BrandLogo } from "@/components/BrandLogo";
 import { useCart } from "../context/CartContext";
 import { submitCheckout } from "../fn/checkout";
 import type { FulfillmentMethod, PaymentMethod } from "../lib/orders";
@@ -104,8 +105,8 @@ function CheckoutPage() {
     <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8">
-          <Link to="/" className="flex items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Accueil">
-            <img src={logo} alt="Poke N Bowl" className="h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10" />
+          <Link to="/" className="flex items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
+            <BrandLogo size="md" />
           </Link>
           <Link
             to="/commander"

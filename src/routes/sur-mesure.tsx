@@ -2,6 +2,7 @@ import * as React from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Minus, Plus, ShoppingBag, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { BrandLogo } from "@/components/BrandLogo";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import {
   detailedBases,
@@ -121,14 +122,10 @@ function SurMesurePage() {
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
           <Link
             to="/"
-            className="flex min-w-0 items-center gap-2.5 transition hover:opacity-95 hover:scale-[1.02] duration-200"
+            className="flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200"
             aria-label="Poke N Bowl — Accueil"
           >
-            <img
-              src={logo}
-              alt="Logo Poke N Bowl"
-              className="h-11 sm:h-14 w-auto object-contain rounded-xl shadow-md border border-white/10"
-            />
+            <BrandLogo size="md" />
           </Link>
           <div className="flex items-center gap-3">
             <div className="hidden rounded-full border border-black/10 bg-white p-1 sm:flex">
