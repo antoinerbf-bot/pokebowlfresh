@@ -23,11 +23,13 @@ import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { bowls, drinks, desserts } from "../lib/data";
 import { DishImage } from "../components/DishImage";
-import { PokeCinematicReel } from "@/components/PokeCinematicReel";
 import { PokeBowlCraftingExperience } from "@/components/PokeBowlCraftingExperience";
 import { NotificationBellMenu } from "@/components/NotificationBellMenu";
 import { CroustyNotificationToast } from "@/components/CroustyNotificationToast";
 import { PokeBowlMarqueeCarousel } from "@/components/PokeBowlMarqueeCarousel";
+import { Hero3DParallaxPoke } from "@/components/Hero3DParallaxPoke";
+import { InteractiveBowlBuilder } from "@/components/InteractiveBowlBuilder";
+import { DishTasteExplorer } from "@/components/DishTasteExplorer";
 import { Sparkles, Utensils, Heart, Check, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -301,111 +303,8 @@ function Index() {
       </header>
 
       <main>
-        {/* ════════════════════ HERO POKÉ & BOWL ════════════════════ */}
-        <section ref={heroRef} className="relative isolate min-h-[700px] overflow-hidden bg-[#071713] text-white lg:min-h-[780px]">
-          {/* Subtle Parallax Background */}
-          <motion.div style={{ y: heroY }} className="absolute inset-0 -z-20">
-            <img
-              src={heroPoke}
-              alt=""
-              aria-hidden="true"
-              fetchPriority="high"
-              className="h-full w-full object-cover object-center opacity-18"
-            />
-          </motion.div>
-          {/* Ambient Lighting Gradients */}
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_35%,rgba(215,255,69,.12),transparent_40%),radial-gradient(ellipse_at_20%_80%,rgba(255,112,95,.08),transparent_50%),linear-gradient(110deg,#071713_0%,rgba(7,23,19,.98)_50%,rgba(7,23,19,.85)_100%)]" />
-
-          <div className="relative z-10 mx-auto grid min-h-[700px] max-w-[1340px] items-center gap-10 px-5 pb-12 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:px-8 lg:min-h-[780px] lg:py-16">
-            {/* Left: Copy & Value Proposition */}
-            <motion.div style={{ opacity: heroOpacity }} className="max-w-xl">
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.15 }}
-                className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45] animate-pulse" />
-                Poké Bowls Frais & Sur-Mesure · Visé, Belgique
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.75, delay: 0.28 }}
-                className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight"
-              >
-                <span className="block text-white">L'art du</span>
-                <span className="mt-1 block text-[#d7ff45]">Poké Bowl.</span>
-                <span className="mt-2 block text-xl sm:text-2xl lg:text-3xl font-extrabold text-white/85">
-                  Frais. Gourmand. Fait minute.
-                </span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                className="mt-5 max-w-lg text-[15px] leading-relaxed text-white/75"
-              >
-                Découvrez nos recettes créations aux ingrédients nobles découpés chaque matin :
-                saumon atlantique frais, scampis saisis au grill, poulet doré fondant
-                et notre riz à sushi délicatement assaisonné.
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.5 }}
-                className="mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center"
-              >
-                <a
-                  href="#carte"
-                  className="btn-primary inline-flex h-13 items-center justify-center gap-2.5 px-7 text-sm font-bold uppercase tracking-wider"
-                >
-                  Découvrir nos Bowls (dès 10€)
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-                <Link
-                  to="/sur-mesure"
-                  className="inline-flex h-13 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/20 hover:scale-[1.02]"
-                >
-                  <Sparkles className="h-4 w-4 text-[#d7ff45]" />
-                  Composer Sur Mesure 🥣
-                </Link>
-              </motion.div>
-
-              {/* Trust badges */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.6 }}
-                className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-xs text-white/65"
-              >
-                <span className="flex items-center gap-1.5 font-bold">
-                  <span className="text-[#d7ff45]">★ 4.9/5</span> avis clients
-                </span>
-                <span className="flex items-center gap-1.5 font-bold">
-                  <span>🥑</span> 100% frais coupé du matin
-                </span>
-                <span className="flex items-center gap-1.5 font-bold">
-                  <span>🛵</span> Visé, Belgique
-                </span>
-              </motion.div>
-            </motion.div>
-
-            {/* Right: The Cinematic Poké Showcase Reel */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-full max-w-xl lg:max-w-none"
-            >
-              <PokeCinematicReel />
-            </motion.div>
-          </div>
-        </section>
+        {/* ════════════════════ HERO POKÉ & BOWL 3D PARALLAX ════════════════════ */}
+        <Hero3DParallaxPoke />
 
         {/* ════════ Ticker ════════════════════════════════════════ */}
         <Ticker />
@@ -416,6 +315,9 @@ function Index() {
             <PokeBowlMarqueeCarousel />
           </div>
         </section>
+
+        {/* ════════ DÉCOUVERTE FRAÎCHEUR & SENSORIALITÉ ════════ */}
+        <DishTasteExplorer />
 
         {/* ════════ CARTE DES POKÉ BOWLS SIGNATURES ════════════════════ */}
         <section id="carte" className="scroll-mt-10 mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
@@ -532,12 +434,31 @@ function Index() {
                       )}
                     </div>
 
-                    {/* Action buttons */}
+                    {/* Action buttons: Quick Add & Customizer */}
                     <div className="mt-auto pt-6 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          addItem({
+                            id: bowl.id,
+                            name: `${bowl.name} (Moyen)`,
+                            basePrice: bowl.price,
+                            price: bowl.price,
+                            quantity: 1,
+                            toppings: [],
+                            removedIngredients: [],
+                          })
+                        }
+                        title={`Ajouter direct au panier (${bowl.price.toFixed(2)} €)`}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] shadow-soft transition hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95 font-black"
+                      >
+                        <Plus className="h-5 w-5 stroke-[2.5]" />
+                      </button>
+
                       <Link
                         to="/product/$productId"
                         params={{ productId: bowl.id }}
-                        className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff5542]"
+                        className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]"
                       >
                         Personnaliser & Commander
                         <ArrowRight className="h-3.5 w-3.5" />
@@ -621,150 +542,8 @@ function Index() {
           </div>
         </section>
 
-        {/* ════════ Étapes de composition : SUR-MESURE ══════════════ */}
-        <section id="composer" className="scroll-mt-10 relative overflow-hidden bg-[#0d211b] px-5 py-16 text-white sm:px-6 sm:py-24 lg:px-8 border-y border-white/10">
-          {/* Ambient decorative glow */}
-          <div className="absolute top-0 right-1/4 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-[100px] pointer-events-none" />
-
-          <div className="relative z-10 mx-auto max-w-[1280px]">
-            <Reveal>
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                <div>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    Comment ça marche · 5 gestes gourmands
-                  </div>
-                  <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-                    <span className="block text-white">Votre Poké Bowl sur mesure,</span>
-                    <span className="mt-1 block text-[#d7ff45]">composé sous vos yeux.</span>
-                  </h2>
-                </div>
-                <div className="max-w-md">
-                  <p className="text-sm leading-relaxed text-white/70">
-                    Chaque ingrédient est sélectionné et découpé le matin même à Visé. Choisissez votre base aérée, vos légumes frais, votre protéine chaude ou fraîche, votre sauce et le crunch final.
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* The 5 interactive rich step cards */}
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-              {[
-                {
-                  num: "01",
-                  title: "Ta Base",
-                  tag: "Traditionnelle & aérée",
-                  desc: "Riz à sushi délicatement assaisonné, riz brun complet, salade fraîche croquante, pâtes ou nachos.",
-                  pills: ["🍚 Riz à sushi", "🌾 Riz brun", "🥗 Salade", "🍝 Pâtes", "🫓 Nachos"],
-                },
-                {
-                  num: "02",
-                  title: "5 Mix-in Frais",
-                  tag: "5 inclus dans le prix !",
-                  desc: "Vitamines & fraîcheur parmi 16 découpes du jour : avocat mûr, mangue, edamame, feta, maïs doux, tomates...",
-                  pills: ["🥑 Avocat", "🥭 Mangue", "🧀 Feta", "🫘 Edamame", "🌽 Maïs"],
-                },
-                {
-                  num: "03",
-                  title: "Ta Protéine",
-                  tag: "Préparée minute",
-                  desc: "Poulet doré mariné, véritable saumon atlantique sashimi (+1€) ou scampis grillés saisis minute.",
-                  pills: ["🍗 Poulet doré", "🐟 Saumon (+1€)", "🦐 Scampis"],
-                },
-                {
-                  num: "04",
-                  title: "Sauce Signature",
-                  tag: "Recettes maison",
-                  desc: "Spicy Mayo onctueuse, Teriyaki brillante caramélisée, Mayo Wasabi subtile, sauce sésame ou chili doux.",
-                  pills: ["🌶️ Spicy Mayo", "🍯 Teriyaki", "🟢 Wasabi", "🌱 Sésame"],
-                },
-                {
-                  num: "05",
-                  title: "Crunch Toppings",
-                  tag: "La touche croustillante",
-                  desc: "Oignons frits ultra dorés, graines de sésame noir & blanc toastées, brisures de nachos ou flocons chili.",
-                  pills: ["🧅 Oignons frits", "🌱 Sésame mix", "🥜 Noix cajou", "🔥 Chili"],
-                },
-              ].map(({ num, title, tag, desc, pills }, index) => (
-                <Reveal key={num} delay={index * 0.06}>
-                  <motion.div
-                    whileHover={{ y: -6, scale: 1.02 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-all duration-300 hover:border-[#d7ff45]/40 hover:bg-white/[0.07] hover:shadow-xl"
-                  >
-                    <div className="absolute top-0 right-0 h-20 w-20 bg-gradient-to-br from-white/10 to-transparent rounded-bl-full pointer-events-none opacity-50 group-hover:opacity-100 transition" />
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-xs font-black text-[#d7ff45] border border-white/10 group-hover:bg-[#d7ff45] group-hover:text-[#10251f] transition">
-                          {num}
-                        </span>
-                        <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[9px] font-bold text-white/80">
-                          {tag}
-                        </span>
-                      </div>
-                      <h3 className="mt-4 text-base sm:text-lg font-extrabold text-white group-hover:text-[#d7ff45] transition">
-                        {title}
-                      </h3>
-                      <p className="mt-2 text-xs leading-relaxed text-white/65">
-                        {desc}
-                      </p>
-                    </div>
-
-                    <div className="mt-5 pt-4 border-t border-white/10">
-                      <div className="flex flex-wrap gap-1">
-                        {pills.map((pill, pIdx) => (
-                          <span
-                            key={pIdx}
-                            className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-white/80"
-                          >
-                            {pill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                </Reveal>
-              ))}
-            </div>
-
-            {/* Bottom High-Impact Banner */}
-            <div className="mt-8 overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-r from-white/[0.08] via-white/[0.05] to-white/[0.02] p-6 sm:p-8 backdrop-blur-md">
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]">
-                      Dès 10,00 €
-                    </span>
-                    <span className="text-xs font-bold text-white/70">
-                      Format Moyen (10€) ou Grand (13€)
-                    </span>
-                  </div>
-                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold text-white">
-                    Envie de créer votre bowl signature sur mesure ?
-                  </h3>
-                  <p className="mt-1 text-xs sm:text-sm text-white/60">
-                    Personnalisez chaque ingrédient en ligne, retirez les allergènes et récupérez votre commande prête minute à Visé.
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Link
-                    to="/sur-mesure"
-                    className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold uppercase tracking-wider"
-                  >
-                    Composer mon bowl en ligne <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <a
-                    href="#carte"
-                    className="rounded-full border border-white/20 bg-white/5 px-5 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition"
-                  >
-                    Voir les 5 recettes signatures
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ════════ SIMULATEUR SUR-MESURE INTERACTIF LUDIQUE ══════════════ */}
+        <InteractiveBowlBuilder />
 
         {/* ════════ Boissons & Desserts : Plaisirs Gourmands ═══════ */}
         <section className="mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8">

@@ -4,8 +4,10 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Flame, Plus } from "lucide-react";
 import { DishImage } from "./DishImage";
 import { bowls, type Bowl } from "@/lib/data";
+import { useCart } from "@/context/CartContext";
 
 export function PokeBowlMarqueeCarousel() {
+  const { addItem } = useCart();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -187,15 +189,34 @@ export function PokeBowlMarqueeCarousel() {
                   </div>
                 </div>
 
-                {/* Action button */}
-                <div className="mt-5 pt-4 border-t border-black/5">
+                {/* Action buttons: Quick Add & Customizer */}
+                <div className="mt-5 pt-4 border-t border-black/5 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addItem({
+                        id: bowl.id,
+                        name: `${bowl.name} (Moyen)`,
+                        basePrice: bowl.price,
+                        price: bowl.price,
+                        quantity: 1,
+                        toppings: [],
+                        removedIngredients: [],
+                      })
+                    }
+                    title="Ajouter direct au panier"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] shadow-sm transition hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95 font-black"
+                  >
+                    <Plus className="h-5 w-5 stroke-[2.5]" />
+                  </button>
+
                   <Link
                     to="/product/$productId"
                     params={{ productId: bowl.id }}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-[1.02] active:scale-[0.98]"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#10251f] py-3 px-3 text-[11px] font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <span>Personnaliser & Commander</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <span>Personnaliser</span>
+                    <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
               </div>

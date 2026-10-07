@@ -23,8 +23,8 @@ const REEL_BOWLS: ReelBowl[] = [
     tag: "Best-seller",
     tagColor: "#d7ff45",
     headline: "Poulet maison, mangue douce & teriyaki",
-    description: "Vrais morceaux de filet de poulet, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants, sésame mix et nachos.",
-    highlights: ["🍗 Poulet maison", "🥭 Mangue & Feta", "🌽 Nachos & Oignons frits"],
+    description: "Vrais morceaux de filet de poulet, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants et sésame mix.",
+    highlights: ["🍗 Poulet maison", "🥭 Mangue & Feta", "🧅 Oignons frits croustillants"],
   },
   {
     id: "saumon-wasabi",
@@ -33,8 +33,8 @@ const REEL_BOWLS: ReelBowl[] = [
     tag: "Premium",
     tagColor: "#ff705f",
     headline: "Saumon noble & salade d'algues",
-    description: "Cubes de saumon frais noble, avocat, salade d'algues, mangue, maïs, edamame, mayo wasabi, sésame mix et nachos croquants.",
-    highlights: ["🐟 Saumon frais noble", "🥑 Avocat & Salade d'algues", "🌽 Nachos & Sésame mix"],
+    description: "Cubes de saumon frais noble, avocat, salade d'algues, mangue, maïs, edamame, mayo wasabi et sésame mix.",
+    highlights: ["🐟 Saumon frais noble", "🥑 Avocat & Salade d'algues", "🌱 Sésame mix toasté"],
   },
   {
     id: "scampis-royaux",
@@ -43,8 +43,8 @@ const REEL_BOWLS: ReelBowl[] = [
     tag: "Signature",
     tagColor: "#d7ff45",
     headline: "Scampis, jalapeños & spicy mayo",
-    description: "Scampis dorés, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños, nachos et flocons de chili.",
-    highlights: ["🦐 Scampis dorés", "🌶️ Jalapeños & Spicy mayo", "🌽 Nachos & Flocons chili"],
+    description: "Scampis dorés, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños et flocons de chili.",
+    highlights: ["🦐 Scampis dorés", "🌶️ Jalapeños & Spicy mayo", "🔥 Flocons de chili"],
   },
   {
     id: "spicy-chicken",
@@ -53,8 +53,8 @@ const REEL_BOWLS: ReelBowl[] = [
     tag: "Épicé",
     tagColor: "#ff705f",
     headline: "Poulet maison mariné & patates douces",
-    description: "Poulet maison mariné, avocat, patates douces, maïs, jalapeños, feta, spicy mayo, flocons de chili, sésame mix et nachos.",
-    highlights: ["🍗 Poulet maison", "🍠 Patates douces & Feta", "🌽 Nachos & Jalapeños"],
+    description: "Poulet maison mariné, avocat, patates douces, maïs, jalapeños, feta, spicy mayo, flocons de chili et sésame mix.",
+    highlights: ["🍗 Poulet maison", "🍠 Patates douces & Feta", "🌶️ Jalapeños épicés"],
   },
 ];
 
