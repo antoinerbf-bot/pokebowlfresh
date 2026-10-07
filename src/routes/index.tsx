@@ -25,6 +25,9 @@ import { bowls, drinks, desserts } from "../lib/data";
 import { DishImage } from "../components/DishImage";
 import { PokeCinematicReel } from "@/components/PokeCinematicReel";
 import { PokeBowlCraftingExperience } from "@/components/PokeBowlCraftingExperience";
+import { NotificationBellMenu } from "@/components/NotificationBellMenu";
+import { CroustyNotificationToast } from "@/components/CroustyNotificationToast";
+import { PokeBowlMarqueeCarousel } from "@/components/PokeBowlMarqueeCarousel";
 import { Sparkles, Utensils, Heart, Check, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -137,16 +140,17 @@ function Index() {
   // Séparation claire : les 5 recettes Poké Bowls du restaurant & les spécialités croustillantes
   const pokeBowls = bowls.filter((b) => !b.id.startsWith("crousty-"));
   const croustyBowls = bowls.filter((b) => b.id.startsWith("crousty-"));
-  const [activeTab, setActiveTab] = React.useState<"all" | "bestseller" | "signature" | "fish" | "spicy">("all");
+  const [activeTab, setActiveTab] = React.useState<"all" | "bestseller" | "signature" | "crousty" | "fish" | "spicy">("all");
 
   const filteredPokeBowls = React.useMemo(() => {
     if (activeTab === "all") return pokeBowls;
     if (activeTab === "bestseller") return pokeBowls.filter((b) => b.tagColor === "bestseller");
     if (activeTab === "signature") return pokeBowls.filter((b) => b.tagColor === "signature");
+    if (activeTab === "crousty") return croustyBowls;
     if (activeTab === "fish") return pokeBowls.filter((b) => b.id === "saumon-wasabi" || b.id === "scampis-royaux");
     if (activeTab === "spicy") return pokeBowls.filter((b) => b.id === "spicy-chicken" || b.id === "scampis-royaux");
     return pokeBowls;
-  }, [pokeBowls, activeTab]);
+  }, [pokeBowls, croustyBowls, activeTab]);
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -198,11 +202,20 @@ function Index() {
           {/* Right actions */}
           <div className="flex items-center gap-2">
             <Link
+              to="/commander"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-4 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-[#10251f] shadow-md transition hover:bg-white hover:scale-105 active:scale-95"
+            >
+              <span>Commander</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+            <Link
               to="/recrutement"
               className="hidden rounded-full bg-[#ff705f] px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] text-white transition hover:brightness-110 sm:block"
             >
               {t("nav.recruit")}
             </Link>
+            {/* Notification Bell Menu (Pokawa-inspired) */}
+            <NotificationBellMenu />
             {/* Language */}
             <div className="hidden rounded-full border border-white/15 bg-black/25 p-1 backdrop-blur md:flex">
               {(["fr", "en", "nl"] as const).map((lang) => (
@@ -397,6 +410,13 @@ function Index() {
         {/* ════════ Ticker ════════════════════════════════════════ */}
         <Ticker />
 
+        {/* ════════ CAROUSEL DÉFILANT POKÉ BOWLS (STYLE POKAWA) ════════ */}
+        <section className="bg-white/70 py-12 sm:py-16 border-b border-black/5 overflow-hidden">
+          <div className="mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8">
+            <PokeBowlMarqueeCarousel />
+          </div>
+        </section>
+
         {/* ════════ CARTE DES POKÉ BOWLS SIGNATURES ════════════════════ */}
         <section id="carte" className="scroll-mt-10 mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <Reveal>
@@ -427,12 +447,13 @@ function Index() {
               </div>
             </div>
 
-            {/* Filter Chips */}
+            {/* Filter Chips - Pokawa inspired pill buttons */}
             <div className="mt-8 flex flex-wrap gap-2 pt-2">
               {[
                 { id: "all", label: `Tous nos Poké Bowls (${pokeBowls.length})` },
                 { id: "bestseller", label: "Best-Seller ⭐" },
                 { id: "signature", label: "Signatures ✦" },
+                { id: "crousty", label: "Gamme Chaude Crousty 🍗 (11€)" },
                 { id: "fish", label: "Saumon & Scampis 🦐" },
                 { id: "spicy", label: "Touche Épicée 🌶️" },
               ].map((filter) => (
@@ -1166,6 +1187,9 @@ function Index() {
       >
         {t("hero.order")} <ArrowRight className="h-4 w-4" />
       </Link>
+
+      {/* ════════ Toast Notification Popup Crousty Chicken ════════ */}
+      <CroustyNotificationToast />
     </div>
   );
 }
