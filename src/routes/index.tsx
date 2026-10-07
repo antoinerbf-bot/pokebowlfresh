@@ -20,6 +20,9 @@ import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { bowls, drinks, desserts } from "../lib/data";
 import { DishImage } from "../components/DishImage";
+import { PokeCinematicReel } from "@/components/PokeCinematicReel";
+import { PokeBowlCraftingExperience } from "@/components/PokeBowlCraftingExperience";
+import { Sparkles, Utensils, Heart } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -127,10 +130,21 @@ function Index() {
   const { items, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const displayedBowls = [
-    ...bowls.filter((b) => b.id.startsWith("crousty-")),
-    ...bowls.filter((b) => !b.id.startsWith("crousty-")),
-  ];
+
+  // Séparation claire : les 5 recettes Poké Bowls du restaurant & les spécialités croustillantes
+  const pokeBowls = bowls.filter((b) => !b.id.startsWith("crousty-"));
+  const croustyBowls = bowls.filter((b) => b.id.startsWith("crousty-"));
+  const [activeTab, setActiveTab] = React.useState<"all" | "bestseller" | "signature" | "fish" | "spicy">("all");
+
+  const filteredPokeBowls = React.useMemo(() => {
+    if (activeTab === "all") return pokeBowls;
+    if (activeTab === "bestseller") return pokeBowls.filter((b) => b.tagColor === "bestseller");
+    if (activeTab === "signature") return pokeBowls.filter((b) => b.tagColor === "signature");
+    if (activeTab === "fish") return pokeBowls.filter((b) => b.id === "saumon-wasabi" || b.id === "scampis-royaux");
+    if (activeTab === "spicy") return pokeBowls.filter((b) => b.id === "spicy-chicken" || b.id === "mighty-gyros" || b.id === "scampis-royaux");
+    return pokeBowls;
+  }, [pokeBowls, activeTab]);
+
   const closeMobile = () => setMobileOpen(false);
 
   /* Parallax hero */
@@ -271,315 +285,315 @@ function Index() {
       </header>
 
       <main>
-        {/* ════════════════════ HERO ════════════════════════════ */}
-        <section ref={heroRef} className="relative isolate min-h-[680px] overflow-hidden bg-[#071713] text-white lg:min-h-[760px]">
-          {/* Background image avec parallax */}
+        {/* ════════════════════ HERO POKÉ & BOWL ════════════════════ */}
+        <section ref={heroRef} className="relative isolate min-h-[700px] overflow-hidden bg-[#071713] text-white lg:min-h-[780px]">
+          {/* Subtle Parallax Background */}
           <motion.div style={{ y: heroY }} className="absolute inset-0 -z-20">
             <img
               src={heroPoke}
               alt=""
               aria-hidden="true"
               fetchPriority="high"
-              className="h-full w-full object-cover object-center opacity-28"
+              className="h-full w-full object-cover object-center opacity-18"
             />
           </motion.div>
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_75%_40%,rgba(215,255,69,.10),transparent_35%),linear-gradient(110deg,#071713_0%,rgba(7,23,19,.97)_45%,rgba(7,23,19,.75)_100%)]" />
+          {/* Ambient Lighting Gradients */}
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_35%,rgba(215,255,69,.12),transparent_40%),radial-gradient(ellipse_at_20%_80%,rgba(255,112,95,.08),transparent_50%),linear-gradient(110deg,#071713_0%,rgba(7,23,19,.98)_50%,rgba(7,23,19,.85)_100%)]" />
 
-          <div className="relative z-10 mx-auto grid min-h-[680px] max-w-[1320px] items-center gap-8 px-5 pb-10 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[.92fr_1.08fr] lg:gap-14 lg:px-8 lg:min-h-[760px] lg:py-16">
-            {/* Left: copy */}
+          <div className="relative z-10 mx-auto grid min-h-[700px] max-w-[1340px] items-center gap-10 px-5 pb-12 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:px-8 lg:min-h-[780px] lg:py-16">
+            {/* Left: Copy & Value Proposition */}
             <motion.div style={{ opacity: heroOpacity }} className="max-w-xl">
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.15 }}
-                className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-[#d7ff45]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#d7ff45]"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45]" />
-                Crousty Chicken · best-seller
+                <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45] animate-pulse" />
+                Poké Bowls Frais & Sur-Mesure · Visé & Fléron
               </motion.div>
-              <motion.p
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.22 }}
-                className="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/40"
-              >
-                {t("hero.location")}
-              </motion.p>
+
               <motion.h1
                 initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.75, delay: 0.28 }}
-                className="mt-3 font-sans text-[2.4rem] font-black leading-[.96] tracking-[-0.04em] sm:text-5xl lg:text-[4rem]"
+                className="mt-4 font-sans text-[2.6rem] font-black leading-[0.94] tracking-[-0.04em] sm:text-5xl lg:text-[4.2rem]"
               >
-                <span className="block">{t("hero.title1")}</span>
-                <span className="mt-2 block text-[#d7ff45]">{t("hero.title2")}</span>
+                <span className="block text-white">L'art du</span>
+                <span className="mt-1 block text-[#d7ff45]">Poké Bowl.</span>
+                <span className="mt-2 block text-xl sm:text-2xl lg:text-3xl font-extrabold text-white/80">
+                  Frais. Gourmand. Fait minute.
+                </span>
               </motion.h1>
+
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.4 }}
-                className="mt-5 max-w-md text-[15px] leading-7 text-white/65"
+                className="mt-5 max-w-lg text-[15px] leading-7 text-white/70"
               >
-                {t("hero.desc")}
+                Découvrez nos 5 recettes créations aux ingrédients nobles découpés chaque matin :
+                saumon atlantique frais, scampis saisis au grill, émincé de gyros rôti, poulet doré fondant
+                et notre riz basmati d’exception.
               </motion.p>
+
+              {/* CTAs */}
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.5 }}
-                className="mt-7 flex flex-col gap-3 sm:flex-row"
+                className="mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center"
               >
-                <Link
-                  to="/commander"
-                  className="btn-primary inline-flex h-12 items-center justify-center"
-                >
-                  {t("hero.order")} <ArrowRight className="h-4 w-4" />
-                </Link>
                 <a
                   href="#carte"
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/6 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/12"
+                  className="btn-primary inline-flex h-13 items-center justify-center gap-2.5 px-7 text-sm font-black uppercase tracking-wider"
                 >
-                  {t("hero.menu")}
+                  Découvrir nos Bowls (dès 10€)
+                  <ArrowRight className="h-4 w-4" />
                 </a>
+                <Link
+                  to="/sur-mesure"
+                  className="inline-flex h-13 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/20 hover:scale-[1.02]"
+                >
+                  <Sparkles className="h-4 w-4 text-[#d7ff45]" />
+                  Composer Sur Mesure 🥣
+                </Link>
+              </motion.div>
+
+              {/* Trust badges */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+                className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-xs text-white/60"
+              >
+                <span className="flex items-center gap-1.5 font-bold">
+                  <span className="text-[#d7ff45]">★ 4.9/5</span> avis clients
+                </span>
+                <span className="flex items-center gap-1.5 font-bold">
+                  <span>🥑</span> 100% frais coupé du matin
+                </span>
+                <span className="flex items-center gap-1.5 font-bold">
+                  <span>🛵</span> Visé & Fléron
+                </span>
               </motion.div>
             </motion.div>
 
-            {/* Right: featured cards */}
-            <Reveal delay={0.1}>
-              <div className="relative">
-                <div className="absolute -inset-10 rounded-[60px] bg-[#d7ff45]/4 blur-3xl" />
-                <div className="relative grid gap-3 sm:grid-cols-[1.12fr_.88fr] sm:items-end">
-                  {/* Main card: Crousty Curry */}
-                  <Link
-                    to="/product/$productId"
-                    params={{ productId: "crousty-chicken-curry" }}
-                    className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-[#f7f4ec] shadow-[0_35px_90px_-32px_rgba(0,0,0,.95)] transition duration-500 hover:-translate-y-1.5"
-                  >
-                    <div className="relative aspect-[.88] overflow-hidden sm:aspect-[.8]">
-                      <DishImage
-                        dishId="crousty-chicken-curry"
-                        alt={t("feature.curry")}
-                        priority
-                        className="h-full w-full scale-[1.02] transition duration-700 group-hover:scale-[1.08]"
-                      />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.04)_25%,rgba(0,0,0,.82)_100%)]" />
-                      <div className="absolute left-4 top-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-[8px] font-black uppercase tracking-[0.14em] text-[#10251f]">
-                        11€ · menu étudiant
-                      </div>
-                      <div className="absolute bottom-5 left-5 right-5 text-white">
-                        <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/60">
-                          Signature · Crousty Chicken
-                        </p>
-                        <h2 className="mt-1 text-2xl font-black leading-none tracking-tight sm:text-3xl">
-                          {t("feature.curry")}
-                        </h2>
-                        <p className="mt-2 max-w-xs text-xs leading-5 text-white/70">
-                          {t("feature.curry_desc")}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-
-                  {/* Side cards */}
-                  <div className="grid gap-3">
-                    <Link
-                      to="/product/$productId"
-                      params={{ productId: "crousty-chicken-sauce-blanche" }}
-                      className="group overflow-hidden rounded-[24px] border border-white/10 bg-[#f7f4ec] shadow-[0_25px_65px_-28px_rgba(0,0,0,.9)] transition duration-500 hover:-translate-y-1"
-                    >
-                      <div className="relative aspect-[1.15] overflow-hidden">
-                        <DishImage
-                          dishId="crousty-chicken-sauce-blanche"
-                          alt={t("feature.white")}
-                          className="h-full w-full transition duration-700 group-hover:scale-[1.07]"
-                        />
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(0,0,0,.75)_100%)]" />
-                        <div className="absolute bottom-4 left-4 right-4 text-white">
-                          <p className="text-[8px] font-black uppercase tracking-[0.14em] text-white/55">
-                            Signature
-                          </p>
-                          <h3 className="mt-1 text-lg font-black leading-none">{t("feature.white")}</h3>
-                        </div>
-                      </div>
-                    </Link>
-                    {/* Mini info card */}
-                    <div className="rounded-[22px] border border-[#d7ff45]/15 bg-white/[0.06] p-4 backdrop-blur-sm sm:p-5">
-                      <div className="flex items-center justify-between gap-2">
-                        <div>
-                          <p className="text-[8px] font-black uppercase tracking-[0.18em] text-[#d7ff45]">
-                            Crousty Mix
-                          </p>
-                          <p className="mt-1 text-sm font-black text-white">Curry + Sauce blanche</p>
-                        </div>
-                        <ArrowRight className="h-5 w-5 shrink-0 text-[#d7ff45]" />
-                      </div>
-                      <p className="mt-2 text-[11px] leading-5 text-white/40">{t("feature.hero_hint")}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
+            {/* Right: The Cinematic Poké Showcase Reel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative w-full max-w-xl lg:max-w-none"
+            >
+              <PokeCinematicReel />
+            </motion.div>
           </div>
         </section>
 
         {/* ════════ Ticker ════════════════════════════════════════ */}
         <Ticker />
 
-        {/* ════════ Crousty section ════════════════════════════════ */}
-        <section className="bg-[#ead9bb] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-          <div className="mx-auto max-w-[1180px]">
+        {/* ════════ CARTE DES POKÉ BOWLS SIGNATURES ════════════════════ */}
+        <section id="carte" className="scroll-mt-10 mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <Reveal>
+            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-3.5 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
+                  <span>🥗</span> Recettes officielles du flyer
+                </div>
+                <h2 className="mt-3 max-w-2xl text-[1.9rem] font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+                  <span className="block text-[#10251f]">Nos 5 Poké Bowls Signatures</span>
+                  <span className="mt-1 block text-[#7d8b83] text-xl sm:text-2xl lg:text-3xl font-extrabold">
+                    Riz basmati parfumé, sauces maison & fraîcheur garantie
+                  </span>
+                </h2>
+              </div>
+              <div className="max-w-md">
+                <p className="text-sm leading-relaxed text-[#68756f]">
+                  Chaque recette est soigneusement équilibrée et personnalisable. Retirez des ingrédients ou ajoutez vos toppings préférés en 1 clic.
+                </p>
+                <div className="mt-4 flex items-center gap-4">
+                  <Link
+                    to="/sur-mesure"
+                    className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-[#ff705f] hover:underline"
+                  >
+                    Ou compose ton bowl de A à Z →
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Filter Chips */}
+            <div className="mt-8 flex flex-wrap gap-2 pt-2">
+              {[
+                { id: "all", label: "Tous nos Poké Bowls (5)" },
+                { id: "bestseller", label: "Best-Seller ⭐" },
+                { id: "signature", label: "Signatures ✦" },
+                { id: "fish", label: "Saumon & Scampis 🦐" },
+                { id: "spicy", label: "Touche Épicée 🌶️" },
+              ].map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  onClick={() => setActiveTab(filter.id as any)}
+                  className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider transition ${
+                    activeTab === filter.id
+                      ? "bg-[#10251f] text-white shadow-md scale-105"
+                      : "bg-white text-[#10251f]/75 hover:bg-[#10251f]/10 border border-black/5"
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* Grid des 5 Poké Bowls */}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredPokeBowls.map((bowl, index) => (
+              <RevealScale key={bowl.id} delay={index * 0.05}>
+                <div className="group flex h-full flex-col overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card transition-all duration-400 hover:-translate-y-2 hover:shadow-lift">
+                  {/* Photo Dish with badge and price */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#ece8dc]">
+                    <DishImage
+                      dishId={bowl.id}
+                      alt={bowl.name}
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                    
+                    {/* Tag badge */}
+                    <span className="badge-tag absolute left-3.5 top-3.5 bg-white/95 text-[#10251f] shadow-card font-black">
+                      {bowl.tag}
+                    </span>
+
+                    {/* Price tag */}
+                    <span className="absolute bottom-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1.5 text-xs font-black text-[#10251f] shadow-md">
+                      {bowl.price.toFixed(2)} €
+                    </span>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="flex flex-1 flex-col p-6 sm:p-7">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-xl sm:text-2xl font-black text-[#10251f] leading-tight">
+                          {bowl.name}
+                        </h3>
+                        <p className="mt-1 text-xs font-bold text-[#ff705f]">
+                          Base riz basmati aéré · Fait minute
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-xs leading-5 text-[#68756f]">
+                      {bowl.desc}
+                    </p>
+
+                    {/* Ingredient pills */}
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {bowl.ingredients.slice(0, 5).map((ing, i) => (
+                        <span
+                          key={i}
+                          className="rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#10251f]/80"
+                        >
+                          {ing.emoji} {ing.name}
+                        </span>
+                      ))}
+                      {bowl.ingredients.length > 5 && (
+                        <span className="rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#7d8b83]">
+                          +{bowl.ingredients.length - 5}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="mt-auto pt-6 flex items-center gap-2">
+                      <Link
+                        to="/product/$productId"
+                        params={{ productId: bowl.id }}
+                        className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff5542]"
+                      >
+                        Personnaliser & Commander
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </RevealScale>
+            ))}
+          </div>
+        </section>
+
+        {/* ════════ ANATOMIE D'UN POKÉ BOWL ════════════════════════ */}
+        <section className="mx-auto max-w-[1340px] px-5 pb-14 sm:px-6 sm:pb-20 lg:px-8">
+          <Reveal>
+            <PokeBowlCraftingExperience />
+          </Reveal>
+        </section>
+
+        {/* ════════ SECTION COMPLÉMENTAIRE : LE BAR À CROUSTY ══════ */}
+        <section className="bg-[#f0e6d6] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24 border-y border-black/5">
+          <div className="mx-auto max-w-[1200px]">
             <Reveal className="text-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#8f5b12]">
-                Poke N Bowl · Signature
-              </p>
-              <h2 className="mt-3 text-[2.2rem] font-black uppercase leading-[0.92] tracking-tight sm:text-5xl lg:text-6xl">
-                Le croustillant
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#8b5510]/10 px-3.5 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-[#8b5510]">
+                <span>🍗</span> Spécialités Chaudes & Croustillantes
+              </div>
+              <h2 className="mt-3 text-[1.9rem] font-black uppercase tracking-tight sm:text-4xl lg:text-5xl">
+                Le Bar à Crousty Chicken
               </h2>
-              <h3 className="mt-1 text-[1.9rem] font-black uppercase leading-none tracking-tight text-[#a96b0d] sm:text-4xl lg:text-5xl">
-                qui fait la différence
-              </h3>
-              <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-black uppercase tracking-[0.08em] sm:text-sm">
-                <span>✦ Fait maison</span>
-                <span className="text-[#a96b0d]">•</span>
-                <span>🔥 Ultra croustillant</span>
-                <span className="text-[#a96b0d]">•</span>
-                <span>♡ Healthy</span>
+              <p className="mt-2 text-sm text-[#6e6255] max-w-xl mx-auto">
+                Du poulet ultra croustillant pané minute, servi chaud sur riz parfumé avec oignons frits.
+              </p>
+              <div className="mt-4 inline-flex items-center gap-3 rounded-full bg-[#8b5510] px-5 py-2 text-white shadow-md text-xs font-black uppercase tracking-wider">
+                🎓 Formule Étudiant : 11 € · Boisson 33cl incluse
               </div>
             </Reveal>
 
-            <div className="mt-9 grid gap-6 md:grid-cols-2">
-              {[
-                {
-                  id: "crousty-chicken-sauce-blanche",
-                  name: "Crousty Chicken · Sauce blanche",
-                  label: "Riz jasmin",
-                  desc: "Riz jasmin parfumé, poulet croustillant, sauce blanche maison et oignons frits.",
-                },
-                {
-                  id: "crousty-chicken-curry",
-                  name: "Crousty Chicken · Curry",
-                  label: "Riz curry",
-                  desc: "Riz au curry onctueux, poulet croustillant, sauce curry maison et oignons frits.",
-                },
-              ].map((item, index) => (
-                <RevealScale key={item.id} delay={index * 0.07}>
+            <div className="mt-10 grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+              {croustyBowls.map((item, index) => (
+                <RevealScale key={item.id} delay={index * 0.08}>
                   <Link
                     to="/product/$productId"
                     params={{ productId: item.id }}
-                    className="group block overflow-hidden rounded-[30px] border border-[#8d5a18]/15 bg-[#f8f0df] shadow-[0_22px_60px_-35px_rgba(55,30,10,.5)] transition duration-350 hover:-translate-y-1.5"
+                    className="group flex flex-col sm:flex-row overflow-hidden rounded-[26px] border border-[#8d5a18]/15 bg-white shadow-card transition duration-300 hover:-translate-y-1.5 hover:shadow-lift"
                   >
-                    <div className="relative aspect-[1.22] overflow-hidden bg-[#e7d4b4]">
+                    <div className="relative aspect-[4/3] sm:w-48 shrink-0 overflow-hidden bg-[#e7d4b4]">
                       <DishImage
                         dishId={item.id}
                         alt={item.name}
-                        className="h-full w-full scale-[1.02] object-cover transition duration-700 group-hover:scale-[1.07]"
+                        className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
-                        <span className="rounded-full bg-[#8b5510] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white">
-                          {item.label}
-                        </span>
-                        <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black">11€</span>
-                      </div>
+                      <span className="absolute left-3 top-3 rounded-full bg-[#8b5510] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white">
+                        11 € · Menu
+                      </span>
                     </div>
-                    <div className="p-5 text-center sm:p-7">
-                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#a96b0d]">
-                        Crousty Chicken
-                      </p>
-                      <h3 className="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">
-                        {item.name.split(" · ")[1]}
-                      </h3>
-                      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#6e6255]">{item.desc}</p>
-                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#241a12] px-5 py-2.5 text-xs font-black uppercase tracking-[0.1em] text-white transition group-hover:bg-[#a96b0d]">
-                        Découvrir la recette <ArrowRight className="h-4 w-4" />
+                    <div className="flex flex-col p-5 sm:p-6 justify-between flex-1">
+                      <div>
+                        <span className="text-[9px] font-black uppercase tracking-wider text-[#a96b0d]">
+                          Crousty Chicken
+                        </span>
+                        <h3 className="mt-1 text-lg font-black text-[#241a12]">
+                          {item.name}
+                        </h3>
+                        <p className="mt-1.5 text-xs text-[#6e6255] line-clamp-2">
+                          {item.desc}
+                        </p>
+                      </div>
+                      <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3">
+                        <span className="text-xs font-bold text-[#8b5510]">
+                          Boisson incluse
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 text-xs font-black text-[#241a12] group-hover:text-[#a96b0d]">
+                          Commander <ArrowRight className="h-3.5 w-3.5" />
+                        </span>
                       </div>
                     </div>
                   </Link>
                 </RevealScale>
               ))}
             </div>
-
-            <Reveal delay={0.1} className="mt-7 text-center">
-              <span className="inline-flex items-center gap-3 rounded-full bg-[#a96b0d] px-6 py-3 text-white shadow-lg">
-                <span className="text-[11px] font-black uppercase tracking-[0.14em]">Menu étudiant</span>
-                <span className="text-xl font-black">11€</span>
-                <span className="text-[10px] font-black uppercase tracking-[0.1em]">· boisson incluse</span>
-              </span>
-              <p className="mt-3 text-xs font-bold text-[#6e6255]">
-                Sauce extra +1€ · Viens goûter la différence.
-              </p>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ════════ Carte bowls ════════════════════════════════════ */}
-        <section id="carte" className="scroll-mt-10 mx-auto max-w-[1320px] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-          <Reveal>
-            <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
-                  {t("menu.eyebrow")}
-                </p>
-                <h2 className="mt-3 max-w-2xl text-[1.7rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
-                  <span className="block">{t("menu.title1")}</span>
-                  <span className="mt-0.5 block text-[#7d8b83]">{t("menu.title2")}</span>
-                </h2>
-              </div>
-              <div className="max-w-sm">
-                <p className="text-sm leading-6 text-[#68756f]">{t("menu.desc")}</p>
-                <Link
-                  to="/commander"
-                  className="mt-3 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#ff705f] transition hover:gap-3"
-                >
-                  {t("menu.order")} <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {displayedBowls.map((bowl, index) => (
-              <RevealScale key={bowl.id} delay={index * 0.04}>
-                <Link
-                  to="/product/$productId"
-                  params={{ productId: bowl.id }}
-                  className={[
-                    "group block h-full overflow-hidden rounded-[26px] bg-white shadow-card transition-all duration-400 hover:-translate-y-2 hover:shadow-lift",
-                    bowl.id.startsWith("crousty-")
-                      ? "ring-2 ring-[#d7ff45] ring-offset-2 ring-offset-[#f7f4ec]"
-                      : "",
-                  ].join(" ")}
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-[#ece8dc]">
-                    <DishImage
-                      dishId={bowl.id}
-                      alt={bowl.name}
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]"
-                    />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.02)_30%,rgba(0,0,0,.52)_100%)]" />
-                    <span className="badge-tag absolute left-3 top-3 bg-white/95 text-[#17231f] shadow-card">
-                      {bowl.tag}
-                    </span>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-xs font-black text-[#10251f]">
-                      € {bowl.price.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col p-5 sm:p-6">
-                    <div className="flex items-start justify-between gap-3">
-                      <h3 className="min-w-0 flex-1 break-words text-[16px] font-black leading-tight sm:text-xl">
-                        {bowl.name}
-                      </h3>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5f4ee] transition-colors duration-300 group-hover:bg-[#ff705f] group-hover:text-white">
-                        <ArrowRight className="h-4 w-4" />
-                      </span>
-                    </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
-                    <div className="mt-auto pt-4 text-[9px] font-black uppercase tracking-[0.14em] text-[#ff705f]">
-                      {t("menu.customize")} · {t("menu.order")} →
-                    </div>
-                  </div>
-                </Link>
-              </RevealScale>
-            ))}
           </div>
         </section>
 
