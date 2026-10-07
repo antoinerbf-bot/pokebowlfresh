@@ -57,13 +57,18 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       let unitPrice = 10.00;
       const opts = item.toppings ?? [];
 
-      // Supplément Saumon
+      // Format Grand (+2.50€)
+      if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) {
+        unitPrice += 2.50;
+      }
+
+      // Supplément Saumon (+1.00€)
       const hasSalmon = opts.some((t) => /saumon/i.test(t));
       if (hasSalmon) {
         unitPrice += 1.00;
       }
 
-      // Toppings payants (+0.50€ chacun)
+      // Toppings (2 inclus, +0.50€ chacun au-delà)
       const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
       if (toppingLine) {
         const parsed = toppingLine
@@ -71,10 +76,12 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
           .split(",")
           .map((s) => s.trim())
           .filter((s) => s.length > 0 && !/aucun/i.test(s));
-        unitPrice += parsed.length * 0.50;
+        const extraToppings = Math.max(0, parsed.length - 2);
+        unitPrice += extraToppings * 0.50;
       } else {
         const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
-        unitPrice += individualToppings.length * 0.50;
+        const extraToppings = Math.max(0, individualToppings.length - 2);
+        unitPrice += extraToppings * 0.50;
       }
 
       return {
@@ -91,14 +98,18 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       let unitPrice = bowl.price;
       const opts = item.toppings ?? [];
 
-      // Toppings (+0.50€ chacun)
+      // Format Grand (+2.50€)
+      if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) {
+        unitPrice += 2.50;
+      }
+
+      // Toppings additionnels (+0.50€ chacun)
       const toppingEntries = opts.filter((t) => /^Topping\s*:/i.test(t));
       unitPrice += toppingEntries.length * 0.50;
 
-      // Sauce extra crousty (+1.00€)
-      if (opts.some((t) => /sauce extra/i.test(t))) {
-        unitPrice += 1.00;
-      }
+      // Sauce extra (+1.00€)
+      const extraSauces = opts.filter((t) => /sauce extra/i.test(t));
+      unitPrice += extraSauces.length * 1.00;
 
       return {
         ...item,

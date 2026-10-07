@@ -36,10 +36,8 @@ function CommanderPage() {
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
-  const displayedBowls = [
-    ...bowls.filter((b) => b.id.startsWith("crousty-")),
-    ...bowls.filter((b) => !b.id.startsWith("crousty-")),
-  ];
+  const pokeBowls = bowls.filter((b) => !b.id.startsWith("crousty-"));
+  const croustyBowls = bowls.filter((b) => b.id.startsWith("crousty-"));
 
   const quickAdd = (item: { id: string; name: string; price: number; image?: string }) => {
     if (!available(item.id)) return;
@@ -189,7 +187,7 @@ function CommanderPage() {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-            {displayedBowls.map((bowl) => {
+            {pokeBowls.map((bowl) => {
               const ok = available(bowl.id);
               const tagStyle = TAG_STYLES[bowl.tagColor ?? "signature"] ?? "bg-[#10251f] text-white";
 
@@ -198,13 +196,7 @@ function CommanderPage() {
                   key={bowl.id}
                   to="/product/$productId"
                   params={{ productId: bowl.id }}
-                  className={[
-                    "group block overflow-hidden rounded-[28px] bg-white shadow-card transition-all duration-500",
-                    "hover:-translate-y-2 hover:shadow-lift",
-                    bowl.id.startsWith("crousty-")
-                      ? "ring-2 ring-[#d7ff45] ring-offset-2 ring-offset-[#f7f4ec]"
-                      : "",
-                  ].join(" ")}
+                  className="group block overflow-hidden rounded-[28px] bg-white shadow-card transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
                 >
                   <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                 </Link>
@@ -217,6 +209,48 @@ function CommanderPage() {
                 </div>
               );
             })}
+          </div>
+
+          {/* ── Section Bar à Crousty Chicken ────────────────── */}
+          <div className="mt-16 sm:mt-20">
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
+                  <Sparkles className="h-3 w-3" /> Formule Étudiant 11€
+                </div>
+                <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
+                  Le Bar à Crousty Chicken
+                </h2>
+                <p className="mt-1 text-xs sm:text-sm text-[#7a847e]">
+                  Vrais morceaux de poulet croustillant mariné · Riz parfumé · Boisson 33cl fraîche incluse
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
+              {croustyBowls.map((bowl) => {
+                const ok = available(bowl.id);
+                const tagStyle = TAG_STYLES[bowl.tagColor ?? "bestseller"] ?? "bg-[#ff705f] text-white";
+
+                return ok ? (
+                  <Link
+                    key={bowl.id}
+                    to="/product/$productId"
+                    params={{ productId: bowl.id }}
+                    className="group block overflow-hidden rounded-[28px] bg-white shadow-card ring-2 ring-[#d7ff45] ring-offset-2 ring-offset-[#f7f4ec] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                  >
+                    <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
+                  </Link>
+                ) : (
+                  <div
+                    key={bowl.id}
+                    className="block cursor-not-allowed overflow-hidden rounded-[28px] bg-white opacity-55 shadow-card"
+                  >
+                    <BowlCard bowl={bowl} ok={false} tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* ── Personnalisation rapide ───────────────────────── */}
@@ -404,12 +438,26 @@ function BowlCard({
           )}
         </div>
         <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
+
+        {/* Ingrédients clés & Toppings */}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <span className="rounded-lg bg-[#faf8f4] border border-[#e8e2d9] px-2 py-0.5 text-[10px] font-bold text-[#68756f]">
+            🍚 Base au choix
+          </span>
+          <span className="rounded-lg bg-[#faf8f4] border border-[#e8e2d9] px-2 py-0.5 text-[10px] font-bold text-[#68756f]">
+            🛡️ Allergies : modifiable
+          </span>
+          <span className="rounded-lg bg-[#faf8f4] border border-[#e8e2d9] px-2 py-0.5 text-[10px] font-bold text-[#ff705f]">
+            ✨ Toppings à volonté
+          </span>
+        </div>
+
         <div
-          className={`mt-4 text-[9px] font-black uppercase tracking-[0.16em] ${
+          className={`mt-4 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.16em] ${
             ok ? "text-[#ff705f]" : "text-[#9aa39c]"
           }`}
         >
-          {ok ? "Personnaliser → Commander" : soldOut}
+          {ok ? "Personnaliser & Commander →" : soldOut}
         </div>
       </div>
     </>

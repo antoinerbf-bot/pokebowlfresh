@@ -32,6 +32,7 @@ function SurMesurePage() {
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
   // Form State
+  const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
   const [selectedBase, setSelectedBase] = React.useState<CustomIngredientOption | null>(detailedBases[0]);
   const [selectedMixIns, setSelectedMixIns] = React.useState<string[]>([]);
   const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0]);
@@ -53,17 +54,19 @@ function SurMesurePage() {
     });
   };
 
-  // Toggle Topping (illimité, +0.50€ chaque)
+  // Toggle Topping (2 inclus, illimité à +0.50€ au-delà)
   const toggleTopping = (name: string) => {
     setSelectedToppings((cur) =>
       cur.includes(name) ? cur.filter((t) => t !== name) : [...cur, name]
     );
   };
 
-  // Pricing calculations
+  // Pricing calculations (Fiche restaurant : 2 toppings inclus)
+  const sizeExtra = selectedSize === "grand" ? 2.50 : 0;
   const proteinExtra = selectedProtein?.extraPrice ?? 0;
-  const toppingsExtra = selectedToppings.length * 0.50;
-  const unitPrice = BASE_PRICE + proteinExtra + toppingsExtra;
+  const extraToppingsCount = Math.max(0, selectedToppings.length - 2);
+  const toppingsExtra = extraToppingsCount * 0.50;
+  const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + toppingsExtra;
   const totalPrice = unitPrice * qty;
 
   // Validation
@@ -88,6 +91,7 @@ function SurMesurePage() {
     if (!isValid) return;
 
     const options = [
+      `Taille : ${selectedSize === "grand" ? "Grand (+2.50€)" : "Moyen (Standard)"}`,
       `Base : ${selectedBase.name}`,
       `Mix-ins : ${selectedMixIns.join(", ")}`,
       `Protéine : ${selectedProtein.name}`,
@@ -204,6 +208,61 @@ function SurMesurePage() {
         <div className="grid gap-10 lg:grid-cols-3">
           {/* ── Left Column: Les 5 Étapes ───────────────────────── */}
           <div className="space-y-8 lg:col-span-2">
+            {/* ══ FORMAT & TAILLE (Fiche officielle) ══════════════ */}
+            <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                    Format
+                  </span>
+                  <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Taille</h2>
+                </div>
+                <span className="text-xs font-bold text-[#ff705f]">Moyen ou Grand</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSize("moyen")}
+                  className={[
+                    "flex flex-col items-start rounded-2xl border-2 p-4 text-left transition-all duration-200",
+                    selectedSize === "moyen"
+                      ? "border-[#10251f] bg-[#10251f] text-white shadow-sm"
+                      : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                  ].join(" ")}
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <span className="font-black text-sm uppercase">Moyen</span>
+                    <span className={`text-xs font-black ${selectedSize === "moyen" ? "text-[#d7ff45]" : "text-[#7a847e]"}`}>
+                      Inclus (10.00€)
+                    </span>
+                  </div>
+                  <span className={`mt-1 text-xs ${selectedSize === "moyen" ? "text-white/70" : "text-[#7a847e]"}`}>
+                    Format régulier généreux
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSize("grand")}
+                  className={[
+                    "flex flex-col items-start rounded-2xl border-2 p-4 text-left transition-all duration-200",
+                    selectedSize === "grand"
+                      ? "border-[#10251f] bg-[#10251f] text-white shadow-sm"
+                      : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                  ].join(" ")}
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <span className="font-black text-sm uppercase">Grand</span>
+                    <span className={`text-xs font-black ${selectedSize === "grand" ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
+                      +2.50 €
+                    </span>
+                  </div>
+                  <span className={`mt-1 text-xs ${selectedSize === "grand" ? "text-white/70" : "text-[#7a847e]"}`}>
+                    Grand format maxi faim
+                  </span>
+                </button>
+              </div>
+            </section>
+
             {/* ══ ÉTAPE 1 : BASE ════════════════════════════════ */}
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
@@ -390,7 +449,7 @@ function SurMesurePage() {
               </div>
             </section>
 
-            {/* ══ ÉTAPE 5 : TOPPING ══════════════════════════════ */}
+            {/* ══ ÉTAPE 5 : TOPPING (2 INCLUS, ILLIMITÉS AU-DELÀ) ══ */}
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
@@ -401,16 +460,19 @@ function SurMesurePage() {
                     Toppings croustillants
                   </h2>
                 </div>
-                <span className="rounded-full bg-[#10251f]/10 px-2.5 py-1 text-xs font-black text-[#10251f]">
-                  +0.50 € / topping
+                <span className="rounded-full bg-[#10251f] px-3 py-1 text-xs font-black text-[#d7ff45]">
+                  {selectedToppings.length <= 2
+                    ? `${selectedToppings.length} / 2 inclus`
+                    : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * 0.5).toFixed(2)}€)`}
                 </span>
               </div>
               <p className="mb-4 text-xs font-semibold text-[#7a847e]">
-                Sélection libre : ajoute autant de toppings que tu veux pour le croquant parfait !
+                <strong>2 toppings inclus dans la formule</strong> · Toppings supplémentaires à volonté (+0.50€ chaque) :
               </p>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {toppings.map((top) => {
                   const isSelected = selectedToppings.includes(top.name);
+                  const isExtra = isSelected && selectedToppings.indexOf(top.name) >= 2;
                   return (
                     <button
                       key={top.id}
@@ -426,7 +488,9 @@ function SurMesurePage() {
                       <span className="text-2xl">{top.emoji}</span>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-xs font-bold text-[#17231f]">{top.name}</p>
-                        <p className="text-[10px] font-black text-[#ff705f]">+0.50 €</p>
+                        <p className="text-[10px] font-black text-[#ff705f]">
+                          {isSelected ? (isExtra ? "+0.50 € (extra)" : "Inclus") : "+0.50 € extra"}
+                        </p>
                       </div>
                       {isSelected && (
                         <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
@@ -455,6 +519,13 @@ function SurMesurePage() {
               <p className="mt-1 text-xs text-[#7a847e]">Récapitulatif de ta composition :</p>
 
               <div className="my-5 space-y-3 divide-y divide-[#f0ece1] text-xs">
+                <div className="pt-2 flex justify-between gap-2">
+                  <span className="font-semibold text-[#7a847e]">Format :</span>
+                  <span className="font-bold text-[#17231f] text-right">
+                    {selectedSize === "grand" ? "Grand (+2.50€)" : "Moyen (Standard)"}
+                  </span>
+                </div>
+
                 <div className="pt-2 flex justify-between gap-2">
                   <span className="font-semibold text-[#7a847e]">Base :</span>
                   <span className="font-bold text-[#17231f] text-right">
@@ -493,7 +564,7 @@ function SurMesurePage() {
                   <span className="font-semibold text-[#7a847e]">Toppings :</span>
                   <span className="font-bold text-[#17231f] text-right">
                     {selectedToppings.length > 0
-                      ? selectedToppings.join(", ")
+                      ? `${selectedToppings.join(", ")} (${Math.min(2, selectedToppings.length)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra` : ""})`
                       : "Aucun topping"}
                   </span>
                 </div>

@@ -73,7 +73,12 @@ function CheckoutPage() {
             name: item.name,
             price: item.price,
             quantity: item.quantity,
-            toppings: item.toppings,
+            toppings: [
+              ...item.toppings,
+              ...(item.removedIngredients && item.removedIngredients.length > 0
+                ? [`Sans : ${item.removedIngredients.join(", ")}`]
+                : []),
+            ],
           })),
           paymentMethod,
           origin,
@@ -283,6 +288,11 @@ function CheckoutPage() {
                     </p>
                     {item.toppings.length > 0 && (
                       <p className="text-xs text-white/50">{item.toppings.join(", ")}</p>
+                    )}
+                    {item.removedIngredients && item.removedIngredients.length > 0 && (
+                      <p className="text-xs text-[#ff705f] font-bold">
+                        ✕ Sans : {item.removedIngredients.join(", ")}
+                      </p>
                     )}
                   </div>
                   <span className="shrink-0 font-bold">

@@ -1,12 +1,31 @@
 import * as React from "react";
 import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
-import { bowls, toppings, type Topping } from "../../lib/data";
+import {
+  bowls,
+  toppings,
+  bowlSizes,
+  detailedBases,
+  detailedSauces,
+  detailedProteins,
+  drinks,
+  type Topping,
+} from "../../lib/data";
 import { DishImage } from "../../components/DishImage";
 import { useTranslation } from "../../context/I18nContext";
 import { useCart } from "../../context/CartContext";
-import { ArrowLeft, ShoppingCart, Check, Minus, Plus, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ShoppingCart,
+  Check,
+  Minus,
+  Plus,
+  X,
+  Sparkles,
+  AlertTriangle,
+  Flame,
+  ShieldCheck,
+} from "lucide-react";
 import { CartDrawer } from "../../components/CartDrawer";
-import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import { useStock } from "../../hooks/useStock";
 
@@ -27,88 +46,78 @@ const TAG_STYLES: Record<string, string> = {
 function ToppingChip({
   topping,
   selected,
-  disabled,
   onToggle,
 }: {
   topping: Topping;
   selected: boolean;
-  disabled: boolean;
   onToggle: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onToggle}
-      disabled={disabled && !selected}
       aria-pressed={selected}
-      aria-label={`${topping.name}${topping.price > 0 ? ` +${topping.price.toFixed(2)}€` : " inclus"}`}
+      aria-label={`${topping.name} +${topping.price.toFixed(2)}€`}
       className={[
-        "topping-chip relative select-none",
+        "relative flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none",
         selected
-          ? "border-[#ff705f] bg-[#fff1ee] shadow-[0_4px_14px_-6px_rgba(255,112,95,.55)]"
-          : disabled
-          ? "cursor-not-allowed opacity-40"
-          : "border-[#e8e2d9] hover:border-[#ff705f]/50",
+          ? "border-[#ff705f] bg-[#fff3f1] shadow-[0_4px_16px_-4px_rgba(255,112,95,.45)] scale-[1.02]"
+          : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4] active:scale-95",
       ].join(" ")}
     >
-      {/* Selected checkmark */}
       {selected && (
-        <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f]">
-          <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
+        <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#ff705f] shadow-sm">
+          <Check className="h-3 w-3 text-white" strokeWidth={3} />
         </span>
       )}
       <span className="text-2xl leading-none" role="img" aria-hidden="true">
         {topping.emoji}
       </span>
-      <span className="text-[11px] font-bold leading-tight text-[#2e2619]">
+      <span className="text-xs font-bold leading-tight text-[#17231f]">
         {topping.name}
       </span>
-      {topping.price > 0 ? (
-        <span className="text-[10px] font-black text-[#ff705f]">+{topping.price.toFixed(2)}€</span>
-      ) : (
-        <span className="text-[10px] font-semibold text-[#a09a92]">inclus</span>
-      )}
+      <span className="text-[11px] font-black text-[#ff705f]">
+        +{topping.price.toFixed(2)} €
+      </span>
     </button>
   );
 }
 
-/* ─── Ingredient pill (removable) ────────────────────────────────── */
-function IngredientPill({
+/* ─── Removable Ingredient Button ────────────────────────────────── */
+function RemovableIngredientButton({
   name,
   emoji,
-  removable,
-  removed,
+  isRemoved,
   onToggle,
 }: {
   name: string;
-  emoji: string | undefined;
-  removable: boolean;
-  removed: boolean;
-  onToggle?: (() => void) | undefined;
+  emoji?: string;
+  isRemoved: boolean;
+  onToggle: () => void;
 }) {
-  if (!removable) {
-    return (
-      <span className="ingredient-pill ingredient-pill--locked" title="Ingrédient fixe">
-        {emoji && <span role="img" aria-hidden="true">{emoji}</span>}
-        {name}
-      </span>
-    );
-  }
-
   return (
     <button
       type="button"
       onClick={onToggle}
-      aria-pressed={removed}
-      aria-label={removed ? `Remettre ${name}` : `Retirer ${name}`}
-      className={["ingredient-pill", removed ? "ingredient-pill--removed" : ""].join(" ")}
+      aria-pressed={isRemoved}
+      aria-label={isRemoved ? `Remettre ${name}` : `Retirer ${name} (allergie)`}
+      className={[
+        "group inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-all duration-200",
+        isRemoved
+          ? "border-[#ff705f] bg-[#ff705f]/15 text-[#c0350f] line-through decoration-[#c0350f]"
+          : "border-[#e0d9cc] bg-white text-[#2a3731] hover:border-[#ff705f]/60 hover:bg-[#fff9f8] shadow-sm",
+      ].join(" ")}
     >
-      {emoji && <span role="img" aria-hidden="true">{emoji}</span>}
-      {name}
-      {removed ? (
-        <span className="ml-1 text-[#ff705f]">✕</span>
+      {emoji && <span role="img" aria-hidden="true" className="text-sm">{emoji}</span>}
+      <span>{name}</span>
+      {isRemoved ? (
+        <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#c0350f] text-[9px] font-black text-white not-italic no-underline">
+          ✕
+        </span>
       ) : (
-        <X className="h-3 w-3 shrink-0 text-[#a09a92] opacity-60" />
+        <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-black/5 text-[9px] font-bold text-[#88928c] opacity-70 group-hover:bg-[#ff705f]/20 group-hover:text-[#ff705f]">
+          ✕
+        </span>
       )}
     </button>
   );
@@ -130,16 +139,16 @@ function QuantitySelector({
         type="button"
         onClick={onMinus}
         aria-label="Diminuer la quantité"
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e8e2d9] bg-white text-[#2e2619] transition hover:border-[#ff705f] hover:text-[#ff705f] active:scale-90"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e8e2d9] bg-white text-[#2e2619] transition hover:border-[#ff705f] hover:text-[#ff705f] active:scale-90"
       >
         <Minus className="h-4 w-4" />
       </button>
-      <span className="w-6 text-center text-lg font-black tabular-nums">{qty}</span>
+      <span className="w-8 text-center text-xl font-black tabular-nums">{qty}</span>
       <button
         type="button"
         onClick={onPlus}
         aria-label="Augmenter la quantité"
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e8e2d9] bg-white text-[#2e2619] transition hover:border-[#ff705f] hover:text-[#ff705f] active:scale-90"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e8e2d9] bg-white text-[#2e2619] transition hover:border-[#ff705f] hover:text-[#ff705f] active:scale-90"
       >
         <Plus className="h-4 w-4" />
       </button>
@@ -147,7 +156,7 @@ function QuantitySelector({
   );
 }
 
-/* ─── Main page ──────────────────────────────────────────────────── */
+/* ─── Main Product Page ──────────────────────────────────────────── */
 function ProductPage() {
   const { productId } = Route.useParams();
   const product = bowls.find((b) => b.id === productId);
@@ -155,14 +164,7 @@ function ProductPage() {
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
 
-  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
-  const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
-  const [extraSauce, setExtraSauce] = React.useState(false);
-  const [qty, setQty] = React.useState(1);
-  const [added, setAdded] = React.useState(false);
-
-  const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
-
+  // Redirection si sur-mesure
   if (productId === "sur-mesure") {
     return <Navigate to="/sur-mesure" replace />;
   }
@@ -180,69 +182,116 @@ function ProductPage() {
     );
   }
 
-  const productOk = available(product.id);
   const isCrousty = product.id.startsWith("crousty-");
+  const productOk = available(product.id);
 
-  /* ── Prix dynamique ─────────────────────────────────────── */
-  const toppingExtra = selectedToppings.reduce((sum, tid) => {
-    const t = toppings.find((t) => t.id === tid || t.name === tid);
-    return sum + (t?.price ?? 0);
-  }, 0);
-  const extraSaucePrice = isCrousty && extraSauce ? 1 : 0;
-  const unitPrice = product.price + toppingExtra + extraSaucePrice;
+  // States
+  const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
+  const [selectedBase, setSelectedBase] = React.useState<string>(product.defaultBase || "Riz blanc");
+  const [selectedSauce, setSelectedSauce] = React.useState<string>(product.defaultSauce || "Spicy-Mayo");
+  const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
+  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
+  const [extraSauce, setExtraSauce] = React.useState<string | null>(null);
+  const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
+  const [qty, setQty] = React.useState(1);
+  const [added, setAdded] = React.useState(false);
+
+  const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
+
+  // Prix dynamique
+  const sizeExtra = selectedSize === "grand" ? 2.50 : 0;
+  const toppingsExtra = selectedToppings.length * 0.50;
+  const extraSaucePrice = extraSauce ? 1.00 : 0;
+  const unitPrice = product.price + sizeExtra + toppingsExtra + extraSaucePrice;
   const totalPrice = unitPrice * qty;
 
-  const toggleTopping = (topping: Topping) => {
-    setSelectedToppings((cur) =>
-      cur.includes(topping.name)
-        ? cur.filter((t) => t !== topping.name)
-        : [...cur, topping.name]
-    );
-  };
-
-  const toggleIngredient = (name: string) => {
+  // Toggle ingrédient retirable (allergies / préférences)
+  const toggleRemovedIngredient = (name: string) => {
     setRemovedIngredients((cur) =>
       cur.includes(name) ? cur.filter((n) => n !== name) : [...cur, name]
     );
   };
 
+  // Toggle topping additionnel (illimité)
+  const toggleTopping = (toppingName: string) => {
+    setSelectedToppings((cur) =>
+      cur.includes(toppingName)
+        ? cur.filter((t) => t !== toppingName)
+        : [...cur, toppingName]
+    );
+  };
+
+  // Ajout au panier
   const handleAddToCart = () => {
     if (!productOk) return;
-    const options = [
-      ...selectedToppings.map((t) => "Topping : " + t),
-      ...(isCrousty && extraSauce ? ["Sauce extra +1€"] : []),
-    ];
+
+    const optionsList: string[] = [];
+
+    // Format / Taille
+    if (selectedSize === "grand") {
+      optionsList.push("Taille : Grand (+2.50€)");
+    } else {
+      optionsList.push("Taille : Moyen (Standard)");
+    }
+
+    // Base si différente
+    optionsList.push(`Base : ${selectedBase}`);
+
+    // Sauce
+    if (selectedSauce === "none") {
+      optionsList.push("Sauce : Sans sauce");
+    } else {
+      optionsList.push(`Sauce : ${selectedSauce}`);
+    }
+
+    // Boisson pour formules Crousty
+    if (isCrousty) {
+      optionsList.push(`Boisson incluse (33cl) : ${selectedDrink}`);
+    }
+
+    // Toppings payants sélectionnés
+    selectedToppings.forEach((t) => {
+      optionsList.push(`Topping : ${t}`);
+    });
+
+    // Sauce extra payante
+    if (extraSauce) {
+      optionsList.push(`Sauce extra (+1€) : ${extraSauce}`);
+    }
+
     addItem({
       id: product.id,
       name: product.name,
       basePrice: product.price,
       price: unitPrice,
       quantity: qty,
-      toppings: options,
+      toppings: optionsList,
       removedIngredients,
     });
+
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
     setIsCartOpen(true);
   };
 
-  const removableIngredients = product.ingredients.filter((i) => i.removable);
-  const fixedIngredients = product.ingredients.filter((i) => !i.removable);
   const tagStyle = TAG_STYLES[product.tagColor ?? "signature"] ?? "bg-[#10251f] text-white";
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f7f4ec] text-[#17231f]">
       <CartDrawer />
 
-      {/* ── Header ─────────────────────────────────────────── */}
+      {/* ── Sticky Header ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6">
-          <Link to="/" className="group flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
+          <Link
+            to="/"
+            className="group flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200"
+            aria-label="Poke N Bowl — Accueil"
+          >
             <BrandLogo size="md" />
           </Link>
 
           <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* Language switcher */}
             <div className="hidden rounded-full border border-black/10 bg-white p-1 sm:flex">
               {(["fr", "en", "nl"] as const).map((lang) => (
                 <button
@@ -257,7 +306,12 @@ function ProductPage() {
                 </button>
               ))}
             </div>
-            {/* Cart button */}
+            <Link
+              to="/commander"
+              className="hidden rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider text-[#17231f] hover:text-[#ff705f] sm:flex"
+            >
+              La Carte
+            </Link>
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
@@ -275,181 +329,328 @@ function ProductPage() {
         </nav>
       </header>
 
-      {/* ── Main ───────────────────────────────────────────── */}
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 pb-32 sm:px-6 sm:pb-10 lg:px-8">
+      {/* ── Main Content ───────────────────────────────────────────── */}
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 pb-36 sm:px-6 sm:py-8 sm:pb-12 lg:px-8">
         <Link
           to="/commander"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-bold text-[#7a847e] transition hover:text-[#17231f]"
+          className="mb-6 inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#7a847e] transition hover:text-[#17231f]"
         >
-          <ArrowLeft className="h-4 w-4" />
-          {t("product.back")}
+          <ArrowLeft className="h-4 w-4" /> {t("product.back")}
         </Link>
 
-        <div className="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
-          {/* ── Image ──────────────────────────────────────── */}
-          <div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] shadow-lift sm:rounded-[36px]">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_1.3fr] lg:gap-12">
+          {/* ── Left Column: Dish Image & Key Info ─────────────────── */}
+          <div className="space-y-4">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[32px] shadow-lift sm:rounded-[36px]">
               <DishImage
                 dishId={product.id}
                 alt={product.name}
                 priority
                 className={`h-full w-full object-cover transition duration-700 ${!productOk ? "grayscale" : ""}`}
               />
-              {/* Tag */}
               <span className={`badge-tag absolute left-4 top-4 shadow-card ${tagStyle}`}>
                 {productOk ? product.tag : t("cmd.sold_out")}
               </span>
-              {/* Prix affiché sur l'image */}
-              <span className="absolute bottom-4 right-4 rounded-full bg-[#d7ff45] px-3 py-1.5 text-sm font-black text-[#10251f] shadow-card">
-                € {product.price.toFixed(2)}
+              <span className="absolute bottom-4 right-4 rounded-full bg-[#d7ff45] px-4 py-2 text-base font-black text-[#10251f] shadow-card">
+                € {unitPrice.toFixed(2)}
               </span>
+            </div>
+
+            {/* Fiche info / Engagement fraîcheur */}
+            <div className="rounded-[24px] border border-black/5 bg-white p-5 shadow-card space-y-3">
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#10251f]">
+                <ShieldCheck className="h-4 w-4 text-[#ff705f]" />
+                <span>Préparé minute sur commande</span>
+              </div>
+              <p className="text-xs text-[#707e77] leading-relaxed">
+                Chaque bowl est assemblé à la commande à Visé & Fléron avec des découpes fraîches du jour.
+                Vous pouvez retirer n'importe quel ingrédient en cas d'allergie ou ajouter tous les toppings souhaités.
+              </p>
             </div>
           </div>
 
-          {/* ── Content ────────────────────────────────────── */}
+          {/* ── Right Column: Interactive Customization ────────────── */}
           <div className="flex flex-col gap-6">
-            {/* Nom + prix */}
             <div>
-              <h1 className="text-3xl font-black leading-tight sm:text-4xl">{product.name}</h1>
-              <p className="mt-2 text-[15px] leading-relaxed text-[#68756f]">{product.desc}</p>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
+                  {isCrousty ? "Bar à Crousty Chicken" : "Poké Bowl Signature"}
+                </span>
+              </div>
+              <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#10251f]">
+                {product.name}
+              </h1>
+              <p className="mt-2 text-sm leading-relaxed text-[#68756f]">
+                {product.desc}
+              </p>
             </div>
 
-            {/* Menu note (crousty) */}
             {product.menuNote && (
-              <div className="rounded-2xl border border-[#a96b0d]/20 bg-[#ead9bb]/40 px-4 py-3">
-                <p className="text-sm font-black text-[#8f5b12]">{product.menuNote}</p>
+              <div className="rounded-2xl border border-[#a96b0d]/25 bg-[#ead9bb]/40 p-4">
+                <p className="text-xs font-black text-[#8f5b12] flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 shrink-0" />
+                  {product.menuNote}
+                </p>
               </div>
             )}
 
-            {/* Indisponible */}
-            {!productOk && (
-              <div className="rounded-2xl border border-[#ff705f]/30 bg-[#ff705f]/10 px-4 py-3 text-sm font-bold text-[#ff705f]">
+            {!productOk ? (
+              <div className="rounded-2xl border border-[#ff705f]/30 bg-[#ff705f]/10 p-4 text-sm font-bold text-[#ff705f]">
                 {t("product.unavailable")}
               </div>
-            )}
-
-            {productOk && (
+            ) : (
               <>
-                {/* ══ 1. COMPOSITION (ingrédients retirables) ════════ */}
-                <section aria-labelledby="composition-title">
+                {/* ══ STEP 1: TAILLE DU BOWL (Fiche restaurant) ══════ */}
+                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="mb-3 flex items-center justify-between">
-                    <h2 id="composition-title" className="text-base font-black text-[#17231f]">
-                      Composition du bowl
+                    <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
+                      1. Format & Taille
                     </h2>
-                    <span className="text-[11px] font-bold text-[#a09a92]">
-                      {isCrousty ? "Recette signature" : "Recette originale"}
+                    <span className="text-[10px] font-bold text-[#a09a92]">Fiche officielle</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {bowlSizes.map((size) => (
+                      <button
+                        key={size.id}
+                        type="button"
+                        onClick={() => setSelectedSize(size.id)}
+                        className={[
+                          "flex flex-col items-start rounded-2xl border-2 p-3.5 text-left transition-all",
+                          selectedSize === size.id
+                            ? "border-[#10251f] bg-[#10251f] text-white shadow-md"
+                            : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                        ].join(" ")}
+                      >
+                        <div className="flex w-full items-center justify-between">
+                          <span className="font-black text-sm uppercase">{size.name}</span>
+                          <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
+                            {size.extraPrice === 0 ? "Inclus" : `+${size.extraPrice.toFixed(2)}€`}
+                          </span>
+                        </div>
+                        <span className={`mt-1 text-[11px] leading-tight ${selectedSize === size.id ? "text-white/70" : "text-[#7a847e]"}`}>
+                          {size.description}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
+                {/* ══ STEP 2: BASE AU CHOIX ══════════════════════════ */}
+                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
+                        2. Base au choix
+                      </h2>
+                      <p className="text-[11px] text-[#7a847e]">Incluse · change selon tes envies</p>
+                    </div>
+                    <span className="rounded-full bg-[#d7ff45]/20 px-2.5 py-0.5 text-[10px] font-black text-[#10251f]">
+                      {selectedBase}
                     </span>
                   </div>
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                    {detailedBases.map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => setSelectedBase(b.name)}
+                        className={[
+                          "flex flex-col items-center justify-center rounded-xl border-2 p-2.5 text-center transition-all",
+                          selectedBase === b.name
+                            ? "border-[#ff705f] bg-[#fff3f1] font-black text-[#c0350f]"
+                            : "border-[#e8e2d9] bg-white font-bold text-[#2e2619] hover:border-[#ff705f]/40",
+                        ].join(" ")}
+                      >
+                        <span className="text-xl">{b.emoji}</span>
+                        <span className="mt-1 text-[11px] leading-tight">{b.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
 
-                  {/* Fixés */}
-                  {fixedIngredients.length > 0 && (
-                    <div className="mb-3">
-                      <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#a09a92]">
-                        Inclus · non modifiables
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {fixedIngredients.map((ing) => (
-                          <IngredientPill
-                            key={ing.name}
-                            name={ing.name}
-                            emoji={ing.emoji}
-                            removable={false}
-                            removed={false}
-                          />
-                        ))}
-                      </div>
+                {/* ══ STEP 3: COMPOSITION & ALLERGIES (INGRÉDIENTS RETIRABLES) ══ */}
+                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f] flex items-center gap-1.5">
+                        <AlertTriangle className="h-4 w-4 text-[#ff705f]" />
+                        3. Composition & Allergies
+                      </h2>
+                      <span className="text-[10px] font-bold text-[#ff705f]">
+                        100% Modifiable
+                      </span>
                     </div>
-                  )}
+                    <p className="mt-1 text-xs text-[#7a847e] leading-relaxed">
+                      Clique sur n'importe quel ingrédient pour le <strong>retirer</strong> si tu as une allergie ou une préférence.
+                    </p>
+                  </div>
 
-                  {/* Retirables */}
-                  {removableIngredients.length > 0 && (
-                    <div>
-                      <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
-                        Retirer un ingrédient — appuie pour supprimer
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {product.ingredients.map((ing) => {
+                      const isRemoved = removedIngredients.includes(ing.name);
+                      return (
+                        <RemovableIngredientButton
+                          key={ing.name}
+                          name={ing.name}
+                          emoji={ing.emoji}
+                          isRemoved={isRemoved}
+                          onToggle={() => toggleRemovedIngredient(ing.name)}
+                        />
+                      );
+                    })}
+                  </div>
+
+                  {removedIngredients.length > 0 && (
+                    <div className="mt-4 rounded-xl border border-[#ff705f]/30 bg-[#fff1ee] p-3 text-xs">
+                      <p className="font-black text-[#c0350f] flex items-center gap-1.5">
+                        <span>⚠️ Préparation sans :</span>
+                        <span className="font-extrabold">{removedIngredients.join(", ")}</span>
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {removableIngredients.map((ing) => (
-                          <IngredientPill
-                            key={ing.name}
-                            name={ing.name}
-                            emoji={ing.emoji}
-                            removable
-                            removed={removedIngredients.includes(ing.name)}
-                            onToggle={() => toggleIngredient(ing.name)}
-                          />
-                        ))}
-                      </div>
-                      {removedIngredients.length > 0 && (
-                        <p className="mt-2 text-[11px] font-bold text-[#ff705f]">
-                          Retiré : {removedIngredients.join(", ")}
-                        </p>
-                      )}
+                      <p className="mt-0.5 text-[10px] text-[#8e4539]">
+                        La consigne sera transmise précisément en cuisine.
+                      </p>
                     </div>
                   )}
                 </section>
 
-                {/* ══ 2. TOPPINGS ADDITIONNELS ══════════════════════ */}
-                <section
-                  aria-labelledby="toppings-title"
-                  className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card sm:p-6"
-                >
+                {/* ══ STEP 4: SAUCE DU BOWL ══════════════════════════ */}
+                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
+                        4. Sauce Signature
+                      </h2>
+                      <p className="text-[11px] text-[#7a847e]">Incluse · change de sauce gratuitement</p>
+                    </div>
+                    <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#d7ff45]">
+                      {selectedSauce === "none" ? "Sans sauce" : selectedSauce}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {detailedSauces.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => setSelectedSauce(s.name)}
+                        className={[
+                          "flex items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs transition-all",
+                          selectedSauce === s.name
+                            ? "border-[#ff705f] bg-[#fff3f1] font-black text-[#c0350f]"
+                            : "border-[#e8e2d9] bg-white font-bold text-[#2e2619] hover:border-[#ff705f]/40",
+                        ].join(" ")}
+                      >
+                        <span>{s.emoji}</span>
+                        <span className="truncate">{s.name}</span>
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSauce("none")}
+                      className={[
+                        "flex items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs transition-all",
+                        selectedSauce === "none"
+                          ? "border-[#ff705f] bg-[#fff3f1] font-black text-[#c0350f]"
+                          : "border-[#e8e2d9] bg-white font-bold text-[#7a847e] hover:border-[#ff705f]/40",
+                      ].join(" ")}
+                    >
+                      <span>🚫</span>
+                      <span>Sans sauce</span>
+                    </button>
+                  </div>
+
+                  {/* Sauce extra payante (+1€) */}
+                  <div className="mt-4 border-t border-black/5 pt-3">
+                    <p className="text-[11px] font-black uppercase tracking-wider text-[#7a847e] mb-2">
+                      Envie d'un 2ème pot de sauce séparé ? (+1.00€)
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {detailedSauces.map((s) => (
+                        <button
+                          key={`extra-${s.id}`}
+                          type="button"
+                          onClick={() => setExtraSauce(extraSauce === s.name ? null : s.name)}
+                          className={[
+                            "rounded-full border px-3 py-1 text-[11px] font-bold transition-all",
+                            extraSauce === s.name
+                              ? "border-[#ff705f] bg-[#ff705f] text-white shadow-sm"
+                              : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#ff705f]/50",
+                          ].join(" ")}
+                        >
+                          {extraSauce === s.name ? `✓ Extra ${s.name} (+1€)` : `+ ${s.name} (+1€)`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                {/* ══ STEP 5: TOPPINGS ADDITIONNELS (ILLIMITÉS À VOLONTÉ) ══ */}
+                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div>
-                      <h2
-                        id="toppings-title"
-                        className="text-base font-black text-[#17231f]"
-                      >
-                        Ajoute des toppings
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
+                        5. Toppings Croustillants
                       </h2>
-                      <p className="mt-0.5 text-[11px] text-[#a09a92]">
-                        Sélection libre · choisis tous les toppings que tu aimes
+                      <p className="text-[11px] text-[#7a847e]">
+                        À volonté · choisis autant de toppings que tu veux (+0.50€ chaque)
                       </p>
                     </div>
                     {selectedToppings.length > 0 && (
-                      <span className="rounded-full bg-[#ff705f]/10 px-3 py-1 text-[10px] font-black text-[#ff705f]">
-                        {selectedToppings.length} sélectionné{selectedToppings.length > 1 ? "s" : ""}
+                      <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
+                        {selectedToppings.length} sélectionné{selectedToppings.length > 1 ? "s" : ""} (+{(selectedToppings.length * 0.5).toFixed(2)}€)
                       </span>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-3">
-                    {toppings
-                      .filter((t) => t.available)
-                      .map((topping) => {
-                        const selected = selectedToppings.includes(topping.name);
-                        return (
-                          <ToppingChip
-                            key={topping.id}
-                            topping={topping}
-                            selected={selected}
-                            disabled={false}
-                            onToggle={() => toggleTopping(topping)}
-                          />
-                        );
-                      })}
+                  <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+                    {toppings.map((topping) => (
+                      <ToppingChip
+                        key={topping.id}
+                        topping={topping}
+                        selected={selectedToppings.includes(topping.name)}
+                        onToggle={() => toggleTopping(topping.name)}
+                      />
+                    ))}
                   </div>
-
-                  {/* Sauce extra (Crousty uniquement) */}
-                  {isCrousty && (
-                    <button
-                      type="button"
-                      onClick={() => setExtraSauce((v) => !v)}
-                      aria-pressed={extraSauce}
-                      className={[
-                        "mt-3 flex w-full items-center justify-between rounded-xl border-2 px-4 py-3 text-left text-sm font-black transition",
-                        extraSauce
-                          ? "border-[#ff705f] bg-[#fff1ee] text-[#ff705f]"
-                          : "border-[#e8e2d9] bg-white text-[#2e2619] hover:border-[#ff705f]/40",
-                      ].join(" ")}
-                    >
-                      <span>Sauce extra</span>
-                      <span>+1.00€</span>
-                    </button>
-                  )}
                 </section>
 
-                {/* ══ 3. QUANTITÉ + PRIX DYNAMIQUE ══════════════════ */}
-                <div className="rounded-[20px] border border-[#e8e2d9] bg-white p-4 shadow-card sm:p-5">
+                {/* ══ STEP 6 (CROUSTY UNIQUEMENT): BOISSON 33CL INCLUSE ══ */}
+                {isCrousty && (
+                  <section className="rounded-[24px] border border-[#e8e2d9] bg-[#ff705f]/5 p-5 shadow-card">
+                    <div className="mb-3">
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f] flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-[#ff705f]" />
+                        Boisson 33cl incluse (Formule Étudiant)
+                      </h2>
+                      <p className="text-[11px] text-[#7a847e]">
+                        Comprise dans la formule à 11€ · choisis ta boisson fraîche
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {drinks.map((d) => (
+                        <button
+                          key={d.id}
+                          type="button"
+                          onClick={() => setSelectedDrink(d.name)}
+                          className={[
+                            "flex items-center justify-between rounded-xl border-2 p-2.5 text-left text-xs font-bold transition-all",
+                            selectedDrink === d.name
+                              ? "border-[#ff705f] bg-white text-[#ff705f] shadow-sm font-black"
+                              : "border-[#e8e2d9] bg-white/70 text-[#2e2619] hover:border-[#ff705f]/40",
+                          ].join(" ")}
+                        >
+                          <span className="truncate">{d.name}</span>
+                          {selectedDrink === d.name && (
+                            <Check className="h-3.5 w-3.5 shrink-0 text-[#ff705f]" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* ══ STEP 7: QUANTITÉ & RECAP PRIX ══════════════════ */}
+                <div className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="flex items-center justify-between gap-4">
                     <QuantitySelector
                       qty={qty}
@@ -458,9 +659,9 @@ function ProductPage() {
                     />
                     <div className="text-right">
                       <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#a09a92]">
-                        {qty > 1 ? `${qty} × ${unitPrice.toFixed(2)}€` : "Prix total"}
+                        {qty > 1 ? `${qty} × ${unitPrice.toFixed(2)}€` : "Prix unitaire calculé"}
                       </p>
-                      <p className="mt-0.5 text-2xl font-black text-[#17231f]">
+                      <p className="mt-0.5 text-3xl font-black text-[#17231f]">
                         € {totalPrice.toFixed(2)}
                       </p>
                     </div>
@@ -473,19 +674,19 @@ function ProductPage() {
                     type="button"
                     onClick={handleAddToCart}
                     className={[
-                      "btn-primary w-full",
-                      added ? "bg-[#10251f]" : "",
+                      "btn-primary w-full text-sm font-black py-4 shadow-lift transition-all",
+                      added ? "bg-[#10251f] scale-[0.99]" : "hover:scale-[1.01] active:scale-95",
                     ].join(" ")}
                   >
                     {added ? (
-                      <>
-                        <Check className="h-5 w-5" /> Ajouté !
-                      </>
+                      <span className="flex items-center justify-center gap-2">
+                        <Check className="h-5 w-5 text-[#d7ff45]" /> Ajouté au panier !
+                      </span>
                     ) : (
-                      <>
+                      <span className="flex items-center justify-center gap-2">
                         <ShoppingCart className="h-5 w-5" />
                         Ajouter au panier · € {totalPrice.toFixed(2)}
-                      </>
+                      </span>
                     )}
                   </button>
                 </div>
@@ -497,21 +698,24 @@ function ProductPage() {
 
       {/* ── Mobile sticky CTA ──────────────────────────────────── */}
       {productOk && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-[#f7f4ec]/95 p-3 backdrop-blur-xl sm:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-white/95 p-3.5 backdrop-blur-xl sm:hidden shadow-[0_-8px_24px_rgba(0,0,0,0.1)]">
           <button
             type="button"
             onClick={handleAddToCart}
-            className={["btn-primary w-full", added ? "bg-[#10251f]" : ""].join(" ")}
+            className={[
+              "btn-primary w-full py-3.5 text-sm font-black shadow-glow-coral",
+              added ? "bg-[#10251f]" : "",
+            ].join(" ")}
           >
             {added ? (
-              <>
-                <Check className="h-5 w-5" /> Ajouté !
-              </>
+              <span className="flex items-center justify-center gap-2">
+                <Check className="h-4 w-4 text-[#d7ff45]" /> Ajouté !
+              </span>
             ) : (
-              <>
+              <span className="flex items-center justify-center gap-2">
                 <ShoppingCart className="h-4 w-4" />
                 Ajouter · € {totalPrice.toFixed(2)}
-              </>
+              </span>
             )}
           </button>
         </div>

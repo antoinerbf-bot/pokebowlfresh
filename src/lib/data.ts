@@ -124,9 +124,21 @@ export const toppings: Topping[] = [
 export const customToppings = toppings.map((t) => t.name);
 export const allToppings = customToppings;
 
+// ─── TAILLES DE BOWL ──────────────────────────────────────────────────────────
+export interface BowlSize {
+  id: "moyen" | "grand";
+  name: string;
+  extraPrice: number;
+  description: string;
+}
+
+export const bowlSizes: BowlSize[] = [
+  { id: "moyen", name: "Moyen", extraPrice: 0, description: "Format régulier généreux" },
+  { id: "grand", name: "Grand", extraPrice: 2.50, description: "Grand format maxi faim (+2.50€)" },
+];
+
 // ─── INGRÉDIENTS RETIRABLES ───────────────────────────────────────────────────
-// Chaque ingrédient de composition peut être marqué comme "removable: true"
-// pour permettre au client de le retirer du bowl.
+// Tous les ingrédients sont retirables par défaut (allergies, goûts, intolérances).
 export interface Ingredient {
   name: string;
   emoji?: string;
@@ -134,15 +146,19 @@ export interface Ingredient {
   isProtein?: boolean;
   isSauce?: boolean;
   isBase?: boolean;
+  isTopping?: boolean;
+  isMixIn?: boolean;
 }
 
-// ─── BOWLS ────────────────────────────────────────────────────────────────────
+// ─── BOWLS SIGNATURES CONFORMES AU MENU OFFICIEL ─────────────────────────────
 export interface Bowl {
   id: string;
   name: string;
   price: number;
   desc: string;
-  ingredients: Ingredient[];  // composition détaillée avec removable
+  defaultBase: string;
+  defaultSauce: string;
+  ingredients: Ingredient[];
   tag: string;
   tagColor?: "signature" | "bestseller" | "premium" | "spicy" | "new";
   menuNote?: string;
@@ -154,127 +170,145 @@ export const bowls: Bowl[] = [
     name: "Mighty Gyros",
     price: 10.00,
     desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Spicy-Mayo",
     tag: "Signature",
     tagColor: "signature",
     ingredients: [
-      { name: "Riz blanc",        emoji: "🍚", removable: false, isBase: true },
-      { name: "Gyros maison",     emoji: "🥙", removable: false, isProtein: true },
-      { name: "Guacamole",        emoji: "🥑", removable: true },
-      { name: "Maïs",             emoji: "🌽", removable: true },
-      { name: "Tomates cerises",  emoji: "🍅", removable: true },
-      { name: "Concombre",        emoji: "🥒", removable: true },
-      { name: "Oignons",          emoji: "🧅", removable: true },
+      { name: "Riz blanc",        emoji: "🍚", removable: true, isBase: true },
+      { name: "Gyros maison",     emoji: "🥙", removable: true, isProtein: true },
+      { name: "Guacamole",        emoji: "🥑", removable: true, isMixIn: true },
+      { name: "Maïs",             emoji: "🌽", removable: true, isMixIn: true },
+      { name: "Tomates cerises",  emoji: "🍅", removable: true, isMixIn: true },
+      { name: "Concombre",        emoji: "🥒", removable: true, isMixIn: true },
+      { name: "Oignons",          emoji: "🧅", removable: true, isMixIn: true },
       { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
-      { name: "Flocons de chili", emoji: "🔥", removable: true },
+      { name: "Flocons de chili", emoji: "🔥", removable: true, isTopping: true },
     ],
   },
   {
     id: "sweet-chicken",
     name: "Sweet Chicken",
     price: 10.00,
-    desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix.",
+    desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Teriyaki",
     tag: "Best-seller",
     tagColor: "bestseller",
     ingredients: [
-      { name: "Riz blanc",             emoji: "🍚", removable: false, isBase: true },
-      { name: "Poulet maison",         emoji: "🍗", removable: false, isProtein: true },
-      { name: "Guacamole",             emoji: "🥑", removable: true },
-      { name: "Maïs",                  emoji: "🌽", removable: true },
-      { name: "Tomates cerises",       emoji: "🍅", removable: true },
-      { name: "Mangue",                emoji: "🥭", removable: true },
-      { name: "Feta",                  emoji: "🧀", removable: true },
+      { name: "Riz blanc",             emoji: "🍚", removable: true, isBase: true },
+      { name: "Poulet maison",         emoji: "🍗", removable: true, isProtein: true },
+      { name: "Guacamole",             emoji: "🥑", removable: true, isMixIn: true },
+      { name: "Maïs",                  emoji: "🌽", removable: true, isMixIn: true },
+      { name: "Tomates cerises",       emoji: "🍅", removable: true, isMixIn: true },
+      { name: "Mangue",                emoji: "🥭", removable: true, isMixIn: true },
+      { name: "Feta",                  emoji: "🧀", removable: true, isMixIn: true },
       { name: "Sauce teriyaki",        emoji: "🍯", removable: true, isSauce: true },
-      { name: "Oignons croustillants", emoji: "🧅", removable: true },
-      { name: "Sésame mix",            emoji: "🌱", removable: true },
+      { name: "Oignons croustillants", emoji: "🧅", removable: true, isTopping: true },
+      { name: "Sésame mix",            emoji: "🌱", removable: true, isTopping: true },
+      { name: "Nachos",                emoji: "🌽", removable: true, isTopping: true },
     ],
   },
   {
     id: "scampis-royaux",
     name: "Scampis Royal",
     price: 10.00,
-    desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, flocons de chili.",
+    desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Spicy-Mayo",
     tag: "Signature",
     tagColor: "signature",
     ingredients: [
-      { name: "Riz blanc",        emoji: "🍚", removable: false, isBase: true },
-      { name: "Scampis",          emoji: "🦐", removable: false, isProtein: true },
-      { name: "Guacamole",        emoji: "🥑", removable: true },
-      { name: "Edamame",          emoji: "🫘", removable: true },
-      { name: "Tomates",          emoji: "🍅", removable: true },
-      { name: "Concombre",        emoji: "🥒", removable: true },
-      { name: "Poivrons",         emoji: "🫑", removable: true },
+      { name: "Riz blanc",        emoji: "🍚", removable: true, isBase: true },
+      { name: "Scampis",          emoji: "🦐", removable: true, isProtein: true },
+      { name: "Guacamole",        emoji: "🥑", removable: true, isMixIn: true },
+      { name: "Edamame",          emoji: "🫘", removable: true, isMixIn: true },
+      { name: "Tomates",          emoji: "🍅", removable: true, isMixIn: true },
+      { name: "Concombre",        emoji: "🥒", removable: true, isMixIn: true },
+      { name: "Poivrons",         emoji: "🫑", removable: true, isMixIn: true },
       { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
-      { name: "Jalapeños",        emoji: "🌶️", removable: true },
-      { name: "Flocons de chili", emoji: "🔥", removable: true },
+      { name: "Jalapeños",        emoji: "🌶️", removable: true, isTopping: true },
+      { name: "Nachos",           emoji: "🌽", removable: true, isTopping: true },
+      { name: "Flocons de chili", emoji: "🔥", removable: true, isTopping: true },
     ],
   },
   {
     id: "saumon-wasabi",
     name: "Saumon Wasabi",
     price: 11.00,
-    desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon, mayo wasabi, sésame mix.",
+    desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon noble, mayo wasabi, sésame mix, nachos.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Mayo-Wasabi",
     tag: "Premium",
     tagColor: "premium",
     ingredients: [
-      { name: "Riz blanc",      emoji: "🍚", removable: false, isBase: true },
-      { name: "Saumon",         emoji: "🐟", removable: false, isProtein: true },
-      { name: "Avocat",         emoji: "🥑", removable: true },
-      { name: "Salade d'algues",emoji: "🌿", removable: true },
-      { name: "Mangue",         emoji: "🥭", removable: true },
-      { name: "Maïs",           emoji: "🌽", removable: true },
-      { name: "Edamame",        emoji: "🫘", removable: true },
+      { name: "Riz blanc",      emoji: "🍚", removable: true, isBase: true },
+      { name: "Saumon",         emoji: "🐟", removable: true, isProtein: true },
+      { name: "Avocat",         emoji: "🥑", removable: true, isMixIn: true },
+      { name: "Salade d'algues",emoji: "🌿", removable: true, isMixIn: true },
+      { name: "Mangue",         emoji: "🥭", removable: true, isMixIn: true },
+      { name: "Maïs",           emoji: "🌽", removable: true, isMixIn: true },
+      { name: "Edamame",        emoji: "🫘", removable: true, isMixIn: true },
       { name: "Mayo wasabi",    emoji: "🟢", removable: true, isSauce: true },
-      { name: "Sésame mix",     emoji: "🌱", removable: true },
+      { name: "Sésame mix",     emoji: "🌱", removable: true, isTopping: true },
+      { name: "Nachos",         emoji: "🌽", removable: true, isTopping: true },
     ],
   },
   {
     id: "spicy-chicken",
     name: "Spicy Chicken",
     price: 10.00,
-    desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix.",
+    desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Spicy-Mayo",
     tag: "Épicé",
     tagColor: "spicy",
     ingredients: [
-      { name: "Riz blanc",        emoji: "🍚", removable: false, isBase: true },
-      { name: "Poulet maison",    emoji: "🍗", removable: false, isProtein: true },
-      { name: "Avocat",           emoji: "🥑", removable: true },
-      { name: "Patates douces",   emoji: "🍠", removable: true },
-      { name: "Maïs",             emoji: "🌽", removable: true },
-      { name: "Jalapeños",        emoji: "🌶️", removable: true },
-      { name: "Feta",             emoji: "🧀", removable: true },
+      { name: "Riz blanc",        emoji: "🍚", removable: true, isBase: true },
+      { name: "Poulet maison",    emoji: "🍗", removable: true, isProtein: true },
+      { name: "Avocat",           emoji: "🥑", removable: true, isMixIn: true },
+      { name: "Patates douces",   emoji: "🍠", removable: true, isMixIn: true },
+      { name: "Maïs",             emoji: "🌽", removable: true, isMixIn: true },
+      { name: "Jalapeños",        emoji: "🌶️", removable: true, isMixIn: true },
+      { name: "Feta",             emoji: "🧀", removable: true, isMixIn: true },
       { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
-      { name: "Flocons de chili", emoji: "🔥", removable: true },
-      { name: "Sésame mix",       emoji: "🌱", removable: true },
+      { name: "Flocons de chili", emoji: "🔥", removable: true, isTopping: true },
+      { name: "Sésame mix",       emoji: "🌱", removable: true, isTopping: true },
+      { name: "Nachos",           emoji: "🌽", removable: true, isTopping: true },
     ],
   },
   {
     id: "crousty-chicken-curry",
     name: "Crousty Chicken Curry",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce curry onctueuse. Menu étudiant : boisson incluse.",
-    tag: "Nouveau",
-    tagColor: "new",
-    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+    desc: "Poulet croustillant mariné, riz parfumé, oignons frits croustillants, sauce curry onctueuse maison. Formule Étudiant : boisson 33cl incluse.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Sauce curry",
+    tag: "Formule 11€",
+    tagColor: "bestseller",
+    menuNote: "Formule Étudiant : 11€ avec boisson 33cl incluse au choix. Sauce extra : +1€.",
     ingredients: [
-      { name: "Riz parfumé",             emoji: "🍚", removable: false, isBase: true },
-      { name: "Poulet croustillant",     emoji: "🍗", removable: false, isProtein: true },
-      { name: "Oignons frits",           emoji: "🧅", removable: true },
-      { name: "Sauce curry onctueuse",   emoji: "🍛", removable: false, isSauce: true },
+      { name: "Riz parfumé",             emoji: "🍚", removable: true, isBase: true },
+      { name: "Poulet croustillant",     emoji: "🍗", removable: true, isProtein: true },
+      { name: "Oignons frits",           emoji: "🧅", removable: true, isTopping: true },
+      { name: "Sauce curry onctueuse",   emoji: "🍛", removable: true, isSauce: true },
     ],
   },
   {
     id: "crousty-chicken-sauce-blanche",
     name: "Crousty Chicken Sauce Blanche",
     price: 11.00,
-    desc: "Poulet croustillant, riz parfumé, oignons frits croustillants, sauce blanche maison. Menu étudiant : boisson incluse.",
-    tag: "Nouveau",
-    tagColor: "new",
-    menuNote: "Menu étudiant : 11€ avec boisson incluse. Sauce extra : +1€.",
+    desc: "Poulet croustillant mariné, riz parfumé, oignons frits croustillants, sauce blanche maison onctueuse. Formule Étudiant : boisson 33cl incluse.",
+    defaultBase: "Riz blanc",
+    defaultSauce: "Sauce blanche",
+    tag: "Formule 11€",
+    tagColor: "bestseller",
+    menuNote: "Formule Étudiant : 11€ avec boisson 33cl incluse au choix. Sauce extra : +1€.",
     ingredients: [
-      { name: "Riz parfumé",         emoji: "🍚", removable: false, isBase: true },
-      { name: "Poulet croustillant", emoji: "🍗", removable: false, isProtein: true },
-      { name: "Oignons frits",       emoji: "🧅", removable: true },
-      { name: "Sauce blanche maison",emoji: "🤍", removable: false, isSauce: true },
+      { name: "Riz parfumé",         emoji: "🍚", removable: true, isBase: true },
+      { name: "Poulet croustillant", emoji: "🍗", removable: true, isProtein: true },
+      { name: "Oignons frits",       emoji: "🧅", removable: true, isTopping: true },
+      { name: "Sauce blanche maison",emoji: "🤍", removable: true, isSauce: true },
     ],
   },
 ];
