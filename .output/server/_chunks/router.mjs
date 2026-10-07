@@ -4,7 +4,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { A as ArrowRight, C as Clock, D as Check, E as ChevronLeft, O as BriefcaseBusiness, S as CreditCard, T as ChevronRight, _ as Menu, a as Trash2, b as Layers, c as ShoppingCart, d as ShieldCheck, f as RefreshCw, g as Minus, h as PhoneCall, i as TriangleAlert, j as ArrowLeft, k as Bell, l as ShoppingBag, m as Phone, n as Utensils, o as Store, p as Plus, r as UtensilsCrossed, s as Sparkles, t as X, u as Shield, v as MapPin, w as CircleCheck, x as Flame, y as LoaderCircle } from "../_libs/lucide-react.mjs";
+import { A as Check, C as Flame, D as ChevronRight, E as CircleCheck, M as Bell, N as ArrowRight, O as ChevronLeft, P as ArrowLeft, S as Layers, T as Clock, _ as PhoneCall, a as Trash2, b as MapPin, c as Sparkles, d as Shield, f as ShieldCheck, g as Phone, h as Plus, i as TriangleAlert, j as BriefcaseBusiness, k as ChefHat, l as ShoppingCart, m as RefreshCw, n as Utensils, o as Store, p as RotateCcw, r as UtensilsCrossed, s as Star, t as X, u as ShoppingBag, v as Minus, w as CreditCard, x as LoaderCircle, y as Menu } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -12,12 +12,12 @@ import { a as numberType, i as literalType, n as booleanType, o as objectType, r
 import { t as cs } from "../_libs/neondatabase__serverless.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-import { i as AnimatePresence, n as useScroll, r as motion, t as useTransform } from "../_libs/framer-motion+[...].mjs";
+import { a as motion, i as useScroll, n as useTransform, o as AnimatePresence, r as useMotionValue, t as useSpring } from "../_libs/framer-motion+[...].mjs";
 //#region src/styles.css?transform-only
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DUtSDFMP.css";
+var styles_default = "/assets/styles-CjbxnCiu.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -651,9 +651,6 @@ function BrandLogo({ className = "", compact = false, size = "md" }) {
 	});
 }
 //#endregion
-//#region src/assets/hero-poke.jpg
-var hero_poke_default = "/assets/hero-poke-Dk38LgOY.jpg";
-//#endregion
 //#region src/assets/tiramisu-speculoos.jpg
 var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
 //#endregion
@@ -747,16 +744,19 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
 //#region src/assets/bowl-sweet-chicken.jpg
-var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-BemVhMbV.jpg";
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-KOb_KDt-.jpg";
 //#endregion
 //#region src/assets/bowl-scampis.jpg
-var bowl_scampis_default = "/assets/bowl-scampis-BdIGNNMt.jpg";
+var bowl_scampis_default = "/assets/bowl-scampis-DR5syUSX.jpg";
 //#endregion
 //#region src/assets/bowl-saumon.jpg
-var bowl_saumon_default = "/assets/bowl-saumon-DIGMI_ay.jpg";
+var bowl_saumon_default = "/assets/bowl-saumon-BzVxQqxk.jpg";
 //#endregion
 //#region src/assets/bowl-spicy-chicken.jpg
-var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-yM1OD4Ej.jpg";
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B4zpsenC.jpg";
+//#endregion
+//#region src/assets/bowl-crousty-curry.jpg
+var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CxDrr4_R.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
 var images = {
@@ -764,7 +764,7 @@ var images = {
 	"scampis-royaux": bowl_scampis_default,
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
-	"crousty-chicken-curry": "/assets/bowl-crousty-curry-CxDrr4_R.jpg",
+	"crousty-chicken-curry": bowl_crousty_curry_default,
 	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-iABTwGCQ.jpg",
 	"sur-mesure": bowl_spicy_chicken_default
 };
@@ -1063,7 +1063,7 @@ var bowls = [
 		id: "sweet-chicken",
 		name: "Sweet Chicken",
 		price: 10,
-		desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix, nachos.",
+		desc: "Guacamole, maïs, tomates cerises, mangue, feta, poulet maison, sauce teriyaki, oignons croustillants, sésame mix.",
 		defaultBase: "Riz à sushi",
 		defaultSauce: "Teriyaki",
 		tag: "Best-seller",
@@ -1128,12 +1128,6 @@ var bowls = [
 				emoji: "🌱",
 				removable: true,
 				isTopping: true
-			},
-			{
-				name: "Nachos",
-				emoji: "🌽",
-				removable: true,
-				isTopping: true
 			}
 		]
 	},
@@ -1141,7 +1135,7 @@ var bowls = [
 		id: "scampis-royaux",
 		name: "Scampis Royal",
 		price: 10,
-		desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, nachos, flocons de chili.",
+		desc: "Guacamole, edamame, tomates, concombre, poivrons, scampis, spicy mayo, jalapeños, flocons de chili.",
 		defaultBase: "Riz à sushi",
 		defaultSauce: "Spicy-Mayo",
 		tag: "Signature",
@@ -1202,12 +1196,6 @@ var bowls = [
 				isTopping: true
 			},
 			{
-				name: "Nachos",
-				emoji: "🌽",
-				removable: true,
-				isTopping: true
-			},
-			{
 				name: "Flocons de chili",
 				emoji: "🔥",
 				removable: true,
@@ -1219,7 +1207,7 @@ var bowls = [
 		id: "saumon-wasabi",
 		name: "Saumon Wasabi",
 		price: 11,
-		desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon noble, mayo wasabi, sésame mix, nachos.",
+		desc: "Avocat, salade d'algues, mangue, maïs, edamame, saumon noble, mayo wasabi, sésame mix.",
 		defaultBase: "Riz à sushi",
 		defaultSauce: "Mayo-Wasabi",
 		tag: "Premium",
@@ -1278,12 +1266,6 @@ var bowls = [
 				emoji: "🌱",
 				removable: true,
 				isTopping: true
-			},
-			{
-				name: "Nachos",
-				emoji: "🌽",
-				removable: true,
-				isTopping: true
 			}
 		]
 	},
@@ -1291,7 +1273,7 @@ var bowls = [
 		id: "spicy-chicken",
 		name: "Spicy Chicken",
 		price: 10,
-		desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix, nachos.",
+		desc: "Avocat, patates douces, maïs, jalapeños, feta, poulet maison, spicy mayo, flocons de chili, sésame mix.",
 		defaultBase: "Riz à sushi",
 		defaultSauce: "Spicy-Mayo",
 		tag: "Épicé",
@@ -1354,12 +1336,6 @@ var bowls = [
 			{
 				name: "Sésame mix",
 				emoji: "🌱",
-				removable: true,
-				isTopping: true
-			},
-			{
-				name: "Nachos",
-				emoji: "🌽",
 				removable: true,
 				isTopping: true
 			}
@@ -1628,222 +1604,6 @@ function CartDrawer() {
 	});
 }
 //#endregion
-//#region src/components/PokeCinematicReel.tsx
-var REEL_BOWLS = [
-	{
-		id: "sweet-chicken",
-		name: "Sweet Chicken",
-		price: 10,
-		tag: "Best-seller",
-		tagColor: "#d7ff45",
-		headline: "Poulet maison, mangue douce & teriyaki",
-		description: "Vrais morceaux de filet de poulet, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants, sésame mix et nachos.",
-		highlights: [
-			"🍗 Poulet maison",
-			"🥭 Mangue & Feta",
-			"🌽 Nachos & Oignons frits"
-		]
-	},
-	{
-		id: "saumon-wasabi",
-		name: "Saumon Wasabi",
-		price: 11,
-		tag: "Premium",
-		tagColor: "#ff705f",
-		headline: "Saumon noble & salade d'algues",
-		description: "Cubes de saumon frais noble, avocat, salade d'algues, mangue, maïs, edamame, mayo wasabi, sésame mix et nachos croquants.",
-		highlights: [
-			"🐟 Saumon frais noble",
-			"🥑 Avocat & Salade d'algues",
-			"🌽 Nachos & Sésame mix"
-		]
-	},
-	{
-		id: "scampis-royaux",
-		name: "Scampis Royal",
-		price: 10,
-		tag: "Signature",
-		tagColor: "#d7ff45",
-		headline: "Scampis, jalapeños & spicy mayo",
-		description: "Scampis dorés, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños, nachos et flocons de chili.",
-		highlights: [
-			"🦐 Scampis dorés",
-			"🌶️ Jalapeños & Spicy mayo",
-			"🌽 Nachos & Flocons chili"
-		]
-	},
-	{
-		id: "spicy-chicken",
-		name: "Spicy Chicken",
-		price: 10,
-		tag: "Épicé",
-		tagColor: "#ff705f",
-		headline: "Poulet maison mariné & patates douces",
-		description: "Poulet maison mariné, avocat, patates douces, maïs, jalapeños, feta, spicy mayo, flocons de chili, sésame mix et nachos.",
-		highlights: [
-			"🍗 Poulet maison",
-			"🍠 Patates douces & Feta",
-			"🌽 Nachos & Jalapeños"
-		]
-	}
-];
-var AUTOPLAY_DURATION_MS = 5e3;
-function PokeCinematicReel() {
-	const [currentIndex, setCurrentIndex] = import_react.useState(0);
-	const [isPaused, setIsPaused] = import_react.useState(false);
-	const currentBowl = REEL_BOWLS[currentIndex];
-	import_react.useEffect(() => {
-		if (isPaused) return;
-		const interval = setInterval(() => {
-			setCurrentIndex((prev) => (prev + 1) % REEL_BOWLS.length);
-		}, AUTOPLAY_DURATION_MS);
-		return () => clearInterval(interval);
-	}, [isPaused, currentIndex]);
-	const handleNext = () => {
-		setCurrentIndex((prev) => (prev + 1) % REEL_BOWLS.length);
-	};
-	const handlePrev = () => {
-		setCurrentIndex((prev) => (prev - 1 + REEL_BOWLS.length) % REEL_BOWLS.length);
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "relative w-full select-none",
-		onMouseEnter: () => setIsPaused(true),
-		onMouseLeave: () => setIsPaused(false),
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -inset-6 rounded-[48px] bg-gradient-to-tr from-[#d7ff45]/15 via-transparent to-[#ff705f]/15 blur-2xl transition-all duration-1000 -z-10" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "relative overflow-hidden rounded-[32px] border border-white/15 bg-[#10251f] shadow-[0_30px_90px_-25px_rgba(0,0,0,0.85)]",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "absolute top-4 inset-x-5 z-30 flex gap-2",
-					children: REEL_BOWLS.map((bowl, index) => {
-						const isActive = index === currentIndex;
-						const isPassed = index < currentIndex;
-						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: () => setCurrentIndex(index),
-							className: "group relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/20 transition hover:h-2",
-							"aria-label": `Aller au bowl ${bowl.name}`,
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: `h-full rounded-full transition-all duration-300 ${isActive ? "bg-[#d7ff45]" : isPassed ? "bg-white/80" : "bg-transparent"}`,
-								style: {
-									width: isActive ? "100%" : isPassed ? "100%" : "0%",
-									transitionDuration: isActive && !isPaused ? `${AUTOPLAY_DURATION_MS}ms` : "300ms",
-									transitionTimingFunction: "linear"
-								}
-							})
-						}, bowl.id);
-					})
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "relative aspect-[4/3] w-full overflow-hidden bg-[#071713] sm:aspect-[16/11]",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
-							mode: "wait",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-								initial: {
-									opacity: 0,
-									scale: 1.08
-								},
-								animate: {
-									opacity: 1,
-									scale: 1
-								},
-								exit: {
-									opacity: 0,
-									scale: .98
-								},
-								transition: {
-									duration: .75,
-									ease: [
-										.16,
-										1,
-										.3,
-										1
-									]
-								},
-								className: "absolute inset-0 h-full w-full",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
-									dishId: currentBowl.id,
-									alt: currentBowl.name,
-									priority: true,
-									className: "h-full w-full object-cover transition-transform duration-10000 ease-out hover:scale-105"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-[#10251f] via-[#10251f]/20 to-black/35" })]
-							}, currentBowl.id)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "absolute top-10 left-5 right-5 z-20 flex items-center justify-between",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f] shadow-md backdrop-blur-md",
-								style: { backgroundColor: currentBowl.tagColor },
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), currentBowl.tag]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "rounded-full bg-black/60 px-3 py-1 text-xs font-black text-white backdrop-blur-md border border-white/10",
-								children: [currentBowl.price.toFixed(2), " €"]
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "absolute bottom-4 left-5 right-5 z-20 hidden flex-wrap gap-2 sm:flex",
-							children: currentBowl.highlights.map((highlight, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "inline-flex items-center rounded-full border border-white/20 bg-black/55 px-3 py-1 text-[10px] font-bold text-white shadow-sm backdrop-blur-md",
-								children: highlight
-							}, idx))
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: handlePrev,
-							"aria-label": "Bowl précédent",
-							className: "absolute left-3 top-1/2 z-30 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition hover:bg-black/70 hover:scale-110",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "h-5 w-5" })
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: handleNext,
-							"aria-label": "Bowl suivant",
-							className: "absolute right-3 top-1/2 z-30 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition hover:bg-black/70 hover:scale-110",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "h-5 w-5" })
-						})
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "relative p-6 sm:p-7 bg-[#10251f] text-white",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]",
-								children: "Recette officielle · Fait minute"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								className: "mt-1 text-2xl font-black tracking-tight sm:text-3xl",
-								children: currentBowl.name
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-1.5 text-xs text-white/70 line-clamp-2 max-w-md",
-								children: currentBowl.description
-							})
-						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "flex items-center gap-2.5 shrink-0",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-								to: "/product/$productId",
-								params: { productId: currentBowl.id },
-								className: "inline-flex items-center gap-2 rounded-2xl bg-[#ff705f] px-5 py-3 text-xs font-black uppercase tracking-[0.1em] text-white shadow-lg transition hover:bg-[#ff5542] hover:scale-105",
-								children: ["Personnaliser", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
-							})
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "mt-5 flex gap-2 overflow-x-auto pb-1 pt-2 border-t border-white/10 no-scrollbar",
-						children: REEL_BOWLS.map((bowl, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: () => setCurrentIndex(idx),
-							className: `shrink-0 rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-wider transition ${idx === currentIndex ? "bg-white text-[#10251f] shadow" : "bg-white/10 text-white/60 hover:bg-white/20 hover:text-white"}`,
-							children: bowl.name
-						}, bowl.id))
-					})]
-				})
-			]
-		})]
-	});
-}
-//#endregion
 //#region src/components/PokeBowlCraftingExperience.tsx
 var CRAFT_STEPS = [
 	{
@@ -1908,12 +1668,11 @@ var CRAFT_STEPS = [
 		number: "05",
 		title: "Le Crunch & Finition Toppings",
 		subtitle: "La signature croquante",
-		description: "Oignons croustillants dorés, graines de sésame noir & blanc toastées, brisures de nachos et flocons de chili pour une texture irrésistible à chaque bouchée.",
+		description: "Oignons croustillants dorés, graines de sésame noir & blanc toastées et flocons de chili pour une texture irrésistible à chaque bouchée.",
 		emoji: "🧅",
 		ingredients: [
 			"Oignons croustillants",
 			"Sésame mix toasté",
-			"Nachos croustillants",
 			"Flocons de chili"
 		],
 		focusDishId: "spicy-chicken",
@@ -2411,6 +2170,7 @@ function CroustyNotificationToast() {
 //#endregion
 //#region src/components/PokeBowlMarqueeCarousel.tsx
 function PokeBowlMarqueeCarousel() {
+	const { addItem } = useCart();
 	const scrollRef = (0, import_react.useRef)(null);
 	const [canScrollLeft, setCanScrollLeft] = (0, import_react.useState)(false);
 	const [canScrollRight, setCanScrollRight] = (0, import_react.useState)(true);
@@ -2563,19 +2323,1419 @@ function PokeBowlMarqueeCarousel() {
 									children: ["+", bowl.ingredients.length - 4]
 								})]
 							})
-						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "mt-5 pt-4 border-t border-black/5",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-5 pt-4 border-t border-black/5 flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => addItem({
+									id: bowl.id,
+									name: `${bowl.name} (Moyen)`,
+									basePrice: bowl.price,
+									price: bowl.price,
+									quantity: 1,
+									toppings: [],
+									removedIngredients: []
+								}),
+								title: "Ajouter direct au panier",
+								className: "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] shadow-sm transition hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95 font-black",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-5 w-5 stroke-[2.5]" })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 								to: "/product/$productId",
 								params: { productId: bowl.id },
-								className: "inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-[1.02] active:scale-[0.98]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Personnaliser & Commander" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
-							})
+								className: "flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#10251f] py-3 px-3 text-[11px] font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-[1.02] active:scale-[0.98]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Personnaliser" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3 w-3" })]
+							})]
 						})]
 					})]
 				}, bowl.id);
 			})
 		})]
+	});
+}
+//#endregion
+//#region src/components/Hero3DParallaxPoke.tsx
+var HERO_DISHES = [
+	{
+		id: "sweet-chicken",
+		name: "Sweet Chicken",
+		price: 10,
+		grandPrice: 13,
+		tag: "Best-Seller ⭐",
+		tagColor: "#d7ff45",
+		glowColor: "rgba(215, 255, 69, 0.22)",
+		tasteProfile: "Doux, fruité & umami caramélisé",
+		description: "Morceaux tendres de poulet mariné doré, mangue mûre juteuse, avocat crémeux, maïs croquant, feta et nappage teriyaki brillant sur riz à sushi.",
+		freshCuts: [
+			"Poulet doré mariné",
+			"Avocat Hass mûr",
+			"Mangue juteuse",
+			"Feta émiettée",
+			"Sauce Teriyaki"
+		],
+		floatingIngredients: [
+			{
+				name: "Poulet Mariné Doré",
+				emoji: "🍗",
+				x: "-8%",
+				y: "14%",
+				depth: 45
+			},
+			{
+				name: "Avocat Hass Crémeux",
+				emoji: "🥑",
+				x: "82%",
+				y: "18%",
+				depth: 55
+			},
+			{
+				name: "Mangue Mûre Juteuse",
+				emoji: "🥭",
+				x: "-6%",
+				y: "70%",
+				depth: 38
+			},
+			{
+				name: "Oignons Croustillants",
+				emoji: "🧅",
+				x: "80%",
+				y: "68%",
+				depth: 48
+			},
+			{
+				name: "Graines Sésame Toastées",
+				emoji: "🌱",
+				x: "42%",
+				y: "88%",
+				depth: 30
+			}
+		]
+	},
+	{
+		id: "saumon-wasabi",
+		name: "Saumon Wasabi",
+		price: 11,
+		grandPrice: 14,
+		tag: "Coup de Cœur Sashimi ✦",
+		tagColor: "#ff705f",
+		glowColor: "rgba(255, 112, 95, 0.25)",
+		tasteProfile: "Ultra-frais, fondant avec un kick wasabi maîtrisé",
+		description: "Épais dés de saumon atlantique sashimi frais coupés chaque matin, avocat, salade d'algues wakame, mangue, edamame et notre mayo wasabi onctueuse.",
+		freshCuts: [
+			"Saumon Atlantique frais",
+			"Salade Wakame",
+			"Avocat fondant",
+			"Edamame vapeur",
+			"Mayo Wasabi"
+		],
+		floatingIngredients: [
+			{
+				name: "Saumon Sashimi Frais",
+				emoji: "🐟",
+				x: "-8%",
+				y: "14%",
+				depth: 55
+			},
+			{
+				name: "Avocat Hass Découpé",
+				emoji: "🥑",
+				x: "82%",
+				y: "18%",
+				depth: 40
+			},
+			{
+				name: "Salade Wakame Iodée",
+				emoji: "🌿",
+				x: "-6%",
+				y: "70%",
+				depth: 50
+			},
+			{
+				name: "Edamame Croquant",
+				emoji: "🫘",
+				x: "80%",
+				y: "68%",
+				depth: 35
+			},
+			{
+				name: "Mayo Wasabi Veloutée",
+				emoji: "🟢",
+				x: "42%",
+				y: "88%",
+				depth: 45
+			}
+		]
+	},
+	{
+		id: "scampis-royaux",
+		name: "Scampis Royal",
+		price: 10,
+		grandPrice: 13,
+		tag: "Saisi au Grill 🦐",
+		tagColor: "#d7ff45",
+		glowColor: "rgba(215, 255, 69, 0.22)",
+		tasteProfile: "Scampis saisis, guacamole onctueux & spicy mayo",
+		description: "Succulents scampis royaux dorés au grill, guacamole maison velouté, tomates cerises, edamame, concombre frais, poivrons et spicy mayo.",
+		freshCuts: [
+			"Scampis grillés saisis",
+			"Guacamole maison",
+			"Tomates cerises",
+			"Jalapeños frais",
+			"Spicy Mayo"
+		],
+		floatingIngredients: [
+			{
+				name: "Scampis Royaux Saisis",
+				emoji: "🦐",
+				x: "-8%",
+				y: "14%",
+				depth: 52
+			},
+			{
+				name: "Guacamole Velouté",
+				emoji: "🥑",
+				x: "82%",
+				y: "18%",
+				depth: 42
+			},
+			{
+				name: "Tomates Cerises Juteuses",
+				emoji: "🍅",
+				x: "-6%",
+				y: "70%",
+				depth: 48
+			},
+			{
+				name: "Jalapeños Épicés",
+				emoji: "🌶️",
+				x: "80%",
+				y: "68%",
+				depth: 36
+			},
+			{
+				name: "Spicy Mayo Onctueuse",
+				emoji: "🌶️",
+				x: "42%",
+				y: "88%",
+				depth: 40
+			}
+		]
+	},
+	{
+		id: "spicy-chicken",
+		name: "Spicy Chicken",
+		price: 10,
+		grandPrice: 13,
+		tag: "Touche Pimentée 🔥",
+		tagColor: "#ff705f",
+		glowColor: "rgba(255, 112, 95, 0.22)",
+		tasteProfile: "Fondant, caramélisé & piquant addictif",
+		description: "Poulet mariné rôti aux épices douces, patates douces rôties au four, avocat, maïs, feta grecque, jalapeños et notre spicy mayo signature.",
+		freshCuts: [
+			"Poulet mariné rôti",
+			"Patates douces rôties",
+			"Avocat crémeux",
+			"Feta émiettée",
+			"Flocons de Chili"
+		],
+		floatingIngredients: [
+			{
+				name: "Poulet Rôti aux Épices",
+				emoji: "🍗",
+				x: "-8%",
+				y: "14%",
+				depth: 48
+			},
+			{
+				name: "Patates Douces Rôties",
+				emoji: "🍠",
+				x: "82%",
+				y: "18%",
+				depth: 54
+			},
+			{
+				name: "Jalapeños Frais",
+				emoji: "🌶️",
+				x: "-6%",
+				y: "70%",
+				depth: 36
+			},
+			{
+				name: "Feta Émiettée",
+				emoji: "🧀",
+				x: "80%",
+				y: "68%",
+				depth: 44
+			},
+			{
+				name: "Flocons de Chili",
+				emoji: "🔥",
+				x: "42%",
+				y: "88%",
+				depth: 42
+			}
+		]
+	},
+	{
+		id: "crousty-chicken-curry",
+		name: "Crousty Chicken Curry",
+		price: 11,
+		grandPrice: 11,
+		tag: "Formule 11€ Boisson Comprise 🥤",
+		tagColor: "#f59e0b",
+		glowColor: "rgba(245, 158, 11, 0.28)",
+		tasteProfile: "Chaud, ultra-croustillant & sauce curry veloutée",
+		description: "Notre plat signature chaud : poulet pané extra croustillant coupé minute, sauce curry onctueuse parfumée, oignons frits et boisson 33cl offerte incluse !",
+		freshCuts: [
+			"Poulet pané croustillant",
+			"Sauce Curry onctueuse",
+			"Oignons frits",
+			"Boisson 33cl incluse"
+		],
+		floatingIngredients: [
+			{
+				name: "Poulet Extra Croustillant",
+				emoji: "🍗",
+				x: "-8%",
+				y: "14%",
+				depth: 52
+			},
+			{
+				name: "Sauce Curry Chaude",
+				emoji: "🍛",
+				x: "82%",
+				y: "18%",
+				depth: 42
+			},
+			{
+				name: "Oignons Frits Croustillants",
+				emoji: "🧅",
+				x: "-6%",
+				y: "70%",
+				depth: 46
+			},
+			{
+				name: "Boisson 33cl Offerte",
+				emoji: "🥤",
+				x: "80%",
+				y: "68%",
+				depth: 48
+			},
+			{
+				name: "Riz Chaud Parfumé",
+				emoji: "🍚",
+				x: "42%",
+				y: "88%",
+				depth: 32
+			}
+		],
+		isHotCombo: true
+	}
+];
+function Hero3DParallaxPoke() {
+	const [currentIndex, setCurrentIndex] = import_react.useState(0);
+	const [selectedSize, setSelectedSize] = import_react.useState("moyen");
+	const [addedSuccess, setAddedSuccess] = import_react.useState(false);
+	const { addItem } = useCart();
+	const currentDish = HERO_DISHES[currentIndex];
+	const activePrice = selectedSize === "grand" && !currentDish.isHotCombo ? currentDish.grandPrice : currentDish.price;
+	const containerRef = import_react.useRef(null);
+	const mouseX = useMotionValue(0);
+	const mouseY = useMotionValue(0);
+	const springConfig = {
+		damping: 25,
+		stiffness: 120,
+		mass: .5
+	};
+	const smoothMouseX = useSpring(mouseX, springConfig);
+	const smoothMouseY = useSpring(mouseY, springConfig);
+	const rotateX = useTransform(smoothMouseY, [-.5, .5], [12, -12]);
+	const rotateY = useTransform(smoothMouseX, [-.5, .5], [-14, 14]);
+	const handleMouseMove = (e) => {
+		if (!containerRef.current) return;
+		const rect = containerRef.current.getBoundingClientRect();
+		const x = (e.clientX - rect.left) / rect.width - .5;
+		const y = (e.clientY - rect.top) / rect.height - .5;
+		mouseX.set(x);
+		mouseY.set(y);
+	};
+	const handleMouseLeave = () => {
+		mouseX.set(0);
+		mouseY.set(0);
+	};
+	const handlePrev = () => {
+		setCurrentIndex((prev) => (prev - 1 + HERO_DISHES.length) % HERO_DISHES.length);
+	};
+	const handleNext = () => {
+		setCurrentIndex((prev) => (prev + 1) % HERO_DISHES.length);
+	};
+	const handleQuickAdd = () => {
+		addItem({
+			id: currentDish.id,
+			name: `${currentDish.name} (${selectedSize === "grand" ? "Grand" : "Moyen"})`,
+			basePrice: activePrice,
+			price: activePrice,
+			quantity: 1,
+			toppings: [],
+			removedIngredients: []
+		});
+		setAddedSuccess(true);
+		setTimeout(() => setAddedSuccess(false), 2200);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		ref: containerRef,
+		onMouseMove: handleMouseMove,
+		onMouseLeave: handleMouseLeave,
+		className: "relative isolate min-h-screen overflow-hidden bg-[#071713] text-white pt-24 pb-16 lg:pt-28 lg:pb-20 flex items-center",
+		style: { perspective: 1200 },
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+				animate: { background: `radial-gradient(ellipse 65% 55% at 30% 45%, ${currentDish.glowColor}, transparent 65%), radial-gradient(ellipse 50% 50% at 80% 60%, rgba(215,255,69,0.06), transparent 70%), linear-gradient(135deg, #071713 0%, #0d221c 50%, #071713 100%)` },
+				transition: {
+					duration: 1.2,
+					ease: "easeOut"
+				},
+				className: "absolute inset-0 -z-20 pointer-events-none"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 opacity-[0.04] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "relative z-10 mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-6 flex flex-wrap items-center justify-between gap-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+						initial: {
+							opacity: 0,
+							y: -12
+						},
+						animate: {
+							opacity: 1,
+							y: 0
+						},
+						transition: { duration: .6 },
+						className: "inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-bold text-white/90 backdrop-blur-md",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "flex h-2 w-2 rounded-full bg-[#d7ff45] animate-ping" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[#d7ff45] font-extrabold",
+								children: "EN DIRECT DE VISÉ"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-white/40",
+								children: "·"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Avenue du Pont 12" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-white/40",
+								children: "·"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "hidden sm:inline text-white/70",
+								children: "Préparé minute en 10 min"
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3 text-xs text-white/70",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "flex items-center gap-1 font-bold text-[#d7ff45]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-3.5 w-3.5 fill-[#d7ff45]" }), " 4.9/5"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "hidden sm:inline text-white/40",
+								children: "|"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "hidden sm:inline font-semibold",
+								children: "Plus de 150 avis gourmands"
+							})
+						]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-12 xl:gap-16",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative order-1 flex flex-col items-center justify-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+							style: {
+								rotateX,
+								rotateY,
+								transformStyle: "preserve-3d"
+							},
+							className: "relative aspect-square w-full max-w-[480px] sm:max-w-[540px] lg:max-w-[580px] select-none",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									style: { transform: "translateZ(-40px)" },
+									className: "absolute -bottom-8 left-1/2 -translate-x-1/2 h-20 w-[85%] rounded-[100%] bg-black/65 blur-2xl pointer-events-none"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									style: { transform: "translateZ(-20px)" },
+									className: "absolute inset-4 rounded-full blur-3xl opacity-40 transition-colors duration-1000 pointer-events-none",
+									style: { backgroundColor: currentDish.tagColor }
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+									animate: { y: [
+										-6,
+										6,
+										-6
+									] },
+									transition: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut"
+									},
+									style: {
+										transform: "translateZ(30px)",
+										transformStyle: "preserve-3d"
+									},
+									className: "relative h-full w-full rounded-[42px] p-3 transition-transform duration-300",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "relative h-full w-full overflow-hidden rounded-[38px] border-2 border-white/20 bg-[#0d221c] shadow-[0_30px_90px_-15px_rgba(0,0,0,0.9)]",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
+											mode: "wait",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+												initial: {
+													opacity: 0,
+													scale: 1.08,
+													filter: "blur(6px)"
+												},
+												animate: {
+													opacity: 1,
+													scale: 1,
+													filter: "blur(0px)"
+												},
+												exit: {
+													opacity: 0,
+													scale: .94,
+													filter: "blur(4px)"
+												},
+												transition: {
+													duration: .65,
+													ease: [
+														.22,
+														1,
+														.36,
+														1
+													]
+												},
+												className: "relative h-full w-full",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+														dishId: currentDish.id,
+														alt: currentDish.name,
+														priority: true,
+														className: "h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-white/10 pointer-events-none" }),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "absolute top-5 left-5 right-5 z-20 flex items-center justify-between",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+															className: "inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#10251f] shadow-lg backdrop-blur-md",
+															style: { backgroundColor: currentDish.tagColor },
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), currentDish.tag]
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+															className: "rounded-full bg-black/65 px-3.5 py-1.5 text-xs font-black text-white backdrop-blur-md border border-white/15 shadow-lg",
+															children: [
+																"Dès ",
+																currentDish.price.toFixed(2),
+																" €"
+															]
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "absolute bottom-5 inset-x-5 z-20",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+															className: "rounded-2xl border border-white/20 bg-black/75 p-3.5 text-xs text-white backdrop-blur-md shadow-xl flex items-center justify-between gap-3",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+																className: "min-w-0",
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	className: "block text-[9px] font-black uppercase tracking-widest text-[#d7ff45]",
+																	children: "Notes Gustatives"
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+																	className: "truncate font-bold text-white/95 text-xs",
+																	children: currentDish.tasteProfile
+																})]
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+																to: "/product/$productId",
+																params: { productId: currentDish.id },
+																className: "shrink-0 rounded-xl bg-white/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-white hover:bg-white hover:text-black transition",
+																children: "Détails →"
+															})]
+														})
+													})
+												]
+											}, currentDish.id)
+										})
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
+									mode: "wait",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, { children: currentDish.floatingIngredients.map((item, idx) => {
+										const depthX = useTransform(smoothMouseX, [-.5, .5], [-item.depth * .7, item.depth * .7]);
+										const depthY = useTransform(smoothMouseY, [-.5, .5], [-item.depth * .7, item.depth * .7]);
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+											initial: {
+												opacity: 0,
+												scale: .6
+											},
+											animate: {
+												opacity: 1,
+												scale: 1
+											},
+											exit: {
+												opacity: 0,
+												scale: .6
+											},
+											transition: {
+												duration: .5,
+												delay: idx * .08
+											},
+											style: {
+												left: item.x,
+												top: item.y,
+												x: depthX,
+												y: depthY,
+												transform: `translateZ(${item.depth}px)`
+											},
+											className: "pointer-events-none absolute z-30 hidden sm:flex items-center gap-2 rounded-2xl border border-white/20 bg-[#0d221c]/85 px-3.5 py-2 shadow-2xl backdrop-blur-md",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-base",
+												children: item.emoji
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[11px] font-extrabold text-white tracking-wide whitespace-nowrap",
+												children: item.name
+											})]
+										}, `${currentDish.id}-${idx}`);
+									}) }, currentDish.id)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: handlePrev,
+									"aria-label": "Plat précédent",
+									className: "absolute -left-4 top-1/2 z-40 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-[#0d221c]/90 text-white shadow-xl backdrop-blur-md transition hover:bg-[#d7ff45] hover:text-[#10251f] hover:scale-110 active:scale-95",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "h-6 w-6" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: handleNext,
+									"aria-label": "Plat suivant",
+									className: "absolute -right-4 top-1/2 z-40 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-[#0d221c]/90 text-white shadow-xl backdrop-blur-md transition hover:bg-[#d7ff45] hover:text-[#10251f] hover:scale-110 active:scale-95",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "h-6 w-6" })
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-6 flex w-full max-w-[560px] items-center justify-center gap-1.5 overflow-x-auto pb-1 no-scrollbar",
+							children: HERO_DISHES.map((dish, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setCurrentIndex(idx),
+								className: `group relative shrink-0 rounded-2xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all duration-200 ${idx === currentIndex ? "bg-[#d7ff45] text-[#10251f] shadow-lg scale-105" : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"}`,
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: dish.name })
+							}, dish.id))
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "order-2 flex flex-col justify-center",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+								initial: {
+									opacity: 0,
+									y: 18
+								},
+								animate: {
+									opacity: 1,
+									y: 0
+								},
+								transition: { duration: .7 },
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/40 bg-[#d7ff45]/10 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#d7ff45]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Expérience Culinaire 100% Fraîcheur" })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+										className: "mt-4 font-display text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "block text-white",
+											children: "L'art du Poké Bowl"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "block text-[#d7ff45]",
+											children: "généreux & fait minute."
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "mt-4 max-w-xl text-base sm:text-lg leading-relaxed text-white/80",
+										children: [
+											"Oubliez les bowls fades remplis de riz. Chez ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+												className: "text-white",
+												children: "Poke N Bowl Visé"
+											}),
+											", chaque recette déborde d'ingrédients nobles coupés le matin même : saumon atlantique sashimi, scampis grillés saisis, poulet doré caramélisé et riz à sushi fondant."
+										]
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+								initial: {
+									opacity: 0,
+									y: 12
+								},
+								animate: {
+									opacity: 1,
+									y: 0
+								},
+								transition: { duration: .4 },
+								className: "mt-6 rounded-3xl border border-white/15 bg-white/[0.06] p-5 sm:p-6 backdrop-blur-xl shadow-2xl",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] font-black uppercase tracking-widest text-[#d7ff45]",
+											children: currentDish.tag
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-2xl font-black text-white",
+											children: currentDish.name
+										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-right",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "block text-3xl font-black text-[#d7ff45] tracking-tight",
+												children: [activePrice.toFixed(2), " €"]
+											}), currentDish.isHotCombo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] font-extrabold uppercase text-[#f59e0b]",
+												children: "Boisson 33cl offerte incluse"
+											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "text-[10px] font-semibold text-white/60",
+												children: ["Format ", selectedSize === "grand" ? "Grand (13€)" : "Moyen (10€)"]
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-4 flex flex-wrap gap-1.5",
+										children: currentDish.freshCuts.map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "rounded-full bg-white/10 border border-white/10 px-3 py-1 text-[11px] font-bold text-white/90",
+											children: ["✓ ", item]
+										}, i))
+									}),
+									!currentDish.isHotCombo && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mt-5 flex items-center justify-between gap-3 rounded-2xl bg-black/35 p-2 border border-white/10",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold text-white/75 pl-2",
+											children: "Choisir le format :"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex gap-1.5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => setSelectedSize("moyen"),
+												className: `rounded-xl px-4 py-2 text-xs font-black uppercase tracking-wider transition ${selectedSize === "moyen" ? "bg-[#d7ff45] text-[#10251f] shadow" : "text-white/70 hover:text-white"}`,
+												children: "Moyen (10 €)"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => setSelectedSize("grand"),
+												className: `rounded-xl px-4 py-2 text-xs font-black uppercase tracking-wider transition ${selectedSize === "grand" ? "bg-[#d7ff45] text-[#10251f] shadow" : "text-white/70 hover:text-white"}`,
+												children: "Grand (13 €)"
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mt-5 flex flex-col sm:flex-row gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											onClick: handleQuickAdd,
+											className: "flex-1 inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#d7ff45] py-4 px-6 text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_10px_30px_rgba(215,255,69,0.35)] transition hover:bg-white hover:scale-[1.02] active:scale-98",
+											children: addedSuccess ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 text-emerald-600 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouté au panier !" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+												"Ajouter au Panier · ",
+												activePrice.toFixed(2),
+												" €"
+											] })] })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+											to: "/product/$productId",
+											params: { productId: currentDish.id },
+											className: "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 py-4 px-5 text-xs font-black uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:scale-[1.02]",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Personnaliser" })]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mt-4 flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-white/60 pt-3 border-t border-white/10",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1.5",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-3.5 w-3.5 text-[#d7ff45]" }), " Prêt en 10-15 min"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1.5",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-3.5 w-3.5 text-[#d7ff45]" }), " Ingrédients frais garantis"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1.5",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🛵" }), " Livraison à domicile dispo"]
+											})
+										]
+									})
+								]
+							}, currentDish.id),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 px-5 py-3 text-xs text-white/80",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-semibold",
+									children: "Envie de créer votre propre combinaison de A à Z ?"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									to: "/sur-mesure",
+									className: "font-black text-[#d7ff45] hover:underline flex items-center gap-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Créer Sur-Mesure (10€)" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
+								})]
+							})
+						]
+					})]
+				})]
+			})
+		]
+	});
+}
+//#endregion
+//#region src/components/InteractiveBowlBuilder.tsx
+var BASES = [
+	{
+		id: "riz-sushi",
+		name: "Riz à sushi",
+		emoji: "🍚",
+		desc: "Vinaigré et fondant"
+	},
+	{
+		id: "riz-brun",
+		name: "Riz brun",
+		emoji: "🌾",
+		desc: "Complet & parfumé"
+	},
+	{
+		id: "salade",
+		name: "Salade fraîche",
+		emoji: "🥗",
+		desc: "Légère & croquante"
+	},
+	{
+		id: "pates",
+		name: "Pâtes",
+		emoji: "🍝",
+		desc: "Gourmandes"
+	}
+];
+var PROTEINES = [
+	{
+		id: "poulet",
+		name: "Poulet doré",
+		emoji: "🍗",
+		extra: 0,
+		tag: "Cuisiné maison"
+	},
+	{
+		id: "saumon",
+		name: "Saumon sashimi",
+		emoji: "🐟",
+		extra: 1,
+		tag: "+1,00 € · Extra frais"
+	},
+	{
+		id: "scampis",
+		name: "Scampis grillés",
+		emoji: "🦐",
+		extra: 0,
+		tag: "Saisis minute"
+	},
+	{
+		id: "vege",
+		name: "Double Avocat & Feta",
+		emoji: "🥑",
+		extra: 0,
+		tag: "100% Végé"
+	}
+];
+var MIXINS = [
+	{
+		id: "avocat",
+		name: "Avocat Hass",
+		emoji: "🥑"
+	},
+	{
+		id: "mangue",
+		name: "Mangue mûre",
+		emoji: "🥭"
+	},
+	{
+		id: "edamame",
+		name: "Edamame",
+		emoji: "🫘"
+	},
+	{
+		id: "feta",
+		name: "Feta grecque",
+		emoji: "🧀"
+	},
+	{
+		id: "tomates",
+		name: "Tomates cerises",
+		emoji: "🍅"
+	},
+	{
+		id: "mais",
+		name: "Maïs doux",
+		emoji: "🌽"
+	},
+	{
+		id: "wakame",
+		name: "Algues Wakame",
+		emoji: "🌿"
+	},
+	{
+		id: "concombre",
+		name: "Concombre frais",
+		emoji: "🥒"
+	},
+	{
+		id: "jalapenos",
+		name: "Jalapeños",
+		emoji: "🌶️"
+	},
+	{
+		id: "patates-douces",
+		name: "Patates douces rôties",
+		emoji: "🍠"
+	}
+];
+var SAUCES = [
+	{
+		id: "teriyaki",
+		name: "Teriyaki caramélisée",
+		emoji: "🍯"
+	},
+	{
+		id: "spicy-mayo",
+		name: "Spicy Mayo piquante",
+		emoji: "🌶️"
+	},
+	{
+		id: "mayo-wasabi",
+		name: "Mayo Wasabi veloutée",
+		emoji: "🟢"
+	},
+	{
+		id: "sesame",
+		name: "Sésame toasté",
+		emoji: "🌰"
+	}
+];
+var TOPPINGS = [
+	{
+		id: "oignons-frits",
+		name: "Oignons frits croustillants",
+		emoji: "🧅"
+	},
+	{
+		id: "sesame-mix",
+		name: "Sésame noir & blanc",
+		emoji: "🌱"
+	},
+	{
+		id: "flocons-chili",
+		name: "Flocons de chili",
+		emoji: "🔥"
+	}
+];
+function InteractiveBowlBuilder() {
+	const [size, setSize] = import_react.useState("moyen");
+	const [base, setBase] = import_react.useState(BASES[0]);
+	const [proteine, setProteine] = import_react.useState(PROTEINES[1]);
+	const [selectedMixins, setSelectedMixins] = import_react.useState([
+		"avocat",
+		"mangue",
+		"edamame",
+		"wakame",
+		"tomates"
+	]);
+	const [sauce, setSauce] = import_react.useState(SAUCES[0]);
+	const [topping, setTopping] = import_react.useState(TOPPINGS[0]);
+	const [added, setAdded] = import_react.useState(false);
+	const { addItem } = useCart();
+	const basePrice = size === "grand" ? 13 : 10;
+	const proteinExtra = proteine.extra;
+	const extraMixinsCount = Math.max(0, selectedMixins.length - 5);
+	const extraMixinsPrice = extraMixinsCount * .5;
+	const totalPrice = basePrice + proteinExtra + extraMixinsPrice;
+	const toggleMixin = (id) => {
+		if (selectedMixins.includes(id)) {
+			if (selectedMixins.length > 1) setSelectedMixins((prev) => prev.filter((m) => m !== id));
+		} else setSelectedMixins((prev) => [...prev, id]);
+	};
+	const resetSelection = () => {
+		setSize("moyen");
+		setBase(BASES[0]);
+		setProteine(PROTEINES[0]);
+		setSelectedMixins([
+			"avocat",
+			"mangue",
+			"edamame",
+			"tomates",
+			"mais"
+		]);
+		setSauce(SAUCES[0]);
+		setTopping(TOPPINGS[0]);
+	};
+	const handleAddToCart = () => {
+		const mixinNames = selectedMixins.map((id) => MIXINS.find((m) => m.id === id)?.name || id);
+		`${base.name}${proteine.name}${mixinNames.join(", ")}${sauce.name}${topping.name}`;
+		addItem({
+			id: `custom-live-${Date.now()}`,
+			name: `Bowl Sur-Mesure (${size === "grand" ? "Grand" : "Moyen"})`,
+			basePrice: totalPrice,
+			price: totalPrice,
+			quantity: 1,
+			toppings: [
+				`Base : ${base.name}`,
+				`Protéine : ${proteine.name}`,
+				...mixinNames,
+				`Sauce : ${sauce.name}`,
+				`Topping : ${topping.name}`
+			],
+			removedIngredients: []
+		});
+		setAdded(true);
+		setTimeout(() => setAdded(false), 2200);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		id: "composer",
+		className: "scroll-mt-12 bg-[#0c1f19] py-16 sm:py-24 text-white relative isolate overflow-hidden",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-1/4 -z-10 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-3xl pointer-events-none" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute bottom-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl pointer-events-none" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "text-center max-w-2xl mx-auto",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/40 bg-[#d7ff45]/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-[#d7ff45]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Mini-Simulateur Ludique" })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+							className: "mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight",
+							children: ["Compose ton bowl en live. ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[#d7ff45]",
+								children: "Fait minute pour toi."
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-3 text-sm sm:text-base text-white/75",
+							children: "Choisis ta base, ta protéine fraîche et tes 5 mix-ins préférés. Visualise ta recette en temps réel et commande-la en un seul clic !"
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-12 grid grid-cols-1 gap-8 lg:grid-cols-[1.3fr_0.9fr] items-start",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-6 rounded-[32px] border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between mb-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
+										children: "1"
+									}), "Format du Bowl"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-white/50",
+									children: "Moyen ou Grand (+3€)"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid grid-cols-2 gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setSize("moyen"),
+									className: `rounded-2xl p-3.5 text-left border transition-all ${size === "moyen" ? "border-[#d7ff45] bg-[#d7ff45]/15 text-white shadow-md" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"}`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "font-black text-sm",
+										children: "Moyen (10,00 €)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-[11px] text-white/60",
+										children: "Généreux & complet"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setSize("grand"),
+									className: `rounded-2xl p-3.5 text-left border transition-all ${size === "grand" ? "border-[#d7ff45] bg-[#d7ff45]/15 text-white shadow-md" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"}`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "font-black text-sm text-[#d7ff45]",
+										children: "Grand (13,00 €) 🔥"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-[11px] text-white/60",
+										children: "Portion XXL très gourmande"
+									})]
+								})]
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between mb-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
+										children: "2"
+									}), "Ta Base Fondante"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-white/50",
+									children: "1 base incluse"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-2 sm:grid-cols-4 gap-2",
+								children: BASES.map((b) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setBase(b),
+									className: `rounded-2xl p-3 text-center border transition-all ${base.id === b.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f] font-black shadow-lg scale-102" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xl block",
+										children: b.emoji
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-bold block mt-1",
+										children: b.name
+									})]
+								}, b.id))
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between mb-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
+										children: "3"
+									}), "Ta Protéine Fraîche"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-white/50",
+									children: "Découpée du matin"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-2 sm:grid-cols-4 gap-2",
+								children: PROTEINES.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setProteine(p),
+									className: `rounded-2xl p-3 text-center border transition-all ${proteine.id === p.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f] font-black shadow-lg scale-102" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xl block",
+											children: p.emoji
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold block mt-1",
+											children: p.name
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] block opacity-80 mt-0.5",
+											children: p.tag
+										})
+									]
+								}, p.id))
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between mb-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
+											children: "4"
+										}),
+										"Tes Mix-ins (",
+										selectedMixins.length,
+										" sélectionnés)"
+									]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-white/60",
+									children: selectedMixins.length <= 5 ? `${5 - selectedMixins.length} inclus restants` : `+${(selectedMixins.length - 5) * .5}€ (${selectedMixins.length - 5} extras)`
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-2 sm:grid-cols-5 gap-2",
+								children: MIXINS.map((m) => {
+									const isSelected = selectedMixins.includes(m.id);
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => toggleMixin(m.id),
+										className: `rounded-xl p-2.5 text-center border transition-all text-xs font-bold flex items-center justify-center gap-1.5 ${isSelected ? "border-[#d7ff45] bg-[#d7ff45]/20 text-white" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: m.emoji }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "truncate",
+												children: m.name
+											}),
+											isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3 w-3 text-[#d7ff45] shrink-0" })
+										]
+									}, m.id);
+								})
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] block mb-2",
+									children: "5. Sauce Signature"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "grid grid-cols-2 gap-1.5",
+									children: SAUCES.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										onClick: () => setSauce(s),
+										className: `rounded-xl p-2.5 text-left border text-xs font-bold transition-all ${sauce.id === s.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f]" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+											s.emoji,
+											" ",
+											s.name
+										] })
+									}, s.id))
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] block mb-2",
+									children: "6. Crunch Topping"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "grid grid-cols-1 gap-1.5",
+									children: TOPPINGS.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										onClick: () => setTopping(t),
+										className: `rounded-xl p-2.5 text-left border text-xs font-bold transition-all ${topping.id === t.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f]" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+											t.emoji,
+											" ",
+											t.name
+										] })
+									}, t.id))
+								})] })]
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "sticky top-24 rounded-[32px] border-2 border-white/20 bg-gradient-to-b from-[#102720] to-[#0a1b16] p-6 sm:p-8 text-white shadow-2xl backdrop-blur-xl",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between pb-4 border-b border-white/10",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-5 w-5 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-black uppercase tracking-widest text-[#d7ff45]",
+										children: "Ta Création Minute"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: resetSelection,
+									className: "flex items-center gap-1 text-[11px] font-bold text-white/50 hover:text-white transition",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, { className: "h-3 w-3" }), "Réinitialiser"]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "relative my-6 aspect-square max-w-[260px] mx-auto rounded-full border-4 border-white/15 bg-gradient-to-br from-[#1a382e] to-[#071713] p-4 shadow-[inset_0_10px_30px_rgba(0,0,0,0.6)] flex items-center justify-center overflow-hidden",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(215,255,69,0.15),transparent_70%)]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative z-10 text-center space-y-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-4xl animate-bounce duration-1000",
+											children: proteine.emoji
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-xs font-black tracking-tight text-white bg-black/50 px-3 py-1 rounded-full border border-white/15 backdrop-blur-md",
+											children: base.name
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex flex-wrap justify-center gap-1 max-w-[190px]",
+											children: [
+												selectedMixins.slice(0, 5).map((id) => {
+													const m = MIXINS.find((item) => item.id === id);
+													return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-lg",
+														children: m?.emoji
+													}, id);
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-lg",
+													children: sauce.emoji
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-lg",
+													children: topping.emoji
+												})
+											]
+										})
+									]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-2 text-xs text-white/80 border-t border-white/10 pt-4",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Format ", size === "grand" ? "Grand" : "Moyen"] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-bold",
+											children: [basePrice.toFixed(2), " €"]
+										})]
+									}),
+									proteinExtra > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between text-[#ff705f]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Supplément Saumon Sashimi" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-bold",
+											children: [
+												"+",
+												proteinExtra.toFixed(2),
+												" €"
+											]
+										})]
+									}),
+									extraMixinsPrice > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between text-[#d7ff45]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+											"Mix-ins extras (",
+											extraMixinsCount,
+											")"
+										] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-bold",
+											children: [
+												"+",
+												extraMixinsPrice.toFixed(2),
+												" €"
+											]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between text-base font-black text-white pt-2 border-t border-white/10",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total de ta commande" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "text-[#d7ff45] text-2xl font-black",
+											children: [totalPrice.toFixed(2), " €"]
+										})]
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: handleAddToCart,
+								className: "mt-6 w-full inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#d7ff45] py-4 px-6 text-sm font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-[1.02] active:scale-98",
+								children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 text-emerald-600 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bowl ajouté au panier !" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									"Commander cette création · ",
+									totalPrice.toFixed(2),
+									" €"
+								] })] })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/sur-mesure",
+								className: "mt-3 block text-center text-xs font-bold text-white/60 hover:text-white transition",
+								children: "Ouvrir le configurateur avancé plein écran →"
+							})
+						]
+					})]
+				})]
+			})
+		]
+	});
+}
+//#endregion
+//#region src/components/DishTasteExplorer.tsx
+var INGREDIENTS_SHOWCASE = [
+	{
+		id: "saumon",
+		title: "Le Saumon Atlantique Sashimi",
+		subtitle: "Pêche responsable · Zéro congélation",
+		desc: "Découpé au couteau chaque matin en gros cubes fondants. Une texture soyeuse et beurrée qui sublime nos bowls signature.",
+		badge: "100% Frais Découpé Minute",
+		badgeColor: "#ff705f",
+		image: bowl_saumon_default,
+		linkDish: "saumon-wasabi",
+		stats: "Riche en Oméga-3 & Protéines"
+	},
+	{
+		id: "avocat",
+		title: "L'Avocat Hass Ultra-Fondant",
+		subtitle: "Sélectionné à maturité parfaite",
+		desc: "Un avocat crémeux tranché minute en éventail ou écrasé en guacamole maison. Aucun avocat dur ou sans saveur.",
+		badge: "Maturité Contrôlée",
+		badgeColor: "#d7ff45",
+		image: bowl_sweet_chicken_default,
+		linkDish: "sweet-chicken",
+		stats: "Vitamines E & Bons Lipides"
+	},
+	{
+		id: "crousty",
+		title: "Le Fameux Crousty Chicken",
+		subtitle: "Panure dorée croustillante minute",
+		desc: "Notre recette secrète de poulet mariné et pané ultra croustillant, nappé de sauce curry chaude onctueuse ou sauce blanche.",
+		badge: "Spécialité Chaude · Formule 11€",
+		badgeColor: "#f59e0b",
+		image: bowl_crousty_curry_default,
+		linkDish: "crousty-chicken-curry",
+		stats: "Boisson 33cl offerte incluse"
+	},
+	{
+		id: "scampis",
+		title: "Les Scampis Royaux au Grill",
+		subtitle: "Saisis à haute température",
+		desc: "De généreux scampis bien dorés avec une subtile note fumée, combinés aux jalapeños frais et à notre spicy mayo maison.",
+		badge: "Saisi Minute",
+		badgeColor: "#d7ff45",
+		image: bowl_scampis_default,
+		linkDish: "scampis-royaux",
+		stats: "Protéines maigres & Saveur grill"
+	}
+];
+function DishTasteExplorer() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "bg-[#faf8f4] py-16 sm:py-24 border-y border-black/5",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col md:flex-row md:items-end md:justify-between gap-6",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "inline-flex items-center gap-2 rounded-full bg-[#10251f]/10 px-3.5 py-1 text-xs font-black uppercase tracking-[0.2em] text-[#10251f]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#10251f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pourquoi c'est si addictif ?" })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+					className: "mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#10251f] tracking-tight",
+					children: ["L'exigence de la fraîcheur. ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-[#ff705f]",
+						children: "Zéro compromis."
+					})]
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "max-w-md text-sm sm:text-base text-[#64746d] leading-relaxed",
+					children: "Ici, pas de produits industriels pré-emballés ni de chips sans valeur. Chaque ingrédient est sélectionné pour sa fraîcheur brute et préparé sur place à Visé."
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4",
+				children: INGREDIENTS_SHOWCASE.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "group relative flex flex-col justify-between overflow-hidden rounded-[28px] border border-black/5 bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative aspect-square w-full overflow-hidden rounded-2xl bg-[#eee8dc]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: item.image,
+							alt: item.title,
+							loading: "lazy",
+							className: "h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "absolute top-3 left-3 z-10",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-wider text-[#10251f] shadow-md backdrop-blur-md",
+								style: { backgroundColor: item.badgeColor },
+								children: item.badge
+							})
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-4",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[10px] font-black uppercase tracking-widest text-[#7d8b83]",
+								children: item.subtitle
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "mt-1 text-lg font-black text-[#10251f] leading-snug",
+								children: item.title
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-xs leading-relaxed text-[#64746d]",
+								children: item.desc
+							})
+						]
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-5 pt-3 border-t border-black/5 flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[11px] font-extrabold text-[#10251f]",
+							children: item.stats
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: "/product/$productId",
+							params: { productId: item.linkDish },
+							className: "inline-flex items-center gap-1 text-xs font-black text-[#ff705f] hover:underline",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Goûter →" })
+						})]
+					})]
+				}, item.id))
+			})]
+		})
 	});
 }
 //#endregion
@@ -2715,8 +3875,8 @@ function Index() {
 		target: heroRef,
 		offset: ["start start", "end start"]
 	});
-	const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
-	const heroOpacity = useTransform(scrollYProgress, [0, .7], [1, 0]);
+	useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+	useTransform(scrollYProgress, [0, .7], [1, 0]);
 	import_react.useEffect(() => {
 		const prev = window.history.scrollRestoration;
 		window.history.scrollRestoration = "manual";
@@ -2882,153 +4042,7 @@ function Index() {
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					ref: heroRef,
-					className: "relative isolate min-h-[700px] overflow-hidden bg-[#071713] text-white lg:min-h-[780px]",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
-							style: { y: heroY },
-							className: "absolute inset-0 -z-20",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: hero_poke_default,
-								alt: "",
-								"aria-hidden": "true",
-								fetchPriority: "high",
-								className: "h-full w-full object-cover object-center opacity-18"
-							})
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_35%,rgba(215,255,69,.12),transparent_40%),radial-gradient(ellipse_at_20%_80%,rgba(255,112,95,.08),transparent_50%),linear-gradient(110deg,#071713_0%,rgba(7,23,19,.98)_50%,rgba(7,23,19,.85)_100%)]" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "relative z-10 mx-auto grid min-h-[700px] max-w-[1340px] items-center gap-10 px-5 pb-12 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-[1fr_1.1fr] lg:gap-14 lg:px-8 lg:min-h-[780px] lg:py-16",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-								style: { opacity: heroOpacity },
-								className: "max-w-xl",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-										initial: {
-											opacity: 0,
-											y: 16
-										},
-										animate: {
-											opacity: 1,
-											y: 0
-										},
-										transition: {
-											duration: .7,
-											delay: .15
-										},
-										className: "inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "h-1.5 w-1.5 rounded-full bg-[#d7ff45] animate-pulse" }), "Poké Bowls Frais & Sur-Mesure · Visé, Belgique"]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.h1, {
-										initial: {
-											opacity: 0,
-											y: 22
-										},
-										animate: {
-											opacity: 1,
-											y: 0
-										},
-										transition: {
-											duration: .75,
-											delay: .28
-										},
-										className: "mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block text-white",
-												children: "L'art du"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "mt-1 block text-[#d7ff45]",
-												children: "Poké Bowl."
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "mt-2 block text-xl sm:text-2xl lg:text-3xl font-extrabold text-white/85",
-												children: "Frais. Gourmand. Fait minute."
-											})
-										]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.p, {
-										initial: { opacity: 0 },
-										animate: { opacity: 1 },
-										transition: {
-											duration: .7,
-											delay: .4
-										},
-										className: "mt-5 max-w-lg text-[15px] leading-relaxed text-white/75",
-										children: "Découvrez nos recettes créations aux ingrédients nobles découpés chaque matin : saumon atlantique frais, scampis saisis au grill, poulet doré fondant et notre riz à sushi délicatement assaisonné."
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-										initial: {
-											opacity: 0,
-											y: 14
-										},
-										animate: {
-											opacity: 1,
-											y: 0
-										},
-										transition: {
-											duration: .7,
-											delay: .5
-										},
-										className: "mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-											href: "#carte",
-											className: "btn-primary inline-flex h-13 items-center justify-center gap-2.5 px-7 text-sm font-bold uppercase tracking-wider",
-											children: ["Découvrir nos Bowls (dès 10€)", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-											to: "/sur-mesure",
-											className: "inline-flex h-13 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-sm font-bold backdrop-blur-sm transition hover:bg-white/20 hover:scale-[1.02]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#d7ff45]" }), "Composer Sur Mesure 🥣"]
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-										initial: { opacity: 0 },
-										animate: { opacity: 1 },
-										transition: {
-											duration: .7,
-											delay: .6
-										},
-										className: "mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-xs text-white/65",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "flex items-center gap-1.5 font-bold",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-[#d7ff45]",
-													children: "★ 4.9/5"
-												}), " avis clients"]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "flex items-center gap-1.5 font-bold",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🥑" }), " 100% frais coupé du matin"]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "flex items-center gap-1.5 font-bold",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🛵" }), " Visé, Belgique"]
-											})
-										]
-									})
-								]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
-								initial: {
-									opacity: 0,
-									scale: .95
-								},
-								animate: {
-									opacity: 1,
-									scale: 1
-								},
-								transition: {
-									duration: .8,
-									delay: .2
-								},
-								className: "relative w-full max-w-xl lg:max-w-none",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokeCinematicReel, {})
-							})]
-						})
-					]
-				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hero3DParallaxPoke, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ticker, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					className: "bg-white/70 py-12 sm:py-16 border-b border-black/5 overflow-hidden",
@@ -3037,6 +4051,7 @@ function Index() {
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokeBowlMarqueeCarousel, {})
 					})
 				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishTasteExplorer, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					id: "carte",
 					className: "scroll-mt-10 mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24",
@@ -3156,14 +4171,28 @@ function Index() {
 												children: ["+", bowl.ingredients.length - 5]
 											})]
 										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "mt-auto pt-6 flex items-center gap-2",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => addItem({
+													id: bowl.id,
+													name: `${bowl.name} (Moyen)`,
+													basePrice: bowl.price,
+													price: bowl.price,
+													quantity: 1,
+													toppings: [],
+													removedIngredients: []
+												}),
+												title: `Ajouter direct au panier (${bowl.price.toFixed(2)} €)`,
+												className: "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] shadow-soft transition hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95 font-black",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-5 w-5 stroke-[2.5]" })
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 												to: "/product/$productId",
 												params: { productId: bowl.id },
-												className: "flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff5542]",
+												className: "flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]",
 												children: ["Personnaliser & Commander", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
-											})
+											})]
 										})
 									]
 								})]
@@ -3248,190 +4277,7 @@ function Index() {
 						})]
 					})
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					id: "composer",
-					className: "scroll-mt-10 relative overflow-hidden bg-[#0d211b] px-5 py-16 text-white sm:px-6 sm:py-24 lg:px-8 border-y border-white/10",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 right-1/4 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-[100px] pointer-events-none" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute bottom-0 left-1/4 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-[100px] pointer-events-none" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "relative z-10 mx-auto max-w-[1280px]",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex flex-col md:flex-row md:items-end md:justify-between gap-6",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5" }), "Comment ça marche · 5 gestes gourmands"]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
-										className: "mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "block text-white",
-											children: "Votre Poké Bowl sur mesure,"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "mt-1 block text-[#d7ff45]",
-											children: "composé sous vos yeux."
-										})]
-									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "max-w-md",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "text-sm leading-relaxed text-white/70",
-											children: "Chaque ingrédient est sélectionné et découpé le matin même à Visé. Choisissez votre base aérée, vos légumes frais, votre protéine chaude ou fraîche, votre sauce et le crunch final."
-										})
-									})]
-								}) }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5",
-									children: [
-										{
-											num: "01",
-											title: "Ta Base",
-											tag: "Traditionnelle & aérée",
-											desc: "Riz à sushi délicatement assaisonné, riz brun complet, salade fraîche croquante, pâtes ou nachos.",
-											pills: [
-												"🍚 Riz à sushi",
-												"🌾 Riz brun",
-												"🥗 Salade",
-												"🍝 Pâtes",
-												"🫓 Nachos"
-											]
-										},
-										{
-											num: "02",
-											title: "5 Mix-in Frais",
-											tag: "5 inclus dans le prix !",
-											desc: "Vitamines & fraîcheur parmi 16 découpes du jour : avocat mûr, mangue, edamame, feta, maïs doux, tomates...",
-											pills: [
-												"🥑 Avocat",
-												"🥭 Mangue",
-												"🧀 Feta",
-												"🫘 Edamame",
-												"🌽 Maïs"
-											]
-										},
-										{
-											num: "03",
-											title: "Ta Protéine",
-											tag: "Préparée minute",
-											desc: "Poulet doré mariné, véritable saumon atlantique sashimi (+1€) ou scampis grillés saisis minute.",
-											pills: [
-												"🍗 Poulet doré",
-												"🐟 Saumon (+1€)",
-												"🦐 Scampis"
-											]
-										},
-										{
-											num: "04",
-											title: "Sauce Signature",
-											tag: "Recettes maison",
-											desc: "Spicy Mayo onctueuse, Teriyaki brillante caramélisée, Mayo Wasabi subtile, sauce sésame ou chili doux.",
-											pills: [
-												"🌶️ Spicy Mayo",
-												"🍯 Teriyaki",
-												"🟢 Wasabi",
-												"🌱 Sésame"
-											]
-										},
-										{
-											num: "05",
-											title: "Crunch Toppings",
-											tag: "La touche croustillante",
-											desc: "Oignons frits ultra dorés, graines de sésame noir & blanc toastées, brisures de nachos ou flocons chili.",
-											pills: [
-												"🧅 Oignons frits",
-												"🌱 Sésame mix",
-												"🥜 Noix cajou",
-												"🔥 Chili"
-											]
-										}
-									].map(({ num, title, tag, desc, pills }, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, {
-										delay: index * .06,
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-											whileHover: {
-												y: -6,
-												scale: 1.02
-											},
-											transition: {
-												duration: .3,
-												ease: "easeOut"
-											},
-											className: "group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-all duration-300 hover:border-[#d7ff45]/40 hover:bg-white/[0.07] hover:shadow-xl",
-											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 right-0 h-20 w-20 bg-gradient-to-br from-white/10 to-transparent rounded-bl-full pointer-events-none opacity-50 group-hover:opacity-100 transition" }),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-														className: "flex items-center justify-between",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-xs font-black text-[#d7ff45] border border-white/10 group-hover:bg-[#d7ff45] group-hover:text-[#10251f] transition",
-															children: num
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "rounded-full bg-white/10 px-2.5 py-0.5 text-[9px] font-bold text-white/80",
-															children: tag
-														})]
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-														className: "mt-4 text-base sm:text-lg font-extrabold text-white group-hover:text-[#d7ff45] transition",
-														children: title
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-														className: "mt-2 text-xs leading-relaxed text-white/65",
-														children: desc
-													})
-												] }),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: "mt-5 pt-4 border-t border-white/10",
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-														className: "flex flex-wrap gap-1",
-														children: pills.map((pill, pIdx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-white/80",
-															children: pill
-														}, pIdx))
-													})
-												})
-											]
-										})
-									}, num))
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "mt-8 overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-r from-white/[0.08] via-white/[0.05] to-white/[0.02] p-6 sm:p-8 backdrop-blur-md",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center gap-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]",
-													children: "Dès 10,00 €"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-xs font-bold text-white/70",
-													children: "Format Moyen (10€) ou Grand (13€)"
-												})]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-												className: "mt-2 text-xl sm:text-2xl font-extrabold text-white",
-												children: "Envie de créer votre bowl signature sur mesure ?"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-1 text-xs sm:text-sm text-white/60",
-												children: "Personnalisez chaque ingrédient en ligne, retirez les allergènes et récupérez votre commande prête minute à Visé."
-											})
-										] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex flex-wrap items-center gap-3",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-												to: "/sur-mesure",
-												className: "btn-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold uppercase tracking-wider",
-												children: ["Composer mon bowl en ligne ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-												href: "#carte",
-												className: "rounded-full border border-white/20 bg-white/5 px-5 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition",
-												children: "Voir les 5 recettes signatures"
-											})]
-										})]
-									})
-								})
-							]
-						})
-					]
-				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InteractiveBowlBuilder, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					className: "mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

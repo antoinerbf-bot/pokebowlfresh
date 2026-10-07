@@ -1,7 +1,7 @@
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { O as BriefcaseBusiness, h as PhoneCall, j as ArrowLeft, v as MapPin } from "../_libs/lucide-react.mjs";
+import { P as ArrowLeft, _ as PhoneCall, b as MapPin, j as BriefcaseBusiness } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/recrutement-BUiTPiiD.js
 var import_jsx_runtime = require_jsx_runtime();
 function RecruitmentPage() {

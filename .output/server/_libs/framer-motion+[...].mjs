@@ -4663,6 +4663,218 @@ function transform(...args) {
 	return useImmediate ? interpolator(inputValue) : interpolator;
 }
 //#endregion
+//#region node_modules/motion-dom/dist/es/animation/FollowAnimation.mjs
+/**
+* Every running follower ticks from this one frame callback.
+*/
+var active = /* @__PURE__ */ new Set();
+var tickAll = ({ timestamp }) => {
+	active.forEach((animation) => animation.tick(timestamp));
+};
+/**
+* A lean animation for values that follow a target (`followValue`,
+* `springValue`): a single numeric generator, retargeted in place as
+* the target moves and ticked from a frame callback shared by every
+* follower. Only implements the controls `MotionValue.animation`
+* exposes. Repeat options are ignored: a follower only ever heads for
+* its latest target.
+*/
+var FollowAnimation = class extends WithPromise {
+	constructor(options) {
+		super();
+		this.state = "idle";
+		this.startTime = 0;
+		this.currentTime = 0;
+		/**
+		* Whether the first tick has fired `onPlay`.
+		*/
+		this.started = false;
+		/**
+		* A target set since the last tick, applied at the next one so any
+		* number of sets per frame cost one retarget.
+		*/
+		this.hasNextTarget = false;
+		this.nextTarget = 0;
+		/**
+		* Bound to the instance so `animation.stop` can be passed around.
+		*/
+		this.stop = () => {
+			if (this.state === "idle") return;
+			this.teardown();
+			this.options.onStop?.();
+		};
+		this.options = options;
+		replaceTransitionType(options);
+		this.factory = options.type || keyframes;
+		this.generator = this.factory(options);
+		const { driver } = options;
+		if (driver) this.driver = driver((timestamp) => this.tick(timestamp));
+		this.startTime = this.now();
+		this.state = "running";
+		if (this.driver) this.driver.start();
+		else {
+			active.size || frame.update(tickAll, true);
+			active.add(this);
+		}
+	}
+	/**
+	* Aim at a new target from wherever the animation has reached by the
+	* next tick. `velocity` fixes the velocity to steer with, otherwise
+	* the generator's is used.
+	*/
+	setTarget(target, velocity) {
+		this.nextTarget = target;
+		this.nextVelocity = velocity;
+		this.hasNextTarget = true;
+	}
+	/**
+	* Steer towards new keyframes from the current position and velocity.
+	* Springs are updated in place; other generators are recreated.
+	*/
+	retarget(keyframes, velocity) {
+		const { options, generator } = this;
+		options.keyframes = keyframes;
+		options.velocity = velocity;
+		this.startTime = this.now();
+		this.currentTime = 0;
+		if (generator.retarget) generator.retarget(keyframes, velocity);
+		else this.generator = this.factory(options);
+	}
+	tick(timestamp) {
+		const { options, hasNextTarget: retargeted } = this;
+		const { delay = 0, onUpdate, onPlay } = options;
+		const elapsed = Math.round(timestamp - this.startTime) - delay;
+		const t = this.currentTime = Math.max(0, elapsed);
+		const state = this.generator.next(t);
+		const value = elapsed < 0 ? options.keyframes[0] : state.value;
+		if (retargeted) {
+			/**
+			* Steer from where the current trajectory has reached this
+			* frame, then render that position as the new origin.
+			*/
+			this.hasNextTarget = false;
+			const { keyframes } = options;
+			keyframes[0] = value;
+			keyframes[1] = this.nextTarget;
+			this.retarget(keyframes, this.nextVelocity ?? this.getGeneratorVelocity());
+		}
+		if (retargeted || !this.started) {
+			this.started = true;
+			onPlay?.();
+		}
+		/**
+		* Callbacks may stop this animation or set a new target, so check
+		* the live state rather than what was read at the top of the tick.
+		*/
+		if (this.state !== "running") return;
+		onUpdate?.(value);
+		if (state.done && elapsed >= 0 && !retargeted && !this.hasNextTarget && this.state === "running") {
+			this.notifyFinished();
+			this.teardown();
+			this.state = "finished";
+			options.onComplete?.();
+		}
+	}
+	getGeneratorVelocity() {
+		return calcGeneratorVelocity(this.generator, this.currentTime, this.options.velocity);
+	}
+	now() {
+		return this.driver ? this.driver.now() : time.now();
+	}
+	teardown() {
+		this.state = "idle";
+		if (this.driver) this.driver.stop();
+		else {
+			active.delete(this);
+			active.size || cancelFrame(tickAll);
+		}
+	}
+};
+//#endregion
+//#region node_modules/motion-dom/dist/es/value/follow-value.mjs
+/**
+* Attach an animation to a MotionValue that will animate whenever the value changes.
+* Similar to attachSpring but supports any transition type (spring, tween, inertia, etc.)
+*
+* @param value - The MotionValue to animate
+* @param source - Initial value or MotionValue to track
+* @param options - Animation transition options
+* @returns Cleanup function
+*
+* @public
+*/
+function attachFollow(value, source, options = {}) {
+	const initialValue = value.get();
+	let activeAnimation = null;
+	let set;
+	const unit = typeof initialValue === "string" ? initialValue.replace(/[\d.-]/g, "") : void 0;
+	const onUpdate = (v) => set(unit ? v + unit : v);
+	const onPlay = () => value["events"].animationStart?.notify();
+	const stopAnimation = () => {
+		if (activeAnimation) {
+			activeAnimation.stop();
+			activeAnimation = null;
+		}
+		value.animation = void 0;
+	};
+	value.attach((v, safeSet) => {
+		set = safeSet;
+		const target = asNumber$1(v);
+		if (activeAnimation?.state === "running") {
+			/**
+			* Steer the running animation rather than replacing it. This
+			* keeps its completion promise and uses its analytical velocity
+			* for accuracy, preventing systematic velocity loss at high
+			* frame rates (240hz+).
+			*/
+			activeAnimation.setTarget(target, options.velocity);
+			return;
+		}
+		const current = asNumber$1(value.get());
+		const velocity = activeAnimation ? activeAnimation.getGeneratorVelocity() : value.getVelocity();
+		stopAnimation();
+		if (current === target) return;
+		const animation = activeAnimation = new FollowAnimation({
+			keyframes: [current, target],
+			velocity,
+			type: "spring",
+			restDelta: .001,
+			restSpeed: .01,
+			...options,
+			onUpdate,
+			onPlay
+		});
+		value.animation = animation;
+		animation.then(() => {
+			if (activeAnimation !== animation) return;
+			activeAnimation = null;
+			value.animation = void 0;
+			value["events"].animationComplete?.notify();
+		});
+	}, stopAnimation);
+	if (isMotionValue(source)) {
+		let skipNextAnimation = options.skipInitialAnimation === true;
+		const removeSourceOnChange = source.on("change", (v) => {
+			if (skipNextAnimation) {
+				skipNextAnimation = false;
+				value.jump(parseValue(v, unit), false);
+			} else value.set(parseValue(v, unit));
+		});
+		const removeValueOnDestroy = value.on("destroy", removeSourceOnChange);
+		return () => {
+			removeSourceOnChange();
+			removeValueOnDestroy();
+		};
+	}
+	return stopAnimation;
+}
+function parseValue(v, unit) {
+	return unit ? v + unit : v;
+}
+function asNumber$1(v) {
+	return typeof v === "number" ? v : parseFloat(v);
+}
+//#endregion
 //#region node_modules/motion-dom/dist/es/projection/geometry/models.mjs
 var createAxisDelta = () => ({
 	translate: 0,
@@ -10691,4 +10903,24 @@ function useMapTransform(inputValue, inputRange, outputMap, options) {
 	return output;
 }
 //#endregion
-export { AnimatePresence as i, useScroll as n, motion as r, useTransform as t };
+//#region node_modules/framer-motion/dist/es/value/use-follow-value.mjs
+function useFollowValue(source, options = {}) {
+	const { isStatic } = (0, import_react.useContext)(MotionConfigContext);
+	const getFromSource = () => isMotionValue(source) ? source.get() : source;
+	if (isStatic) return useTransform(getFromSource);
+	const value = useMotionValue(getFromSource());
+	(0, import_react.useInsertionEffect)(() => {
+		return attachFollow(value, source, options);
+	}, [value, JSON.stringify(options)]);
+	return value;
+}
+//#endregion
+//#region node_modules/framer-motion/dist/es/value/use-spring.mjs
+function useSpring(source, options = {}) {
+	return useFollowValue(source, {
+		type: "spring",
+		...options
+	});
+}
+//#endregion
+export { motion as a, useScroll as i, useTransform as n, AnimatePresence as o, useMotionValue as r, useSpring as t };
