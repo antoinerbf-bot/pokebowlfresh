@@ -15,6 +15,9 @@ import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import heroPoke from "@/assets/hero-poke.jpg";
 import dessert from "@/assets/dessert.jpg";
+import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
+import tiramisuNutella from "@/assets/tiramisu-nutella.jpg";
+import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
 import { useTranslation } from "../context/I18nContext";
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
@@ -22,7 +25,7 @@ import { bowls, drinks, desserts } from "../lib/data";
 import { DishImage } from "../components/DishImage";
 import { PokeCinematicReel } from "@/components/PokeCinematicReel";
 import { PokeBowlCraftingExperience } from "@/components/PokeBowlCraftingExperience";
-import { Sparkles, Utensils, Heart } from "lucide-react";
+import { Sparkles, Utensils, Heart, Check, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -127,7 +130,7 @@ function Ticker() {
 /* ── Main ─────────────────────────────────────────────────────────── */
 function Index() {
   const { t, language, setLanguage } = useTranslation();
-  const { items, setIsCartOpen } = useCart();
+  const { items, setIsCartOpen, addItem } = useCart();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -307,21 +310,21 @@ function Index() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.15 }}
-                className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-[#d7ff45]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-[#d7ff45] animate-pulse" />
-                Poké Bowls Frais & Sur-Mesure · Visé & Fléron
+                Poké Bowls Frais & Sur-Mesure · Visé, Belgique
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.75, delay: 0.28 }}
-                className="mt-4 font-sans text-[2.6rem] font-black leading-[0.94] tracking-[-0.04em] sm:text-5xl lg:text-[4.2rem]"
+                className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight"
               >
                 <span className="block text-white">L'art du</span>
                 <span className="mt-1 block text-[#d7ff45]">Poké Bowl.</span>
-                <span className="mt-2 block text-xl sm:text-2xl lg:text-3xl font-extrabold text-white/80">
+                <span className="mt-2 block text-xl sm:text-2xl lg:text-3xl font-extrabold text-white/85">
                   Frais. Gourmand. Fait minute.
                 </span>
               </motion.h1>
@@ -330,7 +333,7 @@ function Index() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.4 }}
-                className="mt-5 max-w-lg text-[15px] leading-7 text-white/70"
+                className="mt-5 max-w-lg text-[15px] leading-relaxed text-white/75"
               >
                 Découvrez nos 5 recettes créations aux ingrédients nobles découpés chaque matin :
                 saumon atlantique frais, scampis saisis au grill, émincé de gyros rôti, poulet doré fondant
@@ -346,7 +349,7 @@ function Index() {
               >
                 <a
                   href="#carte"
-                  className="btn-primary inline-flex h-13 items-center justify-center gap-2.5 px-7 text-sm font-black uppercase tracking-wider"
+                  className="btn-primary inline-flex h-13 items-center justify-center gap-2.5 px-7 text-sm font-bold uppercase tracking-wider"
                 >
                   Découvrir nos Bowls (dès 10€)
                   <ArrowRight className="h-4 w-4" />
@@ -365,7 +368,7 @@ function Index() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.6 }}
-                className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-xs text-white/60"
+                className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 pt-6 text-xs text-white/65"
               >
                 <span className="flex items-center gap-1.5 font-bold">
                   <span className="text-[#d7ff45]">★ 4.9/5</span> avis clients
@@ -374,7 +377,7 @@ function Index() {
                   <span>🥑</span> 100% frais coupé du matin
                 </span>
                 <span className="flex items-center gap-1.5 font-bold">
-                  <span>🛵</span> Visé & Fléron
+                  <span>🛵</span> Visé, Belgique
                 </span>
               </motion.div>
             </motion.div>
@@ -399,12 +402,12 @@ function Index() {
           <Reveal>
             <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-3.5 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#ff705f]">
                   <span>🥗</span> Recettes officielles du flyer
                 </div>
-                <h2 className="mt-3 max-w-2xl text-[1.9rem] font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+                <h2 className="mt-3 max-w-2xl text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
                   <span className="block text-[#10251f]">Nos 5 Poké Bowls Signatures</span>
-                  <span className="mt-1 block text-[#7d8b83] text-xl sm:text-2xl lg:text-3xl font-extrabold">
+                  <span className="mt-2 block text-[#4e5c55] text-base sm:text-lg lg:text-xl font-medium">
                     Riz basmati parfumé, sauces maison & fraîcheur garantie
                   </span>
                 </h2>
@@ -416,7 +419,7 @@ function Index() {
                 <div className="mt-4 flex items-center gap-4">
                   <Link
                     to="/sur-mesure"
-                    className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-[#ff705f] hover:underline"
+                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#ff705f] hover:underline"
                   >
                     Ou compose ton bowl de A à Z →
                   </Link>
@@ -437,7 +440,7 @@ function Index() {
                   key={filter.id}
                   type="button"
                   onClick={() => setActiveTab(filter.id as any)}
-                  className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider transition ${
+                  className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${
                     activeTab === filter.id
                       ? "bg-[#10251f] text-white shadow-md scale-105"
                       : "bg-white text-[#10251f]/75 hover:bg-[#10251f]/10 border border-black/5"
@@ -464,12 +467,12 @@ function Index() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
                     
                     {/* Tag badge */}
-                    <span className="badge-tag absolute left-3.5 top-3.5 bg-white/95 text-[#10251f] shadow-card font-black">
+                    <span className="badge-tag absolute left-3.5 top-3.5 bg-white/95 text-[#10251f] shadow-card font-bold">
                       {bowl.tag}
                     </span>
 
                     {/* Price tag */}
-                    <span className="absolute bottom-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1.5 text-xs font-black text-[#10251f] shadow-md">
+                    <span className="absolute bottom-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1.5 text-xs font-extrabold text-[#10251f] shadow-md">
                       {bowl.price.toFixed(2)} €
                     </span>
                   </div>
@@ -478,7 +481,7 @@ function Index() {
                   <div className="flex flex-1 flex-col p-6 sm:p-7">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h3 className="text-xl sm:text-2xl font-black text-[#10251f] leading-tight">
+                        <h3 className="text-lg sm:text-xl font-extrabold text-[#10251f] leading-snug">
                           {bowl.name}
                         </h3>
                         <p className="mt-1 text-xs font-bold text-[#ff705f]">
@@ -537,16 +540,16 @@ function Index() {
         <section className="bg-[#f0e6d6] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24 border-y border-black/5">
           <div className="mx-auto max-w-[1200px]">
             <Reveal className="text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#8b5510]/10 px-3.5 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-[#8b5510]">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#8b5510]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8b5510]">
                 <span>🍗</span> Spécialités Chaudes & Croustillantes
               </div>
-              <h2 className="mt-3 text-[1.9rem] font-black uppercase tracking-tight sm:text-4xl lg:text-5xl">
+              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#241a12]">
                 Le Bar à Crousty Chicken
               </h2>
               <p className="mt-2 text-sm text-[#6e6255] max-w-xl mx-auto">
                 Du poulet ultra croustillant pané minute, servi chaud sur riz parfumé avec oignons frits.
               </p>
-              <div className="mt-4 inline-flex items-center gap-3 rounded-full bg-[#8b5510] px-5 py-2 text-white shadow-md text-xs font-black uppercase tracking-wider">
+              <div className="mt-4 inline-flex items-center gap-3 rounded-full bg-[#8b5510] px-5 py-2 text-white shadow-md text-xs font-bold uppercase tracking-wider">
                 🎓 Formule Étudiant : 11 € · Boisson 33cl incluse
               </div>
             </Reveal>
@@ -565,16 +568,16 @@ function Index() {
                         alt={item.name}
                         className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                       />
-                      <span className="absolute left-3 top-3 rounded-full bg-[#8b5510] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white">
+                      <span className="absolute left-3 top-3 rounded-full bg-[#8b5510] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white">
                         11 € · Menu
                       </span>
                     </div>
                     <div className="flex flex-col p-5 sm:p-6 justify-between flex-1">
                       <div>
-                        <span className="text-[9px] font-black uppercase tracking-wider text-[#a96b0d]">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#a96b0d]">
                           Crousty Chicken
                         </span>
-                        <h3 className="mt-1 text-lg font-black text-[#241a12]">
+                        <h3 className="mt-1 text-lg font-bold text-[#241a12]">
                           {item.name}
                         </h3>
                         <p className="mt-1.5 text-xs text-[#6e6255] line-clamp-2">
@@ -597,114 +600,346 @@ function Index() {
           </div>
         </section>
 
-        {/* ════════ Étapes de composition ═════════════════════════ */}
-        <section id="composer" className="scroll-mt-10 bg-[#10251f] px-5 py-12 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-          <div className="mx-auto max-w-[1200px]">
+        {/* ════════ Étapes de composition : SUR-MESURE ══════════════ */}
+        <section id="composer" className="scroll-mt-10 relative overflow-hidden bg-[#0d211b] px-5 py-16 text-white sm:px-6 sm:py-24 lg:px-8 border-y border-white/10">
+          {/* Ambient decorative glow */}
+          <div className="absolute top-0 right-1/4 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-[100px] pointer-events-none" />
+
+          <div className="relative z-10 mx-auto max-w-[1280px]">
             <Reveal>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">
-                {t("journey.eyebrow")}
-              </p>
-              <h2 className="mt-3 max-w-3xl text-[1.7rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
-                <span className="block">{t("journey.title1")}</span>
-                <span className="mt-0.5 block text-white/35">{t("journey.title2")}</span>
-              </h2>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/30 bg-[#d7ff45]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Comment ça marche · 5 gestes gourmands
+                  </div>
+                  <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                    <span className="block text-white">Votre Poké Bowl sur mesure,</span>
+                    <span className="mt-1 block text-[#d7ff45]">composé sous vos yeux.</span>
+                  </h2>
+                </div>
+                <div className="max-w-md">
+                  <p className="text-sm leading-relaxed text-white/70">
+                    Chaque ingrédient est sélectionné et découpé le matin même à Visé. Choisissez votre base aérée, vos légumes frais, votre protéine chaude ou fraîche, votre sauce et le crunch final.
+                  </p>
+                </div>
+              </div>
             </Reveal>
-            <div className="mt-8 grid gap-2 sm:mt-9 sm:grid-cols-2 lg:grid-cols-5">
+
+            {/* The 5 interactive rich step cards */}
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               {[
-                { num: "01", title: "1. Ta Base", desc: "Riz blanc, riz brun, pâtes, nachos ou salade fraîche." },
-                { num: "02", title: "2. Mix-in", desc: "5 ingrédients frais parmi 16 (avocat, mangue, feta, maïs...)." },
-                { num: "03", title: "3. Protéine", desc: "Poulet mariné, gyros maison, saumon (+1€) ou scampis." },
-                { num: "04", title: "4. Sauce", desc: "Spicy-mayo, teriyaki, mayo truffe, sésame, chili doux..." },
-                { num: "05", title: "5. Toppings", desc: "Oignons frits, sésame seeds, noix de cajou, flocons chili..." },
-              ].map(({ num, title, desc }, index) => (
-                <Reveal key={num} delay={index * 0.05}>
+                {
+                  num: "01",
+                  title: "Ta Base",
+                  tag: "Légère & aérée",
+                  desc: "Riz basmati vapeur aux grains fins, riz brun complet, salade fraîche croquante, pâtes ou nachos.",
+                  pills: ["🍚 Riz basmati", "🌾 Riz brun", "🥗 Salade", "🍝 Pâtes", "🫓 Nachos"],
+                },
+                {
+                  num: "02",
+                  title: "5 Mix-in Frais",
+                  tag: "5 inclus dans le prix !",
+                  desc: "Vitamines & fraîcheur parmi 16 découpes du jour : avocat mûr, mangue, edamame, feta, maïs doux, tomates...",
+                  pills: ["🥑 Avocat", "🥭 Mangue", "🧀 Feta", "🫘 Edamame", "🌽 Maïs"],
+                },
+                {
+                  num: "03",
+                  title: "Ta Protéine",
+                  tag: "Préparée minute",
+                  desc: "Poulet doré mariné, véritable saumon atlantique sashimi (+1€), scampis grillés ou émincé de gyros rôti.",
+                  pills: ["🍗 Poulet doré", "🐟 Saumon (+1€)", "🦐 Scampis", "🥙 Gyros"],
+                },
+                {
+                  num: "04",
+                  title: "Sauce Signature",
+                  tag: "Recettes maison",
+                  desc: "Spicy Mayo onctueuse, Teriyaki brillante caramélisée, Mayo Wasabi subtile, sauce sésame ou chili doux.",
+                  pills: ["🌶️ Spicy Mayo", "🍯 Teriyaki", "🟢 Wasabi", "🌱 Sésame"],
+                },
+                {
+                  num: "05",
+                  title: "Crunch Toppings",
+                  tag: "La touche croustillante",
+                  desc: "Oignons frits ultra dorés, graines de sésame noir & blanc toastées, brisures de nachos ou flocons chili.",
+                  pills: ["🧅 Oignons frits", "🌱 Sésame mix", "🥜 Noix cajou", "🔥 Chili"],
+                },
+              ].map(({ num, title, tag, desc, pills }, index) => (
+                <Reveal key={num} delay={index * 0.06}>
                   <motion.div
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.25 }}
-                    className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6"
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition-all duration-300 hover:border-[#d7ff45]/40 hover:bg-white/[0.07] hover:shadow-xl"
                   >
-                    <span className="text-3xl font-black text-[#d7ff45]">{num}</span>
-                    <h3 className="mt-4 text-base font-black">{title}</h3>
-                    <p className="mt-1.5 text-xs leading-relaxed text-white/55">{desc}</p>
+                    <div className="absolute top-0 right-0 h-20 w-20 bg-gradient-to-br from-white/10 to-transparent rounded-bl-full pointer-events-none opacity-50 group-hover:opacity-100 transition" />
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-xs font-black text-[#d7ff45] border border-white/10 group-hover:bg-[#d7ff45] group-hover:text-[#10251f] transition">
+                          {num}
+                        </span>
+                        <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[9px] font-bold text-white/80">
+                          {tag}
+                        </span>
+                      </div>
+                      <h3 className="mt-4 text-base sm:text-lg font-extrabold text-white group-hover:text-[#d7ff45] transition">
+                        {title}
+                      </h3>
+                      <p className="mt-2 text-xs leading-relaxed text-white/65">
+                        {desc}
+                      </p>
+                    </div>
+
+                    <div className="mt-5 pt-4 border-t border-white/10">
+                      <div className="flex flex-wrap gap-1">
+                        {pills.map((pill, pIdx) => (
+                          <span
+                            key={pIdx}
+                            className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-white/80"
+                          >
+                            {pill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </motion.div>
                 </Reveal>
               ))}
             </div>
-            <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.15em] text-[#d7ff45]">
-                  Formule Poke (n) Bowl sur mesure · 10.00 €
-                </p>
-                <p className="mt-1 text-sm text-white/60">
-                  Compose ton bol personnalisé en ligne ou découvre nos 7 recettes signatures.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  to="/sur-mesure"
-                  className="btn-primary inline-flex items-center justify-center gap-2"
-                >
-                  Composer mon bowl <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  to="/commander"
-                  className="rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:bg-white/10"
-                >
-                  Voir la carte
-                </Link>
+
+            {/* Bottom High-Impact Banner */}
+            <div className="mt-8 overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-r from-white/[0.08] via-white/[0.05] to-white/[0.02] p-6 sm:p-8 backdrop-blur-md">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]">
+                      Dès 10,00 €
+                    </span>
+                    <span className="text-xs font-bold text-white/70">
+                      Format Moyen (10€) ou Grand (13€)
+                    </span>
+                  </div>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-extrabold text-white">
+                    Envie de créer votre bowl signature sur mesure ?
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-white/60">
+                    Personnalisez chaque ingrédient en ligne, retirez les allergènes et récupérez votre commande prête minute à Visé.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/sur-mesure"
+                    className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold uppercase tracking-wider"
+                  >
+                    Composer mon bowl en ligne <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <a
+                    href="#carte"
+                    className="rounded-full border border-white/20 bg-white/5 px-5 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10 transition"
+                  >
+                    Voir les 5 recettes signatures
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ════════ Boissons + Desserts ════════════════════════════ */}
-        <section className="mx-auto max-w-[1200px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
+        {/* ════════ Boissons & Desserts : Plaisirs Gourmands ═══════ */}
+        <section className="mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
           <Reveal>
-            <div className="grid gap-4 lg:grid-cols-2">
-              {/* Boissons */}
-              <div className="overflow-hidden rounded-[24px] bg-white shadow-card sm:p-0">
-                <div className="border-b border-black/5 px-6 py-5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff705f]">
-                    {t("menu.drinks")}
-                  </p>
-                  <h3 className="mt-1 text-2xl font-black sm:text-3xl">{t("menu.drinks_title")}</h3>
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#ff705f]">
+                <span>🧁</span> Douceurs & Rafraîchissements
+              </div>
+              <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]">
+                Complétez votre repas avec nos incontournables
+              </h2>
+              <p className="mt-2 text-sm text-[#5a6760]">
+                Des tiramisus artisanaux préparés chaque matin et vos boissons fraîches préférées.
+              </p>
+            </div>
+
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* Module 1 : Tiramisus Maison */}
+              <div className="flex flex-col justify-between overflow-hidden rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
+                <div>
+                  <div className="flex items-center justify-between border-b border-black/5 pb-4">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#ff705f]">
+                        Pâtisserie Maison · Fait chaque matin
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-extrabold text-[#10251f] mt-1">
+                        Nos 3 Tiramisus Gourmands
+                      </h3>
+                    </div>
+                    <span className="rounded-full bg-[#ff705f]/10 px-3 py-1 text-xs font-black text-[#ff705f]">
+                      4,00 € l'unité
+                    </span>
+                  </div>
+
+                  <div className="mt-6 space-y-4">
+                    {[
+                      {
+                        id: "tira-spec",
+                        name: "Tiramisu Spéculoos",
+                        badge: "Grand Classique ⭐",
+                        desc: "Crème mascarpone légère, biscuits Lotus caramélisés croustillants & voile de spéculoos.",
+                        image: tiramisuSpeculoos,
+                        price: 4.00,
+                      },
+                      {
+                        id: "tira-nutella",
+                        name: "Tiramisu Nutella",
+                        badge: "Ultra Gourmand 🍫",
+                        desc: "Tourbillons généreux de Nutella fondant, éclats de noisettes torréfiées & mascarpone.",
+                        image: tiramisuNutella,
+                        price: 4.00,
+                      },
+                      {
+                        id: "tira-oreo",
+                        name: "Tiramisu Oreo",
+                        badge: "Crunch & Crème 🍪",
+                        desc: "Brisures croustillantes de biscuits Oréo noir et crème fouettée maison onctueuse.",
+                        image: tiramisuOreo,
+                        price: 4.00,
+                      },
+                    ].map((item) => (
+                      <div
+                        key={item.id}
+                        className="group flex items-center gap-4 rounded-2xl border border-black/5 bg-[#faf8f4] p-3.5 transition duration-200 hover:border-[#ff705f]/30 hover:bg-white hover:shadow-sm"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-20 w-20 shrink-0 rounded-xl object-cover shadow-sm group-hover:scale-105 transition duration-300"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <h4 className="font-extrabold text-[#10251f] text-sm sm:text-base">
+                              {item.name}
+                            </h4>
+                            <span className="text-[10px] font-bold text-[#ff705f] bg-[#ff705f]/10 rounded-md px-2 py-0.5">
+                              {item.badge}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs text-[#68756f] line-clamp-2 leading-relaxed">
+                            {item.desc}
+                          </p>
+                          <div className="mt-2.5 flex items-center justify-between">
+                            <span className="text-xs font-black text-[#10251f]">
+                              {item.price.toFixed(2)} €
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                addItem({
+                                  id: item.id,
+                                  name: item.name,
+                                  basePrice: item.price,
+                                  price: item.price,
+                                  quantity: 1,
+                                  toppings: [],
+                                  removedIngredients: [],
+                                });
+                              }}
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[#10251f] px-3.5 py-1.5 text-[11px] font-bold text-white transition hover:bg-[#ff705f]"
+                            >
+                              <Plus className="h-3 w-3" />
+                              Ajouter
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid gap-2 p-5 sm:grid-cols-2 sm:p-6">
-                  {drinks.map((drink) => (
-                    <Link
-                      key={drink.id}
-                      to="/commander"
-                      className="flex items-center justify-between gap-2 rounded-xl bg-[#f5f4ee] px-4 py-3 text-sm transition hover:bg-[#d7ff45] hover:-translate-y-0.5"
-                    >
-                      <span className="min-w-0 break-words font-bold">{drink.name}</span>
-                      <span className="shrink-0 text-xs font-black">€ {drink.price.toFixed(2)}</span>
-                    </Link>
-                  ))}
+
+                <div className="mt-6 pt-4 border-t border-black/5 text-center">
+                  <Link
+                    to="/commander"
+                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#ff705f] hover:underline"
+                  >
+                    Commander un dessert seul ou en menu →
+                  </Link>
                 </div>
               </div>
-              {/* Desserts */}
-              <div className="overflow-hidden rounded-[24px] bg-[#ff705f] text-white shadow-card">
-                <div className="border-b border-white/15 px-6 py-5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/60">
-                    {t("menu.desserts")}
-                  </p>
-                  <h3 className="mt-1 text-2xl font-black sm:text-3xl">{t("menu.desserts_title")}</h3>
+
+              {/* Module 2 : Boissons Fraîches */}
+              <div className="flex flex-col justify-between overflow-hidden rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
+                <div>
+                  <div className="flex items-center justify-between border-b border-black/5 pb-4">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#ff705f]">
+                        Canettes & Eaux · Servies très fraîches
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-extrabold text-[#10251f] mt-1">
+                        Nos Boissons Fraîches
+                      </h3>
+                    </div>
+                    <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]">
+                      2,00 € l'unité
+                    </span>
+                  </div>
+
+                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                    {[
+                      { id: "coca", name: "Coca-Cola", size: "33 cl", icon: "🥤", tag: "Classique givré", price: 2.00 },
+                      { id: "coca-zero", name: "Coca-Cola Zero", size: "33 cl", icon: "✨", tag: "Zéro sucre", price: 2.00 },
+                      { id: "fanta", name: "Fanta Orange", size: "33 cl", icon: "🍊", tag: "Fruité pétillant", price: 2.00 },
+                      { id: "ice-tea", name: "Ice-Tea Pêche", size: "33 cl", icon: "🍑", tag: "Douceur glacée", price: 2.00 },
+                      { id: "eau-plate", name: "Eau plate", size: "50 cl", icon: "💧", tag: "Pureté minérale", price: 2.00 },
+                      { id: "eau-gaz", name: "Eau gazeuse", size: "50 cl", icon: "🫧", tag: "Bulles vives", price: 2.00 },
+                    ].map((drink) => (
+                      <div
+                        key={drink.id}
+                        className="group flex flex-col justify-between rounded-2xl border border-black/5 bg-[#faf8f4] p-4 transition duration-200 hover:border-[#d7ff45] hover:bg-white hover:shadow-sm"
+                      >
+                        <div className="flex items-start justify-between">
+                          <span className="text-2xl">{drink.icon}</span>
+                          <span className="rounded-md bg-black/5 px-2 py-0.5 text-[10px] font-bold text-[#68756f]">
+                            {drink.size}
+                          </span>
+                        </div>
+                        <div className="mt-3">
+                          <h4 className="font-extrabold text-[#10251f] text-sm">
+                            {drink.name}
+                          </h4>
+                          <p className="text-[11px] text-[#7d8b83]">
+                            {drink.tag}
+                          </p>
+                        </div>
+                        <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3">
+                          <span className="text-xs font-black text-[#10251f]">
+                            {drink.price.toFixed(2)} €
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              addItem({
+                                id: drink.id,
+                                name: `${drink.name} (${drink.size})`,
+                                basePrice: drink.price,
+                                price: drink.price,
+                                quantity: 1,
+                                toppings: [],
+                                removedIngredients: [],
+                              });
+                            }}
+                            className="inline-flex items-center gap-1 rounded-full bg-[#10251f] px-3 py-1.5 text-[11px] font-bold text-white transition hover:bg-[#d7ff45] hover:text-[#10251f]"
+                          >
+                            <Plus className="h-3 w-3" />
+                            Ajouter
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center gap-4 p-5 sm:p-6">
-                  <img
-                    src={dessert}
-                    alt="Tiramisu maison"
-                    loading="lazy"
-                    className="h-20 w-20 shrink-0 rounded-2xl object-cover"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-sm text-white/75">{desserts.map((d) => d.name).join(" · ")}</p>
-                    <Link
-                      to="/commander"
-                      className="mt-2 inline-block text-xs font-black uppercase tracking-[0.12em] underline underline-offset-4"
-                    >
-                      {t("menu.desserts_cta")} →
-                    </Link>
+
+                <div className="mt-6 pt-4 border-t border-black/5 text-center">
+                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#68756f]">
+                    <span>🧊</span> Boisson 33cl incluse dans la formule Étudiant (11 €)
                   </div>
                 </div>
               </div>
@@ -720,11 +955,11 @@ function Index() {
               className="group mx-auto flex max-w-[1200px] items-center justify-between gap-5 rounded-[24px] bg-[#d7ff45] p-5 transition duration-300 hover:-translate-y-1.5 sm:rounded-[30px] sm:p-8"
             >
               <div className="min-w-0">
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-[#536018]">
+                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#465313]">
                   <BriefcaseBusiness className="h-4 w-4 shrink-0" />
                   {t("recruit.banner_tag")}
                 </div>
-                <h2 className="mt-2 break-words text-xl font-black leading-snug sm:text-3xl">
+                <h2 className="mt-2 break-words text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#10251f]">
                   {t("recruit.banner_title")}
                 </h2>
               </div>
@@ -735,108 +970,145 @@ function Index() {
           </Reveal>
         </section>
 
-        {/* ════════ Infos pratiques ════════════════════════════════ */}
-        <section id="infos" className="scroll-mt-10 bg-[#ece9df] px-5 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-          <div className="mx-auto grid max-w-[1200px] gap-4 sm:gap-5 lg:grid-cols-[1fr_.85fr] lg:gap-8">
+        {/* ════════ Infos pratiques & Google Maps Visé ══════════════ */}
+        <section id="infos" className="scroll-mt-10 bg-[#ece9df] px-5 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-[1340px]">
             <Reveal>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
-                {t("info.eyebrow")}
-              </p>
-              <h2 className="mt-3 text-[1.7rem] font-black leading-snug tracking-tight sm:text-3xl lg:text-4xl">
-                <span className="block">{t("info.title1")}</span>
-                <span className="mt-0.5 block text-[#7d8b83]">{t("info.title2")}</span>
-              </h2>
-              <div className="mt-6 grid gap-2.5 sm:mt-8 sm:gap-3">
-                {/* Visé */}
-                <div className="rounded-2xl bg-white p-4 shadow-card">
-                  <div className="flex items-center justify-between border-b border-black/5 pb-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#ff705f]">Restaurant Visé</span>
-                    <span className="rounded-full bg-[#d7ff45] px-2 py-0.5 text-[9px] font-black">Ouvert</span>
-                  </div>
-                  <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div className="mb-10 text-center max-w-2xl mx-auto">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#ff705f]">
+                  <MapPin className="h-3.5 w-3.5" />
+                  Visé, Belgique · Avenue du Pont 12
+                </div>
+                <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]">
+                  Passez nous voir au restaurant
+                </h2>
+                <p className="mt-2 text-sm text-[#5a6760]">
+                  À emporter, sur place ou en livraison rapide. Retrouvez notre équipe en plein centre de Visé.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+              {/* Carte Google Maps interactive de Visé */}
+              <Reveal>
+                <div className="flex flex-col h-full overflow-hidden rounded-[32px] border border-black/10 bg-white shadow-lift">
+                  {/* Top Bar with restaurant details */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 bg-[#faf8f4] p-5 sm:px-6">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f]">
+                          📍
+                        </span>
+                        <h3 className="font-extrabold text-[#10251f] text-base">
+                          Poke N Bowl Visé
+                        </h3>
+                      </div>
+                      <p className="text-xs text-[#68756f] mt-0.5">
+                        Avenue du Pont 12, 4600 Visé, Belgique
+                      </p>
+                    </div>
                     <a
                       href={MAPS_URL}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2.5 text-xs font-bold hover:text-[#ff705f]"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#10251f] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#ff705f]"
                     >
-                      <MapPin className="h-4 w-4 shrink-0 text-[#ff705f]" />
-                      <span>Av. du Pont 12, 4600 Visé</span>
-                    </a>
-                    <a
-                      href="tel:+32491281456"
-                      className="flex items-center gap-2 text-xs font-black text-[#10251f] hover:text-[#ff705f]"
-                    >
-                      <Phone className="h-3.5 w-3.5 text-[#ff705f]" />
-                      <span>0491 28 14 56</span>
+                      <span>Itinéraire Google Maps</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </a>
                   </div>
-                </div>
 
-                {/* Fléron */}
-                <div className="rounded-2xl bg-white p-4 shadow-card">
-                  <div className="flex items-center justify-between border-b border-black/5 pb-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#ff705f]">Restaurant Fléron</span>
-                    <span className="rounded-full bg-[#d7ff45] px-2 py-0.5 text-[9px] font-black">Ouvert</span>
+                  {/* Interactive Map Iframe */}
+                  <div className="relative min-h-[380px] sm:min-h-[420px] flex-1 w-full bg-[#e5e3df]">
+                    <iframe
+                      title="Carte interactive Google Maps Poké N Bowl Visé"
+                      src="https://maps.google.com/maps?q=Poke%20N%20Bowl%20Vis%C3%A9%20Avenue%20du%20Pont%2012%204600%20Vis%C3%A9&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                      className="absolute inset-0 h-full w-full border-0"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
                   </div>
-                  <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <a
-                      href="https://www.google.com/maps?q=Avenue+des+Martyrs+307,+4620+Fl%C3%A9ron"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2.5 text-xs font-bold hover:text-[#ff705f]"
-                    >
-                      <MapPin className="h-4 w-4 shrink-0 text-[#ff705f]" />
-                      <span>Av. des Martyrs 307, 4620 Fléron</span>
-                    </a>
-                    <a
-                      href="tel:+32493423643"
-                      className="flex items-center gap-2 text-xs font-black text-[#10251f] hover:text-[#ff705f]"
-                    >
-                      <Phone className="h-3.5 w-3.5 text-[#ff705f]" />
-                      <span>0493 42 36 43</span>
-                    </a>
-                  </div>
-                </div>
 
-                <div className="flex items-center justify-between rounded-xl bg-[#f7f4ec] px-4 py-2 text-[10px] font-bold text-[#7d8b83]">
-                  <span>🛵 Livraison à domicile disponible</span>
-                  <a href="https://instagram.com/POKE_NBOWL" target="_blank" rel="noreferrer" className="text-[#10251f] font-black hover:underline">
-                    @POKE_NBOWL
-                  </a>
+                  {/* Visual badges at the bottom of the map */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 bg-[#faf8f4] p-4 text-[11px] font-semibold text-[#5a6760] border-t border-black/5">
+                    <span>🚗 Parking facile à proximité</span>
+                    <span>🚶 Au cœur de Visé</span>
+                    <span>🛵 Retrait Click & Collect express</span>
+                  </div>
                 </div>
-              </div>
-            </Reveal>
-            <Reveal delay={0.06}>
-              <div className="overflow-hidden rounded-[24px] bg-[#10251f] text-white shadow-lift">
-                <div className="flex items-center gap-2 border-b border-white/10 px-5 py-4 sm:px-7">
-                  <Clock className="h-5 w-5 shrink-0 text-[#d7ff45]" />
-                  <h3 className="text-xl font-black">{t("info.hours")}</h3>
-                </div>
-                <div className="divide-y divide-white/10 px-5 sm:px-7">
-                  {HOUR_ROWS.map(([dayKey, value]) => (
-                    <div key={dayKey} className="flex items-center justify-between gap-3 py-3 text-sm">
-                      <span className="min-w-0 font-bold text-white/60">{t(dayKey)}</span>
-                      <span
-                        className={`shrink-0 text-right font-black ${value === "closed" ? "text-[#ff705f]" : ""}`}
-                      >
-                        {value === "closed" ? t("info.closed") : value}
+              </Reveal>
+
+              {/* Horaires d'ouverture & Contact rapide */}
+              <Reveal delay={0.08}>
+                <div className="flex flex-col justify-between h-full space-y-6">
+                  {/* Horaires Card */}
+                  <div className="overflow-hidden rounded-[32px] bg-[#10251f] text-white shadow-lift p-6 sm:p-7">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      <div className="flex items-center gap-2.5">
+                        <Clock className="h-5 w-5 text-[#d7ff45]" />
+                        <h3 className="text-xl font-extrabold">Horaires d'ouverture</h3>
+                      </div>
+                      <span className="rounded-full bg-[#d7ff45]/20 border border-[#d7ff45]/40 px-3 py-1 text-[10px] font-bold text-[#d7ff45]">
+                        ● Ouvert pour le service
                       </span>
                     </div>
-                  ))}
+
+                    <div className="divide-y divide-white/10 py-2">
+                      {HOUR_ROWS.map(([dayKey, value]) => (
+                        <div key={dayKey} className="flex items-center justify-between gap-3 py-3 text-xs sm:text-sm">
+                          <span className="font-semibold text-white/70">{t(dayKey)}</span>
+                          <span
+                            className={`font-extrabold ${value === "closed" ? "text-[#ff705f]" : "text-white"}`}
+                          >
+                            {value === "closed" ? "Fermé" : value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Contact Direct Card */}
+                  <div className="rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-7 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-[#ff705f]" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#ff705f]">
+                          Commandes & Renseignements
+                        </span>
+                      </div>
+                      <span className="text-xs text-[#7d8b83] font-bold">
+                        Appel direct
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <a
+                        href="tel:+32491281456"
+                        className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-[#ff705f] py-3.5 px-4 text-xs font-bold text-white shadow-soft transition hover:bg-[#ff5542]"
+                      >
+                        <Phone className="h-4 w-4" />
+                        <span>0491 28 14 56</span>
+                      </a>
+                      <a
+                        href="https://instagram.com/POKE_NBOWL"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 rounded-2xl border border-black/10 bg-[#faf8f4] py-3.5 px-4 text-xs font-bold text-[#10251f] transition hover:bg-black/5"
+                      >
+                        <span>Instagram @POKE_NBOWL</span>
+                      </a>
+                    </div>
+
+                    <div className="rounded-xl bg-[#f7f4ec] px-4 py-2.5 text-xs text-[#68756f] flex items-center justify-between">
+                      <span className="font-semibold">🛵 Livraison à domicile disponible</span>
+                      <Link to="/commander" className="font-bold text-[#10251f] hover:underline">
+                        Commander en ligne →
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <div className="px-5 py-4 sm:px-7">
-                  <a
-                    href={MAPS_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-[#d7ff45] transition hover:gap-3"
-                  >
-                    {t("info.maps")} <ArrowRight className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
           </div>
         </section>
       </main>

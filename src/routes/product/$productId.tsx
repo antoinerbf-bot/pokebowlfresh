@@ -363,7 +363,7 @@ function ProductPage() {
                 <span>Préparé minute sur commande</span>
               </div>
               <p className="text-xs text-[#707e77] leading-relaxed">
-                Chaque bowl est assemblé à la commande à Visé & Fléron avec des découpes fraîches du jour.
+                Chaque bowl est assemblé à la commande à Visé avec des découpes fraîches du jour.
                 Vous pouvez retirer n'importe quel ingrédient en cas d'allergie ou ajouter tous les toppings souhaités.
               </p>
             </div>

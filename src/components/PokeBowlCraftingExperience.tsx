@@ -80,14 +80,14 @@ export function PokeBowlCraftingExperience() {
 
       {/* Header */}
       <div className="relative z-10 max-w-2xl">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3.5 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
           <Layers className="h-3 w-3" />
           Anatomie d'un Poké Bowl
         </div>
-        <h2 className="mt-4 text-2xl font-black leading-tight sm:text-4xl lg:text-5xl">
-          Comment naît votre Poké Bowl sous vos yeux.
+        <h2 className="mt-4 text-2xl font-extrabold leading-tight text-white sm:text-3xl lg:text-4xl">
+          Comment naît votre Poké Bowl sous vos yeux
         </h2>
-        <p className="mt-3 text-sm text-white/65 leading-relaxed">
+        <p className="mt-3 text-sm text-white/70 leading-relaxed">
           Chaque ingrédient est sélectionné le matin, préparé minute et assemblé couche après couche pour un équilibre gustatif parfait.
         </p>
       </div>

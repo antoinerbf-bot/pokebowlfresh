@@ -28,72 +28,65 @@ function ContactPage() {
             On se parle ?
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            Une question, une commande ou une demande particulière ? Retrouvez-nous dans nos restaurants à Visé et Fléron ou contactez nos équipes par téléphone.
+            Une question, une commande ou une demande particulière ? Retrouvez-nous dans notre restaurant à Visé ou contactez notre équipe par téléphone.
           </p>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-12 grid gap-8 lg:grid-cols-2">
           {/* Restaurant Visé */}
-          <div className="rounded-3xl border border-border bg-card p-7 shadow-soft">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff45] text-black font-black">1</span>
-              <div>
-                <h2 className="text-xl font-black">Poké & Bowl Visé</h2>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Centre-ville Visé</p>
+          <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-soft flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff45] text-black font-black">📍</span>
+                <div>
+                  <h2 className="text-2xl font-black text-[#10251f]">Poké & Bowl Visé</h2>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Centre-ville Visé · Av. du Pont</p>
+                </div>
+              </div>
+              <div className="mt-6 space-y-3">
+                <a
+                  href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-start gap-3 rounded-2xl bg-muted/50 p-4 transition hover:bg-muted"
+                >
+                  <MapPin className="h-5 w-5 shrink-0 text-[#ff705f] mt-0.5" />
+                  <div>
+                    <p className="font-bold text-[#10251f]">Avenue du Pont 12</p>
+                    <p className="text-sm text-muted-foreground">4600 Visé, Belgique</p>
+                  </div>
+                </a>
+                <a
+                  href="tel:+32491281456"
+                  className="flex items-center gap-3 rounded-2xl bg-muted/50 p-4 transition hover:bg-muted"
+                >
+                  <PhoneCall className="h-5 w-5 shrink-0 text-[#ff705f]" />
+                  <div>
+                    <p className="text-xs text-muted-foreground font-bold">Téléphone direct</p>
+                    <span className="font-bold text-base text-[#10251f]">0491 28 14 56 (+32)</span>
+                  </div>
+                </a>
               </div>
             </div>
-            <div className="mt-5 space-y-3">
-              <a
-                href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-start gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
-              >
-                <MapPin className="h-5 w-5 shrink-0 text-coral" />
-                <div>
-                  <p className="font-bold">Avenue du Pont 12</p>
-                  <p className="text-sm text-muted-foreground">4600 Visé, Belgique</p>
-                </div>
-              </a>
-              <a
-                href="tel:+32491281456"
-                className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
-              >
-                <PhoneCall className="h-5 w-5 shrink-0 text-coral" />
-                <span className="font-bold">0491 28 14 56 (+32)</span>
+
+            <div className="mt-6 pt-6 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+              <span className="font-bold text-[#10251f]">🛵 Livraison & À emporter</span>
+              <a href="https://instagram.com/POKE_NBOWL" target="_blank" rel="noreferrer" className="text-[#ff705f] font-black hover:underline">
+                @POKE_NBOWL
               </a>
             </div>
           </div>
 
-          {/* Restaurant Fléron */}
-          <div className="rounded-3xl border border-border bg-card p-7 shadow-soft">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ff705f] text-white font-black">2</span>
-              <div>
-                <h2 className="text-xl font-black">Poké & Bowl Fléron</h2>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Avenue des Martyrs</p>
-              </div>
-            </div>
-            <div className="mt-5 space-y-3">
-              <a
-                href="https://www.google.com/maps?q=Avenue+des+Martyrs+307,+4620+Fl%C3%A9ron"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-start gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
-              >
-                <MapPin className="h-5 w-5 shrink-0 text-coral" />
-                <div>
-                  <p className="font-bold">Avenue des Martyrs 307</p>
-                  <p className="text-sm text-muted-foreground">4620 Fléron, Belgique</p>
-                </div>
-              </a>
-              <a
-                href="tel:+32493423643"
-                className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition hover:bg-muted"
-              >
-                <PhoneCall className="h-5 w-5 shrink-0 text-coral" />
-                <span className="font-bold">0493 42 36 43 (+32)</span>
-              </a>
-            </div>
+          {/* Interactive Google Maps Visé */}
+          <div className="overflow-hidden rounded-3xl border border-border shadow-soft h-[360px] sm:h-[400px]">
+            <iframe
+              title="Carte Google Maps Poké N Bowl Visé"
+              src="https://maps.google.com/maps?q=Poke%20N%20Bowl%20Vis%C3%A9%20Avenue%20du%20Pont%2012%204600%20Vis%C3%A9&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
 

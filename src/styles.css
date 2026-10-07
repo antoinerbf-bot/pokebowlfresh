@@ -7,12 +7,12 @@
 /* ════════════════════════════════════════════════════════════════════
    DESIGN SYSTEM — POKE N BOWL
    Palette : sable chaud · terre brûlée · corail vif · vert lime
-   Typographie : Syne (display) · Plus Jakarta Sans (body)
+   Typographie : Outfit (display) · Plus Jakarta Sans (body)
    ════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
   /* ── Typographies ─────────────────────────────────────────── */
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-sans:    "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
   /* ── Palette sémantique ───────────────────────────────────── */
@@ -184,8 +184,8 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.022em;
-    line-height: 1.18;
+    letter-spacing: -0.012em;
+    line-height: 1.26;
     overflow-wrap: break-word;
     word-break: normal;
   }
