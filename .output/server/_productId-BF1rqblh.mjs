@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { _ as Navigate, g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-Cmi6Yhsz.mjs";
+import { t as Route } from "./_productId-BZHvNt_2.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-BkzyhEtx.mjs";
 import { E as Check, c as ShoppingCart, d as ShieldCheck, g as Minus, i as TriangleAlert, k as ArrowLeft, p as Plus, s as Sparkles } from "./_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-D3RCKZlw.mjs";
 import { t as useStock } from "./_ssr/useStock-Fo5LmgbX.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-C0bL23lB.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-BF1rqblh.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {
@@ -267,7 +267,7 @@ function ProductPage() {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Préparé minute sur commande" })]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-xs text-[#707e77] leading-relaxed",
-								children: "Chaque bowl est assemblé à la commande à Visé & Fléron avec des découpes fraîches du jour. Vous pouvez retirer n'importe quel ingrédient en cas d'allergie ou ajouter tous les toppings souhaités."
+								children: "Chaque bowl est assemblé à la commande à Visé avec des découpes fraîches du jour. Vous pouvez retirer n'importe quel ingrédient en cas d'allergie ou ajouter tous les toppings souhaités."
 							})]
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

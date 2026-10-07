@@ -4,16 +4,16 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$12 } from "../_productId-Cmi6Yhsz.mjs";
+import { t as Route$12 } from "../_productId-BZHvNt_2.mjs";
 import { n as booleanType, o as objectType, s as stringType } from "../_libs/zod.mjs";
 import { a as getMolliePayment, c as upsertOrder, n as claimNextPrintJob, o as getOrderFromStore, s as listOrdersFromStore, t as acknowledgePrint } from "./order-store-C20kjW_r.mjs";
 import { t as Route$13 } from "./order.success-CC-iXW2G.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DLw052gZ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-F81dAq98.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-c4MROn8i.css";
+var styles_default = "/assets/styles-B_VDQc7y.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -138,7 +138,7 @@ var Route$11 = createRootRouteWithContext()({
 			},
 			{
 				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+				href: "https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 			},
 			{
 				rel: "icon",
@@ -181,7 +181,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$6 = () => import("./routes-DQ0AJ5-K.mjs");
+var $$splitComponentImporter$6 = () => import("./routes-CdiMwE4T.mjs");
 var Route$10 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais à emporter" }, {
 		name: "description",
@@ -191,9 +191,9 @@ var Route$10 = createFileRoute("/")({
 });
 var $$splitComponentImporter$5 = () => import("./checkout-DKNrB0XZ.mjs");
 var Route$9 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-cfP9GsmY.mjs");
+var $$splitComponentImporter$4 = () => import("./commander-2KoHpxwu.mjs");
 var Route$8 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./contact-B4XQnahS.mjs");
+var $$splitComponentImporter$3 = () => import("./contact-ebvlFhhM.mjs");
 var Route$7 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")

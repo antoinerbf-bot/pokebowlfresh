@@ -9,9 +9,9 @@ import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
 import { O as ArrowRight, k as ArrowLeft, l as ShoppingBag, r as UtensilsCrossed, s as Sparkles } from "../_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./CartDrawer-D3RCKZlw.mjs";
 import { t as useStock } from "./useStock-Fo5LmgbX.mjs";
-import { t as dessert_default } from "./dessert-DNrt0Psl.mjs";
 require_react();
 var import_jsx_runtime = require_jsx_runtime();
+var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
 var TAG_STYLES = {
 	signature: "bg-[#10251f] text-[#d7ff45]",
 	bestseller: "bg-[#ff705f] text-white",
