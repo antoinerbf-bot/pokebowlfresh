@@ -187,7 +187,7 @@ function ProductPage() {
 
   // States
   const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
-  const [selectedBase, setSelectedBase] = React.useState<string>(product.defaultBase || "Riz blanc");
+  const [selectedBase, setSelectedBase] = React.useState<string>(product.defaultBase || "Riz à sushi");
   const [selectedSauce, setSelectedSauce] = React.useState<string>(product.defaultSauce || "Spicy-Mayo");
   const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
   const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);

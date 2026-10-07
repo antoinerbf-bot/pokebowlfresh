@@ -18,13 +18,13 @@ interface CraftStep {
 const CRAFT_STEPS: CraftStep[] = [
   {
     number: "01",
-    title: "Le Lit de Riz Basmati Aéré",
+    title: "Le Lit de Riz à Sushi",
     subtitle: "La base parfaite",
-    description: "Cuit vapeur avec précision, notre riz basmati aux grains fins et allongés reste léger, tiède et naturellement aéré. Zéro bloc compact, juste la texture idéale.",
+    description: "Préparé selon la tradition, notre riz à sushi est délicatement vinaigré et assaisonné pour une texture fondante et savoureuse, parfait sous vos ingrédients frais.",
     emoji: "🍚",
-    ingredients: ["Riz basmati fin", "Grains détachés & légers", "Assaisonnement délicat"],
+    ingredients: ["Riz à sushi traditionnel", "Assaisonnement délicat", "Texture fondante"],
     focusDishId: "sweet-chicken",
-    layerHighlight: "Fond du bowl · Riz vapeur aéré",
+    layerHighlight: "Fond du bowl · Riz à sushi assaisonné",
   },
   {
     number: "02",

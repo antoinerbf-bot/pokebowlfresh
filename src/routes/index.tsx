@@ -337,7 +337,7 @@ function Index() {
               >
                 Découvrez nos recettes créations aux ingrédients nobles découpés chaque matin :
                 saumon atlantique frais, scampis saisis au grill, poulet doré fondant
-                et notre riz basmati d’exception.
+                et notre riz à sushi délicatement assaisonné.
               </motion.p>
 
               {/* CTAs */}
@@ -406,9 +406,9 @@ function Index() {
                   <span>🥗</span> Recettes officielles du flyer
                 </div>
                 <h2 className="mt-3 max-w-2xl text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
-                  <span className="block text-[#10251f]">Nos 5 Poké Bowls Signatures</span>
+                  <span className="block text-[#10251f]">Nos Poké Bowls Signatures</span>
                   <span className="mt-2 block text-[#4e5c55] text-base sm:text-lg lg:text-xl font-medium">
-                    Riz basmati parfumé, sauces maison & fraîcheur garantie
+                    Riz à sushi traditionnel, sauces maison & fraîcheur garantie
                   </span>
                 </h2>
               </div>
@@ -485,7 +485,7 @@ function Index() {
                           {bowl.name}
                         </h3>
                         <p className="mt-1 text-xs font-bold text-[#ff705f]">
-                          Base riz basmati aéré · Fait minute
+                          Base riz à sushi · Fait minute
                         </p>
                       </div>
                     </div>
@@ -633,9 +633,9 @@ function Index() {
                 {
                   num: "01",
                   title: "Ta Base",
-                  tag: "Légère & aérée",
-                  desc: "Riz basmati vapeur aux grains fins, riz brun complet, salade fraîche croquante, pâtes ou nachos.",
-                  pills: ["🍚 Riz basmati", "🌾 Riz brun", "🥗 Salade", "🍝 Pâtes", "🫓 Nachos"],
+                  tag: "Traditionnelle & aérée",
+                  desc: "Riz à sushi délicatement assaisonné, riz brun complet, salade fraîche croquante, pâtes ou nachos.",
+                  pills: ["🍚 Riz à sushi", "🌾 Riz brun", "🥗 Salade", "🍝 Pâtes", "🫓 Nachos"],
                 },
                 {
                   num: "02",
