@@ -1,7 +1,6 @@
 import React from "react";
 
 // ─── Nouvelles photos culinaires professionnelles ──────────────────────────────
-import bowlGyros        from "@/assets/bowl-gyros.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis      from "@/assets/bowl-scampis.jpg";
 import bowlSaumon       from "@/assets/bowl-saumon.jpg";
@@ -10,7 +9,6 @@ import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 import bowlCroustyBlanche from "@/assets/bowl-crousty-blanche.jpg";
 
 const images: Record<string, string> = {
-  "mighty-gyros":                  bowlGyros,
   "sweet-chicken":                 bowlSweetChicken,
   "scampis-royaux":                bowlScampis,
   "saumon-wasabi":                 bowlSaumon,

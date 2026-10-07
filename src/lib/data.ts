@@ -64,14 +64,12 @@ export const detailedMixIns: CustomIngredientOption[] = [
 // ─── PROTÉINES ────────────────────────────────────────────────────────────────
 export const customProteins = [
   "Poulet",
-  "Gyros",
   "Saumon + 1 €",
   "Scampis",
 ];
 
 export const detailedProteins: CustomIngredientOption[] = [
   { id: "poulet",  name: "Poulet",        emoji: "🍗", extraPrice: 0 },
-  { id: "gyros",   name: "Gyros",         emoji: "🥙", extraPrice: 0 },
   { id: "saumon",  name: "Saumon (+1 €)", emoji: "🐟", extraPrice: 1.00 },
   { id: "scampis", name: "Scampis",       emoji: "🦐", extraPrice: 0 },
 ];
@@ -133,8 +131,8 @@ export interface BowlSize {
 }
 
 export const bowlSizes: BowlSize[] = [
-  { id: "moyen", name: "Moyen", extraPrice: 0, description: "Format régulier généreux" },
-  { id: "grand", name: "Grand", extraPrice: 2.50, description: "Grand format maxi faim (+2.50€)" },
+  { id: "moyen", name: "Moyen", extraPrice: 0, description: "Format régulier généreux (10 €)" },
+  { id: "grand", name: "Grand", extraPrice: 3.00, description: "Grand format maxi faim (+3.00€ · 13 €)" },
 ];
 
 // ─── INGRÉDIENTS RETIRABLES ───────────────────────────────────────────────────
@@ -165,27 +163,6 @@ export interface Bowl {
 }
 
 export const bowls: Bowl[] = [
-  {
-    id: "mighty-gyros",
-    name: "Mighty Gyros",
-    price: 10.00,
-    desc: "Guacamole, maïs, tomates cerises, concombre, oignons, gyros maison, spicy mayo, flocons de chili.",
-    defaultBase: "Riz blanc",
-    defaultSauce: "Spicy-Mayo",
-    tag: "Signature",
-    tagColor: "signature",
-    ingredients: [
-      { name: "Riz blanc",        emoji: "🍚", removable: true, isBase: true },
-      { name: "Gyros maison",     emoji: "🥙", removable: true, isProtein: true },
-      { name: "Guacamole",        emoji: "🥑", removable: true, isMixIn: true },
-      { name: "Maïs",             emoji: "🌽", removable: true, isMixIn: true },
-      { name: "Tomates cerises",  emoji: "🍅", removable: true, isMixIn: true },
-      { name: "Concombre",        emoji: "🥒", removable: true, isMixIn: true },
-      { name: "Oignons",          emoji: "🧅", removable: true, isMixIn: true },
-      { name: "Spicy mayo",       emoji: "🌶️", removable: true, isSauce: true },
-      { name: "Flocons de chili", emoji: "🔥", removable: true, isTopping: true },
-    ],
-  },
   {
     id: "sweet-chicken",
     name: "Sweet Chicken",
@@ -331,7 +308,7 @@ export const drinks = [
 
 // ─── DESSERTS ─────────────────────────────────────────────────────────────────
 export const desserts = [
-  { id: "tira-oreo",    name: "Tiramisu Oreo",      price: 4.00 },
-  { id: "tira-nutella", name: "Tiramisu Nutella",   price: 4.00 },
-  { id: "tira-spec",    name: "Tiramisu Spéculoos", price: 4.00 },
+  { id: "tira-oreo",    name: "Tiramisu Oreo",      price: 4.00, soldOut: false },
+  { id: "tira-nutella", name: "Tiramisu Nutella",   price: 4.00, soldOut: true },
+  { id: "tira-spec",    name: "Tiramisu Spéculoos", price: 4.00, soldOut: false },
 ];

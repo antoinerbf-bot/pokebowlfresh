@@ -199,7 +199,7 @@ function ProductPage() {
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   // Prix dynamique
-  const sizeExtra = selectedSize === "grand" ? 2.50 : 0;
+  const sizeExtra = selectedSize === "grand" ? 3.00 : 0;
   const toppingsExtra = selectedToppings.length * 0.50;
   const extraSaucePrice = extraSauce ? 1.00 : 0;
   const unitPrice = product.price + sizeExtra + toppingsExtra + extraSaucePrice;
@@ -229,7 +229,7 @@ function ProductPage() {
 
     // Format / Taille
     if (selectedSize === "grand") {
-      optionsList.push("Taille : Grand (+2.50€)");
+      optionsList.push("Taille : Grand (+3.00€)");
     } else {
       optionsList.push("Taille : Moyen (Standard)");
     }

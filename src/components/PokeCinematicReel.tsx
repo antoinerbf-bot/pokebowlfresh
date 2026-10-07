@@ -47,16 +47,6 @@ const REEL_BOWLS: ReelBowl[] = [
     highlights: ["🦐 Scampis dorés", "🌶️ Jalapeños & Spicy mayo", "🌽 Nachos & Flocons chili"],
   },
   {
-    id: "mighty-gyros",
-    name: "Mighty Gyros",
-    price: 10.00,
-    tag: "Signature",
-    tagColor: "#f59e0b",
-    headline: "Gyros maison & guacamole frais",
-    description: "Gyros maison émincé, guacamole, maïs croquant, tomates cerises, concombre, oignons, spicy mayo et flocons de chili.",
-    highlights: ["🥙 Gyros maison", "🥑 Guacamole & Maïs", "🔥 Flocons de chili"],
-  },
-  {
     id: "spicy-chicken",
     name: "Spicy Chicken",
     price: 10.00,

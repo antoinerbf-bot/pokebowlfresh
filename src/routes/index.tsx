@@ -144,7 +144,7 @@ function Index() {
     if (activeTab === "bestseller") return pokeBowls.filter((b) => b.tagColor === "bestseller");
     if (activeTab === "signature") return pokeBowls.filter((b) => b.tagColor === "signature");
     if (activeTab === "fish") return pokeBowls.filter((b) => b.id === "saumon-wasabi" || b.id === "scampis-royaux");
-    if (activeTab === "spicy") return pokeBowls.filter((b) => b.id === "spicy-chicken" || b.id === "mighty-gyros" || b.id === "scampis-royaux");
+    if (activeTab === "spicy") return pokeBowls.filter((b) => b.id === "spicy-chicken" || b.id === "scampis-royaux");
     return pokeBowls;
   }, [pokeBowls, activeTab]);
 
@@ -335,8 +335,8 @@ function Index() {
                 transition={{ duration: 0.7, delay: 0.4 }}
                 className="mt-5 max-w-lg text-[15px] leading-relaxed text-white/75"
               >
-                Découvrez nos 5 recettes créations aux ingrédients nobles découpés chaque matin :
-                saumon atlantique frais, scampis saisis au grill, émincé de gyros rôti, poulet doré fondant
+                Découvrez nos recettes créations aux ingrédients nobles découpés chaque matin :
+                saumon atlantique frais, scampis saisis au grill, poulet doré fondant
                 et notre riz basmati d’exception.
               </motion.p>
 
@@ -430,7 +430,7 @@ function Index() {
             {/* Filter Chips */}
             <div className="mt-8 flex flex-wrap gap-2 pt-2">
               {[
-                { id: "all", label: "Tous nos Poké Bowls (5)" },
+                { id: "all", label: `Tous nos Poké Bowls (${pokeBowls.length})` },
                 { id: "bestseller", label: "Best-Seller ⭐" },
                 { id: "signature", label: "Signatures ✦" },
                 { id: "fish", label: "Saumon & Scampis 🦐" },
@@ -648,8 +648,8 @@ function Index() {
                   num: "03",
                   title: "Ta Protéine",
                   tag: "Préparée minute",
-                  desc: "Poulet doré mariné, véritable saumon atlantique sashimi (+1€), scampis grillés ou émincé de gyros rôti.",
-                  pills: ["🍗 Poulet doré", "🐟 Saumon (+1€)", "🦐 Scampis", "🥙 Gyros"],
+                  desc: "Poulet doré mariné, véritable saumon atlantique sashimi (+1€) ou scampis grillés saisis minute.",
+                  pills: ["🍗 Poulet doré", "🐟 Saumon (+1€)", "🦐 Scampis"],
                 },
                 {
                   num: "04",
@@ -787,14 +787,16 @@ function Index() {
                         desc: "Crème mascarpone légère, biscuits Lotus caramélisés croustillants & voile de spéculoos.",
                         image: tiramisuSpeculoos,
                         price: 4.00,
+                        soldOut: false,
                       },
                       {
                         id: "tira-nutella",
                         name: "Tiramisu Nutella",
-                        badge: "Ultra Gourmand 🍫",
+                        badge: "Sold Out ⚠️",
                         desc: "Tourbillons généreux de Nutella fondant, éclats de noisettes torréfiées & mascarpone.",
                         image: tiramisuNutella,
                         price: 4.00,
+                        soldOut: true,
                       },
                       {
                         id: "tira-oreo",
@@ -803,23 +805,43 @@ function Index() {
                         desc: "Brisures croustillantes de biscuits Oréo noir et crème fouettée maison onctueuse.",
                         image: tiramisuOreo,
                         price: 4.00,
+                        soldOut: false,
                       },
                     ].map((item) => (
                       <div
                         key={item.id}
-                        className="group flex items-center gap-4 rounded-2xl border border-black/5 bg-[#faf8f4] p-3.5 transition duration-200 hover:border-[#ff705f]/30 hover:bg-white hover:shadow-sm"
+                        className={`group flex items-center gap-4 rounded-2xl border border-black/5 p-3.5 transition duration-200 ${
+                          item.soldOut
+                            ? "bg-[#f2efe9]/70 opacity-80"
+                            : "bg-[#faf8f4] hover:border-[#ff705f]/30 hover:bg-white hover:shadow-sm"
+                        }`}
                       >
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="h-20 w-20 shrink-0 rounded-xl object-cover shadow-sm group-hover:scale-105 transition duration-300"
-                        />
+                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className={`h-full w-full object-cover shadow-sm transition duration-300 ${
+                              item.soldOut ? "grayscale contrast-75" : "group-hover:scale-105"
+                            }`}
+                          />
+                          {item.soldOut && (
+                            <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-[10px] font-black uppercase tracking-wider text-white">
+                              Épuisé
+                            </span>
+                          )}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
                             <h4 className="font-extrabold text-[#10251f] text-sm sm:text-base">
                               {item.name}
                             </h4>
-                            <span className="text-[10px] font-bold text-[#ff705f] bg-[#ff705f]/10 rounded-md px-2 py-0.5">
+                            <span
+                              className={`text-[10px] font-bold rounded-md px-2 py-0.5 ${
+                                item.soldOut
+                                  ? "bg-black/10 text-[#68756f]"
+                                  : "text-[#ff705f] bg-[#ff705f]/10"
+                              }`}
+                            >
                               {item.badge}
                             </span>
                           </div>
@@ -830,24 +852,30 @@ function Index() {
                             <span className="text-xs font-black text-[#10251f]">
                               {item.price.toFixed(2)} €
                             </span>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                addItem({
-                                  id: item.id,
-                                  name: item.name,
-                                  basePrice: item.price,
-                                  price: item.price,
-                                  quantity: 1,
-                                  toppings: [],
-                                  removedIngredients: [],
-                                });
-                              }}
-                              className="inline-flex items-center gap-1.5 rounded-full bg-[#10251f] px-3.5 py-1.5 text-[11px] font-bold text-white transition hover:bg-[#ff705f]"
-                            >
-                              <Plus className="h-3 w-3" />
-                              Ajouter
-                            </button>
+                            {item.soldOut ? (
+                              <span className="inline-flex items-center rounded-full bg-black/10 px-3 py-1 text-[11px] font-bold text-[#68756f] cursor-not-allowed">
+                                Victime de son succès
+                              </span>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  addItem({
+                                    id: item.id,
+                                    name: item.name,
+                                    basePrice: item.price,
+                                    price: item.price,
+                                    quantity: 1,
+                                    toppings: [],
+                                    removedIngredients: [],
+                                  });
+                                }}
+                                className="inline-flex items-center gap-1.5 rounded-full bg-[#10251f] px-3.5 py-1.5 text-[11px] font-bold text-white transition hover:bg-[#ff705f]"
+                              >
+                                <Plus className="h-3 w-3" />
+                                Ajouter
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

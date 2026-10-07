@@ -22,7 +22,7 @@ export const Route = createFileRoute("/sur-mesure")({
 });
 
 const BASE_PRICE = 10.00;
-const MAX_MIX_INS = 5;
+const INCLUDED_MIX_INS = 5;
 
 function SurMesurePage() {
   const { t, language, setLanguage } = useTranslation();
@@ -41,17 +41,11 @@ function SurMesurePage() {
   const [qty, setQty] = React.useState(1);
   const [added, setAdded] = React.useState(false);
 
-  // Toggle Mix-in (Max 5)
+  // Toggle Mix-in (5 inclus, illimité à +0.50€ au-delà)
   const toggleMixIn = (name: string) => {
-    setSelectedMixIns((cur) => {
-      if (cur.includes(name)) {
-        return cur.filter((item) => item !== name);
-      }
-      if (cur.length >= MAX_MIX_INS) {
-        return cur; // Ne dépasse pas 5
-      }
-      return [...cur, name];
-    });
+    setSelectedMixIns((cur) =>
+      cur.includes(name) ? cur.filter((item) => item !== name) : [...cur, name]
+    );
   };
 
   // Toggle Topping (2 inclus, illimité à +0.50€ au-delà)
@@ -61,27 +55,26 @@ function SurMesurePage() {
     );
   };
 
-  // Pricing calculations (Fiche restaurant : 2 toppings inclus)
-  const sizeExtra = selectedSize === "grand" ? 2.50 : 0;
+  // Pricing calculations (5 mix-ins inclus, 2 toppings inclus, Grand = 13€ soit +3€)
+  const sizeExtra = selectedSize === "grand" ? 3.00 : 0;
   const proteinExtra = selectedProtein?.extraPrice ?? 0;
+  const extraMixInsCount = Math.max(0, selectedMixIns.length - INCLUDED_MIX_INS);
+  const mixInsExtra = extraMixInsCount * 0.50;
   const extraToppingsCount = Math.max(0, selectedToppings.length - 2);
   const toppingsExtra = extraToppingsCount * 0.50;
-  const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + toppingsExtra;
+  const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + mixInsExtra + toppingsExtra;
   const totalPrice = unitPrice * qty;
 
   // Validation
   const isBaseReady = selectedBase !== null;
-  const isMixInsReady = selectedMixIns.length === MAX_MIX_INS;
+  const isMixInsReady = selectedMixIns.length >= 1;
   const isProteinReady = selectedProtein !== null;
   const isSauceReady = selectedSauce !== null;
   const isValid = isBaseReady && isMixInsReady && isProteinReady && isSauceReady;
 
   const getMissingReason = () => {
     if (!isBaseReady) return "Étape 1 : Choisis une base";
-    if (selectedMixIns.length < MAX_MIX_INS) {
-      const remaining = MAX_MIX_INS - selectedMixIns.length;
-      return `Étape 2 : Choisis encore ${remaining} mix-in${remaining > 1 ? "s" : ""}`;
-    }
+    if (selectedMixIns.length === 0) return "Étape 2 : Choisis tes mix-ins (5 inclus dans le prix)";
     if (!isProteinReady) return "Étape 3 : Choisis une protéine";
     if (!isSauceReady) return "Étape 4 : Choisis une sauce";
     return null;
@@ -91,13 +84,13 @@ function SurMesurePage() {
     if (!isValid) return;
 
     const options = [
-      `Taille : ${selectedSize === "grand" ? "Grand (+2.50€)" : "Moyen (Standard)"}`,
+      `Taille : ${selectedSize === "grand" ? "Grand (+3.00€)" : "Moyen (Standard)"}`,
       `Base : ${selectedBase.name}`,
-      `Mix-ins : ${selectedMixIns.join(", ")}`,
-      `Protéine : ${selectedProtein.name}`,
+      `Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
+      `Protéine : ${selectedProtein.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
       `Sauce : ${selectedSauce.name}`,
       ...(selectedToppings.length > 0
-        ? [`Toppings : ${selectedToppings.join(", ")}`]
+        ? [`Toppings : ${selectedToppings.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`]
         : ["Toppings : Aucun"]),
     ];
 
@@ -253,7 +246,7 @@ function SurMesurePage() {
                   <div className="flex w-full items-center justify-between">
                     <span className="font-black text-sm uppercase">Grand</span>
                     <span className={`text-xs font-black ${selectedSize === "grand" ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
-                      +2.50 €
+                      +3.00 € (13 €)
                     </span>
                   </div>
                   <span className={`mt-1 text-xs ${selectedSize === "grand" ? "text-white/70" : "text-[#7a847e]"}`}>
@@ -305,57 +298,77 @@ function SurMesurePage() {
               </div>
             </section>
 
-            {/* ══ ÉTAPE 2 : MIX IN (CHOIX DE 5 INGRÉDIENTS) ══════ */}
+            {/* ══ ÉTAPE 2 : MIX IN (5 INCLUS · ILLIMITÉ À +0,50€ AU-DELÀ) ══════ */}
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
                     Étape 2
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">
-                    Mix In (Choix de 5 ingrédients)
+                    Mix-Ins Frais
                   </h2>
                 </div>
                 <div
                   className={[
                     "rounded-full px-3 py-1 text-xs font-black transition-colors",
-                    selectedMixIns.length === MAX_MIX_INS
+                    selectedMixIns.length >= INCLUDED_MIX_INS
                       ? "bg-[#10251f] text-[#d7ff45]"
                       : "bg-[#ff705f]/10 text-[#ff705f]",
                   ].join(" ")}
                 >
-                  {selectedMixIns.length} / {MAX_MIX_INS} choisis
+                  {selectedMixIns.length <= INCLUDED_MIX_INS
+                    ? `${selectedMixIns.length} / ${INCLUDED_MIX_INS} inclus`
+                    : `${selectedMixIns.length} choisis (${INCLUDED_MIX_INS} inclus + ${extraMixInsCount} extra à +0,50€)`}
                 </div>
               </div>
 
-              <p className="mb-4 text-xs font-semibold text-[#7a847e]">
-                Sélectionne exactement 5 ingrédients frais parmi les 16 proposés sur le ticket :
-              </p>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-[#7a847e]">
+                <span>
+                  {selectedMixIns.length < INCLUDED_MIX_INS
+                    ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :`
+                    : `5 mix-ins inclus · Choisissez-en autant que vous voulez (+0,50 € par ingrédient supplémentaire) :`}
+                </span>
+                {extraMixInsCount > 0 && (
+                  <span className="rounded-full bg-[#d7ff45]/30 px-2 py-0.5 text-[10px] font-extrabold text-[#10251f]">
+                    +{mixInsExtra.toFixed(2)} € de suppléments mix-ins
+                  </span>
+                )}
+              </div>
 
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {detailedMixIns.map((mixIn) => {
                   const isSelected = selectedMixIns.includes(mixIn.name);
-                  const isMaxReached = selectedMixIns.length >= MAX_MIX_INS && !isSelected;
+                  const isExtra = !isSelected && selectedMixIns.length >= INCLUDED_MIX_INS;
 
                   return (
                     <button
                       key={mixIn.id}
                       type="button"
-                      disabled={isMaxReached}
                       onClick={() => toggleMixIn(mixIn.name)}
                       className={[
                         "flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-150",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm scale-[1.01]"
-                          : isMaxReached
-                          ? "cursor-not-allowed border-[#ece8e1] bg-[#faf8f4] opacity-45"
                           : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30",
                       ].join(" ")}
                     >
                       <span className="text-xl">{mixIn.emoji}</span>
-                      <span className="min-w-0 flex-1 truncate text-xs font-bold text-[#17231f]">
-                        {mixIn.name}
-                      </span>
+                      <div className="min-w-0 flex-1">
+                        <span className="block truncate text-xs font-bold text-[#17231f]">
+                          {mixIn.name}
+                        </span>
+                        {isExtra && (
+                          <span className="text-[10px] font-bold text-[#ff705f]">
+                            +0,50 €
+                          </span>
+                        )}
+                        {isSelected && selectedMixIns.indexOf(mixIn.name) >= INCLUDED_MIX_INS && (
+                          <span className="text-[9px] font-bold text-[#ff705f]">
+                            +0,50 €
+                          </span>
+                        )}
+                      </div>
                       {isSelected && (
                         <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
                           <Check className="h-2.5 w-2.5 stroke-[3]" />
@@ -522,7 +535,7 @@ function SurMesurePage() {
                 <div className="pt-2 flex justify-between gap-2">
                   <span className="font-semibold text-[#7a847e]">Format :</span>
                   <span className="font-bold text-[#17231f] text-right">
-                    {selectedSize === "grand" ? "Grand (+2.50€)" : "Moyen (Standard)"}
+                    {selectedSize === "grand" ? "Grand (+3.00€ · 13€)" : "Moyen (10€)"}
                   </span>
                 </div>
 
@@ -537,8 +550,8 @@ function SurMesurePage() {
                   <span className="font-semibold text-[#7a847e]">Mix-ins :</span>
                   <span className="font-bold text-[#17231f] text-right">
                     {selectedMixIns.length > 0
-                      ? selectedMixIns.join(", ")
-                      : "0 / 5 choisis"}
+                      ? `${selectedMixIns.join(", ")} (${Math.min(INCLUDED_MIX_INS, selectedMixIns.length)} inclus${extraMixInsCount > 0 ? ` + ${extraMixInsCount} extra (+${mixInsExtra.toFixed(2)}€)` : ""})`
+                      : "0 sélectionné"}
                   </span>
                 </div>
 

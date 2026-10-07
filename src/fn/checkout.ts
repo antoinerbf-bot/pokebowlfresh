@@ -57,9 +57,9 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       let unitPrice = 10.00;
       const opts = item.toppings ?? [];
 
-      // Format Grand (+2.50€)
+      // Format Grand (+3.00€ · 13€)
       if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) {
-        unitPrice += 2.50;
+        unitPrice += 3.00;
       }
 
       // Supplément Saumon (+1.00€)
@@ -68,11 +68,25 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += 1.00;
       }
 
+      // Mix-ins (5 inclus, +0.50€ chacun au-delà)
+      const mixInsLine = opts.find((t) => /^Mix-ins?\s*:/i.test(t));
+      if (mixInsLine) {
+        const rawMixIns = mixInsLine
+          .replace(/^Mix-ins?\s*:\s*/i, "")
+          .replace(/\s*\(\+[\d.,]+€\)\s*$/, "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0);
+        const extraMixIns = Math.max(0, rawMixIns.length - 5);
+        unitPrice += extraMixIns * 0.50;
+      }
+
       // Toppings (2 inclus, +0.50€ chacun au-delà)
       const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
       if (toppingLine) {
         const parsed = toppingLine
           .replace(/^Toppings?\s*:\s*/i, "")
+          .replace(/\s*\(\+[\d.,]+€\)\s*$/, "")
           .split(",")
           .map((s) => s.trim())
           .filter((s) => s.length > 0 && !/aucun/i.test(s));
@@ -98,9 +112,9 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       let unitPrice = bowl.price;
       const opts = item.toppings ?? [];
 
-      // Format Grand (+2.50€)
+      // Format Grand (+3.00€ · 13€)
       if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) {
-        unitPrice += 2.50;
+        unitPrice += 3.00;
       }
 
       // Toppings additionnels (+0.50€ chacun)
@@ -120,6 +134,10 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
     }
 
     // ─── 3. Boissons & Desserts ──────────────────────────────────────
+    if (item.id === "tira-nutella") {
+      throw new Error("Le Tiramisu Nutella est actuellement victime de son succès (sold out).");
+    }
+
     const canonicalPrice = catalog.get(item.id);
     if (canonicalPrice == null) {
       throw new Error("Article invalide");

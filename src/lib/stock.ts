@@ -27,7 +27,7 @@ export function buildDefaultStock(): StockSnapshot {
     items[d.id] = { available: true, qty: null };
   }
   for (const d of desserts) {
-    items[d.id] = { available: true, qty: null };
+    items[d.id] = { available: d.soldOut ? false : true, qty: null };
   }
   for (const t of allToppings) {
     items[toppingKey(t)] = { available: true, qty: null };
@@ -40,6 +40,8 @@ export function buildDefaultStock(): StockSnapshot {
 }
 
 export function isItemAvailable(stock: StockSnapshot | null | undefined, id: string): boolean {
+  const dessert = desserts.find((item) => item.id === id);
+  if (dessert?.soldOut) return false;
   if (!stock?.items) return true;
   const entry = stock.items[id];
   if (!entry) return true;
