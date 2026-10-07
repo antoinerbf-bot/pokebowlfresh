@@ -1,7 +1,7 @@
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { h as PhoneCall, k as ArrowLeft, l as ShoppingBag, v as MapPin } from "../_libs/lucide-react.mjs";
+import { h as PhoneCall, j as ArrowLeft, l as ShoppingBag, v as MapPin } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/contact-ebvlFhhM.js
 var import_jsx_runtime = require_jsx_runtime();
 function ContactPage() {

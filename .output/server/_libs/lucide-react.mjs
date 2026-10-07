@@ -141,6 +141,19 @@ var ArrowRight = createLucideIcon("arrow-right", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Bell = createLucideIcon("bell", [["path", {
+	d: "M10.268 21a2 2 0 0 0 3.464 0",
+	key: "vwvbt9"
+}], ["path", {
+	d: "M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326",
+	key: "11g9vi"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var BriefcaseBusiness = createLucideIcon("briefcase-business", [
 	["path", {
 		d: "M12 12h.01",
@@ -242,6 +255,16 @@ var CreditCard = createLucideIcon("credit-card", [["rect", {
 	y1: "10",
 	y2: "10",
 	key: "1b3vmo"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Flame = createLucideIcon("flame", [["path", {
+	d: "M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4",
+	key: "1slcih"
 }]]);
 /**
 * @license lucide-react v0.575.0 - ISC
@@ -604,4 +627,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { CircleCheck as C, BriefcaseBusiness as D, Check as E, ArrowRight as O, Clock as S, ChevronLeft as T, Menu as _, Trash2 as a, Layers as b, ShoppingCart as c, ShieldCheck as d, RefreshCw as f, Minus as g, PhoneCall as h, TriangleAlert as i, ArrowLeft as k, ShoppingBag as l, Phone as m, Utensils as n, Store as o, Plus as p, UtensilsCrossed as r, Sparkles as s, X as t, Shield as u, MapPin as v, ChevronRight as w, CreditCard as x, LoaderCircle as y };
+export { ArrowRight as A, Clock as C, Check as D, ChevronLeft as E, BriefcaseBusiness as O, CreditCard as S, ChevronRight as T, Menu as _, Trash2 as a, Layers as b, ShoppingCart as c, ShieldCheck as d, RefreshCw as f, Minus as g, PhoneCall as h, TriangleAlert as i, ArrowLeft as j, Bell as k, ShoppingBag as l, Phone as m, Utensils as n, Store as o, Plus as p, UtensilsCrossed as r, Sparkles as s, X as t, Shield as u, MapPin as v, CircleCheck as w, Flame as x, LoaderCircle as y };
