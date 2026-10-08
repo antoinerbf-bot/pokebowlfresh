@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { R as ArrowRight, c as Sparkles, r as UtensilsCrossed, u as ShoppingBag, z as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { R as ArrowRight, c as ShoppingBag, n as UtensilsCrossed, o as Sparkles, z as ArrowLeft } from "../_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./CartDrawer-crEbLLNk.mjs";
 import { t as useStock } from "./useStock-BGVgtCqa.mjs";
 require_react();

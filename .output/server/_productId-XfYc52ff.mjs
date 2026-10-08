@@ -7,7 +7,7 @@ import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { _ as Navigate, g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as Route } from "./_productId-BRCrG_2a.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-BkzyhEtx.mjs";
-import { P as Check, c as Sparkles, f as ShieldCheck, h as Plus, i as TriangleAlert, l as ShoppingCart, v as Minus, z as ArrowLeft } from "./_libs/lucide-react.mjs";
+import { P as Check, _ as Minus, m as Plus, o as Sparkles, r as TriangleAlert, s as ShoppingCart, u as ShieldCheck, z as ArrowLeft } from "./_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-crEbLLNk.mjs";
 import { t as useStock } from "./_ssr/useStock-BGVgtCqa.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/_productId-XfYc52ff.js

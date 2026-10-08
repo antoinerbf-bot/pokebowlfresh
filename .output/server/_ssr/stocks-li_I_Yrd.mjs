@@ -1,7 +1,7 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { S as LoaderCircle, d as Shield, m as RefreshCw } from "../_libs/lucide-react.mjs";
+import { l as Shield, p as RefreshCw, x as LoaderCircle } from "../_libs/lucide-react.mjs";
 import { n as catalogLabels } from "./stock-BpwbXmCA.mjs";
 import { n as resetStock, r as setStockItem, t as getStock } from "./stock-DNCXWs5Q.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/stocks-li_I_Yrd.js
