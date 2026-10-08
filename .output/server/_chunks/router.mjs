@@ -4,7 +4,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { A as ChevronRight, C as Heart, D as CreditCard, E as ExternalLink, F as BriefcaseBusiness, I as Bell, L as Award, M as ChevronDown, N as ChefHat, O as Clock, P as Check, R as ArrowRight, S as Instagram, T as Flame, _ as Minus, a as Store, b as MapPin, c as ShoppingBag, d as Search, f as RotateCcw, g as PhoneCall, h as Phone, i as Trash2, j as ChevronLeft, k as CircleCheck, l as Shield, m as Plus, n as UtensilsCrossed, o as Sparkles, p as RefreshCw, r as TriangleAlert, s as ShoppingCart, t as X, u as ShieldCheck, v as MessageCircle, w as Funnel, x as LoaderCircle, y as Menu, z as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { A as ChevronDown, C as Flame, D as CircleCheck, E as Clock, F as Award, I as ArrowRight, L as ArrowLeft, M as Check, N as BriefcaseBusiness, O as ChevronRight, P as Bell, S as Funnel, T as CreditCard, _ as Menu, a as Sparkles, b as Instagram, c as Shield, d as RefreshCw, f as Plus, g as MessageCircle, h as Minus, i as Store, j as ChefHat, k as ChevronLeft, l as ShieldCheck, m as PhoneCall, n as TriangleAlert, o as ShoppingCart, p as Phone, r as Trash2, s as ShoppingBag, t as X, u as Search, v as MapPin, w as ExternalLink, x as Heart, y as LoaderCircle } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-JiTB_HuS.css";
+var styles_default = "/assets/styles-CeHZPVHS.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -735,19 +735,19 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
 //#region src/assets/bowl-sweet-chicken.jpg
-var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-KOb_KDt-.jpg";
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-BoSycZiE.jpg";
 //#endregion
 //#region src/assets/bowl-scampis.jpg
-var bowl_scampis_default = "/assets/bowl-scampis-DR5syUSX.jpg";
+var bowl_scampis_default = "/assets/bowl-scampis-C6eZQ1DQ.jpg";
 //#endregion
 //#region src/assets/bowl-saumon.jpg
-var bowl_saumon_default = "/assets/bowl-saumon-BzVxQqxk.jpg";
+var bowl_saumon_default = "/assets/bowl-saumon-sK4H8v1a.jpg";
 //#endregion
 //#region src/assets/bowl-spicy-chicken.jpg
-var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B4zpsenC.jpg";
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-DRi3v3cG.jpg";
 //#endregion
 //#region src/assets/bowl-crousty-curry.jpg
-var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CxDrr4_R.jpg";
+var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CqIMmazU.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
 var images = {
@@ -756,7 +756,7 @@ var images = {
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
 	"crousty-chicken-curry": bowl_crousty_curry_default,
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-iABTwGCQ.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-Dher5In6.jpg",
 	"sur-mesure": bowl_spicy_chicken_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
@@ -2178,20 +2178,18 @@ var SLIDES = [
 		ingredients: "Poulet mariné rôti, patates douces rôties, maïs, feta, rondelles de jalapeños & spicy mayo."
 	}
 ];
-var AUTOPLAY_MS = 6e3;
+var AUTOPLAY_MS = 5500;
 function PokawaHeroExact() {
 	const [currentIdx, setCurrentIdx] = import_react.useState(0);
-	const [isPaused, setIsPaused] = import_react.useState(false);
 	const [addedNotice, setAddedNotice] = import_react.useState(false);
 	const { addItem } = useCart();
 	const slide = SLIDES[currentIdx];
 	import_react.useEffect(() => {
-		if (isPaused) return;
 		const interval = setInterval(() => {
 			setCurrentIdx((prev) => (prev + 1) % SLIDES.length);
 		}, AUTOPLAY_MS);
 		return () => clearInterval(interval);
-	}, [isPaused, currentIdx]);
+	}, [currentIdx]);
 	const handlePrev = () => {
 		setCurrentIdx((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
 	};
@@ -2214,8 +2212,6 @@ function PokawaHeroExact() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		"aria-label": "Accueil Pokawa-Style Poke N Bowl Visé",
 		className: "relative w-full h-[94vh] sm:h-[98vh] min-h-[640px] max-h-[1050px] overflow-hidden bg-[#121c18] select-none",
-		onMouseEnter: () => setIsPaused(true),
-		onMouseLeave: () => setIsPaused(false),
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
 				initial: false,
@@ -2497,99 +2493,115 @@ var tiramisu_nutella_default = "/assets/tiramisu-nutella-Cq3EXNhL.jpg";
 //#region src/assets/tiramisu-oreo.jpg
 var tiramisu_oreo_default = "/assets/dessert-9PIP1ns9.jpg";
 //#endregion
+//#region src/assets/drink-coca-cola.jpg
+var drink_coca_cola_default = "/assets/drink-coca-cola-D83foBG1.jpg";
+//#endregion
+//#region src/assets/drink-coca-zero.jpg
+var drink_coca_zero_default = "/assets/drink-coca-zero-eyT1b9_N.jpg";
+//#endregion
+//#region src/assets/drink-fanta-orange.jpg
+var drink_fanta_orange_default = "/assets/drink-fanta-orange-PDmbpAsA.jpg";
+//#endregion
+//#region src/assets/drink-ice-tea.jpg
+var drink_ice_tea_default = "/assets/drink-ice-tea-C5kBZPQd.jpg";
+//#endregion
+//#region src/assets/drink-eau-plate.jpg
+var drink_eau_plate_default = "/assets/drink-eau-plate-R1otZoiG.jpg";
+//#endregion
+//#region src/assets/drink-eau-gazeuse.jpg
+var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-Vo9XPEXy.jpg";
+//#endregion
 //#region src/components/FluidInteractiveMenu.tsx
 function FluidInteractiveMenu() {
 	const { addItem } = useCart();
-	const [activeCategory, setActiveCategory] = import_react.useState("all");
+	const [activeSection, setActiveSection] = import_react.useState("all");
 	const [activeTaste, setActiveTaste] = import_react.useState("all");
 	const [searchQuery, setSearchQuery] = import_react.useState("");
 	const [selectedSizes, setSelectedSizes] = import_react.useState({});
 	const [recentlyAddedId, setRecentlyAddedId] = import_react.useState(null);
-	const menuItems = import_react.useMemo(() => {
-		const list = [];
-		bowls.forEach((b) => {
-			const isCrousty = b.id.startsWith("crousty-");
-			b.id === "saumon-wasabi" || b.id;
-			let tasteTag = "gourmand";
+	const pokeItems = import_react.useMemo(() => {
+		return bowls.filter((b) => !b.id.startsWith("crousty-")).map((b) => {
+			let tasteTag = "fresh";
 			if (b.id === "spicy-chicken") tasteTag = "spicy";
-			if (b.id === "saumon-wasabi") tasteTag = "fresh";
-			if (b.id === "scampis-royaux") tasteTag = "fresh";
 			if (b.id === "sweet-chicken") tasteTag = "sweet";
-			if (isCrousty) tasteTag = "crispy";
-			list.push({
+			return {
 				id: b.id,
 				name: b.name,
-				category: isCrousty ? "crousty" : "poke",
+				category: "poke",
 				price: b.price,
-				grandPrice: isCrousty ? void 0 : b.price + 3,
+				grandPrice: b.price + 3,
 				desc: b.desc,
-				badge: isCrousty ? "Formule 11€ Boisson 🥤" : b.tag,
+				badge: b.tag,
 				dishId: b.id,
 				ingredients: b.ingredients,
 				tasteTag,
-				isCombo: isCrousty
-			});
+				packagingNote: "Bol en bambou naturel · Fait minute"
+			};
 		});
-		const dessertImages = {
+	}, []);
+	const croustyItems = import_react.useMemo(() => {
+		return bowls.filter((b) => b.id.startsWith("crousty-")).map((b) => ({
+			id: b.id,
+			name: b.name,
+			category: "crousty",
+			price: b.price,
+			desc: b.desc,
+			badge: "Formule 11 € · Boisson Offerte 🥤",
+			dishId: b.id,
+			ingredients: b.ingredients,
+			tasteTag: "crispy",
+			isCombo: true,
+			packagingNote: "Packaging Kraft Takeaway chaud · Boisson 33cl incluse"
+		}));
+	}, []);
+	const dessertItems = import_react.useMemo(() => {
+		const imagesMap = {
 			"tira-spec": tiramisu_speculoos_default,
 			"tira-nutella": tiramisu_nutella_default,
 			"tira-oreo": tiramisu_oreo_default
 		};
-		desserts.forEach((d) => {
-			list.push({
-				id: d.id,
-				name: d.name,
-				category: "dessert",
-				price: d.price,
-				desc: d.id === "tira-spec" ? "Crème mascarpone légère, biscuits Lotus caramélisés croustillants & voile de spéculoos." : d.id === "tira-nutella" ? "Tourbillons généreux de Nutella fondant, éclats de noisettes torréfiées & mascarpone." : "Brisures croustillantes de biscuits Oreo noir et crème fouettée maison onctueuse.",
-				badge: d.soldOut ? "Victime de son succès ⚠️" : "Fait Maison du Matin ⭐",
-				image: dessertImages[d.id],
-				soldOut: d.soldOut,
-				tasteTag: "sweet"
-			});
-		});
-		const drinkIcons = {
-			coca: "🥤",
-			"coca-zero": "✨",
-			fanta: "🍊",
-			"ice-tea": "🍑",
-			"eau-plate": "💧",
-			"eau-gaz": "🫧"
-		};
-		drinks.forEach((dr) => {
-			list.push({
-				id: dr.id,
-				name: dr.name,
-				category: "drink",
-				price: dr.price,
-				desc: "Servie très fraîche 33cl / 50cl. Parfait pour accompagner votre bowl.",
-				badge: drinkIcons[dr.id] || "🧊",
-				tasteTag: "drink"
-			});
-		});
-		return list;
+		return desserts.map((d) => ({
+			id: d.id,
+			name: d.name,
+			category: "dessert",
+			price: d.price,
+			desc: d.id === "tira-spec" ? "Crème mascarpone ultra-légère, véritables biscuits Lotus caramélisés & voile de spéculoos artisanal." : d.id === "tira-nutella" ? "Généreux tourbillons de Nutella fondant, éclats de noisettes torréfiées et crème fouettée maison." : "Éclats croustillants de biscuits Oreo noir plongés dans une onctueuse crème mascarpone fraîche.",
+			badge: d.soldOut ? "Victime de son succès" : "Fait Maison du Matin ⭐",
+			image: imagesMap[d.id],
+			soldOut: d.soldOut,
+			tasteTag: "sweet",
+			packagingNote: "Pot artisanal individuel fraîcheur"
+		}));
 	}, []);
-	const filteredItems = import_react.useMemo(() => {
-		return menuItems.filter((item) => {
-			if (activeCategory === "fish") {
-				if (item.id !== "saumon-wasabi" && item.id !== "scampis-royaux") return false;
-			} else if (activeCategory !== "all" && item.category !== activeCategory) return false;
-			if (activeTaste !== "all" && item.tasteTag !== activeTaste) return false;
-			if (searchQuery.trim() !== "") {
-				const query = searchQuery.toLowerCase();
-				const matchesName = item.name.toLowerCase().includes(query);
-				const matchesDesc = item.desc.toLowerCase().includes(query);
-				const matchesIng = item.ingredients?.some((ing) => ing.name.toLowerCase().includes(query));
-				if (!matchesName && !matchesDesc && !matchesIng) return false;
-			}
-			return true;
-		});
-	}, [
-		menuItems,
-		activeCategory,
-		activeTaste,
-		searchQuery
-	]);
+	const drinkItems = import_react.useMemo(() => {
+		const imagesMap = {
+			coca: drink_coca_cola_default,
+			"coca-zero": drink_coca_zero_default,
+			fanta: drink_fanta_orange_default,
+			"ice-tea": drink_ice_tea_default,
+			"eau-plate": drink_eau_plate_default,
+			"eau-gaz": drink_eau_gazeuse_default
+		};
+		const notesMap = {
+			coca: "Canette 33cl servie glacée",
+			"coca-zero": "Canette 33cl zéro sucre ultra-fraîche",
+			fanta: "Canette 33cl pétillante à l'orange",
+			"ice-tea": "Canette 33cl pêche rafraîchissante",
+			"eau-plate": "Bouteille 50cl Chaudfontaine plate",
+			"eau-gaz": "Bouteille 50cl Chaudfontaine pétillante"
+		};
+		return drinks.map((dr) => ({
+			id: dr.id,
+			name: dr.name,
+			category: "drink",
+			price: dr.price,
+			desc: notesMap[dr.id] || "Boisson fraîche 33cl / 50cl.",
+			badge: "Extra Frais 🧊",
+			image: imagesMap[dr.id],
+			tasteTag: "drink",
+			packagingNote: notesMap[dr.id]
+		}));
+	}, []);
 	const handleAddToCart = (item) => {
 		if (item.soldOut) return;
 		const size = selectedSizes[item.id] || "moyen";
@@ -2603,7 +2615,8 @@ function FluidInteractiveMenu() {
 			price: finalPrice,
 			quantity: 1,
 			toppings: [],
-			removedIngredients: []
+			removedIngredients: [],
+			image: item.image
 		});
 		setRecentlyAddedId(item.id);
 		setTimeout(() => {
@@ -2616,78 +2629,54 @@ function FluidInteractiveMenu() {
 			[itemId]: size
 		}));
 	};
-	const categories = [
-		{
-			id: "all",
-			label: "Toute la Carte",
-			icon: "✨",
-			count: menuItems.length
-		},
-		{
-			id: "poke",
-			label: "Pokés Signatures",
-			icon: "🥗",
-			count: menuItems.filter((i) => i.category === "poke").length
-		},
-		{
-			id: "crousty",
-			label: "Bar à Crousty (Chaud)",
-			icon: "🍗",
-			count: menuItems.filter((i) => i.category === "crousty").length
-		},
-		{
-			id: "fish",
-			label: "Saumon & Scampis",
-			icon: "🦐",
-			count: 2
-		},
-		{
-			id: "dessert",
-			label: "Tiramisus Maison",
-			icon: "🧁",
-			count: menuItems.filter((i) => i.category === "dessert").length
-		},
-		{
-			id: "drink",
-			label: "Boissons Fraîches",
-			icon: "🥤",
-			count: menuItems.filter((i) => i.category === "drink").length
-		}
-	];
+	const filterList = (items) => {
+		return items.filter((item) => {
+			if (activeTaste !== "all" && item.tasteTag !== activeTaste && item.tasteTag !== "drink") return false;
+			if (searchQuery.trim() !== "") {
+				const query = searchQuery.toLowerCase();
+				const matchesName = item.name.toLowerCase().includes(query);
+				const matchesDesc = item.desc.toLowerCase().includes(query);
+				const matchesIng = item.ingredients?.some((ing) => ing.name.toLowerCase().includes(query));
+				if (!matchesName && !matchesDesc && !matchesIng) return false;
+			}
+			return true;
+		});
+	};
+	const filteredPokes = filterList(pokeItems);
+	const filteredCrousty = filterList(croustyItems);
+	const filteredDesserts = filterList(dessertItems);
+	const filteredDrinks = filterList(drinkItems);
+	const totalResults = (activeSection === "all" || activeSection === "pokes" ? filteredPokes.length : 0) + (activeSection === "all" || activeSection === "crousty" ? filteredCrousty.length : 0) + (activeSection === "all" || activeSection === "desserts" ? filteredDesserts.length : 0) + (activeSection === "all" || activeSection === "boissons" ? filteredDrinks.length : 0);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		id: "carte",
 		className: "scroll-mt-16 mx-auto max-w-[1340px] px-4 py-16 sm:px-6 sm:py-24 lg:px-8",
-		"aria-label": "La carte interactive Poke N Bowl",
+		"aria-label": "La carte Poke N Bowl Visé",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-black/5",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "inline-flex items-center gap-2 rounded-full bg-[#d7ff45]/30 border border-[#d7ff45] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]",
+						className: "inline-flex items-center gap-2 rounded-full bg-[#d7ff45]/40 border border-[#b2db16] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#10251f]" }), "Carte Officielle & Recettes Visétoises"]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 						className: "mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]",
-						children: [
-							"Des créations fraîches,",
-							" ",
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-[#ff705f]",
-								children: "fluides & savoureuses."
-							})
-						]
+						children: ["Une carte claire, ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[#ff705f]",
+							children: "organisée & gourmande."
+						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-2 text-sm sm:text-base text-[#5a6760] max-w-2xl font-medium",
-						children: "Choisissez votre recette préférée ou composez sur-mesure. Riz à sushi traditionnel, saumon découpé minute et poulet doré croustillant."
+						children: "Pokés servis dans de véritables bols en bambou naturel, Crousty Chicken chaud en boîte kraft avec boisson, desserts du jour et rafraîchissements givrés."
 					})
 				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "relative w-full md:w-72",
+					className: "relative w-full md:w-80",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7d8b83]" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 							type: "text",
-							placeholder: "Rechercher un plat, ingrédient...",
+							placeholder: "Rechercher saumon, crousty, oreo...",
 							value: searchQuery,
 							onChange: (e) => setSearchQuery(e.target.value),
 							className: "w-full rounded-full border border-black/10 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold text-[#10251f] placeholder-[#7d8b83] shadow-sm focus:border-[#d7ff45] focus:outline-none focus:ring-2 focus:ring-[#d7ff45]/40"
@@ -2703,12 +2692,43 @@ function FluidInteractiveMenu() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "mt-8 flex items-center gap-2 overflow-x-auto no-scrollbar pb-2",
-				children: categories.map((cat) => {
-					const isActive = activeCategory === cat.id;
+				children: [
+					{
+						id: "all",
+						label: "Toute la Carte",
+						icon: "✨",
+						count: pokeItems.length + croustyItems.length + dessertItems.length + drinkItems.length
+					},
+					{
+						id: "pokes",
+						label: "Poké Bowls Signatures",
+						icon: "🥗",
+						count: pokeItems.length
+					},
+					{
+						id: "crousty",
+						label: "Bar à Crousty Chicken",
+						icon: "🍗",
+						count: croustyItems.length
+					},
+					{
+						id: "desserts",
+						label: "Tiramisus Maison",
+						icon: "🧁",
+						count: dessertItems.length
+					},
+					{
+						id: "boissons",
+						label: "Boissons Fraîches",
+						icon: "🥤",
+						count: drinkItems.length
+					}
+				].map((cat) => {
+					const isActive = activeSection === cat.id;
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						type: "button",
 						onClick: () => {
-							setActiveCategory(cat.id);
+							setActiveSection(cat.id);
 							setActiveTaste("all");
 						},
 						className: `relative flex items-center gap-2 rounded-full px-5 py-3 text-xs sm:text-sm font-black uppercase tracking-wider transition shrink-0 ${isActive ? "bg-[#10251f] text-white shadow-lg scale-[1.02]" : "bg-white text-[#10251f]/80 hover:bg-[#10251f]/10 border border-black/5"}`,
@@ -2727,253 +2747,392 @@ function FluidInteractiveMenu() {
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-4 flex flex-wrap items-center gap-2 pt-2",
+				className: "mt-4 flex flex-wrap items-center gap-2 pt-1",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 					className: "text-[11px] font-bold uppercase tracking-wider text-[#7d8b83] flex items-center gap-1 mr-1",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Funnel, { className: "h-3 w-3" }), " Goût :"]
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Funnel, { className: "h-3 w-3" }), " Saveur :"]
 				}), [
 					{
 						id: "all",
-						label: "Tous"
+						label: "Toutes les envies"
 					},
 					{
 						id: "fresh",
-						label: "Frais & Fondant 🥑"
+						label: "Frais & Léger 🥑"
 					},
 					{
 						id: "crispy",
-						label: "Extra Croustillant 🍗"
+						label: "Croustillant & Chaud 🍗"
 					},
 					{
 						id: "spicy",
-						label: "Touche Épicée 🌶️"
+						label: "Touche Piquante 🌶️"
 					},
 					{
 						id: "sweet",
-						label: "Douceur Teriyaki / Sucré 🍯"
+						label: "Douceur Teriyaki / Sucre 🍯"
 					}
 				].map((taste) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
 					onClick: () => setActiveTaste(taste.id),
-					className: `rounded-full px-3 py-1.5 text-[11px] font-bold transition ${activeTaste === taste.id ? "bg-[#ff705f] text-white shadow-sm" : "bg-white/80 text-[#5a6760] hover:bg-black/5 border border-black/5"}`,
+					className: `rounded-full px-3.5 py-1.5 text-[11px] font-bold transition ${activeTaste === taste.id ? "bg-[#ff705f] text-white shadow-sm" : "bg-white/80 text-[#5a6760] hover:bg-black/5 border border-black/5"}`,
 					children: taste.label
 				}, taste.id))]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-8 overflow-hidden rounded-[28px] bg-gradient-to-r from-[#10251f] to-[#1c3830] p-6 text-white shadow-lift flex flex-col sm:flex-row items-center justify-between gap-5 border border-white/10",
+			totalResults === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-12 rounded-[32px] bg-white border border-black/5 p-12 text-center shadow-card",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-4xl",
+						children: "🔍"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						className: "mt-3 text-xl font-bold text-[#10251f]",
+						children: "Aucun plat ne correspond à votre recherche"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-xs text-[#7d8b83]",
+						children: "Essayez avec un autre mot-clé ou réinitialisez les filtres."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => {
+							setActiveSection("all");
+							setActiveTaste("all");
+							setSearchQuery("");
+						},
+						className: "mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-5 py-2.5 text-xs font-bold text-white shadow-sm",
+						children: "Réinitialiser les filtres"
+					})
+				]
+			}),
+			(activeSection === "all" || activeSection === "pokes") && filteredPokes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-12 pt-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#d7ff45] text-2xl shadow-md",
-						children: "🥣"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "rounded-full bg-[#d7ff45]/20 border border-[#d7ff45]/30 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
-							children: "✦ Option Sur-Mesure 100% Libre"
+					className: "flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "inline-flex items-center gap-1.5 rounded-full bg-[#10251f]/5 px-3 py-1 text-[11px] font-extrabold text-[#10251f]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🥗" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bols en Bois / Bambou Sculpté" })]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							className: "mt-1 text-lg sm:text-xl font-black",
-							children: "Envie de créer votre propre bowl de A à Z ?"
+							className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
+							children: "Nos Poké Bowls Signatures"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-xs text-white/70 max-w-xl",
-							children: "Choisissez votre base, votre protéine (poulet, saumon, scampis), vos 5 mix-ins frais, votre sauce maison et vos toppings croustillants."
+							className: "text-xs sm:text-sm text-[#5a6760] mt-0.5",
+							children: "Saumon découpé minute, poulet mariné en petits morceaux tendres, scampis grillés & légumes croquants."
 						})
-					] })]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-					to: "/sur-mesure",
-					className: "shrink-0 inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-6 py-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-105 active:scale-95",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Créer mon Bowl (10 €)" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-xs font-extrabold text-[#ff705f]",
+						children: "Format Moyen dès 10 € · Grand +3 €"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4",
+					children: filteredPokes.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishCard, {
+						item,
+						selectedSize: selectedSizes[item.id] || "moyen",
+						onToggleSize: (s) => toggleSize(item.id, s),
+						onAdd: () => handleAddToCart(item),
+						isAdded: recentlyAddedId === item.id
+					}, item.id))
 				})]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mt-10",
-				children: filteredItems.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "rounded-[32px] bg-white border border-black/5 p-12 text-center shadow-card",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-4xl",
-							children: "🔍"
+			(activeSection === "all" || activeSection === "crousty") && filteredCrousty.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-16 pt-8 border-t border-black/5",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "rounded-[32px] bg-gradient-to-br from-[#fff7ed] to-[#ffedd5] border border-[#fed7aa] p-6 sm:p-8 mb-6 shadow-sm",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col md:flex-row md:items-center justify-between gap-5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-3.5 w-3.5 fill-white" }), "Bar à Crousty · Chaud & Croustillant"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "mt-2 text-2xl sm:text-3xl font-black text-[#7c2d12]",
+								children: "Le Bar à Crousty Chicken"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-1 text-xs sm:text-sm text-[#9a3412] max-w-2xl font-medium",
+								children: [
+									"Présenté dans son ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "packaging kraft takeaway dédié" }),
+									" pour conserver toute la chaleur et le croustillant des morceaux de poulet pané minute."
+								]
+							})
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "shrink-0 flex items-center gap-3 rounded-2xl bg-white p-3.5 border border-[#fed7aa] shadow-card",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-2xl",
+								children: "🥤"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "block text-[10px] font-black uppercase tracking-wider text-[#ea580c]",
+								children: "Formule Étudiant Complète"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "text-lg font-black text-[#7c2d12]",
+								children: ["11,00 € ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-bold text-[#9a3412]",
+									children: "(Boisson 33cl incluse)"
+								})]
+							})] })]
+						})]
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid gap-6 sm:grid-cols-2",
+					children: filteredCrousty.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishCard, {
+						item,
+						selectedSize: "moyen",
+						onToggleSize: () => {},
+						onAdd: () => handleAddToCart(item),
+						isAdded: recentlyAddedId === item.id,
+						isCroustySpecial: true
+					}, item.id))
+				})]
+			}),
+			(activeSection === "all" || activeSection === "desserts") && filteredDesserts.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-16 pt-8 border-t border-black/5",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "inline-flex items-center gap-1.5 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#ff705f]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧁" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Douceurs Artisanales" })]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							className: "mt-3 text-xl font-bold text-[#10251f]",
-							children: "Aucun plat ne correspond"
+							className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
+							children: "Nos Tiramisus Maison"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "mt-1 text-xs text-[#7d8b83]",
-							children: "Essayez de réinitialiser la recherche ou changez de catégorie."
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: () => {
-								setActiveCategory("all");
-								setActiveTaste("all");
-								setSearchQuery("");
-							},
-							className: "mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-5 py-2.5 text-xs font-bold text-white shadow-sm",
-							children: "Réinitialiser les filtres"
+							className: "text-xs sm:text-sm text-[#5a6760] mt-0.5",
+							children: "Préparés chaque matin par notre chef. Mascarpone fouetté, biscuits croustillants & sauces gourmandes."
 						})
-					]
-				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
-					layout: true,
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+						children: "4,00 € l'unité"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "grid gap-6 sm:grid-cols-2 lg:grid-cols-3",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
-						mode: "popLayout",
-						children: filteredItems.map((item, index) => {
-							const currentSize = selectedSizes[item.id] || "moyen";
-							const effectivePrice = currentSize === "grand" && item.grandPrice ? item.grandPrice : item.price;
-							const isRecentlyAdded = recentlyAddedId === item.id;
-							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
-								layout: true,
-								initial: {
-									opacity: 0,
-									scale: .94
-								},
-								animate: {
-									opacity: 1,
-									scale: 1
-								},
-								exit: {
-									opacity: 0,
-									scale: .94
-								},
-								transition: {
-									duration: .35,
-									delay: index * .03
-								},
-								className: "group flex flex-col justify-between overflow-hidden rounded-[30px] border border-black/5 bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "relative aspect-[4/3] w-full overflow-hidden bg-[#e9e5dc]",
-									children: [
-										item.dishId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
-											dishId: item.dishId,
-											alt: item.name,
-											className: "h-full w-full object-cover transition duration-700 group-hover:scale-108"
-										}) : item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-											src: item.image,
-											alt: item.name,
-											className: `h-full w-full object-cover transition duration-700 group-hover:scale-108 ${item.soldOut ? "grayscale contrast-75" : ""}`
-										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "flex h-full w-full items-center justify-center bg-[#f4f0e6] text-4xl",
-											children: item.badge
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/15" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "absolute top-3.5 left-3.5 rounded-full bg-white/95 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f] shadow-md backdrop-blur",
-											children: item.badge
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "absolute top-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md",
-											children: [effectivePrice.toFixed(2), " €"]
-										}),
-										item.soldOut && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px]",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-red-600 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-white shadow-lg",
-												children: "Victime de son succès"
-											})
-										})
-									]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "p-5 sm:p-6",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "flex items-start justify-between gap-2",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-												className: "text-lg sm:text-xl font-black text-[#10251f] leading-snug",
-												children: item.name
-											}), item.isCombo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-0.5 text-xs font-extrabold text-[#f59e0b]",
-												children: "🥤 Formule Étudiant : Boisson 33cl incluse"
-											}) : item.category === "poke" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-0.5 text-xs font-bold text-[#ff705f]",
-												children: "🍚 Base riz à sushi · Fait minute"
-											}) : null] })
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "mt-2 text-xs leading-relaxed text-[#68756f] line-clamp-2",
-											children: item.desc
-										}),
-										item.ingredients && item.ingredients.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mt-3.5 flex flex-wrap gap-1.5",
-											children: [item.ingredients.slice(0, 5).map((ing, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#10251f]/85",
-												children: [
-													ing.emoji,
-													" ",
-													ing.name
-												]
-											}, i)), item.ingredients.length > 5 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#7d8b83]",
-												children: ["+", item.ingredients.length - 5]
-											})]
-										}),
-										item.grandPrice && !item.isCombo && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mt-4 flex items-center justify-between border-t border-black/5 pt-3",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-[11px] font-bold uppercase tracking-wider text-[#7d8b83]",
-												children: "Format :"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "inline-flex rounded-full bg-[#f2ede4] p-0.5",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-													type: "button",
-													onClick: () => toggleSize(item.id, "moyen"),
-													className: `rounded-full px-2.5 py-1 text-[10px] font-black transition ${currentSize === "moyen" ? "bg-[#10251f] text-white shadow-sm" : "text-[#5a6760] hover:text-black"}`,
-													children: "Moyen (10 €)"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-													type: "button",
-													onClick: () => toggleSize(item.id, "grand"),
-													className: `rounded-full px-2.5 py-1 text-[10px] font-black transition ${currentSize === "grand" ? "bg-[#10251f] text-white shadow-sm" : "text-[#5a6760] hover:text-black"}`,
-													children: "Grand (13 €)"
-												})]
-											})]
-										})
-									]
-								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "p-5 sm:p-6 pt-0 mt-auto",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center gap-2 pt-2 border-t border-black/5",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											type: "button",
-											disabled: item.soldOut,
-											onClick: () => handleAddToCart(item),
-											className: `relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl font-black shadow-soft transition ${item.soldOut ? "bg-black/10 text-black/30 cursor-not-allowed" : isRecentlyAdded ? "bg-[#10251f] text-[#d7ff45] scale-105" : "bg-[#d7ff45] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95"}`,
-											title: `Ajouter au panier (${effectivePrice.toFixed(2)} €)`,
-											children: [isRecentlyAdded ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 stroke-[3]" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-5 w-5 stroke-[2.5]" }), isRecentlyAdded && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.span, {
-												initial: {
-													opacity: 0,
-													y: 0,
-													scale: .6
-												},
-												animate: {
-													opacity: 1,
-													y: -24,
-													scale: 1
-												},
-												exit: { opacity: 0 },
-												className: "absolute -top-1 font-black text-xs text-[#10251f] bg-[#d7ff45] px-1.5 py-0.5 rounded-full shadow",
-												children: "+1"
-											})]
-										}), item.dishId ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-											to: "/product/$productId",
-											params: { productId: item.dishId },
-											className: "flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Personnaliser" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
-										}) : item.soldOut ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "flex-1 text-center py-3 text-xs font-bold text-[#7d8b83]",
-											children: "Épuisé pour aujourd'hui"
-										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											type: "button",
-											onClick: () => handleAddToCart(item),
-											className: "flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter direct" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
-										})]
-									})
-								})]
-							}, item.id);
+					children: filteredDesserts.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishCard, {
+						item,
+						selectedSize: "moyen",
+						onToggleSize: () => {},
+						onAdd: () => handleAddToCart(item),
+						isAdded: recentlyAddedId === item.id
+					}, item.id))
+				})]
+			}),
+			(activeSection === "all" || activeSection === "boissons") && filteredDrinks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-16 pt-8 border-t border-black/5",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "inline-flex items-center gap-1.5 rounded-full bg-[#0284c7]/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0284c7]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧊" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Servies Très Fraîches" })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
+							children: "Nos Boissons Fraîches"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs sm:text-sm text-[#5a6760] mt-0.5",
+							children: "Canettes givrées 33cl et bouteilles d'eau minérale Chaudfontaine 50cl pour accompagner vos plats."
 						})
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+						children: "2,00 € l'unité"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid gap-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6",
+					children: filteredDrinks.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DrinkCard, {
+						item,
+						onAdd: () => handleAddToCart(item),
+						isAdded: recentlyAddedId === item.id
+					}, item.id))
+				})]
+			})
+		]
+	});
+}
+function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustySpecial = false }) {
+	const effectivePrice = selectedSize === "grand" && item.grandPrice ? item.grandPrice : item.price;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+		layout: true,
+		className: `group flex flex-col justify-between overflow-hidden rounded-[28px] border bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift ${isCroustySpecial ? "border-[#fed7aa] ring-2 ring-[#ea580c]/15" : "border-black/5"}`,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "relative aspect-[4/3] w-full overflow-hidden bg-[#e9e5dc]",
+			children: [
+				item.dishId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+					dishId: item.dishId,
+					alt: item.name,
+					className: "h-full w-full object-cover transition duration-700 group-hover:scale-108"
+				}) : item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+					src: item.image,
+					alt: item.name,
+					className: `h-full w-full object-cover transition duration-700 group-hover:scale-108 ${item.soldOut ? "grayscale contrast-75" : ""}`
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex h-full w-full items-center justify-center bg-[#f4f0e6] text-4xl",
+					children: item.badge
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/15 pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: `absolute top-3.5 left-3.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur ${isCroustySpecial ? "bg-[#ea580c] text-white" : "bg-white/95 text-[#10251f]"}`,
+					children: item.badge
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "absolute top-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md",
+					children: [effectivePrice.toFixed(2), " €"]
+				}),
+				item.packagingNote && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "absolute bottom-2.5 left-3.5 rounded-md bg-black/65 backdrop-blur-sm px-2 py-0.5 text-[9px] font-extrabold text-white/90",
+					children: item.packagingNote
+				}),
+				item.soldOut && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px]",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "rounded-full bg-red-600 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-white shadow-lg",
+						children: "Victime de son succès"
 					})
 				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "p-5 sm:p-6",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+					className: "text-lg sm:text-xl font-black text-[#10251f] leading-snug",
+					children: item.name
+				}),
+				item.isCombo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-0.5 text-xs font-extrabold text-[#ea580c]",
+					children: "🥤 Formule chaude : Canette 33cl offerte au choix"
+				}) : item.category === "poke" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-0.5 text-xs font-bold text-[#059669]",
+					children: "🥣 Servi en bol bambou sculpté · Riz japonais vinaigré"
+				}) : null,
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 text-xs leading-relaxed text-[#68756f] line-clamp-2",
+					children: item.desc
+				}),
+				item.ingredients && item.ingredients.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-3.5 flex flex-wrap gap-1.5",
+					children: [item.ingredients.slice(0, 5).map((ing, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#10251f]/85 border border-[#e8dfcf]",
+						children: [
+							ing.emoji,
+							" ",
+							ing.name
+						]
+					}, i)), item.ingredients.length > 5 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#7d8b83]",
+						children: ["+", item.ingredients.length - 5]
+					})]
+				}),
+				item.grandPrice && !item.isCombo && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-4 flex items-center justify-between border-t border-black/5 pt-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-[11px] font-bold uppercase tracking-wider text-[#7d8b83]",
+						children: "Format :"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "inline-flex rounded-full bg-[#f2ede4] p-0.5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => onToggleSize("moyen"),
+							className: `rounded-full px-2.5 py-1 text-[10px] font-black transition ${selectedSize === "moyen" ? "bg-[#10251f] text-white shadow-sm" : "text-[#5a6760] hover:text-black"}`,
+							children: [
+								"Moyen (",
+								item.price.toFixed(0),
+								" €)"
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => onToggleSize("grand"),
+							className: `rounded-full px-2.5 py-1 text-[10px] font-black transition ${selectedSize === "grand" ? "bg-[#10251f] text-white shadow-sm" : "text-[#5a6760] hover:text-black"}`,
+							children: [
+								"Grand (",
+								item.grandPrice.toFixed(0),
+								" €)"
+							]
+						})]
+					})]
+				})
+			]
+		})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "p-5 sm:p-6 pt-0 mt-auto",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-2 pt-2 border-t border-black/5",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					disabled: item.soldOut,
+					onClick: onAdd,
+					className: `relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl font-black shadow-soft transition ${item.soldOut ? "bg-black/10 text-black/30 cursor-not-allowed" : isAdded ? "bg-[#10251f] text-[#d7ff45] scale-105" : "bg-[#d7ff45] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95"}`,
+					title: `Ajouter au panier (${effectivePrice.toFixed(2)} €)`,
+					children: [isAdded ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 stroke-[3]" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-5 w-5 stroke-[2.5]" }), isAdded && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.span, {
+						initial: {
+							opacity: 0,
+							y: 0,
+							scale: .6
+						},
+						animate: {
+							opacity: 1,
+							y: -24,
+							scale: 1
+						},
+						exit: { opacity: 0 },
+						className: "absolute -top-1 font-black text-xs text-[#10251f] bg-[#d7ff45] px-1.5 py-0.5 rounded-full shadow",
+						children: "+1"
+					})]
+				}), item.dishId ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+					to: "/product/$productId",
+					params: { productId: item.dishId },
+					className: "flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Personnaliser" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
+				}) : item.soldOut ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "flex-1 text-center py-3 text-xs font-bold text-[#7d8b83]",
+					children: "Épuisé aujourd'hui"
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: onAdd,
+					className: "flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter direct" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
+				})]
+			})
+		})]
+	});
+}
+function DrinkCard({ item, onAdd, isAdded }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "group flex flex-col justify-between overflow-hidden rounded-[22px] border border-black/5 bg-white p-3 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#f0eee9]",
+				children: [item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+					src: item.image,
+					alt: item.name,
+					className: "h-full w-full object-cover transition duration-500 group-hover:scale-105"
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex h-full w-full items-center justify-center text-3xl",
+					children: "🥤"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
+					children: [item.price.toFixed(2), " €"]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-2.5",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+					className: "text-xs font-black text-[#10251f] leading-tight line-clamp-1",
+					children: item.name
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-0.5 text-[10px] text-[#7d8b83] line-clamp-1",
+					children: item.packagingNote || "33 cl"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				onClick: onAdd,
+				className: `mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-black transition ${isAdded ? "bg-[#10251f] text-[#d7ff45]" : "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"}`,
+				children: isAdded ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouté" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter (2 €)" })] })
 			})
 		]
 	});
@@ -3089,79 +3248,84 @@ function PokawaBrandValues() {
 var BASES = [
 	{
 		id: "riz-sushi",
-		name: "Riz à sushi",
+		name: "Riz à sushi japonais",
 		emoji: "🍚",
 		desc: "Vinaigré et fondant"
 	},
 	{
 		id: "riz-brun",
-		name: "Riz brun",
+		name: "Riz brun complet",
 		emoji: "🌾",
-		desc: "Complet & parfumé"
+		desc: "Riche en fibres & parfumé"
 	},
 	{
 		id: "salade",
-		name: "Salade fraîche",
+		name: "Salade fraîche croquante",
 		emoji: "🥗",
-		desc: "Légère & croquante"
+		desc: "Légère & désaltérante"
 	},
 	{
 		id: "pates",
-		name: "Pâtes",
+		name: "Pâtes gourmandes",
 		emoji: "🍝",
-		desc: "Gourmandes"
+		desc: "Savoureuses & consistantes"
 	}
 ];
 var PROTEINES = [
 	{
 		id: "poulet",
-		name: "Poulet doré",
+		name: "Poulet mariné doré",
 		emoji: "🍗",
 		extra: 0,
-		tag: "Cuisiné maison"
+		tag: "Petits morceaux tendres"
 	},
 	{
 		id: "saumon",
-		name: "Saumon sashimi",
+		name: "Saumon sashimi noble",
 		emoji: "🐟",
 		extra: 1,
-		tag: "+1,00 € · Extra frais"
+		tag: "+1,00 € · Découpé minute"
 	},
 	{
 		id: "scampis",
-		name: "Scampis grillés",
+		name: "Scampis royaux grillés",
 		emoji: "🦐",
 		extra: 0,
-		tag: "Saisis minute"
+		tag: "Saisis au grill minute"
 	},
 	{
 		id: "vege",
-		name: "Double Avocat & Feta",
+		name: "Double Avocat Hass & Feta",
 		emoji: "🥑",
 		extra: 0,
-		tag: "100% Végé"
+		tag: "100% Végétarien"
 	}
 ];
 var MIXINS = [
 	{
 		id: "avocat",
-		name: "Avocat Hass",
+		name: "Avocat Hass fondant",
 		emoji: "🥑"
 	},
 	{
 		id: "mangue",
-		name: "Mangue mûre",
+		name: "Mangue mûre juteuse",
 		emoji: "🥭"
 	},
 	{
 		id: "edamame",
-		name: "Edamame",
+		name: "Edamame croquant",
 		emoji: "🫘"
 	},
 	{
 		id: "feta",
-		name: "Feta grecque",
+		name: "Feta grecque AOP",
 		emoji: "🧀"
+	},
+	{
+		id: "wakame",
+		name: "Salade d'algues Wakame",
+		emoji: "🌿"
 	},
 	{
 		id: "tomates",
@@ -3174,18 +3338,13 @@ var MIXINS = [
 		emoji: "🌽"
 	},
 	{
-		id: "wakame",
-		name: "Algues Wakame",
-		emoji: "🌿"
-	},
-	{
 		id: "concombre",
 		name: "Concombre frais",
 		emoji: "🥒"
 	},
 	{
 		id: "jalapenos",
-		name: "Jalapeños",
+		name: "Jalapeños marinés",
 		emoji: "🌶️"
 	},
 	{
@@ -3197,43 +3356,51 @@ var MIXINS = [
 var SAUCES = [
 	{
 		id: "teriyaki",
-		name: "Teriyaki caramélisée",
-		emoji: "🍯"
+		name: "Teriyaki caramélisée maison",
+		emoji: "🍯",
+		desc: "Sucré-salé savoureux"
 	},
 	{
 		id: "spicy-mayo",
 		name: "Spicy Mayo piquante",
-		emoji: "🌶️"
+		emoji: "🌶️",
+		desc: "Relevée & onctueuse"
 	},
 	{
 		id: "mayo-wasabi",
 		name: "Mayo Wasabi veloutée",
-		emoji: "🟢"
+		emoji: "🟢",
+		desc: "Fraîche avec du caractère"
 	},
 	{
 		id: "sesame",
-		name: "Sésame toasté",
-		emoji: "🌰"
+		name: "Sésame toasté crémeux",
+		emoji: "🌰",
+		desc: "Rondeur délicate"
 	}
 ];
 var TOPPINGS = [
 	{
 		id: "oignons-frits",
-		name: "Oignons frits croustillants",
-		emoji: "🧅"
+		name: "Oignons frits dorés",
+		emoji: "🧅",
+		desc: "Croustillant irrésistible"
 	},
 	{
 		id: "sesame-mix",
-		name: "Sésame noir & blanc",
-		emoji: "🌱"
+		name: "Mélange sésame noir & blanc",
+		emoji: "🌱",
+		desc: "Arômes torréfiés"
 	},
 	{
 		id: "flocons-chili",
-		name: "Flocons de chili",
-		emoji: "🔥"
+		name: "Flocons de chili crunchy",
+		emoji: "🔥",
+		desc: "Kick épicé vivifiant"
 	}
 ];
 function InteractiveBowlBuilder() {
+	const [activeStep, setActiveStep] = import_react.useState(1);
 	const [size, setSize] = import_react.useState("moyen");
 	const [base, setBase] = import_react.useState(BASES[0]);
 	const [proteine, setProteine] = import_react.useState(PROTEINES[1]);
@@ -3242,7 +3409,7 @@ function InteractiveBowlBuilder() {
 		"mangue",
 		"edamame",
 		"wakame",
-		"tomates"
+		"feta"
 	]);
 	const [sauce, setSauce] = import_react.useState(SAUCES[0]);
 	const [topping, setTopping] = import_react.useState(TOPPINGS[0]);
@@ -3250,31 +3417,15 @@ function InteractiveBowlBuilder() {
 	const { addItem } = useCart();
 	const basePrice = size === "grand" ? 13 : 10;
 	const proteinExtra = proteine.extra;
-	const extraMixinsCount = Math.max(0, selectedMixins.length - 5);
-	const extraMixinsPrice = extraMixinsCount * .5;
+	const extraMixinsPrice = Math.max(0, selectedMixins.length - 5) * .5;
 	const totalPrice = basePrice + proteinExtra + extraMixinsPrice;
 	const toggleMixin = (id) => {
 		if (selectedMixins.includes(id)) {
 			if (selectedMixins.length > 1) setSelectedMixins((prev) => prev.filter((m) => m !== id));
 		} else setSelectedMixins((prev) => [...prev, id]);
 	};
-	const resetSelection = () => {
-		setSize("moyen");
-		setBase(BASES[0]);
-		setProteine(PROTEINES[0]);
-		setSelectedMixins([
-			"avocat",
-			"mangue",
-			"edamame",
-			"tomates",
-			"mais"
-		]);
-		setSauce(SAUCES[0]);
-		setTopping(TOPPINGS[0]);
-	};
 	const handleAddToCart = () => {
 		const mixinNames = selectedMixins.map((id) => MIXINS.find((m) => m.id === id)?.name || id);
-		`${base.name}${proteine.name}${mixinNames.join(", ")}${sauce.name}${topping.name}`;
 		addItem({
 			id: `custom-live-${Date.now()}`,
 			name: `Bowl Sur-Mesure (${size === "grand" ? "Grand" : "Moyen"})`,
@@ -3282,338 +3433,485 @@ function InteractiveBowlBuilder() {
 			price: totalPrice,
 			quantity: 1,
 			toppings: [
+				`Taille : ${size === "grand" ? "Grand (13€)" : "Moyen (10€)"}`,
 				`Base : ${base.name}`,
 				`Protéine : ${proteine.name}`,
-				...mixinNames,
+				`Mix-ins : ${mixinNames.join(", ")}`,
 				`Sauce : ${sauce.name}`,
 				`Topping : ${topping.name}`
 			],
-			removedIngredients: []
+			removedIngredients: [],
+			image: bowl_sweet_chicken_default
 		});
 		setAdded(true);
 		setTimeout(() => setAdded(false), 2200);
 	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-		id: "composer",
-		className: "scroll-mt-12 bg-[#0c1f19] py-16 sm:py-24 text-white relative isolate overflow-hidden",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-1/4 -z-10 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-3xl pointer-events-none" }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute bottom-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl pointer-events-none" }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "text-center max-w-2xl mx-auto",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/40 bg-[#d7ff45]/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-[#d7ff45]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Mini-Simulateur Ludique" })]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
-							className: "mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight",
-							children: ["Compose ton bowl en live. ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-[#d7ff45]",
-								children: "Fait minute pour toi."
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "mt-3 text-sm sm:text-base text-white/75",
-							children: "Choisis ta base, ta protéine fraîche et tes 5 mix-ins préférés. Visualise ta recette en temps réel et commande-la en un seul clic !"
-						})
-					]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mt-12 grid grid-cols-1 gap-8 lg:grid-cols-[1.3fr_0.9fr] items-start",
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "mx-auto max-w-[1340px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "relative overflow-hidden rounded-[36px] bg-white border border-[#e8dfcf] shadow-lift p-6 sm:p-10 lg:p-12",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-[#d7ff45]/20 blur-3xl" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-black/5",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "space-y-6 rounded-[32px] border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl",
+						className: "max-w-2xl",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between mb-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
-										children: "1"
-									}), "Format du Bowl"]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs text-white/50",
-									children: "Moyen ou Grand (+3€)"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-2 gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setSize("moyen"),
-									className: `rounded-2xl p-3.5 text-left border transition-all ${size === "moyen" ? "border-[#d7ff45] bg-[#d7ff45]/15 text-white shadow-md" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"}`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "font-black text-sm",
-										children: "Moyen (10,00 €)"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "text-[11px] text-white/60",
-										children: "Généreux & complet"
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setSize("grand"),
-									className: `rounded-2xl p-3.5 text-left border transition-all ${size === "grand" ? "border-[#d7ff45] bg-[#d7ff45]/15 text-white shadow-md" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"}`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "font-black text-sm text-[#d7ff45]",
-										children: "Grand (13,00 €) 🔥"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "text-[11px] text-white/60",
-										children: "Portion XXL très gourmande"
-									})]
-								})]
-							})] }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between mb-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
-										children: "2"
-									}), "Ta Base Fondante"]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs text-white/50",
-									children: "1 base incluse"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "grid grid-cols-2 sm:grid-cols-4 gap-2",
-								children: BASES.map((b) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setBase(b),
-									className: `rounded-2xl p-3 text-center border transition-all ${base.id === b.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f] font-black shadow-lg scale-102" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-xl block",
-										children: b.emoji
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-xs font-bold block mt-1",
-										children: b.name
-									})]
-								}, b.id))
-							})] }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between mb-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
-										children: "3"
-									}), "Ta Protéine Fraîche"]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs text-white/50",
-									children: "Découpée du matin"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "grid grid-cols-2 sm:grid-cols-4 gap-2",
-								children: PROTEINES.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setProteine(p),
-									className: `rounded-2xl p-3 text-center border transition-all ${proteine.id === p.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f] font-black shadow-lg scale-102" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-xl block",
-											children: p.emoji
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-xs font-bold block mt-1",
-											children: p.name
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-[10px] block opacity-80 mt-0.5",
-											children: p.tag
-										})
-									]
-								}, p.id))
-							})] }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between mb-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]",
-											children: "4"
-										}),
-										"Tes Mix-ins (",
-										selectedMixins.length,
-										" sélectionnés)"
-									]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs text-white/60",
-									children: selectedMixins.length <= 5 ? `${5 - selectedMixins.length} inclus restants` : `+${(selectedMixins.length - 5) * .5}€ (${selectedMixins.length - 5} extras)`
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "grid grid-cols-2 sm:grid-cols-5 gap-2",
-								children: MIXINS.map((m) => {
-									const isSelected = selectedMixins.includes(m.id);
-									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-										type: "button",
-										onClick: () => toggleMixin(m.id),
-										className: `rounded-xl p-2.5 text-center border transition-all text-xs font-bold flex items-center justify-center gap-1.5 ${isSelected ? "border-[#d7ff45] bg-[#d7ff45]/20 text-white" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"}`,
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: m.emoji }),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "truncate",
-												children: m.name
-											}),
-											isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3 w-3 text-[#d7ff45] shrink-0" })
-										]
-									}, m.id);
-								})
-							})] }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] block mb-2",
-									children: "5. Sauce Signature"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "grid grid-cols-2 gap-1.5",
-									children: SAUCES.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										onClick: () => setSauce(s),
-										className: `rounded-xl p-2.5 text-left border text-xs font-bold transition-all ${sauce.id === s.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f]" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-											s.emoji,
-											" ",
-											s.name
-										] })
-									}, s.id))
-								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black uppercase tracking-wider text-[#d7ff45] block mb-2",
-									children: "6. Crunch Topping"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "grid grid-cols-1 gap-1.5",
-									children: TOPPINGS.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										onClick: () => setTopping(t),
-										className: `rounded-xl p-2.5 text-left border text-xs font-bold transition-all ${topping.id === t.id ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f]" : "border-white/10 bg-white/5 text-white hover:bg-white/10"}`,
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-											t.emoji,
-											" ",
-											t.name
-										] })
-									}, t.id))
-								})] })]
+								className: "inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#d7ff45] shadow-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Atelier Créatif · Bol en Bambou Naturel" })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+								className: "mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]",
+								children: ["Composez votre bowl ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[#ff705f]",
+									children: "sur-mesure."
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-sm sm:text-base text-[#5a6760] font-medium leading-relaxed",
+								children: "Sélectionnez vos ingrédients étape par étape. Chaque bowl est préparé à la minute dans un bol en bois sculpté, avec vos 5 mix-ins frais inclus."
 							})
 						]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "sticky top-24 rounded-[32px] border-2 border-white/20 bg-gradient-to-b from-[#102720] to-[#0a1b16] p-6 sm:p-8 text-white shadow-2xl backdrop-blur-xl",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between pb-4 border-b border-white/10",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-5 w-5 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-xs font-black uppercase tracking-widest text-[#d7ff45]",
-										children: "Ta Création Minute"
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: resetSelection,
-									className: "flex items-center gap-1 text-[11px] font-bold text-white/50 hover:text-white transition",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, { className: "h-3 w-3" }), "Réinitialiser"]
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "relative my-6 aspect-square max-w-[260px] mx-auto rounded-full border-4 border-white/15 bg-gradient-to-br from-[#1a382e] to-[#071713] p-4 shadow-[inset_0_10px_30px_rgba(0,0,0,0.6)] flex items-center justify-center overflow-hidden",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(215,255,69,0.15),transparent_70%)]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "relative z-10 text-center space-y-2",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-4xl animate-bounce duration-1000",
-											children: proteine.emoji
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-xs font-black tracking-tight text-white bg-black/50 px-3 py-1 rounded-full border border-white/15 backdrop-blur-md",
-											children: base.name
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex flex-wrap justify-center gap-1 max-w-[190px]",
-											children: [
-												selectedMixins.slice(0, 5).map((id) => {
-													const m = MIXINS.find((item) => item.id === id);
-													return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "text-lg",
-														children: m?.emoji
-													}, id);
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-lg",
-													children: sauce.emoji
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-lg",
-													children: topping.emoji
-												})
-											]
-										})
-									]
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "space-y-2 text-xs text-white/80 border-t border-white/10 pt-4",
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "shrink-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/sur-mesure",
+							className: "inline-flex items-center gap-2.5 rounded-full bg-[#faf8f4] border border-[#d8cfbe] px-5 py-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white hover:scale-105 active:scale-95",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Accéder au grand configurateur 5 étapes" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4 text-[#ff705f]" })]
+						})
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-8 grid grid-cols-2 sm:grid-cols-4 gap-2.5",
+					children: [
+						{
+							num: 1,
+							title: "1. Format & Base",
+							icon: "🍚"
+						},
+						{
+							num: 2,
+							title: "2. Protéine Fraîche",
+							icon: "🐟"
+						},
+						{
+							num: 3,
+							title: `3. Mix-Ins (${selectedMixins.length}/5)`,
+							icon: "🥑"
+						},
+						{
+							num: 4,
+							title: "4. Sauce & Croustillant",
+							icon: "🍯"
+						}
+					].map((st) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						onClick: () => setActiveStep(st.num),
+						className: `flex items-center gap-2.5 rounded-2xl p-3.5 text-left transition-all ${activeStep === st.num ? "bg-[#10251f] text-white shadow-md scale-[1.02]" : "bg-[#f7f4ec] text-[#10251f]/80 hover:bg-[#ede7da] border border-black/5"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-xl",
+							children: st.icon
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "min-w-0",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "block text-xs font-black truncate",
+								children: st.title
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: `text-[10px] font-bold ${activeStep === st.num ? "text-[#d7ff45]" : "text-[#7d8b83]"}`,
+								children: activeStep === st.num ? "En cours d'édition" : "Cliquer pour modifier"
+							})]
+						})]
+					}, st.num))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-8 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-start",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-[30px] bg-[#faf8f4] border border-[#e8dfcf] p-6 sm:p-7 shadow-sm min-h-[440px] flex flex-col justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							activeStep === 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+								initial: {
+									opacity: 0,
+									y: 10
+								},
+								animate: {
+									opacity: 1,
+									y: 0
+								},
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex justify-between",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Format ", size === "grand" ? "Grand" : "Moyen"] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "font-bold",
-											children: [basePrice.toFixed(2), " €"]
+										className: "flex items-center justify-between mb-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+											className: "text-lg font-black text-[#10251f] flex items-center gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🍚" }), " Étape 1 : Choisissez le format et la base"]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-bold text-[#7d8b83]",
+											children: "1 choix obligatoire"
 										})]
 									}),
-									proteinExtra > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex justify-between text-[#ff705f]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Supplément Saumon Sashimi" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "font-bold",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "block text-xs font-black uppercase tracking-wider text-[#7d8b83] mb-2",
+											children: "Taille du Bol en Bambou :"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "grid grid-cols-2 gap-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => setSize("moyen"),
+												className: `flex items-center justify-between rounded-2xl p-4 border transition ${size === "moyen" ? "bg-[#10251f] text-white border-[#10251f] shadow-md" : "bg-white text-[#10251f] border-black/10 hover:border-black/25"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "text-left",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "block text-sm font-black",
+														children: "Format Moyen"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: `text-xs ${size === "moyen" ? "text-white/70" : "text-[#7d8b83]"}`,
+														children: "Généreux & complet"
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-base font-black text-[#d7ff45]",
+													children: "10,00 €"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: () => setSize("grand"),
+												className: `flex items-center justify-between rounded-2xl p-4 border transition ${size === "grand" ? "bg-[#10251f] text-white border-[#10251f] shadow-md" : "bg-white text-[#10251f] border-black/10 hover:border-black/25"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "text-left",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "block text-sm font-black",
+														children: "Grand Format"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: `text-xs ${size === "grand" ? "text-white/70" : "text-[#7d8b83]"}`,
+														children: "Maxi faim gourmande"
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-base font-black text-[#d7ff45]",
+													children: "13,00 €"
+												})]
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-xs font-black uppercase tracking-wider text-[#7d8b83] mb-2",
+										children: "Votre base au choix :"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "grid grid-cols-2 gap-2.5",
+										children: BASES.map((b) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => setBase(b),
+											className: `flex items-center gap-3 rounded-2xl p-3.5 border text-left transition ${base.id === b.id ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20" : "bg-white/80 border-black/10 hover:bg-white"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-2xl",
+												children: b.emoji
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "block text-xs sm:text-sm font-black text-[#10251f]",
+												children: b.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] text-[#7d8b83] font-medium",
+												children: b.desc
+											})] })]
+										}, b.id))
+									})
+								]
+							}),
+							activeStep === 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+								initial: {
+									opacity: 0,
+									y: 10
+								},
+								animate: {
+									opacity: 1,
+									y: 0
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center justify-between mb-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+										className: "text-lg font-black text-[#10251f] flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🐟" }), " Étape 2 : Choisissez votre protéine principale"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-bold text-[#7d8b83]",
+										children: "1 protéine incluse"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "grid grid-cols-1 sm:grid-cols-2 gap-3",
+									children: PROTEINES.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setProteine(p),
+										className: `flex items-center justify-between rounded-2xl p-4 border text-left transition ${proteine.id === p.id ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20" : "bg-white/80 border-black/10 hover:bg-white"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-2xl",
+												children: p.emoji
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "block text-xs sm:text-sm font-black text-[#10251f]",
+												children: p.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] text-[#7d8b83] font-bold",
+												children: p.tag
+											})] })]
+										}), proteine.id === p.id && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "h-5 w-5 text-[#ff705f] shrink-0" })]
+									}, p.id))
+								})]
+							}),
+							activeStep === 3 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+								initial: {
+									opacity: 0,
+									y: 10
+								},
+								animate: {
+									opacity: 1,
+									y: 0
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+										className: "text-lg font-black text-[#10251f] flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🥑" }), " Étape 3 : Vos mix-ins frais (5 inclus)"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-black/10 text-xs font-black",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: selectedMixins.length > 5 ? "text-[#ea580c]" : "text-[#059669]",
+											children: [selectedMixins.length, " sélectionnés"]
+										}), selectedMixins.length > 5 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "text-[10px] text-[#ea580c]",
 											children: [
-												"+",
-												proteinExtra.toFixed(2),
-												" €"
+												"(+",
+												(selectedMixins.length - 5) * .5,
+												" €)"
 											]
 										})]
-									}),
-									extraMixinsPrice > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex justify-between text-[#d7ff45]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-											"Mix-ins extras (",
-											extraMixinsCount,
-											")"
-										] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "font-bold",
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "grid grid-cols-2 sm:grid-cols-3 gap-2.5",
+									children: MIXINS.map((m) => {
+										const isSelected = selectedMixins.includes(m.id);
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => toggleMixin(m.id),
+											className: `flex items-center gap-2 rounded-2xl p-2.5 border text-left transition ${isSelected ? "bg-[#10251f] text-white border-[#10251f] shadow-sm scale-[1.02]" : "bg-white text-[#10251f] border-black/10 hover:border-black/25"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-lg",
+												children: m.emoji
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs font-black truncate",
+												children: m.name
+											})]
+										}, m.id);
+									})
+								})]
+							}),
+							activeStep === 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
+								initial: {
+									opacity: 0,
+									y: 10
+								},
+								animate: {
+									opacity: 1,
+									y: 0
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mb-5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+										className: "text-base font-black text-[#10251f] flex items-center gap-2 mb-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🍯" }), " Choisissez votre sauce onctueuse"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "grid grid-cols-2 gap-2.5",
+										children: SAUCES.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => setSauce(s),
+											className: `flex items-center gap-2.5 rounded-2xl p-3 border text-left transition ${sauce.id === s.id ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20" : "bg-white/80 border-black/10 hover:bg-white"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xl",
+												children: s.emoji
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "block text-xs font-black text-[#10251f]",
+												children: s.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[9px] text-[#7d8b83] font-medium",
+												children: s.desc
+											})] })]
+										}, s.id))
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-base font-black text-[#10251f] flex items-center gap-2 mb-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧅" }), " Choisissez votre topping croustillant"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "grid grid-cols-1 sm:grid-cols-3 gap-2.5",
+									children: TOPPINGS.map((tp) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setTopping(tp),
+										className: `flex items-center gap-2 rounded-2xl p-3 border text-left transition ${topping.id === tp.id ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20" : "bg-white/80 border-black/10 hover:bg-white"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xl",
+											children: tp.emoji
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black text-[#10251f]",
+											children: tp.name
+										})]
+									}, tp.id))
+								})] })]
+							})
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-6 flex items-center justify-between pt-4 border-t border-black/5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								disabled: activeStep === 1,
+								onClick: () => setActiveStep((curr) => Math.max(1, curr - 1)),
+								className: `text-xs font-black px-4 py-2 rounded-full transition ${activeStep === 1 ? "opacity-30 cursor-not-allowed text-[#7d8b83]" : "text-[#10251f] hover:bg-black/5"}`,
+								children: "← Étape précédente"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setActiveStep((curr) => curr < 4 ? curr + 1 : 1),
+								className: "text-xs font-black px-4 py-2 rounded-full bg-[#10251f] text-white hover:bg-[#ff705f] transition",
+								children: activeStep < 4 ? `Étape suivante (${activeStep + 1}/4) →` : "Revenir au début"
+							})]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "rounded-[30px] bg-white border border-[#e8dfcf] p-6 sm:p-7 shadow-card flex flex-col justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between pb-4 border-b border-black/5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-2xl",
+										children: "🥣"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+										className: "text-base font-black text-[#10251f]",
+										children: "Votre Recette en Direct"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-[10px] font-bold text-[#059669]",
+										children: ["Bol en bambou naturel · Format ", size === "grand" ? "Grand" : "Moyen"]
+									})] })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-right",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "block text-[10px] font-extrabold uppercase tracking-wider text-[#7d8b83]",
+										children: "Total Recette"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-2xl font-black text-[#10251f]",
+										children: [totalPrice.toFixed(2), " €"]
+									})]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-5 space-y-3",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-start justify-between text-xs",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "font-bold text-[#7d8b83]",
+											children: "Base choisie :"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-black text-[#10251f] flex items-center gap-1.5",
 											children: [
-												"+",
-												extraMixinsPrice.toFixed(2),
-												" €"
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: base.emoji }),
+												" ",
+												base.name
 											]
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex justify-between text-base font-black text-white pt-2 border-t border-white/10",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total de ta commande" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "text-[#d7ff45] text-2xl font-black",
-											children: [totalPrice.toFixed(2), " €"]
+										className: "flex items-start justify-between text-xs",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "font-bold text-[#7d8b83]",
+											children: "Protéine :"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-black text-[#10251f] flex items-center gap-1.5",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: proteine.emoji }),
+												" ",
+												proteine.name
+											]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-xs",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-bold text-[#7d8b83] block mb-1.5",
+											children: [
+												"Mix-ins frais (",
+												selectedMixins.length,
+												") :"
+											]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "flex flex-wrap gap-1",
+											children: selectedMixins.map((id) => {
+												const m = MIXINS.find((mix) => mix.id === id);
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													className: "rounded-lg bg-[#f7f4ec] border border-[#e8dfcf] px-2 py-0.5 text-[10px] font-bold text-[#10251f]",
+													children: [
+														m?.emoji,
+														" ",
+														m?.name
+													]
+												}, id);
+											})
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-start justify-between text-xs pt-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "font-bold text-[#7d8b83]",
+											children: "Sauce :"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-black text-[#10251f] flex items-center gap-1.5",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: sauce.emoji }),
+												" ",
+												sauce.name
+											]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-start justify-between text-xs",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "font-bold text-[#7d8b83]",
+											children: "Topping :"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-black text-[#10251f] flex items-center gap-1.5",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: topping.emoji }),
+												" ",
+												topping.name
+											]
 										})]
 									})
 								]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-5 rounded-2xl bg-[#f7f4ec] p-3 text-[11px] text-[#5a6760] flex items-center gap-2 border border-[#e8dfcf]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-base",
+									children: "🌿"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Préparé minute sous vos yeux avec des ingrédients frais du jour à Visé." })]
+							})
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-6 pt-4 border-t border-black/5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								type: "button",
 								onClick: handleAddToCart,
-								className: "mt-6 w-full inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#d7ff45] py-4 px-6 text-sm font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-[1.02] active:scale-98",
-								children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 text-emerald-600 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bowl ajouté au panier !" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-									"Commander cette création · ",
+								className: `w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider shadow-lg transition active:scale-98 ${added ? "bg-[#059669] text-white" : "bg-[#d7ff45] text-[#10251f] hover:bg-[#10251f] hover:text-[#d7ff45]"}`,
+								children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bowl ajouté au panier !" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									"Ajouter mon bowl (",
 									totalPrice.toFixed(2),
-									" €"
+									" €)"
 								] })] })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 								to: "/sur-mesure",
-								className: "mt-3 block text-center text-xs font-bold text-white/60 hover:text-white transition",
-								children: "Ouvrir le configurateur avancé plein écran →"
-							})
-						]
+								className: "mt-2.5 block text-center text-[11px] font-black text-[#7d8b83] hover:text-[#10251f] underline",
+								children: "Ouvrir la page configurateur 100% dédiée →"
+							})]
+						})]
 					})]
-				})]
-			})
-		]
+				})
+			]
+		})
 	});
 }
 //#endregion
@@ -3865,15 +4163,6 @@ var Route$12 = createFileRoute("/")({
 	component: Index
 });
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
-var HOUR_ROWS = [
-	["info.day.mon", "12:00 – 14:00 · 17:00 – 21:00"],
-	["info.day.tue", "12:00 – 14:00 · 17:00 – 21:00"],
-	["info.day.wed", "12:00 – 14:00 · 17:00 – 21:00"],
-	["info.day.thu", "12:00 – 14:00 · 17:00 – 21:00"],
-	["info.day.fri", "12:00 – 14:00 · 17:00 – 21:00"],
-	["info.day.sat", "18:00 – 21:00"],
-	["info.day.sun", "closed"]
-];
 function Reveal({ children, delay = 0, className = "" }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 		initial: {
@@ -4075,31 +4364,74 @@ function Index() {
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex flex-col justify-between h-full space-y-6",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "overflow-hidden rounded-[32px] bg-[#10251f] text-white shadow-lift p-6 sm:p-7",
+										className: "overflow-hidden rounded-[32px] bg-white border border-black/10 shadow-card p-6 sm:p-7",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex items-center justify-between border-b border-white/10 pb-4",
+											className: "flex items-center justify-between border-b border-black/5 pb-4",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex items-center gap-2.5",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-5 w-5 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-													className: "text-xl font-extrabold",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "flex h-9 w-9 items-center justify-center rounded-2xl bg-[#10251f] text-white",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-4 w-4 text-[#d7ff45]" })
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "text-lg font-black text-[#10251f]",
 													children: "Horaires d'ouverture"
-												})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-[11px] text-[#7d8b83]",
+													children: "Poke N Bowl Visé · En plein centre"
+												})] })]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-[#d7ff45]/20 border border-[#d7ff45]/40 px-3 py-1 text-[10px] font-bold text-[#d7ff45]",
+												className: "rounded-full bg-[#d7ff45]/40 border border-[#b8e612] px-3 py-1 text-[10px] font-black uppercase text-[#10251f]",
 												children: "● Ouvert pour le service"
 											})]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "divide-y divide-white/10 py-2",
-											children: HOUR_ROWS.map(([dayKey, value]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center justify-between gap-3 py-3 text-xs sm:text-sm",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "font-semibold text-white/70",
-													children: t(dayKey)
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: `font-extrabold ${value === "closed" ? "text-[#ff705f]" : "text-white"}`,
-													children: value === "closed" ? "Fermé" : value
-												})]
-											}, dayKey))
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-4 space-y-2.5",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center justify-between rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 sm:px-4",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "block text-xs font-black text-[#10251f]",
+														children: "Du Lundi au Vendredi"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-[10px] text-[#7d8b83] font-medium",
+														children: "Service midi & soir"
+													})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "text-right",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "block text-xs font-black text-[#10251f]",
+															children: "12:00 – 14:00"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "block text-xs font-black text-[#10251f]",
+															children: "17:00 – 21:00"
+														})]
+													})]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center justify-between rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 sm:px-4",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "block text-xs font-black text-[#10251f]",
+														children: "Samedi"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-[10px] text-[#7d8b83] font-medium",
+														children: "Service du soir"
+													})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-xs font-black text-[#10251f]",
+														children: "18:00 – 21:00"
+													})]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center justify-between rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 sm:px-4",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "block text-xs font-black text-[#10251f]",
+														children: "Dimanche"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-[10px] text-[#7d8b83] font-medium",
+														children: "Fermeture hebdomadaire"
+													})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-xs font-extrabold text-[#ff705f]",
+														children: "Fermé"
+													})]
+												})
+											]
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-7 space-y-4",
@@ -5212,9 +5544,6 @@ function buildPickupSlots() {
 	return slots.slice(0, 48);
 }
 //#endregion
-//#region src/assets/dessert.jpg
-var dessert_default = "/assets/dessert-9PIP1ns9.jpg";
-//#endregion
 //#region src/lib/stock.ts
 function toppingKey(name) {
 	return `topping:${name}`;
@@ -5434,6 +5763,19 @@ function useStock(pollMs = 2e4) {
 }
 //#endregion
 //#region src/routes/commander.tsx
+var DESSERT_IMAGES = {
+	"tira-spec": tiramisu_speculoos_default,
+	"tira-nutella": tiramisu_nutella_default,
+	"tira-oreo": tiramisu_oreo_default
+};
+var DRINK_IMAGES = {
+	coca: drink_coca_cola_default,
+	"coca-zero": drink_coca_zero_default,
+	fanta: drink_fanta_orange_default,
+	"ice-tea": drink_ice_tea_default,
+	"eau-plate": drink_eau_plate_default,
+	"eau-gaz": drink_eau_gazeuse_default
+};
 var Route$10 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#10251f] text-[#d7ff45]",
@@ -5752,68 +6094,123 @@ function CommanderPage() {
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mt-5 grid gap-5 sm:mt-6 lg:grid-cols-2 lg:gap-6",
+						className: "mt-8 space-y-8",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "overflow-hidden rounded-[24px] bg-white shadow-card sm:rounded-[28px]",
+							className: "overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card p-6 sm:p-8",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-3 border-b border-black/5 px-6 py-5",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UtensilsCrossed, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-xl font-black sm:text-2xl",
-									children: t("cmd.drinks")
+								className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-black/5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "inline-flex items-center gap-1.5 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧁" }), " Douceurs Artisanales"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
+									children: t("cmd.desserts")
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+									children: "4,00 € la pièce"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "grid gap-2 p-5 sm:grid-cols-2 sm:p-6",
-								children: drinks.map((drink) => {
-									const ok = available(drink.id);
-									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-										type: "button",
-										disabled: !ok,
-										onClick: () => quickAdd(drink),
-										className: ["flex min-h-[48px] items-center justify-between gap-2 rounded-2xl px-4 py-3 text-left transition-all duration-200", ok ? "bg-[#f5f4ee] hover:bg-[#d7ff45] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,.15)] active:scale-[0.98]" : "cursor-not-allowed bg-[#f0f0ea] opacity-55"].join(" "),
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "min-w-0 break-words text-sm font-bold",
-											children: drink.name
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "shrink-0 text-xs font-black",
-											children: ok ? `€ ${drink.price.toFixed(2)}` : t("cmd.sold_out")
+								className: "mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3",
+								children: desserts.map((d) => {
+									const ok = available(d.id);
+									const imgSrc = DESSERT_IMAGES[d.id] || "/assets/dessert-9PIP1ns9.jpg";
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-[#faf8f4] p-3 transition hover:shadow-md",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[#eee8dc]",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+													src: imgSrc,
+													alt: d.name,
+													className: `h-full w-full object-cover transition duration-500 group-hover:scale-105 ${!ok ? "grayscale contrast-75" : ""}`
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "absolute top-2 right-2 rounded-full bg-[#d7ff45] px-2.5 py-0.5 text-xs font-black text-[#10251f] shadow",
+													children: "4.00 €"
+												}),
+												!ok && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "absolute inset-0 flex items-center justify-center bg-black/60",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "rounded-full bg-red-600 px-3 py-1 text-[10px] font-black uppercase text-white",
+														children: t("cmd.sold_out")
+													})
+												})
+											]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-3 flex items-center justify-between gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-sm font-black text-[#10251f]",
+												children: d.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												disabled: !ok,
+												onClick: () => quickAdd({
+													id: d.id,
+													name: d.name,
+													price: d.price,
+													image: imgSrc
+												}),
+												className: `rounded-xl px-3.5 py-2 text-xs font-black transition ${ok ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]" : "bg-black/10 text-black/30 cursor-not-allowed"}`,
+												children: ok ? "Ajouter" : "Épuisé"
+											})]
 										})]
-									}, drink.id);
+									}, d.id);
 								})
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "overflow-hidden rounded-[24px] bg-[#ff705f] text-white shadow-card sm:rounded-[28px]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "border-b border-white/15 px-6 py-5",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-xl font-black sm:text-2xl",
-									children: t("cmd.desserts")
-								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex flex-col gap-4 p-5 sm:flex-row sm:gap-5 sm:p-6",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									src: dessert_default,
-									alt: "Tiramisu maison",
-									className: "h-24 w-full rounded-2xl object-cover sm:h-auto sm:w-28 sm:shrink-0",
-									loading: "lazy"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "flex flex-1 flex-col gap-2",
-									children: desserts.map((d) => {
-										const ok = available(d.id);
-										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											type: "button",
-											disabled: !ok,
-											onClick: () => quickAdd(d),
-											className: ["flex min-h-[44px] w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-bold transition-all duration-200", ok ? "bg-white/10 hover:bg-white/20 hover:-translate-y-0.5 active:scale-[0.98]" : "cursor-not-allowed bg-white/5 opacity-55"].join(" "),
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "min-w-0 break-words",
-												children: d.name
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "shrink-0 font-black",
-												children: ok ? `€ ${d.price.toFixed(2)}` : t("cmd.sold_out")
-											})]
-										}, d.id);
-									})
+							className: "overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card p-6 sm:p-8",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-black/5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "inline-flex items-center gap-1.5 rounded-full bg-[#0284c7]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#0284c7]",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧊" }), " Servies Glacées"]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
+									children: t("cmd.drinks")
+								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+									children: "2,00 € la canette / bouteille"
 								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-6 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6",
+								children: drinks.map((drink) => {
+									const ok = available(drink.id);
+									const imgSrc = DRINK_IMAGES[drink.id];
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-[#faf8f4] p-3 transition hover:shadow-md",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#eee8dc]",
+											children: [imgSrc ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+												src: imgSrc,
+												alt: drink.name,
+												className: `h-full w-full object-cover transition duration-500 group-hover:scale-105 ${!ok ? "grayscale contrast-75" : ""}`
+											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "flex h-full w-full items-center justify-center text-3xl",
+												children: "🥤"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
+												children: "2.00 €"
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-2.5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "block text-xs font-black text-[#10251f] truncate",
+												children: drink.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												disabled: !ok,
+												onClick: () => quickAdd({
+													id: drink.id,
+													name: drink.name,
+													price: drink.price,
+													image: imgSrc
+												}),
+												className: `mt-2 flex w-full items-center justify-center rounded-xl py-1.5 text-[11px] font-black transition ${ok ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]" : "bg-black/10 text-black/30 cursor-not-allowed"}`,
+												children: ok ? "Ajouter" : "Épuisé"
+											})]
+										})]
+									}, drink.id);
+								})
 							})]
 						})]
 					})

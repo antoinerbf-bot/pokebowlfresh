@@ -126,24 +126,22 @@ const SLIDES: PokawaSlide[] = [
   },
 ];
 
-const AUTOPLAY_MS = 6000;
+const AUTOPLAY_MS = 5500;
 
 export function PokawaHeroExact() {
   const [currentIdx, setCurrentIdx] = React.useState(0);
-  const [isPaused, setIsPaused] = React.useState(false);
   const [addedNotice, setAddedNotice] = React.useState(false);
   const { addItem } = useCart();
 
   const slide = SLIDES[currentIdx];
 
-  // Auto-play
+  // Auto-play continu automatique et fluide (Pokawa style)
   React.useEffect(() => {
-    if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentIdx((prev) => (prev + 1) % SLIDES.length);
     }, AUTOPLAY_MS);
     return () => clearInterval(interval);
-  }, [isPaused, currentIdx]);
+  }, [currentIdx]);
 
   const handlePrev = () => {
     setCurrentIdx((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
@@ -171,8 +169,6 @@ export function PokawaHeroExact() {
     <section
       aria-label="Accueil Pokawa-Style Poke N Bowl Visé"
       className="relative w-full h-[94vh] sm:h-[98vh] min-h-[640px] max-h-[1050px] overflow-hidden bg-[#121c18] select-none"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       {/* ════════ PHOTO EN PLEIN ÉCRAN TOTAL (FULL-BLEED SANS CADRE) ════════ */}
       <AnimatePresence initial={false} mode="wait">

@@ -9,52 +9,55 @@ import {
   RotateCcw,
   ArrowRight,
   Flame,
-  Layers,
   ChefHat,
+  Layers,
+  CheckCircle2,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 
 const BASES = [
-  { id: "riz-sushi", name: "Riz à sushi", emoji: "🍚", desc: "Vinaigré et fondant" },
-  { id: "riz-brun", name: "Riz brun", emoji: "🌾", desc: "Complet & parfumé" },
-  { id: "salade", name: "Salade fraîche", emoji: "🥗", desc: "Légère & croquante" },
-  { id: "pates", name: "Pâtes", emoji: "🍝", desc: "Gourmandes" },
+  { id: "riz-sushi", name: "Riz à sushi japonais", emoji: "🍚", desc: "Vinaigré et fondant" },
+  { id: "riz-brun", name: "Riz brun complet", emoji: "🌾", desc: "Riche en fibres & parfumé" },
+  { id: "salade", name: "Salade fraîche croquante", emoji: "🥗", desc: "Légère & désaltérante" },
+  { id: "pates", name: "Pâtes gourmandes", emoji: "🍝", desc: "Savoureuses & consistantes" },
 ];
 
 const PROTEINES = [
-  { id: "poulet", name: "Poulet doré", emoji: "🍗", extra: 0, tag: "Cuisiné maison" },
-  { id: "saumon", name: "Saumon sashimi", emoji: "🐟", extra: 1.0, tag: "+1,00 € · Extra frais" },
-  { id: "scampis", name: "Scampis grillés", emoji: "🦐", extra: 0, tag: "Saisis minute" },
-  { id: "vege", name: "Double Avocat & Feta", emoji: "🥑", extra: 0, tag: "100% Végé" },
+  { id: "poulet", name: "Poulet mariné doré", emoji: "🍗", extra: 0, tag: "Petits morceaux tendres" },
+  { id: "saumon", name: "Saumon sashimi noble", emoji: "🐟", extra: 1.0, tag: "+1,00 € · Découpé minute" },
+  { id: "scampis", name: "Scampis royaux grillés", emoji: "🦐", extra: 0, tag: "Saisis au grill minute" },
+  { id: "vege", name: "Double Avocat Hass & Feta", emoji: "🥑", extra: 0, tag: "100% Végétarien" },
 ];
 
 const MIXINS = [
-  { id: "avocat", name: "Avocat Hass", emoji: "🥑" },
-  { id: "mangue", name: "Mangue mûre", emoji: "🥭" },
-  { id: "edamame", name: "Edamame", emoji: "🫘" },
-  { id: "feta", name: "Feta grecque", emoji: "🧀" },
+  { id: "avocat", name: "Avocat Hass fondant", emoji: "🥑" },
+  { id: "mangue", name: "Mangue mûre juteuse", emoji: "🥭" },
+  { id: "edamame", name: "Edamame croquant", emoji: "🫘" },
+  { id: "feta", name: "Feta grecque AOP", emoji: "🧀" },
+  { id: "wakame", name: "Salade d'algues Wakame", emoji: "🌿" },
   { id: "tomates", name: "Tomates cerises", emoji: "🍅" },
   { id: "mais", name: "Maïs doux", emoji: "🌽" },
-  { id: "wakame", name: "Algues Wakame", emoji: "🌿" },
   { id: "concombre", name: "Concombre frais", emoji: "🥒" },
-  { id: "jalapenos", name: "Jalapeños", emoji: "🌶️" },
+  { id: "jalapenos", name: "Jalapeños marinés", emoji: "🌶️" },
   { id: "patates-douces", name: "Patates douces rôties", emoji: "🍠" },
 ];
 
 const SAUCES = [
-  { id: "teriyaki", name: "Teriyaki caramélisée", emoji: "🍯" },
-  { id: "spicy-mayo", name: "Spicy Mayo piquante", emoji: "🌶️" },
-  { id: "mayo-wasabi", name: "Mayo Wasabi veloutée", emoji: "🟢" },
-  { id: "sesame", name: "Sésame toasté", emoji: "🌰" },
+  { id: "teriyaki", name: "Teriyaki caramélisée maison", emoji: "🍯", desc: "Sucré-salé savoureux" },
+  { id: "spicy-mayo", name: "Spicy Mayo piquante", emoji: "🌶️", desc: "Relevée & onctueuse" },
+  { id: "mayo-wasabi", name: "Mayo Wasabi veloutée", emoji: "🟢", desc: "Fraîche avec du caractère" },
+  { id: "sesame", name: "Sésame toasté crémeux", emoji: "🌰", desc: "Rondeur délicate" },
 ];
 
 const TOPPINGS = [
-  { id: "oignons-frits", name: "Oignons frits croustillants", emoji: "🧅" },
-  { id: "sesame-mix", name: "Sésame noir & blanc", emoji: "🌱" },
-  { id: "flocons-chili", name: "Flocons de chili", emoji: "🔥" },
+  { id: "oignons-frits", name: "Oignons frits dorés", emoji: "🧅", desc: "Croustillant irrésistible" },
+  { id: "sesame-mix", name: "Mélange sésame noir & blanc", emoji: "🌱", desc: "Arômes torréfiés" },
+  { id: "flocons-chili", name: "Flocons de chili crunchy", emoji: "🔥", desc: "Kick épicé vivifiant" },
 ];
 
 export function InteractiveBowlBuilder() {
+  const [activeStep, setActiveStep] = React.useState<number>(1);
   const [size, setSize] = React.useState<"moyen" | "grand">("moyen");
   const [base, setBase] = React.useState(BASES[0]);
   const [proteine, setProteine] = React.useState(PROTEINES[1]); // Saumon by default
@@ -63,7 +66,7 @@ export function InteractiveBowlBuilder() {
     "mangue",
     "edamame",
     "wakame",
-    "tomates",
+    "feta",
   ]);
   const [sauce, setSauce] = React.useState(SAUCES[0]);
   const [topping, setTopping] = React.useState(TOPPINGS[0]);
@@ -89,23 +92,10 @@ export function InteractiveBowlBuilder() {
     }
   };
 
-  const resetSelection = () => {
-    setSize("moyen");
-    setBase(BASES[0]);
-    setProteine(PROTEINES[0]);
-    setSelectedMixins(["avocat", "mangue", "edamame", "tomates", "mais"]);
-    setSauce(SAUCES[0]);
-    setTopping(TOPPINGS[0]);
-  };
-
   const handleAddToCart = () => {
     const mixinNames = selectedMixins.map(
       (id) => MIXINS.find((m) => m.id === id)?.name || id
     );
-
-    const description = `Base: ${base.name} · Protéine: ${proteine.name} · Mix-ins: ${mixinNames.join(
-      ", "
-    )} · Sauce: ${sauce.name} · Topping: ${topping.name}`;
 
     addItem({
       id: `custom-live-${Date.now()}`,
@@ -114,13 +104,15 @@ export function InteractiveBowlBuilder() {
       price: totalPrice,
       quantity: 1,
       toppings: [
+        `Taille : ${size === "grand" ? "Grand (13€)" : "Moyen (10€)"}`,
         `Base : ${base.name}`,
         `Protéine : ${proteine.name}`,
-        ...mixinNames,
+        `Mix-ins : ${mixinNames.join(", ")}`,
         `Sauce : ${sauce.name}`,
         `Topping : ${topping.name}`,
       ],
       removedIngredients: [],
+      image: bowlSweetChicken,
     });
 
     setAdded(true);
@@ -128,314 +120,437 @@ export function InteractiveBowlBuilder() {
   };
 
   return (
-    <section id="composer" className="scroll-mt-12 bg-[#0c1f19] py-16 sm:py-24 text-white relative isolate overflow-hidden">
-      {/* Ambient Glows */}
-      <div className="absolute top-0 left-1/4 -z-10 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl pointer-events-none" />
+    <div className="mx-auto max-w-[1340px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      {/* ── Cadre Général Clair & Lumineux (Harmonisé avec le fond du site) ── */}
+      <div className="relative overflow-hidden rounded-[36px] bg-white border border-[#e8dfcf] shadow-lift p-6 sm:p-10 lg:p-12">
+        {/* Décoration douce d'arrière-plan */}
+        <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-[#d7ff45]/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl" />
 
-      <div className="mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/40 bg-[#d7ff45]/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-[#d7ff45]">
-            <Sparkles className="h-4 w-4" />
-            <span>Mini-Simulateur Ludique</span>
-          </div>
-          <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-            Compose ton bowl en live. <span className="text-[#d7ff45]">Fait minute pour toi.</span>
-          </h2>
-          <p className="mt-3 text-sm sm:text-base text-white/75">
-            Choisis ta base, ta protéine fraîche et tes 5 mix-ins préférés. Visualise ta recette en temps réel et commande-la en un seul clic !
-          </p>
-        </div>
-
-        {/* ── LIVE INTERACTIVE WORKSPACE ── */}
-        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-[1.3fr_0.9fr] items-start">
-          
-          {/* LEFT: STEP-BY-STEP INGREDIENT PICKER */}
-          <div className="space-y-6 rounded-[32px] border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl">
-            
-            {/* Step 1: Format */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]">1</span>
-                  Format du Bowl
-                </span>
-                <span className="text-xs text-white/50">Moyen ou Grand (+3€)</span>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setSize("moyen")}
-                  className={`rounded-2xl p-3.5 text-left border transition-all ${
-                    size === "moyen"
-                      ? "border-[#d7ff45] bg-[#d7ff45]/15 text-white shadow-md"
-                      : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="font-black text-sm">Moyen (10,00 €)</div>
-                  <div className="text-[11px] text-white/60">Généreux & complet</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSize("grand")}
-                  className={`rounded-2xl p-3.5 text-left border transition-all ${
-                    size === "grand"
-                      ? "border-[#d7ff45] bg-[#d7ff45]/15 text-white shadow-md"
-                      : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="font-black text-sm text-[#d7ff45]">Grand (13,00 €) 🔥</div>
-                  <div className="text-[11px] text-white/60">Portion XXL très gourmande</div>
-                </button>
-              </div>
+        {/* ── Entête du Module Sur-Mesure ── */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-black/5">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#d7ff45] shadow-sm">
+              <ChefHat className="h-3.5 w-3.5" />
+              <span>Atelier Créatif · Bol en Bambou Naturel</span>
             </div>
-
-            {/* Step 2: Base */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]">2</span>
-                  Ta Base Fondante
-                </span>
-                <span className="text-xs text-white/50">1 base incluse</span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {BASES.map((b) => (
-                  <button
-                    key={b.id}
-                    type="button"
-                    onClick={() => setBase(b)}
-                    className={`rounded-2xl p-3 text-center border transition-all ${
-                      base.id === b.id
-                        ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f] font-black shadow-lg scale-102"
-                        : "border-white/10 bg-white/5 text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <span className="text-xl block">{b.emoji}</span>
-                    <span className="text-xs font-bold block mt-1">{b.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Step 3: Protein */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]">3</span>
-                  Ta Protéine Fraîche
-                </span>
-                <span className="text-xs text-white/50">Découpée du matin</span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {PROTEINES.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setProteine(p)}
-                    className={`rounded-2xl p-3 text-center border transition-all ${
-                      proteine.id === p.id
-                        ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f] font-black shadow-lg scale-102"
-                        : "border-white/10 bg-white/5 text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <span className="text-xl block">{p.emoji}</span>
-                    <span className="text-xs font-bold block mt-1">{p.name}</span>
-                    <span className="text-[10px] block opacity-80 mt-0.5">{p.tag}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Step 4: Mix-ins */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-black uppercase tracking-wider text-[#d7ff45] flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#d7ff45] text-[#10251f] text-[10px]">4</span>
-                  Tes Mix-ins ({selectedMixins.length} sélectionnés)
-                </span>
-                <span className="text-xs text-white/60">
-                  {selectedMixins.length <= 5
-                    ? `${5 - selectedMixins.length} inclus restants`
-                    : `+${(selectedMixins.length - 5) * 0.5}€ (${selectedMixins.length - 5} extras)`}
-                </span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                {MIXINS.map((m) => {
-                  const isSelected = selectedMixins.includes(m.id);
-                  return (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => toggleMixin(m.id)}
-                      className={`rounded-xl p-2.5 text-center border transition-all text-xs font-bold flex items-center justify-center gap-1.5 ${
-                        isSelected
-                          ? "border-[#d7ff45] bg-[#d7ff45]/20 text-white"
-                          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-                      }`}
-                    >
-                      <span>{m.emoji}</span>
-                      <span className="truncate">{m.name}</span>
-                      {isSelected && <Check className="h-3 w-3 text-[#d7ff45] shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Step 5: Sauce & Topping */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div>
-                <span className="text-xs font-black uppercase tracking-wider text-[#d7ff45] block mb-2">
-                  5. Sauce Signature
-                </span>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {SAUCES.map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => setSauce(s)}
-                      className={`rounded-xl p-2.5 text-left border text-xs font-bold transition-all ${
-                        sauce.id === s.id
-                          ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f]"
-                          : "border-white/10 bg-white/5 text-white hover:bg-white/10"
-                      }`}
-                    >
-                      <span>{s.emoji} {s.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <span className="text-xs font-black uppercase tracking-wider text-[#d7ff45] block mb-2">
-                  6. Crunch Topping
-                </span>
-                <div className="grid grid-cols-1 gap-1.5">
-                  {TOPPINGS.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => setTopping(t)}
-                      className={`rounded-xl p-2.5 text-left border text-xs font-bold transition-all ${
-                        topping.id === t.id
-                          ? "border-[#d7ff45] bg-[#d7ff45] text-[#10251f]"
-                          : "border-white/10 bg-white/5 text-white hover:bg-white/10"
-                      }`}
-                    >
-                      <span>{t.emoji} {t.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]">
+              Composez votre bowl <span className="text-[#ff705f]">sur-mesure.</span>
+            </h2>
+            <p className="mt-2 text-sm sm:text-base text-[#5a6760] font-medium leading-relaxed">
+              Sélectionnez vos ingrédients étape par étape. Chaque bowl est préparé à la minute dans un bol en bois sculpté, avec vos 5 mix-ins frais inclus.
+            </p>
           </div>
 
-          {/* RIGHT: LIVE VISUAL BOWL & ORDER CARD */}
-          <div className="sticky top-24 rounded-[32px] border-2 border-white/20 bg-gradient-to-b from-[#102720] to-[#0a1b16] p-6 sm:p-8 text-white shadow-2xl backdrop-blur-xl">
-            
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
-              <div className="flex items-center gap-2">
-                <ChefHat className="h-5 w-5 text-[#d7ff45]" />
-                <span className="text-xs font-black uppercase tracking-widest text-[#d7ff45]">
-                  Ta Création Minute
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={resetSelection}
-                className="flex items-center gap-1 text-[11px] font-bold text-white/50 hover:text-white transition"
-              >
-                <RotateCcw className="h-3 w-3" />
-                Réinitialiser
-              </button>
-            </div>
-
-            {/* Live Interactive Visual Bowl */}
-            <div className="relative my-6 aspect-square max-w-[260px] mx-auto rounded-full border-4 border-white/15 bg-gradient-to-br from-[#1a382e] to-[#071713] p-4 shadow-[inset_0_10px_30px_rgba(0,0,0,0.6)] flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(215,255,69,0.15),transparent_70%)]" />
-
-              {/* Floating Emojis of Selected Ingredients */}
-              <div className="relative z-10 text-center space-y-2">
-                <div className="text-4xl animate-bounce duration-1000">
-                  {proteine.emoji}
-                </div>
-                <div className="text-xs font-black tracking-tight text-white bg-black/50 px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
-                  {base.name}
-                </div>
-                <div className="flex flex-wrap justify-center gap-1 max-w-[190px]">
-                  {selectedMixins.slice(0, 5).map((id) => {
-                    const m = MIXINS.find((item) => item.id === id);
-                    return (
-                      <span key={id} className="text-lg">
-                        {m?.emoji}
-                      </span>
-                    );
-                  })}
-                  <span className="text-lg">{sauce.emoji}</span>
-                  <span className="text-lg">{topping.emoji}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Summary */}
-            <div className="space-y-2 text-xs text-white/80 border-t border-white/10 pt-4">
-              <div className="flex justify-between">
-                <span>Format {size === "grand" ? "Grand" : "Moyen"}</span>
-                <span className="font-bold">{basePrice.toFixed(2)} €</span>
-              </div>
-              {proteinExtra > 0 && (
-                <div className="flex justify-between text-[#ff705f]">
-                  <span>Supplément Saumon Sashimi</span>
-                  <span className="font-bold">+{proteinExtra.toFixed(2)} €</span>
-                </div>
-              )}
-              {extraMixinsPrice > 0 && (
-                <div className="flex justify-between text-[#d7ff45]">
-                  <span>Mix-ins extras ({extraMixinsCount})</span>
-                  <span className="font-bold">+{extraMixinsPrice.toFixed(2)} €</span>
-                </div>
-              )}
-              <div className="flex justify-between text-base font-black text-white pt-2 border-t border-white/10">
-                <span>Total de ta commande</span>
-                <span className="text-[#d7ff45] text-2xl font-black">{totalPrice.toFixed(2)} €</span>
-              </div>
-            </div>
-
-            {/* Direct Order Button */}
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className="mt-6 w-full inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#d7ff45] py-4 px-6 text-sm font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-[1.02] active:scale-98"
-            >
-              {added ? (
-                <>
-                  <Check className="h-5 w-5 text-emerald-600 stroke-[3]" />
-                  <span>Bowl ajouté au panier !</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="h-5 w-5" />
-                  <span>Commander cette création · {totalPrice.toFixed(2)} €</span>
-                </>
-              )}
-            </button>
-
+          {/* Lien Direct vers la Page Sur-Mesure Dédiée */}
+          <div className="shrink-0">
             <Link
               to="/sur-mesure"
-              className="mt-3 block text-center text-xs font-bold text-white/60 hover:text-white transition"
+              className="inline-flex items-center gap-2.5 rounded-full bg-[#faf8f4] border border-[#d8cfbe] px-5 py-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white hover:scale-105 active:scale-95"
             >
-              Ouvrir le configurateur avancé plein écran →
+              <span>Accéder au grand configurateur 5 étapes</span>
+              <ArrowRight className="h-4 w-4 text-[#ff705f]" />
             </Link>
-
           </div>
-
         </div>
 
+        {/* ── Barre de progression d'étapes interactive ── */}
+        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {[
+            { num: 1, title: "1. Format & Base", icon: "🍚" },
+            { num: 2, title: "2. Protéine Fraîche", icon: "🐟" },
+            { num: 3, title: `3. Mix-Ins (${selectedMixins.length}/5)`, icon: "🥑" },
+            { num: 4, title: "4. Sauce & Croustillant", icon: "🍯" },
+          ].map((st) => (
+            <button
+              key={st.num}
+              type="button"
+              onClick={() => setActiveStep(st.num)}
+              className={`flex items-center gap-2.5 rounded-2xl p-3.5 text-left transition-all ${
+                activeStep === st.num
+                  ? "bg-[#10251f] text-white shadow-md scale-[1.02]"
+                  : "bg-[#f7f4ec] text-[#10251f]/80 hover:bg-[#ede7da] border border-black/5"
+              }`}
+            >
+              <span className="text-xl">{st.icon}</span>
+              <div className="min-w-0">
+                <span className="block text-xs font-black truncate">{st.title}</span>
+                <span
+                  className={`text-[10px] font-bold ${
+                    activeStep === st.num ? "text-[#d7ff45]" : "text-[#7d8b83]"
+                  }`}
+                >
+                  {activeStep === st.num ? "En cours d'édition" : "Cliquer pour modifier"}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* ── Corps Principal : Sélecteur Interactif (Gauche) & Live Preview (Droite) ── */}
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-start">
+          
+          {/* COLONNE GAUCHE : LE SÉLECTEUR ACTIF SELON L'ÉTAPE */}
+          <div className="rounded-[30px] bg-[#faf8f4] border border-[#e8dfcf] p-6 sm:p-7 shadow-sm min-h-[440px] flex flex-col justify-between">
+            <div>
+              {/* ÉTAPE 1 : FORMAT & BASE */}
+              {activeStep === 1 && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-black text-[#10251f] flex items-center gap-2">
+                      <span>🍚</span> Étape 1 : Choisissez le format et la base
+                    </h3>
+                    <span className="text-xs font-bold text-[#7d8b83]">1 choix obligatoire</span>
+                  </div>
+
+                  {/* Format Moyen vs Grand */}
+                  <div className="mb-5">
+                    <label className="block text-xs font-black uppercase tracking-wider text-[#7d8b83] mb-2">
+                      Taille du Bol en Bambou :
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setSize("moyen")}
+                        className={`flex items-center justify-between rounded-2xl p-4 border transition ${
+                          size === "moyen"
+                            ? "bg-[#10251f] text-white border-[#10251f] shadow-md"
+                            : "bg-white text-[#10251f] border-black/10 hover:border-black/25"
+                        }`}
+                      >
+                        <div className="text-left">
+                          <span className="block text-sm font-black">Format Moyen</span>
+                          <span className={`text-xs ${size === "moyen" ? "text-white/70" : "text-[#7d8b83]"}`}>
+                            Généreux & complet
+                          </span>
+                        </div>
+                        <span className="text-base font-black text-[#d7ff45]">10,00 €</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setSize("grand")}
+                        className={`flex items-center justify-between rounded-2xl p-4 border transition ${
+                          size === "grand"
+                            ? "bg-[#10251f] text-white border-[#10251f] shadow-md"
+                            : "bg-white text-[#10251f] border-black/10 hover:border-black/25"
+                        }`}
+                      >
+                        <div className="text-left">
+                          <span className="block text-sm font-black">Grand Format</span>
+                          <span className={`text-xs ${size === "grand" ? "text-white/70" : "text-[#7d8b83]"}`}>
+                            Maxi faim gourmande
+                          </span>
+                        </div>
+                        <span className="text-base font-black text-[#d7ff45]">13,00 €</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Choix de la Base */}
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#7d8b83] mb-2">
+                    Votre base au choix :
+                  </label>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {BASES.map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => setBase(b)}
+                        className={`flex items-center gap-3 rounded-2xl p-3.5 border text-left transition ${
+                          base.id === b.id
+                            ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
+                            : "bg-white/80 border-black/10 hover:bg-white"
+                        }`}
+                      >
+                        <span className="text-2xl">{b.emoji}</span>
+                        <div>
+                          <span className="block text-xs sm:text-sm font-black text-[#10251f]">
+                            {b.name}
+                          </span>
+                          <span className="text-[10px] text-[#7d8b83] font-medium">{b.desc}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ÉTAPE 2 : PROTÉINE */}
+              {activeStep === 2 && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-black text-[#10251f] flex items-center gap-2">
+                      <span>🐟</span> Étape 2 : Choisissez votre protéine principale
+                    </h3>
+                    <span className="text-xs font-bold text-[#7d8b83]">1 protéine incluse</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {PROTEINES.map((p) => (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => setProteine(p)}
+                        className={`flex items-center justify-between rounded-2xl p-4 border text-left transition ${
+                          proteine.id === p.id
+                            ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
+                            : "bg-white/80 border-black/10 hover:bg-white"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{p.emoji}</span>
+                          <div>
+                            <span className="block text-xs sm:text-sm font-black text-[#10251f]">
+                              {p.name}
+                            </span>
+                            <span className="text-[10px] text-[#7d8b83] font-bold">{p.tag}</span>
+                          </div>
+                        </div>
+                        {proteine.id === p.id && (
+                          <CheckCircle2 className="h-5 w-5 text-[#ff705f] shrink-0" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ÉTAPE 3 : MIX-INS */}
+              {activeStep === 3 && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <h3 className="text-lg font-black text-[#10251f] flex items-center gap-2">
+                      <span>🥑</span> Étape 3 : Vos mix-ins frais (5 inclus)
+                    </h3>
+                    <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-black/10 text-xs font-black">
+                      <span className={selectedMixins.length > 5 ? "text-[#ea580c]" : "text-[#059669]"}>
+                        {selectedMixins.length} sélectionnés
+                      </span>
+                      {selectedMixins.length > 5 && (
+                        <span className="text-[10px] text-[#ea580c]">
+                          (+{(selectedMixins.length - 5) * 0.5} €)
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    {MIXINS.map((m) => {
+                      const isSelected = selectedMixins.includes(m.id);
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => toggleMixin(m.id)}
+                          className={`flex items-center gap-2 rounded-2xl p-2.5 border text-left transition ${
+                            isSelected
+                              ? "bg-[#10251f] text-white border-[#10251f] shadow-sm scale-[1.02]"
+                              : "bg-white text-[#10251f] border-black/10 hover:border-black/25"
+                          }`}
+                        >
+                          <span className="text-lg">{m.emoji}</span>
+                          <span className="text-xs font-black truncate">{m.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ÉTAPE 4 : SAUCE & TOPPING */}
+              {activeStep === 4 && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                  <div className="mb-5">
+                    <h3 className="text-base font-black text-[#10251f] flex items-center gap-2 mb-2">
+                      <span>🍯</span> Choisissez votre sauce onctueuse
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {SAUCES.map((s) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => setSauce(s)}
+                          className={`flex items-center gap-2.5 rounded-2xl p-3 border text-left transition ${
+                            sauce.id === s.id
+                              ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
+                              : "bg-white/80 border-black/10 hover:bg-white"
+                          }`}
+                        >
+                          <span className="text-xl">{s.emoji}</span>
+                          <div>
+                            <span className="block text-xs font-black text-[#10251f]">{s.name}</span>
+                            <span className="text-[9px] text-[#7d8b83] font-medium">{s.desc}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-base font-black text-[#10251f] flex items-center gap-2 mb-2">
+                      <span>🧅</span> Choisissez votre topping croustillant
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {TOPPINGS.map((tp) => (
+                        <button
+                          key={tp.id}
+                          type="button"
+                          onClick={() => setTopping(tp)}
+                          className={`flex items-center gap-2 rounded-2xl p-3 border text-left transition ${
+                            topping.id === tp.id
+                              ? "bg-white border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
+                              : "bg-white/80 border-black/10 hover:bg-white"
+                          }`}
+                        >
+                          <span className="text-xl">{tp.emoji}</span>
+                          <span className="text-xs font-black text-[#10251f]">{tp.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+
+            {/* Boutons de navigation étapes */}
+            <div className="mt-6 flex items-center justify-between pt-4 border-t border-black/5">
+              <button
+                type="button"
+                disabled={activeStep === 1}
+                onClick={() => setActiveStep((curr) => Math.max(1, curr - 1))}
+                className={`text-xs font-black px-4 py-2 rounded-full transition ${
+                  activeStep === 1
+                    ? "opacity-30 cursor-not-allowed text-[#7d8b83]"
+                    : "text-[#10251f] hover:bg-black/5"
+                }`}
+              >
+                ← Étape précédente
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveStep((curr) => (curr < 4 ? curr + 1 : 1))}
+                className="text-xs font-black px-4 py-2 rounded-full bg-[#10251f] text-white hover:bg-[#ff705f] transition"
+              >
+                {activeStep < 4 ? `Étape suivante (${activeStep + 1}/4) →` : "Revenir au début"}
+              </button>
+            </div>
+          </div>
+
+          {/* COLONNE DROITE : TICKET DE CUISINE & VISUALISATION EN DIRECT */}
+          <div className="rounded-[30px] bg-white border border-[#e8dfcf] p-6 sm:p-7 shadow-card flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-black/5">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🥣</span>
+                  <div>
+                    <h4 className="text-base font-black text-[#10251f]">Votre Recette en Direct</h4>
+                    <span className="text-[10px] font-bold text-[#059669]">
+                      Bol en bambou naturel · Format {size === "grand" ? "Grand" : "Moyen"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#7d8b83]">
+                    Total Recette
+                  </span>
+                  <span className="text-2xl font-black text-[#10251f]">
+                    {totalPrice.toFixed(2)} €
+                  </span>
+                </div>
+              </div>
+
+              {/* Récapitulatif ingrédients choisis */}
+              <div className="mt-5 space-y-3">
+                <div className="flex items-start justify-between text-xs">
+                  <span className="font-bold text-[#7d8b83]">Base choisie :</span>
+                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                    <span>{base.emoji}</span> {base.name}
+                  </span>
+                </div>
+
+                <div className="flex items-start justify-between text-xs">
+                  <span className="font-bold text-[#7d8b83]">Protéine :</span>
+                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                    <span>{proteine.emoji}</span> {proteine.name}
+                  </span>
+                </div>
+
+                <div className="text-xs">
+                  <span className="font-bold text-[#7d8b83] block mb-1.5">Mix-ins frais ({selectedMixins.length}) :</span>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedMixins.map((id) => {
+                      const m = MIXINS.find((mix) => mix.id === id);
+                      return (
+                        <span
+                          key={id}
+                          className="rounded-lg bg-[#f7f4ec] border border-[#e8dfcf] px-2 py-0.5 text-[10px] font-bold text-[#10251f]"
+                        >
+                          {m?.emoji} {m?.name}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="flex items-start justify-between text-xs pt-1">
+                  <span className="font-bold text-[#7d8b83]">Sauce :</span>
+                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                    <span>{sauce.emoji}</span> {sauce.name}
+                  </span>
+                </div>
+
+                <div className="flex items-start justify-between text-xs">
+                  <span className="font-bold text-[#7d8b83]">Topping :</span>
+                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                    <span>{topping.emoji}</span> {topping.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tag Authenticité */}
+              <div className="mt-5 rounded-2xl bg-[#f7f4ec] p-3 text-[11px] text-[#5a6760] flex items-center gap-2 border border-[#e8dfcf]">
+                <span className="text-base">🌿</span>
+                <span>Préparé minute sous vos yeux avec des ingrédients frais du jour à Visé.</span>
+              </div>
+            </div>
+
+            {/* Bouton d'Ajout Panier */}
+            <div className="mt-6 pt-4 border-t border-black/5">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className={`w-full flex items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black uppercase tracking-wider shadow-lg transition active:scale-98 ${
+                  added
+                    ? "bg-[#059669] text-white"
+                    : "bg-[#d7ff45] text-[#10251f] hover:bg-[#10251f] hover:text-[#d7ff45]"
+                }`}
+              >
+                {added ? (
+                  <>
+                    <Check className="h-5 w-5 stroke-[3]" />
+                    <span>Bowl ajouté au panier !</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="h-4 w-4" />
+                    <span>Ajouter mon bowl ({totalPrice.toFixed(2)} €)</span>
+                  </>
+                )}
+              </button>
+
+              <Link
+                to="/sur-mesure"
+                className="mt-2.5 block text-center text-[11px] font-black text-[#7d8b83] hover:text-[#10251f] underline"
+              >
+                Ouvrir la page configurateur 100% dédiée →
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

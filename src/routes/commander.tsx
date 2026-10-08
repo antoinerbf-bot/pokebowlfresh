@@ -4,6 +4,31 @@ import * as React from "react";
 import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import dessert from "@/assets/dessert.jpg";
+import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
+import tiramisuNutella from "@/assets/tiramisu-nutella.jpg";
+import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
+
+import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
+import drinkCocaZero from "@/assets/drink-coca-zero.jpg";
+import drinkFantaOrange from "@/assets/drink-fanta-orange.jpg";
+import drinkIceTea from "@/assets/drink-ice-tea.jpg";
+import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
+import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
+
+const DESSERT_IMAGES: Record<string, string> = {
+  "tira-spec": tiramisuSpeculoos,
+  "tira-nutella": tiramisuNutella,
+  "tira-oreo": tiramisuOreo,
+};
+
+const DRINK_IMAGES: Record<string, string> = {
+  coca: drinkCocaCola,
+  "coca-zero": drinkCocaZero,
+  fanta: drinkFantaOrange,
+  "ice-tea": drinkIceTea,
+  "eau-plate": drinkEauPlate,
+  "eau-gaz": drinkEauGazeuse,
+};
 import {
   bowls,
   drinks,
@@ -296,76 +321,136 @@ function CommanderPage() {
             </div>
           </div>
 
-          {/* ── Boissons + Desserts ───────────────────────────── */}
-          <div className="mt-5 grid gap-5 sm:mt-6 lg:grid-cols-2 lg:gap-6">
-            {/* Boissons */}
-            <div className="overflow-hidden rounded-[24px] bg-white shadow-card sm:rounded-[28px]">
-              <div className="flex items-center gap-3 border-b border-black/5 px-6 py-5">
-                <UtensilsCrossed className="h-5 w-5 text-[#ff705f]" />
-                <h2 className="text-xl font-black sm:text-2xl">{t("cmd.drinks")}</h2>
+          {/* ── Boissons + Desserts avec vraies photos ─────────────────── */}
+          <div className="mt-8 space-y-8">
+            {/* Desserts Maison */}
+            <div className="overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-black/5">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
+                    <span>🧁</span> Douceurs Artisanales
+                  </div>
+                  <h2 className="mt-2 text-2xl sm:text-3xl font-black text-[#10251f]">
+                    {t("cmd.desserts")}
+                  </h2>
+                </div>
+                <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">
+                  4,00 € la pièce
+                </span>
               </div>
-              <div className="grid gap-2 p-5 sm:grid-cols-2 sm:p-6">
-                {drinks.map((drink) => {
-                  const ok = available(drink.id);
+
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {desserts.map((d) => {
+                  const ok = available(d.id);
+                  const imgSrc = DESSERT_IMAGES[d.id] || dessert;
                   return (
-                    <button
-                      key={drink.id}
-                      type="button"
-                      disabled={!ok}
-                      onClick={() => quickAdd(drink)}
-                      className={[
-                        "flex min-h-[48px] items-center justify-between gap-2 rounded-2xl px-4 py-3 text-left transition-all duration-200",
-                        ok
-                          ? "bg-[#f5f4ee] hover:bg-[#d7ff45] hover:-translate-y-0.5 hover:shadow-[0_4px_12px_-4px_rgba(0,0,0,.15)] active:scale-[0.98]"
-                          : "cursor-not-allowed bg-[#f0f0ea] opacity-55",
-                      ].join(" ")}
+                    <div
+                      key={d.id}
+                      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-[#faf8f4] p-3 transition hover:shadow-md"
                     >
-                      <span className="min-w-0 break-words text-sm font-bold">{drink.name}</span>
-                      <span className="shrink-0 text-xs font-black">
-                        {ok ? `€ ${drink.price.toFixed(2)}` : t("cmd.sold_out")}
-                      </span>
-                    </button>
+                      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[#eee8dc]">
+                        <img
+                          src={imgSrc}
+                          alt={d.name}
+                          className={`h-full w-full object-cover transition duration-500 group-hover:scale-105 ${
+                            !ok ? "grayscale contrast-75" : ""
+                          }`}
+                        />
+                        <span className="absolute top-2 right-2 rounded-full bg-[#d7ff45] px-2.5 py-0.5 text-xs font-black text-[#10251f] shadow">
+                          4.00 €
+                        </span>
+                        {!ok && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                            <span className="rounded-full bg-red-600 px-3 py-1 text-[10px] font-black uppercase text-white">
+                              {t("cmd.sold_out")}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-3 flex items-center justify-between gap-2">
+                        <span className="text-sm font-black text-[#10251f]">{d.name}</span>
+                        <button
+                          type="button"
+                          disabled={!ok}
+                          onClick={() => quickAdd({ id: d.id, name: d.name, price: d.price, image: imgSrc })}
+                          className={`rounded-xl px-3.5 py-2 text-xs font-black transition ${
+                            ok
+                              ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"
+                              : "bg-black/10 text-black/30 cursor-not-allowed"
+                          }`}
+                        >
+                          {ok ? "Ajouter" : "Épuisé"}
+                        </button>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Desserts */}
-            <div className="overflow-hidden rounded-[24px] bg-[#ff705f] text-white shadow-card sm:rounded-[28px]">
-              <div className="border-b border-white/15 px-6 py-5">
-                <h2 className="text-xl font-black sm:text-2xl">{t("cmd.desserts")}</h2>
-              </div>
-              <div className="flex flex-col gap-4 p-5 sm:flex-row sm:gap-5 sm:p-6">
-                <img
-                  src={dessert}
-                  alt="Tiramisu maison"
-                  className="h-24 w-full rounded-2xl object-cover sm:h-auto sm:w-28 sm:shrink-0"
-                  loading="lazy"
-                />
-                <div className="flex flex-1 flex-col gap-2">
-                  {desserts.map((d) => {
-                    const ok = available(d.id);
-                    return (
-                      <button
-                        key={d.id}
-                        type="button"
-                        disabled={!ok}
-                        onClick={() => quickAdd(d)}
-                        className={[
-                          "flex min-h-[44px] w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-bold transition-all duration-200",
-                          ok
-                            ? "bg-white/10 hover:bg-white/20 hover:-translate-y-0.5 active:scale-[0.98]"
-                            : "cursor-not-allowed bg-white/5 opacity-55",
-                        ].join(" ")}
-                      >
-                        <span className="min-w-0 break-words">{d.name}</span>
-                        <span className="shrink-0 font-black">
-                          {ok ? `€ ${d.price.toFixed(2)}` : t("cmd.sold_out")}
-                        </span>
-                      </button>
-                    );
-                  })}
+            {/* Boissons Fraîches */}
+            <div className="overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-black/5">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#0284c7]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#0284c7]">
+                    <span>🧊</span> Servies Glacées
+                  </div>
+                  <h2 className="mt-2 text-2xl sm:text-3xl font-black text-[#10251f]">
+                    {t("cmd.drinks")}
+                  </h2>
                 </div>
+                <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">
+                  2,00 € la canette / bouteille
+                </span>
+              </div>
+
+              <div className="mt-6 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+                {drinks.map((drink) => {
+                  const ok = available(drink.id);
+                  const imgSrc = DRINK_IMAGES[drink.id];
+                  return (
+                    <div
+                      key={drink.id}
+                      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-[#faf8f4] p-3 transition hover:shadow-md"
+                    >
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#eee8dc]">
+                        {imgSrc ? (
+                          <img
+                            src={imgSrc}
+                            alt={drink.name}
+                            className={`h-full w-full object-cover transition duration-500 group-hover:scale-105 ${
+                              !ok ? "grayscale contrast-75" : ""
+                            }`}
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-3xl">🥤</div>
+                        )}
+                        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
+                          2.00 €
+                        </span>
+                      </div>
+
+                      <div className="mt-2.5">
+                        <span className="block text-xs font-black text-[#10251f] truncate">
+                          {drink.name}
+                        </span>
+                        <button
+                          type="button"
+                          disabled={!ok}
+                          onClick={() => quickAdd({ id: drink.id, name: drink.name, price: drink.price, image: imgSrc })}
+                          className={`mt-2 flex w-full items-center justify-center rounded-xl py-1.5 text-[11px] font-black transition ${
+                            ok
+                              ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"
+                              : "bg-black/10 text-black/30 cursor-not-allowed"
+                          }`}
+                        >
+                          {ok ? "Ajouter" : "Épuisé"}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

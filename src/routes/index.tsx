@@ -245,29 +245,51 @@ function Index() {
               {/* Horaires d'ouverture & Contact rapide */}
               <Reveal delay={0.08}>
                 <div className="flex flex-col justify-between h-full space-y-6">
-                  {/* Horaires Card */}
-                  <div className="overflow-hidden rounded-[32px] bg-[#10251f] text-white shadow-lift p-6 sm:p-7">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                  {/* Horaires d'ouverture Simplifiés & Épurés */}
+                  <div className="overflow-hidden rounded-[32px] bg-white border border-black/10 shadow-card p-6 sm:p-7">
+                    <div className="flex items-center justify-between border-b border-black/5 pb-4">
                       <div className="flex items-center gap-2.5">
-                        <Clock className="h-5 w-5 text-[#d7ff45]" />
-                        <h3 className="text-xl font-extrabold">Horaires d'ouverture</h3>
+                        <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#10251f] text-white">
+                          <Clock className="h-4 w-4 text-[#d7ff45]" />
+                        </span>
+                        <div>
+                          <h3 className="text-lg font-black text-[#10251f]">Horaires d'ouverture</h3>
+                          <p className="text-[11px] text-[#7d8b83]">Poke N Bowl Visé · En plein centre</p>
+                        </div>
                       </div>
-                      <span className="rounded-full bg-[#d7ff45]/20 border border-[#d7ff45]/40 px-3 py-1 text-[10px] font-bold text-[#d7ff45]">
+                      <span className="rounded-full bg-[#d7ff45]/40 border border-[#b8e612] px-3 py-1 text-[10px] font-black uppercase text-[#10251f]">
                         ● Ouvert pour le service
                       </span>
                     </div>
 
-                    <div className="divide-y divide-white/10 py-2">
-                      {HOUR_ROWS.map(([dayKey, value]) => (
-                        <div key={dayKey} className="flex items-center justify-between gap-3 py-3 text-xs sm:text-sm">
-                          <span className="font-semibold text-white/70">{t(dayKey)}</span>
-                          <span
-                            className={`font-extrabold ${value === "closed" ? "text-[#ff705f]" : "text-white"}`}
-                          >
-                            {value === "closed" ? "Fermé" : value}
-                          </span>
+                    {/* Horaires regroupés du Lundi au Vendredi */}
+                    <div className="mt-4 space-y-2.5">
+                      <div className="flex items-center justify-between rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 sm:px-4">
+                        <div>
+                          <span className="block text-xs font-black text-[#10251f]">Du Lundi au Vendredi</span>
+                          <span className="text-[10px] text-[#7d8b83] font-medium">Service midi & soir</span>
                         </div>
-                      ))}
+                        <div className="text-right">
+                          <span className="block text-xs font-black text-[#10251f]">12:00 – 14:00</span>
+                          <span className="block text-xs font-black text-[#10251f]">17:00 – 21:00</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 sm:px-4">
+                        <div>
+                          <span className="block text-xs font-black text-[#10251f]">Samedi</span>
+                          <span className="text-[10px] text-[#7d8b83] font-medium">Service du soir</span>
+                        </div>
+                        <span className="text-xs font-black text-[#10251f]">18:00 – 21:00</span>
+                      </div>
+
+                      <div className="flex items-center justify-between rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 sm:px-4">
+                        <div>
+                          <span className="block text-xs font-black text-[#10251f]">Dimanche</span>
+                          <span className="text-[10px] text-[#7d8b83] font-medium">Fermeture hebdomadaire</span>
+                        </div>
+                        <span className="text-xs font-extrabold text-[#ff705f]">Fermé</span>
+                      </div>
                     </div>
                   </div>
 
