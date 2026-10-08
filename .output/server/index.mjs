@@ -248,6 +248,27 @@ var public_assets_data_default = {
 		"size": 156662,
 		"path": "../public/assets/bowl-spicy-chicken-OPlWuwzK.jpg"
 	},
+	"/assets/BrandLogo-CgBai2Nc.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"5d5-G8ZRAckUimh5vuUkVuagGusDUnE\"",
+		"mtime": "2026-10-08T12:48:43.752Z",
+		"size": 1493,
+		"path": "../public/assets/BrandLogo-CgBai2Nc.js"
+	},
+	"/assets/_productId-Bxg_2I0U.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"4d65-zQ8fPBhO9aN3ZE64pmHYOlPfhi0\"",
+		"mtime": "2026-10-08T12:48:43.752Z",
+		"size": 19813,
+		"path": "../public/assets/_productId-Bxg_2I0U.js"
+	},
+	"/assets/arrow-left-yEuU5fmX.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"a5-qCPBanJqTCCRbsCMg7z31uZXLNU\"",
+		"mtime": "2026-10-08T12:48:43.752Z",
+		"size": 165,
+		"path": "../public/assets/arrow-left-yEuU5fmX.js"
+	},
 	"/assets/briefcase-business-cl_nnMkC.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"145-UFWHFClsTZ+ZGMpLgstdOw45IqU\"",
@@ -303,6 +324,13 @@ var public_assets_data_default = {
 		"mtime": "2026-10-08T18:44:08.784Z",
 		"size": 5048,
 		"path": "../public/assets/contact-9G1dUSfT.js"
+	},
+	"/assets/createClientRpc-2_3ILrZT.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"8c09-b30s6TM2BEP8efuJw955VZ6i3KE\"",
+		"mtime": "2026-10-08T12:48:43.752Z",
+		"size": 35849,
+		"path": "../public/assets/createClientRpc-2_3ILrZT.js"
 	},
 	"/assets/createLucideIcon-COA0CdbU.js": {
 		"type": "text/javascript; charset=utf-8",
@@ -479,6 +507,20 @@ var public_assets_data_default = {
 		"size": 777747,
 		"path": "../public/assets/drink-coca-zero-eyT1b9_N.jpg"
 	},
+	"/assets/sur-mesure-DXybZNIJ.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"4dbd-yZwfAyeq01X7Rja/P0FVE2vSCQs\"",
+		"mtime": "2026-10-08T12:48:43.752Z",
+		"size": 19901,
+		"path": "../public/assets/sur-mesure-DXybZNIJ.js"
+	},
+	"/assets/drink-eau-gazeuse-Vo9XPEXy.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"ba43a-cQjCyyeTtrxsZhxmb45ThXzqNCs\"",
+		"mtime": "2026-10-08T12:48:43.755Z",
+		"size": 762938,
+		"path": "../public/assets/drink-eau-gazeuse-Vo9XPEXy.jpg"
+	},
 	"/assets/tiramisu-nutella-Cq3EXNhL.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"b3e21-z4hdaY7Tn/ukPVQQVxgaggzbteQ\"",
@@ -607,11 +649,11 @@ var multiHandler = (...handlers) => {
 	const middleware = handlers.filter(Boolean).map((h) => toMiddleware(h));
 	return (ev) => callMiddleware(ev, middleware, final);
 };
-var _lazy_gmTYTR = defineLazyEventHandler(() => import("./_chunks/ssr-renderer.mjs"));
+var _lazy_XAhvdF = defineLazyEventHandler(() => import("./_chunks/ssr-renderer.mjs"));
 var findRoute = /* @__PURE__ */ (() => {
 	const $0 = {
 		route: "/**",
-		handler: multiHandler(toEventHandler(server_default), _lazy_gmTYTR)
+		handler: multiHandler(toEventHandler(server_default), _lazy_XAhvdF)
 	};
 	return (m, p) => {
 		if (p.charCodeAt(p.length - 1) === 47) p = p.slice(0, -1) || "/";
