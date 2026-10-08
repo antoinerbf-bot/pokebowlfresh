@@ -4,7 +4,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { A as ChevronDown, C as Flame, D as CircleCheck, E as Clock, F as Award, I as ArrowRight, L as ArrowLeft, M as Check, N as BriefcaseBusiness, O as ChevronRight, P as Bell, S as Funnel, T as CreditCard, _ as Menu, a as Sparkles, b as Instagram, c as Shield, d as RefreshCw, f as Plus, g as MessageCircle, h as Minus, i as Store, j as ChefHat, k as ChevronLeft, l as ShieldCheck, m as PhoneCall, n as TriangleAlert, o as ShoppingCart, p as Phone, r as Trash2, s as ShoppingBag, t as X, u as Search, v as MapPin, w as ExternalLink, x as Heart, y as LoaderCircle } from "../_libs/lucide-react.mjs";
+import { A as CreditCard, B as Check, C as MapPin, D as Funnel, E as Heart, F as CircleAlert, G as ArrowLeft, H as Bell, I as ChevronRight, L as ChevronLeft, M as Clock, N as CircleCheck, O as Flame, P as CircleCheckBig, R as ChevronDown, S as Menu, T as Instagram, U as Award, V as BriefcaseBusiness, W as ArrowRight, _ as Phone, a as TriangleAlert, b as Minus, c as Sparkles, d as Shield, f as ShieldCheck, g as Plus, h as Printer, i as Truck, j as CookingPot, k as ExternalLink, l as ShoppingCart, m as RefreshCw, n as VolumeX, o as Trash2, p as Search, r as Volume2, s as Store, t as X, u as ShoppingBag, v as PhoneCall, w as LoaderCircle, x as MessageCircle, y as Navigation, z as ChefHat } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-Bgd0atLj.css";
+var styles_default = "/assets/styles-B3koZcio.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -522,7 +522,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$13 = createRootRouteWithContext()({
+var Route$15 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -580,7 +580,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$13.useRouteContext();
+	const { queryClient } = Route$15.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -4176,7 +4176,7 @@ function PokawaInstagramWall() {
 }
 //#endregion
 //#region src/routes/index.tsx
-var Route$12 = createFileRoute("/")({
+var Route$14 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Bar à Crousty à emporter" }, {
 		name: "description",
 		content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, bar à crousty chicken chaud et desserts maison. Commande en ligne ou sur place !"
@@ -4634,6 +4634,7 @@ async function ensureSchema() {
 		await sql`
         CREATE TABLE IF NOT EXISTS orders (
           id TEXT PRIMARY KEY,
+          delivery_token TEXT,
           created_at TIMESTAMPTZ NOT NULL,
           status TEXT NOT NULL,
           payment_method TEXT NOT NULL,
@@ -4650,6 +4651,9 @@ async function ensureSchema() {
         )
       `;
 		await sql`
+        ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT
+      `;
+		await sql`
         CREATE INDEX IF NOT EXISTS orders_print_queue_idx
         ON orders (print_status, status, created_at)
       `;
@@ -4660,6 +4664,10 @@ async function ensureSchema() {
         CREATE INDEX IF NOT EXISTS orders_mollie_idx
         ON orders (mollie_payment_id)
       `;
+		await sql`
+        CREATE UNIQUE INDEX IF NOT EXISTS orders_delivery_token_idx
+        ON orders (delivery_token) WHERE delivery_token IS NOT NULL
+      `;
 	})().catch((error) => {
 		schemaReady = void 0;
 		throw error;
@@ -4669,6 +4677,7 @@ async function ensureSchema() {
 function rowToOrder(row) {
 	return {
 		id: row.id,
+		deliveryToken: row.delivery_token ?? void 0,
 		createdAt: row.created_at,
 		status: row.status,
 		paymentMethod: row.payment_method,
@@ -4676,13 +4685,17 @@ function rowToOrder(row) {
 		customer: JSON.parse(row.customer_json),
 		items: JSON.parse(row.items_json),
 		total: Number(row.total),
-		currency: row.currency
+		currency: row.currency,
+		printStatus: row.print_status,
+		printedAt: row.printed_at,
+		printAttempts: row.print_attempts,
+		printError: row.print_error
 	};
 }
 async function getOrderFromStore(id) {
 	await ensureSchema();
 	const row = (await getSql()`
-    SELECT id, created_at, status, payment_method, mollie_payment_id,
+    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
            customer_json, items_json, total, currency,
            print_status, printed_at, print_claimed_at, print_attempts, print_error
     FROM orders
@@ -4691,26 +4704,39 @@ async function getOrderFromStore(id) {
   `)[0];
 	return row ? rowToOrder(row) : void 0;
 }
-async function listOrdersFromStore() {
+async function getOrderByDeliveryToken(token) {
+	await ensureSchema();
+	const row = (await getSql()`
+    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+           customer_json, items_json, total, currency,
+           print_status, printed_at, print_claimed_at, print_attempts, print_error
+    FROM orders
+    WHERE delivery_token = ${token}
+    LIMIT 1
+  `)[0];
+	return row ? rowToOrder(row) : void 0;
+}
+async function listOrdersFromStore(limit = 200) {
 	await ensureSchema();
 	return (await getSql()`
-    SELECT id, created_at, status, payment_method, mollie_payment_id,
+    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
            customer_json, items_json, total, currency,
-           print_status, printed_at, print_attempts, print_error
+           print_status, printed_at, print_claimed_at, print_attempts, print_error
     FROM orders
     ORDER BY created_at DESC
-    LIMIT 200
+    LIMIT ${limit}
   `).map(rowToOrder);
 }
 async function upsertOrder(order) {
 	await ensureSchema();
 	await getSql()`
     INSERT INTO orders (
-      id, created_at, status, payment_method, mollie_payment_id,
+      id, delivery_token, created_at, status, payment_method, mollie_payment_id,
       customer_json, items_json, total, currency
     )
     VALUES (
       ${order.id},
+      ${order.deliveryToken ?? null},
       ${order.createdAt},
       ${order.status},
       ${order.paymentMethod},
@@ -4721,6 +4747,7 @@ async function upsertOrder(order) {
       ${order.currency}
     )
     ON CONFLICT (id) DO UPDATE SET
+      delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
       status = EXCLUDED.status,
       payment_method = EXCLUDED.payment_method,
       mollie_payment_id = EXCLUDED.mollie_payment_id,
@@ -4728,6 +4755,24 @@ async function upsertOrder(order) {
       items_json = EXCLUDED.items_json,
       total = EXCLUDED.total,
       currency = EXCLUDED.currency
+  `;
+}
+async function updateOrderStatus(orderId, status) {
+	await ensureSchema();
+	await getSql()`
+    UPDATE orders
+    SET status = ${status}
+    WHERE id = ${orderId}
+  `;
+}
+async function requestOrderReprint(orderId) {
+	await ensureSchema();
+	await getSql()`
+    UPDATE orders
+    SET print_status = 'pending',
+        print_claimed_at = NULL,
+        print_error = NULL
+    WHERE id = ${orderId}
   `;
 }
 async function claimNextPrintJob() {
@@ -4742,7 +4787,7 @@ async function claimNextPrintJob() {
     WHERE id = (
       SELECT id
       FROM orders
-      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery')
+      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery', 'preparing', 'ready', 'delivering')
         AND (
           print_status = 'pending'
           OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
@@ -4751,9 +4796,9 @@ async function claimNextPrintJob() {
       LIMIT 1
       FOR UPDATE SKIP LOCKED
     )
-    RETURNING id, created_at, status, payment_method, mollie_payment_id,
+    RETURNING id, delivery_token, created_at, status, payment_method, mollie_payment_id,
               customer_json, items_json, total, currency,
-              print_status, printed_at, print_attempts, print_error
+              print_status, printed_at, print_claimed_at, print_attempts, print_error
   `)[0];
 	return row ? rowToOrder(row) : void 0;
 }
@@ -4773,7 +4818,7 @@ async function acknowledgePrint(orderId, success, errorMessage) {
 	}
 	await sql`
     UPDATE orders
-    SET print_status = 'pending',
+    SET print_status = 'failed',
         print_error = ${errorMessage ?? "Printer agent failed"}
     WHERE id = ${orderId}
   `;
@@ -4989,6 +5034,7 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 	const orderId = generateOrderId();
 	const order = {
 		id: orderId,
+		deliveryToken: crypto.randomUUID().replace(/-/g, ""),
 		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
 		status: data.paymentMethod === "online" ? "pending_payment" : data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup",
 		paymentMethod: data.paymentMethod,
@@ -5078,7 +5124,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$11 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$13 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -5797,7 +5843,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$10 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$12 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#10251f] text-[#d7ff45]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -6317,7 +6363,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$9 = createFileRoute("/contact")({
+var Route$11 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -6458,7 +6504,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$8 = createFileRoute("/recrutement")({
+var Route$10 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -6575,7 +6621,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$7 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$9 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -7229,7 +7275,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$6 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$8 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -7477,7 +7523,7 @@ function AdminStocksPage() {
 }
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
-var Route$5 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -7514,7 +7560,7 @@ var Route$5 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POS
 * GET /api/orders
 * Liste les commandes persistées.
 */
-var Route$4 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
+var Route$6 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
 	const expected = process.env.ADMIN_SECRET;
 	if (!expected || request.headers.get("x-admin-secret") !== expected) return new Response("Unauthorized", { status: 401 });
 	const orders = await listOrdersFromStore();
@@ -7528,7 +7574,7 @@ var Route$4 = createFileRoute("/api/orders")({ server: { handlers: { GET: async 
 } } } });
 //#endregion
 //#region src/routes/order.success.tsx
-var Route$3 = createFileRoute("/order/success")({
+var Route$5 = createFileRoute("/order/success")({
 	validateSearch: (search) => ({
 		orderId: typeof search.orderId === "string" ? search.orderId : void 0,
 		method: typeof search.method === "string" ? search.method : void 0
@@ -7536,7 +7582,7 @@ var Route$3 = createFileRoute("/order/success")({
 	component: OrderSuccessPage
 });
 function OrderSuccessPage() {
-	const { orderId, method } = Route$3.useSearch();
+	const { orderId, method } = Route$5.useSearch();
 	const { clearCart } = useCart();
 	const [loading, setLoading] = (0, import_react.useState)(true);
 	const [order, setOrder] = (0, import_react.useState)(null);
@@ -7749,8 +7795,1105 @@ function OrderSuccessPage() {
 	});
 }
 //#endregion
+//#region src/lib/escpos.ts
+/**
+* Générateur de commandes binaires ESC/POS pour Epson TM-m30III
+* Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
+*/
+var EscPosBuilder = class {
+	buffer = [];
+	constructor() {
+		this.init();
+	}
+	init() {
+		this.buffer.push(27, 64);
+		this.buffer.push(27, 116, 2);
+		return this;
+	}
+	align(alignment) {
+		const val = alignment === "center" ? 1 : alignment === "right" ? 2 : 0;
+		this.buffer.push(27, 97, val);
+		return this;
+	}
+	bold(enable) {
+		this.buffer.push(27, 69, enable ? 1 : 0);
+		return this;
+	}
+	doubleSize(enable) {
+		this.buffer.push(29, 33, enable ? 17 : 0);
+		return this;
+	}
+	invert(enable) {
+		this.buffer.push(29, 66, enable ? 1 : 0);
+		return this;
+	}
+	text(str) {
+		for (let i = 0; i < str.length; i++) {
+			const code = str.charCodeAt(i);
+			if (code < 128) this.buffer.push(code);
+			else {
+				const char = str[i];
+				this.buffer.push({
+					é: 130,
+					è: 138,
+					ê: 136,
+					ë: 137,
+					à: 133,
+					â: 131,
+					î: 140,
+					ï: 139,
+					ô: 147,
+					ù: 151,
+					û: 150,
+					ü: 129,
+					ç: 135,
+					É: 144,
+					À: 183,
+					"€": 213
+				}[char] ?? 32);
+			}
+		}
+		return this;
+	}
+	line(str = "") {
+		if (str) this.text(str);
+		this.buffer.push(10);
+		return this;
+	}
+	divider(char = "-", length = 42) {
+		return this.line(char.repeat(length));
+	}
+	feed(lines = 3) {
+		this.buffer.push(27, 100, lines);
+		return this;
+	}
+	cut(partial = true) {
+		this.buffer.push(29, 86, partial ? 1 : 0);
+		return this;
+	}
+	/**
+	* Commande native ESC/POS QR Code Epson (GS ( k)
+	* Modèle 2, correction d'erreur M, taille de module paramétrable (1 à 8)
+	*/
+	qrCode(data, size = 6) {
+		const dataBytes = [];
+		for (let i = 0; i < data.length; i++) dataBytes.push(data.charCodeAt(i) & 255);
+		const len = dataBytes.length + 3;
+		const pL = len % 256;
+		const pH = Math.floor(len / 256);
+		this.buffer.push(29, 40, 107, 4, 0, 49, 65, 50, 0);
+		this.buffer.push(29, 40, 107, 3, 0, 49, 67, Math.min(Math.max(size, 1), 8));
+		this.buffer.push(29, 40, 107, 3, 0, 49, 69, 49);
+		this.buffer.push(29, 40, 107, pL, pH, 49, 80, 48, ...dataBytes);
+		this.buffer.push(29, 40, 107, 3, 0, 49, 81, 48);
+		return this;
+	}
+	toBytes() {
+		return new Uint8Array(this.buffer);
+	}
+	toBase64() {
+		const binary = String.fromCharCode(...this.buffer);
+		return btoa(binary);
+	}
+};
+function truncate(text, width = 42) {
+	if (text.length <= width) return text;
+	return text.substring(0, width - 3) + "...";
+}
+/**
+* 1. TICKET CUISINE
+* Lisibilité maximale pour la préparation, sans données personnelles superflues.
+*/
+function buildKitchenReceipt(order) {
+	const b = new EscPosBuilder();
+	b.align("center").bold(true).doubleSize(true).line("POKE N BOWL").line("CUISINE").doubleSize(false).bold(false).line();
+	b.align("center").invert(true).doubleSize(true).bold(true).line(order.customer.fulfillment === "delivery" ? ` LIVRAISON : ${order.customer.requestedTime} ` : ` A EMPORTER : ${order.customer.requestedTime} `).invert(false).doubleSize(false).bold(false).line();
+	b.align("left").bold(true).line(`COMMANDE : ${order.id}`).bold(false).line(`Client : ${order.customer.name}`).line(`Reçue le : ${new Date(order.createdAt).toLocaleDateString("fr-BE")} à ${new Date(order.createdAt).toLocaleTimeString("fr-BE", {
+		hour: "2-digit",
+		minute: "2-digit"
+	})}`).divider("=");
+	if (order.customer.notes) {
+		b.invert(true).bold(true).line(` NOTE CLIENT / ALLERGIES : `).invert(false).bold(false);
+		b.line(truncate(order.customer.notes, 42));
+		b.divider("-");
+	}
+	for (const item of order.items) {
+		b.bold(true).doubleSize(true);
+		b.line(`${item.quantity} x ${item.name}`);
+		b.doubleSize(false).bold(false);
+		if (item.toppings && item.toppings.length > 0) for (const top of item.toppings) if (top.toLowerCase().startsWith("sans :")) b.invert(true).bold(true).line(`  ! ${top} `).invert(false).bold(false);
+		else b.line(`  + ${truncate(top, 38)}`);
+		b.line();
+	}
+	b.divider("=");
+	b.feed(4).cut(true);
+	return b.toBytes();
+}
+/**
+* 2. TICKET CLIENT / LIVREUR
+* Contient coordonnées complètes, adresse, paiement et QR Code de suivi/GPS.
+*/
+function buildDeliveryReceipt(order, origin = "https://pokenbowl.be") {
+	const b = new EscPosBuilder();
+	b.align("center").bold(true).doubleSize(true).line("POKE N BOWL").doubleSize(false).line("Rue Haute 38, 4600 Visé").line("Tel: 04 222 00 00").line().bold(true).line(order.customer.fulfillment === "delivery" ? "*** TICKET LIVRAISON ***" : "*** TICKET CLIENT (RETRAIT) ***").bold(false).divider("=");
+	b.align("left").bold(true).line(`COMMANDE N° : ${order.id}`).bold(false).line(`Date : ${new Date(order.createdAt).toLocaleDateString("fr-BE")} ${new Date(order.createdAt).toLocaleTimeString("fr-BE", {
+		hour: "2-digit",
+		minute: "2-digit"
+	})}`).divider("-");
+	b.bold(true).line("CLIENT :").bold(false);
+	b.line(`Nom  : ${order.customer.name}`);
+	b.line(`Tel  : ${order.customer.phone}`);
+	b.line(`Heure souhaitée : ${order.customer.requestedTime}`);
+	if (order.customer.fulfillment === "delivery") {
+		b.divider("-");
+		b.bold(true).line("ADRESSE DE LIVRAISON :").bold(false);
+		b.line(truncate(order.customer.address ?? "Non précisée", 42));
+		b.line(`${order.customer.postalCode ?? ""} ${order.customer.city ?? ""}`.trim());
+		if (order.customer.notes) b.line(`Note : ${truncate(order.customer.notes, 35)}`);
+	}
+	b.divider("-");
+	b.bold(true).line("ARTICLES :").bold(false);
+	for (const item of order.items) {
+		const itemTotal = (item.price * item.quantity).toFixed(2) + " EUR";
+		const header = `${item.quantity}x ${item.name}`;
+		const dotsCount = Math.max(1, 42 - header.length - itemTotal.length);
+		b.line(`${header}${" ".repeat(dotsCount)}${itemTotal}`);
+		if (item.toppings && item.toppings.length > 0) for (const top of item.toppings) b.line(`   ${truncate(top, 38)}`);
+	}
+	b.divider("-");
+	if (order.customer.deliveryFee && order.customer.deliveryFee > 0) {
+		const feeStr = order.customer.deliveryFee.toFixed(2) + " EUR";
+		b.line(`Frais de livraison${" ".repeat(Math.max(1, 24 - feeStr.length))}${feeStr}`);
+	}
+	b.bold(true).doubleSize(true);
+	const totalStr = `TOTAL: ${order.total.toFixed(2)} EUR`;
+	b.line(totalStr);
+	b.doubleSize(false).bold(false);
+	b.line();
+	b.align("center").bold(true);
+	if (order.status === "paid") b.invert(true).line(" PAIEMENT VALIDE - EN LIGNE ").invert(false);
+	else b.line(`PAIEMENT SUR PLACE : ${order.total.toFixed(2)} EUR`);
+	b.bold(false).line();
+	if (order.deliveryToken) {
+		const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken}`;
+		b.divider("=");
+		b.line("SCANNEZ POUR GPS ET CONTACT LIVREUR");
+		b.line();
+		b.qrCode(trackUrl, 6);
+		b.line();
+		b.line("pokenbowl.be");
+	}
+	b.divider("=");
+	b.line("Merci de votre confiance !");
+	b.feed(4).cut(true);
+	return b.toBytes();
+}
+//#endregion
+//#region src/fn/pos.ts
+function verifyPin(pin) {
+	return pin === (process.env.POS_PIN ?? "1234");
+}
+var getPosOrders = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	return { orders: await listOrdersFromStore(100) };
+});
+var setPosOrderStatus = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	orderId: stringType().min(1),
+	status: enumType([
+		"pending_payment",
+		"paid",
+		"awaiting_pickup",
+		"awaiting_delivery",
+		"preparing",
+		"ready",
+		"delivering",
+		"completed",
+		"cancelled"
+	])
+})).handler(async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	await updateOrderStatus(data.orderId, data.status);
+	return { success: true };
+});
+var triggerReprint = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	orderId: stringType().min(1)
+})).handler(async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	await requestOrderReprint(data.orderId);
+	return { success: true };
+});
+var getOrderReceipts = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	orderId: stringType().min(1),
+	origin: stringType().optional()
+})).handler(async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	const order = await getOrderFromStore(data.orderId);
+	if (!order) throw new Error("Commande introuvable.");
+	const kitchenBytes = buildKitchenReceipt(order);
+	const deliveryBytes = buildDeliveryReceipt(order, data.origin ?? "https://pokenbowl.be");
+	const toBase64 = (bytes) => {
+		let binary = "";
+		const len = bytes.byteLength;
+		for (let i = 0; i < len; i++) binary += String.fromCharCode(bytes[i]);
+		return btoa(binary);
+	};
+	return {
+		orderId: order.id,
+		kitchenReceiptB64: toBase64(kitchenBytes),
+		deliveryReceiptB64: toBase64(deliveryBytes)
+	};
+});
+var ackPosPrint = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	orderId: stringType().min(1),
+	success: booleanType(),
+	error: stringType().optional()
+})).handler(async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	await acknowledgePrint(data.orderId, data.success, data.error);
+	return { success: true };
+});
+//#endregion
+//#region src/lib/epos-client.ts
+var DEFAULT_PRINTER_CONFIG = {
+	printerIp: "192.168.1.100",
+	printerPort: 9100,
+	bridgeUrl: "http://localhost:3001",
+	autoPrintKitchen: true,
+	autoPrintDelivery: true,
+	soundEnabled: true
+};
+function loadPrinterConfig() {
+	if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
+	try {
+		const raw = localStorage.getItem("pnb_printer_config");
+		if (raw) return {
+			...DEFAULT_PRINTER_CONFIG,
+			...JSON.parse(raw)
+		};
+	} catch {}
+	return DEFAULT_PRINTER_CONFIG;
+}
+function savePrinterConfig(config) {
+	if (typeof window === "undefined") return;
+	localStorage.setItem("pnb_printer_config", JSON.stringify(config));
+}
+/**
+* Envoie un flux de données binaires à l'imprimante :
+* Tente d'abord le Print Bridge si configuré, sinon ePOS-Print direct.
+*/
+async function sendReceiptToPrinter(base64Data, config) {
+	if (config.bridgeUrl) try {
+		const bridgeEndpoint = `${config.bridgeUrl.replace(/\/$/, "")}/print`;
+		if ((await fetch(bridgeEndpoint, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				printerIp: config.printerIp,
+				printerPort: config.printerPort,
+				dataBase64: base64Data
+			})
+		})).ok) return {
+			success: true,
+			message: "Imprimé avec succès via Print Bridge."
+		};
+	} catch (err) {
+		console.warn("Print Bridge injoignable, essai ePOS-Print...", err);
+	}
+	try {
+		const xml = `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+      <command>${base64Data}</command>
+    </epos-print>
+  </s:Body>
+</s:Envelope>`;
+		const eposUrl = `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`;
+		const res = await fetch(eposUrl, {
+			method: "POST",
+			headers: {
+				"Content-Type": "text/xml; charset=utf-8",
+				"If-Modified-Since": "Thu, 01 Jan 1970 00:00:00 GMT",
+				SOAPAction: "\"\""
+			},
+			body: xml
+		});
+		if (res.ok) return {
+			success: true,
+			message: "Imprimé avec succès via Epson ePOS."
+		};
+		else throw new Error(`Erreur ePOS HTTP ${res.status}`);
+	} catch (err) {
+		const msg = err instanceof Error ? err.message : String(err);
+		return {
+			success: false,
+			message: `Échec d'impression vers ${config.printerIp} : ${msg}. Vérifiez l'adresse IP ou lancez le Print Bridge.`
+		};
+	}
+}
+//#endregion
+//#region src/routes/pos/index.tsx
+var Route$4 = createFileRoute("/pos/")({ component: PosApplicationPage });
+function PosApplicationPage() {
+	const [pin, setPin] = (0, import_react.useState)(() => {
+		return typeof window !== "undefined" && localStorage.getItem("pnb_pos_pin") || "1234";
+	});
+	const [isUnlocked, setIsUnlocked] = (0, import_react.useState)(false);
+	const [pinInput, setPinInput] = (0, import_react.useState)("");
+	const [pinError, setPinError] = (0, import_react.useState)(false);
+	const [orders, setOrders] = (0, import_react.useState)([]);
+	const [loading, setLoading] = (0, import_react.useState)(true);
+	const [selectedOrder, setSelectedOrder] = (0, import_react.useState)(null);
+	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
+	const [activeTab, setActiveTab] = (0, import_react.useState)("kanban");
+	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
+	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
+	const [printLog, setPrintLog] = (0, import_react.useState)([]);
+	const knownOrderIds = (0, import_react.useRef)(/* @__PURE__ */ new Set());
+	const playAlertSound = () => {
+		if (!config.soundEnabled) return;
+		try {
+			const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			const osc = audioCtx.createOscillator();
+			const gain = audioCtx.createGain();
+			osc.type = "sine";
+			osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+			osc.frequency.setValueAtTime(880, audioCtx.currentTime + .15);
+			gain.gain.setValueAtTime(.3, audioCtx.currentTime);
+			gain.gain.exponentialRampToValueAtTime(.01, audioCtx.currentTime + .4);
+			osc.connect(gain);
+			gain.connect(audioCtx.destination);
+			osc.start();
+			osc.stop(audioCtx.currentTime + .45);
+		} catch (e) {
+			console.warn("Audio non disponible", e);
+		}
+	};
+	const loadOrders = async () => {
+		try {
+			const newOrders = (await getPosOrders({ data: { pin } })).orders;
+			if (knownOrderIds.current.size > 0) {
+				if (newOrders.some((o) => !knownOrderIds.current.has(o.id) && (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"))) playAlertSound();
+			}
+			newOrders.forEach((o) => knownOrderIds.current.add(o.id));
+			setOrders(newOrders);
+			const pendingPrint = newOrders.find((o) => o.printStatus === "pending" && (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"));
+			if (pendingPrint && printingOrderId !== pendingPrint.id) handleExecutePrint(pendingPrint);
+		} catch (e) {
+			console.error(e);
+		} finally {
+			setLoading(false);
+		}
+	};
+	(0, import_react.useEffect)(() => {
+		if (isUnlocked) {
+			loadOrders();
+			const timer = setInterval(loadOrders, 4e3);
+			return () => clearInterval(timer);
+		}
+	}, [isUnlocked, pin]);
+	const handleExecutePrint = async (order) => {
+		setPrintingOrderId(order.id);
+		try {
+			const origin = window.location.origin;
+			const receipts = await getOrderReceipts({ data: {
+				pin,
+				orderId: order.id,
+				origin
+			} });
+			let successCount = 0;
+			let errorMsg = "";
+			if (config.autoPrintKitchen && receipts.kitchenReceiptB64) {
+				const resKitchen = await sendReceiptToPrinter(receipts.kitchenReceiptB64, config);
+				if (resKitchen.success) successCount++;
+				else errorMsg += `[Cuisine] ${resKitchen.message} `;
+			}
+			if (config.autoPrintDelivery && receipts.deliveryReceiptB64) {
+				const resDelivery = await sendReceiptToPrinter(receipts.deliveryReceiptB64, config);
+				if (resDelivery.success) successCount++;
+				else errorMsg += `[Livreur] ${resDelivery.message} `;
+			}
+			const isOk = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0) === 0 || successCount > 0;
+			await ackPosPrint({ data: {
+				pin,
+				orderId: order.id,
+				success: isOk,
+				error: errorMsg || void 0
+			} });
+			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+			if (isOk) setPrintLog((prev) => [{
+				time: now,
+				msg: `Commande ${order.id} imprimée.`,
+				type: "ok"
+			}, ...prev.slice(0, 30)]);
+			else setPrintLog((prev) => [{
+				time: now,
+				msg: `Échec ${order.id} : ${errorMsg}`,
+				type: "err"
+			}, ...prev.slice(0, 30)]);
+		} catch (err) {
+			console.error(err);
+			await ackPosPrint({ data: {
+				pin,
+				orderId: order.id,
+				success: false,
+				error: err?.message ?? "Erreur inattendue"
+			} });
+		} finally {
+			setPrintingOrderId(null);
+			loadOrders();
+		}
+	};
+	const handleManualReprint = async (orderId) => {
+		if (!confirm("Voulez-vous réimprimer le ticket de cette commande ?")) return;
+		try {
+			await triggerReprint({ data: {
+				pin,
+				orderId
+			} });
+			await loadOrders();
+		} catch (e) {
+			alert("Erreur lors de la demande de réimpression.");
+		}
+	};
+	const handleUpdateStatus = async (orderId, status) => {
+		try {
+			await setPosOrderStatus({ data: {
+				pin,
+				orderId,
+				status
+			} });
+			await loadOrders();
+			if (selectedOrder && selectedOrder.id === orderId) setSelectedOrder((prev) => prev ? {
+				...prev,
+				status
+			} : null);
+		} catch (e) {
+			alert("Erreur de mise à jour du statut.");
+		}
+	};
+	const handleTestPrint = async () => {
+		const res = await sendReceiptToPrinter(btoa("\x1B@\x1B!\x1BaTEST POKENBOWL\n\nIMPRESSION REUSSIE\n\x1B!\0\x1BdV"), config);
+		alert(res.message);
+	};
+	if (!isUnlocked) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen bg-[#10251f] flex items-center justify-center p-4 select-none",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl text-center space-y-6",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mx-auto w-16 h-16 rounded-2xl bg-[#ff705f]/10 flex items-center justify-center text-[#ff705f]",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "w-8 h-8" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-2xl font-black text-[#10251f]",
+					children: "POKE N BOWL"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-sm font-bold text-[#7a847e] mt-1",
+					children: "Accès POS Caisse"
+				})] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex justify-center gap-3",
+					children: [
+						0,
+						1,
+						2,
+						3
+					].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-4 h-4 rounded-full transition-all ${pinInput.length > i ? "bg-[#ff705f] scale-110" : "bg-black/10"}` }, i))
+				}),
+				pinError && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs font-bold text-red-500",
+					children: "Code PIN incorrect"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "grid grid-cols-3 gap-3",
+					children: [
+						[
+							1,
+							2,
+							3,
+							4,
+							5,
+							6,
+							7,
+							8,
+							9
+						].map((num) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => {
+								if (pinInput.length < 4) {
+									const next = pinInput + num;
+									setPinInput(next);
+									if (next.length === 4) if (next === pin) {
+										setIsUnlocked(true);
+										setPinError(false);
+									} else {
+										setPinError(true);
+										setTimeout(() => setPinInput(""), 600);
+									}
+								}
+							},
+							className: "h-16 rounded-2xl bg-[#f7f4ec] text-2xl font-black text-[#10251f] hover:bg-black/5 active:scale-95 transition",
+							children: num
+						}, num)),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setPinInput(""),
+							className: "h-16 rounded-2xl bg-black/5 text-sm font-extrabold text-[#7a847e]",
+							children: "Effacer"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => {
+								if (pinInput.length < 4) {
+									const next = pinInput + "0";
+									setPinInput(next);
+									if (next.length === 4) if (next === pin) {
+										setIsUnlocked(true);
+										setPinError(false);
+									} else {
+										setPinError(true);
+										setTimeout(() => setPinInput(""), 600);
+									}
+								}
+							},
+							className: "h-16 rounded-2xl bg-[#f7f4ec] text-2xl font-black text-[#10251f] active:scale-95 transition",
+							children: "0"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => {
+								setIsUnlocked(true);
+							},
+							className: "h-16 rounded-2xl bg-[#ff705f]/10 text-xs font-black text-[#ff705f]",
+							children: "Entrée"
+						})
+					]
+				})
+			]
+		})
+	});
+	const newOrdersList = orders.filter((o) => o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery");
+	const preparingOrdersList = orders.filter((o) => o.status === "preparing");
+	const readyOrdersList = orders.filter((o) => o.status === "ready");
+	const deliveringOrdersList = orders.filter((o) => o.status === "delivering");
+	orders.filter((o) => o.status === "completed" || o.status === "cancelled");
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				className: "flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#10251f]",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex h-3 w-3 relative",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d7ff45] opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-[#d7ff45]" })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-lg font-black tracking-wider text-white",
+							children: "POKENBOWL POS"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+						className: "flex rounded-xl bg-black/30 p-1",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => setActiveTab("kanban"),
+								className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
+								children: [
+									"Commandes en direct (",
+									newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
+									")"
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => setActiveTab("history"),
+								className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "history" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
+								children: "Historique"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => setActiveTab("settings"),
+								className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
+								children: "Imprimante & Paramètres"
+							})
+						]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => {
+								const updated = {
+									...config,
+									soundEnabled: !config.soundEnabled
+								};
+								setConfig(updated);
+								savePrinterConfig(updated);
+							},
+							className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-[#d7ff45]/20 text-[#d7ff45]" : "bg-white/5 text-[#6c7d76]"}`,
+							title: "Activer/Désactiver son",
+							children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-5 w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-5 w-5" })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: loadOrders,
+							className: "rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition",
+							title: "Rafraîchir",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-5 w-5 ${loading ? "animate-spin" : ""}` })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-2 rounded-xl bg-black/40 px-3 py-1.5 text-xs font-bold border border-white/5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[#98aba3]",
+								children: config.printerIp
+							})]
+						})
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-1 overflow-hidden",
+				children: [
+					activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "Nouvelles",
+								badgeCount: newOrdersList.length,
+								color: "bg-[#ff705f]",
+								orders: newOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
+								nextLabel: "Préparer",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-4 h-4" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "En Cuisine",
+								badgeCount: preparingOrdersList.length,
+								color: "bg-[#f59e0b]",
+								orders: preparingOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => handleUpdateStatus(id, "ready"),
+								nextLabel: "Prête",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-4 h-4" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "Prêtes / Comptoir",
+								badgeCount: readyOrdersList.length,
+								color: "bg-[#10b981]",
+								orders: readyOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => {
+									if (orders.find((o) => o.id === id)?.customer.fulfillment === "delivery") handleUpdateStatus(id, "delivering");
+									else handleUpdateStatus(id, "completed");
+								},
+								nextLabel: "Départ Livr. / Remis",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-4 h-4" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "En Livraison",
+								badgeCount: deliveringOrdersList.length,
+								color: "bg-[#3b82f6]",
+								orders: deliveringOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => handleUpdateStatus(id, "completed"),
+								nextLabel: "Livrée",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-4 h-4" })
+							})
+						]
+					}),
+					activeTab === "history" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex-1 p-6 overflow-y-auto space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-4 bg-white/5 p-4 rounded-2xl",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "h-5 w-5 text-[#7a847e]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "text",
+								placeholder: "Rechercher par n° de commande, client, téléphone...",
+								value: searchQuery,
+								onChange: (e) => setSearchQuery(e.target.value),
+								className: "bg-transparent flex-1 text-white placeholder-[#7a847e] outline-none font-bold"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "rounded-2xl border border-white/10 overflow-hidden",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+								className: "w-full text-left text-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
+									className: "bg-black/30 text-xs uppercase text-[#8ea39b] font-black",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "N° Commande"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Date / Heure"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Client"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Mode"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Total"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Statut"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Impression"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4 text-right",
+											children: "Actions"
+										})
+									] })
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
+									className: "divide-y divide-white/5 font-semibold",
+									children: orders.filter((o) => o.id.toLowerCase().includes(searchQuery.toLowerCase()) || o.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) || o.customer.phone.includes(searchQuery)).map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+										className: "hover:bg-white/5 transition",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4 font-mono font-bold text-white",
+												children: o.id
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+												className: "p-4 text-[#8ea39b]",
+												children: [
+													new Date(o.createdAt).toLocaleDateString("fr-BE"),
+													" ",
+													new Date(o.createdAt).toLocaleTimeString("fr-BE", {
+														hour: "2-digit",
+														minute: "2-digit"
+													})
+												]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: o.customer.name
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: o.customer.fulfillment === "delivery" ? "Livraison" : "Retrait"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+												className: "p-4 font-bold text-white",
+												children: [o.total.toFixed(2), " €"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "rounded-full bg-white/10 px-3 py-1 text-xs font-black",
+													children: o.status
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: `rounded-full px-2.5 py-1 text-xs font-black ${o.printStatus === "printed" ? "bg-emerald-500/20 text-emerald-300" : o.printStatus === "failed" ? "bg-red-500/20 text-red-300" : "bg-amber-500/20 text-amber-300"}`,
+													children: o.printStatus ?? "pending"
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+												className: "p-4 text-right space-x-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													onClick: () => setSelectedOrder(o),
+													className: "rounded-xl bg-white/10 px-3 py-1.5 text-xs font-black hover:bg-white/20",
+													children: "Détail"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													onClick: () => handleManualReprint(o.id),
+													className: "rounded-xl bg-[#ff705f] px-3 py-1.5 text-xs font-black text-white hover:bg-[#ff5a47]",
+													children: "Réimprimer"
+												})]
+											})
+										]
+									}, o.id))
+								})]
+							})
+						})]
+					}),
+					activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex-1 p-8 max-w-2xl mx-auto overflow-y-auto space-y-6",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-2xl font-black",
+								children: "Configuration Matériel & POS"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-base font-black text-[#ff705f]",
+										children: "Imprimante Réseau (Epson TM-m30III)"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-xs font-extrabold uppercase text-[#8ea39b]",
+										children: "Adresse IP"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "text",
+										value: config.printerIp,
+										onChange: (e) => setConfig({
+											...config,
+											printerIp: e.target.value
+										}),
+										className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
+										placeholder: "192.168.1.100"
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-xs font-extrabold uppercase text-[#8ea39b]",
+										children: "Port TCP ESC/POS"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "number",
+										value: config.printerPort,
+										onChange: (e) => setConfig({
+											...config,
+											printerPort: Number(e.target.value)
+										}),
+										className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
+										placeholder: "9100"
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-xs font-extrabold uppercase text-[#8ea39b]",
+										children: "URL Print Bridge Local (Optionnel)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "text",
+										value: config.bridgeUrl ?? "",
+										onChange: (e) => setConfig({
+											...config,
+											bridgeUrl: e.target.value
+										}),
+										className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
+										placeholder: "http://localhost:3001"
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "pt-2 flex gap-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => {
+												savePrinterConfig(config);
+												alert("Configuration enregistrée.");
+											},
+											className: "flex-1 rounded-xl bg-[#ff705f] py-3 text-white font-black text-sm",
+											children: "Enregistrer"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: handleTestPrint,
+											className: "flex-1 rounded-xl bg-white/10 py-3 text-white font-black text-sm hover:bg-white/20",
+											children: "Tester l'impression (Test Print)"
+										})]
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "text-base font-black text-white",
+									children: "Journal d'impression direct"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "h-44 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl",
+									children: printLog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[#6c7d76]",
+										children: "Aucune impression récente."
+									}) : printLog.map((log, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: log.type === "ok" ? "text-emerald-400" : "text-rose-400",
+										children: [
+											"[",
+											log.time,
+											"] ",
+											log.msg
+										]
+									}, idx))
+								})]
+							})
+						]
+					})
+				]
+			}),
+			selectedOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between border-b border-white/10 pb-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-mono text-xl font-black",
+								children: selectedOrder.id
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs text-[#8ea39b] mt-0.5",
+								children: ["Créée à ", new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")]
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => setSelectedOrder(null),
+								className: "rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20",
+								children: "✕"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-2xl bg-black/30 p-4 space-y-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex justify-between items-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-base font-black",
+										children: selectedOrder.customer.name
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: `tel:${selectedOrder.customer.phone}`,
+										className: "flex items-center gap-1.5 text-xs font-bold text-[#d7ff45] bg-[#d7ff45]/15 px-3 py-1.5 rounded-xl",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5" }), selectedOrder.customer.phone]
+									})]
+								}),
+								selectedOrder.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-xs text-[#8ea39b] pt-1 border-t border-white/5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-bold text-white",
+										children: selectedOrder.customer.address
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+										selectedOrder.customer.postalCode,
+										" ",
+										selectedOrder.customer.city
+									] })]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs text-[#d7ff45] font-bold",
+									children: "Retrait sur place"
+								}),
+								selectedOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Note :" }),
+										" ",
+										selectedOrder.customer.notes
+									]
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black uppercase text-[#8ea39b]",
+									children: "Articles commandés"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+									className: "divide-y divide-white/5 bg-black/20 rounded-2xl p-3",
+									children: selectedOrder.items.map((it, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+										className: "py-2 first:pt-0 last:pb-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex justify-between font-bold text-sm",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+												it.quantity,
+												"× ",
+												it.name
+											] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [(it.price * it.quantity).toFixed(2), " €"] })]
+										}), it.toppings && it.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50",
+											children: it.toppings.map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: top }, tidx))
+										})]
+									}, idx))
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex justify-between items-center pt-2 px-2 font-black text-base",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [selectedOrder.total.toFixed(2), " €"] })]
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-3 pt-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => handleManualReprint(selectedOrder.id),
+								className: "rounded-2xl bg-white/10 py-3.5 text-sm font-black hover:bg-white/20 transition flex items-center justify-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), "Réimprimer Ticket"]
+							}), selectedOrder.deliveryToken && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: `/track/${selectedOrder.deliveryToken}`,
+								target: "_blank",
+								rel: "noreferrer",
+								className: "rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-sm font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4" }), "Vue Livreur QR"]
+							})]
+						})
+					]
+				})
+			})
+		]
+	});
+}
+function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, onNextStatus, nextLabel, nextIcon }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex flex-col rounded-2xl bg-[#142822] border border-white/5 overflow-hidden",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex items-center justify-between p-3.5 border-b border-white/5 bg-black/20",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `w-3 h-3 rounded-full ${color}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "text-sm font-black tracking-wide text-white",
+					children: title
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-white",
+				children: badgeCount
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "flex-1 overflow-y-auto p-2.5 space-y-2.5",
+			children: orders.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "flex h-32 items-center justify-center text-xs font-bold text-[#62776f]",
+				children: "Aucune commande"
+			}) : orders.map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				onClick: () => onSelect(o),
+				className: "rounded-2xl bg-black/40 border border-white/10 p-3.5 shadow hover:border-white/30 transition cursor-pointer space-y-2.5",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "font-mono text-sm font-black text-white",
+							children: o.id
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-[#8ea39b]",
+							children: o.customer.requestedTime
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-base font-black text-white",
+						children: o.customer.name
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-xs font-semibold text-[#8ea39b]",
+						children: [
+							o.items.reduce((acc, it) => acc + it.quantity, 0),
+							" articles · ",
+							o.total.toFixed(2),
+							" €"
+						]
+					})] }),
+					o.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-xs bg-[#ff705f]/15 p-2 rounded-xl text-[#ff8e80] line-clamp-1 font-bold",
+						children: ["! ", o.customer.notes]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "pt-1 flex items-center gap-2 border-t border-white/5",
+						onClick: (e) => e.stopPropagation(),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => onReprint(o.id),
+							className: "rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition",
+							title: "Réimprimer",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: () => onNextStatus(o.id),
+							className: "flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition",
+							children: [nextIcon, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: nextLabel })]
+						})]
+					})
+				]
+			}, o.id))
+		})]
+	});
+}
+//#endregion
 //#region src/routes/product/$productId.tsx
-var Route$2 = createFileRoute("/product/$productId")({ component: ProductPage });
+var Route$3 = createFileRoute("/product/$productId")({ component: ProductPage });
 var TAG_STYLES = {
 	signature: "bg-[#10251f] text-[#d7ff45]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -7845,7 +8988,7 @@ function QuantitySelector({ qty, onMinus, onPlus }) {
 	});
 }
 function ProductPage() {
-	const { productId } = Route$2.useParams();
+	const { productId } = Route$3.useParams();
 	const product = bowls.find((b) => b.id === productId);
 	const { t, language, setLanguage } = useTranslation();
 	const { addItem, setIsCartOpen, items } = useCart();
@@ -8323,6 +9466,285 @@ function ProductPage() {
 	});
 }
 //#endregion
+//#region src/fn/delivery.ts
+var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ token: stringType().min(8) })).handler(async ({ data }) => {
+	const order = await getOrderByDeliveryToken(data.token);
+	if (!order) return { found: false };
+	return {
+		found: true,
+		order: {
+			id: order.id,
+			createdAt: order.createdAt,
+			status: order.status,
+			fulfillment: order.customer.fulfillment,
+			requestedTime: order.customer.requestedTime,
+			customerName: order.customer.name,
+			customerPhone: order.customer.phone,
+			notes: order.customer.notes,
+			address: order.customer.address,
+			postalCode: order.customer.postalCode,
+			city: order.customer.city,
+			deliveryFee: order.customer.deliveryFee,
+			total: order.total,
+			paymentMethod: order.paymentMethod,
+			items: order.items.map((i) => ({
+				name: i.name,
+				quantity: i.quantity,
+				toppings: i.toppings
+			}))
+		}
+	};
+});
+var updateDeliveryStatus = createServerFn({ method: "POST" }).validator(objectType({
+	token: stringType().min(8),
+	status: enumType(["delivering", "completed"])
+})).handler(async ({ data }) => {
+	const order = await getOrderByDeliveryToken(data.token);
+	if (!order) throw new Error("Commande introuvable");
+	await updateOrderStatus(order.id, data.status);
+	return { success: true };
+});
+//#endregion
+//#region src/routes/track/$token.tsx
+var Route$2 = createFileRoute("/track/$token")({ component: DeliveryTrackPage });
+function DeliveryTrackPage() {
+	const { token } = Route$2.useParams();
+	const [loading, setLoading] = (0, import_react.useState)(true);
+	const [updating, setUpdating] = (0, import_react.useState)(false);
+	const [order, setOrder] = (0, import_react.useState)(null);
+	const [error, setError] = (0, import_react.useState)(null);
+	const fetchOrder = async () => {
+		try {
+			const res = await getDeliveryOrder({ data: { token } });
+			if (res.found) setOrder(res.order);
+			else setError("Commande introuvable ou lien expiré.");
+		} catch (e) {
+			console.error(e);
+			setError("Impossible de charger les données de la commande.");
+		} finally {
+			setLoading(false);
+		}
+	};
+	(0, import_react.useEffect)(() => {
+		fetchOrder();
+		const interval = setInterval(fetchOrder, 15e3);
+		return () => clearInterval(interval);
+	}, [token]);
+	const handleStatusChange = async (newStatus) => {
+		setUpdating(true);
+		try {
+			await updateDeliveryStatus({ data: {
+				token,
+				status: newStatus
+			} });
+			await fetchOrder();
+		} catch (e) {
+			console.error(e);
+			alert("Erreur lors de la mise à jour du statut.");
+		} finally {
+			setUpdating(false);
+		}
+	};
+	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "flex min-h-screen items-center justify-center bg-[#f7f4ec]",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-8 w-8 animate-spin text-[#ff705f]" })
+	});
+	if (error || !order) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex min-h-screen flex-col items-center justify-center bg-[#f7f4ec] px-4 text-center",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-12 w-12 text-[#ff705f]" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "mt-4 text-2xl font-black text-[#17231f]",
+				children: "Lien invalide"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-2 text-sm text-[#758079]",
+				children: error ?? "Commande introuvable."
+			})
+		]
+	});
+	const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
+	const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+	const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}`;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-[#f7f4ec] text-[#17231f]",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+			className: "sticky top-0 z-30 border-b border-black/5 bg-[#f7f4ec]/95 px-5 py-3 backdrop-blur-md",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mx-auto flex max-w-lg items-center justify-between",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandLogo, { size: "sm" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "font-mono text-xs font-black bg-black/5 px-3 py-1 rounded-full",
+					children: order.id
+				})]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+			className: "mx-auto max-w-lg px-4 py-6 space-y-4",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+							children: "Statut"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "rounded-full bg-[#fff5f3] px-3 py-1 text-xs font-black text-[#ff705f]",
+							children: [
+								order.status === "paid" && "Payée / En attente",
+								order.status === "preparing" && "En préparation",
+								order.status === "ready" && "Prête pour livraison",
+								order.status === "delivering" && "En cours de livraison",
+								order.status === "completed" && "Livrée",
+								order.status === "cancelled" && "Annulée"
+							]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-4 flex items-center gap-2 text-sm text-[#7a847e]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Créneau demandé : ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+							className: "text-[#17231f]",
+							children: order.requestedTime
+						})] })]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+						children: "Client"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-lg font-black",
+							children: order.customerName
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-semibold text-[#7a847e]",
+							children: order.customerPhone
+						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: `tel:${order.customerPhone}`,
+							className: "flex items-center gap-2 rounded-xl bg-[#25D366]/15 text-[#189947] hover:bg-[#25D366]/25 px-4 py-3 font-bold text-sm transition",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-4 w-4" }), "Appeler"]
+						})]
+					})]
+				}),
+				order.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+							children: "Adresse de Livraison"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-start gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5 text-[#ff705f] shrink-0 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-bold text-base leading-snug",
+								children: order.address
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-sm text-[#7a847e]",
+								children: [
+									order.postalCode,
+									" ",
+									order.city
+								]
+							})] })]
+						}),
+						order.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-xl bg-[#fff9ea] border border-[#f3d996] p-3 text-xs text-[#735311]",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Instructions client :" }),
+								" ",
+								order.notes
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "pt-2 grid grid-cols-2 gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: mapsUrl,
+								target: "_blank",
+								rel: "noopener noreferrer",
+								className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] text-white py-3 font-bold text-sm shadow hover:bg-[#3367d6] transition",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Google Maps"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: wazeUrl,
+								target: "_blank",
+								rel: "noopener noreferrer",
+								className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] text-[#003d52] py-3 font-bold text-sm shadow hover:bg-[#2bb8e6] transition",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Waze"]
+							})]
+						})
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+						children: "Mode de réception"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 font-bold text-base",
+						children: "Retrait sur place (Poke N Bowl Visé)"
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+							className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+							children: [
+								"Articles (",
+								order.items.length,
+								")"
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "font-black text-sm",
+							children: [
+								"Total: ",
+								order.total.toFixed(2),
+								" €"
+							]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+						className: "divide-y divide-black/5",
+						children: order.items.map((item, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+							className: "py-2.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex justify-between font-bold text-sm",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									item.quantity,
+									"× ",
+									item.name
+								] })
+							}), item.toppings && item.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mt-1 text-xs text-[#7a847e] pl-4 border-l-2 border-[#ff705f]/40 space-y-0.5",
+								children: item.toppings.map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: top }, tidx))
+							})]
+						}, idx))
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "pt-2 space-y-2",
+					children: [
+						order.status !== "delivering" && order.status !== "completed" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: () => handleStatusChange("delivering"),
+							disabled: updating,
+							className: "w-full rounded-2xl bg-[#ff705f] py-4 text-white font-black text-base shadow-lg hover:bg-[#ff5a47] transition flex items-center justify-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "h-5 w-5" }), updating ? "Mise à jour..." : "Partir en livraison"]
+						}),
+						order.status === "delivering" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: () => handleStatusChange("completed"),
+							disabled: updating,
+							className: "w-full rounded-2xl bg-[#10251f] py-4 text-white font-black text-base shadow-lg hover:bg-black transition flex items-center justify-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "h-5 w-5 text-[#d7ff45]" }), updating ? "Mise à jour..." : "Marquer comme Livrée"]
+						}),
+						order.status === "completed" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "rounded-2xl bg-[#10251f] p-4 text-center text-[#d7ff45] font-black text-sm",
+							children: "✓ Commande terminée et livrée"
+						})
+					]
+				})
+			]
+		})]
+	});
+}
+//#endregion
 //#region src/routes/api/printer/ack.ts
 var ackSchema = objectType({
 	orderId: stringType().min(1),
@@ -8371,74 +9793,95 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
+var IndexRoute = Route$14.update({
+	id: "/",
+	path: "/",
+	getParentRoute: () => Route$15
+});
+var CheckoutRoute = Route$13.update({
+	id: "/checkout",
+	path: "/checkout",
+	getParentRoute: () => Route$15
+});
+var CommanderRoute = Route$12.update({
+	id: "/commander",
+	path: "/commander",
+	getParentRoute: () => Route$15
+});
+var ContactRoute = Route$11.update({
+	id: "/contact",
+	path: "/contact",
+	getParentRoute: () => Route$15
+});
+var RecrutementRoute = Route$10.update({
+	id: "/recrutement",
+	path: "/recrutement",
+	getParentRoute: () => Route$15
+});
+var SurMesureRoute = Route$9.update({
+	id: "/sur-mesure",
+	path: "/sur-mesure",
+	getParentRoute: () => Route$15
+});
+var AdminStocksRoute = Route$8.update({
+	id: "/admin/stocks",
+	path: "/admin/stocks",
+	getParentRoute: () => Route$15
+});
+var ApiMollieWebhookRoute = Route$7.update({
+	id: "/api/mollie-webhook",
+	path: "/api/mollie-webhook",
+	getParentRoute: () => Route$15
+});
+var ApiOrdersRoute = Route$6.update({
+	id: "/api/orders",
+	path: "/api/orders",
+	getParentRoute: () => Route$15
+});
+var OrderSuccessRoute = Route$5.update({
+	id: "/order/success",
+	path: "/order/success",
+	getParentRoute: () => Route$15
+});
+var PosIndexRoute = Route$4.update({
+	id: "/pos/",
+	path: "/pos/",
+	getParentRoute: () => Route$15
+});
 var rootRouteChildren = {
-	IndexRoute: Route$12.update({
-		id: "/",
-		path: "/",
-		getParentRoute: () => Route$13
-	}),
-	CheckoutRoute: Route$11.update({
-		id: "/checkout",
-		path: "/checkout",
-		getParentRoute: () => Route$13
-	}),
-	CommanderRoute: Route$10.update({
-		id: "/commander",
-		path: "/commander",
-		getParentRoute: () => Route$13
-	}),
-	ContactRoute: Route$9.update({
-		id: "/contact",
-		path: "/contact",
-		getParentRoute: () => Route$13
-	}),
-	RecrutementRoute: Route$8.update({
-		id: "/recrutement",
-		path: "/recrutement",
-		getParentRoute: () => Route$13
-	}),
-	SurMesureRoute: Route$7.update({
-		id: "/sur-mesure",
-		path: "/sur-mesure",
-		getParentRoute: () => Route$13
-	}),
-	AdminStocksRoute: Route$6.update({
-		id: "/admin/stocks",
-		path: "/admin/stocks",
-		getParentRoute: () => Route$13
-	}),
-	ApiMollieWebhookRoute: Route$5.update({
-		id: "/api/mollie-webhook",
-		path: "/api/mollie-webhook",
-		getParentRoute: () => Route$13
-	}),
-	ApiOrdersRoute: Route$4.update({
-		id: "/api/orders",
-		path: "/api/orders",
-		getParentRoute: () => Route$13
-	}),
-	OrderSuccessRoute: Route$3.update({
-		id: "/order/success",
-		path: "/order/success",
-		getParentRoute: () => Route$13
-	}),
-	ProductProductIdRoute: Route$2.update({
+	IndexRoute,
+	CheckoutRoute,
+	CommanderRoute,
+	ContactRoute,
+	RecrutementRoute,
+	SurMesureRoute,
+	AdminStocksRoute,
+	ApiMollieWebhookRoute,
+	ApiOrdersRoute,
+	OrderSuccessRoute,
+	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$13
+		getParentRoute: () => Route$15
 	}),
+	TrackTokenRoute: Route$2.update({
+		id: "/track/$token",
+		path: "/track/$token",
+		getParentRoute: () => Route$15
+	}),
+	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$13
+		getParentRoute: () => Route$15
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$13
+		getParentRoute: () => Route$15
 	})
 };
-var routeTree = Route$13._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$15._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

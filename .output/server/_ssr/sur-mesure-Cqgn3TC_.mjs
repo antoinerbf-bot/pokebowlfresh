@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { L as ArrowLeft, M as Check, a as Sparkles, f as Plus, h as Minus, s as ShoppingBag } from "../_libs/lucide-react.mjs";
+import { B as Check, G as ArrowLeft, b as Minus, c as Sparkles, g as Plus, u as ShoppingBag } from "../_libs/lucide-react.mjs";
 import { i as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-C2fzxPmj.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-Cqgn3TC_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

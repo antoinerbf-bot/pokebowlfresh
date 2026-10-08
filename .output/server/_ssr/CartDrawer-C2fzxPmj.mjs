@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { f as Plus, h as Minus, r as Trash2, s as ShoppingBag, t as X } from "../_libs/lucide-react.mjs";
+import { b as Minus, g as Plus, o as Trash2, t as X, u as ShoppingBag } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
