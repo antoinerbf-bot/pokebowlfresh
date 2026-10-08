@@ -6,10 +6,10 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { A as Check, C as Flame, D as ChevronRight, M as Bell, N as ArrowRight, O as ChevronLeft, S as Layers, T as Clock, b as MapPin, c as Sparkles, f as ShieldCheck, g as Phone, h as Plus, j as BriefcaseBusiness, k as ChefHat, n as Utensils, p as RotateCcw, s as Star, t as X, u as ShoppingBag, y as Menu } from "../_libs/lucide-react.mjs";
-import { a as bowl_scampis_default, i as bowl_saumon_default, n as DishImage, r as bowl_crousty_curry_default, s as bowl_sweet_chicken_default, t as CartDrawer } from "./CartDrawer-crEbLLNk.mjs";
+import { C as Layers, D as ExternalLink, E as Flame, F as BriefcaseBusiness, I as Bell, L as Award, M as ChevronLeft, N as ChefHat, P as Check, R as ArrowRight, T as Heart, b as Menu, c as Sparkles, f as ShieldCheck, g as Phone, h as Plus, j as ChevronRight, k as Clock, n as Utensils, p as RotateCcw, s as Star, t as X, u as ShoppingBag, w as Instagram, x as MapPin, y as MessageCircle } from "../_libs/lucide-react.mjs";
+import { a as bowl_scampis_default, i as bowl_saumon_default, n as DishImage, o as bowl_spicy_chicken_default, r as bowl_crousty_curry_default, s as bowl_sweet_chicken_default, t as CartDrawer } from "./CartDrawer-crEbLLNk.mjs";
 import { a as motion, i as useScroll, n as useTransform, o as AnimatePresence, r as useMotionValue, t as useSpring } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BwIDW225.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-D83-KKPR.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
@@ -2136,6 +2136,516 @@ function DishTasteExplorer() {
 		})
 	});
 }
+var CATEGORIES = [
+	{
+		id: "pokes",
+		title: "Pokés Signatures",
+		subtitle: "5 recettes équilibrées",
+		badge: "100% Frais",
+		badgeColor: "bg-[#d7ff45] text-[#10251f]",
+		image: bowl_saumon_default,
+		anchor: "#carte",
+		icon: "🥗"
+	},
+	{
+		id: "sur-mesure",
+		title: "Compose ton Bowl",
+		subtitle: "5 mix-ins frais inclus",
+		badge: "Sur-Mesure",
+		badgeColor: "bg-[#ff705f] text-white",
+		image: bowl_sweet_chicken_default,
+		anchor: "#composer",
+		icon: "✨"
+	},
+	{
+		id: "crousty",
+		title: "Bar à Crousty",
+		subtitle: "Formule étudiant 11€",
+		badge: "Gamme Chaude 🔥",
+		badgeColor: "bg-[#8b5510] text-white",
+		image: bowl_crousty_curry_default,
+		anchor: "#crousty",
+		icon: "🍗"
+	},
+	{
+		id: "desserts",
+		title: "Tiramisus Maison",
+		subtitle: "Fait chaque matin (4€)",
+		badge: "Gourmandise",
+		badgeColor: "bg-[#ff705f]/90 text-white",
+		image: tiramisu_speculoos_default,
+		anchor: "#desserts",
+		icon: "🧁"
+	},
+	{
+		id: "boissons",
+		title: "Boissons Fraîches",
+		subtitle: "Canettes givrées & eaux",
+		badge: "2,00 € l'unité",
+		badgeColor: "bg-[#10251f] text-white",
+		image: "/assets/hero-poke-Dk38LgOY.jpg",
+		anchor: "#boissons",
+		icon: "🥤"
+	}
+];
+function PokawaCategoriesBar() {
+	const scrollRef = (0, import_react.useRef)(null);
+	const [canScrollLeft, setCanScrollLeft] = (0, import_react.useState)(false);
+	const [canScrollRight, setCanScrollRight] = (0, import_react.useState)(true);
+	const checkScroll = () => {
+		if (!scrollRef.current) return;
+		const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+		setCanScrollLeft(scrollLeft > 10);
+		setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+	};
+	(0, import_react.useEffect)(() => {
+		const el = scrollRef.current;
+		if (!el) return;
+		el.addEventListener("scroll", checkScroll);
+		checkScroll();
+		return () => el.removeEventListener("scroll", checkScroll);
+	}, []);
+	const scroll = (direction) => {
+		if (!scrollRef.current) return;
+		const scrollAmount = direction === "left" ? -280 : 280;
+		scrollRef.current.scrollBy({
+			left: scrollAmount,
+			behavior: "smooth"
+		});
+	};
+	const handleCategoryClick = (anchor) => {
+		const target = document.querySelector(anchor);
+		if (target) target.scrollIntoView({
+			behavior: "smooth",
+			block: "start"
+		});
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "bg-white/80 py-10 sm:py-14 border-b border-black/5 overflow-hidden",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#10251f]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🥑" }), " Explorez Notre Carte Complète"]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]",
+						children: "Vivez sainement, soyez gourmands."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-xs sm:text-sm text-[#68756f]",
+						children: "Des créations fraîches, des spécialités chaudes et des douceurs artisanales préparées à Visé."
+					})
+				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 self-start sm:self-auto",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => scroll("left"),
+						disabled: !canScrollLeft,
+						"aria-label": "Faire défiler vers la gauche",
+						className: "flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white disabled:opacity-30 disabled:pointer-events-none",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "h-4.5 w-4.5" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: () => scroll("right"),
+						disabled: !canScrollRight,
+						"aria-label": "Faire défiler vers la droite",
+						className: "flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white disabled:opacity-30 disabled:pointer-events-none",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "h-4.5 w-4.5" })
+					})]
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				ref: scrollRef,
+				className: "flex gap-4 sm:gap-6 overflow-x-auto pb-4 pt-1 no-scrollbar scroll-smooth",
+				style: { scrollSnapType: "x mandatory" },
+				children: CATEGORIES.map((cat) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					onClick: () => handleCategoryClick(cat.anchor),
+					style: { scrollSnapAlign: "start" },
+					className: "group relative flex w-[220px] sm:w-[245px] shrink-0 flex-col overflow-hidden rounded-[30px] border border-black/5 bg-[#faf8f4] p-3.5 text-left shadow-card transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-lift active:scale-98 cursor-pointer",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative aspect-square w-full overflow-hidden rounded-[24px] bg-[#ece8dc]",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: cat.image,
+								alt: cat.title,
+								className: "h-full w-full object-cover transition-transform duration-700 group-hover:scale-108",
+								loading: "lazy"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: `absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-wider shadow-sm ${cat.badgeColor}`,
+								children: cat.badge
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-sm shadow-md backdrop-blur-sm",
+								children: cat.icon
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-3.5 px-1 pb-1",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-sm sm:text-base font-extrabold uppercase tracking-tight text-[#10251f] group-hover:text-[#ff705f] transition-colors",
+								children: cat.title
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-0.5 text-[11px] font-semibold text-[#68756f]",
+								children: cat.subtitle
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-2.5 flex items-center justify-between border-t border-black/5 pt-2 text-[10px] font-black uppercase tracking-wider text-[#10251f]/75 group-hover:text-[#ff705f]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Voir la carte" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3 w-3 transition-transform group-hover:translate-x-1" })]
+							})
+						]
+					})]
+				}, cat.id))
+			})]
+		})
+	});
+}
+function PokawaBrandValues() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "bg-[#faf8f4] py-16 sm:py-20 lg:py-24 border-y border-black/5",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "text-center max-w-2xl mx-auto mb-12",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#10251f] border border-black/5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Award, { className: "h-3.5 w-3.5 text-[#ff705f]" }), "Nos Engagements & Notre Philosophie"]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]",
+							children: "Un Poké plein de qualités"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-2 text-sm text-[#68756f]",
+							children: "Chez Poke N Bowl Visé, nous croyons qu'un repas rapide doit être sain, gourmand et préparé avec les meilleurs ingrédients."
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid gap-6 sm:grid-cols-2 lg:grid-cols-4",
+					children: [
+						{
+							id: "freshness",
+							emoji: "🐟",
+							tag: "Exigence fraîcheur",
+							tagColor: "bg-[#d7ff45] text-[#10251f]",
+							title: "Fraîcheur Quotidienne",
+							desc: "Découpe minute de nos légumes croquants et approvisionnement quotidien en saumon & scampis de première fraîcheur.",
+							perk: "Découpe chaque matin à Visé"
+						},
+						{
+							id: "rice",
+							emoji: "🍚",
+							tag: "Authenticité",
+							tagColor: "bg-[#ff705f] text-white",
+							title: "Riz à Sushi Artisanal",
+							desc: "Cuit à point et assaisonné avec notre vinaigre de riz signature selon la véritable tradition. Fini le riz fade et sec !",
+							perk: "Assaisonnement équilibré"
+						},
+						{
+							id: "crousty",
+							emoji: "🍗",
+							tag: "Gamme Chaude",
+							tagColor: "bg-[#8b5510] text-white",
+							title: "Bar à Crousty Pané",
+							desc: "Pour les amateurs de réconfort : poulet pané ultra croustillant, oignons frits dorés et sauces chaudes gourmandes.",
+							perk: "Formule étudiant 11€ avec boisson"
+						},
+						{
+							id: "custom",
+							emoji: "✨",
+							tag: "Sur-Mesure",
+							tagColor: "bg-[#10251f] text-[#d7ff45]",
+							title: "Liberté & Transparence",
+							desc: "Retirez n'importe quel allergène en 1 clic ou créez votre bowl personnalisé de A à Z avec 5 mix-ins frais inclus.",
+							perk: "Zéro compromis sur vos goûts"
+						}
+					].map((val) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "group flex flex-col justify-between rounded-[32px] border border-black/5 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f7f4ec] text-2xl shadow-inner group-hover:scale-110 transition-transform",
+									children: val.emoji
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: `rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-wider ${val.tagColor}`,
+									children: val.tag
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "mt-6 text-lg sm:text-xl font-extrabold text-[#10251f]",
+								children: val.title
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-2 text-xs leading-relaxed text-[#68756f]",
+								children: val.desc
+							})
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-6 pt-4 border-t border-black/5 flex items-center justify-between",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "inline-flex items-center gap-1.5 text-[11px] font-bold text-[#10251f]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-3.5 w-3.5 text-[#ff705f]" }), val.perk]
+							})
+						})]
+					}, val.id))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-12 text-center",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/commander",
+						className: "inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-105 active:scale-95",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Goûter la différence en ligne" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
+					})
+				})
+			]
+		})
+	});
+}
+var INSTA_POSTS = [
+	{
+		id: "post-1",
+		image: bowl_saumon_default,
+		likes: 248,
+		comments: 19,
+		caption: "Le Saumon Wasabi dans toute sa fraîcheur : avocat fondant, edamames croquants & sésame doré 🥑✨",
+		tag: "#PokeBowlVisé"
+	},
+	{
+		id: "post-2",
+		image: bowl_sweet_chicken_default,
+		likes: 312,
+		comments: 24,
+		caption: "Poulet mariné sweet & mangue fraîche du jour : le mix sucré-salé qui met tout le monde d'accord 🥭🍗",
+		tag: "#SweetChicken"
+	},
+	{
+		id: "post-3",
+		image: bowl_scampis_default,
+		likes: 195,
+		comments: 14,
+		caption: "Scampis Royaux sautés minute sur lit de riz à sushi vinaigré. Prêt en moins de 3 minutes pour votre pause déj 🦐",
+		tag: "#FraisDuJour"
+	},
+	{
+		id: "post-4",
+		image: bowl_spicy_chicken_default,
+		likes: 276,
+		comments: 22,
+		caption: "Pour ceux qui aiment quand ça réveille les papilles : Spicy Chicken et sauce pimentée maison 🔥",
+		tag: "#SpicyVibes"
+	}
+];
+function PokawaInstagramWall() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "bg-white py-16 sm:py-20 lg:py-24 border-b border-black/5",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "text-center max-w-2xl mx-auto mb-10",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#ff705f]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, { className: "h-3.5 w-3.5" }), "La Communauté Poke N Bowl"]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]",
+							children: "L’actu sur nos réseaux"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "mt-2 text-sm text-[#68756f]",
+							children: [
+								"Partagez vos bowls à Visé en story et taguez ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-bold text-[#10251f]",
+									children: "@POKE_NBOWL"
+								}),
+								" pour être reposté !"
+							]
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid gap-5 sm:grid-cols-2 lg:grid-cols-4",
+					children: INSTA_POSTS.map((post) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: "https://instagram.com/POKE_NBOWL",
+						target: "_blank",
+						rel: "noreferrer",
+						className: "group relative flex flex-col overflow-hidden rounded-[28px] border border-black/5 bg-[#faf8f4] shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "relative aspect-square w-full overflow-hidden bg-[#ece8dc]",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									src: post.image,
+									alt: post.caption,
+									className: "h-full w-full object-cover transition-transform duration-700 group-hover:scale-108",
+									loading: "lazy"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/60 p-4 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100 text-white",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-4 text-xs font-bold",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1.5",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, { className: "h-4 w-4 fill-[#ff705f] text-[#ff705f]" }), post.likes]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "flex items-center gap-1.5",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageCircle, { className: "h-4 w-4 fill-white" }), post.comments]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-center text-[11px] leading-snug line-clamp-3 text-white/90",
+											children: post.caption
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-white/20 px-3 py-1 text-[9px] font-bold uppercase tracking-wider backdrop-blur-md",
+											children: "Voir sur Instagram →"
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "absolute bottom-3 left-3 rounded-full bg-black/40 backdrop-blur-md px-2.5 py-0.5 text-[9px] font-bold text-white shadow-sm group-hover:opacity-0 transition-opacity",
+									children: post.tag
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "p-4 flex items-center justify-between text-xs text-[#68756f]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-extrabold text-[#10251f]",
+								children: "@POKE_NBOWL"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, { className: "h-4 w-4 text-[#ff705f] group-hover:scale-110 transition-transform" })]
+						})]
+					}, post.id))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-10 text-center",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: "https://instagram.com/POKE_NBOWL",
+						target: "_blank",
+						rel: "noreferrer",
+						className: "inline-flex items-center gap-2.5 rounded-full border-2 border-[#10251f] bg-white px-7 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-soft transition hover:bg-[#10251f] hover:text-white hover:scale-105 active:scale-95",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, { className: "h-4 w-4 text-[#ff705f]" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Suivez-nous sur Instagram @POKE_NBOWL" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "h-3.5 w-3.5 opacity-60" })
+						]
+					})
+				})
+			]
+		})
+	});
+}
+function PokawaPerksBanner() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "px-5 py-12 sm:px-6 sm:py-16 lg:px-8",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-[1340px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#10251f] via-[#142d26] to-[#0b1a16] p-7 sm:p-10 lg:p-14 text-white shadow-lift border border-white/10 relative",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#d7ff45]/15 blur-3xl pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#ff705f]/15 blur-3xl pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "max-w-2xl",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45] backdrop-blur-md border border-white/10",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), "Service Express Poke N Bowl Visé"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight",
+								children: "Commandez en direct au meilleur prix"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-3 text-xs sm:text-sm text-white/75 leading-relaxed",
+								children: "Pas d'intermédiaire, préparation prioritaire en cuisine et ingrédients 100% personnalisables selon vos préférences et allergies."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mt-6 grid gap-4 sm:grid-cols-3",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-3 rounded-2xl bg-white/5 p-3 backdrop-blur-sm border border-white/5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] text-sm font-black",
+											children: "⚡"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "min-w-0",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+												className: "text-xs font-bold",
+												children: "Retrait Express"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-[10px] text-white/60",
+												children: "Zéro attente au 12 Av. du Pont"
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-3 rounded-2xl bg-white/5 p-3 backdrop-blur-sm border border-white/5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#ff705f] text-white text-sm font-black",
+											children: "🛵"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "min-w-0",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+												className: "text-xs font-bold",
+												children: "Livraison Locale"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-[10px] text-white/60",
+												children: "Chez vous bien frais"
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-3 rounded-2xl bg-white/5 p-3 backdrop-blur-sm border border-white/5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45]/20 text-[#d7ff45] text-sm font-black",
+											children: "🎓"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "min-w-0",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
+												className: "text-xs font-bold",
+												children: "Formule 11 €"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-[10px] text-white/60",
+												children: "Crousty + boisson 33cl"
+											})]
+										})]
+									})
+								]
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+							to: "/commander",
+							className: "inline-flex items-center justify-center gap-2.5 rounded-full bg-[#d7ff45] px-8 py-4 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-105 active:scale-95",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commander en ligne" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+							to: "/sur-mesure",
+							className: "inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-4 text-xs font-black uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Créer mon Poké sur-mesure" })
+						})]
+					})]
+				})
+			]
+		})
+	});
+}
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 var HOUR_ROWS = [
 	["info.day.mon", "12:00 – 14:00 · 17:00 – 21:00"],
@@ -2433,6 +2943,7 @@ function Index() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hero3DParallaxPoke, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ticker, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokawaCategoriesBar, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					className: "bg-white/70 py-12 sm:py-16 border-b border-black/5 overflow-hidden",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -2593,8 +3104,10 @@ function Index() {
 					className: "mx-auto max-w-[1340px] px-5 pb-14 sm:px-6 sm:pb-20 lg:px-8",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokeBowlCraftingExperience, {}) })
 				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokawaBrandValues, {}) }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
-					className: "bg-[#f0e6d6] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24 border-y border-black/5",
+					id: "crousty",
+					className: "scroll-mt-12 bg-[#f0e6d6] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24 border-y border-black/5",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mx-auto max-w-[1200px]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, {
@@ -2667,8 +3180,10 @@ function Index() {
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(InteractiveBowlBuilder, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokawaPerksBanner, {}) }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
-					className: "mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8",
+					id: "desserts",
+					className: "scroll-mt-12 mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Reveal, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "text-center max-w-2xl mx-auto mb-10",
 						children: [
@@ -2797,7 +3312,8 @@ function Index() {
 								})
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex flex-col justify-between overflow-hidden rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-8",
+							id: "boissons",
+							className: "scroll-mt-12 flex flex-col justify-between overflow-hidden rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-8",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-center justify-between border-b border-black/5 pb-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -2918,6 +3434,7 @@ function Index() {
 						})]
 					})] })
 				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokawaInstagramWall, {}) }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					className: "px-5 pb-14 sm:px-6 sm:pb-20 lg:px-8",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {

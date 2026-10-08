@@ -30,6 +30,10 @@ import { PokeBowlMarqueeCarousel } from "@/components/PokeBowlMarqueeCarousel";
 import { Hero3DParallaxPoke } from "@/components/Hero3DParallaxPoke";
 import { InteractiveBowlBuilder } from "@/components/InteractiveBowlBuilder";
 import { DishTasteExplorer } from "@/components/DishTasteExplorer";
+import { PokawaCategoriesBar } from "@/components/PokawaCategoriesBar";
+import { PokawaBrandValues } from "@/components/PokawaBrandValues";
+import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
+import { PokawaPerksBanner } from "@/components/PokawaPerksBanner";
 import { Sparkles, Utensils, Heart, Check, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -309,6 +313,9 @@ function Index() {
         {/* ════════ Ticker ════════════════════════════════════════ */}
         <Ticker />
 
+        {/* ════════ EXPLORATEUR DE CATÉGORIES (STYLE POKAWA) ════════ */}
+        <PokawaCategoriesBar />
+
         {/* ════════ CAROUSEL DÉFILANT POKÉ BOWLS (STYLE POKAWA) ════════ */}
         <section className="bg-white/70 py-12 sm:py-16 border-b border-black/5 overflow-hidden">
           <div className="mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8">
@@ -478,8 +485,13 @@ function Index() {
           </Reveal>
         </section>
 
+        {/* ════════ NOS ENGAGEMENTS QUALITÉ (STYLE POKAWA) ════════ */}
+        <Reveal>
+          <PokawaBrandValues />
+        </Reveal>
+
         {/* ════════ SECTION COMPLÉMENTAIRE : LE BAR À CROUSTY ══════ */}
-        <section className="bg-[#f0e6d6] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24 border-y border-black/5">
+        <section id="crousty" className="scroll-mt-12 bg-[#f0e6d6] px-5 py-14 text-[#241a12] sm:px-6 sm:py-20 lg:px-8 lg:py-24 border-y border-black/5">
           <div className="mx-auto max-w-[1200px]">
             <Reveal className="text-center">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#8b5510]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8b5510]">
@@ -545,8 +557,13 @@ function Index() {
         {/* ════════ SIMULATEUR SUR-MESURE INTERACTIF LUDIQUE ══════════════ */}
         <InteractiveBowlBuilder />
 
+        {/* ════════ AVANTAGES COMMANDE EN DIRECT (STYLE POKAWA) ════════ */}
+        <Reveal>
+          <PokawaPerksBanner />
+        </Reveal>
+
         {/* ════════ Boissons & Desserts : Plaisirs Gourmands ═══════ */}
-        <section className="mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
+        <section id="desserts" className="scroll-mt-12 mx-auto max-w-[1340px] px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto mb-10">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#ff705f]">
@@ -694,7 +711,7 @@ function Index() {
               </div>
 
               {/* Module 2 : Boissons Fraîches */}
-              <div className="flex flex-col justify-between overflow-hidden rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
+              <div id="boissons" className="scroll-mt-12 flex flex-col justify-between overflow-hidden rounded-[32px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
                 <div>
                   <div className="flex items-center justify-between border-b border-black/5 pb-4">
                     <div>
@@ -774,6 +791,11 @@ function Index() {
             </div>
           </Reveal>
         </section>
+
+        {/* ════════ L'ACTU SUR NOS RÉSEAUX & INSTAGRAM (STYLE POKAWA) ════════ */}
+        <Reveal>
+          <PokawaInstagramWall />
+        </Reveal>
 
         {/* ════════ Recrutement banner ═════════════════════════════ */}
         <section className="px-5 pb-14 sm:px-6 sm:pb-20 lg:px-8">
