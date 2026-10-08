@@ -3,6 +3,7 @@ import type { Order } from "./orders";
 
 type DbRow = {
   id: string;
+  delivery_token: string | null;
   created_at: string;
   status: Order["status"];
   payment_method: Order["paymentMethod"];
@@ -11,7 +12,7 @@ type DbRow = {
   items_json: string;
   total: number | string;
   currency: "EUR";
-  print_status: "pending" | "printing" | "printed";
+  print_status: "pending" | "printing" | "printed" | "failed";
   printed_at: string | null;
   print_claimed_at: string | null;
   print_attempts: number;
@@ -37,6 +38,7 @@ async function ensureSchema(): Promise<void> {
       await sql`
         CREATE TABLE IF NOT EXISTS orders (
           id TEXT PRIMARY KEY,
+          delivery_token TEXT,
           created_at TIMESTAMPTZ NOT NULL,
           status TEXT NOT NULL,
           payment_method TEXT NOT NULL,
@@ -53,6 +55,9 @@ async function ensureSchema(): Promise<void> {
         )
       `;
       await sql`
+        ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT
+      `;
+      await sql`
         CREATE INDEX IF NOT EXISTS orders_print_queue_idx
         ON orders (print_status, status, created_at)
       `;
@@ -62,6 +67,10 @@ async function ensureSchema(): Promise<void> {
       await sql`
         CREATE INDEX IF NOT EXISTS orders_mollie_idx
         ON orders (mollie_payment_id)
+      `;
+      await sql`
+        CREATE UNIQUE INDEX IF NOT EXISTS orders_delivery_token_idx
+        ON orders (delivery_token) WHERE delivery_token IS NOT NULL
       `;
     })().catch((error) => {
       schemaReady = undefined;
@@ -74,6 +83,7 @@ async function ensureSchema(): Promise<void> {
 function rowToOrder(row: DbRow): Order {
   return {
     id: row.id,
+    deliveryToken: row.delivery_token ?? undefined,
     createdAt: row.created_at,
     status: row.status,
     paymentMethod: row.payment_method,
@@ -82,6 +92,10 @@ function rowToOrder(row: DbRow): Order {
     items: JSON.parse(row.items_json) as Order["items"],
     total: Number(row.total),
     currency: row.currency,
+    printStatus: row.print_status,
+    printedAt: row.printed_at,
+    printAttempts: row.print_attempts,
+    printError: row.print_error,
   };
 }
 
@@ -89,7 +103,7 @@ export async function getOrderFromStore(id: string): Promise<Order | undefined> 
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<DbRow>`
-    SELECT id, created_at, status, payment_method, mollie_payment_id,
+    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
            customer_json, items_json, total, currency,
            print_status, printed_at, print_claimed_at, print_attempts, print_error
     FROM orders
@@ -100,16 +114,31 @@ export async function getOrderFromStore(id: string): Promise<Order | undefined> 
   return row ? rowToOrder(row) : undefined;
 }
 
-export async function listOrdersFromStore(): Promise<Order[]> {
+export async function getOrderByDeliveryToken(token: string): Promise<Order | undefined> {
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<DbRow>`
-    SELECT id, created_at, status, payment_method, mollie_payment_id,
+    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
            customer_json, items_json, total, currency,
-           print_status, printed_at, print_attempts, print_error
+           print_status, printed_at, print_claimed_at, print_attempts, print_error
+    FROM orders
+    WHERE delivery_token = ${token}
+    LIMIT 1
+  `;
+  const row = rows[0];
+  return row ? rowToOrder(row) : undefined;
+}
+
+export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
+  await ensureSchema();
+  const sql = getSql();
+  const rows = await sql<DbRow>`
+    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+           customer_json, items_json, total, currency,
+           print_status, printed_at, print_claimed_at, print_attempts, print_error
     FROM orders
     ORDER BY created_at DESC
-    LIMIT 200
+    LIMIT ${limit}
   `;
   return rows.map(rowToOrder);
 }
@@ -119,11 +148,12 @@ export async function upsertOrder(order: Order): Promise<void> {
   const sql = getSql();
   await sql`
     INSERT INTO orders (
-      id, created_at, status, payment_method, mollie_payment_id,
+      id, delivery_token, created_at, status, payment_method, mollie_payment_id,
       customer_json, items_json, total, currency
     )
     VALUES (
       ${order.id},
+      ${order.deliveryToken ?? null},
       ${order.createdAt},
       ${order.status},
       ${order.paymentMethod},
@@ -134,6 +164,7 @@ export async function upsertOrder(order: Order): Promise<void> {
       ${order.currency}
     )
     ON CONFLICT (id) DO UPDATE SET
+      delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
       status = EXCLUDED.status,
       payment_method = EXCLUDED.payment_method,
       mollie_payment_id = EXCLUDED.mollie_payment_id,
@@ -141,6 +172,28 @@ export async function upsertOrder(order: Order): Promise<void> {
       items_json = EXCLUDED.items_json,
       total = EXCLUDED.total,
       currency = EXCLUDED.currency
+  `;
+}
+
+export async function updateOrderStatus(orderId: string, status: Order["status"]): Promise<void> {
+  await ensureSchema();
+  const sql = getSql();
+  await sql`
+    UPDATE orders
+    SET status = ${status}
+    WHERE id = ${orderId}
+  `;
+}
+
+export async function requestOrderReprint(orderId: string): Promise<void> {
+  await ensureSchema();
+  const sql = getSql();
+  await sql`
+    UPDATE orders
+    SET print_status = 'pending',
+        print_claimed_at = NULL,
+        print_error = NULL
+    WHERE id = ${orderId}
   `;
 }
 
@@ -157,7 +210,7 @@ export async function claimNextPrintJob(): Promise<Order | undefined> {
     WHERE id = (
       SELECT id
       FROM orders
-      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery')
+      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery', 'preparing', 'ready', 'delivering')
         AND (
           print_status = 'pending'
           OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
@@ -166,9 +219,9 @@ export async function claimNextPrintJob(): Promise<Order | undefined> {
       LIMIT 1
       FOR UPDATE SKIP LOCKED
     )
-    RETURNING id, created_at, status, payment_method, mollie_payment_id,
+    RETURNING id, delivery_token, created_at, status, payment_method, mollie_payment_id,
               customer_json, items_json, total, currency,
-              print_status, printed_at, print_attempts, print_error
+              print_status, printed_at, print_claimed_at, print_attempts, print_error
   `;
   const row = rows[0];
   return row ? rowToOrder(row) : undefined;
@@ -196,7 +249,7 @@ export async function acknowledgePrint(
 
   await sql`
     UPDATE orders
-    SET print_status = 'pending',
+    SET print_status = 'failed',
         print_error = ${errorMessage ?? "Printer agent failed"}
     WHERE id = ${orderId}
   `;

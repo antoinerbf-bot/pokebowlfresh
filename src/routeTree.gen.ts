@@ -19,7 +19,9 @@ import { Route as AdminStocksRouteImport } from './routes/admin/stocks'
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
+import { Route as PosIndexRouteImport } from './routes/pos/index'
 import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
+import { Route as TrackTokenRouteImport } from './routes/track/$token'
 import { Route as ApiPrinterAckRouteImport } from './routes/api/printer/ack'
 import { Route as ApiPrinterQueueRouteImport } from './routes/api/printer/queue'
 
@@ -73,9 +75,19 @@ const OrderSuccessRoute = OrderSuccessRouteImport.update({
   path: '/order/success',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PosIndexRoute = PosIndexRouteImport.update({
+  id: '/pos/',
+  path: '/pos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductProductIdRoute = ProductProductIdRouteImport.update({
   id: '/product/$productId',
   path: '/product/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrackTokenRoute = TrackTokenRouteImport.update({
+  id: '/track/$token',
+  path: '/track/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPrinterAckRoute = ApiPrinterAckRouteImport.update({
@@ -101,6 +113,8 @@ export interface FileRoutesByFullPath {
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
   '/product/$productId': typeof ProductProductIdRoute
+  '/track/$token': typeof TrackTokenRoute
+  '/pos/': typeof PosIndexRoute
   '/api/printer/ack': typeof ApiPrinterAckRoute
   '/api/printer/queue': typeof ApiPrinterQueueRoute
 }
@@ -116,6 +130,8 @@ export interface FileRoutesByTo {
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
   '/product/$productId': typeof ProductProductIdRoute
+  '/track/$token': typeof TrackTokenRoute
+  '/pos': typeof PosIndexRoute
   '/api/printer/ack': typeof ApiPrinterAckRoute
   '/api/printer/queue': typeof ApiPrinterQueueRoute
 }
@@ -132,6 +148,8 @@ export interface FileRoutesById {
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
   '/product/$productId': typeof ProductProductIdRoute
+  '/track/$token': typeof TrackTokenRoute
+  '/pos/': typeof PosIndexRoute
   '/api/printer/ack': typeof ApiPrinterAckRoute
   '/api/printer/queue': typeof ApiPrinterQueueRoute
 }
@@ -149,6 +167,8 @@ export interface FileRouteTypes {
     | '/api/orders'
     | '/order/success'
     | '/product/$productId'
+    | '/track/$token'
+    | '/pos/'
     | '/api/printer/ack'
     | '/api/printer/queue'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +184,8 @@ export interface FileRouteTypes {
     | '/api/orders'
     | '/order/success'
     | '/product/$productId'
+    | '/track/$token'
+    | '/pos'
     | '/api/printer/ack'
     | '/api/printer/queue'
   id:
@@ -179,6 +201,8 @@ export interface FileRouteTypes {
     | '/api/orders'
     | '/order/success'
     | '/product/$productId'
+    | '/track/$token'
+    | '/pos/'
     | '/api/printer/ack'
     | '/api/printer/queue'
   fileRoutesById: FileRoutesById
@@ -195,6 +219,8 @@ export interface RootRouteChildren {
   ApiOrdersRoute: typeof ApiOrdersRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
+  TrackTokenRoute: typeof TrackTokenRoute
+  PosIndexRoute: typeof PosIndexRoute
   ApiPrinterAckRoute: typeof ApiPrinterAckRoute
   ApiPrinterQueueRoute: typeof ApiPrinterQueueRoute
 }
@@ -271,11 +297,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrderSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pos/': {
+      id: '/pos/'
+      path: '/pos'
+      fullPath: '/pos/'
+      preLoaderRoute: typeof PosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product/$productId': {
       id: '/product/$productId'
       path: '/product/$productId'
       fullPath: '/product/$productId'
       preLoaderRoute: typeof ProductProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/track/$token': {
+      id: '/track/$token'
+      path: '/track/$token'
+      fullPath: '/track/$token'
+      preLoaderRoute: typeof TrackTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/printer/ack': {
@@ -307,6 +347,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiOrdersRoute: ApiOrdersRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ProductProductIdRoute: ProductProductIdRoute,
+  TrackTokenRoute: TrackTokenRoute,
+  PosIndexRoute: PosIndexRoute,
   ApiPrinterAckRoute: ApiPrinterAckRoute,
   ApiPrinterQueueRoute: ApiPrinterQueueRoute,
 }
