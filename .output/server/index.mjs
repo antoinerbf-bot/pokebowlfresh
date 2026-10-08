@@ -332,6 +332,62 @@ var public_assets_data_default = {
 		"size": 804592,
 		"path": "../public/assets/bowl-crousty-curry-CP8uJ3-4.jpg"
 	},
+	"/assets/checkout-CHKvMu3s.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"3457-GkJpYPLsOQpdx+kOBMVDbyfOAx8\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 13399,
+		"path": "../public/assets/checkout-CHKvMu3s.js"
+	},
+	"/assets/commander-C_IbZgis.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"4459-rWfaewP4o4d+L5s0o09BEHtY0uE\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 17497,
+		"path": "../public/assets/commander-C_IbZgis.js"
+	},
+	"/assets/clock-DOtSFY4D.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"126-//jSYKD1h9Yws3uuXO+bxFCU1JE\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 294,
+		"path": "../public/assets/clock-DOtSFY4D.js"
+	},
+	"/assets/contact-9G1dUSfT.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"13b8-EiYNTLhroGevDDFoQUrKT4382oQ\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 5048,
+		"path": "../public/assets/contact-9G1dUSfT.js"
+	},
+	"/assets/createClientRpc-2_3ILrZT.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"8c09-b30s6TM2BEP8efuJw955VZ6i3KE\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 35849,
+		"path": "../public/assets/createClientRpc-2_3ILrZT.js"
+	},
+	"/assets/createServerFn-DLLtPDRW.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"1128-z2doi3tsho9fxxfabLW0raXVtIU\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 4392,
+		"path": "../public/assets/createServerFn-DLLtPDRW.js"
+	},
+	"/assets/createLucideIcon-COA0CdbU.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"4ab-JbElSmUzt4aKtqUn1FdEZDhaxps\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 1195,
+		"path": "../public/assets/createLucideIcon-COA0CdbU.js"
+	},
+	"/assets/data-6GjUR1G4.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"1f51-Os8S8MhnAD5IKnuVTwCnoJ63Mmo\"",
+		"mtime": "2026-10-08T19:02:38.676Z",
+		"size": 8017,
+		"path": "../public/assets/data-6GjUR1G4.js"
+	},
 	"/assets/dessert-9PIP1ns9.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"d822-kPW8+rCCVPZwYCa7Y1iWSvRF7Sc\"",
@@ -402,12 +458,26 @@ var public_assets_data_default = {
 		"size": 423,
 		"path": "../public/assets/phone-call-BZr4v2ld.js"
 	},
+	"/assets/index-pCKKJmEe.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"4efad-jF0PFSzZ0XCSa678+aOV6JbslGQ\"",
+		"mtime": "2026-10-08T19:02:38.675Z",
+		"size": 323501,
+		"path": "../public/assets/index-pCKKJmEe.js"
+	},
 	"/assets/recrutement-DcSer1n0.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"ebf-WLRVkHu2wWc++RXPnoAaXTPaUnA\"",
 		"mtime": "2026-10-08T19:49:44.208Z",
 		"size": 3775,
 		"path": "../public/assets/recrutement-DcSer1n0.js"
+	},
+	"/assets/routes-Co2kT09f.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"3563e-mMFcL7k8I1fFo30TmJBa1V0WDxk\"",
+		"mtime": "2026-10-08T19:02:38.677Z",
+		"size": 218686,
+		"path": "../public/assets/routes-Co2kT09f.js"
 	},
 	"/assets/shield-check-BxYbUMm8.js": {
 		"type": "text/javascript; charset=utf-8",
@@ -450,6 +520,13 @@ var public_assets_data_default = {
 		"mtime": "2026-10-08T19:49:44.221Z",
 		"size": 777747,
 		"path": "../public/assets/drink-coca-zero-eyT1b9_N.jpg"
+	},
+	"/assets/drink-coca-cola-D83foBG1.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"bf65a-h2782mDQADKj1mVNTnKPFmSQaZM\"",
+		"mtime": "2026-10-08T19:02:38.677Z",
+		"size": 783962,
+		"path": "../public/assets/drink-coca-cola-D83foBG1.jpg"
 	},
 	"/assets/drink-eau-plate-DnmShlA4.jpg": {
 		"type": "image/jpeg",
@@ -628,11 +705,11 @@ var multiHandler = (...handlers) => {
 	const middleware = handlers.filter(Boolean).map((h) => toMiddleware(h));
 	return (ev) => callMiddleware(ev, middleware, final);
 };
-var _lazy_gmTYTR = defineLazyEventHandler(() => import("./_chunks/ssr-renderer.mjs"));
+var _lazy_XAhvdF = defineLazyEventHandler(() => import("./_chunks/ssr-renderer.mjs"));
 var findRoute = /* @__PURE__ */ (() => {
 	const $0 = {
 		route: "/**",
-		handler: multiHandler(toEventHandler(server_default), _lazy_gmTYTR)
+		handler: multiHandler(toEventHandler(server_default), _lazy_XAhvdF)
 	};
 	return (m, p) => {
 		if (p.charCodeAt(p.length - 1) === 47) p = p.slice(0, -1) || "/";
