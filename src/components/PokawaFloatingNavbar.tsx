@@ -25,10 +25,10 @@ export function PokawaFloatingNavbar() {
         {/* ── CAPSULE GAUCHE (STYLE POKAWA) ── */}
         <div className="hidden lg:flex items-center gap-5 rounded-full bg-[#fff8ee] px-6 py-2.5 shadow-2xl border border-white/70 backdrop-blur-md text-[#10251f]">
           <a
-            href="#valeurs"
-            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] hover:text-[#ff705f] transition"
+            href="#composer"
+            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#10251f] hover:text-[#ff705f] transition"
           >
-            <span>Engagements</span>
+            <span>Composer son Bowl</span>
             <ChevronDown className="h-3 w-3 stroke-[2.5]" />
           </a>
 
@@ -41,10 +41,10 @@ export function PokawaFloatingNavbar() {
           </a>
 
           <a
-            href="#composer"
+            href="#valeurs"
             className="text-[11px] font-black uppercase tracking-[0.14em] hover:text-[#ff705f] transition"
           >
-            Sur-Mesure
+            Engagements
           </a>
 
           {/* Bouton Localisation Visé style Pokawa (bouton bleu/vert avec pin) */}

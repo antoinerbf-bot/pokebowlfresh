@@ -33,7 +33,7 @@ const NOTIFICATIONS: ToastNotification[] = [
     tag: "Nouveau au Menu",
     tagColor: "bg-[#10251f] text-white",
     title: "Crousty Sauce Blanche",
-    desc: "Tenders croustillants panés minute, sauce blanche onctueuse et oignons frits croquants.",
+    desc: "Petits morceaux de poulet croustillant dorés, sauce blanche onctueuse et oignons frits croquants.",
     dishId: "crousty-chicken-sauce-blanche",
     price: "11,00 €",
     badgeEmoji: "🤍",

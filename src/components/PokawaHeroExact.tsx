@@ -4,12 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Plus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
-// Photos culinaires générées pour Poke N Bowl Visé
-import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
-import bowlSaumon from "@/assets/bowl-saumon.jpg";
+// Photos culinaires haute définition pour Poke N Bowl Visé
+import heroSaumonWide from "@/assets/hero-saumon-wide.jpg";
+import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
 import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
-import bowlScampis from "@/assets/bowl-scampis.jpg";
-import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
+import heroScampis from "@/assets/hero-scampis.jpg";
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
 
 interface PokawaSlide {
@@ -34,8 +33,26 @@ interface PokawaSlide {
 
 const SLIDES: PokawaSlide[] = [
   {
+    id: "saumon-wasabi",
+    image: heroSaumonWide,
+    titleLine1: "POKÉ SAUMON",
+    titleLine2: "FRAIS DU MATIN",
+    dishName: "Saumon Wasabi",
+    ingredientCallout: {
+      text: "SAUMON SASHIMI ÉCOSSE",
+      subtext: "DÉCOUPÉ DU MATIN",
+      emoji: "🐟",
+    },
+    statBadge: {
+      main: "OMÉGA-3",
+      sub: "100% FRAÎCHEUR GARANTIE",
+    },
+    price: 11.0,
+    ingredients: "Saumon atlantique frais découpé minute, avocat Hass fondant, mangue mûre, edamame croquant, salade d'algues wakame & sésame mix.",
+  },
+  {
     id: "sweet-chicken",
-    image: bowlSweetChicken,
+    image: heroSweetWide,
     titleLine1: "BESOIN",
     titleLine2: "DE DOUCEUR ?",
     dishName: "Sweet Chicken Teriyaki",
@@ -49,80 +66,44 @@ const SLIDES: PokawaSlide[] = [
       sub: "FORMAT GÉNÉREUX",
     },
     price: 10.0,
-    ingredients: "Poulet mariné, avocat Hass, mangue mûre, maïs croquant, feta & sauce teriyaki onctueuse.",
-  },
-  {
-    id: "saumon-wasabi",
-    image: bowlSaumon,
-    titleLine1: "EXTRA FRAIS",
-    titleLine2: "& SASHIMI ?",
-    dishName: "Saumon Wasabi",
-    ingredientCallout: {
-      text: "SAUMON NOBLE SASHIMI",
-      subtext: "DÉCOUPÉ DU MATIN",
-      emoji: "🐟",
-    },
-    statBadge: {
-      main: "OMÉGA-3",
-      sub: "100% FRAÎCHEUR GARANTIE",
-    },
-    price: 11.0,
-    ingredients: "Saumon atlantique frais, salade d'algues wakame, avocat, mangue, edamame & mayo wasabi.",
+    ingredients: "Poulet mariné doré, mangue mûre, avocat Hass fondant, maïs doux croquant, edamame & sauce teriyaki onctueuse maison.",
   },
   {
     id: "crousty-chicken-curry",
     image: bowlCroustyCurry,
-    titleLine1: "BESOIN DE",
-    titleLine2: "CROUSTY ?",
+    titleLine1: "BAR À CROUSTY",
+    titleLine2: "CURRY DORÉ",
     dishName: "Crousty Chicken Curry",
     ingredientCallout: {
-      text: "POULET EXTRA CROUSTILLANT",
-      subtext: "PANURE MINUTE",
-      emoji: "🍗",
+      text: "PETITS MORCEAUX CROUSTILLANTS",
+      subtext: "PANURE MINUTE & CURRY",
+      emoji: "🍛",
     },
     statBadge: {
       main: "FORMULE 11 €",
       sub: "BOISSON 33CL INCLUSE",
     },
     price: 11.0,
-    ingredients: "Poulet pané ultra-croustillant, riz chaud parfumé, sauce curry onctueuse & oignons frits.",
+    ingredients: "Petits morceaux de poulet croustillant dorés, sauce curry onctueuse maison bien visible, oignons frits croustillants & riz à sushi chaud.",
     isCrousty: true,
   },
   {
     id: "scampis-royaux",
-    image: bowlScampis,
-    titleLine1: "SAISI AU GRILL",
-    titleLine2: "& SAVEURS ?",
+    image: heroScampis,
+    titleLine1: "SCAMPIS GRILLÉS",
+    titleLine2: "& SPICY MAYO",
     dishName: "Scampis Royal",
     ingredientCallout: {
       text: "SCAMPIS ROYAUX DORÉS",
-      subtext: "SAISIS HAUTE T°",
+      subtext: "SAISIS AU GRILL",
       emoji: "🦐",
     },
     statBadge: {
       main: "PROTÉINES",
-      sub: "SCAMPIS GRILLÉS MINUTE",
+      sub: "GRILL MINUTE",
     },
     price: 10.0,
-    ingredients: "Scampis saisis au grill, guacamole maison velouté, edamame, tomates cerises & spicy mayo.",
-  },
-  {
-    id: "spicy-chicken",
-    image: bowlSpicyChicken,
-    titleLine1: "UN PEU DE",
-    titleLine2: "PIQUANT ?",
-    dishName: "Spicy Chicken",
-    ingredientCallout: {
-      text: "PATATES DOUCES RÔTIES",
-      subtext: "AU FOUR MINUTE",
-      emoji: "🍠",
-    },
-    statBadge: {
-      main: "CHILI CRUNCH",
-      sub: "KICK ÉPICÉ ADDICTIF",
-    },
-    price: 10.0,
-    ingredients: "Poulet mariné rôti, patates douces rôties, maïs, feta, rondelles de jalapeños & spicy mayo.",
+    ingredients: "Scampis saisis au grill, guacamole maison velouté, edamame croquant, tomates cerises, poivrons & spicy mayo relevée.",
   },
 ];
 
@@ -168,53 +149,91 @@ export function PokawaHeroExact() {
   return (
     <section
       aria-label="Accueil Pokawa-Style Poke N Bowl Visé"
-      className="relative w-full min-h-[700px] lg:h-[90vh] max-h-[960px] overflow-hidden bg-[#0c1813] select-none flex items-center"
+      className="relative w-full h-[94vh] sm:h-[98vh] min-h-[640px] max-h-[1050px] overflow-hidden bg-[#101e18] select-none"
     >
-      {/* ════════ FOND AMBIANT LUMINEUX & ATMOSPHÉRIQUE (ZÉRO PIXÉLISATION) ════════ */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Halo doux teinté dérivé de la photo en ultra-flou */}
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={`bg-${slide.id}`}
+      {/* ════════ PHOTO EN PLEIN ÉCRAN TOTAL (LE BOL PREND TOUTE LA PAGE) ════════ */}
+      <AnimatePresence initial={false} mode="wait">
+        <motion.div
+          key={slide.id}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 z-0"
+        >
+          <img
             src={slide.image}
-            alt=""
-            aria-hidden="true"
-            initial={{ opacity: 0, scale: 1.15 }}
-            animate={{ opacity: 0.22, scale: 1.05 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.9 }}
-            className="absolute inset-0 h-full w-full object-cover object-center filter blur-3xl saturate-150"
+            alt={slide.dishName}
+            className="h-full w-full object-cover object-center"
           />
-        </AnimatePresence>
+          {/* VIGNETTAGE SOMBRE CINÉMATIQUE POUR LISIBILITÉ DU TEXTE */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/35 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+        </motion.div>
+      </AnimatePresence>
 
-        {/* Dégradés graphiques riches et texturés Pokawa */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0c1813] via-[#0c1813]/90 to-[#0c1813]/70" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(215,255,69,0.08)_0%,transparent_60%)]" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0c1813] to-transparent" />
-      </div>
+      {/* ════════ CALLOUT INGRÉDIENT EN HAUT À DROITE (STYLE EXACT POKAWA) ════════ */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`badge-${slide.id}`}
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 20 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="absolute top-28 right-4 sm:right-8 lg:right-12 z-20 hidden md:flex items-center gap-3 rounded-2xl bg-black/40 backdrop-blur-md px-4 py-2.5 border border-white/20 text-white shadow-2xl"
+        >
+          <span className="text-2xl">{slide.ingredientCallout.emoji}</span>
+          <div className="text-left">
+            <span className="block text-[11px] font-black uppercase tracking-wider text-[#d7ff45]">
+              {slide.ingredientCallout.text}
+            </span>
+            <span className="block text-[9px] font-bold uppercase tracking-widest text-white/80">
+              {slide.ingredientCallout.subtext}
+            </span>
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-      {/* ════════ CONTENU PRINCIPAL EN 2 COLONNES (STYLE POKAWA OFFICIEL) ════════ */}
-      <div className="relative z-20 mx-auto max-w-[1400px] w-full px-4 sm:px-8 lg:px-12 pt-20 pb-16 lg:py-0">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          {/* ─── COLONNE GAUCHE (7 COLS) : GRAND TITRE & ACTIONS ─── */}
-          <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+      {/* ════════ GRAND STAT BADGE FLOTTANT (STYLE POKAWA) ════════ */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`stat-${slide.id}`}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className="absolute top-44 right-6 sm:right-10 lg:right-16 z-20 hidden lg:flex flex-col items-center justify-center rounded-3xl bg-[#d7ff45] text-[#10251f] px-5 py-4 shadow-2xl border-2 border-white/40 rotate-3 hover:rotate-0 transition-transform duration-300"
+        >
+          <span className="text-2xl lg:text-3xl font-black uppercase tracking-tight leading-none">
+            {slide.statBadge.main}
+          </span>
+          <span className="text-[8px] font-black uppercase tracking-widest text-[#10251f]/80 mt-1">
+            {slide.statBadge.sub}
+          </span>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* ════════ GRAND TITRE EN BAS À GAUCHE (STYLE EXACT POKAWA) ════════ */}
+      <div className="absolute inset-x-0 bottom-12 sm:bottom-14 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
+        <div className="mx-auto max-w-[1400px] flex flex-col lg:flex-row lg:items-end justify-between gap-6 pointer-events-auto">
+          {/* Titre géant blanc */}
+          <div className="max-w-3xl">
             <AnimatePresence mode="wait">
               <motion.div
-                key={`content-${slide.id}`}
-                initial={{ opacity: 0, y: 25 }}
+                key={`title-${slide.id}`}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-3 sm:space-y-4"
+                className="space-y-2 sm:space-y-3"
               >
                 {/* Petit tag de la recette */}
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/20">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/30">
                   <span className="text-[#d7ff45]">✦</span>
                   <span>{slide.dishName}</span>
-                  <span className="text-white/40">·</span>
-                  <span className="text-[#d7ff45] font-black">{slide.price.toFixed(2)} €</span>
+                  <span className="text-white/60">·</span>
+                  <span className="text-[#d7ff45]">{slide.price.toFixed(2)} €</span>
                   {slide.isCrousty && (
                     <span className="ml-1 rounded-md bg-[#ff705f] px-2 py-0.5 text-[9px] font-black text-white">
                       BOISSON INCLUSE
@@ -223,22 +242,22 @@ export function PokawaHeroExact() {
                 </div>
 
                 {/* Titre géant ultra-bold style Pokawa */}
-                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-black uppercase tracking-tight text-white leading-[0.92] drop-shadow-[0_8px_30px_rgba(0,0,0,0.85)]">
+                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white leading-[0.92] drop-shadow-[0_8px_24px_rgba(0,0,0,0.85)]">
                   <span className="block">{slide.titleLine1}</span>
                   <span className="block text-white">{slide.titleLine2}</span>
                 </h1>
 
                 {/* Ingrédients clés conformes à la recette */}
-                <p className="text-sm sm:text-base text-white/90 max-w-xl font-medium drop-shadow leading-relaxed pt-1">
+                <p className="text-xs sm:text-sm text-white/90 max-w-xl font-medium drop-shadow leading-relaxed pt-1">
                   {slide.ingredients}
                 </p>
 
                 {/* Boutons d'action rapides */}
-                <div className="flex flex-wrap items-center gap-3 pt-3">
+                <div className="flex flex-wrap items-center gap-3 pt-2">
                   <button
                     type="button"
                     onClick={handleQuickAdd}
-                    className="group relative inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-7 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-2xl transition hover:bg-white hover:scale-105 active:scale-95"
+                    className="group relative inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-2xl transition hover:bg-white hover:scale-105 active:scale-95"
                   >
                     <Plus className="h-4 w-4 stroke-[3]" />
                     <span>Ajouter ce bowl ({slide.price.toFixed(2)} €)</span>
@@ -246,7 +265,7 @@ export function PokawaHeroExact() {
 
                     {addedNotice && (
                       <span className="absolute -top-10 inset-x-0 mx-auto flex w-max items-center gap-1.5 rounded-full bg-[#2431eb] px-3.5 py-1 text-xs font-black text-white shadow-2xl">
-                        <Check className="h-3.5 w-3.5 stroke-[3]" /> Ajouté au panier !
+                        <Check className="h-3.5 w-3.5 stroke-[3]" /> Ajouté !
                       </span>
                     )}
                   </button>
@@ -254,125 +273,62 @@ export function PokawaHeroExact() {
                   <Link
                     to="/product/$productId"
                     params={{ productId: slide.id }}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/30 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/25 hover:scale-105 active:scale-95"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-white/20 border border-white/40 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/30"
                   >
                     Personnaliser
                   </Link>
 
-                  <Link
-                    to="/sur-mesure"
-                    className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:text-white sm:ml-2 drop-shadow transition hover:underline"
+                  <a
+                    href="#composer"
+                    className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline sm:ml-2 drop-shadow"
                   >
-                    <span>Composer sur-mesure</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
+                    Composer votre bowl →
+                  </a>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* ─── COLONNE DROITE (5 COLS) : SHOWCASE BOL HAUTE DÉFINITION CRISTALLIN ─── */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            {/* Halo lumineux concentrique sous le plat */}
-            <div className="pointer-events-none absolute h-72 w-72 sm:h-96 sm:w-96 rounded-full bg-[#d7ff45]/15 blur-3xl" />
+          {/* ════════ CARTE PROMO EN BAS À DROITE (STYLE EXACT POKAWA) ════════ */}
+          <div className="shrink-0 hidden md:block">
+            <div className="rounded-3xl bg-white p-4 shadow-2xl border border-black/10 flex items-center gap-4 max-w-sm text-[#10251f]">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#f5ebe1]">
+                <img
+                  src={tiramisuSpeculoos}
+                  alt="Dessert maison"
+                  className="h-full w-full object-cover"
+                />
+                <span className="absolute bottom-0 inset-x-0 bg-[#2431eb] text-center text-[8px] font-black text-white uppercase">
+                  Maison
+                </span>
+              </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`dish-stage-${slide.id}`}
-                initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.94, rotate: 2 }}
-                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] lg:w-[480px] lg:h-[480px] xl:w-[530px] xl:h-[530px] flex items-center justify-center"
-              >
-                {/* Image du bol affichée à sa résolution native nette (pas d'étirement plein écran) */}
-                <div className="relative h-full w-full rounded-full overflow-hidden shadow-[0_24px_60px_-10px_rgba(0,0,0,0.85)] border-4 border-white/20 ring-8 ring-white/5">
-                  <img
-                    src={slide.image}
-                    alt={slide.dishName}
-                    className="h-full w-full object-cover object-center filter contrast-[1.04] saturate-[1.12]"
-                    loading="eager"
-                  />
-                  {/* Reflet subtil de lumière naturelle sur le bol */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="rounded-md bg-[#ea580c]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#ea580c]">
+                    Bar à Crousty · 11 € Menu 🍗
+                  </span>
                 </div>
-
-                {/* Callout Bleu Ingrédient Pokawa flottant */}
-                <motion.div
-                  initial={{ opacity: 0, y: -15, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.45, delay: 0.2 }}
-                  className="absolute -top-3 sm:-top-4 -left-3 sm:-left-6 z-20 flex items-center gap-2.5 rounded-2xl bg-[#2431eb] px-4 py-2.5 text-white shadow-2xl border border-white/20 backdrop-blur-md"
+                <h3 className="mt-1 text-xs font-black text-[#10251f] uppercase tracking-tight">
+                  Petits Morceaux Dorés & Sauce
+                </h3>
+                <p className="text-[10px] text-[#68756f] leading-snug line-clamp-2 mt-0.5">
+                  Poulet croustillant pané minute + riz + sauce maison + boisson 33cl !
+                </p>
+                <a
+                  href="#crousty"
+                  className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-black uppercase text-[#ea580c] hover:underline"
                 >
-                  <span className="text-xl">{slide.ingredientCallout.emoji}</span>
-                  <div>
-                    <p className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider leading-none">
-                      {slide.ingredientCallout.text}
-                    </p>
-                    <p className="text-[8px] sm:text-[9px] font-bold text-white/80 uppercase tracking-widest mt-0.5">
-                      {slide.ingredientCallout.subtext}
-                    </p>
-                  </div>
-                </motion.div>
-
-                {/* Badge Stat Pokawa flottant */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.45, delay: 0.25 }}
-                  className="absolute -bottom-3 sm:-bottom-4 -right-3 sm:-right-4 z-20 flex flex-col items-center justify-center rounded-2xl bg-[#2431eb] px-4 py-2.5 sm:px-5 sm:py-3 text-white shadow-2xl border border-white/20 text-center"
-                >
-                  <span className="text-xl sm:text-2xl font-black uppercase tracking-tight leading-none text-[#d7ff45]">
-                    {slide.statBadge.main}
-                  </span>
-                  <span className="text-[8px] font-bold uppercase tracking-widest text-white/80 mt-1">
-                    {slide.statBadge.sub}
-                  </span>
-                </motion.div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-
-      {/* ════════ CARTE PROMO DISCRÈTE EN BAS À DROITE (FORMULE CROUSTY) ════════ */}
-      <div className="absolute bottom-5 right-6 z-30 hidden xl:block">
-        <div className="rounded-2xl bg-white/95 backdrop-blur-md p-3.5 shadow-2xl border border-white/40 flex items-center gap-3.5 max-w-xs text-[#10251f]">
-          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[#f5ebe1]">
-            <img
-              src={tiramisuSpeculoos}
-              alt="Dessert maison"
-              className="h-full w-full object-cover"
-            />
-            <span className="absolute bottom-0 inset-x-0 bg-[#2431eb] text-center text-[7px] font-black text-white uppercase">
-              Maison
-            </span>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5">
-              <span className="rounded bg-[#2431eb]/10 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider text-[#2431eb]">
-                Menu Étudiant 11 € 🥤
-              </span>
+                  Voir les formules →
+                </a>
+              </div>
             </div>
-            <h3 className="mt-0.5 text-xs font-black text-[#10251f] uppercase tracking-tight truncate">
-              Bar à Crousty Visé
-            </h3>
-            <p className="text-[10px] text-[#68756f] leading-tight line-clamp-1">
-              Poulet pané + riz + boisson 33cl incluse
-            </p>
-            <Link
-              to="/commander"
-              className="mt-1 inline-flex items-center gap-1 text-[9px] font-black uppercase text-[#2431eb] hover:underline"
-            >
-              Commander →
-            </Link>
           </div>
         </div>
       </div>
 
       {/* ════════ DOTS PAGINATION & CONTRÔLES SLIDER EN BAS AU CENTRE ════════ */}
-      <div className="absolute bottom-4 sm:bottom-6 inset-x-0 z-30 flex items-center justify-center gap-2">
+      <div className="absolute bottom-4 sm:bottom-5 inset-x-0 z-30 flex items-center justify-center gap-2">
         {SLIDES.map((s, idx) => {
           const isActive = idx === currentIdx;
           return (
@@ -383,7 +339,7 @@ export function PokawaHeroExact() {
               aria-label={`Aller au plat ${s.dishName}`}
               className={`transition-all duration-300 rounded-full ${
                 isActive
-                  ? "w-8 h-2.5 bg-[#d7ff45] shadow-lg"
+                  ? "w-8 h-2.5 bg-white shadow-lg"
                   : "w-2.5 h-2.5 bg-white/40 hover:bg-white/70"
               }`}
             />
@@ -396,7 +352,7 @@ export function PokawaHeroExact() {
         type="button"
         onClick={handlePrev}
         aria-label="Plat précédent"
-        className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-11 w-11 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md hover:bg-white hover:text-black transition shadow-xl"
+        className="absolute left-3 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md hover:bg-white hover:text-black transition shadow-xl"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
@@ -404,7 +360,7 @@ export function PokawaHeroExact() {
         type="button"
         onClick={handleNext}
         aria-label="Plat suivant"
-        className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-11 w-11 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md hover:bg-white hover:text-black transition shadow-xl"
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white border border-white/20 backdrop-blur-md hover:bg-white hover:text-black transition shadow-xl"
       >
         <ChevronRight className="h-5 w-5" />
       </button>

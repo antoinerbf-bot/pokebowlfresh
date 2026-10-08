@@ -131,18 +131,18 @@ function Index() {
         {/* ════════════════════ 3. TICKER DÉFILANT ════════════════════ */}
         <Ticker />
 
-        {/* ════════════════════ 4. NOS ENGAGEMENTS QUALITÉ (STYLE POKAWA) ════════════════════ */}
+        {/* ════════════════════ 4. LE SIMULATEUR DE COMPOSITION SUR-MESURE ════════════════════ */}
+        <section id="composer" className="scroll-mt-12">
+          <InteractiveBowlBuilder />
+        </section>
+
+        {/* ════════════════════ 5. NOS ENGAGEMENTS QUALITÉ (STYLE POKAWA) ════════════════════ */}
         <section id="valeurs" className="scroll-mt-12 bg-white/70 py-14 sm:py-20 border-b border-black/5">
           <PokawaBrandValues />
         </section>
 
-        {/* ════════════════════ 5. LA CARTE GOURMANDE INTERACTIVE & FLUIDE ════════════════════ */}
+        {/* ════════════════════ 6. LA CARTE GOURMANDE INTERACTIVE & FLUIDE ════════════════════ */}
         <FluidInteractiveMenu />
-
-        {/* ════════════════════ 6. LE SIMULATEUR DE COMPOSITION SUR-MESURE ════════════════════ */}
-        <section id="composer" className="scroll-mt-12">
-          <InteractiveBowlBuilder />
-        </section>
 
         {/* ════════════════════ 7. LES AVANTAGES COMMANDE DIRECTE ════════════════════ */}
         <Reveal>

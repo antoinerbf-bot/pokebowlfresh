@@ -405,7 +405,7 @@ export function FluidInteractiveMenu() {
                   Le Bar à Crousty Chicken
                 </h3>
                 <p className="mt-1 text-xs sm:text-sm text-[#9a3412] max-w-2xl font-medium">
-                  Présenté dans son <strong>packaging kraft takeaway dédié</strong> pour conserver toute la chaleur et le croustillant des morceaux de poulet pané minute.
+                  Petits morceaux de poulet croustillant dorés, généreusement nappés de sauce maison onctueuse (curry ou blanche) et oignons frits croustillants sur riz chaud.
                 </p>
               </div>
 
