@@ -142,9 +142,9 @@ export function FluidInteractiveMenu() {
       coca: "Canette 33cl servie glacée",
       "coca-zero": "Canette 33cl zéro sucre ultra-fraîche",
       fanta: "Canette 33cl pétillante à l'orange",
-      "ice-tea": "Canette 33cl pêche rafraîchissante",
-      "eau-plate": "Bouteille 50cl Chaudfontaine plate",
-      "eau-gaz": "Bouteille 50cl Chaudfontaine pétillante",
+      "ice-tea": "Canette Lipton Ice-Tea Pêche 33cl fraîche",
+      "eau-plate": "Bouteille plastique Cristaline 50cl plate",
+      "eau-gaz": "Bouteille plastique Cristaline 50cl pétillante",
     };
 
     return drinks.map((dr) => ({
@@ -492,7 +492,7 @@ export function FluidInteractiveMenu() {
                 Nos Boissons Fraîches
               </h3>
               <p className="text-xs sm:text-sm text-[#5a6760] mt-0.5">
-                Canettes givrées 33cl et bouteilles d'eau minérale Chaudfontaine 50cl pour accompagner vos plats.
+                Canettes givrées 33cl et bouteilles d'eau Cristaline 50cl pour accompagner vos plats.
               </p>
             </div>
             <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">

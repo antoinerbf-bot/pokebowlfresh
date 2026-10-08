@@ -294,12 +294,12 @@ export function bowlComposition(bowl: Bowl): string[] {
 
 // ─── BOISSONS ─────────────────────────────────────────────────────────────────
 export const drinks = [
-  { id: "coca",      name: "Coca-Cola (33 cl)",    price: 2.00 },
-  { id: "coca-zero", name: "Coca-Cola Zero (33 cl)",price: 2.00 },
-  { id: "fanta",     name: "Fanta (33 cl)",         price: 2.00 },
-  { id: "ice-tea",   name: "Ice-Tea (33 cl)",        price: 2.00 },
-  { id: "eau-plate", name: "Eau plate",              price: 2.00 },
-  { id: "eau-gaz",   name: "Eau gazeuse (50 cl)",   price: 2.00 },
+  { id: "coca",      name: "Coca-Cola (33 cl)",                 price: 2.00 },
+  { id: "coca-zero", name: "Coca-Cola Zero (33 cl)",            price: 2.00 },
+  { id: "fanta",     name: "Fanta Orange (33 cl)",              price: 2.00 },
+  { id: "ice-tea",   name: "Lipton Ice-Tea Pêche (33 cl)",      price: 2.00 },
+  { id: "eau-plate", name: "Cristaline Eau plate (50 cl)",      price: 2.00 },
+  { id: "eau-gaz",   name: "Cristaline Eau pétillante (50 cl)", price: 2.00 },
 ];
 
 // ─── DESSERTS ─────────────────────────────────────────────────────────────────

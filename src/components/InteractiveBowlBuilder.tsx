@@ -15,6 +15,9 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
+import bowlSaumon from "@/assets/bowl-saumon.jpg";
+import bowlScampis from "@/assets/bowl-scampis.jpg";
+import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 
 const BASES = [
   { id: "riz-sushi", name: "Riz à sushi japonais", emoji: "🍚", desc: "Vinaigré et fondant" },
@@ -82,6 +85,14 @@ export function InteractiveBowlBuilder() {
   const extraMixinsPrice = extraMixinsCount * 0.5;
   const totalPrice = basePrice + proteinExtra + extraMixinsPrice;
 
+  const proteinImages: Record<string, string> = {
+    poulet: bowlSweetChicken,
+    saumon: bowlSaumon,
+    scampis: bowlScampis,
+    vege: bowlSweetChicken,
+  };
+  const activeBowlImage = proteinImages[proteine.id] || bowlSweetChicken;
+
   const toggleMixin = (id: string) => {
     if (selectedMixins.includes(id)) {
       if (selectedMixins.length > 1) {
@@ -112,7 +123,7 @@ export function InteractiveBowlBuilder() {
         `Topping : ${topping.name}`,
       ],
       removedIngredients: [],
-      image: bowlSweetChicken,
+      image: activeBowlImage,
     });
 
     setAdded(true);
@@ -458,6 +469,32 @@ export function InteractiveBowlBuilder() {
                   </span>
                   <span className="text-2xl font-black text-[#10251f]">
                     {totalPrice.toFixed(2)} €
+                  </span>
+                </div>
+              </div>
+
+              {/* Aperçu visuel gourmand et appétissant du bol en bambou */}
+              <div className="relative my-4 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-[#faf8f4] shadow-md group">
+                <img
+                  src={activeBowlImage}
+                  alt="Bol composé Poke N Bowl"
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Badge bol bambou */}
+                <div className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/20 shadow">
+                  Bol Bambou Débordant 🌿
+                </div>
+
+                {/* Protéine & Format */}
+                <div className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white">
+                  <span className="text-xs font-black drop-shadow flex items-center gap-1.5">
+                    <span>{proteine.emoji}</span>
+                    <span>{proteine.name}</span>
+                  </span>
+                  <span className="rounded-md bg-[#2431eb] px-2.5 py-0.5 text-[10px] font-black uppercase text-white shadow">
+                    {size === "grand" ? "Grand (13 €)" : "Moyen (10 €)"}
                   </span>
                 </div>
               </div>

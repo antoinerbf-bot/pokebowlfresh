@@ -3,6 +3,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Minus, Plus, ShoppingBag, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
+import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
+import bowlSaumon from "@/assets/bowl-saumon.jpg";
+import bowlScampis from "@/assets/bowl-scampis.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import {
   detailedBases,
@@ -40,6 +43,14 @@ function SurMesurePage() {
   const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
   const [qty, setQty] = React.useState(1);
   const [added, setAdded] = React.useState(false);
+
+  const proteinImages: Record<string, string> = {
+    poulet: bowlSweetChicken,
+    saumon: bowlSaumon,
+    scampis: bowlScampis,
+    vege: bowlSweetChicken,
+  };
+  const activeBowlImage = selectedProtein ? (proteinImages[selectedProtein.id] || bowlSaumon) : bowlSaumon;
 
   // Toggle Mix-in (5 inclus, illimité à +0.50€ au-delà)
   const toggleMixIn = (name: string) => {
@@ -94,6 +105,14 @@ function SurMesurePage() {
         : ["Toppings : Aucun"]),
     ];
 
+    const proteinImages: Record<string, string> = {
+      poulet: bowlSweetChicken,
+      saumon: bowlSaumon,
+      scampis: bowlScampis,
+      vege: bowlSweetChicken,
+    };
+    const activeBowlImage = selectedProtein ? (proteinImages[selectedProtein.id] || bowlSaumon) : bowlSaumon;
+
     addItem({
       id: "sur-mesure",
       name: "Poke Bowl sur mesure",
@@ -102,7 +121,7 @@ function SurMesurePage() {
       quantity: qty,
       toppings: options,
       removedIngredients: [],
-      image: bowlSpicyChicken,
+      image: activeBowlImage,
     });
 
     setAdded(true);
@@ -520,12 +539,22 @@ function SurMesurePage() {
           {/* ── Right Column: Récapitulatif Sticky ─────────────── */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 rounded-[28px] border border-[#e8e2d9] bg-white p-6 shadow-card">
-              <div className="overflow-hidden rounded-2xl mb-5 shadow-sm">
+              <div className="relative overflow-hidden rounded-2xl mb-5 shadow-sm aspect-[4/3] bg-[#faf8f4] group">
                 <img
-                  src={bowlSpicyChicken}
+                  src={activeBowlImage}
                   alt="Poke Bowl sur mesure"
-                  className="h-44 w-full object-cover"
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#d7ff45] border border-white/20 shadow">
+                  Bol Bambou Débordant 🌿
+                </span>
+                <span className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white text-xs font-black drop-shadow">
+                  <span>{selectedProtein ? `${selectedProtein.emoji} ${selectedProtein.name}` : "Protéine au choix"}</span>
+                  <span className="rounded bg-[#2431eb] px-2 py-0.5 text-[10px] font-black uppercase text-white shadow">
+                    {selectedSize === "grand" ? "Grand (13€)" : "Moyen (10€)"}
+                  </span>
+                </span>
               </div>
 
               <h3 className="text-xl font-black text-[#17231f]">Ton Poke Bowl sur mesure</h3>
