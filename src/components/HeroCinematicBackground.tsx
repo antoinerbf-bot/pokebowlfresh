@@ -105,7 +105,7 @@ const SLIDES: SlideData[] = [
     id: "crousty-chicken-curry",
     name: "Crousty Chicken Curry",
     category: "SPÉCIALITÉ CHAUDE · FORMULE 11€",
-    headline: "Le Crousty Pané Minute",
+    headline: "Crousty Chicken Doré",
     tagline: "CHAUD & ADDICTIF.",
     desc: "Notre formule étudiante signature : généreux filets de poulet pané extra croustillant, sauce curry onctueuse parfumée, oignons frits croquants sur riz chaud parfumé. Boisson 33cl incluse !",
     price: 11.0,

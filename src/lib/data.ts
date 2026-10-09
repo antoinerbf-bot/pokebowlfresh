@@ -298,8 +298,8 @@ export const drinks = [
   { id: "coca-zero", name: "Coca-Cola Zero (33 cl)",            price: 2.00 },
   { id: "fanta",     name: "Fanta Orange (33 cl)",              price: 2.00 },
   { id: "ice-tea",   name: "Lipton Ice-Tea Pêche (33 cl)",      price: 2.00 },
-  { id: "eau-plate", name: "Cristaline Eau plate (50 cl)",      price: 2.00 },
-  { id: "eau-gaz",   name: "Cristaline Eau pétillante (50 cl)", price: 2.00 },
+  { id: "eau-plate", name: "SPA Reine Eau plate (50 cl)",       price: 2.00 },
+  { id: "eau-gaz",   name: "SPA Intense Eau pétillante (50 cl)", price: 2.00 },
 ];
 
 // ─── DESSERTS ─────────────────────────────────────────────────────────────────

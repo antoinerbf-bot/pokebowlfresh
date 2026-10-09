@@ -735,7 +735,7 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 //#endregion
 //#region src/assets/bowl-sweet-chicken.jpg
-var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-CKSwb_XP.jpg";
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 //#endregion
 //#region src/assets/bowl-scampis.jpg
 var bowl_scampis_default = "/assets/bowl-scampis-BK5Y7tTW.jpg";
@@ -1430,12 +1430,12 @@ var drinks = [
 	},
 	{
 		id: "eau-plate",
-		name: "Cristaline Eau plate (50 cl)",
+		name: "SPA Reine Eau plate (50 cl)",
 		price: 2
 	},
 	{
 		id: "eau-gaz",
-		name: "Cristaline Eau pétillante (50 cl)",
+		name: "SPA Intense Eau pétillante (50 cl)",
 		price: 2
 	}
 ];
@@ -1623,8 +1623,8 @@ var NOTIFICATIONS = [
 		id: "etudiant-deal",
 		tag: "Formule Étudiant",
 		tagColor: "bg-[#d7ff45] text-[#10251f]",
-		title: "Formule Crousty à 11 €",
-		desc: "1 Crousty Bowl au choix + 1 boisson 33cl offerte incluse (Coca, Ice-Tea, Fanta...).",
+		title: "Formule Crousty Chicken à 11 €",
+		desc: "1 Crousty Chicken au choix + 1 boisson 33cl offerte incluse (Coca, Ice-Tea, Fanta...).",
 		dishId: "crousty-chicken-curry",
 		price: "11,00 €",
 		badgeEmoji: "🎓",
@@ -2134,7 +2134,7 @@ var SLIDES = [
 	{
 		id: "crousty-chicken-curry",
 		image: bowl_crousty_curry_default,
-		titleLine1: "BAR À CROUSTY",
+		titleLine1: "CROUSTY CHICKEN",
 		titleLine2: "CURRY DORÉ",
 		dishName: "Crousty Chicken Curry",
 		ingredientCallout: {
@@ -2429,7 +2429,7 @@ function PokawaHeroExact() {
 										className: "flex items-center gap-2",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "rounded-md bg-[#ea580c]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#ea580c]",
-											children: "Bar à Crousty · 11 € Menu 🍗"
+											children: "Crousty Chicken · 11 € Menu 🍗"
 										})
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
@@ -2500,10 +2500,10 @@ var drink_fanta_orange_default = "/assets/drink-fanta-orange-PDmbpAsA.jpg";
 var drink_ice_tea_default = "/assets/drink-ice-tea-CZgyxPov.jpg";
 //#endregion
 //#region src/assets/drink-eau-plate.jpg
-var drink_eau_plate_default = "/assets/drink-eau-plate-DnmShlA4.jpg";
+var drink_eau_plate_default = "/assets/drink-eau-plate-B76aUhfx.jpg";
 //#endregion
 //#region src/assets/drink-eau-gazeuse.jpg
-var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-XXPuS_B2.jpg";
+var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-CayWkPyq.jpg";
 //#endregion
 //#region src/components/FluidInteractiveMenu.tsx
 function FluidInteractiveMenu() {
@@ -2581,8 +2581,8 @@ function FluidInteractiveMenu() {
 			"coca-zero": "Canette 33cl zéro sucre ultra-fraîche",
 			fanta: "Canette 33cl pétillante à l'orange",
 			"ice-tea": "Canette Lipton Ice-Tea Pêche 33cl fraîche",
-			"eau-plate": "Bouteille plastique Cristaline 50cl plate",
-			"eau-gaz": "Bouteille plastique Cristaline 50cl pétillante"
+			"eau-plate": "Bouteille plastique SPA Reine 50cl plate",
+			"eau-gaz": "Bouteille plastique SPA Intense 50cl pétillante"
 		};
 		return drinks.map((dr) => ({
 			id: dr.id,
@@ -2701,7 +2701,7 @@ function FluidInteractiveMenu() {
 					},
 					{
 						id: "crousty",
-						label: "Bar à Crousty Chicken",
+						label: "Crousty Chicken",
 						icon: "🍗",
 						count: croustyItems.length
 					},
@@ -2841,11 +2841,11 @@ function FluidInteractiveMenu() {
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-sm",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-3.5 w-3.5 fill-white" }), "Bar à Crousty · Chaud & Croustillant"]
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-3.5 w-3.5 fill-white" }), "Crousty Chicken · Chaud & Croustillant"]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 								className: "mt-2 text-2xl sm:text-3xl font-black text-[#7c2d12]",
-								children: "Le Bar à Crousty Chicken"
+								children: "Crousty Chicken"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-1 text-xs sm:text-sm text-[#9a3412] max-w-2xl font-medium",
@@ -2927,7 +2927,7 @@ function FluidInteractiveMenu() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "text-xs sm:text-sm text-[#5a6760] mt-0.5",
-							children: "Canettes givrées 33cl et bouteilles d'eau Cristaline 50cl pour accompagner vos plats."
+							children: "Canettes givrées 33cl et bouteilles d'eau SPA 50cl pour accompagner vos plats."
 						})
 					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
@@ -3178,8 +3178,8 @@ function PokawaBrandValues() {
 							emoji: "🍗",
 							tag: "Gamme Chaude",
 							tagColor: "bg-[#8b5510] text-white",
-							title: "Bar à Crousty Pané",
-							desc: "Pour les amateurs de réconfort : poulet pané ultra croustillant, oignons frits dorés et sauces chaudes gourmandes.",
+							title: "Crousty Chicken",
+							desc: "Pour les amateurs de réconfort : petits morceaux de poulet croustillant dorés, oignons frits et sauces chaudes maison généreuses.",
 							perk: "Formule étudiant 11€ avec boisson"
 						},
 						{
@@ -3410,11 +3410,11 @@ function InteractiveBowlBuilder() {
 	const extraMixinsPrice = Math.max(0, selectedMixins.length - 5) * .5;
 	const totalPrice = basePrice + proteinExtra + extraMixinsPrice;
 	const activeBowlImage = {
-		poulet: "/assets/bowl-sweet-chicken-CKSwb_XP.jpg",
+		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
 		scampis: "/assets/bowl-scampis-BK5Y7tTW.jpg",
-		vege: "/assets/bowl-sweet-chicken-CKSwb_XP.jpg"
-	}[proteine.id] || "/assets/bowl-sweet-chicken-CKSwb_XP.jpg";
+		vege: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
+	}[proteine.id] || "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 	const toggleMixin = (id) => {
 		if (selectedMixins.includes(id)) {
 			if (selectedMixins.length > 1) setSelectedMixins((prev) => prev.filter((m) => m !== id));
@@ -3993,7 +3993,7 @@ function PokawaPerksBanner() {
 												children: "Livraison Locale"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-[10px] text-white/60",
-												children: "Chez vous bien frais"
+												children: "Dès 2 € selon distance (0 € dès 50 €)"
 											})]
 										})]
 									}),
@@ -4009,7 +4009,7 @@ function PokawaPerksBanner() {
 												children: "Formule 11 €"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-[10px] text-white/60",
-												children: "Crousty + boisson 33cl"
+												children: "Crousty Chicken + boisson 33cl"
 											})]
 										})]
 									})
@@ -4177,9 +4177,9 @@ function PokawaInstagramWall() {
 //#endregion
 //#region src/routes/index.tsx
 var Route$12 = createFileRoute("/")({
-	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Bar à Crousty à emporter" }, {
+	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 		name: "description",
-		content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, bar à crousty chicken chaud et desserts maison. Commande en ligne ou sur place !"
+		content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !"
 	}] }),
 	component: Index
 });
@@ -4231,7 +4231,7 @@ function Ticker() {
 				className: "text-[#10251f]/40",
 				children: "✦"
 			}),
-			"Bar à Crousty",
+			"Crousty Chicken",
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 				className: "text-[#10251f]/40",
 				children: "✦"
@@ -6015,11 +6015,11 @@ function CommanderPage() {
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl",
-									children: "Le Bar à Crousty Chicken"
+									children: "Crousty Chicken"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "mt-1 text-xs sm:text-sm text-[#7a847e]",
-									children: "Vrais morceaux de poulet croustillant mariné · Riz parfumé · Boisson 33cl fraîche incluse"
+									children: "Petits morceaux de poulet croustillant dorés · Riz chaud · Boisson 33cl fraîche incluse"
 								})
 							] })
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -6592,10 +6592,10 @@ function SurMesurePage() {
 	const [qty, setQty] = import_react.useState(1);
 	const [added, setAdded] = import_react.useState(false);
 	const activeBowlImage = selectedProtein ? {
-		poulet: "/assets/bowl-sweet-chicken-CKSwb_XP.jpg",
+		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
 		scampis: "/assets/bowl-scampis-BK5Y7tTW.jpg",
-		vege: "/assets/bowl-sweet-chicken-CKSwb_XP.jpg"
+		vege: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
 	}[selectedProtein.id] || "/assets/bowl-saumon-CRYVYQxR.jpg" : bowl_saumon_default;
 	const toggleMixIn = (name) => {
 		setSelectedMixIns((cur) => cur.includes(name) ? cur.filter((item) => item !== name) : [...cur, name]);
@@ -6634,10 +6634,10 @@ function SurMesurePage() {
 			...selectedToppings.length > 0 ? [`Toppings : ${selectedToppings.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`] : ["Toppings : Aucun"]
 		];
 		const activeBowlImage = selectedProtein ? {
-			poulet: "/assets/bowl-sweet-chicken-CKSwb_XP.jpg",
+			poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 			saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
 			scampis: "/assets/bowl-scampis-BK5Y7tTW.jpg",
-			vege: "/assets/bowl-sweet-chicken-CKSwb_XP.jpg"
+			vege: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
 		}[selectedProtein.id] || "/assets/bowl-saumon-CRYVYQxR.jpg" : bowl_saumon_default;
 		addItem({
 			id: "sur-mesure",
@@ -8016,7 +8016,7 @@ function ProductPage() {
 									className: "flex items-center gap-2",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]",
-										children: isCrousty ? "Bar à Crousty Chicken" : "Poké Bowl Signature"
+										children: isCrousty ? "Crousty Chicken" : "Poké Bowl Signature"
 									})
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {

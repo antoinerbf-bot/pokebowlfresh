@@ -82,7 +82,7 @@ export function FluidInteractiveMenu() {
       });
   }, []);
 
-  // 2. Bar à Crousty Chicken (Servis en bol kraft takeaway chaud avec boisson 33cl incluse)
+  // 2. Crousty Chicken (Servis en bol kraft takeaway chaud avec boisson 33cl incluse)
   const croustyItems = React.useMemo<DishItem[]>(() => {
     return bowls
       .filter((b) => b.id.startsWith("crousty-"))
@@ -143,8 +143,8 @@ export function FluidInteractiveMenu() {
       "coca-zero": "Canette 33cl zéro sucre ultra-fraîche",
       fanta: "Canette 33cl pétillante à l'orange",
       "ice-tea": "Canette Lipton Ice-Tea Pêche 33cl fraîche",
-      "eau-plate": "Bouteille plastique Cristaline 50cl plate",
-      "eau-gaz": "Bouteille plastique Cristaline 50cl pétillante",
+      "eau-plate": "Bouteille plastique SPA Reine 50cl plate",
+      "eau-gaz": "Bouteille plastique SPA Intense 50cl pétillante",
     };
 
     return drinks.map((dr) => ({
@@ -269,7 +269,7 @@ export function FluidInteractiveMenu() {
         {[
           { id: "all" as const, label: "Toute la Carte", icon: "✨", count: pokeItems.length + croustyItems.length + dessertItems.length + drinkItems.length },
           { id: "pokes" as const, label: "Poké Bowls Signatures", icon: "🥗", count: pokeItems.length },
-          { id: "crousty" as const, label: "Bar à Crousty Chicken", icon: "🍗", count: croustyItems.length },
+          { id: "crousty" as const, label: "Crousty Chicken", icon: "🍗", count: croustyItems.length },
           { id: "desserts" as const, label: "Tiramisus Maison", icon: "🧁", count: dessertItems.length },
           { id: "boissons" as const, label: "Boissons Fraîches", icon: "🥤", count: drinkItems.length },
         ].map((cat) => {
@@ -390,7 +390,7 @@ export function FluidInteractiveMenu() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════════════════════
-          CATÉGORIE 2 : LE BAR À CROUSTY CHICKEN (Packaging Kraft Takeaway Chaud)
+          CATÉGORIE 2 : CROUSTY CHICKEN (Packaging Kraft Takeaway Chaud)
          ═══════════════════════════════════════════════════════════════════════════ */}
       {(activeSection === "all" || activeSection === "crousty") && filteredCrousty.length > 0 && (
         <div className="mt-16 pt-8 border-t border-black/5">
@@ -399,10 +399,10 @@ export function FluidInteractiveMenu() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-sm">
                   <Flame className="h-3.5 w-3.5 fill-white" />
-                  Bar à Crousty · Chaud & Croustillant
+                  Crousty Chicken · Chaud & Croustillant
                 </div>
                 <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#7c2d12]">
-                  Le Bar à Crousty Chicken
+                  Crousty Chicken
                 </h3>
                 <p className="mt-1 text-xs sm:text-sm text-[#9a3412] max-w-2xl font-medium">
                   Petits morceaux de poulet croustillant dorés, généreusement nappés de sauce maison onctueuse (curry ou blanche) et oignons frits croustillants sur riz chaud.
@@ -492,7 +492,7 @@ export function FluidInteractiveMenu() {
                 Nos Boissons Fraîches
               </h3>
               <p className="text-xs sm:text-sm text-[#5a6760] mt-0.5">
-                Canettes givrées 33cl et bouteilles d'eau Cristaline 50cl pour accompagner vos plats.
+                Canettes givrées 33cl et bouteilles d'eau SPA 50cl pour accompagner vos plats.
               </p>
             </div>
             <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">

@@ -374,7 +374,7 @@ function ProductPage() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
-                  {isCrousty ? "Bar à Crousty Chicken" : "Poké Bowl Signature"}
+                  {isCrousty ? "Crousty Chicken" : "Poké Bowl Signature"}
                 </span>
               </div>
               <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#10251f]">

@@ -41,7 +41,7 @@ export function PokawaPerksBanner() {
                 </span>
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold">Livraison Locale</h4>
-                  <p className="text-[10px] text-white/60">Chez vous bien frais</p>
+                  <p className="text-[10px] text-white/60">Dès 2 € selon distance (0 € dès 50 €)</p>
                 </div>
               </div>
 
@@ -51,7 +51,7 @@ export function PokawaPerksBanner() {
                 </span>
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold">Formule 11 €</h4>
-                  <p className="text-[10px] text-white/60">Crousty + boisson 33cl</p>
+                  <p className="text-[10px] text-white/60">Crousty Chicken + boisson 33cl</p>
                 </div>
               </div>
             </div>

@@ -71,7 +71,7 @@ const SLIDES: PokawaSlide[] = [
   {
     id: "crousty-chicken-curry",
     image: bowlCroustyCurry,
-    titleLine1: "BAR À CROUSTY",
+    titleLine1: "CROUSTY CHICKEN",
     titleLine2: "CURRY DORÉ",
     dishName: "Crousty Chicken Curry",
     ingredientCallout: {
@@ -306,7 +306,7 @@ export function PokawaHeroExact() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="rounded-md bg-[#ea580c]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#ea580c]">
-                    Bar à Crousty · 11 € Menu 🍗
+                    Crousty Chicken · 11 € Menu 🍗
                   </span>
                 </div>
                 <h3 className="mt-1 text-xs font-black text-[#10251f] uppercase tracking-tight">

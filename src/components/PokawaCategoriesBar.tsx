@@ -41,7 +41,7 @@ const CATEGORIES: CategoryItem[] = [
   },
   {
     id: "crousty",
-    title: "Bar à Crousty",
+    title: "Crousty Chicken",
     subtitle: "Formule étudiant 11€",
     badge: "Gamme Chaude 🔥",
     badgeColor: "bg-[#8b5510] text-white",

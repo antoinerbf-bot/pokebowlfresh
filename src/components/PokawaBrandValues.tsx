@@ -27,8 +27,8 @@ export function PokawaBrandValues() {
       emoji: "🍗",
       tag: "Gamme Chaude",
       tagColor: "bg-[#8b5510] text-white",
-      title: "Bar à Crousty Pané",
-      desc: "Pour les amateurs de réconfort : poulet pané ultra croustillant, oignons frits dorés et sauces chaudes gourmandes.",
+      title: "Crousty Chicken",
+      desc: "Pour les amateurs de réconfort : petits morceaux de poulet croustillant dorés, oignons frits et sauces chaudes maison généreuses.",
       perk: "Formule étudiant 11€ avec boisson",
     },
     {

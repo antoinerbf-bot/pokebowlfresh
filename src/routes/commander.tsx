@@ -236,7 +236,7 @@ function CommanderPage() {
             })}
           </div>
 
-          {/* ── Section Bar à Crousty Chicken ────────────────── */}
+          {/* ── Section Crousty Chicken ────────────────── */}
           <div className="mt-16 sm:mt-20">
             <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
@@ -244,10 +244,10 @@ function CommanderPage() {
                   <Sparkles className="h-3 w-3" /> Formule Étudiant 11€
                 </div>
                 <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
-                  Le Bar à Crousty Chicken
+                  Crousty Chicken
                 </h2>
                 <p className="mt-1 text-xs sm:text-sm text-[#7a847e]">
-                  Vrais morceaux de poulet croustillant mariné · Riz parfumé · Boisson 33cl fraîche incluse
+                  Petits morceaux de poulet croustillant dorés · Riz chaud · Boisson 33cl fraîche incluse
                 </p>
               </div>
             </div>

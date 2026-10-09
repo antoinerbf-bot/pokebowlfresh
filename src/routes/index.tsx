@@ -24,11 +24,11 @@ import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Poke N Bowl Visé — Poké bowls frais & Bar à Crousty à emporter" },
+      { title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" },
       {
         name: "description",
         content:
-          "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, bar à crousty chicken chaud et desserts maison. Commande en ligne ou sur place !",
+          "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !",
       },
     ],
   }),
@@ -81,7 +81,7 @@ function Ticker() {
       <span className="text-[#10251f]/40">✦</span>
       Fait Minute
       <span className="text-[#10251f]/40">✦</span>
-      Bar à Crousty
+      Crousty Chicken
       <span className="text-[#10251f]/40">✦</span>
     </span>
   ));
