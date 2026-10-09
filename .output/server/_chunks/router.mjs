@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-B3koZcio.css";
+var styles_default = "/assets/styles-BHisMPwI.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -747,7 +747,7 @@ var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-Bko5BGRq.jpg";
 //#endregion
 //#region src/assets/bowl-crousty-curry.jpg
-var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CP8uJ3-4.jpg";
+var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CRZGKMUK.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
 var images = {
@@ -756,7 +756,7 @@ var images = {
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
 	"crousty-chicken-curry": bowl_crousty_curry_default,
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-CbdwPodU.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-BliNigHA.jpg",
 	"sur-mesure": bowl_saumon_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
@@ -2081,15 +2081,6 @@ function PokawaFloatingNavbar() {
 	});
 }
 //#endregion
-//#region src/assets/hero-saumon-wide.jpg
-var hero_saumon_wide_default = "/assets/hero-saumon-wide-Jm1eR82S.jpg";
-//#endregion
-//#region src/assets/hero-sweet-wide.jpg
-var hero_sweet_wide_default = "/assets/hero-sweet-wide-u4Na34gi.jpg";
-//#endregion
-//#region src/assets/hero-scampis.jpg
-var hero_scampis_default = "/assets/hero-scampis-C6eZQ1DQ.jpg";
-//#endregion
 //#region src/assets/tiramisu-speculoos.jpg
 var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
 //#endregion
@@ -2097,39 +2088,39 @@ var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
 var SLIDES = [
 	{
 		id: "saumon-wasabi",
-		image: hero_saumon_wide_default,
-		titleLine1: "POKÉ SAUMON",
-		titleLine2: "FRAIS DU MATIN",
+		image: bowl_saumon_default,
+		titleLine1: "SAUMON WASABI",
+		titleLine2: "FRAÎCHEUR NOBLE",
 		dishName: "Saumon Wasabi",
 		ingredientCallout: {
-			text: "SAUMON SASHIMI ÉCOSSE",
+			text: "SAUMON NOBLE FRAIS",
 			subtext: "DÉCOUPÉ DU MATIN",
 			emoji: "🐟"
 		},
 		statBadge: {
-			main: "OMÉGA-3",
-			sub: "100% FRAÎCHEUR GARANTIE"
+			main: "11.00 €",
+			sub: "PREMIUM FRAÎCHEUR"
 		},
 		price: 11,
-		ingredients: "Saumon atlantique frais découpé minute, avocat Hass fondant, mangue mûre, edamame croquant, salade d'algues wakame & sésame mix."
+		ingredients: "Saumon noble atlantique en dés généreux, avocat Hass fondant, mangue mûre, edamame croquant, salade d'algues wakame & mayo wasabi veloutée."
 	},
 	{
 		id: "sweet-chicken",
-		image: hero_sweet_wide_default,
-		titleLine1: "BESOIN",
-		titleLine2: "DE DOUCEUR ?",
-		dishName: "Sweet Chicken Teriyaki",
+		image: bowl_sweet_chicken_default,
+		titleLine1: "SWEET CHICKEN",
+		titleLine2: "TERIYAKI MAISON",
+		dishName: "Sweet Chicken",
 		ingredientCallout: {
-			text: "POULET DORÉ MARINÉ",
-			subtext: "RECETTE MAISON",
+			text: "POULET DORÉ MAISON",
+			subtext: "MARINADE TERIYAKI",
 			emoji: "🍗"
 		},
 		statBadge: {
-			main: "DÈS 10.00 €",
-			sub: "FORMAT GÉNÉREUX"
+			main: "10.00 €",
+			sub: "BEST-SELLER"
 		},
 		price: 10,
-		ingredients: "Poulet mariné doré, mangue mûre, avocat Hass fondant, maïs doux croquant, edamame & sauce teriyaki onctueuse maison."
+		ingredients: "Poulet maison doré, guacamole velouté, mangue, maïs doux, tomates cerises, feta crémeuse, oignons croustillants & sauce teriyaki."
 	},
 	{
 		id: "crousty-chicken-curry",
@@ -2139,7 +2130,7 @@ var SLIDES = [
 		dishName: "Crousty Chicken Curry",
 		ingredientCallout: {
 			text: "PETITS MORCEAUX CROUSTILLANTS",
-			subtext: "PANURE MINUTE & CURRY",
+			subtext: "SAUCE CURRY ONCTUEUSE",
 			emoji: "🍛"
 		},
 		statBadge: {
@@ -2147,26 +2138,44 @@ var SLIDES = [
 			sub: "BOISSON 33CL INCLUSE"
 		},
 		price: 11,
-		ingredients: "Petits morceaux de poulet croustillant dorés, sauce curry onctueuse maison bien visible, oignons frits croustillants & riz à sushi chaud.",
+		ingredients: "Petits morceaux de poulet croustillant dorés, sauce curry onctueuse maison bien généreuse, oignons frits croustillants & riz à sushi chaud.",
 		isCrousty: true
 	},
 	{
 		id: "scampis-royaux",
-		image: hero_scampis_default,
-		titleLine1: "SCAMPIS GRILLÉS",
-		titleLine2: "& SPICY MAYO",
+		image: bowl_scampis_default,
+		titleLine1: "SCAMPIS ROYAUX",
+		titleLine2: "SPICY MAYO",
 		dishName: "Scampis Royal",
 		ingredientCallout: {
-			text: "SCAMPIS ROYAUX DORÉS",
+			text: "SCAMPIS ROYAUX GRILLÉS",
 			subtext: "SAISIS AU GRILL",
 			emoji: "🦐"
 		},
 		statBadge: {
-			main: "PROTÉINES",
-			sub: "GRILL MINUTE"
+			main: "10.00 €",
+			sub: "SIGNATURE"
 		},
 		price: 10,
-		ingredients: "Scampis saisis au grill, guacamole maison velouté, edamame croquant, tomates cerises, poivrons & spicy mayo relevée."
+		ingredients: "Scampis saisis au grill, guacamole maison velouté, edamame croquant, tomates fraîches, concombre, poivrons, jalapeños & spicy mayo."
+	},
+	{
+		id: "spicy-chicken",
+		image: bowl_spicy_chicken_default,
+		titleLine1: "SPICY CHICKEN",
+		titleLine2: "KICK ÉPICÉ",
+		dishName: "Spicy Chicken",
+		ingredientCallout: {
+			text: "POULET ÉPICÉ MAISON",
+			subtext: "FLOCONS DE CHILI",
+			emoji: "🔥"
+		},
+		statBadge: {
+			main: "10.00 €",
+			sub: "ÉPICÉ GOURMAND"
+		},
+		price: 10,
+		ingredients: "Poulet mariné épicé, avocat Hass, patates douces rôties, maïs doux, feta, jalapeños, sauce spicy mayo onctueuse & sésame mix."
 	}
 ];
 var AUTOPLAY_MS = 5500;
@@ -2201,7 +2210,7 @@ function PokawaHeroExact() {
 		setTimeout(() => setAddedNotice(false), 2e3);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-		"aria-label": "Accueil Pokawa-Style Poke N Bowl Visé",
+		"aria-label": "Accueil Poké N Bowl Visé — Bowls Frais & Crousty Chicken",
 		className: "relative w-full h-[94vh] sm:h-[98vh] min-h-[640px] max-h-[1050px] overflow-hidden bg-[#101e18] select-none",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
@@ -2226,16 +2235,15 @@ function PokawaHeroExact() {
 							1
 						]
 					},
-					className: "absolute inset-0 z-0",
+					className: "absolute inset-0 z-0 flex items-center justify-center bg-[#15231e]",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 							src: slide.image,
 							alt: slide.dishName,
-							className: "h-full w-full object-cover object-center"
+							className: "h-full w-full object-cover object-center filter brightness-105 contrast-102"
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/35 pointer-events-none" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" })
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-y-0 left-0 w-full sm:w-3/4 lg:w-1/2 bg-gradient-to-r from-black/50 via-black/15 to-transparent pointer-events-none" })
 					]
 				}, slide.id)
 			}),
@@ -2333,7 +2341,7 @@ function PokawaHeroExact() {
 										1
 									]
 								},
-								className: "space-y-2 sm:space-y-3",
+								className: "space-y-2 sm:space-y-3 rounded-[30px] bg-black/40 backdrop-blur-md p-6 sm:p-7 border border-white/20 shadow-2xl",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/30",
@@ -2965,7 +2973,7 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 					className: "flex h-full w-full items-center justify-center bg-[#f4f0e6] text-4xl",
 					children: item.badge
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/15 pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: `absolute top-3.5 left-3.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur ${isCroustySpecial ? "bg-[#ea580c] text-white" : "bg-white/95 text-[#10251f]"}`,
 					children: item.badge
@@ -3440,7 +3448,22 @@ function InteractiveBowlBuilder() {
 			image: activeBowlImage
 		});
 		setAdded(true);
-		setTimeout(() => setAdded(false), 2200);
+		setTimeout(() => {
+			setAdded(false);
+			setActiveStep(1);
+			setSize("moyen");
+			setBase(BASES[0]);
+			setProteine(PROTEINES[1]);
+			setSelectedMixins([
+				"avocat",
+				"mangue",
+				"edamame",
+				"wakame",
+				"feta"
+			]);
+			setSauce(SAUCES[0]);
+			setTopping(TOPPINGS[0]);
+		}, 1200);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "mx-auto max-w-[1340px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8",

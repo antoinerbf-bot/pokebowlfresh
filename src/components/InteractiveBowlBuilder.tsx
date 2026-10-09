@@ -127,7 +127,17 @@ export function InteractiveBowlBuilder() {
     });
 
     setAdded(true);
-    setTimeout(() => setAdded(false), 2200);
+    // Retourne automatiquement à l'étape 1 du composeur pour en créer un autre facilement
+    setTimeout(() => {
+      setAdded(false);
+      setActiveStep(1);
+      setSize("moyen");
+      setBase(BASES[0]);
+      setProteine(PROTEINES[1]);
+      setSelectedMixins(["avocat", "mangue", "edamame", "wakame", "feta"]);
+      setSauce(SAUCES[0]);
+      setTopping(TOPPINGS[0]);
+    }, 1200);
   };
 
   return (

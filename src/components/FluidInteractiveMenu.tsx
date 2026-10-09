@@ -569,7 +569,8 @@ function DishCard({
             </div>
           )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/15 pointer-events-none" />
+          {/* Léger voile subtil en bas uniquement pour préserver la clarté et la luminosité */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
 
           {/* Badge Supérieur Gauche */}
           <span

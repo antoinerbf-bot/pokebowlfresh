@@ -4,11 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Plus, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
-// Photos culinaires haute définition pour Poke N Bowl Visé
-import heroSaumonWide from "@/assets/hero-saumon-wide.jpg";
-import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
+// Photos culinaires haute définition Poké N Bowl Visé
+import bowlSaumon from "@/assets/bowl-saumon.jpg";
+import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
-import heroScampis from "@/assets/hero-scampis.jpg";
+import bowlScampis from "@/assets/bowl-scampis.jpg";
+import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
 
 interface PokawaSlide {
@@ -34,39 +35,39 @@ interface PokawaSlide {
 const SLIDES: PokawaSlide[] = [
   {
     id: "saumon-wasabi",
-    image: heroSaumonWide,
-    titleLine1: "POKÉ SAUMON",
-    titleLine2: "FRAIS DU MATIN",
+    image: bowlSaumon,
+    titleLine1: "SAUMON WASABI",
+    titleLine2: "FRAÎCHEUR NOBLE",
     dishName: "Saumon Wasabi",
     ingredientCallout: {
-      text: "SAUMON SASHIMI ÉCOSSE",
+      text: "SAUMON NOBLE FRAIS",
       subtext: "DÉCOUPÉ DU MATIN",
       emoji: "🐟",
     },
     statBadge: {
-      main: "OMÉGA-3",
-      sub: "100% FRAÎCHEUR GARANTIE",
+      main: "11.00 €",
+      sub: "PREMIUM FRAÎCHEUR",
     },
     price: 11.0,
-    ingredients: "Saumon atlantique frais découpé minute, avocat Hass fondant, mangue mûre, edamame croquant, salade d'algues wakame & sésame mix.",
+    ingredients: "Saumon noble atlantique en dés généreux, avocat Hass fondant, mangue mûre, edamame croquant, salade d'algues wakame & mayo wasabi veloutée.",
   },
   {
     id: "sweet-chicken",
-    image: heroSweetWide,
-    titleLine1: "BESOIN",
-    titleLine2: "DE DOUCEUR ?",
-    dishName: "Sweet Chicken Teriyaki",
+    image: bowlSweetChicken,
+    titleLine1: "SWEET CHICKEN",
+    titleLine2: "TERIYAKI MAISON",
+    dishName: "Sweet Chicken",
     ingredientCallout: {
-      text: "POULET DORÉ MARINÉ",
-      subtext: "RECETTE MAISON",
+      text: "POULET DORÉ MAISON",
+      subtext: "MARINADE TERIYAKI",
       emoji: "🍗",
     },
     statBadge: {
-      main: "DÈS 10.00 €",
-      sub: "FORMAT GÉNÉREUX",
+      main: "10.00 €",
+      sub: "BEST-SELLER",
     },
     price: 10.0,
-    ingredients: "Poulet mariné doré, mangue mûre, avocat Hass fondant, maïs doux croquant, edamame & sauce teriyaki onctueuse maison.",
+    ingredients: "Poulet maison doré, guacamole velouté, mangue, maïs doux, tomates cerises, feta crémeuse, oignons croustillants & sauce teriyaki.",
   },
   {
     id: "crousty-chicken-curry",
@@ -76,7 +77,7 @@ const SLIDES: PokawaSlide[] = [
     dishName: "Crousty Chicken Curry",
     ingredientCallout: {
       text: "PETITS MORCEAUX CROUSTILLANTS",
-      subtext: "PANURE MINUTE & CURRY",
+      subtext: "SAUCE CURRY ONCTUEUSE",
       emoji: "🍛",
     },
     statBadge: {
@@ -84,26 +85,44 @@ const SLIDES: PokawaSlide[] = [
       sub: "BOISSON 33CL INCLUSE",
     },
     price: 11.0,
-    ingredients: "Petits morceaux de poulet croustillant dorés, sauce curry onctueuse maison bien visible, oignons frits croustillants & riz à sushi chaud.",
+    ingredients: "Petits morceaux de poulet croustillant dorés, sauce curry onctueuse maison bien généreuse, oignons frits croustillants & riz à sushi chaud.",
     isCrousty: true,
   },
   {
     id: "scampis-royaux",
-    image: heroScampis,
-    titleLine1: "SCAMPIS GRILLÉS",
-    titleLine2: "& SPICY MAYO",
+    image: bowlScampis,
+    titleLine1: "SCAMPIS ROYAUX",
+    titleLine2: "SPICY MAYO",
     dishName: "Scampis Royal",
     ingredientCallout: {
-      text: "SCAMPIS ROYAUX DORÉS",
+      text: "SCAMPIS ROYAUX GRILLÉS",
       subtext: "SAISIS AU GRILL",
       emoji: "🦐",
     },
     statBadge: {
-      main: "PROTÉINES",
-      sub: "GRILL MINUTE",
+      main: "10.00 €",
+      sub: "SIGNATURE",
     },
     price: 10.0,
-    ingredients: "Scampis saisis au grill, guacamole maison velouté, edamame croquant, tomates cerises, poivrons & spicy mayo relevée.",
+    ingredients: "Scampis saisis au grill, guacamole maison velouté, edamame croquant, tomates fraîches, concombre, poivrons, jalapeños & spicy mayo.",
+  },
+  {
+    id: "spicy-chicken",
+    image: bowlSpicyChicken,
+    titleLine1: "SPICY CHICKEN",
+    titleLine2: "KICK ÉPICÉ",
+    dishName: "Spicy Chicken",
+    ingredientCallout: {
+      text: "POULET ÉPICÉ MAISON",
+      subtext: "FLOCONS DE CHILI",
+      emoji: "🔥",
+    },
+    statBadge: {
+      main: "10.00 €",
+      sub: "ÉPICÉ GOURMAND",
+    },
+    price: 10.0,
+    ingredients: "Poulet mariné épicé, avocat Hass, patates douces rôties, maïs doux, feta, jalapeños, sauce spicy mayo onctueuse & sésame mix.",
   },
 ];
 
@@ -116,7 +135,7 @@ export function PokawaHeroExact() {
 
   const slide = SLIDES[currentIdx];
 
-  // Auto-play continu automatique et fluide (Pokawa style)
+  // Auto-play continu automatique et fluide
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIdx((prev) => (prev + 1) % SLIDES.length);
@@ -148,10 +167,10 @@ export function PokawaHeroExact() {
 
   return (
     <section
-      aria-label="Accueil Pokawa-Style Poke N Bowl Visé"
+      aria-label="Accueil Poké N Bowl Visé — Bowls Frais & Crousty Chicken"
       className="relative w-full h-[94vh] sm:h-[98vh] min-h-[640px] max-h-[1050px] overflow-hidden bg-[#101e18] select-none"
     >
-      {/* ════════ PHOTO EN PLEIN ÉCRAN TOTAL (LE BOL PREND TOUTE LA PAGE) ════════ */}
+      {/* ════════ PHOTO EN PLEIN ÉCRAN LUMINEUSE & CLAIRE (BOLS EN BAMBOU ARTISANAUX) ════════ */}
       <AnimatePresence initial={false} mode="wait">
         <motion.div
           key={slide.id}
@@ -159,17 +178,16 @@ export function PokawaHeroExact() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 flex items-center justify-center bg-[#15231e]"
         >
           <img
             src={slide.image}
             alt={slide.dishName}
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover object-center filter brightness-105 contrast-102"
           />
-          {/* VIGNETTAGE SOMBRE CINÉMATIQUE POUR LISIBILITÉ DU TEXTE */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/35 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+          {/* VOILE LÉGER LOCALISÉ POUR CONSERVER LA LUMINOSITÉ ET LA VIVACITÉ DU BOL */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-full sm:w-3/4 lg:w-1/2 bg-gradient-to-r from-black/50 via-black/15 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
@@ -226,7 +244,7 @@ export function PokawaHeroExact() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-2 sm:space-y-3"
+                className="space-y-2 sm:space-y-3 rounded-[30px] bg-black/40 backdrop-blur-md p-6 sm:p-7 border border-white/20 shadow-2xl"
               >
                 {/* Petit tag de la recette */}
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white backdrop-blur-md border border-white/30">
