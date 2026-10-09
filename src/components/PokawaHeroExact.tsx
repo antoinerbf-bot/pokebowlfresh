@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Plus, Check, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
-// Photos culinaires haute définition Poké N Bowl Visé (1:1 carré, 100% bol visible)
-import bowlSaumon from "@/assets/bowl-saumon.jpg";
-import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
-import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
-import bowlScampis from "@/assets/bowl-scampis.jpg";
-import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
+// Photos culinaires plein écran ultra haute définition 1080p (Poke N Bowl Visé)
+import heroSaumonWide from "@/assets/hero-saumon-clean-wide.jpg";
+import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
+import heroCroustyWide from "@/assets/hero-crousty-wide.jpg";
+import heroScampisWide from "@/assets/hero-scampis-wide.jpg";
+import heroSpicyWide from "@/assets/hero-spicy-wide.jpg";
 
 interface PokawaSlide {
   id: string;
@@ -35,7 +35,7 @@ interface PokawaSlide {
 const SLIDES: PokawaSlide[] = [
   {
     id: "saumon-wasabi",
-    image: bowlSaumon,
+    image: heroSaumonWide,
     titleLine1: "SAUMON WASABI",
     titleLine2: "FRAÎCHEUR NOBLE",
     dishName: "Saumon Wasabi",
@@ -54,7 +54,7 @@ const SLIDES: PokawaSlide[] = [
   },
   {
     id: "sweet-chicken",
-    image: bowlSweetChicken,
+    image: heroSweetWide,
     titleLine1: "SWEET CHICKEN",
     titleLine2: "TERIYAKI MAISON",
     dishName: "Sweet Chicken",
@@ -73,7 +73,7 @@ const SLIDES: PokawaSlide[] = [
   },
   {
     id: "crousty-chicken-curry",
-    image: bowlCroustyCurry,
+    image: heroCroustyWide,
     titleLine1: "CROUSTY CHICKEN",
     titleLine2: "CURRY DORÉ",
     dishName: "Crousty Chicken Curry",
@@ -93,7 +93,7 @@ const SLIDES: PokawaSlide[] = [
   },
   {
     id: "scampis-royaux",
-    image: bowlScampis,
+    image: heroScampisWide,
     titleLine1: "SCAMPIS ROYAUX",
     titleLine2: "SPICY MAYO",
     dishName: "Scampis Royal",
@@ -112,7 +112,7 @@ const SLIDES: PokawaSlide[] = [
   },
   {
     id: "spicy-chicken",
-    image: bowlSpicyChicken,
+    image: heroSpicyWide,
     titleLine1: "SPICY CHICKEN",
     titleLine2: "KICK ÉPICÉ",
     dishName: "Spicy Chicken",
@@ -175,228 +175,180 @@ export function PokawaHeroExact() {
 
   return (
     <section
-      aria-label="Accueil Poké N Bowl Visé — Bowls Frais & Crousty Chicken"
-      className="relative w-full min-h-[600px] lg:min-h-[680px] xl:min-h-[720px] overflow-hidden bg-[#0a1713] text-white select-none pt-24 pb-14 sm:pt-28 sm:pb-16 flex items-center"
+      aria-label="Accueil Poké N Bowl Visé — Poké bowls frais & Crousty Chicken"
+      className="relative w-full h-[92vh] sm:h-[96vh] min-h-[620px] max-h-[1050px] overflow-hidden bg-[#0a1713] select-none"
     >
-      {/* ════════ HALOS LUMINEUX AMBIANTS HAUT DE GAMME (PAS DE VOILE SOMBRE ÉCRASANT) ════════ */}
-      <div className="pointer-events-none absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full bg-[#d7ff45]/10 blur-[130px]" />
-      <div className="pointer-events-none absolute top-1/3 right-0 h-[600px] w-[600px] rounded-full bg-[#ff705f]/12 blur-[150px]" />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 h-[400px] w-[400px] rounded-full bg-[#10251f] blur-[100px]" />
+      {/* ════════ PHOTO EN PLEIN ÉCRAN TOTAL (LES PLATS PRENNENT TOUTE LA HOME PAGE AVEC GROS ZOOM APPÉTISSANT) ════════ */}
+      <AnimatePresence initial={false} mode="wait">
+        <motion.div
+          key={`bg-${slide.id}`}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 z-0 overflow-hidden"
+        >
+          <img
+            src={slide.image}
+            alt={`Bol ${slide.dishName} — Poké N Bowl Visé`}
+            className="h-full w-full object-cover object-center filter brightness-100 contrast-102"
+          />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12 xl:grid-cols-[1.15fr_0.85fr]">
-          
-          {/* ════════ COLONNE GAUCHE : TYPOGRAPHIE PUNCHY, CLAIRE & SANS GROS CARRÉ NOIR ════════ */}
-          <div className="flex flex-col justify-center order-2 lg:order-1">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`content-${slide.id}`}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-4 sm:space-y-5"
-              >
-                {/* Badge supérieur coloré */}
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#10251f] shadow-md">
-                    <Sparkles className="h-3.5 w-3.5 stroke-[2.5]" />
-                    {slide.badge}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-white/90 border border-white/15 backdrop-blur-sm">
-                    {slide.ingredientCallout.emoji} {slide.ingredientCallout.text}
-                  </span>
-                </div>
+          {/* DÉGRADÉS CINÉMATIQUES SUBTILS QUI RENDENT L'ÉCRITURE PARFAITEMENT LISIBLE SANS MASQUER LE PLAT */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+        </motion.div>
+      </AnimatePresence>
 
-                {/* Titre géant ultra-punchy blanc & éclatant */}
-                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black uppercase tracking-tight text-white leading-[0.92] drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
-                  <span className="block text-white">{slide.titleLine1}</span>
-                  <span className="block text-[#d7ff45]">{slide.titleLine2}</span>
-                </h1>
-
-                {/* Ingrédients précis de la recette */}
-                <p className="text-sm sm:text-base text-white/85 max-w-xl font-medium leading-relaxed drop-shadow-sm pt-1">
-                  {slide.ingredients}
-                </p>
-
-                {/* Ligne Tarif & Informations Formule */}
-                <div className="flex items-center gap-3 pt-1">
-                  <div className="rounded-2xl bg-white/10 px-4 py-2 border border-white/20 backdrop-blur-md flex items-center gap-3">
-                    <span className="text-2xl sm:text-3xl font-black text-white leading-none">
-                      {slide.price.toFixed(2)} €
-                    </span>
-                    <div className="text-left border-l border-white/20 pl-3">
-                      <span className="block text-[10px] font-black uppercase tracking-widest text-[#d7ff45]">
-                        {slide.isCrousty ? "Formule Complète" : "Format Moyen Inclus"}
-                      </span>
-                      <span className="block text-[9px] font-medium text-white/70">
-                        {slide.isCrousty ? "Boisson 33cl offerte au choix" : "Grand format à 13 € (+3€)"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Boutons d'action rapides */}
-                <div className="flex flex-wrap items-center gap-3 pt-3">
-                  <button
-                    type="button"
-                    onClick={handleQuickAdd}
-                    className="group relative inline-flex items-center gap-2.5 rounded-full bg-[#d7ff45] px-7 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_10px_30px_rgba(215,255,69,0.3)] transition hover:bg-white hover:scale-105 active:scale-95"
-                  >
-                    <Plus className="h-4 w-4 stroke-[3]" />
-                    <span>Ajouter ce bowl ({slide.price.toFixed(2)} €)</span>
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-
-                    {addedNotice && (
-                      <span className="absolute -top-10 inset-x-0 mx-auto flex w-max items-center gap-1.5 rounded-full bg-[#2431eb] px-3.5 py-1 text-xs font-black text-white shadow-2xl">
-                        <Check className="h-3.5 w-3.5 stroke-[3]" /> Ajouté au panier !
-                      </span>
-                    )}
-                  </button>
-
-                  <Link
-                    to="/product/$productId"
-                    params={{ productId: slide.id }}
-                    className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/30 px-5 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white"
-                  >
-                    Personnaliser
-                  </Link>
-
-                  <a
-                    href="#composer"
-                    className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline sm:ml-2 drop-shadow"
-                  >
-                    Composer sur-mesure →
-                  </a>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+      {/* ════════ CALLOUT INGRÉDIENT FLOTTANT EN HAUT À DROITE (DISCRET, HAUT DE GAMME) ════════ */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`callout-${slide.id}`}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+          className="absolute top-24 sm:top-28 right-4 sm:right-8 lg:right-12 z-20 hidden md:flex items-center gap-2.5 rounded-full bg-black/45 backdrop-blur-md px-4 py-2 border border-white/20 text-white shadow-xl pointer-events-none"
+        >
+          <span className="text-xl">{slide.ingredientCallout.emoji}</span>
+          <div className="text-left leading-tight">
+            <span className="block text-[11px] font-black uppercase tracking-wider text-[#d7ff45]">
+              {slide.ingredientCallout.text}
+            </span>
+            <span className="block text-[9px] font-medium text-white/80">
+              {slide.ingredientCallout.subtext}
+            </span>
           </div>
+        </motion.div>
+      </AnimatePresence>
 
-          {/* ════════ COLONNE DROITE : LE PLAT ENTIER EN HAUTE DÉFINITION (100% VISIBLE) ════════ */}
-          <div className="relative flex items-center justify-center order-1 lg:order-2">
-            {/* Halo lumineux d'assiette */}
-            <div className="pointer-events-none absolute inset-0 m-auto h-[320px] w-[320px] sm:h-[440px] sm:w-[440px] rounded-full bg-gradient-to-tr from-[#d7ff45]/20 via-[#ff705f]/25 to-transparent blur-2xl" />
+      {/* ════════ TYPOGRAPHIE ET ACTIONS EN BAS À GAUCHE (PARFAITEMENT LISIBLES, SANS GROS CARRÉ NOIR GÊNANT) ════════ */}
+      <div className="absolute inset-x-0 bottom-12 sm:bottom-16 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
+        <div className="mx-auto max-w-[1400px] flex flex-col items-start pointer-events-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`content-${slide.id}`}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-2xl space-y-3 sm:space-y-4"
+            >
+              {/* Badges punchy */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#10251f] shadow-lg">
+                  <Sparkles className="h-3 w-3 stroke-[2.5]" />
+                  {slide.badge}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-black/45 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-white border border-white/20 shadow-md">
+                  {slide.dishName} · {slide.price.toFixed(2)} €
+                </span>
+              </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`dish-showcase-${slide.id}`}
-                initial={{ opacity: 0, scale: 0.9, rotate: -4 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.92, rotate: 4 }}
-                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-10 w-[290px] sm:w-[400px] md:w-[450px] lg:w-[480px] xl:w-[520px] aspect-square"
-              >
-                {/* Cadre du bol préservant 100% de la photo carrée sans aucun rognage zoomé */}
-                <div className="relative h-full w-full rounded-[36px] sm:rounded-[44px] overflow-hidden border-2 border-white/20 shadow-[0_25px_60px_-10px_rgba(0,0,0,0.85)] bg-[#12231b]">
-                  <img
-                    src={slide.image}
-                    alt={`Bol ${slide.dishName} préparé minute à Visé`}
-                    className="h-full w-full object-cover object-center filter brightness-105 contrast-102 transition duration-700 hover:scale-105"
-                  />
+              {/* Grand titre style Pokawa ultra-visible avec drop shadow puissant */}
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight leading-[0.92] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]">
+                <span className="block text-white">{slide.titleLine1}</span>
+                <span className="block text-[#d7ff45]">{slide.titleLine2}</span>
+              </h1>
 
-                  {/* Micro-voile subtil dégradé en bas uniquement pour laisser le bol 100% éclatant */}
-                  <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+              {/* Ingrédients de la recette parfaitement lisibles directement sur l'image */}
+              <p className="text-sm sm:text-base text-white/95 font-medium leading-relaxed max-w-xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                {slide.ingredients}
+              </p>
 
-                  {/* Badge Bol en Bambou ou Formule Chaude */}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
-                    <span className="rounded-full bg-black/60 backdrop-blur-md px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/20">
-                      {slide.isCrousty ? "🍗 Crousty Chicken Chaud" : "🥣 Bol Bambou Naturel"}
+              {/* Ligne Tarif & Formule */}
+              <div className="flex items-center gap-3 pt-1">
+                <div className="inline-flex items-center gap-3 rounded-2xl bg-black/55 backdrop-blur-md px-4 py-2 border border-white/25 shadow-xl">
+                  <span className="text-2xl sm:text-3xl font-black text-white leading-none">
+                    {slide.price.toFixed(2)} €
+                  </span>
+                  <div className="border-l border-white/25 pl-3 text-left">
+                    <span className="block text-[10px] font-black uppercase tracking-widest text-[#d7ff45]">
+                      {slide.isCrousty ? "Formule 11 € Complète" : "Format Moyen Inclus"}
                     </span>
-                    <span className="rounded-full bg-[#ff705f] px-3 py-1 text-[11px] font-black text-white shadow-md">
-                      Fait Minute
+                    <span className="block text-[9px] font-medium text-white/80">
+                      {slide.isCrousty ? "Boisson 33cl incluse au choix" : "Grand format à 13 € (+3€)"}
                     </span>
                   </div>
                 </div>
+              </div>
 
-                {/* Badge Ingrédient Noble Flottant en haut à droite */}
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="absolute -top-4 -right-2 sm:-right-4 z-20 flex items-center gap-2.5 rounded-2xl bg-[#10251f]/90 backdrop-blur-md px-3.5 py-2 border border-white/25 text-white shadow-2xl"
-                >
-                  <span className="text-xl sm:text-2xl">{slide.ingredientCallout.emoji}</span>
-                  <div className="text-left">
-                    <span className="block text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
-                      {slide.ingredientCallout.text}
-                    </span>
-                    <span className="block text-[8px] font-bold uppercase tracking-widest text-white/80">
-                      {slide.ingredientCallout.subtext}
-                    </span>
-                  </div>
-                </motion.div>
-
-                {/* Badge Prix Flottant en bas à gauche */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.25 }}
-                  className="absolute -bottom-3 -left-2 sm:-left-4 z-20 rounded-2xl bg-[#d7ff45] text-[#10251f] px-4 py-2.5 shadow-2xl border-2 border-white/40 rotate-[-3deg] hover:rotate-0 transition-transform"
-                >
-                  <span className="block text-xl sm:text-2xl font-black uppercase tracking-tight leading-none">
-                    {slide.statBadge.main}
-                  </span>
-                  <span className="block text-[8px] font-black uppercase tracking-widest text-[#10251f]/80 mt-0.5">
-                    {slide.statBadge.sub}
-                  </span>
-                </motion.div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* ════════ PAGINATION & CONTRÔLES SLIDER EN BAS ════════ */}
-        <div className="mt-8 sm:mt-10 flex items-center justify-between border-t border-white/10 pt-4">
-          {/* Indicateur de plat */}
-          <div className="flex items-center gap-2 text-xs font-bold text-white/60">
-            <span className="text-[#d7ff45] font-black">0{currentIdx + 1}</span>
-            <span>/</span>
-            <span>0{SLIDES.length}</span>
-            <span className="ml-2 hidden sm:inline text-white/40">· {slide.dishName}</span>
-          </div>
-
-          {/* Dots indicateurs */}
-          <div className="flex items-center gap-2">
-            {SLIDES.map((s, idx) => {
-              const isActive = idx === currentIdx;
-              return (
+              {/* Boutons d'action rapides */}
+              <div className="flex flex-wrap items-center gap-3 pt-2 sm:pt-3">
                 <button
-                  key={s.id}
                   type="button"
-                  onClick={() => setCurrentIdx(idx)}
-                  aria-label={`Aller au plat ${s.dishName}`}
-                  className={`transition-all duration-300 rounded-full ${
-                    isActive
-                      ? "w-8 h-2.5 bg-[#d7ff45] shadow-lg"
-                      : "w-2.5 h-2.5 bg-white/30 hover:bg-white/60"
-                  }`}
-                />
-              );
-            })}
-          </div>
+                  onClick={handleQuickAdd}
+                  className="group relative inline-flex items-center gap-2.5 rounded-full bg-[#d7ff45] px-7 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_10px_30px_rgba(215,255,69,0.4)] transition hover:bg-white hover:scale-105 active:scale-95"
+                >
+                  <Plus className="h-4 w-4 stroke-[3]" />
+                  <span>Ajouter ce bowl ({slide.price.toFixed(2)} €)</span>
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
 
-          {/* Boutons Suivant / Précédent */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handlePrev}
-              aria-label="Plat précédent"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 backdrop-blur-md hover:bg-white hover:text-black transition shadow-md"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Plat suivant"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 backdrop-blur-md hover:bg-white hover:text-black transition shadow-md"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+                  {addedNotice && (
+                    <span className="absolute -top-10 inset-x-0 mx-auto flex w-max items-center gap-1.5 rounded-full bg-[#2431eb] px-3.5 py-1 text-xs font-black text-white shadow-2xl">
+                      <Check className="h-3.5 w-3.5 stroke-[3]" /> Ajouté au panier !
+                    </span>
+                  )}
+                </button>
+
+                <Link
+                  to="/product/$productId"
+                  params={{ productId: slide.id }}
+                  className="inline-flex items-center gap-2 rounded-full bg-black/45 border border-white/40 px-5 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white shadow-lg"
+                >
+                  Personnaliser
+                </Link>
+
+                <a
+                  href="#composer"
+                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline sm:ml-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
+                >
+                  Composer sur-mesure →
+                </a>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
+
+      {/* ════════ DOTS PAGINATION AU CENTRE EN BAS ════════ */}
+      <div className="absolute bottom-4 sm:bottom-5 inset-x-0 z-30 flex items-center justify-center gap-2 pointer-events-auto">
+        {SLIDES.map((s, idx) => {
+          const isActive = idx === currentIdx;
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setCurrentIdx(idx)}
+              aria-label={`Aller au plat ${s.dishName}`}
+              className={`transition-all duration-300 rounded-full ${
+                isActive
+                  ? "w-8 h-2.5 bg-[#d7ff45] shadow-[0_0_12px_rgba(215,255,69,0.8)]"
+                  : "w-2.5 h-2.5 bg-white/40 hover:bg-white/80"
+              }`}
+            />
+          );
+        })}
+      </div>
+
+      {/* ════════ FLÈCHES DISCRÈTES GAUCHE / DROITE ════════ */}
+      <button
+        type="button"
+        onClick={handlePrev}
+        aria-label="Plat précédent"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-11 w-11 items-center justify-center rounded-full bg-black/50 text-white border border-white/25 backdrop-blur-md hover:bg-white hover:text-black transition shadow-xl"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        onClick={handleNext}
+        aria-label="Plat suivant"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hidden sm:flex h-11 w-11 items-center justify-center rounded-full bg-black/50 text-white border border-white/25 backdrop-blur-md hover:bg-white hover:text-black transition shadow-xl"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
     </section>
   );
 }
