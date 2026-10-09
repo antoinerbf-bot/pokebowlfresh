@@ -738,13 +738,13 @@ ScrollBar.displayName = ScrollAreaScrollbar.displayName;
 var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 //#endregion
 //#region src/assets/bowl-scampis.jpg
-var bowl_scampis_default = "/assets/bowl-scampis-BK5Y7tTW.jpg";
+var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
 //#endregion
 //#region src/assets/bowl-saumon.jpg
 var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 //#endregion
 //#region src/assets/bowl-spicy-chicken.jpg
-var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-OPlWuwzK.jpg";
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-Bko5BGRq.jpg";
 //#endregion
 //#region src/assets/bowl-crousty-curry.jpg
 var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CP8uJ3-4.jpg";
@@ -3412,7 +3412,7 @@ function InteractiveBowlBuilder() {
 	const activeBowlImage = {
 		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
-		scampis: "/assets/bowl-scampis-BK5Y7tTW.jpg",
+		scampis: "/assets/bowl-scampis-DlEe1YXf.jpg",
 		vege: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
 	}[proteine.id] || "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 	const toggleMixin = (id) => {
@@ -6594,7 +6594,7 @@ function SurMesurePage() {
 	const activeBowlImage = selectedProtein ? {
 		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
-		scampis: "/assets/bowl-scampis-BK5Y7tTW.jpg",
+		scampis: "/assets/bowl-scampis-DlEe1YXf.jpg",
 		vege: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
 	}[selectedProtein.id] || "/assets/bowl-saumon-CRYVYQxR.jpg" : bowl_saumon_default;
 	const toggleMixIn = (name) => {
@@ -6636,7 +6636,7 @@ function SurMesurePage() {
 		const activeBowlImage = selectedProtein ? {
 			poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 			saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
-			scampis: "/assets/bowl-scampis-BK5Y7tTW.jpg",
+			scampis: "/assets/bowl-scampis-DlEe1YXf.jpg",
 			vege: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
 		}[selectedProtein.id] || "/assets/bowl-saumon-CRYVYQxR.jpg" : bowl_saumon_default;
 		addItem({
