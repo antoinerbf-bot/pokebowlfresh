@@ -6,7 +6,7 @@ import {
   bowlSizes,
   detailedBases,
   detailedSauces,
-  detailedProteins,
+  detailedMixIns,
   drinks,
   type Topping,
 } from "../../lib/data";
@@ -190,19 +190,28 @@ function ProductPage() {
   const [selectedBase, setSelectedBase] = React.useState<string>(product.defaultBase || "Riz à sushi");
   const [selectedSauce, setSelectedSauce] = React.useState<string>(product.defaultSauce || "Spicy-Mayo");
   const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
-  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
-  const [extraSauce, setExtraSauce] = React.useState<string | null>(null);
+  
+  // Suppléments demandés par le client
+  const [extraChicken, setExtraChicken] = React.useState(false); // Crousty : supplément poulet croustillant (+2.50 €)
+  const [extraProtein, setExtraProtein] = React.useState<string | null>(null); // Poké : supplément protéine (+2.50 €)
+  const [selectedMixins, setSelectedMixins] = React.useState<string[]>([]); // Légumes / Fruits (+0.50 € chaque, illimité)
+  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]); // Toppings croustillants (+0.50 € chaque, illimité)
+  const [extraSauce, setExtraSauce] = React.useState<string | null>(null); // 2ème pot de sauce (+1.00 €)
   const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
   const [qty, setQty] = React.useState(1);
   const [added, setAdded] = React.useState(false);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
-  // Prix dynamique
-  const sizeExtra = selectedSize === "grand" ? 3.00 : 0;
-  const toppingsExtra = selectedToppings.length * 0.50;
+  // Calcul du prix cohérent partout :
+  // Crousty chicken a UNE SEULE TAILLE (pas de grand format +3€).
+  const sizeExtra = !isCrousty && selectedSize === "grand" ? 3.00 : 0;
+  const extraProteinPrice = (isCrousty ? (extraChicken ? 2.50 : 0) : (extraProtein ? 2.50 : 0));
+  const mixinsExtraPrice = selectedMixins.length * 0.50;
+  const toppingsExtraPrice = selectedToppings.length * 0.50;
   const extraSaucePrice = extraSauce ? 1.00 : 0;
-  const unitPrice = product.price + sizeExtra + toppingsExtra + extraSaucePrice;
+
+  const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
   const totalPrice = unitPrice * qty;
 
   // Toggle ingrédient retirable (allergies / préférences)
@@ -221,6 +230,15 @@ function ProductPage() {
     );
   };
 
+  // Toggle légume / mix-in additionnel (illimité)
+  const toggleMixin = (mixinName: string) => {
+    setSelectedMixins((cur) =>
+      cur.includes(mixinName)
+        ? cur.filter((m) => m !== mixinName)
+        : [...cur, mixinName]
+    );
+  };
+
   // Ajout au panier
   const handleAddToCart = () => {
     if (!productOk) return;
@@ -228,30 +246,41 @@ function ProductPage() {
     const optionsList: string[] = [];
 
     // Format / Taille
-    if (selectedSize === "grand") {
-      optionsList.push("Taille : Grand (+3.00€)");
+    if (isCrousty) {
+      optionsList.push("Format : Taille unique standard (Portion généreuse)");
+      if (extraChicken) {
+        optionsList.push("Supplément : + Portion extra Poulet Croustillant (+2.50€)");
+      }
+      optionsList.push(`Boisson 33cl incluse : ${selectedDrink}`);
     } else {
-      optionsList.push("Taille : Moyen (Standard)");
+      if (selectedSize === "grand") {
+        optionsList.push("Taille : Grand (+3.00€)");
+      } else {
+        optionsList.push("Taille : Moyen (Standard)");
+      }
+      if (extraProtein) {
+        optionsList.push(`Supplément Protéine (+2.50€) : ${extraProtein}`);
+      }
     }
 
-    // Base si différente
+    // Base
     optionsList.push(`Base : ${selectedBase}`);
 
-    // Sauce
+    // Sauce principale
     if (selectedSauce === "none") {
       optionsList.push("Sauce : Sans sauce");
     } else {
       optionsList.push(`Sauce : ${selectedSauce}`);
     }
 
-    // Boisson pour formules Crousty
-    if (isCrousty) {
-      optionsList.push(`Boisson incluse (33cl) : ${selectedDrink}`);
-    }
+    // Suppléments Légumes & Mix-ins sélectionnés
+    selectedMixins.forEach((m) => {
+      optionsList.push(`Légume / Mix-in (+0.50€) : ${m}`);
+    });
 
     // Toppings payants sélectionnés
     selectedToppings.forEach((t) => {
-      optionsList.push(`Topping : ${t}`);
+      optionsList.push(`Topping (+0.50€) : ${t}`);
     });
 
     // Sauce extra payante
@@ -260,8 +289,8 @@ function ProductPage() {
     }
 
     addItem({
-      id: product.id,
-      name: product.name,
+      id: isCrousty ? `${product.id}` : `${product.id}-${selectedSize}`,
+      name: isCrousty ? product.name : `${product.name} (${selectedSize === "grand" ? "Grand" : "Moyen"})`,
       basePrice: product.price,
       price: unitPrice,
       quantity: qty,
@@ -341,7 +370,7 @@ function ProductPage() {
         <div className="grid gap-8 lg:grid-cols-[1.1fr_1.3fr] lg:gap-12">
           {/* ── Left Column: Dish Image & Key Info ─────────────────── */}
           <div className="space-y-4">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[32px] shadow-lift sm:rounded-[36px]">
+            <div className="relative aspect-square sm:aspect-[4/3] overflow-hidden rounded-[32px] shadow-lift sm:rounded-[36px] bg-[#12231b]">
               <DishImage
                 dishId={product.id}
                 alt={product.name}
@@ -360,11 +389,12 @@ function ProductPage() {
             <div className="rounded-[24px] border border-black/5 bg-white p-5 shadow-card space-y-3">
               <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#10251f]">
                 <ShieldCheck className="h-4 w-4 text-[#ff705f]" />
-                <span>Préparé minute sur commande</span>
+                <span>Préparé minute sur commande à Visé</span>
               </div>
               <p className="text-xs text-[#707e77] leading-relaxed">
-                Chaque bowl est assemblé à la commande à Visé avec des découpes fraîches du jour.
-                Vous pouvez retirer n'importe quel ingrédient en cas d'allergie ou ajouter tous les toppings souhaités.
+                {isCrousty
+                  ? "Poulet croustillant frit minute, bien doré et nappé de sauce généreuse avec riz chaud et canette 33cl fraîche incluse."
+                  : "Chaque bowl est assemblé à la commande à Visé avec du poisson noble et légumes frais du jour. Vous pouvez retirer n'importe quel ingrédient en cas d'allergie ou ajouter tous les suppléments souhaités."}
               </p>
             </div>
           </div>
@@ -374,7 +404,7 @@ function ProductPage() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
-                  {isCrousty ? "Crousty Chicken" : "Poké Bowl Signature"}
+                  {isCrousty ? "Crousty Chicken Chaud" : "Poké Bowl Signature"}
                 </span>
               </div>
               <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#10251f]">
@@ -400,47 +430,129 @@ function ProductPage() {
               </div>
             ) : (
               <>
-                {/* ══ STEP 1: TAILLE DU BOWL (Fiche restaurant) ══════ */}
-                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
-                      1. Format & Taille
-                    </h2>
-                    <span className="text-[10px] font-bold text-[#a09a92]">Fiche officielle</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {bowlSizes.map((size) => (
+                {/* ══ STEP 1: FORMAT & TAILLE OU BANNIÈRE TAILLE UNIQUE CROUSTY ══════ */}
+                {isCrousty ? (
+                  <section className="rounded-[24px] border border-[#fed7aa] bg-[#fff7ed] p-5 shadow-card">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="inline-block rounded-full bg-[#ea580c] text-white px-3 py-0.5 text-[10px] font-black uppercase tracking-wider mb-1">
+                          Taille Unique Standard
+                        </span>
+                        <h2 className="text-sm font-black text-[#17231f]">
+                          Portion Généreuse Chaude · Formule 11.00 €
+                        </h2>
+                        <p className="text-[11px] text-[#7a847e] mt-0.5">
+                          Petits morceaux de poulet croustillant dorés + Riz chaud + Boisson 33cl incluse
+                        </p>
+                      </div>
+                      <span className="text-2xl font-black text-[#ea580c]">11.00 €</span>
+                    </div>
+
+                    {/* Supplément Poulet Croustillant demandé par le client */}
+                    <div className="mt-4 pt-3 border-t border-[#fed7aa]">
                       <button
-                        key={size.id}
                         type="button"
-                        onClick={() => setSelectedSize(size.id)}
-                        className={[
-                          "flex flex-col items-start rounded-2xl border-2 p-3.5 text-left transition-all",
-                          selectedSize === size.id
-                            ? "border-[#10251f] bg-[#10251f] text-white shadow-md"
-                            : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
-                        ].join(" ")}
+                        onClick={() => setExtraChicken(!extraChicken)}
+                        className={`w-full flex items-center justify-between rounded-2xl border-2 p-3 transition-all ${
+                          extraChicken
+                            ? "border-[#ea580c] bg-white shadow-sm font-black"
+                            : "border-[#fed7aa]/60 bg-white/70 hover:border-[#ea580c] hover:bg-white"
+                        }`}
                       >
-                        <div className="flex w-full items-center justify-between">
-                          <span className="font-black text-sm uppercase">{size.name}</span>
-                          <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
-                            {size.extraPrice === 0 ? "Inclus" : `+${size.extraPrice.toFixed(2)}€`}
-                          </span>
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-2xl">🍗</span>
+                          <div className="text-left">
+                            <span className="block text-xs font-black text-[#10251f]">
+                              Supplément Poulet Croustillant
+                            </span>
+                            <span className="text-[10px] text-[#7a847e]">
+                              Portion extra de petits morceaux dorés croustillants
+                            </span>
+                          </div>
                         </div>
-                        <span className={`mt-1 text-[11px] leading-tight ${selectedSize === size.id ? "text-white/70" : "text-[#7a847e]"}`}>
-                          {size.description}
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-black ${
+                            extraChicken
+                              ? "bg-[#ea580c] text-white"
+                              : "bg-[#fff7ed] text-[#ea580c] border border-[#fed7aa]"
+                          }`}
+                        >
+                          {extraChicken ? "✓ Inclus (+2.50 €)" : "+ 2.50 €"}
                         </span>
                       </button>
-                    ))}
-                  </div>
-                </section>
+                    </div>
+                  </section>
+                ) : (
+                  <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
+                    <div className="mb-3 flex items-center justify-between">
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
+                        1. Format & Taille
+                      </h2>
+                      <span className="text-[10px] font-bold text-[#a09a92]">Bol bambou</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {bowlSizes.map((size) => (
+                        <button
+                          key={size.id}
+                          type="button"
+                          onClick={() => setSelectedSize(size.id)}
+                          className={[
+                            "flex flex-col items-start rounded-2xl border-2 p-3.5 text-left transition-all",
+                            selectedSize === size.id
+                              ? "border-[#10251f] bg-[#10251f] text-white shadow-md"
+                              : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                          ].join(" ")}
+                        >
+                          <div className="flex w-full items-center justify-between">
+                            <span className="font-black text-sm uppercase">{size.name}</span>
+                            <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
+                              {size.extraPrice === 0 ? "Inclus" : `+${size.extraPrice.toFixed(2)}€`}
+                            </span>
+                          </div>
+                          <span className={`mt-1 text-[11px] leading-tight ${selectedSize === size.id ? "text-white/70" : "text-[#7a847e]"}`}>
+                            {size.description}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Supplément Protéine pour Poké Bowls */}
+                    <div className="mt-4 pt-3 border-t border-black/5">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-[#7a847e]">
+                          Envie d'une portion double de protéine ? (+2.50 €)
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { id: "poulet", name: "Poulet Teriyaki", emoji: "🍗" },
+                          { id: "saumon", name: "Saumon Sashimi", emoji: "🐟" },
+                          { id: "scampis", name: "Scampis Grillés", emoji: "🦐" },
+                        ].map((pr) => (
+                          <button
+                            key={pr.id}
+                            type="button"
+                            onClick={() => setExtraProtein(extraProtein === pr.name ? null : pr.name)}
+                            className={`rounded-full px-3.5 py-1.5 text-xs font-bold border transition ${
+                              extraProtein === pr.name
+                                ? "bg-[#ff705f] border-[#ff705f] text-white shadow-sm"
+                                : "bg-[#faf8f4] border-[#e8e2d9] text-[#17231f] hover:border-[#ff705f]/50"
+                            }`}
+                          >
+                            <span>{pr.emoji} {extraProtein === pr.name ? `✓ ${pr.name} (+2.50 €)` : `+ Extra ${pr.name} (+2.50 €)`}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </section>
+                )}
 
                 {/* ══ STEP 2: BASE AU CHOIX ══════════════════════════ */}
                 <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="mb-3 flex items-center justify-between">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
-                        2. Base au choix
+                        {isCrousty ? "Base" : "2. Base au choix"}
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">Incluse · change selon tes envies</p>
                     </div>
@@ -468,20 +580,20 @@ function ProductPage() {
                   </div>
                 </section>
 
-                {/* ══ STEP 3: COMPOSITION & ALLERGIES (INGRÉDIENTS RETIRABLES) ══ */}
+                {/* ══ STEP 3: ALLERGIES & INGRÉDIENTS RETIRABLES ══════ */}
                 <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="mb-3">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f] flex items-center gap-1.5">
                         <AlertTriangle className="h-4 w-4 text-[#ff705f]" />
-                        3. Composition & Allergies
+                        Composition de la recette & Allergies
                       </h2>
                       <span className="text-[10px] font-bold text-[#ff705f]">
                         100% Modifiable
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-[#7a847e] leading-relaxed">
-                      Clique sur n'importe quel ingrédient pour le <strong>retirer</strong> si tu as une allergie ou une préférence.
+                      Clique sur un ingrédient pour le <strong>retirer</strong> si tu as une allergie ou une intolérance.
                     </p>
                   </div>
 
@@ -507,20 +619,20 @@ function ProductPage() {
                         <span className="font-extrabold">{removedIngredients.join(", ")}</span>
                       </p>
                       <p className="mt-0.5 text-[10px] text-[#8e4539]">
-                        La consigne sera transmise précisément en cuisine.
+                        La consigne sera transmise avec soin en cuisine.
                       </p>
                     </div>
                   )}
                 </section>
 
-                {/* ══ STEP 4: SAUCE DU BOWL ══════════════════════════ */}
+                {/* ══ STEP 4: SAUCE ══════════════════════════════════ */}
                 <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="mb-3 flex items-center justify-between">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
-                        4. Sauce Signature
+                        Sauce
                       </h2>
-                      <p className="text-[11px] text-[#7a847e]">Incluse · change de sauce gratuitement</p>
+                      <p className="text-[11px] text-[#7a847e]">Incluse · changement gratuit</p>
                     </div>
                     <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#d7ff45]">
                       {selectedSauce === "none" ? "Sans sauce" : selectedSauce}
@@ -584,12 +696,56 @@ function ProductPage() {
                   </div>
                 </section>
 
-                {/* ══ STEP 5: TOPPINGS ADDITIONNELS (ILLIMITÉS À VOLONTÉ) ══ */}
+                {/* ══ STEP 5: SUPPLÉMENTS LÉGUMES & MIX-INS FRAIS (+0.50€ CHAQUE, ILLIMITÉ) ══ */}
                 <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
-                        5. Toppings Croustillants
+                        Suppléments Légumes & Fruits Frais
+                      </h2>
+                      <p className="text-[11px] text-[#7a847e]">
+                        À volonté · choisis autant de légumes que tu veux (+0.50€ chaque)
+                      </p>
+                    </div>
+                    {selectedMixins.length > 0 && (
+                      <span className="rounded-full bg-[#059669] px-3 py-1 text-xs font-black text-white shadow-sm">
+                        {selectedMixins.length} légume{selectedMixins.length > 1 ? "s" : ""} (+{(selectedMixins.length * 0.5).toFixed(2)}€)
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {detailedMixIns.map((mix) => {
+                      const isSelected = selectedMixins.includes(mix.name);
+                      return (
+                        <button
+                          key={mix.id}
+                          type="button"
+                          onClick={() => toggleMixin(mix.name)}
+                          className={`flex items-center gap-2 rounded-xl border p-2.5 text-left transition ${
+                            isSelected
+                              ? "border-[#059669] bg-[#ecfdf5] text-[#065f46] font-black shadow-sm"
+                              : "border-[#e8e2d9] bg-white hover:border-[#059669]/40 text-[#2e2619] font-medium"
+                          }`}
+                        >
+                          <span className="text-xl">{mix.emoji}</span>
+                          <div className="flex-1 min-w-0">
+                            <span className="block text-xs truncate">{mix.name}</span>
+                            <span className="text-[10px] text-[#059669] font-bold">+0.50 €</span>
+                          </div>
+                          {isSelected && <Check className="h-4 w-4 text-[#059669] shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* ══ STEP 6: TOPPINGS CROUSTILLANTS (ILLIMITÉS À VOLONTÉ) ══ */}
+                <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
+                        Toppings Croustillants
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">
                         À volonté · choisis autant de toppings que tu veux (+0.50€ chaque)
@@ -597,7 +753,7 @@ function ProductPage() {
                     </div>
                     {selectedToppings.length > 0 && (
                       <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                        {selectedToppings.length} sélectionné{selectedToppings.length > 1 ? "s" : ""} (+{(selectedToppings.length * 0.5).toFixed(2)}€)
+                        {selectedToppings.length} topping{selectedToppings.length > 1 ? "s" : ""} (+{(selectedToppings.length * 0.5).toFixed(2)}€)
                       </span>
                     )}
                   </div>
@@ -614,16 +770,16 @@ function ProductPage() {
                   </div>
                 </section>
 
-                {/* ══ STEP 6 (CROUSTY UNIQUEMENT): BOISSON 33CL INCLUSE ══ */}
+                {/* ══ STEP 7 (CROUSTY UNIQUEMENT): BOISSON 33CL INCLUSE AU CHOIX ══ */}
                 {isCrousty && (
-                  <section className="rounded-[24px] border border-[#e8e2d9] bg-[#ff705f]/5 p-5 shadow-card">
+                  <section className="rounded-[24px] border border-[#fed7aa] bg-[#fff7ed] p-5 shadow-card">
                     <div className="mb-3">
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f] flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-[#ff705f]" />
-                        Boisson 33cl incluse (Formule Étudiant)
+                        <Sparkles className="h-4 w-4 text-[#ea580c]" />
+                        Boisson 33cl / 50cl Incluse dans la Formule
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">
-                        Comprise dans la formule à 11€ · choisis ta boisson fraîche
+                        Comprise dans les 11.00 € · sélectionne ta boisson fraîche
                       </p>
                     </div>
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -635,13 +791,13 @@ function ProductPage() {
                           className={[
                             "flex items-center justify-between rounded-xl border-2 p-2.5 text-left text-xs font-bold transition-all",
                             selectedDrink === d.name
-                              ? "border-[#ff705f] bg-white text-[#ff705f] shadow-sm font-black"
-                              : "border-[#e8e2d9] bg-white/70 text-[#2e2619] hover:border-[#ff705f]/40",
+                              ? "border-[#ea580c] bg-white text-[#ea580c] shadow-sm font-black"
+                              : "border-[#fed7aa]/70 bg-white/70 text-[#2e2619] hover:border-[#ea580c]/50",
                           ].join(" ")}
                         >
                           <span className="truncate">{d.name}</span>
                           {selectedDrink === d.name && (
-                            <Check className="h-3.5 w-3.5 shrink-0 text-[#ff705f]" />
+                            <Check className="h-3.5 w-3.5 shrink-0 text-[#ea580c]" />
                           )}
                         </button>
                       ))}
@@ -649,7 +805,7 @@ function ProductPage() {
                   </section>
                 )}
 
-                {/* ══ STEP 7: QUANTITÉ & RECAP PRIX ══════════════════ */}
+                {/* ══ STEP 8: QUANTITÉ & RÉCAPITULATIF PRIX EN DIRECT ════ */}
                 <div className="rounded-[24px] border border-[#e8e2d9] bg-white p-5 shadow-card">
                   <div className="flex items-center justify-between gap-4">
                     <QuantitySelector

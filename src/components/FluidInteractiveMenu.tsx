@@ -17,6 +17,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { DishImage } from "@/components/DishImage";
 import { bowls, drinks, desserts } from "@/lib/data";
+import { InteractiveBowlBuilder } from "@/components/InteractiveBowlBuilder";
 
 // Photos culinaires officielles générées
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
@@ -30,7 +31,7 @@ import drinkIceTea from "@/assets/drink-ice-tea.jpg";
 import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
 import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
 
-type MenuSectionId = "all" | "pokes" | "crousty" | "desserts" | "boissons";
+type MenuSectionId = "all" | "pokes" | "crousty" | "composer" | "desserts" | "boissons";
 
 interface DishItem {
   id: string;
@@ -270,6 +271,7 @@ export function FluidInteractiveMenu() {
           { id: "all" as const, label: "Toute la Carte", icon: "✨", count: pokeItems.length + croustyItems.length + dessertItems.length + drinkItems.length },
           { id: "pokes" as const, label: "Poké Bowls Signatures", icon: "🥗", count: pokeItems.length },
           { id: "crousty" as const, label: "Crousty Chicken", icon: "🍗", count: croustyItems.length },
+          { id: "composer" as const, label: "Sur-Mesure", icon: "🥣", count: 1 },
           { id: "desserts" as const, label: "Tiramisus Maison", icon: "🧁", count: dessertItems.length },
           { id: "boissons" as const, label: "Boissons Fraîches", icon: "🥤", count: drinkItems.length },
         ].map((cat) => {
@@ -440,7 +442,16 @@ export function FluidInteractiveMenu() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════════════════════
-          CATÉGORIE 3 : NOS TIRAMISUS MAISON GOURMANDS
+          CATÉGORIE 3 : COMPOSER VOTRE BOWL SUR-MESURE (Atelier Créatif)
+         ═══════════════════════════════════════════════════════════════════════════ */}
+      {(activeSection === "all" || activeSection === "composer") && (
+        <div id="composer" className="mt-16 pt-8 border-t border-black/5 scroll-mt-16">
+          <InteractiveBowlBuilder />
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════════════════
+          CATÉGORIE 4 : NOS TIRAMISUS MAISON GOURMANDS
          ═══════════════════════════════════════════════════════════════════════════ */}
       {(activeSection === "all" || activeSection === "desserts") && filteredDesserts.length > 0 && (
         <div className="mt-16 pt-8 border-t border-black/5">

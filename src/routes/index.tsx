@@ -17,7 +17,6 @@ import { PokawaFloatingNavbar } from "@/components/PokawaFloatingNavbar";
 import { PokawaHeroExact } from "@/components/PokawaHeroExact";
 import { FluidInteractiveMenu } from "@/components/FluidInteractiveMenu";
 import { PokawaBrandValues } from "@/components/PokawaBrandValues";
-import { InteractiveBowlBuilder } from "@/components/InteractiveBowlBuilder";
 import { PokawaPerksBanner } from "@/components/PokawaPerksBanner";
 import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
 
@@ -131,18 +130,13 @@ function Index() {
         {/* ════════════════════ 3. TICKER DÉFILANT ════════════════════ */}
         <Ticker />
 
-        {/* ════════════════════ 4. LE SIMULATEUR DE COMPOSITION SUR-MESURE ════════════════════ */}
-        <section id="composer" className="scroll-mt-12">
-          <InteractiveBowlBuilder />
-        </section>
+        {/* ════════════════════ 4. LA CARTE GOURMANDE INTERACTIVE & FLUIDE (POKÉS -> CROUSTY -> SUR-MESURE -> DESSERTS/BOISSONS) ════════════════════ */}
+        <FluidInteractiveMenu />
 
         {/* ════════════════════ 5. NOS ENGAGEMENTS QUALITÉ (STYLE POKAWA) ════════════════════ */}
         <section id="valeurs" className="scroll-mt-12 bg-white/70 py-14 sm:py-20 border-b border-black/5">
           <PokawaBrandValues />
         </section>
-
-        {/* ════════════════════ 6. LA CARTE GOURMANDE INTERACTIVE & FLUIDE ════════════════════ */}
-        <FluidInteractiveMenu />
 
         {/* ════════════════════ 7. LES AVANTAGES COMMANDE DIRECTE ════════════════════ */}
         <Reveal>
