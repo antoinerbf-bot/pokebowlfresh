@@ -185,8 +185,10 @@ export const submitCheckout = createServerFn({ method: "POST" })
     const deliveryFee = deliveryZone ? (subtotal >= 50 ? 0 : deliveryZone.feeUnder50) : 0;
     const total = subtotal + deliveryFee;
     const orderId = generateOrderId();
+    const deliveryToken = crypto.randomUUID().replace(/-/g, "");
     const order: Order = {
       id: orderId,
+      deliveryToken,
       createdAt: new Date().toISOString(),
       status: data.paymentMethod === "online" ? "pending_payment" : (data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup"),
       paymentMethod: data.paymentMethod as PaymentMethod,

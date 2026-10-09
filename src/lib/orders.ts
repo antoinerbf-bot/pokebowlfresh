@@ -5,6 +5,10 @@ export type OrderStatus =
   | "paid"
   | "awaiting_pickup"
   | "awaiting_delivery"
+  | "preparing"
+  | "ready"
+  | "delivering"
+  | "completed"
   | "cancelled"
   | "expired";
 
@@ -31,6 +35,7 @@ export interface OrderCustomer {
 
 export interface Order {
   id: string;
+  deliveryToken?: string;
   createdAt: string;
   status: OrderStatus;
   paymentMethod: PaymentMethod;
@@ -39,6 +44,10 @@ export interface Order {
   items: OrderItem[];
   total: number;
   currency: "EUR";
+  printStatus?: "pending" | "printing" | "printed" | "failed";
+  printedAt?: string | null;
+  printAttempts?: number;
+  printError?: string | null;
 }
 
 export function generateOrderId(): string {
