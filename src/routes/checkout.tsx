@@ -243,10 +243,15 @@ function CheckoutPage() {
                       : "border-black/10 bg-[#f7f4ec] hover:border-black/20"
                   }`}
                 >
-                  <CreditCard className="h-5 w-5 text-[#ff705f]" />
-                  <span className="text-sm font-black">Payer en ligne</span>
+                  <div className="flex items-center justify-between w-full">
+                    <CreditCard className="h-5 w-5 text-[#ff705f]" />
+                    <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
+                      Bancontact
+                    </span>
+                  </div>
+                  <span className="text-sm font-black">Bancontact & En ligne</span>
                   <span className="text-xs text-[#7a847e]">
-                    Bancontact, carte — via Mollie
+                    Bancontact Pro, Payconiq, Carte bancaire
                   </span>
                 </button>
                 <button

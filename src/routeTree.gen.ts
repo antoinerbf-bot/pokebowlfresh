@@ -16,6 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
 import { Route as SurMesureRouteImport } from './routes/sur-mesure'
 import { Route as AdminStocksRouteImport } from './routes/admin/stocks'
+import { Route as ApiBancontactWebhookRouteImport } from './routes/api/bancontact-webhook'
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
@@ -58,6 +59,11 @@ const SurMesureRoute = SurMesureRouteImport.update({
 const AdminStocksRoute = AdminStocksRouteImport.update({
   id: '/admin/stocks',
   path: '/admin/stocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBancontactWebhookRoute = ApiBancontactWebhookRouteImport.update({
+  id: '/api/bancontact-webhook',
+  path: '/api/bancontact-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMollieWebhookRoute = ApiMollieWebhookRouteImport.update({
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/recrutement': typeof RecrutementRoute
   '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
+  '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/recrutement': typeof RecrutementRoute
   '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
+  '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -144,6 +152,7 @@ export interface FileRoutesById {
   '/recrutement': typeof RecrutementRoute
   '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
+  '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/recrutement'
     | '/sur-mesure'
     | '/admin/stocks'
+    | '/api/bancontact-webhook'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
     | '/recrutement'
     | '/sur-mesure'
     | '/admin/stocks'
+    | '/api/bancontact-webhook'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/recrutement'
     | '/sur-mesure'
     | '/admin/stocks'
+    | '/api/bancontact-webhook'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -215,6 +227,7 @@ export interface RootRouteChildren {
   RecrutementRoute: typeof RecrutementRoute
   SurMesureRoute: typeof SurMesureRoute
   AdminStocksRoute: typeof AdminStocksRoute
+  ApiBancontactWebhookRoute: typeof ApiBancontactWebhookRoute
   ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
   ApiOrdersRoute: typeof ApiOrdersRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/stocks'
       fullPath: '/admin/stocks'
       preLoaderRoute: typeof AdminStocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/bancontact-webhook': {
+      id: '/api/bancontact-webhook'
+      path: '/api/bancontact-webhook'
+      fullPath: '/api/bancontact-webhook'
+      preLoaderRoute: typeof ApiBancontactWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/mollie-webhook': {
@@ -343,6 +363,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecrutementRoute: RecrutementRoute,
   SurMesureRoute: SurMesureRoute,
   AdminStocksRoute: AdminStocksRoute,
+  ApiBancontactWebhookRoute: ApiBancontactWebhookRoute,
   ApiMollieWebhookRoute: ApiMollieWebhookRoute,
   ApiOrdersRoute: ApiOrdersRoute,
   OrderSuccessRoute: OrderSuccessRoute,

@@ -125,8 +125,8 @@ function OrderSuccessPage() {
             <Clock className="mx-auto h-12 w-12 text-[#ff705f]" />
             <h1 className="mt-4 text-3xl font-black">Paiement en cours…</h1>
             <p className="mt-3 text-[#758079]">
-              Si tu as payé, cette page se mettra à jour. Sinon, retourne sur Mollie ou
-              choisis « Payer sur place ».
+              Si tu as payé, cette page se mettra à jour dès confirmation bancaire.
+              Sinon, réessaye le paiement en ligne ou choisis « Payer sur place ».
             </p>
             <p className="mt-4 font-mono text-sm font-bold">{order.id}</p>
           </div>

@@ -12,6 +12,11 @@ import {
   getMolliePayment,
 } from "../lib/mollie.server";
 import {
+  isBancontactProConfigured,
+  createBancontactProPayment,
+  getBancontactProPayment,
+} from "../lib/bancontact-pro.server";
+import {
   getOrderFromStore,
   upsertOrder,
 } from "../lib/order-store";
@@ -219,6 +224,39 @@ export const submitCheckout = createServerFn({ method: "POST" })
       };
     }
 
+    if (isBancontactProConfigured()) {
+      const webhookUrl = `${data.origin}/api/bancontact-webhook`;
+      const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
+
+      const payment = await createBancontactProPayment({
+        amountEur: total,
+        description: `Poke N Bowl ${orderId}`,
+        reference: order.id,
+        returnUrl: redirectUrl,
+        callbackUrl: webhookUrl,
+      });
+
+      order.molliePaymentId = payment.paymentId;
+      await upsertOrder(order);
+
+      const payUrl =
+        payment._links?.checkout?.href ||
+        payment._links?.deeplink?.href ||
+        payment._links?.qrcode?.href;
+
+      if (!payUrl) {
+        throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
+      }
+
+      return {
+        type: "online" as const,
+        orderId: order.id,
+        total: order.total,
+        molliePaymentId: payment.paymentId,
+        redirectUrl: payUrl,
+      };
+    }
+
     const webhookUrl = `${data.origin}/api/mollie-webhook`;
     const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=online`;
 
@@ -259,24 +297,46 @@ export const getOrderStatus = createServerFn({ method: "GET" })
     let order = await getOrderFromStore(data.orderId);
 
     if (order?.molliePaymentId && order.status === "pending_payment") {
-      try {
-        const payment = await getMolliePayment(order.molliePaymentId);
-        if (payment.status === "paid") {
-          order = { ...order, status: "paid" };
-          await upsertOrder(order);
-        } else if (
-          payment.status === "canceled" ||
-          payment.status === "expired" ||
-          payment.status === "failed"
-        ) {
-          order = {
-            ...order,
-            status: payment.status === "expired" ? "expired" : "cancelled",
-          };
-          await upsertOrder(order);
+      if (isBancontactProConfigured()) {
+        try {
+          const payment = await getBancontactProPayment(order.molliePaymentId);
+          if (payment.status === "SUCCEEDED") {
+            order = { ...order, status: "paid" };
+            await upsertOrder(order);
+          } else if (
+            payment.status === "CANCELLED" ||
+            payment.status === "EXPIRED" ||
+            payment.status === "FAILED"
+          ) {
+            order = {
+              ...order,
+              status: payment.status === "EXPIRED" ? "expired" : "cancelled",
+            };
+            await upsertOrder(order);
+          }
+        } catch {
+          // Keep local status
         }
-      } catch {
-        // Keep local status if Mollie unreachable
+      } else {
+        try {
+          const payment = await getMolliePayment(order.molliePaymentId);
+          if (payment.status === "paid") {
+            order = { ...order, status: "paid" };
+            await upsertOrder(order);
+          } else if (
+            payment.status === "canceled" ||
+            payment.status === "expired" ||
+            payment.status === "failed"
+          ) {
+            order = {
+              ...order,
+              status: payment.status === "expired" ? "expired" : "cancelled",
+            };
+            await upsertOrder(order);
+          }
+        } catch {
+          // Keep local status if Mollie unreachable
+        }
       }
     }
 
