@@ -15,7 +15,7 @@ import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n a
 import { t as Route$15 } from "./order.success-DGzS6tAt.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-D0tlka5o.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DqP5HVP_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-C7Lpa6AF.css";
@@ -335,8 +335,7 @@ async function sendReceiptToPrinter(base64Data, config) {
 	} catch (err) {
 		console.warn("Print Bridge injoignable, essai ePOS-Print...", err);
 	}
-	try {
-		const xml = `<?xml version="1.0" encoding="utf-8"?>
+	const xml = `<?xml version="1.0" encoding="utf-8"?>
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
@@ -344,8 +343,15 @@ async function sendReceiptToPrinter(base64Data, config) {
     </epos-print>
   </s:Body>
 </s:Envelope>`;
-		const eposUrl = `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`;
-		const res = await fetch(eposUrl, {
+	const targets = [
+		`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
+	];
+	let lastErr = "";
+	for (const url of targets) try {
+		if ((await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "text/xml; charset=utf-8",
@@ -353,19 +359,17 @@ async function sendReceiptToPrinter(base64Data, config) {
 				SOAPAction: "\"\""
 			},
 			body: xml
-		});
-		if (res.ok) return {
+		})).ok) return {
 			success: true,
-			message: "Imprimé avec succès via Epson ePOS."
+			message: `Ticket imprimé avec succès sur ${config.printerIp} !`
 		};
-		else throw new Error(`Erreur ePOS HTTP ${res.status}`);
-	} catch (err) {
-		const msg = err instanceof Error ? err.message : String(err);
-		return {
-			success: false,
-			message: `Échec d'impression vers ${config.printerIp} : ${msg}. Vérifiez l'adresse IP ou lancez le Print Bridge.`
-		};
+	} catch (e) {
+		lastErr = e?.message ?? String(e);
 	}
+	return {
+		success: false,
+		message: `Impossible d'envoyer à l'Epson ${config.printerIp} : ${lastErr}.`
+	};
 }
 var Route$2 = createFileRoute("/pos/")({ component: PosApplicationPage });
 function PosApplicationPage() {
