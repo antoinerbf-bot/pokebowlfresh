@@ -67,9 +67,8 @@ export async function sendReceiptToPrinter(
     }
   }
 
-  // Option 2 : ePOS-Print direct (port 80/8008 de l'imprimante)
-  try {
-    const xml = `<?xml version="1.0" encoding="utf-8"?>
+  // Option 2 : ePOS-Print direct (Epson TM-m30III HTTPS / HTTP)
+  const xml = `<?xml version="1.0" encoding="utf-8"?>
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
@@ -78,28 +77,38 @@ export async function sendReceiptToPrinter(
   </s:Body>
 </s:Envelope>`;
 
-    const eposUrl = `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`;
-    const res = await fetch(eposUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/xml; charset=utf-8",
-        "If-Modified-Since": "Thu, 01 Jan 1970 00:00:00 GMT",
-        SOAPAction: '""',
-      },
-      body: xml,
-    });
+  // Tenter les ports standards ePOS de l'Epson : HTTPS 8043 (sécurisé TM-m30III), HTTPS 443, puis HTTP 80/8008
+  const targets = [
+    `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+  ];
 
-    if (res.ok) {
-      return { success: true, message: "Imprimé avec succès via Epson ePOS." };
-    } else {
-      throw new Error(`Erreur ePOS HTTP ${res.status}`);
+  let lastErr = "";
+  for (const url of targets) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/xml; charset=utf-8",
+          "If-Modified-Since": "Thu, 01 Jan 1970 00:00:00 GMT",
+          SOAPAction: '""',
+        },
+        body: xml,
+      });
+
+      if (res.ok) {
+        return { success: true, message: `Ticket imprimé avec succès sur ${config.printerIp} !` };
+      }
+    } catch (e: any) {
+      lastErr = e?.message ?? String(e);
     }
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return {
-      success: false,
-      message: `Échec d'impression vers ${config.printerIp} : ${msg}. Vérifiez l'adresse IP ou lancez le Print Bridge.`,
-    };
   }
+
+  return {
+    success: false,
+    message: `Impossible d'envoyer à l'Epson ${config.printerIp} : ${lastErr}.`,
+  };
 }
 
