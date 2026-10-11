@@ -3,9 +3,9 @@ import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { a as numberType, i as literalType, o as objectType, r as enumType, s as stringType, t as arrayType } from "../_libs/zod.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
 import { t as createServerRpc } from "./createServerRpc-B90ckaqP.mjs";
-import { n as formatEurAmount, r as getMolliePayment, t as createMolliePayment } from "./mollie.server-BK3UfBAZ.mjs";
+import { a as getMolliePayment, i as getBancontactProPayment, n as createMolliePayment, o as isBancontactProConfigured, r as formatEurAmount, t as createBancontactProPayment } from "./bancontact-pro.server-3IaSEhvt.mjs";
 import { c as upsertOrder, i as getOrderFromStore } from "./order-store-4tO4OvTG.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DXhelcWr.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-yHqYmpso.js
 function generateOrderId() {
 	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
@@ -149,6 +149,28 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 			redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
 		};
 	}
+	if (isBancontactProConfigured()) {
+		const webhookUrl = `${data.origin}/api/bancontact-webhook`;
+		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
+		const payment = await createBancontactProPayment({
+			amountEur: total,
+			description: `Poke N Bowl ${orderId}`,
+			reference: order.id,
+			returnUrl: redirectUrl,
+			callbackUrl: webhookUrl
+		});
+		order.molliePaymentId = payment.paymentId;
+		await upsertOrder(order);
+		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
+		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
+		return {
+			type: "online",
+			orderId: order.id,
+			total: order.total,
+			molliePaymentId: payment.paymentId,
+			redirectUrl: payUrl
+		};
+	}
 	const webhookUrl = `${data.origin}/api/mollie-webhook`;
 	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=online`;
 	const payment = await createMolliePayment({
@@ -183,7 +205,23 @@ var getOrderStatus_createServerFn_handler = createServerRpc({
 }, (opts) => getOrderStatus.__executeServer(opts));
 var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(getOrderStatus_createServerFn_handler, async ({ data }) => {
 	let order = await getOrderFromStore(data.orderId);
-	if (order?.molliePaymentId && order.status === "pending_payment") try {
+	if (order?.molliePaymentId && order.status === "pending_payment") if (isBancontactProConfigured()) try {
+		const payment = await getBancontactProPayment(order.molliePaymentId);
+		if (payment.status === "SUCCEEDED") {
+			order = {
+				...order,
+				status: "paid"
+			};
+			await upsertOrder(order);
+		} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") {
+			order = {
+				...order,
+				status: payment.status === "EXPIRED" ? "expired" : "cancelled"
+			};
+			await upsertOrder(order);
+		}
+	} catch {}
+	else try {
 		const payment = await getMolliePayment(order.molliePaymentId);
 		if (payment.status === "paid") {
 			order = {

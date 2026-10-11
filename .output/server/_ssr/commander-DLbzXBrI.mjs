@@ -8,7 +8,7 @@ import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
 import { G as ArrowLeft, W as ArrowRight, c as Sparkles, u as ShoppingBag } from "../_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./CartDrawer-B2PhVEb9.mjs";
-import { t as useStock } from "./useStock-K1JsIZMi.mjs";
+import { t as useStock } from "./useStock-BZI1to_0.mjs";
 import { a as drink_fanta_orange_default, c as tiramisu_oreo_default, i as drink_eau_plate_default, l as tiramisu_speculoos_default, n as drink_coca_zero_default, o as drink_ice_tea_default, r as drink_eau_gazeuse_default, s as tiramisu_nutella_default, t as drink_coca_cola_default } from "./drink-eau-gazeuse-BNz0q5PT.mjs";
 require_react();
 var import_jsx_runtime = require_jsx_runtime();

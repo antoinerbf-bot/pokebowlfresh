@@ -6,8 +6,8 @@ import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
 import { A as CreditCard, G as ArrowLeft, s as Store, w as LoaderCircle } from "../_libs/lucide-react.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
-import { n as submitCheckout } from "./checkout-BhpRNcDg.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-BOwoRE3D.js
+import { n as submitCheckout } from "./checkout-BsDSa2sc.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DASAWOjX.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -302,14 +302,20 @@ function CheckoutPage() {
 										onClick: () => setPaymentMethod("online"),
 										className: `flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${paymentMethod === "online" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec] hover:border-black/20"}`,
 										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between w-full",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
+													children: "Bancontact"
+												})]
+											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-sm font-black",
-												children: "Payer en ligne"
+												children: "Bancontact & En ligne"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "Bancontact, carte — via Mollie"
+												children: "Bancontact Pro, Payconiq, Carte bancaire"
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {

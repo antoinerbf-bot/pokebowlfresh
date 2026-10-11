@@ -4,21 +4,21 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$13 } from "../_productId-FMM7Qziz.mjs";
+import { t as Route$14 } from "../_productId-uzJx3Dm2.mjs";
 import { P as CircleCheckBig, _ as Phone, d as Shield, h as Printer, i as Truck, j as CookingPot, k as ExternalLink, m as RefreshCw, n as VolumeX, p as Search, r as Volume2 } from "../_libs/lucide-react.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-DqTMzYH5.mjs";
+import { t as createSsrRpc } from "./createSsrRpc-DaP2Ll_1.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as Route$14 } from "../_token-8zkbFWIx.mjs";
-import { r as getMolliePayment } from "./mollie.server-BK3UfBAZ.mjs";
+import { t as Route$15 } from "../_token-LiuOqEUs.mjs";
+import { a as getMolliePayment, i as getBancontactProPayment } from "./bancontact-pro.server-3IaSEhvt.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, t as acknowledgePrint } from "./order-store-4tO4OvTG.mjs";
-import { t as Route$15 } from "./order.success-DGzS6tAt.mjs";
+import { t as Route$16 } from "./order.success-_eSYlBLu.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-B5_XkRSm.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-UN-aq5O8.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-C7Lpa6AF.css";
+var styles_default = "/assets/styles-DvtEh93f.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -106,7 +106,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$12 = createRootRouteWithContext()({
+var Route$13 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -164,7 +164,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$12.useRouteContext();
+	const { queryClient } = Route$13.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -187,31 +187,65 @@ function RootComponent() {
 	});
 }
 var $$splitComponentImporter$6 = () => import("./routes-B-Mldj55.mjs");
-var Route$11 = createFileRoute("/")({
+var Route$12 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 		name: "description",
 		content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !"
 	}] }),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./checkout-BOwoRE3D.mjs");
-var Route$10 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-BXmdiYZi.mjs");
-var Route$9 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
+var $$splitComponentImporter$5 = () => import("./checkout-DASAWOjX.mjs");
+var Route$11 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
+var $$splitComponentImporter$4 = () => import("./commander-DLbzXBrI.mjs");
+var Route$10 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./contact-ebvlFhhM.mjs");
-var Route$8 = createFileRoute("/contact")({
+var Route$9 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
 var $$splitComponentImporter$2 = () => import("./recrutement-BUiTPiiD.mjs");
-var Route$7 = createFileRoute("/recrutement")({
+var Route$8 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
 var $$splitComponentImporter$1 = () => import("./sur-mesure-PUGGCNL4.mjs");
-var Route$6 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./stocks-Di4hLRvd.mjs");
-var Route$5 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
+var Route$7 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+var $$splitComponentImporter = () => import("./stocks-RLnK7knV.mjs");
+var Route$6 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
+var Route$5 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+	try {
+		const contentType = request.headers.get("content-type") ?? "";
+		let paymentId = null;
+		if (contentType.includes("application/json")) {
+			const body = await request.json();
+			paymentId = body.paymentId || body.id || null;
+		} else {
+			const text = await request.text();
+			const params = new URLSearchParams(text);
+			paymentId = params.get("paymentId") || params.get("id");
+		}
+		if (!paymentId) return new Response("Missing payment id", { status: 400 });
+		const payment = await getBancontactProPayment(paymentId);
+		const orderId = payment.reference;
+		if (!orderId) return new Response("OK", { status: 200 });
+		const order = await getOrderFromStore(orderId);
+		if (!order) return new Response("OK", { status: 200 });
+		if (payment.status === "SUCCEEDED") await upsertOrder({
+			...order,
+			status: "paid",
+			molliePaymentId: paymentId
+		});
+		else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") await upsertOrder({
+			...order,
+			status: payment.status === "EXPIRED" ? "expired" : "cancelled",
+			molliePaymentId: paymentId
+		});
+		return new Response("OK", { status: 200 });
+	} catch (e) {
+		console.error("[bancontact-webhook]", e);
+		return new Response("Error", { status: 500 });
+	}
+} } } });
 var Route$4 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
@@ -1277,60 +1311,65 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 		return new Response("Printer queue unavailable", { status: 500 });
 	}
 } } } });
-var IndexRoute = Route$11.update({
+var IndexRoute = Route$12.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var CheckoutRoute = Route$10.update({
+var CheckoutRoute = Route$11.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var CommanderRoute = Route$9.update({
+var CommanderRoute = Route$10.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var ContactRoute = Route$8.update({
+var ContactRoute = Route$9.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var RecrutementRoute = Route$7.update({
+var RecrutementRoute = Route$8.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var SurMesureRoute = Route$6.update({
+var SurMesureRoute = Route$7.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var AdminStocksRoute = Route$5.update({
+var AdminStocksRoute = Route$6.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
+});
+var ApiBancontactWebhookRoute = Route$5.update({
+	id: "/api/bancontact-webhook",
+	path: "/api/bancontact-webhook",
+	getParentRoute: () => Route$13
 });
 var ApiMollieWebhookRoute = Route$4.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
 var ApiOrdersRoute = Route$3.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
-var OrderSuccessRoute = Route$15.update({
+var OrderSuccessRoute = Route$16.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
 var PosIndexRoute = Route$2.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$12
+	getParentRoute: () => Route$13
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -1340,32 +1379,33 @@ var rootRouteChildren = {
 	RecrutementRoute,
 	SurMesureRoute,
 	AdminStocksRoute,
+	ApiBancontactWebhookRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
 	OrderSuccessRoute,
-	ProductProductIdRoute: Route$13.update({
+	ProductProductIdRoute: Route$14.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
-	TrackTokenRoute: Route$14.update({
+	TrackTokenRoute: Route$15.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$12
+		getParentRoute: () => Route$13
 	})
 };
-var routeTree = Route$12._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$13._addFileChildren(rootRouteChildren)._addFileTypes();
 var getRouter = () => {
 	const queryClient = new QueryClient();
 	return createRouter({

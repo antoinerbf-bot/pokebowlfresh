@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-C7Lpa6AF.css";
+var styles_default = "/assets/styles-DvtEh93f.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -522,7 +522,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$15 = createRootRouteWithContext()({
+var Route$16 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -580,7 +580,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$15.useRouteContext();
+	const { queryClient } = Route$16.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -4244,7 +4244,7 @@ function PokawaInstagramWall() {
 }
 //#endregion
 //#region src/routes/index.tsx
-var Route$14 = createFileRoute("/")({
+var Route$15 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 		name: "description",
 		content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !"
@@ -4682,6 +4682,70 @@ async function getMolliePayment(paymentId) {
 }
 function formatEurAmount(total) {
 	return total.toFixed(2);
+}
+//#endregion
+//#region src/lib/bancontact-pro.server.ts
+/**
+* Server-only Bancontact Pro (Payconiq by Bancontact) API helper.
+*
+* Supported environments:
+* - Production: https://api.payconiq.com/v3
+* - Preprod / Test: https://api.preprod.payconiq.com/v3
+*
+* Required environment variables:
+* - BANCONTACT_PRO_API_KEY or PAYCONIQ_API_KEY
+* - BANCONTACT_PRO_ENV (optional: "production" | "preprod", defaults to "production")
+*/
+var PROD_API = "https://api.payconiq.com/v3";
+var PREPROD_API = "https://api.preprod.payconiq.com/v3";
+function getBancontactProApiKey() {
+	return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
+}
+function isBancontactProConfigured() {
+	return Boolean(getBancontactProApiKey());
+}
+function getApiBaseUrl() {
+	const env = (process.env.BANCONTACT_PRO_ENV || "production").toLowerCase();
+	return env === "preprod" || env === "test" ? PREPROD_API : PROD_API;
+}
+async function createBancontactProPayment(params) {
+	const apiKey = getBancontactProApiKey();
+	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.");
+	const amountCents = Math.round(params.amountEur * 100);
+	const res = await fetch(`${getApiBaseUrl()}/payments`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+			"Content-Type": "application/json",
+			Accept: "application/json"
+		},
+		body: JSON.stringify({
+			amount: amountCents,
+			currency: "EUR",
+			description: params.description,
+			reference: params.reference,
+			returnUrl: params.returnUrl,
+			callbackUrl: params.callbackUrl
+		})
+	});
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Bancontact Pro create payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
+async function getBancontactProPayment(paymentId) {
+	const apiKey = getBancontactProApiKey();
+	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.");
+	const res = await fetch(`${getApiBaseUrl()}/payments/${paymentId}`, { headers: {
+		Authorization: `Bearer ${apiKey}`,
+		Accept: "application/json"
+	} });
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Bancontact Pro get payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
 }
 //#endregion
 //#region src/lib/order-store.ts
@@ -5126,6 +5190,28 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 			redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
 		};
 	}
+	if (isBancontactProConfigured()) {
+		const webhookUrl = `${data.origin}/api/bancontact-webhook`;
+		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
+		const payment = await createBancontactProPayment({
+			amountEur: total,
+			description: `Poke N Bowl ${orderId}`,
+			reference: order.id,
+			returnUrl: redirectUrl,
+			callbackUrl: webhookUrl
+		});
+		order.molliePaymentId = payment.paymentId;
+		await upsertOrder(order);
+		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
+		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
+		return {
+			type: "online",
+			orderId: order.id,
+			total: order.total,
+			molliePaymentId: payment.paymentId,
+			redirectUrl: payUrl
+		};
+	}
 	const webhookUrl = `${data.origin}/api/mollie-webhook`;
 	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=online`;
 	const payment = await createMolliePayment({
@@ -5155,7 +5241,23 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 });
 var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
 	let order = await getOrderFromStore(data.orderId);
-	if (order?.molliePaymentId && order.status === "pending_payment") try {
+	if (order?.molliePaymentId && order.status === "pending_payment") if (isBancontactProConfigured()) try {
+		const payment = await getBancontactProPayment(order.molliePaymentId);
+		if (payment.status === "SUCCEEDED") {
+			order = {
+				...order,
+				status: "paid"
+			};
+			await upsertOrder(order);
+		} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") {
+			order = {
+				...order,
+				status: payment.status === "EXPIRED" ? "expired" : "cancelled"
+			};
+			await upsertOrder(order);
+		}
+	} catch {}
+	else try {
 		const payment = await getMolliePayment(order.molliePaymentId);
 		if (payment.status === "paid") {
 			order = {
@@ -5187,7 +5289,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$13 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$14 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -5480,14 +5582,20 @@ function CheckoutPage() {
 										onClick: () => setPaymentMethod("online"),
 										className: `flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${paymentMethod === "online" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec] hover:border-black/20"}`,
 										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between w-full",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
+													children: "Bancontact"
+												})]
+											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-sm font-black",
-												children: "Payer en ligne"
+												children: "Bancontact & En ligne"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "Bancontact, carte — via Mollie"
+												children: "Bancontact Pro, Payconiq, Carte bancaire"
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -5906,7 +6014,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$12 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$13 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#10251f] text-[#d7ff45]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -6426,7 +6534,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$11 = createFileRoute("/contact")({
+var Route$12 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -6567,7 +6675,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$10 = createFileRoute("/recrutement")({
+var Route$11 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -6684,7 +6792,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$9 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$10 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -7338,7 +7446,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$8 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$9 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -7585,6 +7693,42 @@ function AdminStocksPage() {
 	});
 }
 //#endregion
+//#region src/routes/api/bancontact-webhook.ts
+var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+	try {
+		const contentType = request.headers.get("content-type") ?? "";
+		let paymentId = null;
+		if (contentType.includes("application/json")) {
+			const body = await request.json();
+			paymentId = body.paymentId || body.id || null;
+		} else {
+			const text = await request.text();
+			const params = new URLSearchParams(text);
+			paymentId = params.get("paymentId") || params.get("id");
+		}
+		if (!paymentId) return new Response("Missing payment id", { status: 400 });
+		const payment = await getBancontactProPayment(paymentId);
+		const orderId = payment.reference;
+		if (!orderId) return new Response("OK", { status: 200 });
+		const order = await getOrderFromStore(orderId);
+		if (!order) return new Response("OK", { status: 200 });
+		if (payment.status === "SUCCEEDED") await upsertOrder({
+			...order,
+			status: "paid",
+			molliePaymentId: paymentId
+		});
+		else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") await upsertOrder({
+			...order,
+			status: payment.status === "EXPIRED" ? "expired" : "cancelled",
+			molliePaymentId: paymentId
+		});
+		return new Response("OK", { status: 200 });
+	} catch (e) {
+		console.error("[bancontact-webhook]", e);
+		return new Response("Error", { status: 500 });
+	}
+} } } });
+//#endregion
 //#region src/routes/api/mollie-webhook.ts
 var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
@@ -7740,7 +7884,7 @@ function OrderSuccessPage() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-3 text-[#758079]",
-						children: "Si tu as payé, cette page se mettra à jour. Sinon, retourne sur Mollie ou choisis « Payer sur place »."
+						children: "Si tu as payé, cette page se mettra à jour dès confirmation bancaire. Sinon, réessaye le paiement en ligne ou choisis « Payer sur place »."
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-4 font-mono text-sm font-bold",
@@ -10125,60 +10269,65 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$14.update({
+var IndexRoute = Route$15.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
-var CheckoutRoute = Route$13.update({
+var CheckoutRoute = Route$14.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
-var CommanderRoute = Route$12.update({
+var CommanderRoute = Route$13.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
-var ContactRoute = Route$11.update({
+var ContactRoute = Route$12.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
-var RecrutementRoute = Route$10.update({
+var RecrutementRoute = Route$11.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
-var SurMesureRoute = Route$9.update({
+var SurMesureRoute = Route$10.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
-var AdminStocksRoute = Route$8.update({
+var AdminStocksRoute = Route$9.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
+});
+var ApiBancontactWebhookRoute = Route$8.update({
+	id: "/api/bancontact-webhook",
+	path: "/api/bancontact-webhook",
+	getParentRoute: () => Route$16
 });
 var ApiMollieWebhookRoute = Route$7.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
 var ApiOrdersRoute = Route$6.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$15
+	getParentRoute: () => Route$16
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -10188,32 +10337,33 @@ var rootRouteChildren = {
 	RecrutementRoute,
 	SurMesureRoute,
 	AdminStocksRoute,
+	ApiBancontactWebhookRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
 	OrderSuccessRoute,
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$15
+		getParentRoute: () => Route$16
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$15
+		getParentRoute: () => Route$16
 	}),
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$15
+		getParentRoute: () => Route$16
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$15
+		getParentRoute: () => Route$16
 	})
 };
-var routeTree = Route$15._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$16._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

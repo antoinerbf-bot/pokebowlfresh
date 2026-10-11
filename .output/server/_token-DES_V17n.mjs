@@ -4,10 +4,10 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { t as BrandLogo } from "./_ssr/BrandLogo-BkzyhEtx.mjs";
 import { C as MapPin, F as CircleAlert, M as Clock, P as CircleCheckBig, _ as Phone, i as Truck, w as LoaderCircle, y as Navigation } from "./_libs/lucide-react.mjs";
 import { c as createServerFn } from "./_ssr/createServerFn-CIHAFgYl.mjs";
-import { t as createSsrRpc } from "./_ssr/createSsrRpc-DqTMzYH5.mjs";
+import { t as createSsrRpc } from "./_ssr/createSsrRpc-DaP2Ll_1.mjs";
 import { o as objectType, r as enumType, s as stringType } from "./_libs/zod.mjs";
-import { t as Route } from "./_token-8zkbFWIx.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_token-Bup7QYws.js
+import { t as Route } from "./_token-LiuOqEUs.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/_token-DES_V17n.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ token: stringType().min(8) })).handler(createSsrRpc("7c6d647b6f9e61f1dd19432e0ce31dfb70d3dd1840600bf36fabbc33694dfca9"));

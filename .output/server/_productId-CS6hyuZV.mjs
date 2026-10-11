@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { _ as Navigate, g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-FMM7Qziz.mjs";
+import { t as Route } from "./_productId-uzJx3Dm2.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-BkzyhEtx.mjs";
 import { B as Check, G as ArrowLeft, a as TriangleAlert, b as Minus, c as Sparkles, f as ShieldCheck, g as Plus, l as ShoppingCart } from "./_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-B2PhVEb9.mjs";
-import { t as useStock } from "./_ssr/useStock-K1JsIZMi.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-DX21oq4Q.js
+import { t as useStock } from "./_ssr/useStock-BZI1to_0.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-CS6hyuZV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {
