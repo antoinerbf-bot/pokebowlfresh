@@ -181,12 +181,15 @@ export function PosApplicationPage() {
   };
 
   const handleManualReprint = async (orderId: string) => {
-    if (!confirm("Voulez-vous réimprimer le ticket de cette commande ?")) return;
+    const targetOrder = orders.find((o) => o.id === orderId);
+    if (targetOrder) {
+      printThermalTicket(targetOrder);
+    }
     try {
       await triggerReprint({ data: { pin, orderId } });
       await loadOrders();
     } catch (e) {
-      alert("Erreur lors de la demande de réimpression.");
+      console.warn("Reprint sync", e);
     }
   };
 
@@ -202,12 +205,145 @@ export function PosApplicationPage() {
     }
   };
 
+  // Impression thermique native Android (Epson Print Enabler / Système Android)
+  const printThermalTicket = (order: Order | null, isTest = false) => {
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "0";
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow?.document;
+    if (!doc) return;
+
+    const qrUrl = order?.deliveryToken
+      ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.origin + "/track/" + order.deliveryToken)}`
+      : "";
+
+    const html = isTest
+      ? `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @page { size: 80mm auto; margin: 0; }
+          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 14px; text-align: center; color: #000; }
+          h1 { font-size: 20px; margin: 0 0 4px 0; }
+          hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+        </style>
+      </head>
+      <body>
+        <h1>POKE N BOWL VISE</h1>
+        <p>TEST IMPRIMANTE REUSSI</p>
+        <hr>
+        <p>Date : ${new Date().toLocaleTimeString("fr-BE")}</p>
+        <p>Epson TM-m30III Connectee !</p>
+        <hr>
+        <p>Pret pour les commandes.</p>
+        <br><br>.
+      </body>
+      </html>
+    `
+      : `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @page { size: 80mm auto; margin: 0; }
+          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 13px; color: #000; }
+          .center { text-align: center; }
+          h1 { font-size: 19px; margin: 0 0 2px 0; }
+          h2 { font-size: 16px; margin: 4px 0; }
+          .bold { font-weight: bold; }
+          hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
+          .item { display: flex; justify-content: space-between; font-weight: bold; margin: 3px 0; }
+          .topping { font-size: 11px; padding-left: 10px; }
+          .qr { margin-top: 8px; text-align: center; }
+          .qr img { width: 140px; height: 140px; }
+        </style>
+      </head>
+      <body>
+        <div class="center">
+          <h1>POKE N BOWL</h1>
+          <p>Rue Haute 38, 4600 Vise</p>
+          <hr>
+          <h2>${order?.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}</h2>
+          <p class="bold">COMMANDE : ${order?.id}</p>
+          <p>Horaire : ${order?.customer.requestedTime}</p>
+        </div>
+        <hr>
+        <p><span class="bold">Client :</span> ${order?.customer.name}</p>
+        <p><span class="bold">Tel :</span> ${order?.customer.phone}</p>
+        ${
+          order?.customer.fulfillment === "delivery"
+            ? `<p><span class="bold">Adresse :</span> ${order.customer.address || ""}</p>
+               <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>`
+            : ""
+        }
+        ${order?.customer.notes ? `<p class="bold">Note : ${order.customer.notes}</p>` : ""}
+        <hr>
+        <p class="bold">ARTICLES :</p>
+        ${
+          order?.items
+            .map(
+              (it) => `
+          <div class="item">
+            <span>${it.quantity}x ${it.name}</span>
+            <span>${(it.price * it.quantity).toFixed(2)} E</span>
+          </div>
+          ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
+        `,
+            )
+            .join("")
+        }
+        <hr>
+        <div class="item" style="font-size: 16px;">
+          <span>TOTAL :</span>
+          <span>${order?.total.toFixed(2)} EUR</span>
+        </div>
+        <div class="center bold" style="margin-top: 4px;">
+          ${order?.status === "paid" ? "PAIEMENT VALIDE (EN LIGNE)" : "A PAYER SUR PLACE"}
+        </div>
+        ${
+          qrUrl
+            ? `
+          <hr>
+          <div class="qr">
+            <p style="font-size: 11px; font-weight: bold;">SCANNEZ POUR GPS ET LIVREUR</p>
+            <img src="${qrUrl}" alt="QR Code">
+          </div>
+        `
+            : ""
+        }
+        <div class="center" style="margin-top: 8px;">
+          <p>Merci pour votre commande !</p>
+        </div>
+        <br><br>.
+      </body>
+      </html>
+    `;
+
+    doc.open();
+    doc.write(html);
+    doc.close();
+
+    iframe.contentWindow?.focus();
+    setTimeout(() => {
+      iframe.contentWindow?.print();
+      setTimeout(() => document.body.removeChild(iframe), 1500);
+    }, 400);
+  };
+
   // Test d'impression direct
   const handleTestPrint = async () => {
-    const dummyB64 = btoa("\x1B@\x1B!\x11\x1B\x61\x01TEST POKENBOWL\n\nIMPRESSION REUSSIE\n\x1B!\x00\x1Bd\x04\x1DV\x01");
-    const res = await sendReceiptToPrinter(dummyB64, config);
-    alert(res.message);
+    printThermalTicket(null, true);
   };
+
 
   // Écran PIN
   if (!isUnlocked) {
