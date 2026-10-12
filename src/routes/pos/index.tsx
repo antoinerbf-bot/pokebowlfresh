@@ -753,9 +753,10 @@ export function PosApplicationPage() {
                 </button>
                 <button
                   onClick={handleTestPrint}
-                  className="flex-1 rounded-xl bg-white/10 py-3 text-white font-black text-sm hover:bg-white/20"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer"
                 >
-                  Tester l'impression (Test Print)
+                  <Printer className="w-4 h-4" />
+                  Tester l'impression (Direct ePOS)
                 </button>
               </div>
             </div>
