@@ -8266,9 +8266,9 @@ var ackPosPrint = createServerFn({ method: "POST" }).validator(objectType({
 //#endregion
 //#region src/lib/epos-client.ts
 var DEFAULT_PRINTER_CONFIG = {
-	printerIp: "192.168.1.100",
-	printerPort: 9100,
-	bridgeUrl: "http://localhost:3001",
+	printerIp: "192.168.0.5",
+	printerPort: 8043,
+	bridgeUrl: "",
 	autoPrintKitchen: true,
 	autoPrintDelivery: true,
 	soundEnabled: true
@@ -8598,7 +8598,38 @@ function PosApplicationPage() {
 		}, 400);
 	};
 	const handleTestPrint = async () => {
-		printThermalTicket(null, true);
+		try {
+			const b = new EscPosBuilder();
+			b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
+			b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
+			b.divider("=");
+			b.line(`Date: ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}`);
+			b.line(`IP: ${config.printerIp}`);
+			b.line("Epson TM-m30III Connectee !");
+			b.divider("=");
+			b.line("Pret pour les commandes.");
+			b.feed(4).cut(true);
+			const res = await sendReceiptToPrinter(b.toBase64(), config);
+			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+			if (res.success) {
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Test ePOS direct REUSSI sur ${config.printerIp} !`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				alert("Succes ! Le ticket de test sort sur l'imprimante.");
+			} else {
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Echec direct : ${res.message}`,
+					type: "err"
+				}, ...prev.slice(0, 30)]);
+				printThermalTicket(null, true);
+			}
+		} catch (e) {
+			console.error(e);
+			printThermalTicket(null, true);
+		}
 	};
 	if (!isUnlocked) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "min-h-screen bg-[#10251f] flex items-center justify-center p-4 select-none",

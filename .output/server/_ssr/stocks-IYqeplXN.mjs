@@ -3,8 +3,8 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { d as Shield, m as RefreshCw, w as LoaderCircle } from "../_libs/lucide-react.mjs";
 import { n as catalogLabels } from "./stock-BmyQCm-F.mjs";
-import { n as resetStock, r as setStockItem, t as getStock } from "./stock-CL5_PgdE.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/stocks-RLnK7knV.js
+import { n as resetStock, r as setStockItem, t as getStock } from "./stock-DPaUwCUR.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/stocks-IYqeplXN.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var PIN_KEY = "pnb_stock_pin";
