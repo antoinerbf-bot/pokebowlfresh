@@ -15,9 +15,9 @@ export interface PrinterConfig {
 }
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
-  printerIp: "192.168.1.100",
-  printerPort: 9100,
-  bridgeUrl: "http://localhost:3001",
+  printerIp: "192.168.0.5",
+  printerPort: 8043,
+  bridgeUrl: "",
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,

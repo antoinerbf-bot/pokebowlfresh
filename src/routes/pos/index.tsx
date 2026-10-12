@@ -33,6 +33,7 @@ import {
   sendReceiptToPrinter,
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
+import { EscPosBuilder } from "../../lib/escpos";
 
 export const Route = createFileRoute("/pos/")({
   component: PosApplicationPage,
@@ -341,7 +342,40 @@ export function PosApplicationPage() {
 
   // Test d'impression direct
   const handleTestPrint = async () => {
-    printThermalTicket(null, true);
+    try {
+      const b = new EscPosBuilder();
+      b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
+      b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
+      b.divider("=");
+      b.line(`Date: ${new Date().toLocaleTimeString("fr-BE")}`);
+      b.line(`IP: ${config.printerIp}`);
+      b.line("Epson TM-m30III Connectee !");
+      b.divider("=");
+      b.line("Pret pour les commandes.");
+      b.feed(4).cut(true);
+
+      const b64 = b.toBase64();
+      const res = await sendReceiptToPrinter(b64, config);
+      const now = new Date().toLocaleTimeString();
+
+      if (res.success) {
+        setPrintLog((prev) => [
+          { time: now, msg: `Test ePOS direct REUSSI sur ${config.printerIp} !`, type: "ok" },
+          ...prev.slice(0, 30),
+        ]);
+        alert("Succes ! Le ticket de test sort sur l'imprimante.");
+      } else {
+        setPrintLog((prev) => [
+          { time: now, msg: `Echec direct : ${res.message}`, type: "err" },
+          ...prev.slice(0, 30),
+        ]);
+        // Secours
+        printThermalTicket(null, true);
+      }
+    } catch (e: any) {
+      console.error(e);
+      printThermalTicket(null, true);
+    }
   };
 
 
