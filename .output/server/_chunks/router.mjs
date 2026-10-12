@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-DvtEh93f.css";
+var styles_default = "/assets/styles-BDmlQYfM.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -9033,10 +9033,10 @@ function PosApplicationPage() {
 											},
 											className: "flex-1 rounded-xl bg-[#ff705f] py-3 text-white font-black text-sm",
 											children: "Enregistrer"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: handleTestPrint,
-											className: "flex-1 rounded-xl bg-white/10 py-3 text-white font-black text-sm hover:bg-white/20",
-											children: "Tester l'impression (Test Print)"
+											className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Tester l'impression (Direct ePOS)"]
 										})]
 									})
 								]

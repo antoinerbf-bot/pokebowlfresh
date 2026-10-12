@@ -16,10 +16,10 @@ import { t as Route$16 } from "./order.success-C6zNXeDu.mjs";
 import { t as EscPosBuilder } from "./escpos-dUhfprHQ.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Bb9v9LdJ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CIxG4Xnl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-DvtEh93f.css";
+var styles_default = "/assets/styles-BDmlQYfM.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -1091,10 +1091,10 @@ function PosApplicationPage() {
 											},
 											className: "flex-1 rounded-xl bg-[#ff705f] py-3 text-white font-black text-sm",
 											children: "Enregistrer"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: handleTestPrint,
-											className: "flex-1 rounded-xl bg-white/10 py-3 text-white font-black text-sm hover:bg-white/20",
-											children: "Tester l'impression (Test Print)"
+											className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Tester l'impression (Direct ePOS)"]
 										})]
 									})
 								]
