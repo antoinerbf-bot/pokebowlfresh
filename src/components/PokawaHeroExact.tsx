@@ -176,7 +176,7 @@ export function PokawaHeroExact() {
   return (
     <section
       aria-label="Accueil Poké N Bowl Visé — Poké bowls frais & Crousty Chicken"
-      className="relative w-full h-[92vh] sm:h-[96vh] min-h-[620px] max-h-[1050px] overflow-hidden bg-[#0a1713] select-none"
+      className="relative w-full h-auto min-h-[780px] sm:h-[96vh] sm:min-h-[680px] max-h-none sm:max-h-[1050px] overflow-hidden bg-[#0a1713] select-none"
     >
       {/* ════════ PHOTO EN PLEIN ÉCRAN TOTAL (LES PLATS PRENNENT TOUTE LA HOME PAGE AVEC GROS ZOOM APPÉTISSANT) ════════ */}
       <AnimatePresence initial={false} mode="wait">
@@ -233,7 +233,7 @@ export function PokawaHeroExact() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-2xl space-y-3 sm:space-y-4"
+              className="w-full max-w-[900px] space-y-3 sm:space-y-4"
             >
               {/* Badges punchy */}
               <div className="flex flex-wrap items-center gap-2">
@@ -247,7 +247,7 @@ export function PokawaHeroExact() {
               </div>
 
               {/* Grand titre style Pokawa ultra-visible avec drop shadow puissant */}
-              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight leading-[0.92] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]">
+              <h1 className="max-w-full text-[clamp(2.15rem,6.4vw,6rem)] font-black uppercase tracking-tight leading-[1.02] [overflow-wrap:anywhere] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]">
                 <span className="block text-white">{slide.titleLine1}</span>
                 <span className="block text-[#d7ff45]">{slide.titleLine2}</span>
               </h1>
