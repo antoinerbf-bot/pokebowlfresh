@@ -16,10 +16,10 @@ import { t as Route$16 } from "./order.success-BBnCZ2Yg.mjs";
 import { t as EscPosBuilder } from "./escpos-dUhfprHQ.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-AV2zq88s.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Dg6h0iXK.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-D2_51ErZ.css";
+var styles_default = "/assets/styles-A8KgfYEX.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {

@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-D2_51ErZ.css";
+var styles_default = "/assets/styles-A8KgfYEX.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {

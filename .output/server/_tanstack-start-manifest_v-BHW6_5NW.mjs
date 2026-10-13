@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-DPSHrwjr.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BHW6_5NW.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/__root.tsx",
@@ -21,7 +21,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/api/printer/queue"
 		],
 		preloads: [
-			"/assets/index-CrunJKqe.js",
+			"/assets/index-DQJs9dJC.js",
 			"/assets/createLucideIcon-zy-1MMUP.js",
 			"/assets/link-D0rUQ_ra.js",
 			"/assets/createServerFn-C1JWGbHh.js"
@@ -29,15 +29,15 @@ var tsrStartManifest = () => ({ routes: {
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-CrunJKqe.js"
+			src: "/assets/index-DQJs9dJC.js"
 		} }]
 	},
 	"/": {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-DW-xSFMH.js",
-			"/assets/CartDrawer-C5kJJRXD.js",
+			"/assets/routes-tbsn93H0.js",
+			"/assets/CartDrawer-cbxImJuh.js",
 			"/assets/briefcase-business-DJeAkziv.js",
 			"/assets/check-PxzYpF26.js",
 			"/assets/circle-check-xE2Wlw9j.js",
@@ -55,7 +55,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/checkout.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/checkout-DBsEfwab.js",
+			"/assets/checkout-DcVpy1BZ.js",
 			"/assets/arrow-left-BCa9TLr_.js",
 			"/assets/checkout-CMIV77ms.js",
 			"/assets/loader-circle-m3U77eaX.js",
@@ -66,9 +66,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/commander.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/commander-h6ioRS09.js",
+			"/assets/commander-vv6dYk0C.js",
 			"/assets/arrow-left-BCa9TLr_.js",
-			"/assets/CartDrawer-C5kJJRXD.js",
+			"/assets/CartDrawer-cbxImJuh.js",
 			"/assets/shopping-bag-Zw7p0j3b.js",
 			"/assets/data-lJNOC6Y9.js",
 			"/assets/BrandLogo-CABpttBX.js",
@@ -104,9 +104,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/sur-mesure.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/sur-mesure-zTCxr7VK.js",
+			"/assets/sur-mesure-GRkIwX7W.js",
 			"/assets/arrow-left-BCa9TLr_.js",
-			"/assets/CartDrawer-C5kJJRXD.js",
+			"/assets/CartDrawer-cbxImJuh.js",
 			"/assets/check-PxzYpF26.js",
 			"/assets/shopping-bag-Zw7p0j3b.js",
 			"/assets/data-lJNOC6Y9.js",
@@ -117,7 +117,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/admin/stocks.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/stocks-BMxH8VuO.js",
+			"/assets/stocks-CH-FEBsr.js",
 			"/assets/loader-circle-m3U77eaX.js",
 			"/assets/stock-CaiRIRLh.js"
 		]
@@ -126,7 +126,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/order.success.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/order.success-DyYqJ_5L.js",
+			"/assets/order.success-CuxvhylR.js",
 			"/assets/circle-check-xE2Wlw9j.js",
 			"/assets/clock-BrBAgSRU.js",
 			"/assets/checkout-CMIV77ms.js",
@@ -139,9 +139,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/product/$productId.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_productId-DHgh4y0C.js",
+			"/assets/_productId-BYG2olvw.js",
 			"/assets/arrow-left-BCa9TLr_.js",
-			"/assets/CartDrawer-C5kJJRXD.js",
+			"/assets/CartDrawer-cbxImJuh.js",
 			"/assets/check-PxzYpF26.js",
 			"/assets/shield-check-qvFTR-Jy.js",
 			"/assets/data-lJNOC6Y9.js",
@@ -153,7 +153,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/track/$token.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_token-mxoPefmI.js",
+			"/assets/_token-DGTiqcXq.js",
 			"/assets/clock-BrBAgSRU.js",
 			"/assets/loader-circle-m3U77eaX.js",
 			"/assets/map-pin-CM6X10Il.js",
