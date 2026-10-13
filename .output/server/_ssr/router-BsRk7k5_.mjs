@@ -4,22 +4,22 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$14 } from "../_productId-Bwg7Km_k.mjs";
-import { P as CircleCheckBig, _ as Phone, d as Shield, h as Printer, i as Truck, j as CookingPot, k as ExternalLink, m as RefreshCw, n as VolumeX, p as Search, r as Volume2 } from "../_libs/lucide-react.mjs";
+import { t as Route$14 } from "../_productId-D6ipuq_z.mjs";
+import { A as ExternalLink, F as CircleCheckBig, M as CookingPot, f as Shield, g as Printer, h as RefreshCw, i as Truck, m as Search, n as VolumeX, r as Volume2, v as Phone } from "../_libs/lucide-react.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-DD2auU0x.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
 import { t as Route$15 } from "../_token-DCvq2wAj.mjs";
 import { a as getMolliePayment, i as getBancontactProPayment } from "./bancontact-pro.server-3IaSEhvt.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, t as acknowledgePrint } from "./order-store-4tO4OvTG.mjs";
-import { t as Route$16 } from "./order.success-C6zNXeDu.mjs";
+import { t as Route$16 } from "./order.success-BBnCZ2Yg.mjs";
 import { t as EscPosBuilder } from "./escpos-dUhfprHQ.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CIxG4Xnl.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BsRk7k5_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-BDmlQYfM.css";
+var styles_default = "/assets/styles-D2_51ErZ.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -187,17 +187,82 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$6 = () => import("./routes-B-Mldj55.mjs");
+var $$splitComponentImporter$6 = () => import("./routes-lOpxi1TL.mjs");
+var RESTAURANT_SCHEMA = {
+	"@context": "https://schema.org",
+	"@type": "FastFoodRestaurant",
+	"name": "Poke N Bowl Visé",
+	"image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
+	"telephone": "+32490000000",
+	"url": "https://pokenbowl.be",
+	"address": {
+		"@type": "PostalAddress",
+		"streetAddress": "Avenue du Pont 12",
+		"addressLocality": "Visé",
+		"postalCode": "4600",
+		"addressCountry": "BE"
+	},
+	"geo": {
+		"@type": "GeoCoordinates",
+		"latitude": 50.7333,
+		"longitude": 5.6942
+	},
+	"servesCuisine": [
+		"Poké bowl",
+		"Fast casual",
+		"Asian",
+		"Halal"
+	],
+	"priceRange": "€€",
+	"openingHoursSpecification": [
+		{
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": [
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday"
+			],
+			"opens": "12:00",
+			"closes": "14:00"
+		},
+		{
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": [
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday"
+			],
+			"opens": "17:00",
+			"closes": "21:00"
+		},
+		{
+			"@type": "OpeningHoursSpecification",
+			"dayOfWeek": ["Saturday"],
+			"opens": "18:00",
+			"closes": "21:00"
+		}
+	]
+};
 var Route$12 = createFileRoute("/")({
-	head: () => ({ meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
-		name: "description",
-		content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !"
-	}] }),
+	head: () => ({
+		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
+			name: "description",
+			content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !"
+		}],
+		scripts: [{
+			type: "application/ld+json",
+			children: JSON.stringify(RESTAURANT_SCHEMA)
+		}]
+	}),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
 var $$splitComponentImporter$5 = () => import("./checkout-BEG-8Kjp.mjs");
 var Route$11 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-DnGwRTXb.mjs");
+var $$splitComponentImporter$4 = () => import("./commander-DxZ6RwRj.mjs");
 var Route$10 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./contact-ebvlFhhM.mjs");
 var Route$9 = createFileRoute("/contact")({
@@ -209,7 +274,7 @@ var Route$8 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./sur-mesure-PUGGCNL4.mjs");
+var $$splitComponentImporter$1 = () => import("./sur-mesure-hN5ZUbjJ.mjs");
 var Route$7 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
 var $$splitComponentImporter = () => import("./stocks-IYqeplXN.mjs");
 var Route$6 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });

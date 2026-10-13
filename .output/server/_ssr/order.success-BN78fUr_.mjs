@@ -4,10 +4,10 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { A as CreditCard, M as Clock, N as CircleCheck, s as Store, w as LoaderCircle } from "../_libs/lucide-react.mjs";
+import { N as Clock, P as CircleCheck, T as LoaderCircle, c as Star, j as CreditCard, s as Store } from "../_libs/lucide-react.mjs";
 import { t as getOrderStatus } from "./checkout-Biqne7Le.mjs";
-import { t as Route } from "./order.success-C6zNXeDu.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/order.success-Bn-tBYWh.js
+import { t as Route } from "./order.success-BBnCZ2Yg.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/order.success-BN78fUr_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function OrderSuccessPage() {
@@ -203,6 +203,30 @@ function OrderSuccessPage() {
 										children: ["€ ", (item.price * item.quantity).toFixed(2)]
 									})]
 								}, i))
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-8 rounded-2xl bg-[#fff8ee] border border-[#fed7aa] p-6 text-center shadow-sm",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex items-center justify-center gap-1 text-amber-400 mb-2",
+								children: [...Array(5)].map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-5 w-5 fill-amber-400 text-amber-400" }, i))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-base font-black text-[#10251f]",
+								children: "Votre avis compte énormément pour nous !"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "mt-1 text-xs text-[#758079] max-w-md mx-auto leading-relaxed",
+								children: "Poke N Bowl est un restaurant indépendant à Visé. Si vous appréciez nos bowls frais, laissez-nous 5 étoiles sur Google pour donner de la force à l'équipe 🙏"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
+								target: "_blank",
+								rel: "noreferrer",
+								className: "mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#d7ff45] transition hover:scale-105 shadow-sm",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "⭐ Laisser 5 étoiles sur Google" })
 							})
 						]
 					}),

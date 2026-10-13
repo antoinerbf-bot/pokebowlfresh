@@ -717,6 +717,16 @@ var Sparkles = createLucideIcon("sparkles", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Star = createLucideIcon("star", [["path", {
+	d: "M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z",
+	key: "r04s7s"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Store = createLucideIcon("store", [
 	["path", {
 		d: "M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5",
@@ -871,4 +881,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { CreditCard as A, Check as B, MapPin as C, Funnel as D, Heart as E, CircleAlert as F, ArrowLeft as G, Bell as H, ChevronRight as I, ChevronLeft as L, Clock as M, CircleCheck as N, Flame as O, CircleCheckBig as P, ChevronDown as R, Menu as S, Instagram as T, Award as U, BriefcaseBusiness as V, ArrowRight as W, Phone as _, TriangleAlert as a, Minus as b, Sparkles as c, Shield as d, ShieldCheck as f, Plus as g, Printer as h, Truck as i, CookingPot as j, ExternalLink as k, ShoppingCart as l, RefreshCw as m, VolumeX as n, Trash2 as o, Search as p, Volume2 as r, Store as s, X as t, ShoppingBag as u, PhoneCall as v, LoaderCircle as w, MessageCircle as x, Navigation as y, ChefHat as z };
+export { ExternalLink as A, ChefHat as B, Menu as C, Heart as D, Instagram as E, CircleCheckBig as F, ArrowRight as G, BriefcaseBusiness as H, CircleAlert as I, ArrowLeft as K, ChevronRight as L, CookingPot as M, Clock as N, Funnel as O, CircleCheck as P, ChevronLeft as R, MessageCircle as S, LoaderCircle as T, Bell as U, Check as V, Award as W, Plus as _, TriangleAlert as a, Navigation as b, Star as c, ShoppingBag as d, Shield as f, Printer as g, RefreshCw as h, Truck as i, CreditCard as j, Flame as k, Sparkles as l, Search as m, VolumeX as n, Trash2 as o, ShieldCheck as p, Volume2 as r, Store as s, X as t, ShoppingCart as u, Phone as v, MapPin as w, Minus as x, PhoneCall as y, ChevronDown as z };

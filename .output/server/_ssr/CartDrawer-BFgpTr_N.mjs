@@ -6,13 +6,18 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { b as Minus, g as Plus, o as Trash2, t as X, u as ShoppingBag } from "../_libs/lucide-react.mjs";
+import { G as ArrowRight, N as Clock, P as CircleCheck, _ as Plus, d as ShoppingBag, i as Truck, l as Sparkles, o as Trash2, t as X, x as Minus } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-B2PhVEb9.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BFgpTr_N.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
+var tiramisu_nutella_default = "/assets/tiramisu-nutella-Cq3EXNhL.jpg";
+var drink_coca_cola_default = "/assets/drink-coca-cola-D83foBG1.jpg";
+var drink_eau_plate_default = "/assets/drink-eau-plate-B76aUhfx.jpg";
+var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-CayWkPyq.jpg";
 var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
 var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
@@ -118,20 +123,117 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" })
 }));
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
+var CROSS_SELL_ITEMS = [
+	{
+		id: "tira-spec",
+		name: "Tiramisu Spéculoos Maison",
+		price: 4,
+		emoji: "🧁",
+		image: tiramisu_speculoos_default,
+		subtitle: "Artisanal · Lotus"
+	},
+	{
+		id: "tira-nutella",
+		name: "Tiramisu Nutella Maison",
+		price: 4,
+		emoji: "🍫",
+		image: tiramisu_nutella_default,
+		subtitle: "Fondant & Gourmand"
+	},
+	{
+		id: "coca",
+		name: "Coca-Cola 33cl",
+		price: 2,
+		emoji: "🥤",
+		image: drink_coca_cola_default,
+		subtitle: "Servi givré"
+	},
+	{
+		id: "eau-gaz",
+		name: "SPA Intense 50cl",
+		price: 2,
+		emoji: "🫧",
+		image: drink_eau_gazeuse_default,
+		subtitle: "Eau pétillante"
+	},
+	{
+		id: "eau-plate",
+		name: "SPA Reine 50cl",
+		price: 2,
+		emoji: "💧",
+		image: drink_eau_plate_default,
+		subtitle: "Eau plate"
+	}
+];
+var FREE_DELIVERY_THRESHOLD = 50;
 function CartDrawer() {
-	const { isCartOpen, setIsCartOpen, items, updateQuantity, removeItem, total } = useCart();
+	const { isCartOpen, setIsCartOpen, items, updateQuantity, removeItem, addItem, total } = useCart();
 	const { t } = useTranslation();
+	const diffToFree = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
+	const progressPercent = Math.min(100, Math.round(total / FREE_DELIVERY_THRESHOLD * 100));
+	const handleQuickAddCrossSell = (item) => {
+		addItem({
+			id: `${item.id}-${Date.now()}`,
+			name: item.name,
+			basePrice: item.price,
+			price: item.price,
+			quantity: 1,
+			toppings: [],
+			removedIngredients: [],
+			image: item.image
+		});
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sheet, {
 		open: isCartOpen,
 		onOpenChange: setIsCartOpen,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetContent, {
 			className: "flex w-full flex-col bg-[#f7f4ec] p-0 sm:max-w-md",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SheetHeader, {
-				className: "border-b border-black/5 px-6 py-4",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetTitle, {
-					className: "flex items-center gap-2 text-base font-black text-[#17231f]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5 text-[#ff705f]" }), t("cart.title")]
-				})
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetHeader, {
+				className: "border-b border-black/5 bg-white px-6 py-4 shadow-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SheetTitle, {
+						className: "flex items-center gap-2 text-base font-black text-[#17231f]",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5 text-[#ff705f]" }), t("cart.title")]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#d7ff45]",
+						children: [
+							items.reduce((s, i) => s + i.quantity, 0),
+							" ",
+							items.length > 1 ? "articles" : "article"
+						]
+					})]
+				}), items.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mt-3 pt-3 border-t border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between text-xs font-bold mb-1.5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex items-center gap-1.5 text-[#10251f]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "h-3.5 w-3.5 text-[#ff705f]" }), diffToFree === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-black text-emerald-700",
+								children: "🎉 Livraison offerte à Visé !"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+								"Plus que",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", {
+									className: "text-[#ff705f]",
+									children: [diffToFree.toFixed(2), " €"]
+								}),
+								" ",
+								"pour la livraison offerte"
+							] })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "text-[10px] font-black text-[#7a847e]",
+							children: [progressPercent, "%"]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-2 w-full overflow-hidden rounded-full bg-black/5",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: `h-full transition-all duration-500 rounded-full ${diffToFree === 0 ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" : "bg-[#ff705f]"}`,
+							style: { width: `${progressPercent}%` }
+						})
+					})]
+				})]
 			}), items.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex flex-1 flex-col items-center justify-center gap-5 px-6 py-10 text-center",
 				children: [
@@ -156,16 +258,16 @@ function CartDrawer() {
 						})
 					})
 				]
-			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollArea, {
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ScrollArea, {
 				className: "flex-1",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex flex-col divide-y divide-black/5 px-6",
 					children: items.map((item) => {
 						const isBowl = bowls.some((b) => b.id === item.id);
 						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex gap-4 py-4",
 							children: [isBowl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#ece8dc]",
+								className: "relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#ece8dc] shadow-sm",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 									dishId: item.id,
 									alt: item.name,
@@ -174,7 +276,7 @@ function CartDrawer() {
 							}) : item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 								src: item.image,
 								alt: item.name,
-								className: "h-16 w-16 shrink-0 rounded-2xl object-cover"
+								className: "h-16 w-16 shrink-0 rounded-2xl object-cover shadow-sm"
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "h-16 w-16 shrink-0 rounded-2xl bg-[#ece8dc]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex flex-1 flex-col justify-between min-w-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -202,7 +304,7 @@ function CartDrawer() {
 												type: "button",
 												"aria-label": "Diminuer",
 												onClick: () => updateQuantity(item.id, item.toppings, item.removedIngredients ?? [], item.quantity - 1),
-												className: "flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e2d9] bg-white transition hover:border-[#ff705f] hover:text-[#ff705f]",
+												className: "flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e2d9] bg-white transition hover:border-[#ff705f] hover:text-[#ff705f] shadow-sm",
 												children: item.quantity === 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "h-3 w-3" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3" })
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -213,7 +315,7 @@ function CartDrawer() {
 												type: "button",
 												"aria-label": "Augmenter",
 												onClick: () => updateQuantity(item.id, item.toppings, item.removedIngredients ?? [], item.quantity + 1),
-												className: "flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e2d9] bg-white transition hover:border-[#ff705f] hover:text-[#ff705f]",
+												className: "flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e2d9] bg-white transition hover:border-[#ff705f] hover:text-[#ff705f] shadow-sm",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" })
 											})
 										]
@@ -222,29 +324,90 @@ function CartDrawer() {
 							})]
 						}, `${item.id}-${JSON.stringify(item.toppings)}-${JSON.stringify(item.removedIngredients)}`);
 					})
-				})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mx-6 my-4 rounded-2xl bg-white border border-black/5 p-4 shadow-sm",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between mb-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-1.5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-xs font-black uppercase tracking-wider text-[#10251f]",
+								children: "Envie d'une douceur ou d'une boisson ?"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[10px] font-bold text-[#7a847e]",
+							children: "1 clic"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex gap-2.5 overflow-x-auto no-scrollbar pb-1",
+						children: CROSS_SELL_ITEMS.map((cs) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => handleQuickAddCrossSell(cs),
+							className: "group flex flex-col items-center justify-between rounded-xl bg-[#faf8f4] border border-black/5 p-2 w-28 shrink-0 text-center transition hover:border-[#ff705f] hover:bg-white hover:scale-[1.02] shadow-sm",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "relative h-12 w-12 overflow-hidden rounded-lg bg-[#eee8dc]",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: cs.image,
+										alt: cs.name,
+										className: "h-full w-full object-cover transition group-hover:scale-110"
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "mt-1.5 text-[10px] font-extrabold leading-tight text-[#17231f] line-clamp-1",
+									children: cs.name
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[9px] text-[#7a847e]",
+									children: cs.subtitle
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "mt-1 flex items-center gap-1 rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] group-hover:bg-[#ff705f] group-hover:text-white transition",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-2.5 w-2.5" }),
+										cs.price.toFixed(2),
+										" €"
+									]
+								})
+							]
+						}, cs.id))
+					})]
+				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "border-t border-black/5 bg-white px-6 pb-safe pt-4 shadow-[0_-12px_30px_-15px_rgba(0,0,0,.08)]",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "mb-4 flex items-center justify-between",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-sm font-bold text-[#7a847e]",
-							children: t("cart.total")
+						className: "mb-3 flex items-center justify-between text-[11px] font-semibold text-[#5a6760] bg-[#faf8f4] px-3 py-1.5 rounded-xl border border-black/5",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex items-center gap-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-3 w-3 text-emerald-600" }), "Prêt en 15-20 min"]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex items-center gap-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "h-3 w-3 text-emerald-600" }), "Fait minute à Visé"]
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mb-4 flex items-center justify-between",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-xs font-bold text-[#7a847e]",
+							children: "Sous-total commande"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[10px] text-[#a09a92]",
+							children: "TVA incluse"
+						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "text-2xl font-black text-[#17231f]",
 							children: ["€ ", total.toFixed(2)]
 						})]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 						to: "/checkout",
 						onClick: () => setIsCartOpen(false),
-						className: "btn-primary block w-full text-center no-underline",
-						children: t("cart.checkout")
+						className: "btn-primary flex items-center justify-center gap-2 w-full text-center no-underline py-4 text-sm font-black uppercase tracking-wider shadow-lg",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: t("cart.checkout") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-3 text-center text-[10px] font-semibold text-[#a09a92]",
-						children: "Commande à emporter · Poke N Bowl Visé"
+						className: "mt-2.5 text-center text-[10px] font-semibold text-[#a09a92]",
+						children: "Paiement sécurisé en ligne ou sur place · Avenue du Pont 12, Visé"
 					})
 				]
 			})] })]
@@ -252,4 +415,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_spicy_chicken_default as a, bowl_scampis_default as i, DishImage as n, bowl_sweet_chicken_default as o, bowl_saumon_default as r, CartDrawer as t };
+export { bowl_spicy_chicken_default as a, drink_eau_gazeuse_default as c, tiramisu_speculoos_default as d, bowl_scampis_default as i, drink_eau_plate_default as l, DishImage as n, bowl_sweet_chicken_default as o, bowl_saumon_default as r, drink_coca_cola_default as s, CartDrawer as t, tiramisu_nutella_default as u };

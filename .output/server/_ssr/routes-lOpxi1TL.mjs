@@ -6,11 +6,11 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
-import { B as Check, C as MapPin, D as Funnel, E as Heart, H as Bell, I as ChevronRight, L as ChevronLeft, M as Clock, N as CircleCheck, O as Flame, R as ChevronDown, S as Menu, T as Instagram, U as Award, V as BriefcaseBusiness, W as ArrowRight, _ as Phone, c as Sparkles, f as ShieldCheck, g as Plus, k as ExternalLink, p as Search, t as X, u as ShoppingBag, x as MessageCircle, z as ChefHat } from "../_libs/lucide-react.mjs";
-import { a as bowl_spicy_chicken_default, i as bowl_scampis_default, n as DishImage, o as bowl_sweet_chicken_default, r as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-B2PhVEb9.mjs";
-import { a as drink_fanta_orange_default, c as tiramisu_oreo_default, i as drink_eau_plate_default, l as tiramisu_speculoos_default, n as drink_coca_zero_default, o as drink_ice_tea_default, r as drink_eau_gazeuse_default, s as tiramisu_nutella_default, t as drink_coca_cola_default } from "./drink-eau-gazeuse-BNz0q5PT.mjs";
+import { A as ExternalLink, B as ChefHat, C as Menu, D as Heart, E as Instagram, G as ArrowRight, H as BriefcaseBusiness, L as ChevronRight, N as Clock, O as Funnel, P as CircleCheck, R as ChevronLeft, S as MessageCircle, U as Bell, V as Check, W as Award, _ as Plus, c as Star, d as ShoppingBag, k as Flame, l as Sparkles, m as Search, p as ShieldCheck, t as X, v as Phone, w as MapPin, z as ChevronDown } from "../_libs/lucide-react.mjs";
+import { a as bowl_spicy_chicken_default, c as drink_eau_gazeuse_default, d as tiramisu_speculoos_default, i as bowl_scampis_default, l as drink_eau_plate_default, n as DishImage, o as bowl_sweet_chicken_default, r as bowl_saumon_default, s as drink_coca_cola_default, t as CartDrawer, u as tiramisu_nutella_default } from "./CartDrawer-BFgpTr_N.mjs";
+import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-B-Mldj55.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-lOpxi1TL.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -2619,6 +2619,148 @@ function PokawaInstagramWall() {
 		})
 	});
 }
+function SocialProofBanner() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		"aria-label": "Avis clients et gages de qualité Poke N Bowl Visé",
+		className: "border-y border-black/5 bg-white py-6 px-4 sm:px-6 lg:px-8 shadow-sm",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mx-auto max-w-[1340px] flex flex-col md:flex-row items-center justify-between gap-6",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-3.5 shrink-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff8ee] border border-[#fed7aa] shadow-sm",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-2xl",
+						children: "🌟"
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-xl font-black text-[#10251f]",
+						children: "4.9 / 5"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex text-amber-400",
+						children: [...Array(5)].map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { className: "h-4 w-4 fill-amber-400 text-amber-400" }, i))
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-xs font-bold text-[#5a6760]",
+					children: [
+						"Sur Google · ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[#ff705f] font-black",
+							children: "+350 clients conquis"
+						}),
+						" à Visé"
+					]
+				})] })]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 w-full md:w-auto",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2.5 rounded-2xl bg-[#faf8f4] border border-black/5 px-3.5 py-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-4 w-4 text-emerald-600 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-xs font-black text-[#10251f]",
+							children: "Prêt en 15-20 min"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-[10px] text-[#7a847e]",
+							children: "Retrait express sans file"
+						})] })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2.5 rounded-2xl bg-[#faf8f4] border border-black/5 px-3.5 py-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#d7ff45] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-xs font-black text-[#10251f]",
+							children: "100% Fait Minute"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-[10px] text-[#7a847e]",
+							children: "Saumon découpé du matin"
+						})] })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2.5 rounded-2xl bg-[#faf8f4] border border-black/5 px-3.5 py-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-4 w-4 text-[#ff705f] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-xs font-black text-[#10251f]",
+							children: "Cœur de Visé"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block text-[10px] text-[#7a847e]",
+							children: "Avenue du Pont 12"
+						})] })]
+					})
+				]
+			})]
+		})
+	});
+}
+function MobileAppStickyBar() {
+	const { items, total, setIsCartOpen } = useCart();
+	const [isVisible, setIsVisible] = import_react.useState(false);
+	import_react.useEffect(() => {
+		const handleScroll = () => {
+			if (window.scrollY > 250 || items.length > 0) setIsVisible(true);
+			else setIsVisible(false);
+		};
+		handleScroll();
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, [items.length]);
+	const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+	const handleAction = () => {
+		if (totalItemCount > 0) setIsCartOpen(true);
+		else {
+			const el = document.getElementById("carte");
+			if (el) el.scrollIntoView({ behavior: "smooth" });
+			else window.location.href = "/commander";
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, { children: isVisible && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
+		initial: {
+			y: 80,
+			opacity: 0
+		},
+		animate: {
+			y: 0,
+			opacity: 1
+		},
+		exit: {
+			y: 80,
+			opacity: 0
+		},
+		transition: {
+			type: "spring",
+			damping: 25,
+			stiffness: 280
+		},
+		className: "fixed bottom-3 inset-x-3 z-40 md:hidden pointer-events-auto",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "rounded-[26px] bg-[#10251f]/95 backdrop-blur-xl border border-white/20 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] flex items-center justify-between gap-2.5 text-white",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+				href: "#composer",
+				className: "flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/15 active:scale-95 transition shrink-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sur-mesure" })]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: handleAction,
+				className: "flex-1 flex items-center justify-between rounded-full bg-[#d7ff45] px-4 py-2.5 text-[#10251f] shadow-lg transition active:scale-95 min-w-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 truncate",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-3.5 w-3.5" }), totalItemCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white",
+							children: totalItemCount
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-xs font-black uppercase tracking-wider truncate",
+						children: totalItemCount > 0 ? `${totalItemCount} article${totalItemCount > 1 ? "s" : ""}` : "Commander"
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1 font-black text-xs shrink-0 ml-1",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: total > 0 ? `${total.toFixed(2)} €` : "La Carte" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5 stroke-[3]" })]
+				})]
+			})]
+		})
+	}) });
+}
 var MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 function Reveal({ children, delay = 0, className = "" }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
@@ -2716,6 +2858,7 @@ function Index() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PokawaHeroExact, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ticker, {}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SocialProofBanner, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FluidInteractiveMenu, {}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 					id: "valeurs",
@@ -2985,15 +3128,7 @@ function Index() {
 					]
 				})
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-				to: "/commander",
-				className: "btn-primary fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-2 md:hidden shadow-2xl",
-				children: [
-					t("hero.order"),
-					" ",
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
-				]
-			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MobileAppStickyBar, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CroustyNotificationToast, {})
 		]
 	});
