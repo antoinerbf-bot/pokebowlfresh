@@ -183,15 +183,9 @@ export function PosApplicationPage() {
 
   const handleManualReprint = async (orderId: string) => {
     const targetOrder = orders.find((o) => o.id === orderId);
-    if (targetOrder) {
-      printThermalTicket(targetOrder);
-    }
-    try {
-      await triggerReprint({ data: { pin, orderId } });
-      await loadOrders();
-    } catch (e) {
-      console.warn("Reprint sync", e);
-    }
+    if (!targetOrder) return;
+    // Réimpression via le client réseau Epson, sans ouvrir la boîte d'impression du navigateur.
+    await handleExecutePrint(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -242,7 +236,7 @@ export function PosApplicationPage() {
         <p>TEST IMPRIMANTE REUSSI</p>
         <hr>
         <p>Date : ${new Date().toLocaleTimeString("fr-BE")}</p>
-        <p>Epson TM-m30III Connectee !</p>
+        <p>Epson TM-m30II Connectee !</p>
         <hr>
         <p>Pret pour les commandes.</p>
         <br><br>.
@@ -349,7 +343,7 @@ export function PosApplicationPage() {
       b.divider("=");
       b.line(`Date: ${new Date().toLocaleTimeString("fr-BE")}`);
       b.line(`IP: ${config.printerIp}`);
-      b.line("Epson TM-m30III Connectee !");
+      b.line("Epson TM-m30II Connectee !");
       b.divider("=");
       b.line("Pret pour les commandes.");
       b.feed(4).cut(true);
@@ -707,7 +701,7 @@ export function PosApplicationPage() {
             <h2 className="text-2xl font-black">Configuration Matériel & POS</h2>
 
             <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-              <h3 className="text-base font-black text-[#ff705f]">Imprimante Réseau (Epson TM-m30III)</h3>
+              <h3 className="text-base font-black text-[#ff705f]">Imprimante Réseau (Epson TM-m30II)</h3>
               <div>
                 <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP</label>
                 <input
