@@ -360,15 +360,19 @@ export function PosApplicationPage() {
         alert("Succes ! Le ticket de test sort sur l'imprimante.");
       } else {
         setPrintLog((prev) => [
-          { time: now, msg: `Echec direct : ${res.message}`, type: "err" },
+          { time: now, msg: `Échec du test : ${res.message}`, type: "err" },
           ...prev.slice(0, 30),
         ]);
-        // Secours
-        printThermalTicket(null, true);
+        alert(`Échec de l'impression directe : ${res.message}\n\nVérifie l'adresse IP et la connexion réseau de l'imprimante.`);
       }
     } catch (e: any) {
-      console.error(e);
-      printThermalTicket(null, true);
+      console.error("Erreur test imprimante", e);
+      const message = e?.message ?? "Erreur inconnue";
+      setPrintLog((prev) => [
+        { time: new Date().toLocaleTimeString(), msg: `Erreur du test : ${message}`, type: "err" },
+        ...prev.slice(0, 30),
+      ]);
+      alert(`Le test d'impression a rencontré une erreur : ${message}`);
     }
   };
 
