@@ -16,7 +16,7 @@ import { t as Route$16 } from "./order.success-BBnCZ2Yg.mjs";
 import { t as EscPosBuilder } from "./escpos-dUhfprHQ.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BsRk7k5_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CjW3EBSc.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-D2_51ErZ.css";
@@ -375,7 +375,7 @@ var setPosOrderStatus = createServerFn({ method: "POST" }).validator(objectType(
 		"cancelled"
 	])
 })).handler(createSsrRpc("d448a7ae3667125e81da09dad6f6dec1c9565eb0f9398367da064dcdf0e9c039"));
-var triggerReprint = createServerFn({ method: "POST" }).validator(objectType({
+createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
 	orderId: stringType().min(1)
 })).handler(createSsrRpc("6515ae2b4b334ce5935aaa2290fe5a760aa9de9e4dbd2160f973f92e3ad32045"));
@@ -584,16 +584,8 @@ function PosApplicationPage() {
 	};
 	const handleManualReprint = async (orderId) => {
 		const targetOrder = orders.find((o) => o.id === orderId);
-		if (targetOrder) printThermalTicket(targetOrder);
-		try {
-			await triggerReprint({ data: {
-				pin,
-				orderId
-			} });
-			await loadOrders();
-		} catch (e) {
-			console.warn("Reprint sync", e);
-		}
+		if (!targetOrder) return;
+		await handleExecutePrint(targetOrder);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
@@ -640,7 +632,7 @@ function PosApplicationPage() {
         <p>TEST IMPRIMANTE REUSSI</p>
         <hr>
         <p>Date : ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}</p>
-        <p>Epson TM-m30III Connectee !</p>
+        <p>Epson TM-m30II Connectee !</p>
         <hr>
         <p>Pret pour les commandes.</p>
         <br><br>.
@@ -728,7 +720,7 @@ function PosApplicationPage() {
 			b.divider("=");
 			b.line(`Date: ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}`);
 			b.line(`IP: ${config.printerIp}`);
-			b.line("Epson TM-m30III Connectee !");
+			b.line("Epson TM-m30II Connectee !");
 			b.divider("=");
 			b.line("Pret pour les commandes.");
 			b.feed(4).cut(true);
@@ -1106,7 +1098,7 @@ function PosApplicationPage() {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 										className: "text-base font-black text-[#ff705f]",
-										children: "Imprimante Réseau (Epson TM-m30III)"
+										children: "Imprimante Réseau (Epson TM-m30II)"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 										className: "text-xs font-extrabold uppercase text-[#8ea39b]",
