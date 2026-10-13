@@ -16,7 +16,7 @@ import { t as Route$16 } from "./order.success-BBnCZ2Yg.mjs";
 import { t as EscPosBuilder } from "./escpos-dUhfprHQ.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DiUq4y4-.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-AV2zq88s.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-D2_51ErZ.css";
@@ -496,6 +496,7 @@ function PosApplicationPage() {
 	const [activeTab, setActiveTab] = (0, import_react.useState)("kanban");
 	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
+	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	const knownOrderIds = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const playAlertSound = () => {
@@ -614,6 +615,13 @@ function PosApplicationPage() {
 		}
 	};
 	const handleTestPrint = async () => {
+		if (testingPrinter) return;
+		setTestingPrinter(true);
+		setPrintLog((prev) => [{
+			time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
+			msg: "Test lancé : connexion à l’imprimante…",
+			type: "err"
+		}, ...prev.slice(0, 30)]);
 		try {
 			const b = new EscPosBuilder();
 			b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
@@ -651,6 +659,8 @@ function PosApplicationPage() {
 				type: "err"
 			}, ...prev.slice(0, 30)]);
 			alert(`Le test d'impression a rencontré une erreur : ${message}`);
+		} finally {
+			setTestingPrinter(false);
 		}
 	};
 	if (!isUnlocked) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -1057,8 +1067,9 @@ function PosApplicationPage() {
 											children: "Enregistrer"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: handleTestPrint,
-											className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Tester l'impression (Direct ePOS)"]
+											disabled: testingPrinter,
+											className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), testingPrinter ? "Test en cours…" : "Tester l'impression (Direct ePOS)"]
 										})]
 									})
 								]

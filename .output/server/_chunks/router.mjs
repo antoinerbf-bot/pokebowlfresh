@@ -8759,6 +8759,7 @@ function PosApplicationPage() {
 	const [activeTab, setActiveTab] = (0, import_react.useState)("kanban");
 	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
+	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	const knownOrderIds = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const playAlertSound = () => {
@@ -8877,6 +8878,13 @@ function PosApplicationPage() {
 		}
 	};
 	const handleTestPrint = async () => {
+		if (testingPrinter) return;
+		setTestingPrinter(true);
+		setPrintLog((prev) => [{
+			time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
+			msg: "Test lancé : connexion à l’imprimante…",
+			type: "err"
+		}, ...prev.slice(0, 30)]);
 		try {
 			const b = new EscPosBuilder();
 			b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
@@ -8914,6 +8922,8 @@ function PosApplicationPage() {
 				type: "err"
 			}, ...prev.slice(0, 30)]);
 			alert(`Le test d'impression a rencontré une erreur : ${message}`);
+		} finally {
+			setTestingPrinter(false);
 		}
 	};
 	if (!isUnlocked) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -9320,8 +9330,9 @@ function PosApplicationPage() {
 											children: "Enregistrer"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: handleTestPrint,
-											className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Tester l'impression (Direct ePOS)"]
+											disabled: testingPrinter,
+											className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), testingPrinter ? "Test en cours…" : "Tester l'impression (Direct ePOS)"]
 										})]
 									})
 								]
