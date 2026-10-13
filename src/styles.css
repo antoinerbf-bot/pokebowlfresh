@@ -454,3 +454,35 @@
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+
+/* Responsive safety fixes: prevent headings and controls from clipping on narrow screens. */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+button, a, [role="button"] {
+  min-width: 0;
+}
+
+img, video, svg {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  h1, h2, h3, h4, h5, h6 {
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
+
+  input, select, textarea, button {
+    max-width: 100%;
+  }
+}
