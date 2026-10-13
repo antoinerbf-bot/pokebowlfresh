@@ -16,7 +16,7 @@ import { t as Route$16 } from "./order.success-BBnCZ2Yg.mjs";
 import { t as EscPosBuilder } from "./escpos-dUhfprHQ.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CjW3EBSc.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DiUq4y4-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-D2_51ErZ.css";
@@ -435,11 +435,21 @@ async function sendReceiptToPrinter(base64Data, config) {
 	} catch (err) {
 		console.warn("Print Bridge injoignable, essai ePOS-Print...", err);
 	}
+	let commandHex = "";
+	try {
+		const binary = atob(base64Data);
+		for (let i = 0; i < binary.length; i++) commandHex += binary.charCodeAt(i).toString(16).padStart(2, "0");
+	} catch {
+		return {
+			success: false,
+			message: "Données du ticket invalides (Base64)."
+		};
+	}
 	const xml = `<?xml version="1.0" encoding="utf-8"?>
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-      <command>${base64Data}</command>
+      <command>${commandHex}</command>
     </epos-print>
   </s:Body>
 </s:Envelope>`;
@@ -603,115 +613,6 @@ function PosApplicationPage() {
 			alert("Erreur de mise à jour du statut.");
 		}
 	};
-	const printThermalTicket = (order, isTest = false) => {
-		const iframe = document.createElement("iframe");
-		iframe.style.position = "fixed";
-		iframe.style.right = "0";
-		iframe.style.bottom = "0";
-		iframe.style.width = "0";
-		iframe.style.height = "0";
-		iframe.style.border = "0";
-		document.body.appendChild(iframe);
-		const doc = iframe.contentWindow?.document;
-		if (!doc) return;
-		const qrUrl = order?.deliveryToken ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.origin + "/track/" + order.deliveryToken)}` : "";
-		const html = isTest ? `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          @page { size: 80mm auto; margin: 0; }
-          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 14px; text-align: center; color: #000; }
-          h1 { font-size: 20px; margin: 0 0 4px 0; }
-          hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
-        </style>
-      </head>
-      <body>
-        <h1>POKE N BOWL VISE</h1>
-        <p>TEST IMPRIMANTE REUSSI</p>
-        <hr>
-        <p>Date : ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}</p>
-        <p>Epson TM-m30II Connectee !</p>
-        <hr>
-        <p>Pret pour les commandes.</p>
-        <br><br>.
-      </body>
-      </html>
-    ` : `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          @page { size: 80mm auto; margin: 0; }
-          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 13px; color: #000; }
-          .center { text-align: center; }
-          h1 { font-size: 19px; margin: 0 0 2px 0; }
-          h2 { font-size: 16px; margin: 4px 0; }
-          .bold { font-weight: bold; }
-          hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
-          .item { display: flex; justify-content: space-between; font-weight: bold; margin: 3px 0; }
-          .topping { font-size: 11px; padding-left: 10px; }
-          .qr { margin-top: 8px; text-align: center; }
-          .qr img { width: 140px; height: 140px; }
-        </style>
-      </head>
-      <body>
-        <div class="center">
-          <h1>POKE N BOWL</h1>
-          <p>Rue Haute 38, 4600 Vise</p>
-          <hr>
-          <h2>${order?.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}</h2>
-          <p class="bold">COMMANDE : ${order?.id}</p>
-          <p>Horaire : ${order?.customer.requestedTime}</p>
-        </div>
-        <hr>
-        <p><span class="bold">Client :</span> ${order?.customer.name}</p>
-        <p><span class="bold">Tel :</span> ${order?.customer.phone}</p>
-        ${order?.customer.fulfillment === "delivery" ? `<p><span class="bold">Adresse :</span> ${order.customer.address || ""}</p>
-               <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>` : ""}
-        ${order?.customer.notes ? `<p class="bold">Note : ${order.customer.notes}</p>` : ""}
-        <hr>
-        <p class="bold">ARTICLES :</p>
-        ${order?.items.map((it) => `
-          <div class="item">
-            <span>${it.quantity}x ${it.name}</span>
-            <span>${(it.price * it.quantity).toFixed(2)} E</span>
-          </div>
-          ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
-        `).join("")}
-        <hr>
-        <div class="item" style="font-size: 16px;">
-          <span>TOTAL :</span>
-          <span>${order?.total.toFixed(2)} EUR</span>
-        </div>
-        <div class="center bold" style="margin-top: 4px;">
-          ${order?.status === "paid" ? "PAIEMENT VALIDE (EN LIGNE)" : "A PAYER SUR PLACE"}
-        </div>
-        ${qrUrl ? `
-          <hr>
-          <div class="qr">
-            <p style="font-size: 11px; font-weight: bold;">SCANNEZ POUR GPS ET LIVREUR</p>
-            <img src="${qrUrl}" alt="QR Code">
-          </div>
-        ` : ""}
-        <div class="center" style="margin-top: 8px;">
-          <p>Merci pour votre commande !</p>
-        </div>
-        <br><br>.
-      </body>
-      </html>
-    `;
-		doc.open();
-		doc.write(html);
-		doc.close();
-		iframe.contentWindow?.focus();
-		setTimeout(() => {
-			iframe.contentWindow?.print();
-			setTimeout(() => document.body.removeChild(iframe), 1500);
-		}, 400);
-	};
 	const handleTestPrint = async () => {
 		try {
 			const b = new EscPosBuilder();
@@ -736,14 +637,20 @@ function PosApplicationPage() {
 			} else {
 				setPrintLog((prev) => [{
 					time: now,
-					msg: `Echec direct : ${res.message}`,
+					msg: `Échec du test : ${res.message}`,
 					type: "err"
 				}, ...prev.slice(0, 30)]);
-				printThermalTicket(null, true);
+				alert(`Échec de l'impression directe : ${res.message}\n\nVérifie l'adresse IP et la connexion réseau de l'imprimante.`);
 			}
 		} catch (e) {
-			console.error(e);
-			printThermalTicket(null, true);
+			console.error("Erreur test imprimante", e);
+			const message = e?.message ?? "Erreur inconnue";
+			setPrintLog((prev) => [{
+				time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
+				msg: `Erreur du test : ${message}`,
+				type: "err"
+			}, ...prev.slice(0, 30)]);
+			alert(`Le test d'impression a rencontré une erreur : ${message}`);
 		}
 	};
 	if (!isUnlocked) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
