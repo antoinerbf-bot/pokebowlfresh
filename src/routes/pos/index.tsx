@@ -56,6 +56,7 @@ export function PosApplicationPage() {
   // Configuration Imprimante & Audio
   const [config, setConfig] = useState<PrinterConfig>(loadPrinterConfig);
   const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
+  const [testingPrinter, setTestingPrinter] = useState(false);
   const [printLog, setPrintLog] = useState<{ time: string; msg: string; type: "ok" | "err" }[]>([]);
 
   // Garder trace des IDs pour les nouvelles alertes
@@ -336,6 +337,9 @@ export function PosApplicationPage() {
 
   // Test d'impression direct
   const handleTestPrint = async () => {
+    if (testingPrinter) return;
+    setTestingPrinter(true);
+    setPrintLog((prev) => [{ time: new Date().toLocaleTimeString(), msg: "Test lancé : connexion à l’imprimante…", type: "err" }, ...prev.slice(0, 30)]);
     try {
       const b = new EscPosBuilder();
       b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
@@ -373,6 +377,8 @@ export function PosApplicationPage() {
         ...prev.slice(0, 30),
       ]);
       alert(`Le test d'impression a rencontré une erreur : ${message}`);
+    } finally {
+      setTestingPrinter(false);
     }
   };
 
@@ -751,10 +757,11 @@ export function PosApplicationPage() {
                 </button>
                 <button
                   onClick={handleTestPrint}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer"
+                  disabled={testingPrinter}
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60"
                 >
                   <Printer className="w-4 h-4" />
-                  Tester l'impression (Direct ePOS)
+                  {testingPrinter ? "Test en cours…" : "Tester l'impression (Direct ePOS)"}
                 </button>
               </div>
             </div>
