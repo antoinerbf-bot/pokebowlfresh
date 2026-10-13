@@ -1,5 +1,5 @@
 /**
- * Client d'impression pour Epson TM-m30III
+ * Client d'impression pour Epson TM-m30II
  * Gère deux méthodes sans abonnement :
  * 1. ePOS-Print XML direct (HTTP/SOAP interne de l'Epson sur le port 80 ou 8008)
  * 2. Local Print Bridge (sur localhost ou IP passerelle port 9100/3001)
@@ -67,17 +67,28 @@ export async function sendReceiptToPrinter(
     }
   }
 
-  // Option 2 : ePOS-Print direct (Epson TM-m30III HTTPS / HTTP)
+  // Option 2 : ePOS-Print direct (Epson TM-m30II HTTPS / HTTP)
+  // ePOS-Print attend une chaîne hexadécimale dans <command>, pas du Base64.
+  let commandHex = "";
+  try {
+    const binary = atob(base64Data);
+    for (let i = 0; i < binary.length; i++) {
+      commandHex += binary.charCodeAt(i).toString(16).padStart(2, "0");
+    }
+  } catch {
+    return { success: false, message: "Données du ticket invalides (Base64)." };
+  }
+
   const xml = `<?xml version="1.0" encoding="utf-8"?>
 <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
   <s:Body>
     <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-      <command>${base64Data}</command>
+      <command>${commandHex}</command>
     </epos-print>
   </s:Body>
 </s:Envelope>`;
 
-  // Tenter les ports standards ePOS de l'Epson : HTTPS 8043 (sécurisé TM-m30III), HTTPS 443, puis HTTP 80/8008
+  // Tenter les ports standards ePOS de l'Epson : HTTPS 8043 (sécurisé TM-m30II), HTTPS 443, puis HTTP 80/8008
   const targets = [
     `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
