@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, Clock, Store, CreditCard, Loader2 } from "lucide-react";
+import { CheckCircle2, Clock, Store, CreditCard, Loader2, Star } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import { getOrderStatus } from "../fn/checkout";
@@ -192,6 +192,29 @@ function OrderSuccessPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* ════════ BOOSTER D'AVIS GOOGLE 5 ÉTOILES ════════ */}
+            <div className="mt-8 rounded-2xl bg-[#fff8ee] border border-[#fed7aa] p-6 text-center shadow-sm">
+              <div className="flex items-center justify-center gap-1 text-amber-400 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <h3 className="text-base font-black text-[#10251f]">
+                Votre avis compte énormément pour nous !
+              </h3>
+              <p className="mt-1 text-xs text-[#758079] max-w-md mx-auto leading-relaxed">
+                Poke N Bowl est un restaurant indépendant à Visé. Si vous appréciez nos bowls frais, laissez-nous 5 étoiles sur Google pour donner de la force à l'équipe 🙏
+              </p>
+              <a
+                href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#d7ff45] transition hover:scale-105 shadow-sm"
+              >
+                <span>⭐ Laisser 5 étoiles sur Google</span>
+              </a>
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">

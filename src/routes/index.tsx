@@ -19,6 +19,51 @@ import { FluidInteractiveMenu } from "@/components/FluidInteractiveMenu";
 import { PokawaBrandValues } from "@/components/PokawaBrandValues";
 import { PokawaPerksBanner } from "@/components/PokawaPerksBanner";
 import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
+import { SocialProofBanner } from "@/components/SocialProofBanner";
+import { MobileAppStickyBar } from "@/components/MobileAppStickyBar";
+
+const RESTAURANT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FastFoodRestaurant",
+  "name": "Poke N Bowl Visé",
+  "image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
+  "telephone": "+32490000000",
+  "url": "https://pokenbowl.be",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Avenue du Pont 12",
+    "addressLocality": "Visé",
+    "postalCode": "4600",
+    "addressCountry": "BE"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 50.7333,
+    "longitude": 5.6942
+  },
+  "servesCuisine": ["Poké bowl", "Fast casual", "Asian", "Halal"],
+  "priceRange": "€€",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "12:00",
+      "closes": "14:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "17:00",
+      "closes": "21:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday"],
+      "opens": "18:00",
+      "closes": "21:00"
+    }
+  ]
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,6 +73,12 @@ export const Route = createFileRoute("/")({
         name: "description",
         content:
           "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(RESTAURANT_SCHEMA),
       },
     ],
   }),
@@ -129,6 +180,9 @@ function Index() {
 
         {/* ════════════════════ 3. TICKER DÉFILANT ════════════════════ */}
         <Ticker />
+
+        {/* ════════════════════ 3.5 PREUVE SOCIALE & RASSURANCE LOCALE VISÉ ════════════════════ */}
+        <SocialProofBanner />
 
         {/* ════════════════════ 4. LA CARTE GOURMANDE INTERACTIVE & FLUIDE (POKÉS -> CROUSTY -> SUR-MESURE -> DESSERTS/BOISSONS) ════════════════════ */}
         <FluidInteractiveMenu />
@@ -352,13 +406,8 @@ function Index() {
         </div>
       </footer>
 
-      {/* ════════ Mobile Sticky CTA ════════ */}
-      <Link
-        to="/commander"
-        className="btn-primary fixed inset-x-3 bottom-3 z-40 flex items-center justify-center gap-2 md:hidden shadow-2xl"
-      >
-        {t("hero.order")} <ArrowRight className="h-4 w-4" />
-      </Link>
+      {/* ════════ Barre interactive type Application Mobile ════════ */}
+      <MobileAppStickyBar />
 
       {/* ════════ Toast Notification Popup Crousty Chicken ════════ */}
       <CroustyNotificationToast />
