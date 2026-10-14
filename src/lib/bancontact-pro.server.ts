@@ -10,8 +10,8 @@
  * - BANCONTACT_PRO_ENV (optional: "production" | "preprod", defaults to "production")
  */
 
-const PROD_API = "https://api.payconiq.com/v3";
-const PREPROD_API = "https://api.preprod.payconiq.com/v3";
+const PROD_API = "https://merchant.api.bancontact.net/v3";
+const PREPROD_API = "https://merchant.api.preprod.bancontact.net/v3";
 
 export function getBancontactProApiKey(): string | undefined {
   return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
@@ -110,7 +110,7 @@ export async function getBancontactProPayment(
 
   const res = await fetch(`${getApiBaseUrl()}/payments/${paymentId}`, {
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: apiKey,
       Accept: "application/json",
     },
   });
