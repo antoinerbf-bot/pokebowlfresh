@@ -41,18 +41,36 @@ jobs:
       - name: Publish build artifact
         if: github.event_name == 'push'
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f .output
-          if git diff --cached --quiet; then
-            echo "No build changes to publish."
-            exit 0
-          fi
-          git commit -m "chore: publish O2Switch build [skip ci]"
-          # Fail visibly if a concurrent publish causes a conflict; never report a successful deployment with a stale .output bundle.
-          git fetch origin "${GITHUB_REF_NAME}"
-          if [ "$(git rev-parse HEAD)" != "$(git rev-parse "origin/${GITHUB_REF_NAME}")" ]; then
-            echo "Branch advanced during build; refusing to publish stale .output."
-            exit 1
-          fi
-          git push origin HEAD:"${GITHUB_REF_NAME}"
+
+          # Retry publication if another build only updated the generated .output directory.
+          for attempt in 1 2 3; do
+            git fetch origin "${GITHUB_REF_NAME}"
+
+            # Never publish a build if application source changed after this run started.
+            if ! git diff --quiet "${GITHUB_SHA}" "origin/${GITHUB_REF_NAME}" -- . ':(exclude).output/**'; then
+              echo "Application source changed during build; refusing to publish a stale artifact."
+              exit 1
+            fi
+
+            # Rebase the generated artifact commit onto the latest branch without rebasing files.
+            git reset --mixed "origin/${GITHUB_REF_NAME}"
+            git add -f .output
+            if git diff --cached --quiet; then
+              echo "No build changes to publish."
+              exit 0
+            fi
+
+            git commit -m "chore: publish O2Switch build [skip ci]"
+            if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+              echo "Build artifact published successfully."
+              exit 0
+            fi
+
+            echo "Push attempt ${attempt} failed; retrying against the latest branch."
+          done
+
+          echo "Could not publish build artifact after 3 attempts."
+          exit 1
