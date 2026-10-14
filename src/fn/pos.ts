@@ -6,6 +6,7 @@ import {
   updateOrderStatus,
   requestOrderReprint,
   acknowledgePrint,
+  upsertOrder,
 } from "../lib/order-store";
 import { buildKitchenReceipt, buildDeliveryReceipt } from "../lib/escpos";
 
@@ -81,9 +82,16 @@ export const getOrderReceipts = createServerFn({ method: "POST" })
       throw new Error("Code PIN invalide.");
     }
 
-    const order = await getOrderFromStore(data.orderId);
+    let order = await getOrderFromStore(data.orderId);
     if (!order) {
       throw new Error("Commande introuvable.");
+    }
+
+    // Backfill a secure tracking token for older orders before printing, so reprints
+    // always receive a functional QR code as well.
+    if (!order.deliveryToken) {
+      order = { ...order, deliveryToken: crypto.randomUUID().replace(/-/g, "") };
+      await upsertOrder(order);
     }
 
     const kitchenBytes = buildKitchenReceipt(order);
