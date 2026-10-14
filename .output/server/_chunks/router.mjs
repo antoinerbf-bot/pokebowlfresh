@@ -6269,7 +6269,7 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 			returnUrl: redirectUrl,
 			callbackUrl: webhookUrl
 		});
-		order.molliePaymentId = payment.paymentId;
+		order.molliePaymentId = `bancontact:${payment.paymentId}`;
 		await upsertOrder(order);
 		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
 		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
@@ -6310,8 +6310,8 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 });
 var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
 	let order = await getOrderFromStore(data.orderId);
-	if (order?.molliePaymentId && order.status === "pending_payment") if (isBancontactProConfigured()) try {
-		const payment = await getBancontactProPayment(order.molliePaymentId);
+	if (order?.molliePaymentId && order.status === "pending_payment") if (order.molliePaymentId.startsWith("bancontact:")) try {
+		const payment = await getBancontactProPayment(order.molliePaymentId.slice(11));
 		if (payment.status === "SUCCEEDED") {
 			order = {
 				...order,
