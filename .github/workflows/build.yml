@@ -11,7 +11,7 @@ on:
 
 concurrency:
   group: o2switch-build
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -50,6 +50,9 @@ jobs:
           fi
           git commit -m "chore: publish O2Switch build [skip ci]"
           # Fail visibly if a concurrent publish causes a conflict; never report a successful deployment with a stale .output bundle.
-          git pull --rebase origin ${GITHUB_REF_NAME}
-          git push origin HEAD:${GITHUB_REF_NAME}
-          git push --force origin HEAD:o2switch-clean
+          git fetch origin "${GITHUB_REF_NAME}"
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse "origin/${GITHUB_REF_NAME}")" ]; then
+            echo "Branch advanced during build; refusing to publish stale .output."
+            exit 1
+          fi
+          git push origin HEAD:"${GITHUB_REF_NAME}"
