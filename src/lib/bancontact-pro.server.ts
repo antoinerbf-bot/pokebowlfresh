@@ -2,8 +2,8 @@
  * Server-only Bancontact Pro (Payconiq by Bancontact) API helper.
  *
  * Supported environments:
- * - Production: https://api.payconiq.com/v3
- * - Preprod / Test: https://api.preprod.payconiq.com/v3
+ * - Production: https://merchant.api.bancontact.net/v3
+ * - Preprod / Test: https://merchant.api.preprod.bancontact.net/v3
  *
  * Required environment variables:
  * - BANCONTACT_PRO_API_KEY or PAYCONIQ_API_KEY
@@ -31,6 +31,9 @@ export type BancontactProStatus =
   | "IDENTIFIED"
   | "AUTHORIZED"
   | "SUCCEEDED"
+  | "AUTHORIZATION_FAILED"
+  | "PENDING_MERCHANT_ACKNOWLEDGEMENT"
+  | "VOIDED"
   | "FAILED"
   | "CANCELLED"
   | "EXPIRED";
@@ -71,7 +74,7 @@ export async function createBancontactProPayment(params: {
   const res = await fetch(`${getApiBaseUrl()}/payments`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: apiKey,
       "Content-Type": "application/json",
       Accept: "application/json",
     },
