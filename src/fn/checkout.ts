@@ -236,7 +236,7 @@ export const submitCheckout = createServerFn({ method: "POST" })
         callbackUrl: webhookUrl,
       });
 
-      order.molliePaymentId = payment.paymentId;
+      order.molliePaymentId = `bancontact:${payment.paymentId}`;
       await upsertOrder(order);
 
       const payUrl =
@@ -297,9 +297,9 @@ export const getOrderStatus = createServerFn({ method: "GET" })
     let order = await getOrderFromStore(data.orderId);
 
     if (order?.molliePaymentId && order.status === "pending_payment") {
-      if (isBancontactProConfigured()) {
+      if (order.molliePaymentId.startsWith("bancontact:")) {
         try {
-          const payment = await getBancontactProPayment(order.molliePaymentId);
+          const payment = await getBancontactProPayment(order.molliePaymentId.slice("bancontact:".length));
           if (payment.status === "SUCCEEDED") {
             order = { ...order, status: "paid" };
             await upsertOrder(order);
