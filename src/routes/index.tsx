@@ -21,6 +21,7 @@ import { PokawaPerksBanner } from "@/components/PokawaPerksBanner";
 import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
 import { SocialProofBanner } from "@/components/SocialProofBanner";
 import { MobileAppStickyBar } from "@/components/MobileAppStickyBar";
+import { PokawaCategoriesCarousel } from "@/components/PokawaCategoriesCarousel";
 
 const RESTAURANT_SCHEMA = {
   "@context": "https://schema.org",
@@ -180,6 +181,9 @@ function Index() {
 
         {/* ════════════════════ 3. TICKER DÉFILANT ════════════════════ */}
         <Ticker />
+
+        {/* ════════════════════ 3.2 CARROUSEL DES CATÉGORIES (STYLE POKAWA) ════════════════════ */}
+        <PokawaCategoriesCarousel />
 
         {/* ════════════════════ 3.5 PREUVE SOCIALE & RASSURANCE LOCALE VISÉ ════════════════════ */}
         <SocialProofBanner />

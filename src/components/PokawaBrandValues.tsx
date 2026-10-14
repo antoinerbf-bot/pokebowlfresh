@@ -1,6 +1,11 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { Sparkles, Fish, Flame, HeartHandshake, ShieldCheck, ArrowRight, Award } from "lucide-react";
+import { Sparkles, ShieldCheck, ArrowRight, Award } from "lucide-react";
+
+import bowlSaumon from "@/assets/bowl-saumon.jpg";
+import bowlSweet from "@/assets/bowl-sweet-chicken.jpg";
+import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";
+import bowlScampis from "@/assets/bowl-scampis.jpg";
 
 export function PokawaBrandValues() {
   const VALUES = [
@@ -12,6 +17,7 @@ export function PokawaBrandValues() {
       title: "Fraîcheur Quotidienne",
       desc: "Découpe minute de nos légumes croquants et approvisionnement quotidien en saumon & scampis de première fraîcheur.",
       perk: "Découpe chaque matin à Visé",
+      image: bowlSaumon,
     },
     {
       id: "rice",
@@ -21,77 +27,91 @@ export function PokawaBrandValues() {
       title: "Riz à Sushi Artisanal",
       desc: "Cuit à point et assaisonné avec notre vinaigre de riz signature selon la véritable tradition. Fini le riz fade et sec !",
       perk: "Assaisonnement équilibré",
+      image: bowlSweet,
     },
     {
       id: "crousty",
       emoji: "🍗",
       tag: "Gamme Chaude",
-      tagColor: "bg-[#8b5510] text-white",
+      tagColor: "bg-[#ea580c] text-white",
       title: "Crousty Chicken",
-      desc: "Pour les amateurs de réconfort : petits morceaux de poulet croustillant dorés, oignons frits et sauces chaudes maison généreuses.",
-      perk: "Formule étudiant 11€ avec boisson",
+      desc: "Petits morceaux de poulet croustillant dorés, oignons frits et sauces chaudes maison curry ou blanche généreuses.",
+      perk: "Formule étudiant 11 € avec boisson",
+      image: bowlCrousty,
     },
     {
       id: "custom",
       emoji: "✨",
       tag: "Sur-Mesure",
-      tagColor: "bg-[#10251f] text-[#d7ff45]",
+      tagColor: "bg-[#d7ff45] text-[#10251f]",
       title: "Liberté & Transparence",
       desc: "Retirez n'importe quel allergène en 1 clic ou créez votre bowl personnalisé de A à Z avec 5 mix-ins frais inclus.",
       perk: "Zéro compromis sur vos goûts",
+      image: bowlScampis,
     },
   ];
 
   return (
     <section className="bg-[#faf8f4] py-16 sm:py-20 lg:py-24 border-y border-black/5">
       <div className="mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8">
-        {/* Header (Pokawa-inspired) */}
+        {/* Header style exact Pokawa : "Un poké plein de qualités" */}
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#10251f] border border-black/5">
             <Award className="h-3.5 w-3.5 text-[#ff705f]" />
             Nos Engagements & Notre Philosophie
           </div>
-          <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]">
-            Un Poké plein de qualités
+          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]">
+            Un poké plein de qualités
           </h2>
-          <p className="mt-2 text-sm text-[#68756f]">
-            Chez Poke N Bowl Visé, nous croyons qu'un repas rapide doit être sain, gourmand et préparé avec les meilleurs ingrédients.
+          <p className="mt-2 text-xs sm:text-sm text-[#5a6760] font-medium">
+            Chez Poke N Bowl Visé, nous croyons qu'un repas rapide doit être sain, gourmand et préparé minute avec les meilleurs produits.
           </p>
         </div>
 
-        {/* 4 Cards Grid */}
+        {/* 4 Cards Grid Visuelles (Style Pokawa Elementor 4-column cards) */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {VALUES.map((val) => (
             <div
               key={val.id}
-              className="group flex flex-col justify-between rounded-[32px] border border-black/5 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-[32px] min-h-[380px] sm:min-h-[420px] p-6 text-white shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift border border-black/10 select-none"
             >
-              <div>
-                {/* Top Emoji + Tag */}
-                <div className="flex items-center justify-between">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f7f4ec] text-2xl shadow-inner group-hover:scale-110 transition-transform">
-                    {val.emoji}
-                  </span>
-                  <span className={`rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-wider ${val.tagColor}`}>
-                    {val.tag}
-                  </span>
-                </div>
+              {/* Photo de fond immersive */}
+              <img
+                src={val.image}
+                alt={val.title}
+                className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-108"
+              />
 
-                {/* Content */}
-                <h3 className="mt-6 text-lg sm:text-xl font-extrabold text-[#10251f]">
-                  {val.title}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-[#68756f]">
-                  {val.desc}
-                </p>
+              {/* Voile sombre cinématographique pour garantir la lisibilité optimale */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/35 transition-opacity duration-300 group-hover:opacity-90" />
+
+              {/* Top Tag & Emoji */}
+              <div className="relative z-10 flex items-center justify-between">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black/40 backdrop-blur-md text-xl border border-white/20 shadow">
+                  {val.emoji}
+                </span>
+                <span
+                  className={`rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-wider shadow ${val.tagColor}`}
+                >
+                  {val.tag}
+                </span>
               </div>
 
-              {/* Bottom Perk Pill */}
-              <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#10251f]">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#ff705f]" />
-                  {val.perk}
-                </span>
+              {/* Content bottom */}
+              <div className="relative z-10 mt-auto pt-6">
+                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white drop-shadow">
+                  {val.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-white/85 font-medium line-clamp-3 drop-shadow">
+                  {val.desc}
+                </p>
+
+                <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#d7ff45] drop-shadow">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    {val.perk}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
@@ -101,9 +121,9 @@ export function PokawaBrandValues() {
         <div className="mt-12 text-center">
           <Link
             to="/commander"
-            className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-7 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-105 active:scale-95"
           >
-            <span>Goûter la différence en ligne</span>
+            <span>Commander en ligne à Visé</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

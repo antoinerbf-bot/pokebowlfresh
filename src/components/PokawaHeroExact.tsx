@@ -194,100 +194,76 @@ export function PokawaHeroExact() {
             className="h-full w-full object-cover object-center filter brightness-100 contrast-102"
           />
 
-          {/* DÉGRADÉS CINÉMATIQUES SUBTILS QUI RENDENT L'ÉCRITURE PARFAITEMENT LISIBLE SANS MASQUER LE PLAT */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+          {/* DÉGRADÉS LÉGERS & ÉPURÉS QUI METTENT EN VALEUR LA PHOTO DU PLAT SANS L'OBSTRUER */}
+          <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
-      {/* ════════ CALLOUT INGRÉDIENT FLOTTANT EN HAUT À DROITE (DISCRET, HAUT DE GAMME) ════════ */}
+      {/* ════════ CALLOUT DISCRET EN HAUT À DROITE ════════ */}
       <AnimatePresence mode="wait">
         <motion.div
           key={`callout-${slide.id}`}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4 }}
-          className="absolute top-24 sm:top-28 right-4 sm:right-8 lg:right-12 z-20 hidden md:flex items-center gap-2.5 rounded-full bg-black/45 backdrop-blur-md px-4 py-2 border border-white/20 text-white shadow-xl pointer-events-none"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+          className="absolute top-20 sm:top-24 right-4 sm:right-8 z-20 hidden md:flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md px-3.5 py-1.5 border border-white/20 text-white shadow-lg pointer-events-none"
         >
-          <span className="text-xl">{slide.ingredientCallout.emoji}</span>
-          <div className="text-left leading-tight">
-            <span className="block text-[11px] font-black uppercase tracking-wider text-[#d7ff45]">
-              {slide.ingredientCallout.text}
-            </span>
-            <span className="block text-[9px] font-medium text-white/80">
-              {slide.ingredientCallout.subtext}
-            </span>
-          </div>
+          <span className="text-base">{slide.ingredientCallout.emoji}</span>
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+            {slide.ingredientCallout.text}
+          </span>
         </motion.div>
       </AnimatePresence>
 
-      {/* ════════ TYPOGRAPHIE ET ACTIONS EN BAS À GAUCHE (PARFAITEMENT LISIBLES, SANS GROS CARRÉ NOIR GÊNANT) ════════ */}
-      <div className="absolute inset-x-0 bottom-12 sm:bottom-16 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
+      {/* ════════ TYPOGRAPHIE ÉPURÉE, FLUIDE ET LIMPIDE STYLE POKAWA (SANS GROSSE ÉCRITURE GÊNANTE) ════════ */}
+      <div className="absolute inset-x-0 bottom-10 sm:bottom-14 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
         <div className="mx-auto max-w-[1400px] flex flex-col items-start pointer-events-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={`content-${slide.id}`}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-[900px] space-y-3 sm:space-y-4"
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-xl space-y-2.5"
             >
-              {/* Badges punchy */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#10251f] shadow-lg">
+              {/* Badge discret */}
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f] shadow-md">
                   <Sparkles className="h-3 w-3 stroke-[2.5]" />
                   {slide.badge}
                 </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-black/45 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-white border border-white/20 shadow-md">
-                  {slide.dishName} · {slide.price.toFixed(2)} €
+                <span className="text-[11px] font-black text-white/80 drop-shadow">
+                  {slide.isCrousty ? "Gamme Chaude" : "Fait minute à Visé"}
                 </span>
               </div>
 
-              {/* Grand titre style Pokawa ultra-visible avec drop shadow puissant */}
-              <h1 className="max-w-full text-[clamp(2.15rem,6.4vw,6rem)] font-black uppercase tracking-tight leading-[1.02] [overflow-wrap:anywhere] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]">
-                <span className="block text-white">{slide.titleLine1}</span>
-                <span className="block text-[#d7ff45]">{slide.titleLine2}</span>
+              {/* Titre élégant et épuré (ne mange pas la photo) */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
+                {slide.dishName}
               </h1>
 
-              {/* Ingrédients de la recette parfaitement lisibles directement sur l'image */}
-              <p className="text-sm sm:text-base text-white/95 font-medium leading-relaxed max-w-xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+              {/* Ingrédients concis sur une ligne */}
+              <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] max-w-lg line-clamp-2">
                 {slide.ingredients}
               </p>
 
-              {/* Ligne Tarif & Formule */}
-              <div className="flex items-center gap-3 pt-1">
-                <div className="inline-flex items-center gap-3 rounded-2xl bg-black/55 backdrop-blur-md px-4 py-2 border border-white/25 shadow-xl">
-                  <span className="text-2xl sm:text-3xl font-black text-white leading-none">
-                    {slide.price.toFixed(2)} €
-                  </span>
-                  <div className="border-l border-white/25 pl-3 text-left">
-                    <span className="block text-[10px] font-black uppercase tracking-widest text-[#d7ff45]">
-                      {slide.isCrousty ? "Formule 11 € Complète" : "Format Moyen Inclus"}
-                    </span>
-                    <span className="block text-[9px] font-medium text-white/80">
-                      {slide.isCrousty ? "Boisson 33cl incluse au choix" : "Grand format à 13 € (+3€)"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Boutons d'action rapides */}
-              <div className="flex flex-wrap items-center gap-3 pt-2 sm:pt-3">
+              {/* Actions rapides & tarif clair */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <button
                   type="button"
                   onClick={handleQuickAdd}
-                  className="group relative inline-flex items-center gap-2.5 rounded-full bg-[#d7ff45] px-7 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_10px_30px_rgba(215,255,69,0.4)] transition hover:bg-white hover:scale-105 active:scale-95"
+                  className="group relative inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_8px_25px_rgba(215,255,69,0.35)] transition hover:bg-white hover:scale-105 active:scale-95"
                 >
                   <Plus className="h-4 w-4 stroke-[3]" />
-                  <span>Ajouter ce bowl ({slide.price.toFixed(2)} €)</span>
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  <span>Ajouter · {slide.price.toFixed(2)} €</span>
+                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" />
 
                   {addedNotice && (
-                    <span className="absolute -top-10 inset-x-0 mx-auto flex w-max items-center gap-1.5 rounded-full bg-[#2431eb] px-3.5 py-1 text-xs font-black text-white shadow-2xl">
-                      <Check className="h-3.5 w-3.5 stroke-[3]" /> Ajouté au panier !
+                    <span className="absolute -top-9 inset-x-0 mx-auto flex w-max items-center gap-1.5 rounded-full bg-[#2431eb] px-3 py-0.5 text-xs font-black text-white shadow-xl">
+                      <Check className="h-3.5 w-3.5 stroke-[3]" /> Ajouté !
                     </span>
                   )}
                 </button>
@@ -295,16 +271,16 @@ export function PokawaHeroExact() {
                 <Link
                   to="/product/$productId"
                   params={{ productId: slide.id }}
-                  className="inline-flex items-center gap-2 rounded-full bg-black/45 border border-white/40 px-5 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white shadow-lg"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-black/40 border border-white/30 px-4 py-3 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white shadow"
                 >
                   Personnaliser
                 </Link>
 
                 <a
-                  href="#composer"
-                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline sm:ml-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
+                  href="#carte"
+                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline ml-1 drop-shadow"
                 >
-                  Composer sur-mesure →
+                  La Carte →
                 </a>
               </div>
             </motion.div>
