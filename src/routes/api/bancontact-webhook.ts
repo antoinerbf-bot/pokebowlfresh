@@ -1,5 +1,5 @@
 ﻿import { createFileRoute } from "@tanstack/react-router";
-import { getBancontactProPayment } from "../../lib/bancontact-pro.server";
+import { getBancontactProApiKey, getBancontactProPayment } from "../../lib/bancontact-pro.server";
 import {
   getOrderFromStore,
   upsertOrder,
@@ -10,6 +10,12 @@ export const Route = createFileRoute("/api/bancontact-webhook")({
     handlers: {
       POST: async ({ request }) => {
         try {
+          const apiKey = getBancontactProApiKey();
+          if (!apiKey) return new Response("Bancontact not configured", { status: 503 });
+          if (request.headers.get("signature") !== apiKey) {
+            return new Response("Invalid signature", { status: 401 });
+          }
+
           const contentType = request.headers.get("content-type") ?? "";
           let paymentId: string | null = null;
 
