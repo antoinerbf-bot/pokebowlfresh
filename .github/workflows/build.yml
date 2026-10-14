@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: o2switch-build
-  cancel-in-progress: false
+  group: o2switch-build-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
