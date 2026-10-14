@@ -4,7 +4,7 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$14 } from "../_productId-ByXhVjZz.mjs";
+import { t as Route$14 } from "../_productId-CvVKCChl.mjs";
 import { A as ExternalLink, F as CircleCheckBig, M as CookingPot, f as Shield, g as Printer, h as RefreshCw, i as Truck, m as Search, n as VolumeX, r as Volume2, v as Phone } from "../_libs/lucide-react.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-CSQW5Zku.mjs";
@@ -16,10 +16,10 @@ import { t as Route$16 } from "./order.success-CPgcaY0T.mjs";
 import { t as EscPosBuilder } from "./escpos-C99SgK7y.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CbGmmDCL.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-yeQ0cMuU.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-CVAFLXmm.css";
+var styles_default = "/assets/styles-CYIoFvLn.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -187,7 +187,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$6 = () => import("./routes-DtWJvGdz.mjs");
+var $$splitComponentImporter$6 = () => import("./routes-DTu93sLm.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "FastFoodRestaurant",
@@ -262,7 +262,7 @@ var Route$12 = createFileRoute("/")({
 });
 var $$splitComponentImporter$5 = () => import("./checkout-Cy8p7lYF.mjs");
 var Route$11 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-DsZU8rE8.mjs");
+var $$splitComponentImporter$4 = () => import("./commander-BCSL3kbq.mjs");
 var Route$10 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./contact-ebvlFhhM.mjs");
 var Route$9 = createFileRoute("/contact")({
@@ -274,7 +274,7 @@ var Route$8 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./sur-mesure-hN5ZUbjJ.mjs");
+var $$splitComponentImporter$1 = () => import("./sur-mesure-CVX7GHIW.mjs");
 var Route$7 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
 var $$splitComponentImporter = () => import("./stocks-C4Q5uy0Q.mjs");
 var Route$6 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });

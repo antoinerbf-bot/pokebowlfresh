@@ -10,7 +10,7 @@ import { G as ArrowRight, N as Clock, P as CircleCheck, _ as Plus, d as Shopping
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BFgpTr_N.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-C2j4dqUH.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
@@ -22,12 +22,13 @@ var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
 var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-Bko5BGRq.jpg";
+var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CRZGKMUK.jpg";
 var images = {
 	"sweet-chicken": bowl_sweet_chicken_default,
 	"scampis-royaux": bowl_scampis_default,
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
-	"crousty-chicken-curry": "/assets/bowl-crousty-curry-CRZGKMUK.jpg",
+	"crousty-chicken-curry": bowl_crousty_curry_default,
 	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-BliNigHA.jpg",
 	"sur-mesure": bowl_saumon_default
 };
@@ -415,4 +416,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_spicy_chicken_default as a, drink_eau_gazeuse_default as c, tiramisu_speculoos_default as d, bowl_scampis_default as i, drink_eau_plate_default as l, DishImage as n, bowl_sweet_chicken_default as o, bowl_saumon_default as r, drink_coca_cola_default as s, CartDrawer as t, tiramisu_nutella_default as u };
+export { bowl_scampis_default as a, drink_coca_cola_default as c, tiramisu_nutella_default as d, tiramisu_speculoos_default as f, bowl_saumon_default as i, drink_eau_gazeuse_default as l, DishImage as n, bowl_spicy_chicken_default as o, bowl_crousty_curry_default as r, bowl_sweet_chicken_default as s, CartDrawer as t, drink_eau_plate_default as u };
