@@ -160,399 +160,399 @@ var public_assets_data_default = {
 	"/favicon.png": {
 		"type": "image/png",
 		"etag": "\"326-ybB5iNJOL2fyURXRtKUxkQa+d1o\"",
-		"mtime": "2026-10-14T16:52:02.541Z",
+		"mtime": "2026-10-14T16:58:55.695Z",
 		"size": 806,
 		"path": "../public/favicon.png"
-	},
-	"/logo.svg": {
-		"type": "image/svg+xml",
-		"etag": "\"59c-Df8a7OZ1AOBNdEwVWfOUUdISEY8\"",
-		"mtime": "2026-10-14T16:52:02.541Z",
-		"size": 1436,
-		"path": "../public/logo.svg"
 	},
 	"/logo.png": {
 		"type": "image/png",
 		"etag": "\"9b21-YFSBMVsf2GVHZm6DGL6auk3moww\"",
-		"mtime": "2026-10-14T16:52:02.541Z",
+		"mtime": "2026-10-14T16:58:55.695Z",
 		"size": 39713,
 		"path": "../public/logo.png"
-	},
-	"/assets/BrandLogo-CABpttBX.js": {
-		"type": "text/javascript; charset=utf-8",
-		"etag": "\"5df-jnHWmNwAyjIseSBRmIl64RjzTE8\"",
-		"mtime": "2026-10-14T16:52:01.439Z",
-		"size": 1503,
-		"path": "../public/assets/BrandLogo-CABpttBX.js"
 	},
 	"/robots.txt": {
 		"type": "text/plain; charset=utf-8",
 		"etag": "\"a0-CKGXSIe7TSsqDTmGm/nY1t/o5d0\"",
-		"mtime": "2026-10-14T16:52:02.541Z",
+		"mtime": "2026-10-14T16:58:55.695Z",
 		"size": 160,
 		"path": "../public/robots.txt"
+	},
+	"/assets/BrandLogo-CABpttBX.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"5df-jnHWmNwAyjIseSBRmIl64RjzTE8\"",
+		"mtime": "2026-10-14T16:58:54.594Z",
+		"size": 1503,
+		"path": "../public/assets/BrandLogo-CABpttBX.js"
+	},
+	"/logo.svg": {
+		"type": "image/svg+xml",
+		"etag": "\"59c-Df8a7OZ1AOBNdEwVWfOUUdISEY8\"",
+		"mtime": "2026-10-14T16:58:55.695Z",
+		"size": 1436,
+		"path": "../public/logo.svg"
 	},
 	"/assets/CartDrawer-Cz6esoQb.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"169e8-K+/Bk0Rx38gIlQrI/rilyNUi9YQ\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 92648,
 		"path": "../public/assets/CartDrawer-Cz6esoQb.js"
 	},
 	"/assets/_productId-agG1KsBM.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"6049-8iuCB2oNAYx6PrrK27Bg4/umy74\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 24649,
 		"path": "../public/assets/_productId-agG1KsBM.js"
 	},
 	"/assets/_token-PwsnT6Iq.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"1f25-E58XsMSkjmQ9B0nyJ//cM7KOK/o\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 7973,
 		"path": "../public/assets/_token-PwsnT6Iq.js"
 	},
 	"/assets/arrow-left-BCa9TLr_.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"a5-nWxtFac0ChgC352ptR1cv95N43M\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 165,
 		"path": "../public/assets/arrow-left-BCa9TLr_.js"
+	},
+	"/assets/bowl-crousty-blanche-BliNigHA.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"3bec3-7aICU1/iy1hRywYMDfZeRxk29CQ\"",
+		"mtime": "2026-10-14T16:58:54.595Z",
+		"size": 245443,
+		"path": "../public/assets/bowl-crousty-blanche-BliNigHA.jpg"
+	},
+	"/assets/bowl-crousty-curry-CRZGKMUK.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"408ef-GVw1m8DoVCRKTfsKjSAQs7P0WLs\"",
+		"mtime": "2026-10-14T16:58:54.595Z",
+		"size": 264431,
+		"path": "../public/assets/bowl-crousty-curry-CRZGKMUK.jpg"
 	},
 	"/assets/bowl-saumon-CRYVYQxR.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"33b41-kmxkI+v19URLzSyHi+mUmIeJmiU\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 211777,
 		"path": "../public/assets/bowl-saumon-CRYVYQxR.jpg"
 	},
 	"/assets/bowl-scampis-DlEe1YXf.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"4be0b-BT7H6oUL10i1fY2DeX7N1G4fyyY\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 310795,
 		"path": "../public/assets/bowl-scampis-DlEe1YXf.jpg"
 	},
 	"/assets/bowl-spicy-chicken-Bko5BGRq.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"325f7-I7MrQM23GvyXdYg6yA/826IdOoc\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 206327,
 		"path": "../public/assets/bowl-spicy-chicken-Bko5BGRq.jpg"
 	},
 	"/assets/briefcase-business-DJeAkziv.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"145-Icqw7COrVhO91vSmQRwPu6aynHU\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 325,
 		"path": "../public/assets/briefcase-business-DJeAkziv.js"
-	},
-	"/assets/checkout-CMIV77ms.js": {
-		"type": "text/javascript; charset=utf-8",
-		"etag": "\"399-GKHrm6rQpiwAmhEeCO+zk9NVMtg\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
-		"size": 921,
-		"path": "../public/assets/checkout-CMIV77ms.js"
 	},
 	"/assets/check-PxzYpF26.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"7c-IVHi0fxXA1mGTWe6eBid4wsv4HI\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 124,
 		"path": "../public/assets/check-PxzYpF26.js"
-	},
-	"/assets/bowl-crousty-curry-CRZGKMUK.jpg": {
-		"type": "image/jpeg",
-		"etag": "\"408ef-GVw1m8DoVCRKTfsKjSAQs7P0WLs\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
-		"size": 264431,
-		"path": "../public/assets/bowl-crousty-curry-CRZGKMUK.jpg"
 	},
 	"/assets/checkout-DG7T7PyL.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"355b-BOiuG98VJYsQKHvgsIZfuBDyAWA\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 13659,
 		"path": "../public/assets/checkout-DG7T7PyL.js"
+	},
+	"/assets/checkout-CMIV77ms.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"399-GKHrm6rQpiwAmhEeCO+zk9NVMtg\"",
+		"mtime": "2026-10-14T16:58:54.594Z",
+		"size": 921,
+		"path": "../public/assets/checkout-CMIV77ms.js"
 	},
 	"/assets/circle-check-xE2Wlw9j.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"b2-l6OrdSi43cVZdFQoU9pYyzz0x50\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 178,
 		"path": "../public/assets/circle-check-xE2Wlw9j.js"
 	},
 	"/assets/clock-BrBAgSRU.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"a9-rTxuSmbLy+eupu13bqHm/UN2F2k\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 169,
 		"path": "../public/assets/clock-BrBAgSRU.js"
-	},
-	"/assets/bowl-crousty-blanche-BliNigHA.jpg": {
-		"type": "image/jpeg",
-		"etag": "\"3bec3-7aICU1/iy1hRywYMDfZeRxk29CQ\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
-		"size": 245443,
-		"path": "../public/assets/bowl-crousty-blanche-BliNigHA.jpg"
-	},
-	"/assets/commander-_i4NJQtH.js": {
-		"type": "text/javascript; charset=utf-8",
-		"etag": "\"4457-LGIvXKLT+6oafujwVeRgVSYYrtk\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
-		"size": 17495,
-		"path": "../public/assets/commander-_i4NJQtH.js"
 	},
 	"/assets/contact-D5yQ9CbS.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"13bd-3wn9mdL0H7592hqoQ7Jlbse34Tg\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 5053,
 		"path": "../public/assets/contact-D5yQ9CbS.js"
-	},
-	"/assets/createServerFn-C1JWGbHh.js": {
-		"type": "text/javascript; charset=utf-8",
-		"etag": "\"9cfe-C6kZ3+bK2FsxzAR/igl4+AEvoE8\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
-		"size": 40190,
-		"path": "../public/assets/createServerFn-C1JWGbHh.js"
 	},
 	"/assets/createLucideIcon-zy-1MMUP.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"26e8-LsCvj+F3zoqFkM8XxEZQcRiVaMU\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 9960,
 		"path": "../public/assets/createLucideIcon-zy-1MMUP.js"
+	},
+	"/assets/commander-_i4NJQtH.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"4457-LGIvXKLT+6oafujwVeRgVSYYrtk\"",
+		"mtime": "2026-10-14T16:58:54.594Z",
+		"size": 17495,
+		"path": "../public/assets/commander-_i4NJQtH.js"
+	},
+	"/assets/createServerFn-C1JWGbHh.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"9cfe-C6kZ3+bK2FsxzAR/igl4+AEvoE8\"",
+		"mtime": "2026-10-14T16:58:54.594Z",
+		"size": 40190,
+		"path": "../public/assets/createServerFn-C1JWGbHh.js"
 	},
 	"/assets/bowl-sweet-chicken-T1JJVtIT.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"cfc58-NzD/zxNOkVlXKLiHGG8dlkJBuA0\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 851032,
 		"path": "../public/assets/bowl-sweet-chicken-T1JJVtIT.jpg"
 	},
 	"/assets/data-lJNOC6Y9.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"2000-wbee5lwp5jsoG2wvtDZpJ5liWV4\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 8192,
 		"path": "../public/assets/data-lJNOC6Y9.js"
 	},
 	"/assets/dessert-9PIP1ns9.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"d822-kPW8+rCCVPZwYCa7Y1iWSvRF7Sc\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 55330,
 		"path": "../public/assets/dessert-9PIP1ns9.jpg"
 	},
 	"/assets/drink-eau-gazeuse-CayWkPyq.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"74df4-JOZFiB8pP/Kl6hjKmHuihgnGEng\"",
-		"mtime": "2026-10-14T16:52:01.442Z",
+		"mtime": "2026-10-14T16:58:54.596Z",
 		"size": 478708,
 		"path": "../public/assets/drink-eau-gazeuse-CayWkPyq.jpg"
 	},
 	"/assets/drink-eau-plate-B76aUhfx.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"6d6c9-5xcdzBQyvuwL5Ek2SBrbxBt5HzY\"",
-		"mtime": "2026-10-14T16:52:01.442Z",
+		"mtime": "2026-10-14T16:58:54.596Z",
 		"size": 448201,
 		"path": "../public/assets/drink-eau-plate-B76aUhfx.jpg"
 	},
 	"/assets/drink-ice-tea-DMqFJYm2.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"c0-2xUP77I79Po02qcDsidbD97h4TU\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 192,
 		"path": "../public/assets/drink-ice-tea-DMqFJYm2.js"
-	},
-	"/assets/link-D0rUQ_ra.js": {
-		"type": "text/javascript; charset=utf-8",
-		"etag": "\"69c7-qOTBB+S12DVHaPFAwntEuA5TjaM\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
-		"size": 27079,
-		"path": "../public/assets/link-D0rUQ_ra.js"
 	},
 	"/assets/index-hMFVrsSx.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"55fa7-WVon/nuhcspR1njZljJlkz3X1NI\"",
-		"mtime": "2026-10-14T16:52:01.438Z",
+		"mtime": "2026-10-14T16:58:54.592Z",
 		"size": 352167,
 		"path": "../public/assets/index-hMFVrsSx.js"
+	},
+	"/assets/link-D0rUQ_ra.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"69c7-qOTBB+S12DVHaPFAwntEuA5TjaM\"",
+		"mtime": "2026-10-14T16:58:54.594Z",
+		"size": 27079,
+		"path": "../public/assets/link-D0rUQ_ra.js"
 	},
 	"/assets/loader-circle-m3U77eaX.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"90-3AqCGdRCnx7R8qYcwhyiEMhIx1I\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 144,
 		"path": "../public/assets/loader-circle-m3U77eaX.js"
 	},
 	"/assets/map-pin-CM6X10Il.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"103-L824M/PHpehm0n547HCa7FsPbSM\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.594Z",
 		"size": 259,
 		"path": "../public/assets/map-pin-CM6X10Il.js"
 	},
 	"/assets/order.success-DK8hhDwY.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"1acc-72PeQUGCY1P1vnXRCmwHx9qmUec\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 6860,
 		"path": "../public/assets/order.success-DK8hhDwY.js"
 	},
 	"/assets/phone-call-ZXsSJdfj.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"1a7-YM27ZWpj/0zkz4+5eMrDVUv7dJI\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 423,
 		"path": "../public/assets/phone-call-ZXsSJdfj.js"
 	},
 	"/assets/recrutement-DuhWk8Uo.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"ec4-G3zlh2Qv2BT55GwyDqo+G6qJIX8\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 3780,
 		"path": "../public/assets/recrutement-DuhWk8Uo.js"
 	},
 	"/assets/shield-check-qvFTR-Jy.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"140-2ZqGAd62d2xkTCEF7hDEuBAg+do\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 320,
 		"path": "../public/assets/shield-check-qvFTR-Jy.js"
 	},
 	"/assets/shopping-bag-Zw7p0j3b.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"154-ErUHeGKd58kSqcnv9PPlrFDjltU\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 340,
 		"path": "../public/assets/shopping-bag-Zw7p0j3b.js"
 	},
 	"/assets/routes-Ci4X1jD3.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"3bbc9-xW1DulDXdgFkTxwTgRsAXgj8i7A\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 244681,
 		"path": "../public/assets/routes-Ci4X1jD3.js"
 	},
 	"/assets/drink-coca-cola-D83foBG1.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"bf65a-h2782mDQADKj1mVNTnKPFmSQaZM\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 783962,
 		"path": "../public/assets/drink-coca-cola-D83foBG1.jpg"
+	},
+	"/assets/drink-coca-zero-eyT1b9_N.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"bde13-/ANkwG+geAOO7dNnfYaI5efF9kE\"",
+		"mtime": "2026-10-14T16:58:54.596Z",
+		"size": 777747,
+		"path": "../public/assets/drink-coca-zero-eyT1b9_N.jpg"
 	},
 	"/assets/drink-fanta-orange-PDmbpAsA.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"ca7df-JU4Lg/04kowGPPKAd+GzYwlyVkE\"",
-		"mtime": "2026-10-14T16:52:01.442Z",
+		"mtime": "2026-10-14T16:58:54.596Z",
 		"size": 829407,
 		"path": "../public/assets/drink-fanta-orange-PDmbpAsA.jpg"
 	},
 	"/assets/drink-ice-tea-CZgyxPov.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"bc7b7-h+mR5Yv9rqDtFReS1JJ00P3daEg\"",
-		"mtime": "2026-10-14T16:52:01.442Z",
+		"mtime": "2026-10-14T16:58:54.596Z",
 		"size": 772023,
 		"path": "../public/assets/drink-ice-tea-CZgyxPov.jpg"
 	},
 	"/assets/hero-crousty-wide-la3QJkVJ.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"9988c-gZ613iufN61WjJTRoXwditMZeyc\"",
-		"mtime": "2026-10-14T16:52:01.442Z",
+		"mtime": "2026-10-14T16:58:54.596Z",
 		"size": 628876,
 		"path": "../public/assets/hero-crousty-wide-la3QJkVJ.jpg"
 	},
 	"/assets/hero-saumon-clean-wide-CmteSWDC.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"97b6f-fD3s5WJC/JdK+sTz13anPpjV7w4\"",
-		"mtime": "2026-10-14T16:52:01.443Z",
+		"mtime": "2026-10-14T16:58:54.597Z",
 		"size": 621423,
 		"path": "../public/assets/hero-saumon-clean-wide-CmteSWDC.jpg"
+	},
+	"/assets/hero-scampis-wide-RPIUC85j.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"b4330-vU/CkT4LGIfbRh+cFP10D9cXI00\"",
+		"mtime": "2026-10-14T16:58:54.597Z",
+		"size": 738096,
+		"path": "../public/assets/hero-scampis-wide-RPIUC85j.jpg"
+	},
+	"/assets/hero-sweet-wide-CybbbKyX.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"9177b-eQbq0v0z0PUZmXF/WWha1RidHD4\"",
+		"mtime": "2026-10-14T16:58:54.597Z",
+		"size": 595835,
+		"path": "../public/assets/hero-sweet-wide-CybbbKyX.jpg"
 	},
 	"/assets/hero-spicy-wide-_hM7Lcc8.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"9efd7-3H5ZqELekp4fbUtDlIes1bowuCo\"",
-		"mtime": "2026-10-14T16:52:01.443Z",
+		"mtime": "2026-10-14T16:58:54.597Z",
 		"size": 651223,
 		"path": "../public/assets/hero-spicy-wide-_hM7Lcc8.jpg"
 	},
 	"/assets/star-C7_5D-jp.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"1d8-ip3V6dXSMumtXzbXCaUadHxIR3o\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 472,
 		"path": "../public/assets/star-C7_5D-jp.js"
-	},
-	"/assets/hero-sweet-wide-CybbbKyX.jpg": {
-		"type": "image/jpeg",
-		"etag": "\"9177b-eQbq0v0z0PUZmXF/WWha1RidHD4\"",
-		"mtime": "2026-10-14T16:52:01.443Z",
-		"size": 595835,
-		"path": "../public/assets/hero-sweet-wide-CybbbKyX.jpg"
-	},
-	"/assets/hero-scampis-wide-RPIUC85j.jpg": {
-		"type": "image/jpeg",
-		"etag": "\"b4330-vU/CkT4LGIfbRh+cFP10D9cXI00\"",
-		"mtime": "2026-10-14T16:52:01.443Z",
-		"size": 738096,
-		"path": "../public/assets/hero-scampis-wide-RPIUC85j.jpg"
-	},
-	"/assets/drink-coca-zero-eyT1b9_N.jpg": {
-		"type": "image/jpeg",
-		"etag": "\"bde13-/ANkwG+geAOO7dNnfYaI5efF9kE\"",
-		"mtime": "2026-10-14T16:52:01.441Z",
-		"size": 777747,
-		"path": "../public/assets/drink-coca-zero-eyT1b9_N.jpg"
 	},
 	"/assets/stock-CaiRIRLh.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"3c6-aE0z8l8w2AVq54aoYgrNNRE6+fw\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 966,
 		"path": "../public/assets/stock-CaiRIRLh.js"
 	},
 	"/assets/stocks-Cu_dNZuy.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"184d-yE0AKKtb4T26jJqvAIlavvq4D6Q\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 6221,
 		"path": "../public/assets/stocks-Cu_dNZuy.js"
-	},
-	"/assets/styles-CYIoFvLn.css": {
-		"type": "text/css; charset=utf-8",
-		"etag": "\"26ab9-ptRbgFDBr2rKt/TNLJL4CJNP2j8\"",
-		"mtime": "2026-10-14T16:52:01.443Z",
-		"size": 158393,
-		"path": "../public/assets/styles-CYIoFvLn.css"
 	},
 	"/assets/sur-mesure-2I7C8JRQ.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"52ee-8G0EYSLwrNk1q9t9VGXsU2k40QE\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 21230,
 		"path": "../public/assets/sur-mesure-2I7C8JRQ.js"
+	},
+	"/assets/styles-CYIoFvLn.css": {
+		"type": "text/css; charset=utf-8",
+		"etag": "\"26ab9-ptRbgFDBr2rKt/TNLJL4CJNP2j8\"",
+		"mtime": "2026-10-14T16:58:54.597Z",
+		"size": 158393,
+		"path": "../public/assets/styles-CYIoFvLn.css"
 	},
 	"/assets/useStock-CYuKnEsX.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"1e8-6Upexz5TXGKApBV0BGkkF4w9ukM\"",
-		"mtime": "2026-10-14T16:52:01.440Z",
+		"mtime": "2026-10-14T16:58:54.595Z",
 		"size": 488,
 		"path": "../public/assets/useStock-CYuKnEsX.js"
 	},
 	"/assets/tiramisu-nutella-Cq3EXNhL.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"b3e21-z4hdaY7Tn/ukPVQQVxgaggzbteQ\"",
-		"mtime": "2026-10-14T16:52:01.443Z",
+		"mtime": "2026-10-14T16:58:54.597Z",
 		"size": 736801,
 		"path": "../public/assets/tiramisu-nutella-Cq3EXNhL.jpg"
 	},
 	"/assets/tiramisu-speculoos-CUQsAiGk.jpg": {
 		"type": "image/jpeg",
 		"etag": "\"b2cff-r0Ka031bdqB5wUJuB6wwzxfQcWk\"",
-		"mtime": "2026-10-14T16:52:01.444Z",
+		"mtime": "2026-10-14T16:58:54.597Z",
 		"size": 732415,
 		"path": "../public/assets/tiramisu-speculoos-CUQsAiGk.jpg"
 	}

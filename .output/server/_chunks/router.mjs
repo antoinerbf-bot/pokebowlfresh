@@ -5758,15 +5758,15 @@ function formatEurAmount(total) {
 * Server-only Bancontact Pro (Payconiq by Bancontact) API helper.
 *
 * Supported environments:
-* - Production: https://api.payconiq.com/v3
-* - Preprod / Test: https://api.preprod.payconiq.com/v3
+* - Production: https://merchant.api.bancontact.net/v3
+* - Preprod / Test: https://merchant.api.preprod.bancontact.net/v3
 *
 * Required environment variables:
 * - BANCONTACT_PRO_API_KEY or PAYCONIQ_API_KEY
 * - BANCONTACT_PRO_ENV (optional: "production" | "preprod", defaults to "production")
 */
-var PROD_API = "https://api.payconiq.com/v3";
-var PREPROD_API = "https://api.preprod.payconiq.com/v3";
+var PROD_API = "https://merchant.api.bancontact.net/v3";
+var PREPROD_API = "https://merchant.api.preprod.bancontact.net/v3";
 function getBancontactProApiKey() {
 	return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
 }
@@ -5784,7 +5784,7 @@ async function createBancontactProPayment(params) {
 	const res = await fetch(`${getApiBaseUrl()}/payments`, {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${apiKey}`,
+			Authorization: apiKey,
 			"Content-Type": "application/json",
 			Accept: "application/json"
 		},
@@ -5807,7 +5807,7 @@ async function getBancontactProPayment(paymentId) {
 	const apiKey = getBancontactProApiKey();
 	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.");
 	const res = await fetch(`${getApiBaseUrl()}/payments/${paymentId}`, { headers: {
-		Authorization: `Bearer ${apiKey}`,
+		Authorization: apiKey,
 		Accept: "application/json"
 	} });
 	if (!res.ok) {
@@ -8765,6 +8765,9 @@ function AdminStocksPage() {
 //#region src/routes/api/bancontact-webhook.ts
 var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
+		const apiKey = getBancontactProApiKey();
+		if (!apiKey) return new Response("Bancontact not configured", { status: 503 });
+		if (request.headers.get("signature") !== apiKey) return new Response("Invalid signature", { status: 401 });
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
 		if (contentType.includes("application/json")) {

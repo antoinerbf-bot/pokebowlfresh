@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/bancontact-pro.server-3IaSEhvt.js
+//#region node_modules/.nitro/vite/services/ssr/assets/bancontact-pro.server-B2q85PKm.js
 /**
 * Server-only Mollie helpers.
 * Requires env: MOLLIE_API_KEY (test_… or live_…)
@@ -49,15 +49,15 @@ function formatEurAmount(total) {
 * Server-only Bancontact Pro (Payconiq by Bancontact) API helper.
 *
 * Supported environments:
-* - Production: https://api.payconiq.com/v3
-* - Preprod / Test: https://api.preprod.payconiq.com/v3
+* - Production: https://merchant.api.bancontact.net/v3
+* - Preprod / Test: https://merchant.api.preprod.bancontact.net/v3
 *
 * Required environment variables:
 * - BANCONTACT_PRO_API_KEY or PAYCONIQ_API_KEY
 * - BANCONTACT_PRO_ENV (optional: "production" | "preprod", defaults to "production")
 */
-var PROD_API = "https://api.payconiq.com/v3";
-var PREPROD_API = "https://api.preprod.payconiq.com/v3";
+var PROD_API = "https://merchant.api.bancontact.net/v3";
+var PREPROD_API = "https://merchant.api.preprod.bancontact.net/v3";
 function getBancontactProApiKey() {
 	return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
 }
@@ -75,7 +75,7 @@ async function createBancontactProPayment(params) {
 	const res = await fetch(`${getApiBaseUrl()}/payments`, {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${apiKey}`,
+			Authorization: apiKey,
 			"Content-Type": "application/json",
 			Accept: "application/json"
 		},
@@ -98,7 +98,7 @@ async function getBancontactProPayment(paymentId) {
 	const apiKey = getBancontactProApiKey();
 	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.");
 	const res = await fetch(`${getApiBaseUrl()}/payments/${paymentId}`, { headers: {
-		Authorization: `Bearer ${apiKey}`,
+		Authorization: apiKey,
 		Accept: "application/json"
 	} });
 	if (!res.ok) {
@@ -108,4 +108,4 @@ async function getBancontactProPayment(paymentId) {
 	return await res.json();
 }
 //#endregion
-export { getMolliePayment as a, getBancontactProPayment as i, createMolliePayment as n, isBancontactProConfigured as o, formatEurAmount as r, createBancontactProPayment as t };
+export { getBancontactProPayment as a, getBancontactProApiKey as i, createMolliePayment as n, getMolliePayment as o, formatEurAmount as r, isBancontactProConfigured as s, createBancontactProPayment as t };
