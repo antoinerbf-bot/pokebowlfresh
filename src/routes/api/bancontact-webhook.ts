@@ -38,7 +38,7 @@ export const Route = createFileRoute("/api/bancontact-webhook")({
           }
 
           if (payment.status === "SUCCEEDED") {
-            await upsertOrder({ ...order, status: "paid", molliePaymentId: paymentId });
+            await upsertOrder({ ...order, status: "paid", molliePaymentId: `bancontact:${paymentId}` });
           } else if (
             payment.status === "CANCELLED" ||
             payment.status === "EXPIRED" ||
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/api/bancontact-webhook")({
             await upsertOrder({
               ...order,
               status: payment.status === "EXPIRED" ? "expired" : "cancelled",
-              molliePaymentId: paymentId,
+              molliePaymentId: `bancontact:${paymentId}`,
             });
           }
 
