@@ -8567,15 +8567,9 @@ function buildDeliveryReceipt(order, origin = "https://pokenbowl.be") {
 	if (order.status === "paid") b.invert(true).line(" PAIEMENT VALIDE - EN LIGNE ").invert(false);
 	else b.line(`PAIEMENT SUR PLACE : ${order.total.toFixed(2)} EUR`);
 	b.bold(false).line();
-	if (order.deliveryToken) {
-		const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken}`;
-		b.divider("=");
-		b.line("SCANNEZ POUR GPS ET CONTACT LIVREUR");
-		b.line();
-		b.qrCode(trackUrl, 6);
-		b.line();
-		b.line("pokenbowl.be");
-	}
+	const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken ?? ""}`;
+	b.divider("=");
+	b.align("center").bold(true).line("SCANNEZ POUR SUIVRE LA COMMANDE").bold(false).line().qrCode(trackUrl, 6).line().line("Acces livreur / GPS").line("pokenbowl.be").align("left");
 	b.divider("=");
 	b.line("Merci de votre confiance !");
 	b.feed(4).cut(true);
