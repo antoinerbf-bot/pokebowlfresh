@@ -16,7 +16,7 @@ import { t as Route$16 } from "./order.success-CkpC4pgG.mjs";
 import { t as EscPosBuilder } from "./escpos-C99SgK7y.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BpQDS4s4.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-C1DLJ1Vh.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-CYIoFvLn.css";
@@ -299,12 +299,12 @@ var Route$5 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 		if (payment.status === "SUCCEEDED") await upsertOrder({
 			...order,
 			status: "paid",
-			molliePaymentId: paymentId
+			molliePaymentId: `bancontact:${paymentId}`
 		});
 		else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") await upsertOrder({
 			...order,
 			status: payment.status === "EXPIRED" ? "expired" : "cancelled",
-			molliePaymentId: paymentId
+			molliePaymentId: `bancontact:${paymentId}`
 		});
 		return new Response("OK", { status: 200 });
 	} catch (e) {

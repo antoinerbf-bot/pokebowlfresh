@@ -8784,12 +8784,12 @@ var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 		if (payment.status === "SUCCEEDED") await upsertOrder({
 			...order,
 			status: "paid",
-			molliePaymentId: paymentId
+			molliePaymentId: `bancontact:${paymentId}`
 		});
 		else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") await upsertOrder({
 			...order,
 			status: payment.status === "EXPIRED" ? "expired" : "cancelled",
-			molliePaymentId: paymentId
+			molliePaymentId: `bancontact:${paymentId}`
 		});
 		return new Response("OK", { status: 200 });
 	} catch (e) {
