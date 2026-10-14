@@ -300,16 +300,20 @@ export function buildDeliveryReceipt(order: Order, origin = "https://pokenbowl.b
   }
   b.bold(false).line();
 
-  // QR Code sécurisé
-  if (order.deliveryToken) {
-    const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken}`;
-    b.divider("=");
-    b.line("SCANNEZ POUR GPS ET CONTACT LIVREUR");
-    b.line();
-    b.qrCode(trackUrl, 6);
-    b.line();
-    b.line("pokenbowl.be");
-  }
+  // QR code sécurisé imprimé au bas de chaque ticket client.
+  // getOrderReceipts crée et enregistre un jeton si une ancienne commande en manque.
+  const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken ?? ""}`;
+  b.divider("=");
+  b.align("center")
+    .bold(true)
+    .line("SCANNEZ POUR SUIVRE LA COMMANDE")
+    .bold(false)
+    .line()
+    .qrCode(trackUrl, 6)
+    .line()
+    .line("Acces livreur / GPS")
+    .line("pokenbowl.be")
+    .align("left");
 
   b.divider("=");
   b.line("Merci de votre confiance !");
