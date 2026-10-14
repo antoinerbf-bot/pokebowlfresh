@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-A8KgfYEX.css";
+var styles_default = "/assets/styles-CVAFLXmm.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -2386,7 +2386,7 @@ function PokawaHeroExact() {
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		"aria-label": "Accueil Poké N Bowl Visé — Poké bowls frais & Crousty Chicken",
-		className: "relative w-full h-[92vh] sm:h-[96vh] min-h-[620px] max-h-[1050px] overflow-hidden bg-[#0a1713] select-none",
+		className: "relative w-full h-auto min-h-[780px] sm:h-[96vh] sm:min-h-[680px] max-h-none sm:max-h-[1050px] overflow-hidden bg-[#0a1713] select-none",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
 				initial: false,
@@ -2483,7 +2483,7 @@ function PokawaHeroExact() {
 									1
 								]
 							},
-							className: "max-w-2xl space-y-3 sm:space-y-4",
+							className: "w-full max-w-[900px] space-y-3 sm:space-y-4",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex flex-wrap items-center gap-2",
@@ -2501,7 +2501,7 @@ function PokawaHeroExact() {
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-									className: "text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight leading-[0.92] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]",
+									className: "max-w-full text-[clamp(2.15rem,6.4vw,6rem)] font-black uppercase tracking-tight leading-[1.02] [overflow-wrap:anywhere] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "block text-white",
 										children: slide.titleLine1
@@ -8623,8 +8623,15 @@ var getOrderReceipts = createServerFn({ method: "POST" }).validator(objectType({
 	origin: stringType().optional()
 })).handler(async ({ data }) => {
 	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
-	const order = await getOrderFromStore(data.orderId);
+	let order = await getOrderFromStore(data.orderId);
 	if (!order) throw new Error("Commande introuvable.");
+	if (!order.deliveryToken) {
+		order = {
+			...order,
+			deliveryToken: crypto.randomUUID().replace(/-/g, "")
+		};
+		await upsertOrder(order);
+	}
 	const kitchenBytes = buildKitchenReceipt(order);
 	const deliveryBytes = buildDeliveryReceipt(order, data.origin ?? "https://pokenbowl.be");
 	const toBase64 = (bytes) => {

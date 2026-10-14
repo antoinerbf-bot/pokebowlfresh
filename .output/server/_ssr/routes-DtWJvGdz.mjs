@@ -10,7 +10,7 @@ import { A as ExternalLink, B as ChefHat, C as Menu, D as Heart, E as Instagram,
 import { a as bowl_spicy_chicken_default, c as drink_eau_gazeuse_default, d as tiramisu_speculoos_default, i as bowl_scampis_default, l as drink_eau_plate_default, n as DishImage, o as bowl_sweet_chicken_default, r as bowl_saumon_default, s as drink_coca_cola_default, t as CartDrawer, u as tiramisu_nutella_default } from "./CartDrawer-BFgpTr_N.mjs";
 import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-lOpxi1TL.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DtWJvGdz.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -627,7 +627,7 @@ function PokawaHeroExact() {
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		"aria-label": "Accueil Poké N Bowl Visé — Poké bowls frais & Crousty Chicken",
-		className: "relative w-full h-[92vh] sm:h-[96vh] min-h-[620px] max-h-[1050px] overflow-hidden bg-[#0a1713] select-none",
+		className: "relative w-full h-auto min-h-[780px] sm:h-[96vh] sm:min-h-[680px] max-h-none sm:max-h-[1050px] overflow-hidden bg-[#0a1713] select-none",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, {
 				initial: false,
@@ -724,7 +724,7 @@ function PokawaHeroExact() {
 									1
 								]
 							},
-							className: "max-w-2xl space-y-3 sm:space-y-4",
+							className: "w-full max-w-[900px] space-y-3 sm:space-y-4",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex flex-wrap items-center gap-2",
@@ -742,7 +742,7 @@ function PokawaHeroExact() {
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-									className: "text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight leading-[0.92] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]",
+									className: "max-w-full text-[clamp(2.15rem,6.4vw,6rem)] font-black uppercase tracking-tight leading-[1.02] [overflow-wrap:anywhere] drop-shadow-[0_4px_18px_rgba(0,0,0,0.9)]",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "block text-white",
 										children: slide.titleLine1

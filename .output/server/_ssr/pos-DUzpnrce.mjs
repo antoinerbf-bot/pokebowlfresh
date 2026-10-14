@@ -1,9 +1,9 @@
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
 import { t as createServerRpc } from "./createServerRpc-B90ckaqP.mjs";
-import { a as listOrdersFromStore, i as getOrderFromStore, o as requestOrderReprint, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-4tO4OvTG.mjs";
+import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, o as requestOrderReprint, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-4tO4OvTG.mjs";
 import { n as buildDeliveryReceipt, r as buildKitchenReceipt } from "./escpos-dUhfprHQ.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-DNV9rkDh.js
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-DUzpnrce.js
 function verifyPin(pin) {
 	return pin === (process.env.POS_PIN ?? "1234");
 }
@@ -64,8 +64,15 @@ var getOrderReceipts = createServerFn({ method: "POST" }).validator(objectType({
 	origin: stringType().optional()
 })).handler(getOrderReceipts_createServerFn_handler, async ({ data }) => {
 	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
-	const order = await getOrderFromStore(data.orderId);
+	let order = await getOrderFromStore(data.orderId);
 	if (!order) throw new Error("Commande introuvable.");
+	if (!order.deliveryToken) {
+		order = {
+			...order,
+			deliveryToken: crypto.randomUUID().replace(/-/g, "")
+		};
+		await upsertOrder(order);
+	}
 	const kitchenBytes = buildKitchenReceipt(order);
 	const deliveryBytes = buildDeliveryReceipt(order, data.origin ?? "https://pokenbowl.be");
 	const toBase64 = (bytes) => {
