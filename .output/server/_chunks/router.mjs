@@ -8765,9 +8765,6 @@ function AdminStocksPage() {
 //#region src/routes/api/bancontact-webhook.ts
 var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
-		const apiKey = getBancontactProApiKey();
-		if (!apiKey) return new Response("Bancontact not configured", { status: 503 });
-		if (request.headers.get("signature") !== apiKey) return new Response("Invalid signature", { status: 401 });
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
 		if (contentType.includes("application/json")) {

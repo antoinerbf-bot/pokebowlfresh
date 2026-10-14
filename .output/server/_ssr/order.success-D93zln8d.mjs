@@ -1,6 +1,6 @@
 import { m as createFileRoute, p as lazyRouteComponent } from "../_libs/@tanstack/react-router+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/order.success-CfGFLNbk.js
-var $$splitComponentImporter = () => import("./order.success-CqFZYjp4.mjs");
+//#region node_modules/.nitro/vite/services/ssr/assets/order.success-D93zln8d.js
+var $$splitComponentImporter = () => import("./order.success-Z7_dSBF-.mjs");
 var Route = createFileRoute("/order/success")({
 	validateSearch: (search) => ({
 		orderId: typeof search.orderId === "string" ? search.orderId : void 0,

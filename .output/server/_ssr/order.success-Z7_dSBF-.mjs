@@ -5,9 +5,9 @@ import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
 import { N as Clock, P as CircleCheck, T as LoaderCircle, c as Star, j as CreditCard, s as Store } from "../_libs/lucide-react.mjs";
-import { t as getOrderStatus } from "./checkout-BI-_NdGp.mjs";
-import { t as Route } from "./order.success-CfGFLNbk.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/order.success-CqFZYjp4.js
+import { t as getOrderStatus } from "./checkout-DsMxFquV.mjs";
+import { t as Route } from "./order.success-D93zln8d.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/order.success-Z7_dSBF-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function OrderSuccessPage() {

@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/bancontact-pro.server-B2q85PKm.js
+//#region node_modules/.nitro/vite/services/ssr/assets/bancontact-pro.server-DRod8WCo.js
 /**
 * Server-only Mollie helpers.
 * Requires env: MOLLIE_API_KEY (test_… or live_…)
@@ -108,4 +108,4 @@ async function getBancontactProPayment(paymentId) {
 	return await res.json();
 }
 //#endregion
-export { getBancontactProPayment as a, getBancontactProApiKey as i, createMolliePayment as n, getMolliePayment as o, formatEurAmount as r, isBancontactProConfigured as s, createBancontactProPayment as t };
+export { getMolliePayment as a, getBancontactProPayment as i, createMolliePayment as n, isBancontactProConfigured as o, formatEurAmount as r, createBancontactProPayment as t };

@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/__23tanstack-start-server-fn-resolver-B6J4idLp.js
+//#region node_modules/.nitro/vite/services/ssr/assets/__23tanstack-start-server-fn-resolver-DB97Hqy5.js
 var manifest = {
 	"08e215f76fa376cf622d49bb0ca6d08af7f1b223e32441b26140e9e3d2fb64bf": {
 		functionName: "resetStock_createServerFn_handler",
@@ -6,7 +6,7 @@ var manifest = {
 	},
 	"243c2b184d864a499b1d71c0c6b5eb7e9bd0b88cb2359335c4d165aeafd87962": {
 		functionName: "submitCheckout_createServerFn_handler",
-		importer: () => import("./_ssr/checkout-DpdTMhFe.mjs")
+		importer: () => import("./_ssr/checkout-DowPH6ce.mjs")
 	},
 	"344ae2a8ed96db3241e90e9ee3089ec0df73f7602450a7faf6a43771144a5705": {
 		functionName: "setStockItem_createServerFn_handler",
@@ -30,7 +30,7 @@ var manifest = {
 	},
 	"92944dec917326ce81275bbe893d3642fead0ec3cc3aa98995106b3743ad6174": {
 		functionName: "getOrderStatus_createServerFn_handler",
-		importer: () => import("./_ssr/checkout-DpdTMhFe.mjs")
+		importer: () => import("./_ssr/checkout-DowPH6ce.mjs")
 	},
 	"ae058d51b0dbcb532d02de73a2c4d7357c52b93b90a304439be634b235fa5013": {
 		functionName: "getOrderReceipts_createServerFn_handler",

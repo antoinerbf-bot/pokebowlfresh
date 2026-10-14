@@ -3,9 +3,9 @@ import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { a as numberType, i as literalType, o as objectType, r as enumType, s as stringType, t as arrayType } from "../_libs/zod.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
 import { t as createServerRpc } from "./createServerRpc-B90ckaqP.mjs";
-import { a as getBancontactProPayment, n as createMolliePayment, o as getMolliePayment, r as formatEurAmount, s as isBancontactProConfigured, t as createBancontactProPayment } from "./bancontact-pro.server-B2q85PKm.mjs";
+import { a as getMolliePayment, i as getBancontactProPayment, n as createMolliePayment, o as isBancontactProConfigured, r as formatEurAmount, t as createBancontactProPayment } from "./bancontact-pro.server-DRod8WCo.mjs";
 import { c as upsertOrder, i as getOrderFromStore } from "./order-store-4tO4OvTG.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DpdTMhFe.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DowPH6ce.js
 function generateOrderId() {
 	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }

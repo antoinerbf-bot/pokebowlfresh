@@ -6,8 +6,8 @@ import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-BkzyhEtx.mjs";
 import { K as ArrowLeft, T as LoaderCircle, j as CreditCard, s as Store } from "../_libs/lucide-react.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
-import { n as submitCheckout } from "./checkout-BI-_NdGp.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-CgY9d3w9.js
+import { n as submitCheckout } from "./checkout-DsMxFquV.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-CTgwzZws.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
