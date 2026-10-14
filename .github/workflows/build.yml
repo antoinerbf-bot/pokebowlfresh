@@ -49,6 +49,7 @@ jobs:
             exit 0
           fi
           git commit -m "chore: publish O2Switch build [skip ci]"
-          git pull --rebase origin ${GITHUB_REF_NAME} || true
+          # Fail visibly if a concurrent publish causes a conflict; never report a successful deployment with a stale .output bundle.
+          git pull --rebase origin ${GITHUB_REF_NAME}
           git push origin HEAD:${GITHUB_REF_NAME}
           git push --force origin HEAD:o2switch-clean
