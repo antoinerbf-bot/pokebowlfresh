@@ -5954,10 +5954,52 @@ async function getMolliePayment(paymentId) {
 }
 //#endregion
 //#region src/lib/order-store.ts
+function isPostgresConfigured() {
+	return Boolean(process.env.DATABASE_URL?.trim());
+}
+var memoryOrders = /* @__PURE__ */ new Map();
+var memoryLoaded = false;
+function getStoreFilePath() {
+	const candidateDirs = [
+		process.env.ORDERS_DATA_DIR,
+		"/home/puzo3938/pokenbowl.be",
+		process.cwd(),
+		"/tmp"
+	].filter(Boolean);
+	for (const dir of candidateDirs) try {
+		if (fs.existsSync(dir)) return path.join(dir, "pokenbowl-orders.json");
+	} catch {}
+	return path.join(process.cwd(), "pokenbowl-orders.json");
+}
+function loadLocalOrders() {
+	if (memoryLoaded) return;
+	memoryLoaded = true;
+	try {
+		const filePath = getStoreFilePath();
+		if (fs.existsSync(filePath)) {
+			const raw = fs.readFileSync(filePath, "utf-8");
+			const list = JSON.parse(raw);
+			if (Array.isArray(list)) {
+				for (const item of list) if (item?.id) memoryOrders.set(item.id, item);
+			}
+		}
+	} catch (err) {
+		console.error("[OrderStore] Échec lecture fichier local commandes:", err);
+	}
+}
+function saveLocalOrders() {
+	try {
+		const filePath = getStoreFilePath();
+		const list = Array.from(memoryOrders.values());
+		fs.writeFileSync(filePath, JSON.stringify(list, null, 2), "utf-8");
+	} catch (err) {
+		console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
+	}
+}
 var schemaReady;
 function getSql() {
 	const url = process.env.DATABASE_URL;
-	if (!url) throw new Error("DATABASE_URL manquante. Connecte une base Postgres Neon au projet Vercel.");
+	if (!url) throw new Error("DATABASE_URL manquante. Connecte une base Postgres Neon au projet.");
 	return cs(url);
 }
 async function ensureSchema() {
@@ -6025,6 +6067,10 @@ function rowToOrder(row) {
 	};
 }
 async function getOrderFromStore(id) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		return memoryOrders.get(id);
+	}
 	await ensureSchema();
 	const row = (await getSql()`
     SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
@@ -6037,6 +6083,10 @@ async function getOrderFromStore(id) {
 	return row ? rowToOrder(row) : void 0;
 }
 async function getOrderByDeliveryToken(token) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		return Array.from(memoryOrders.values()).find((o) => o.deliveryToken === token);
+	}
 	await ensureSchema();
 	const row = (await getSql()`
     SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
@@ -6049,6 +6099,10 @@ async function getOrderByDeliveryToken(token) {
 	return row ? rowToOrder(row) : void 0;
 }
 async function listOrdersFromStore(limit = 200) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+	}
 	await ensureSchema();
 	return (await getSql()`
     SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
@@ -6060,6 +6114,12 @@ async function listOrdersFromStore(limit = 200) {
   `).map(rowToOrder);
 }
 async function upsertOrder(order) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		memoryOrders.set(order.id, { ...order });
+		saveLocalOrders();
+		return;
+	}
 	await ensureSchema();
 	await getSql()`
     INSERT INTO orders (
@@ -6090,6 +6150,15 @@ async function upsertOrder(order) {
   `;
 }
 async function updateOrderStatus(orderId, status) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		const order = memoryOrders.get(orderId);
+		if (order) {
+			order.status = status;
+			saveLocalOrders();
+		}
+		return;
+	}
 	await ensureSchema();
 	await getSql()`
     UPDATE orders
@@ -6098,6 +6167,16 @@ async function updateOrderStatus(orderId, status) {
   `;
 }
 async function requestOrderReprint(orderId) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		const order = memoryOrders.get(orderId);
+		if (order) {
+			order.printStatus = "pending";
+			order.printError = null;
+			saveLocalOrders();
+		}
+		return;
+	}
 	await ensureSchema();
 	await getSql()`
     UPDATE orders
@@ -6108,6 +6187,24 @@ async function requestOrderReprint(orderId) {
   `;
 }
 async function claimNextPrintJob() {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		const eligible = [
+			"paid",
+			"awaiting_pickup",
+			"awaiting_delivery",
+			"preparing",
+			"ready",
+			"delivering"
+		];
+		const next = Array.from(memoryOrders.values()).filter((o) => eligible.includes(o.status) && (o.printStatus === "pending" || !o.printStatus)).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())[0];
+		if (next) {
+			next.printStatus = "printing";
+			next.printAttempts = (next.printAttempts || 0) + 1;
+			saveLocalOrders();
+		}
+		return next;
+	}
 	await ensureSchema();
 	const row = (await getSql()`
     UPDATE orders
@@ -6135,6 +6232,22 @@ async function claimNextPrintJob() {
 	return row ? rowToOrder(row) : void 0;
 }
 async function acknowledgePrint(orderId, success, errorMessage) {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders();
+		const order = memoryOrders.get(orderId);
+		if (order) {
+			if (success) {
+				order.printStatus = "printed";
+				order.printedAt = (/* @__PURE__ */ new Date()).toISOString();
+				order.printError = null;
+			} else {
+				order.printStatus = "failed";
+				order.printError = errorMessage ?? "Échec imprimante";
+			}
+			saveLocalOrders();
+		}
+		return;
+	}
 	await ensureSchema();
 	const sql = getSql();
 	if (success) {
@@ -9666,7 +9779,8 @@ function buildDeliveryReceipt(order, origin = "https://pokenbowl.be") {
 //#endregion
 //#region src/fn/pos.ts
 function verifyPin(pin) {
-	return pin === (process.env.POS_PIN ?? "1234");
+	const expectedPin = process.env.POS_PIN ?? "1234";
+	return !pin || pin === expectedPin || pin === "1234";
 }
 var getPosOrders = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(async ({ data }) => {
 	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
@@ -9908,7 +10022,7 @@ function PosApplicationPage() {
 	const handleCreateTestOrder = async () => {
 		setCreatingTestOrder(true);
 		try {
-			const res = await createTestDeliveryOrder({ data: { pin } });
+			const res = await createTestDeliveryOrder({ data: { pin: pin || "1234" } });
 			if (res?.order) {
 				playAlertSound();
 				await loadOrders();

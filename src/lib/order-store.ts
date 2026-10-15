@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { neon } from "@neondatabase/serverless";
 import type { Order } from "./orders";
 
@@ -19,13 +21,71 @@ type DbRow = {
   print_error: string | null;
 };
 
+function isPostgresConfigured(): boolean {
+  return Boolean(process.env.DATABASE_URL?.trim());
+}
+
+// ─── Stockage Local JSON (quand DATABASE_URL n'est pas configuré sur O2Switch) ───
+const memoryOrders = new Map<string, Order>();
+let memoryLoaded = false;
+
+function getStoreFilePath(): string {
+  const candidateDirs = [
+    process.env.ORDERS_DATA_DIR,
+    "/home/puzo3938/pokenbowl.be",
+    process.cwd(),
+    "/tmp",
+  ].filter(Boolean) as string[];
+
+  for (const dir of candidateDirs) {
+    try {
+      if (fs.existsSync(dir)) {
+        return path.join(dir, "pokenbowl-orders.json");
+      }
+    } catch {}
+  }
+  return path.join(process.cwd(), "pokenbowl-orders.json");
+}
+
+function loadLocalOrders(): void {
+  if (memoryLoaded) return;
+  memoryLoaded = true;
+  try {
+    const filePath = getStoreFilePath();
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      const list = JSON.parse(raw);
+      if (Array.isArray(list)) {
+        for (const item of list) {
+          if (item?.id) {
+            memoryOrders.set(item.id, item);
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error("[OrderStore] Échec lecture fichier local commandes:", err);
+  }
+}
+
+function saveLocalOrders(): void {
+  try {
+    const filePath = getStoreFilePath();
+    const list = Array.from(memoryOrders.values());
+    fs.writeFileSync(filePath, JSON.stringify(list, null, 2), "utf-8");
+  } catch (err) {
+    console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
+  }
+}
+
+// ─── Stockage PostgreSQL Neon ──────────────────────────────────────────────────
 let schemaReady: Promise<void> | undefined;
 
 function getSql() {
   const url = process.env.DATABASE_URL;
   if (!url) {
     throw new Error(
-      "DATABASE_URL manquante. Connecte une base Postgres Neon au projet Vercel.",
+      "DATABASE_URL manquante. Connecte une base Postgres Neon au projet.",
     );
   }
   return neon(url);
@@ -100,6 +160,11 @@ function rowToOrder(row: DbRow): Order {
 }
 
 export async function getOrderFromStore(id: string): Promise<Order | undefined> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    return memoryOrders.get(id);
+  }
+
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<DbRow>`
@@ -115,6 +180,11 @@ export async function getOrderFromStore(id: string): Promise<Order | undefined> 
 }
 
 export async function getOrderByDeliveryToken(token: string): Promise<Order | undefined> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    return Array.from(memoryOrders.values()).find((o) => o.deliveryToken === token);
+  }
+
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<DbRow>`
@@ -130,6 +200,13 @@ export async function getOrderByDeliveryToken(token: string): Promise<Order | un
 }
 
 export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    return Array.from(memoryOrders.values())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+  }
+
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<DbRow>`
@@ -144,6 +221,13 @@ export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
 }
 
 export async function upsertOrder(order: Order): Promise<void> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    memoryOrders.set(order.id, { ...order });
+    saveLocalOrders();
+    return;
+  }
+
   await ensureSchema();
   const sql = getSql();
   await sql`
@@ -176,6 +260,16 @@ export async function upsertOrder(order: Order): Promise<void> {
 }
 
 export async function updateOrderStatus(orderId: string, status: Order["status"]): Promise<void> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    const order = memoryOrders.get(orderId);
+    if (order) {
+      order.status = status;
+      saveLocalOrders();
+    }
+    return;
+  }
+
   await ensureSchema();
   const sql = getSql();
   await sql`
@@ -186,6 +280,17 @@ export async function updateOrderStatus(orderId: string, status: Order["status"]
 }
 
 export async function requestOrderReprint(orderId: string): Promise<void> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    const order = memoryOrders.get(orderId);
+    if (order) {
+      order.printStatus = "pending";
+      order.printError = null;
+      saveLocalOrders();
+    }
+    return;
+  }
+
   await ensureSchema();
   const sql = getSql();
   await sql`
@@ -198,6 +303,20 @@ export async function requestOrderReprint(orderId: string): Promise<void> {
 }
 
 export async function claimNextPrintJob(): Promise<Order | undefined> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    const eligible = ["paid", "awaiting_pickup", "awaiting_delivery", "preparing", "ready", "delivering"];
+    const next = Array.from(memoryOrders.values())
+      .filter((o) => eligible.includes(o.status) && (o.printStatus === "pending" || !o.printStatus))
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())[0];
+    if (next) {
+      next.printStatus = "printing";
+      next.printAttempts = (next.printAttempts || 0) + 1;
+      saveLocalOrders();
+    }
+    return next;
+  }
+
   await ensureSchema();
   const sql = getSql();
   const rows = await sql<DbRow>`
@@ -232,6 +351,23 @@ export async function acknowledgePrint(
   success: boolean,
   errorMessage?: string,
 ): Promise<void> {
+  if (!isPostgresConfigured()) {
+    loadLocalOrders();
+    const order = memoryOrders.get(orderId);
+    if (order) {
+      if (success) {
+        order.printStatus = "printed";
+        order.printedAt = new Date().toISOString();
+        order.printError = null;
+      } else {
+        order.printStatus = "failed";
+        order.printError = errorMessage ?? "Échec imprimante";
+      }
+      saveLocalOrders();
+    }
+    return;
+  }
+
   await ensureSchema();
   const sql = getSql();
 

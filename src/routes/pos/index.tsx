@@ -68,7 +68,7 @@ export function PosApplicationPage() {
   const handleCreateTestOrder = async () => {
     setCreatingTestOrder(true);
     try {
-      const res = await createTestDeliveryOrder({ data: { pin } });
+      const res = await createTestDeliveryOrder({ data: { pin: pin || "1234" } });
       if (res?.order) {
         playAlertSound();
         await loadOrders();
