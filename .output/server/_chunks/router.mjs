@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CYIoFvLn.css";
+var styles_default = "/assets/styles-DYZ7Bex2.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -645,7 +645,7 @@ function BrandLogo({ className = "", compact = false, size = "md" }) {
 				})
 			]
 		}), !compact && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-			className: `font-black uppercase text-[#d7ff45] text-center w-full leading-none ${subtextSizes}`,
+			className: `font-black uppercase text-[#F5EFE6] text-center w-full leading-none ${subtextSizes}`,
 			children: "SUR MESURE"
 		})]
 	});
@@ -1549,7 +1549,7 @@ function CartDrawer() {
 						className: "flex items-center gap-2 text-base font-black text-[#17231f]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-5 w-5 text-[#ff705f]" }), t("cart.title")]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#d7ff45]",
+						className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6]",
 						children: [
 							items.reduce((s, i) => s + i.quantity, 0),
 							" ",
@@ -1715,7 +1715,7 @@ function CartDrawer() {
 									children: cs.subtitle
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "mt-1 flex items-center gap-1 rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] group-hover:bg-[#ff705f] group-hover:text-white transition",
+									className: "mt-1 flex items-center gap-1 rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] group-hover:bg-[#ff705f] group-hover:text-white transition",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-2.5 w-2.5" }),
 										cs.price.toFixed(2),
@@ -1795,7 +1795,7 @@ var NOTIFICATIONS = [
 	{
 		id: "etudiant-deal",
 		tag: "Formule Étudiant",
-		tagColor: "bg-[#d7ff45] text-[#10251f]",
+		tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 		title: "Formule Crousty Chicken à 11 €",
 		desc: "1 Crousty Chicken au choix + 1 boisson 33cl offerte incluse (Coca, Ice-Tea, Fanta...).",
 		dishId: "crousty-chicken-curry",
@@ -1866,7 +1866,7 @@ function CroustyNotificationToast() {
 			onMouseLeave: () => setIsHovered(false),
 			className: "pointer-events-auto relative overflow-hidden rounded-3xl border border-black/10 bg-white/95 p-4 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.25)] backdrop-blur-xl transition hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.35)]",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#d7ff45]/20 blur-2xl pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#ff705f]/15 blur-2xl pointer-events-none" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
 					onClick: handleDismiss,
@@ -1984,7 +1984,7 @@ function NotificationBellMenu() {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-7 w-7 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f]",
+							className: "flex h-7 w-7 items-center justify-center rounded-full bg-[#F5EFE6] text-xs font-black text-[#10251f]",
 							children: "🔔"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 							className: "text-sm font-extrabold",
@@ -2017,7 +2017,7 @@ function NotificationBellMenu() {
 						{
 							id: "notif-saumon",
 							tag: "Best-Seller",
-							tagColor: "bg-[#d7ff45] text-[#10251f]",
+							tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 							title: "Poké Bowls Frais du Jour",
 							desc: "5 recettes signatures préparées à la commande : Saumon Wasabi, Sweet Chicken, Scampis Royal...",
 							dishId: "bowl-saumon",
@@ -2304,7 +2304,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 										children: cat.sub
 									})] })]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: `rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${isActive ? "bg-[#d7ff45] text-[#10251f]" : "bg-black/5 text-[#7a847e]"}`,
+									className: `rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${isActive ? "bg-[#10251f] text-[#F5EFE6]" : "bg-black/5 text-[#7a847e]"}`,
 									children: cat.badge
 								})]
 							}, cat.id);
@@ -2314,10 +2314,10 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 								href: "#composer",
 								onClick: onClose,
-								className: "flex items-center justify-between rounded-xl bg-[#d7ff45] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm hover:scale-[1.02] transition",
+								className: "flex items-center justify-between rounded-xl bg-[#F5EFE6] border border-[#e8ded0] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm hover:scale-[1.02] transition",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "flex items-center gap-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5" }), "Composer son Bowl"]
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#ff705f]" }), "Composer son Bowl"]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
 							})
 						})
@@ -2351,7 +2351,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 												className: "h-full w-full object-cover transition duration-500 group-hover:scale-108"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "absolute top-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
+												className: "absolute top-1.5 right-1.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
 												children: [poke.price.toFixed(2), " €"]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -2456,8 +2456,8 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3]" }), "Créativité Illimitée"]
+										className: "inline-flex items-center gap-1.5 rounded-full bg-[#F5EFE6] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3] text-[#ff705f]" }), "Créativité Illimitée"]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
 										className: "mt-3 text-2xl font-black text-white",
@@ -2477,7 +2477,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 												className: "text-xl",
 												children: "🍚"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block text-[10px] font-bold mt-1 text-[#d7ff45]",
+												className: "block text-[10px] font-bold mt-1 text-[#F5EFE6]",
 												children: "1. Base"
 											})]
 										}),
@@ -2487,7 +2487,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 												className: "text-xl",
 												children: "🐟"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block text-[10px] font-bold mt-1 text-[#d7ff45]",
+												className: "block text-[10px] font-bold mt-1 text-[#F5EFE6]",
 												children: "2. Protéine"
 											})]
 										}),
@@ -2497,7 +2497,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 												className: "text-xl",
 												children: "🥑"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block text-[10px] font-bold mt-1 text-[#d7ff45]",
+												className: "block text-[10px] font-bold mt-1 text-[#F5EFE6]",
 												children: "3. 5 Mix-ins"
 											})]
 										}),
@@ -2507,7 +2507,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 												className: "text-xl",
 												children: "✨"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block text-[10px] font-bold mt-1 text-[#d7ff45]",
+												className: "block text-[10px] font-bold mt-1 text-[#F5EFE6]",
 												children: "4. Sauce & Seeds"
 											})]
 										})
@@ -2516,7 +2516,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 									href: "#composer",
 									onClick: onClose,
-									className: "inline-flex items-center justify-center gap-2 rounded-2xl bg-[#d7ff45] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg hover:bg-white transition",
+									className: "inline-flex items-center justify-center gap-2 rounded-2xl bg-[#F5EFE6] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg hover:bg-white transition",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Lancer l'atelier Sur-Mesure maintenant" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })]
 								})
 							]
@@ -2530,7 +2530,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 								className: "text-[11px] text-[#7a847e]",
 								children: "Préparés chaque matin par notre chef · Mascarpone aérien"
 							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]",
+								className: "rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3 py-1 text-xs font-black text-[#10251f]",
 								children: "4,00 € l'unité"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -2545,7 +2545,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 											alt: dessert.name,
 											className: "h-full w-full object-cover transition duration-500 group-hover:scale-108"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] shadow",
+											className: "absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow",
 											children: [dessert.price.toFixed(2), " €"]
 										})]
 									}),
@@ -2574,7 +2574,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 								className: "text-[11px] text-[#7a847e]",
 								children: "Canettes 33cl et eaux SPA minérales 50cl servies très fraîches"
 							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]",
+								className: "rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3 py-1 text-xs font-black text-[#10251f]",
 								children: "2,00 € l'unité"
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -2589,7 +2589,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 											alt: drink.name,
 											className: "h-full w-full object-cover transition duration-500 group-hover:scale-108"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] shadow",
+											className: "absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow",
 											children: [drink.price.toFixed(2), " €"]
 										})]
 									}),
@@ -2680,7 +2680,7 @@ function PokawaFloatingNavbar() {
 								children: "POKE"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f] shadow-md",
+								className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#F5EFE6] text-xs font-black text-[#10251f] shadow-md",
 								children: "N"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -2689,7 +2689,7 @@ function PokawaFloatingNavbar() {
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[8px] font-black uppercase tracking-[0.35em] text-[#d7ff45] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mt-0.5",
+						className: "text-[8px] font-black uppercase tracking-[0.35em] text-[#F5EFE6] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mt-0.5",
 						children: "VISÉ · BELGIQUE"
 					})]
 				}),
@@ -2798,7 +2798,7 @@ function PokawaFloatingNavbar() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 						href: "#composer",
 						onClick: () => setMobileMenuOpen(false),
-						className: "flex items-center justify-between rounded-2xl bg-[#d7ff45] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm active:scale-98 transition",
+						className: "flex items-center justify-between rounded-2xl bg-[#F5EFE6] border border-[#e8ded0] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm active:scale-98 transition",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "flex items-center gap-2.5",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -3028,7 +3028,7 @@ function PokawaHeroExact() {
 						className: "text-base",
 						children: slide.ingredientCallout.emoji
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+						className: "text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 						children: slide.ingredientCallout.text
 					})]
 				}, `callout-${slide.id}`)
@@ -3066,8 +3066,8 @@ function PokawaHeroExact() {
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex items-center gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f] shadow-md",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[2.5]" }), slide.badge]
+										className: "inline-flex items-center gap-1.5 rounded-full bg-[#F5EFE6] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f] shadow-md border border-[#e2d6c3]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[2.5] text-[#ff705f]" }), slide.badge]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "text-[11px] font-black text-white/80 drop-shadow",
 										children: slide.isCrousty ? "Gamme Chaude" : "Fait minute à Visé"
@@ -3087,9 +3087,9 @@ function PokawaHeroExact() {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											type: "button",
 											onClick: handleQuickAdd,
-											className: "group relative inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_8px_25px_rgba(215,255,69,0.35)] transition hover:bg-white hover:scale-105 active:scale-95",
+											className: "group relative inline-flex items-center gap-2 rounded-full bg-[#F5EFE6] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition hover:bg-white hover:scale-105 active:scale-95 border border-white/40",
 											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-4 w-4 stroke-[3]" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-4 w-4 stroke-[3] text-[#10251f]" }),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
 													"Ajouter · ",
 													slide.price.toFixed(2),
@@ -3110,7 +3110,7 @@ function PokawaHeroExact() {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 											href: "#carte",
-											className: "inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline ml-1 drop-shadow",
+											className: "inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#F5EFE6] hover:underline ml-1 drop-shadow",
 											children: "La Carte →"
 										})
 									]
@@ -3128,7 +3128,7 @@ function PokawaHeroExact() {
 						type: "button",
 						onClick: () => setCurrentIdx(idx),
 						"aria-label": `Aller au plat ${s.dishName}`,
-						className: `transition-all duration-300 rounded-full ${isActive ? "w-8 h-2.5 bg-[#d7ff45] shadow-[0_0_12px_rgba(215,255,69,0.8)]" : "w-2.5 h-2.5 bg-white/40 hover:bg-white/80"}`
+						className: `transition-all duration-300 rounded-full ${isActive ? "w-8 h-2.5 bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]" : "w-2.5 h-2.5 bg-white/40 hover:bg-white/80"}`
 					}, s.id);
 				})
 			}),
@@ -3406,7 +3406,7 @@ function InteractiveBowlBuilder() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "relative overflow-hidden rounded-[36px] bg-white border border-[#e8dfcf] shadow-lift p-6 sm:p-10 lg:p-12",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-[#d7ff45]/20 blur-3xl" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-black/5 blur-3xl" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-black/5",
@@ -3414,7 +3414,7 @@ function InteractiveBowlBuilder() {
 						className: "max-w-2xl",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#d7ff45] shadow-sm",
+								className: "inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#F5EFE6] shadow-sm",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Atelier Créatif · Bol en Bambou Naturel" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
@@ -3476,7 +3476,7 @@ function InteractiveBowlBuilder() {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-center justify-between",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: `text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#d7ff45]" : isDone ? "text-[#ff705f]" : "text-[#7d8b83]"}`,
+									className: `text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#F5EFE6]" : isDone ? "text-[#ff705f]" : "text-[#7d8b83]"}`,
 									children: s.title
 								}), isDone && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "h-4 w-4 text-[#ff705f]" })]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -3519,7 +3519,7 @@ function InteractiveBowlBuilder() {
 													className: "font-black text-sm text-[#10251f]",
 													children: "Format Moyen"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "rounded-full bg-[#d7ff45] px-2.5 py-0.5 text-xs font-black text-[#10251f]",
+													className: "rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-0.5 text-xs font-black text-[#10251f]",
 													children: "10.00 €"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -3536,7 +3536,7 @@ function InteractiveBowlBuilder() {
 													className: "font-black text-sm text-[#10251f]",
 													children: "Grand Format"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#d7ff45]",
+													className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6]",
 													children: "13.00 €"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -3800,7 +3800,7 @@ function InteractiveBowlBuilder() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/20 shadow",
+										className: "absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] border border-white/20 shadow",
 										children: "Bol Bambou Débordant 🌿"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -3940,7 +3940,7 @@ function InteractiveBowlBuilder() {
 								type: "button",
 								onClick: handleAddToCart,
 								className: `btn-primary w-full py-4 text-sm font-black flex items-center justify-center gap-2 shadow-lift transition duration-200 ${added ? "bg-[#10251f]" : ""}`,
-								children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bowl ajouté ! Retour à l'étape 1..." })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+								children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4 text-[#22c55e]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bowl ajouté ! Retour à l'étape 1..." })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
 										"Ajouter mon bowl (",
@@ -4106,7 +4106,7 @@ function FluidInteractiveMenu() {
 				className: "flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-black/5",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "inline-flex items-center gap-2 rounded-full bg-[#d7ff45]/40 border border-[#b2db16] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]",
+						className: "inline-flex items-center gap-2 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#10251f]" }), "Carte Officielle & Recettes Visétoises"]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
@@ -4129,7 +4129,7 @@ function FluidInteractiveMenu() {
 							placeholder: "Rechercher saumon, crousty, oreo...",
 							value: searchQuery,
 							onChange: (e) => setSearchQuery(e.target.value),
-							className: "w-full rounded-full border border-black/10 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold text-[#10251f] placeholder-[#7d8b83] shadow-sm focus:border-[#d7ff45] focus:outline-none focus:ring-2 focus:ring-[#d7ff45]/40"
+							className: "w-full rounded-full border border-black/10 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold text-[#10251f] placeholder-[#7d8b83] shadow-sm focus:border-[#ff705f] focus:outline-none focus:ring-2 focus:ring-[#ff705f]/30"
 						}),
 						searchQuery && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "button",
@@ -4195,7 +4195,7 @@ function FluidInteractiveMenu() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: cat.label }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: `rounded-full px-2 py-0.5 text-[10px] font-bold ${isActive ? "bg-[#d7ff45] text-[#10251f]" : "bg-black/5 text-[#5a6760]"}`,
+								className: `rounded-full px-2 py-0.5 text-[10px] font-bold ${isActive ? "bg-[#F5EFE6] text-[#10251f]" : "bg-black/5 text-[#5a6760]"}`,
 								children: cat.count
 							})
 						]
@@ -4365,7 +4365,7 @@ function FluidInteractiveMenu() {
 							children: "Préparés chaque matin par notre chef. Mascarpone fouetté, biscuits croustillants & sauces gourmandes."
 						})
 					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+						className: "text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full",
 						children: "4,00 € l'unité"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -4397,7 +4397,7 @@ function FluidInteractiveMenu() {
 							children: "Canettes givrées 33cl et bouteilles d'eau SPA 50cl pour accompagner vos plats."
 						})
 					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+						className: "text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full",
 						children: "2,00 € l'unité"
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -4438,7 +4438,7 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 					children: item.badge
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					className: "absolute top-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md",
+					className: "absolute top-3.5 right-3.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md",
 					children: [effectivePrice.toFixed(2), " €"]
 				}),
 				item.packagingNote && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -4522,7 +4522,7 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 					type: "button",
 					disabled: item.soldOut,
 					onClick: onAdd,
-					className: `relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl font-black shadow-soft transition ${item.soldOut ? "bg-black/10 text-black/30 cursor-not-allowed" : isAdded ? "bg-[#10251f] text-[#d7ff45] scale-105" : "bg-[#d7ff45] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95"}`,
+					className: `relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl font-black shadow-soft transition ${item.soldOut ? "bg-black/10 text-black/30 cursor-not-allowed" : isAdded ? "bg-[#10251f] text-emerald-400 scale-105" : "bg-[#F5EFE6] border border-[#e8ded0] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:border-[#ff705f] hover:scale-105 active:scale-95"}`,
 					title: `Ajouter au panier (${effectivePrice.toFixed(2)} €)`,
 					children: [isAdded ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 stroke-[3]" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-5 w-5 stroke-[2.5]" }), isAdded && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.span, {
 						initial: {
@@ -4536,7 +4536,7 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 							scale: 1
 						},
 						exit: { opacity: 0 },
-						className: "absolute -top-1 font-black text-xs text-[#10251f] bg-[#d7ff45] px-1.5 py-0.5 rounded-full shadow",
+						className: "absolute -top-1 font-black text-xs text-white bg-emerald-600 px-1.5 py-0.5 rounded-full shadow",
 						children: "+1"
 					})]
 				}), item.dishId ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
@@ -4571,7 +4571,7 @@ function DrinkCard({ item, onAdd, isAdded }) {
 					className: "flex h-full w-full items-center justify-center text-3xl",
 					children: "🥤"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					className: "absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
+					className: "absolute bottom-1.5 right-1.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
 					children: [item.price.toFixed(2), " €"]
 				})]
 			}),
@@ -4588,7 +4588,7 @@ function DrinkCard({ item, onAdd, isAdded }) {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				type: "button",
 				onClick: onAdd,
-				className: `mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-black transition ${isAdded ? "bg-[#10251f] text-[#d7ff45]" : "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"}`,
+				className: `mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-black transition ${isAdded ? "bg-[#10251f] text-emerald-400" : "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white"}`,
 				children: isAdded ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouté" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter (2 €)" })] })
 			})
 		]
@@ -4626,7 +4626,7 @@ function PokawaBrandValues() {
 							id: "freshness",
 							emoji: "🐟",
 							tag: "Exigence fraîcheur",
-							tagColor: "bg-[#d7ff45] text-[#10251f]",
+							tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 							title: "Fraîcheur Quotidienne",
 							desc: "Découpe minute de nos légumes croquants et approvisionnement quotidien en saumon & scampis de première fraîcheur.",
 							perk: "Découpe chaque matin à Visé",
@@ -4656,7 +4656,7 @@ function PokawaBrandValues() {
 							id: "custom",
 							emoji: "✨",
 							tag: "Sur-Mesure",
-							tagColor: "bg-[#d7ff45] text-[#10251f]",
+							tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 							title: "Liberté & Transparence",
 							desc: "Retirez n'importe quel allergène en 1 clic ou créez votre bowl personnalisé de A à Z avec 5 mix-ins frais inclus.",
 							perk: "Zéro compromis sur vos goûts",
@@ -4695,8 +4695,8 @@ function PokawaBrandValues() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "mt-4 pt-3 border-t border-white/20 flex items-center justify-between",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "inline-flex items-center gap-1.5 text-[11px] font-bold text-[#d7ff45] drop-shadow",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-3.5 w-3.5" }), val.perk]
+											className: "inline-flex items-center gap-1.5 text-[11px] font-bold text-[#F5EFE6] drop-shadow",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-3.5 w-3.5 text-[#ff705f]" }), val.perk]
 										})
 									})
 								]
@@ -4724,7 +4724,7 @@ function PokawaPerksBanner() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "mx-auto max-w-[1340px] overflow-hidden rounded-[36px] bg-gradient-to-br from-[#10251f] via-[#142d26] to-[#0b1a16] p-7 sm:p-10 lg:p-14 text-white shadow-lift border border-white/10 relative",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#d7ff45]/15 blur-3xl pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-24 -right-24 h-72 w-72 rounded-full bg-white/10 blur-3xl pointer-events-none" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#ff705f]/15 blur-3xl pointer-events-none" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between",
@@ -4732,7 +4732,7 @@ function PokawaPerksBanner() {
 						className: "max-w-2xl",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45] backdrop-blur-md border border-white/10",
+								className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#F5EFE6] backdrop-blur-md border border-white/10",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), "Service Express Poke N Bowl Visé"]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
@@ -4749,7 +4749,7 @@ function PokawaPerksBanner() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-center gap-3 rounded-2xl bg-white/5 p-3 backdrop-blur-sm border border-white/5",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] text-sm font-black",
+											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#F5EFE6] text-[#10251f] text-sm font-black",
 											children: "⚡"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "min-w-0",
@@ -4781,7 +4781,7 @@ function PokawaPerksBanner() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-center gap-3 rounded-2xl bg-white/5 p-3 backdrop-blur-sm border border-white/5",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45]/20 text-[#d7ff45] text-sm font-black",
+											className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[#F5EFE6] text-sm font-black",
 											children: "🎓"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "min-w-0",
@@ -4801,7 +4801,7 @@ function PokawaPerksBanner() {
 						className: "flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 							to: "/commander",
-							className: "inline-flex items-center justify-center gap-2.5 rounded-full bg-[#d7ff45] px-8 py-4 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-105 active:scale-95",
+							className: "inline-flex items-center justify-center gap-2.5 rounded-full bg-[#F5EFE6] px-8 py-4 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg transition hover:bg-white hover:scale-105 active:scale-95",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-4 w-4" }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commander en ligne" }),
@@ -5006,7 +5006,7 @@ function SocialProofBanner() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2.5 rounded-2xl bg-[#faf8f4] border border-black/5 px-3.5 py-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#d7ff45] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#ff705f] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "block text-xs font-black text-[#10251f]",
 							children: "100% Fait Minute"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -5075,12 +5075,12 @@ function MobileAppStickyBar() {
 			className: "rounded-[26px] bg-[#10251f]/95 backdrop-blur-xl border border-white/20 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] flex items-center justify-between gap-2.5 text-white",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 				href: "#composer",
-				className: "flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/15 active:scale-95 transition shrink-0",
+				className: "flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] border border-white/15 active:scale-95 transition shrink-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sur-mesure" })]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				type: "button",
 				onClick: handleAction,
-				className: "flex-1 flex items-center justify-between rounded-full bg-[#d7ff45] px-4 py-2.5 text-[#10251f] shadow-lg transition active:scale-95 min-w-0",
+				className: "flex-1 flex items-center justify-between rounded-full bg-[#F5EFE6] px-4 py-2.5 text-[#10251f] shadow-lg transition active:scale-95 min-w-0 hover:bg-white",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-2 truncate",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -5108,7 +5108,7 @@ var CATEGORIES = [
 		id: "pokes",
 		title: "Pokés & Chirashis",
 		badge: "Dès 10,00 €",
-		badgeColor: "bg-[#10251f] text-[#d7ff45]",
+		badgeColor: "bg-[#10251f] text-[#F5EFE6]",
 		image: bowl_saumon_default,
 		targetId: "carte",
 		desc: "Saumon atlantique minute, poulet doré & scampis royaux"
@@ -5126,7 +5126,7 @@ var CATEGORIES = [
 		id: "composer",
 		title: "Atelier Sur-Mesure",
 		badge: "Création Libre",
-		badgeColor: "bg-[#d7ff45] text-[#10251f]",
+		badgeColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 		image: bowl_sweet_chicken_default,
 		targetId: "composer",
 		desc: "Composez votre recette de A à Z avec 5 mix-ins frais"
@@ -5243,7 +5243,7 @@ function PokawaCategoriesCarousel() {
 							className: "text-xl sm:text-2xl font-black uppercase tracking-tight text-[#10251f] group-hover:text-[#ff705f] transition",
 							children: cat.title
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-9 w-9 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] transition duration-300 group-hover:bg-[#d7ff45] group-hover:translate-x-1",
+							className: "flex h-9 w-9 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] transition duration-300 group-hover:bg-[#10251f] group-hover:text-white group-hover:translate-x-1",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-4 w-4" })
 						})]
 					})]
@@ -5361,28 +5361,28 @@ function Ticker() {
 		children: [
 			"Poke N Bowl",
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-[#10251f]/40",
+				className: "text-[#ff705f]",
 				children: "✦"
 			}),
 			"Fresh Food Visé",
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-[#10251f]/40",
+				className: "text-[#ff705f]",
 				children: "✦"
 			}),
 			"Fait Minute",
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-[#10251f]/40",
+				className: "text-[#ff705f]",
 				children: "✦"
 			}),
 			"Crousty Chicken",
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-[#10251f]/40",
+				className: "text-[#ff705f]",
 				children: "✦"
 			})
 		]
 	}, i));
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "overflow-hidden bg-[#d7ff45] py-3 text-[#10251f] shadow-inner",
+		className: "overflow-hidden bg-[#10251f] py-3.5 text-[#F5EFE6] border-y border-white/10 shadow-sm",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
 			animate: { x: ["0%", "-50%"] },
 			transition: {
@@ -5437,18 +5437,18 @@ function Index() {
 					className: "px-4 py-10 sm:px-6 lg:px-8",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Reveal, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 						to: "/recrutement",
-						className: "group mx-auto flex max-w-[1240px] items-center justify-between gap-5 rounded-[28px] bg-[#d7ff45] p-6 transition duration-300 hover:-translate-y-1.5 sm:rounded-[34px] sm:p-9 shadow-card",
+						className: "group mx-auto flex max-w-[1240px] items-center justify-between gap-5 rounded-[28px] bg-gradient-to-r from-[#10251f] via-[#16332b] to-[#1c3e34] text-white p-6 transition duration-300 hover:-translate-y-1.5 sm:rounded-[34px] sm:p-9 shadow-card border border-white/10",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "min-w-0",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#36420c]",
+								className: "flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#ff705f]",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BriefcaseBusiness, { className: "h-4 w-4 shrink-0" }), t("recruit.banner_tag")]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								className: "mt-2 break-words text-xl sm:text-2xl lg:text-3xl font-black text-[#10251f]",
+								className: "mt-2 break-words text-xl sm:text-2xl lg:text-3xl font-black text-white",
 								children: t("recruit.banner_title")
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white transition group-hover:scale-110 shadow-md",
+							className: "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F5EFE6] text-[#10251f] transition group-hover:scale-110 shadow-md",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-5 w-5" })
 						})]
 					}) })
@@ -5484,7 +5484,7 @@ function Index() {
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex items-center gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f]",
+												className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#F5EFE6] border border-[#e8ded0] text-xs font-black text-[#10251f]",
 												children: "📍"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 												className: "font-extrabold text-[#10251f] text-base",
@@ -5532,7 +5532,7 @@ function Index() {
 												className: "flex items-center gap-2.5",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "flex h-9 w-9 items-center justify-center rounded-2xl bg-[#10251f] text-white",
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-4 w-4 text-[#d7ff45]" })
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-4 w-4 text-[#ff705f]" })
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 													className: "text-lg font-black text-[#10251f]",
 													children: "Horaires d'ouverture"
@@ -5541,7 +5541,7 @@ function Index() {
 													children: "Poke N Bowl Visé · En plein centre"
 												})] })]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-[#d7ff45]/40 border border-[#b8e612] px-3 py-1 text-[10px] font-black uppercase text-[#10251f]",
+												className: "rounded-full bg-[#ecfdf5] border border-[#a7f3d0] text-[#065f46] px-3 py-1 text-[10px] font-bold uppercase",
 												children: "● Ouvert pour le service"
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -5713,7 +5713,7 @@ function generateOrderId() {
 var MOLLIE_API = "https://api.mollie.com/v2";
 function getApiKey() {
 	const key = process.env.MOLLIE_API_KEY;
-	if (!key) throw new Error("MOLLIE_API_KEY manquante. Ajoute-la dans les variables d'environnement Vercel.");
+	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
 	return key;
 }
 async function createMolliePayment(params) {
@@ -6744,7 +6744,7 @@ function CheckoutPage() {
 											children: ["Livraison · ", deliveryFee === 0 ? "Gratuite" : `€ ${deliveryFee.toFixed(2)}`]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "text-2xl font-black text-[#d7ff45]",
+											className: "text-2xl font-black text-[#ff705f]",
 											children: ["€ ", orderTotal.toFixed(2)]
 										})
 									]
@@ -7085,11 +7085,11 @@ var DRINK_IMAGES = {
 };
 var Route$13 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
-	signature: "bg-[#10251f] text-[#d7ff45]",
+	signature: "bg-[#10251f] text-[#F5EFE6]",
 	bestseller: "bg-[#ff705f] text-white",
 	premium: "bg-[#7c4f1a] text-[#ffe9c2]",
 	spicy: "bg-[#c0350f] text-white",
-	new: "bg-[#d7ff45] text-[#10251f]"
+	new: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]"
 };
 function CommanderPage() {
 	const { t, language, setLanguage } = useTranslation();
@@ -7163,7 +7163,7 @@ function CommanderPage() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 				className: "relative overflow-hidden bg-[#10251f] px-5 py-14 text-white sm:px-8 sm:py-20 lg:py-24",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[#d7ff45]/5 blur-3xl" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-white/5 blur-3xl" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pointer-events-none absolute -bottom-20 left-1/4 h-60 w-60 rounded-full bg-[#ff705f]/8 blur-3xl" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mx-auto max-w-[1200px]",
@@ -7183,7 +7183,7 @@ function CommanderPage() {
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#d7ff45]",
+									className: "text-[10px] font-black uppercase tracking-[0.28em] text-[#F5EFE6]",
 									children: t("cmd.eyebrow")
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
 									className: "mt-2 text-[clamp(2rem,8vw,4rem)] font-black leading-[1.06] tracking-[-0.025em]",
@@ -7215,13 +7215,13 @@ function CommanderPage() {
 										alt: "Poke Bowl sur mesure",
 										className: "h-full w-full object-cover"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "absolute bottom-1.5 left-1.5 rounded-full bg-[#10251f]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#d7ff45]",
+										className: "absolute bottom-1.5 left-1.5 rounded-full bg-[#10251f]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#F5EFE6]",
 										children: "5 étapes"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), " Fiche officielle restaurant"]
+										className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 text-[#ff705f]" }), " Fiche officielle restaurant"]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 										className: "mt-1 text-2xl font-black sm:text-3xl",
@@ -7240,7 +7240,7 @@ function CommanderPage() {
 										className: "block text-[10px] font-bold uppercase tracking-wider text-white/50",
 										children: "Formule"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-2xl font-black text-[#d7ff45]",
+										className: "text-2xl font-black text-[#ff705f]",
 										children: "10.00 €"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
@@ -7316,7 +7316,7 @@ function CommanderPage() {
 								return ok ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 									to: "/product/$productId",
 									params: { productId: bowl.id },
-									className: "group block overflow-hidden rounded-[28px] bg-white shadow-card ring-2 ring-[#d7ff45] ring-offset-2 ring-offset-[#f7f4ec] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift",
+									className: "group block overflow-hidden rounded-[28px] bg-white shadow-card ring-2 ring-[#ff705f]/30 ring-offset-2 ring-offset-[#f7f4ec] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BowlCard, {
 										bowl,
 										ok: true,
@@ -7341,8 +7341,8 @@ function CommanderPage() {
 							className: "flex flex-col gap-4 border-b border-white/10 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-center gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-5 w-5 shrink-0 text-[#d7ff45]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-5 w-5 shrink-0 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[10px] font-black uppercase tracking-[0.22em] text-[#F5EFE6]",
 									children: t("cmd.customization_title")
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "mt-0.5 text-sm text-white/55",
@@ -7384,7 +7384,7 @@ function CommanderPage() {
 							].map(({ label, items, emoji }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "rounded-2xl border border-white/10 bg-white/[0.04] p-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-									className: "flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#d7ff45]",
+									className: "flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#F5EFE6]",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: emoji }),
 										" ",
@@ -7413,7 +7413,7 @@ function CommanderPage() {
 									className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
 									children: t("cmd.desserts")
 								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+									className: "text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full",
 									children: "4,00 € la pièce"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -7432,7 +7432,7 @@ function CommanderPage() {
 													className: `h-full w-full object-cover transition duration-500 group-hover:scale-105 ${!ok ? "grayscale contrast-75" : ""}`
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "absolute top-2 right-2 rounded-full bg-[#d7ff45] px-2.5 py-0.5 text-xs font-black text-[#10251f] shadow",
+													className: "absolute top-2 right-2 rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6] shadow",
 													children: "4.00 €"
 												}),
 												!ok && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -7457,7 +7457,7 @@ function CommanderPage() {
 													price: d.price,
 													image: imgSrc
 												}),
-												className: `rounded-xl px-3.5 py-2 text-xs font-black transition ${ok ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]" : "bg-black/10 text-black/30 cursor-not-allowed"}`,
+												className: `rounded-xl px-3.5 py-2 text-xs font-black transition ${ok ? "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white" : "bg-black/10 text-black/30 cursor-not-allowed"}`,
 												children: ok ? "Ajouter" : "Épuisé"
 											})]
 										})]
@@ -7475,7 +7475,7 @@ function CommanderPage() {
 									className: "mt-2 text-2xl sm:text-3xl font-black text-[#10251f]",
 									children: t("cmd.drinks")
 								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full",
+									className: "text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full",
 									children: "2,00 € la canette / bouteille"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -7495,7 +7495,7 @@ function CommanderPage() {
 												className: "flex h-full w-full items-center justify-center text-3xl",
 												children: "🥤"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow",
+												className: "absolute bottom-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow",
 												children: "2.00 €"
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -7512,7 +7512,7 @@ function CommanderPage() {
 													price: drink.price,
 													image: imgSrc
 												}),
-												className: `mt-2 flex w-full items-center justify-center rounded-xl py-1.5 text-[11px] font-black transition ${ok ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]" : "bg-black/10 text-black/30 cursor-not-allowed"}`,
+												className: `mt-2 flex w-full items-center justify-center rounded-xl py-1.5 text-[11px] font-black transition ${ok ? "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white" : "bg-black/10 text-black/30 cursor-not-allowed"}`,
 												children: ok ? "Ajouter" : "Épuisé"
 											})]
 										})]
@@ -7556,7 +7556,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 				children: ok ? bowl.tag : soldOut
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-				className: "absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-sm font-black text-[#10251f] sm:bottom-4 sm:right-4",
+				className: "absolute bottom-3 right-3 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-3 py-1.5 text-sm font-black text-[#10251f] shadow-md sm:bottom-4 sm:right-4",
 				children: ["€ ", bowl.price.toFixed(2)]
 			})
 		]
@@ -7652,7 +7652,7 @@ function ContactPage() {
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-center gap-3",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff45] text-black font-black",
+								className: "flex h-10 w-10 items-center justify-center rounded-full bg-[#F5EFE6] border border-[#e8ded0] text-black font-black",
 								children: "📍"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 								className: "text-2xl font-black text-[#10251f]",
@@ -7771,7 +7771,7 @@ function RecruitmentPage() {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					className: "relative overflow-hidden rounded-[2.5rem] bg-[linear-gradient(135deg,oklch(0.24_0.045_195),oklch(0.38_0.08_175))] p-8 text-white shadow-lift md:p-14",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime/20 blur-3xl" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "relative max-w-3xl",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
@@ -8003,8 +8003,8 @@ function SurMesurePage() {
 								className: "max-w-xl",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#d7ff45]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5" }), " Fiche officielle restaurant"]
+										className: "inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#F5EFE6]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#ff705f]" }), " Fiche officielle restaurant"]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
 										className: "mt-3 text-3xl font-black tracking-tight sm:text-5xl",
@@ -8024,7 +8024,7 @@ function SurMesurePage() {
 									className: "text-[11px] font-bold uppercase tracking-wider text-white/50",
 									children: "Formule de base"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-3xl font-black text-[#d7ff45] sm:text-4xl",
+									className: "text-3xl font-black text-[#ff705f] sm:text-4xl",
 									children: "10.00 €"
 								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-xs font-semibold text-white/60",
@@ -8043,7 +8043,7 @@ function SurMesurePage() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "mb-4 flex items-center justify-between",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 											children: "Format"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "mt-1 text-xl font-black text-[#17231f]",
@@ -8064,7 +8064,7 @@ function SurMesurePage() {
 													className: "font-black text-sm uppercase",
 													children: "Moyen"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: `text-xs font-black ${selectedSize === "moyen" ? "text-[#d7ff45]" : "text-[#7a847e]"}`,
+													className: `text-xs font-black ${selectedSize === "moyen" ? "text-[#F5EFE6]" : "text-[#7a847e]"}`,
 													children: "Inclus (10.00€)"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -8081,7 +8081,7 @@ function SurMesurePage() {
 													className: "font-black text-sm uppercase",
 													children: "Grand"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: `text-xs font-black ${selectedSize === "grand" ? "text-[#d7ff45]" : "text-[#ff705f]"}`,
+													className: `text-xs font-black ${selectedSize === "grand" ? "text-[#ff705f]" : "text-[#ff705f]"}`,
 													children: "+3.00 € (13 €)"
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -8096,7 +8096,7 @@ function SurMesurePage() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "mb-4 flex items-center justify-between",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 											children: "Étape 1"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "mt-1 text-xl font-black text-[#17231f]",
@@ -8143,20 +8143,20 @@ function SurMesurePage() {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "mb-4 flex flex-wrap items-center justify-between gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+												className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 												children: "Étape 2"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 												className: "mt-1 text-xl font-black text-[#17231f]",
 												children: "Mix-Ins Frais"
 											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: ["rounded-full px-3 py-1 text-xs font-black transition-colors", selectedMixIns.length >= INCLUDED_MIX_INS ? "bg-[#10251f] text-[#d7ff45]" : "bg-[#ff705f]/10 text-[#ff705f]"].join(" "),
+												className: ["rounded-full px-3 py-1 text-xs font-black transition-colors", selectedMixIns.length >= INCLUDED_MIX_INS ? "bg-[#10251f] text-[#F5EFE6]" : "bg-[#ff705f]/10 text-[#ff705f]"].join(" "),
 												children: selectedMixIns.length <= INCLUDED_MIX_INS ? `${selectedMixIns.length} / ${INCLUDED_MIX_INS} inclus` : `${selectedMixIns.length} choisis (${INCLUDED_MIX_INS} inclus + ${extraMixInsCount} extra à +0,50€)`
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "mb-4 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-[#7a847e]",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: selectedMixIns.length < INCLUDED_MIX_INS ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :` : `5 mix-ins inclus · Choisissez-en autant que vous voulez (+0,50 € par ingrédient supplémentaire) :` }), extraMixInsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "rounded-full bg-[#d7ff45]/30 px-2 py-0.5 text-[10px] font-extrabold text-[#10251f]",
+												className: "rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[10px] font-extrabold text-[#ff705f]",
 												children: [
 													"+",
 													mixInsExtra.toFixed(2),
@@ -8210,7 +8210,7 @@ function SurMesurePage() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "mb-4 flex items-center justify-between",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 											children: "Étape 3"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "mt-1 text-xl font-black text-[#17231f]",
@@ -8257,7 +8257,7 @@ function SurMesurePage() {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "mb-4 flex items-center justify-between",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+											className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 											children: "Étape 4"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "mt-1 text-xl font-black text-[#17231f]",
@@ -8298,13 +8298,13 @@ function SurMesurePage() {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "mb-4 flex items-center justify-between",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]",
+												className: "rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]",
 												children: "Étape 5"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 												className: "mt-1 text-xl font-black text-[#17231f]",
 												children: "Toppings croustillants"
 											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-[#10251f] px-3 py-1 text-xs font-black text-[#d7ff45]",
+												className: "rounded-full bg-[#10251f] px-3 py-1 text-xs font-black text-[#F5EFE6]",
 												children: selectedToppings.length <= 2 ? `${selectedToppings.length} / 2 inclus` : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * .5).toFixed(2)}€)`
 											})]
 										}),
@@ -8362,7 +8362,7 @@ function SurMesurePage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" }),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#d7ff45] border border-white/20 shadow",
+												className: "absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#F5EFE6] border border-white/20 shadow",
 												children: "Bol Bambou Débordant 🌿"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
@@ -8719,7 +8719,7 @@ function AdminStocksPage() {
 								type: "button",
 								disabled: savingId === row.id,
 								onClick: () => void toggle(row.id, !available),
-								className: `shrink-0 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide transition ${available ? "bg-[#d7ff45] text-[#10251f]" : "bg-[#ff705f]/15 text-[#ff705f]"}`,
+								className: `shrink-0 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide transition ${available ? "bg-[#10251f] text-[#F5EFE6]" : "bg-[#ff705f]/15 text-[#ff705f]"}`,
 								children: savingId === row.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-3.5 w-3.5 animate-spin" }) : available ? "Dispo" : "Épuisé"
 							})]
 						}, row.id);
@@ -8966,7 +8966,7 @@ function OrderSuccessPage() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex flex-col items-center text-center",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "h-14 w-14 text-[#d7ff45]" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "h-14 w-14 text-[#22c55e]" }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 								className: "mt-4 text-3xl font-black sm:text-4xl",
 								children: isPaid ? "Commande payée !" : "Commande confirmée !"
@@ -9072,7 +9072,7 @@ function OrderSuccessPage() {
 								href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
 								target: "_blank",
 								rel: "noreferrer",
-								className: "mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#d7ff45] transition hover:scale-105 shadow-sm",
+								className: "mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#F5EFE6] transition hover:scale-105 shadow-sm",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "⭐ Laisser 5 étoiles sur Google" })
 							})
 						]
@@ -9743,7 +9743,7 @@ function PosApplicationPage() {
 						className: "flex items-center gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "flex h-3 w-3 relative",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d7ff45] opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-[#d7ff45]" })]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "text-lg font-black tracking-wider text-white",
 							children: "POKENBOWL POS"
@@ -9784,7 +9784,7 @@ function PosApplicationPage() {
 								setConfig(updated);
 								savePrinterConfig(updated);
 							},
-							className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-[#d7ff45]/20 text-[#d7ff45]" : "bg-white/5 text-[#6c7d76]"}`,
+							className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"}`,
 							title: "Activer/Désactiver son",
 							children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-5 w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-5 w-5" })
 						}),
@@ -10099,8 +10099,8 @@ function PosApplicationPage() {
 										children: selectedOrder.customer.name
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 										href: `tel:${selectedOrder.customer.phone}`,
-										className: "flex items-center gap-1.5 text-xs font-bold text-[#d7ff45] bg-[#d7ff45]/15 px-3 py-1.5 rounded-xl",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5" }), selectedOrder.customer.phone]
+										className: "flex items-center gap-1.5 text-xs font-bold text-[#F5EFE6] bg-white/10 px-3 py-1.5 rounded-xl",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5 text-[#ff705f]" }), selectedOrder.customer.phone]
 									})]
 								}),
 								selectedOrder.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -10114,7 +10114,7 @@ function PosApplicationPage() {
 										selectedOrder.customer.city
 									] })]
 								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-xs text-[#d7ff45] font-bold",
+									className: "text-xs text-[#F5EFE6] font-bold",
 									children: "Retrait sur place"
 								}),
 								selectedOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -10250,11 +10250,11 @@ function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, o
 //#region src/routes/product/$productId.tsx
 var Route$3 = createFileRoute("/product/$productId")({ component: ProductPage });
 var TAG_STYLES = {
-	signature: "bg-[#10251f] text-[#d7ff45]",
+	signature: "bg-[#10251f] text-[#F5EFE6]",
 	bestseller: "bg-[#ff705f] text-white",
 	premium: "bg-[#7c4f1a] text-[#ffe9c2]",
 	spicy: "bg-[#c0350f] text-white",
-	new: "bg-[#d7ff45] text-[#10251f]"
+	new: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]"
 };
 function ToppingChip({ topping, selected, onToggle }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -10509,7 +10509,7 @@ function ProductPage() {
 									children: productOk ? product.tag : t("cmd.sold_out")
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "absolute bottom-4 right-4 rounded-full bg-[#d7ff45] px-4 py-2 text-base font-black text-[#10251f] shadow-card",
+									className: "absolute bottom-4 right-4 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-4 py-2 text-base font-black text-[#10251f] shadow-card",
 									children: ["€ ", unitPrice.toFixed(2)]
 								})
 							]
@@ -10627,7 +10627,7 @@ function ProductPage() {
 														className: "font-black text-sm uppercase",
 														children: size.name
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: `text-xs font-black ${selectedSize === size.id ? "text-[#d7ff45]" : "text-[#ff705f]"}`,
+														className: `text-xs font-black ${selectedSize === size.id ? "text-[#F5EFE6]" : "text-[#ff705f]"}`,
 														children: size.extraPrice === 0 ? "Inclus" : `+${size.extraPrice.toFixed(2)}€`
 													})]
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -10687,7 +10687,7 @@ function ProductPage() {
 											className: "text-[11px] text-[#7a847e]",
 											children: "Incluse · change selon tes envies"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-full bg-[#d7ff45]/20 px-2.5 py-0.5 text-[10px] font-black text-[#10251f]",
+											className: "rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-0.5 text-[10px] font-black text-[#10251f]",
 											children: selectedBase
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -10768,7 +10768,7 @@ function ProductPage() {
 												className: "text-[11px] text-[#7a847e]",
 												children: "Incluse · changement gratuit"
 											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#d7ff45]",
+												className: "rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#F5EFE6]",
 												children: selectedSauce === "none" ? "Sans sauce" : selectedSauce
 											})]
 										}),
@@ -10938,7 +10938,7 @@ function ProductPage() {
 										className: ["btn-primary w-full text-sm font-black py-4 shadow-lift transition-all", added ? "bg-[#10251f] scale-[0.99]" : "hover:scale-[1.01] active:scale-95"].join(" "),
 										children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "flex items-center justify-center gap-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 text-[#d7ff45]" }), " Ajouté au panier !"]
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-5 w-5 text-[#22c55e]" }), " Ajouté au panier !"]
 										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "flex items-center justify-center gap-2",
 											children: [
@@ -10962,7 +10962,7 @@ function ProductPage() {
 					className: ["btn-primary w-full py-3.5 text-sm font-black shadow-glow-coral", added ? "bg-[#10251f]" : ""].join(" "),
 					children: added ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 						className: "flex items-center justify-center gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4 text-[#d7ff45]" }), " Ajouté !"]
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4 text-[#22c55e]" }), " Ajouté !"]
 					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 						className: "flex items-center justify-center gap-2",
 						children: [
@@ -11243,10 +11243,10 @@ function DeliveryTrackPage() {
 							onClick: () => handleStatusChange("completed"),
 							disabled: updating,
 							className: "w-full rounded-2xl bg-[#10251f] py-4 text-white font-black text-base shadow-lg hover:bg-black transition flex items-center justify-center gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "h-5 w-5 text-[#d7ff45]" }), updating ? "Mise à jour..." : "Marquer comme Livrée"]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "h-5 w-5 text-[#22c55e]" }), updating ? "Mise à jour..." : "Marquer comme Livrée"]
 						}),
 						order.status === "completed" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "rounded-2xl bg-[#10251f] p-4 text-center text-[#d7ff45] font-black text-sm",
+							className: "rounded-2xl bg-[#10251f] p-4 text-center text-[#F5EFE6] font-black text-sm",
 							children: "✓ Commande terminée et livrée"
 						})
 					]
