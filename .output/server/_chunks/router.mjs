@@ -5705,116 +5705,66 @@ function generateOrderId() {
 	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 //#endregion
-//#region src/lib/mollie.server.ts
-/**
-* Server-only Mollie helpers.
-* Requires env: MOLLIE_API_KEY (test_… or live_…)
-*/
-var MOLLIE_API = "https://api.mollie.com/v2";
-function getApiKey() {
-	const key = process.env.MOLLIE_API_KEY;
-	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
-	return key;
-}
-async function createMolliePayment(params) {
-	const res = await fetch(`${MOLLIE_API}/payments`, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${getApiKey()}`,
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			amount: {
-				currency: "EUR",
-				value: params.amountValue
-			},
-			description: params.description,
-			redirectUrl: params.redirectUrl,
-			webhookUrl: params.webhookUrl,
-			metadata: params.metadata,
-			locale: params.locale ?? "fr_BE"
-		})
-	});
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Mollie create payment failed (${res.status}): ${errText}`);
-	}
-	return await res.json();
-}
-async function getMolliePayment(paymentId) {
-	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
-	}
-	return await res.json();
-}
-function formatEurAmount(total) {
-	return total.toFixed(2);
-}
-//#endregion
 //#region src/lib/bancontact-pro.server.ts
-/**
-* Server-only Bancontact Pro (Payconiq by Bancontact) API helper.
-*
-* Supported environments:
-* - Production: https://merchant.api.bancontact.net/v3
-* - Preprod / Test: https://merchant.api.preprod.bancontact.net/v3
-*
-* Required environment variables:
-* - BANCONTACT_PRO_API_KEY or PAYCONIQ_API_KEY
-* - BANCONTACT_PRO_ENV (optional: "production" | "preprod", defaults to "production")
-*/
-var PROD_API = "https://merchant.api.bancontact.net/v3";
-var PREPROD_API = "https://merchant.api.preprod.bancontact.net/v3";
 function getBancontactProApiKey() {
 	return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
 }
-function isBancontactProConfigured() {
-	return Boolean(getBancontactProApiKey());
+function getAuthHeader(apiKey) {
+	const clean = apiKey.trim();
+	return clean.toLowerCase().startsWith("bearer ") ? clean : `Bearer ${clean}`;
 }
-function getApiBaseUrl() {
+var CANDIDATE_PROD_URLS = ["https://api.payconiq.com/v3", "https://merchant.api.bancontact.net/v3"];
+var CANDIDATE_PREPROD_URLS = ["https://api.preprod.payconiq.com/v3", "https://merchant.api.preprod.bancontact.net/v3"];
+function getCandidateUrls() {
 	const env = (process.env.BANCONTACT_PRO_ENV || "production").toLowerCase();
-	return env === "preprod" || env === "test" ? PREPROD_API : PROD_API;
+	return env === "preprod" || env === "test" ? CANDIDATE_PREPROD_URLS : CANDIDATE_PROD_URLS;
 }
 async function createBancontactProPayment(params) {
 	const apiKey = getBancontactProApiKey();
-	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.");
+	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.");
 	const amountCents = Math.round(params.amountEur * 100);
-	const res = await fetch(`${getApiBaseUrl()}/payments`, {
-		method: "POST",
-		headers: {
-			Authorization: apiKey,
-			"Content-Type": "application/json",
-			Accept: "application/json"
-		},
-		body: JSON.stringify({
-			amount: amountCents,
-			currency: "EUR",
-			description: params.description,
-			reference: params.reference,
-			returnUrl: params.returnUrl,
-			callbackUrl: params.callbackUrl
-		})
-	});
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Bancontact Pro create payment failed (${res.status}): ${errText}`);
+	const urls = getCandidateUrls();
+	let lastErr = "";
+	for (const baseUrl of urls) try {
+		const res = await fetch(`${baseUrl}/payments`, {
+			method: "POST",
+			headers: {
+				Authorization: getAuthHeader(apiKey),
+				"Content-Type": "application/json",
+				Accept: "application/json"
+			},
+			body: JSON.stringify({
+				amount: amountCents,
+				currency: "EUR",
+				description: params.description,
+				reference: params.reference,
+				returnUrl: params.returnUrl,
+				callbackUrl: params.callbackUrl
+			})
+		});
+		if (res.ok) return await res.json();
+		lastErr = await res.text();
+	} catch (e) {
+		lastErr = e?.message ?? String(e);
 	}
-	return await res.json();
+	throw new Error(`Bancontact Pro create payment failed: ${lastErr}`);
 }
 async function getBancontactProPayment(paymentId) {
 	const apiKey = getBancontactProApiKey();
-	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.");
-	const res = await fetch(`${getApiBaseUrl()}/payments/${paymentId}`, { headers: {
-		Authorization: apiKey,
-		Accept: "application/json"
-	} });
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Bancontact Pro get payment failed (${res.status}): ${errText}`);
+	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.");
+	const urls = getCandidateUrls();
+	let lastErr = "";
+	for (const baseUrl of urls) try {
+		const res = await fetch(`${baseUrl}/payments/${paymentId}`, { headers: {
+			Authorization: getAuthHeader(apiKey),
+			Accept: "application/json"
+		} });
+		if (res.ok) return await res.json();
+		lastErr = await res.text();
+	} catch (e) {
+		lastErr = e?.message ?? String(e);
 	}
-	return await res.json();
+	throw new Error(`Bancontact Pro get payment failed: ${lastErr}`);
 }
 //#endregion
 //#region src/lib/order-store.ts
@@ -6259,89 +6209,48 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 			redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
 		};
 	}
-	if (isBancontactProConfigured()) {
-		const webhookUrl = `${data.origin}/api/bancontact-webhook`;
-		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
-		const payment = await createBancontactProPayment({
-			amountEur: total,
-			description: `Poke N Bowl ${orderId}`,
-			reference: order.id,
-			returnUrl: redirectUrl,
-			callbackUrl: webhookUrl
-		});
-		order.molliePaymentId = `bancontact:${payment.paymentId}`;
-		await upsertOrder(order);
-		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
-		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
-		return {
-			type: "online",
-			orderId: order.id,
-			total: order.total,
-			molliePaymentId: payment.paymentId,
-			redirectUrl: payUrl
-		};
-	}
-	const webhookUrl = `${data.origin}/api/mollie-webhook`;
-	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=online`;
-	const payment = await createMolliePayment({
-		amountValue: formatEurAmount(total),
+	const webhookUrl = `${data.origin}/api/bancontact-webhook`;
+	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
+	const payment = await createBancontactProPayment({
+		amountEur: total,
 		description: `Poke N Bowl ${orderId}`,
-		redirectUrl,
-		webhookUrl,
-		metadata: {
-			orderId: order.id,
-			customerName: order.customer.name,
-			customerPhone: order.customer.phone,
-			requestedTime: order.customer.requestedTime
-		},
-		locale: "fr_BE"
+		reference: order.id,
+		returnUrl: redirectUrl,
+		callbackUrl: webhookUrl
 	});
-	order.molliePaymentId = payment.id;
+	order.molliePaymentId = `bancontact:${payment.paymentId}`;
 	await upsertOrder(order);
-	const checkoutUrl = payment._links?.checkout?.href;
-	if (!checkoutUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement");
+	const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
+	if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
 	return {
 		type: "online",
 		orderId: order.id,
 		total: order.total,
-		molliePaymentId: payment.id,
-		redirectUrl: checkoutUrl
+		molliePaymentId: payment.paymentId,
+		redirectUrl: payUrl
 	};
 });
 var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
 	let order = await getOrderFromStore(data.orderId);
-	if (order?.molliePaymentId && order.status === "pending_payment") if (order.molliePaymentId.startsWith("bancontact:")) try {
-		const payment = await getBancontactProPayment(order.molliePaymentId.slice(11));
-		if (payment.status === "SUCCEEDED") {
-			order = {
-				...order,
-				status: "paid"
-			};
-			await upsertOrder(order);
-		} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") {
-			order = {
-				...order,
-				status: payment.status === "EXPIRED" ? "expired" : "cancelled"
-			};
-			await upsertOrder(order);
-		}
-	} catch {}
-	else try {
-		const payment = await getMolliePayment(order.molliePaymentId);
-		if (payment.status === "paid") {
-			order = {
-				...order,
-				status: "paid"
-			};
-			await upsertOrder(order);
-		} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
-			order = {
-				...order,
-				status: payment.status === "expired" ? "expired" : "cancelled"
-			};
-			await upsertOrder(order);
-		}
-	} catch {}
+	if (order?.molliePaymentId && order.status === "pending_payment") {
+		const paymentId = order.molliePaymentId.startsWith("bancontact:") ? order.molliePaymentId.slice(11) : order.molliePaymentId;
+		try {
+			const payment = await getBancontactProPayment(paymentId);
+			if (payment.status === "SUCCEEDED") {
+				order = {
+					...order,
+					status: "paid"
+				};
+				await upsertOrder(order);
+			} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED" || payment.status === "VOIDED") {
+				order = {
+					...order,
+					status: payment.status === "EXPIRED" ? "expired" : "cancelled"
+				};
+				await upsertOrder(order);
+			}
+		} catch {}
+	}
 	if (!order) return { found: false };
 	return {
 		found: true,
@@ -6655,16 +6564,16 @@ function CheckoutPage() {
 												className: "flex items-center justify-between w-full",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
-													children: "Bancontact"
+													children: "Bancontact Pro"
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-sm font-black",
-												children: "Bancontact & En ligne"
+												children: "Bancontact Pro"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "Bancontact Pro, Payconiq, Carte bancaire"
+												children: "Application bancaire belge & Payconiq (QR code)"
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -8797,6 +8706,26 @@ var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 		return new Response("Error", { status: 500 });
 	}
 } } } });
+//#endregion
+//#region src/lib/mollie.server.ts
+/**
+* Server-only Mollie helpers.
+* Requires env: MOLLIE_API_KEY (test_… or live_…)
+*/
+var MOLLIE_API = "https://api.mollie.com/v2";
+function getApiKey() {
+	const key = process.env.MOLLIE_API_KEY;
+	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
+	return key;
+}
+async function getMolliePayment(paymentId) {
+	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
 var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {

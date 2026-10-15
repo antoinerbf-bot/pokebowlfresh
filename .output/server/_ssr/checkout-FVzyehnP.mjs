@@ -6,8 +6,8 @@ import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-czPofqBR.mjs";
 import { K as ArrowLeft, T as LoaderCircle, j as CreditCard, s as Store } from "../_libs/lucide-react.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
-import { n as submitCheckout } from "./checkout-D9NSyd9X.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-CaWZDHDa.js
+import { n as submitCheckout } from "./checkout-C0BBU2Ej.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-FVzyehnP.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -306,16 +306,16 @@ function CheckoutPage() {
 												className: "flex items-center justify-between w-full",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
-													children: "Bancontact"
+													children: "Bancontact Pro"
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-sm font-black",
-												children: "Bancontact & En ligne"
+												children: "Bancontact Pro"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "Bancontact Pro, Payconiq, Carte bancaire"
+												children: "Application bancaire belge & Payconiq (QR code)"
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {

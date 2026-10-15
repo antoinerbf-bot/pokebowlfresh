@@ -4,19 +4,19 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$14 } from "../_productId-CMVU-1km.mjs";
+import { t as Route$14 } from "../_productId-Dw-4nXkQ.mjs";
 import { A as ExternalLink, F as CircleCheckBig, M as CookingPot, f as Shield, g as Printer, h as RefreshCw, i as Truck, m as Search, n as VolumeX, r as Volume2, v as Phone } from "../_libs/lucide-react.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-B5qQqpUC.mjs";
+import { t as createSsrRpc } from "./createSsrRpc-BtSJch6o.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as Route$15 } from "../_token-DOsEAtFG.mjs";
-import { a as getMolliePayment, i as getBancontactProPayment } from "./bancontact-pro.server-CB-8uU9-.mjs";
+import { t as Route$15 } from "../_token-BFb-SlLX.mjs";
+import { n as getBancontactProPayment } from "./bancontact-pro.server-CodjVMhX.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, t as acknowledgePrint } from "./order-store-4tO4OvTG.mjs";
-import { t as Route$16 } from "./order.success-BkpHxTi0.mjs";
+import { t as Route$16 } from "./order.success-CDYipKYO.mjs";
 import { t as EscPosBuilder } from "./escpos-C99SgK7y.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Nj52QkUZ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DfPeCr3Z.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-DYZ7Bex2.css";
@@ -260,9 +260,9 @@ var Route$12 = createFileRoute("/")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./checkout-CaWZDHDa.mjs");
+var $$splitComponentImporter$5 = () => import("./checkout-FVzyehnP.mjs");
 var Route$11 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-D8cW7XfD.mjs");
+var $$splitComponentImporter$4 = () => import("./commander-CA4wEwQw.mjs");
 var Route$10 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./contact-Dex14wPb.mjs");
 var Route$9 = createFileRoute("/contact")({
@@ -276,7 +276,7 @@ var Route$8 = createFileRoute("/recrutement")({
 });
 var $$splitComponentImporter$1 = () => import("./sur-mesure-BtWGGgcN.mjs");
 var Route$7 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./stocks-DVwOQnrj.mjs");
+var $$splitComponentImporter = () => import("./stocks-C7XwkEIc.mjs");
 var Route$6 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var Route$5 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
@@ -312,6 +312,24 @@ var Route$5 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 		return new Response("Error", { status: 500 });
 	}
 } } } });
+/**
+* Server-only Mollie helpers.
+* Requires env: MOLLIE_API_KEY (test_… or live_…)
+*/
+var MOLLIE_API = "https://api.mollie.com/v2";
+function getApiKey() {
+	const key = process.env.MOLLIE_API_KEY;
+	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
+	return key;
+}
+async function getMolliePayment(paymentId) {
+	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
 var Route$4 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
