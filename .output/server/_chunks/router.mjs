@@ -19,7 +19,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BPxM34JH.css";
+var styles_default = "/assets/styles-BFh_gzTr.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -9738,6 +9738,59 @@ var ackPosPrint = createServerFn({ method: "POST" }).validator(objectType({
 	await acknowledgePrint(data.orderId, data.success, data.error);
 	return { success: true };
 });
+var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	const testId = generateOrderId();
+	const deliveryToken = crypto.randomUUID().replace(/-/g, "");
+	const testOrder = {
+		id: testId,
+		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+		status: "paid",
+		paymentMethod: "online",
+		printStatus: "pending",
+		deliveryToken,
+		currency: "EUR",
+		customer: {
+			name: "Jean Dupont (TEST LIVREUR GPS)",
+			phone: "+32 499 12 34 56",
+			email: "livreur.test@pokenbowl.be",
+			fulfillment: "delivery",
+			requestedTime: "Dès que possible",
+			address: "Avenue Reine Astrid 15",
+			postalCode: "4600",
+			city: "Visé",
+			deliveryFee: 2,
+			notes: "Test Waze & Google Maps - Sonner interphone 2B"
+		},
+		items: [{
+			id: "spicy-chicken",
+			name: "Spicy Chicken Poké (Grand)",
+			price: 15.5,
+			quantity: 1,
+			toppings: [
+				"Avocat",
+				"Oignons frits",
+				"Sauce Spicy Mayo"
+			]
+		}, {
+			id: "crousty-chicken",
+			name: "Crousty Chicken Poké",
+			price: 14.5,
+			quantity: 1,
+			toppings: [
+				"Sauce Sésame",
+				"Edamame",
+				"Cacahuètes"
+			]
+		}],
+		total: 32
+	};
+	await upsertOrder(testOrder);
+	return {
+		success: true,
+		order: testOrder
+	};
+});
 //#endregion
 //#region src/lib/epos-client.ts
 var DEFAULT_PRINTER_CONFIG = {
@@ -9851,6 +9904,22 @@ function PosApplicationPage() {
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	const knownOrderIds = (0, import_react.useRef)(/* @__PURE__ */ new Set());
+	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
+	const handleCreateTestOrder = async () => {
+		setCreatingTestOrder(true);
+		try {
+			const res = await createTestDeliveryOrder({ data: { pin } });
+			if (res?.order) {
+				playAlertSound();
+				await loadOrders();
+				setSelectedOrder(res.order);
+			}
+		} catch (e) {
+			alert("Erreur lors de la création de la commande test : " + (e?.message ?? e));
+		} finally {
+			setCreatingTestOrder(false);
+		}
+	};
 	const playAlertSound = () => {
 		if (!config.soundEnabled) return;
 		try {
@@ -9965,6 +10034,116 @@ function PosApplicationPage() {
 		} catch (e) {
 			alert("Erreur de mise à jour du statut.");
 		}
+	};
+	const printThermalTicket = (order, isTest = false) => {
+		const iframe = document.createElement("iframe");
+		iframe.style.position = "fixed";
+		iframe.style.right = "0";
+		iframe.style.bottom = "0";
+		iframe.style.width = "0";
+		iframe.style.height = "0";
+		iframe.style.border = "0";
+		document.body.appendChild(iframe);
+		const doc = iframe.contentWindow?.document;
+		if (!doc) return;
+		const qrUrl = order?.deliveryToken ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.origin + "/track/" + order.deliveryToken)}` : "";
+		const html = isTest ? `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @page { size: 80mm auto; margin: 0; }
+          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 14px; text-align: center; color: #000; }
+          h1 { font-size: 20px; margin: 0 0 4px 0; }
+          hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+        </style>
+      </head>
+      <body>
+        <h1>POKE N BOWL VISE</h1>
+        <p>TEST IMPRIMANTE REUSSI</p>
+        <hr>
+        <p>Date : ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}</p>
+        <p>Epson TM-m30II Connectee !</p>
+        <hr>
+        <p>Pret pour les commandes.</p>
+        <br><br>.
+      </body>
+      </html>
+    ` : `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          @page { size: 80mm auto; margin: 0; }
+          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 13px; color: #000; }
+          .center { text-align: center; }
+          h1 { font-size: 19px; margin: 0 0 2px 0; }
+          h2 { font-size: 16px; margin: 4px 0; }
+          .bold { font-weight: bold; }
+          hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
+          .item { display: flex; justify-content: space-between; font-weight: bold; margin: 3px 0; }
+          .topping { font-size: 11px; padding-left: 10px; }
+          .qr { margin-top: 8px; text-align: center; }
+          .qr img { width: 140px; height: 140px; }
+        </style>
+      </head>
+      <body>
+        <div class="center">
+          <h1>POKE N BOWL</h1>
+          <p>Rue Haute 38, 4600 Vise</p>
+          <hr>
+          <h2>${order?.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}</h2>
+          <p class="bold">COMMANDE : ${order?.id}</p>
+          <p>Horaire : ${order?.customer.requestedTime}</p>
+        </div>
+        <hr>
+        <p><span class="bold">Client :</span> ${order?.customer.name}</p>
+        <p><span class="bold">Tel :</span> ${order?.customer.phone}</p>
+        ${order?.customer.fulfillment === "delivery" ? `<p><span class="bold">Adresse :</span> ${order.customer.address || ""}</p>
+               <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>` : ""}
+        ${order?.customer.notes ? `<p class="bold">Note : ${order.customer.notes}</p>` : ""}
+        <hr>
+        <p class="bold">ARTICLES :</p>
+        ${order?.items.map((it) => `
+          <div class="item">
+            <span>${it.quantity}x ${it.name}</span>
+            <span>${(it.price * it.quantity).toFixed(2)} E</span>
+          </div>
+          ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
+        `).join("")}
+        <hr>
+        <div class="item" style="font-size: 16px;">
+          <span>TOTAL :</span>
+          <span>${order?.total.toFixed(2)} EUR</span>
+        </div>
+        <div class="center bold" style="margin-top: 4px;">
+          ${order?.status === "paid" ? "PAIEMENT VALIDE (EN LIGNE)" : "A PAYER SUR PLACE"}
+        </div>
+        ${qrUrl ? `
+          <hr>
+          <div class="qr">
+            <p style="font-size: 11px; font-weight: bold; margin: 0 0 4px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
+            <img src="${qrUrl}" alt="QR Code GPS">
+            <p style="font-size: 10px; color: #333; margin: 4px 0 0 0;">Itineraire 1-clic livreur</p>
+          </div>
+        ` : ""}
+        <div class="center" style="margin-top: 8px;">
+          <p>Merci pour votre commande !</p>
+        </div>
+        <br><br>.
+      </body>
+      </html>
+    `;
+		doc.open();
+		doc.write(html);
+		doc.close();
+		iframe.contentWindow?.focus();
+		setTimeout(() => {
+			iframe.contentWindow?.print();
+			setTimeout(() => document.body.removeChild(iframe), 1500);
+		}, 400);
 	};
 	const handleTestPrint = async () => {
 		if (testingPrinter) return;
@@ -10156,6 +10335,13 @@ function PosApplicationPage() {
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-3",
 					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: handleCreateTestOrder,
+							disabled: creatingTestOrder,
+							className: "flex items-center gap-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-2 text-xs font-black hover:bg-amber-500/30 active:scale-95 transition disabled:opacity-50",
+							title: "Créer une fausse commande de livraison avec QR Code GPS (Waze & Google Maps)",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "h-4 w-4 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: creatingTestOrder ? "Création..." : "+ Test Livraison (QR GPS)" })]
+						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => {
 								const updated = {
@@ -10538,18 +10724,76 @@ function PosApplicationPage() {
 								})
 							]
 						}),
+						selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center justify-between",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-black uppercase text-emerald-400",
+										children: "GPS & Navigation Livreur"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold",
+										children: "1-Clic"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
+										target: "_blank",
+										rel: "noreferrer",
+										className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: `https://waze.com/ul?q=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
+										target: "_blank",
+										rel: "noreferrer",
+										className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze"]
+									})]
+								}),
+								selectedOrder.deliveryToken && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "pt-2 border-t border-white/10 flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent((typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be") + "/track/" + selectedOrder.deliveryToken)}`,
+										alt: "QR Code GPS",
+										className: "w-16 h-16 rounded-xl bg-white p-1 shrink-0"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-xs space-y-1",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "font-bold text-white",
+												children: "QR Code GPS du ticket"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-[#8ea39b] text-[11px] leading-tight",
+												children: "Le livreur peut scanner ce QR directement sur l'écran ou sur le ticket de caisse."
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: `/track/${selectedOrder.deliveryToken}`,
+												target: "_blank",
+												rel: "noreferrer",
+												className: "inline-flex items-center gap-1 text-[#ff705f] hover:underline font-bold text-xs",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ouvrir la page livreur" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3 h-3" })]
+											})
+										]
+									})]
+								})
+							]
+						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-3 pt-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => handleManualReprint(selectedOrder.id),
-								className: "rounded-2xl bg-white/10 py-3.5 text-sm font-black hover:bg-white/20 transition flex items-center justify-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), "Réimprimer Ticket"]
-							}), selectedOrder.deliveryToken && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: `/track/${selectedOrder.deliveryToken}`,
-								target: "_blank",
-								rel: "noreferrer",
-								className: "rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-sm font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4" }), "Vue Livreur QR"]
+								className: "rounded-2xl bg-white/10 py-3.5 text-xs font-black hover:bg-white/20 transition flex items-center justify-center gap-2",
+								title: "Envoyer à l'imprimante thermique Epson réseau",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), "Imprimer Réseau"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => printThermalTicket(selectedOrder),
+								className: "rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-xs font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2",
+								title: "Ouvrir le ticket thermique avec son QR Code à l'écran / boîte de dialogue d'impression",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Aperçu Ticket & QR"]
 							})]
 						})
 					]

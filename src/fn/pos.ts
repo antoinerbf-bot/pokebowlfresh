@@ -9,6 +9,7 @@ import {
   upsertOrder,
 } from "../lib/order-store";
 import { buildKitchenReceipt, buildDeliveryReceipt } from "../lib/escpos";
+import { generateOrderId, type Order } from "../lib/orders";
 
 function verifyPin(pin?: string): boolean {
   const expectedPin = process.env.POS_PIN ?? "1234";
@@ -129,5 +130,58 @@ export const ackPosPrint = createServerFn({ method: "POST" })
 
     await acknowledgePrint(data.orderId, data.success, data.error);
     return { success: true };
+  });
+
+export const createTestDeliveryOrder = createServerFn({ method: "POST" })
+  .validator(z.object({ pin: z.string().optional() }))
+  .handler(async ({ data }) => {
+    if (!verifyPin(data.pin)) {
+      throw new Error("Code PIN invalide.");
+    }
+
+    const testId = generateOrderId();
+    const deliveryToken = crypto.randomUUID().replace(/-/g, "");
+
+    const testOrder: Order = {
+      id: testId,
+      createdAt: new Date().toISOString(),
+      status: "paid",
+      paymentMethod: "online",
+      printStatus: "pending",
+      deliveryToken,
+      currency: "EUR",
+      customer: {
+        name: "Jean Dupont (TEST LIVREUR GPS)",
+        phone: "+32 499 12 34 56",
+        email: "livreur.test@pokenbowl.be",
+        fulfillment: "delivery",
+        requestedTime: "Dès que possible",
+        address: "Avenue Reine Astrid 15",
+        postalCode: "4600",
+        city: "Visé",
+        deliveryFee: 2.0,
+        notes: "Test Waze & Google Maps - Sonner interphone 2B",
+      },
+      items: [
+        {
+          id: "spicy-chicken",
+          name: "Spicy Chicken Poké (Grand)",
+          price: 15.5,
+          quantity: 1,
+          toppings: ["Avocat", "Oignons frits", "Sauce Spicy Mayo"],
+        },
+        {
+          id: "crousty-chicken",
+          name: "Crousty Chicken Poké",
+          price: 14.5,
+          quantity: 1,
+          toppings: ["Sauce Sésame", "Edamame", "Cacahuètes"],
+        },
+      ],
+      total: 32.0,
+    };
+
+    await upsertOrder(testOrder);
+    return { success: true, order: testOrder };
   });
 

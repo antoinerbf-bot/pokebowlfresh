@@ -18,6 +18,7 @@ import {
   Layers,
   MapPin,
   Phone,
+  Navigation,
 } from "lucide-react";
 import {
   getPosOrders,
@@ -25,6 +26,7 @@ import {
   triggerReprint,
   getOrderReceipts,
   ackPosPrint,
+  createTestDeliveryOrder,
 } from "../../fn/pos";
 import {
   type PrinterConfig,
@@ -61,6 +63,23 @@ export function PosApplicationPage() {
 
   // Garder trace des IDs pour les nouvelles alertes
   const knownOrderIds = useRef<Set<string>>(new Set());
+  const [creatingTestOrder, setCreatingTestOrder] = useState(false);
+
+  const handleCreateTestOrder = async () => {
+    setCreatingTestOrder(true);
+    try {
+      const res = await createTestDeliveryOrder({ data: { pin } });
+      if (res?.order) {
+        playAlertSound();
+        await loadOrders();
+        setSelectedOrder(res.order as any);
+      }
+    } catch (e: any) {
+      alert("Erreur lors de la création de la commande test : " + (e?.message ?? e));
+    } finally {
+      setCreatingTestOrder(false);
+    }
+  };
 
   // Bip d'alerte Web Audio API (aucun fichier MP3 externe requis)
   const playAlertSound = () => {
@@ -525,6 +544,17 @@ export function PosApplicationPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Bouton Commande Test Livreur / GPS */}
+          <button
+            onClick={handleCreateTestOrder}
+            disabled={creatingTestOrder}
+            className="flex items-center gap-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-2 text-xs font-black hover:bg-amber-500/30 active:scale-95 transition disabled:opacity-50"
+            title="Créer une fausse commande de livraison avec QR Code GPS (Waze & Google Maps)"
+          >
+            <Truck className="h-4 w-4 text-amber-400" />
+            <span>{creatingTestOrder ? "Création..." : "+ Test Livraison (QR GPS)"}</span>
+          </button>
+
           {/* Toggle Son */}
           <button
             onClick={() => {
@@ -858,27 +888,93 @@ export function PosApplicationPage() {
               </div>
             </div>
 
+            {/* Section GPS & Livreur pour les commandes en livraison */}
+            {selectedOrder.customer.fulfillment === "delivery" && (
+              <div className="rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black uppercase text-emerald-400">
+                    GPS & Navigation Livreur
+                  </span>
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
+                    1-Clic
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95"
+                  >
+                    <Navigation className="w-3.5 h-3.5" />
+                    Google Maps
+                  </a>
+                  <a
+                    href={`https://waze.com/ul?q=${encodeURIComponent(
+                      `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95"
+                  >
+                    <Navigation className="w-3.5 h-3.5" />
+                    Waze
+                  </a>
+                </div>
+
+                {selectedOrder.deliveryToken && (
+                  <div className="pt-2 border-t border-white/10 flex items-center gap-3">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(
+                        (typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be") +
+                          "/track/" +
+                          selectedOrder.deliveryToken,
+                      )}`}
+                      alt="QR Code GPS"
+                      className="w-16 h-16 rounded-xl bg-white p-1 shrink-0"
+                    />
+                    <div className="text-xs space-y-1">
+                      <p className="font-bold text-white">QR Code GPS du ticket</p>
+                      <p className="text-[#8ea39b] text-[11px] leading-tight">
+                        Le livreur peut scanner ce QR directement sur l'écran ou sur le ticket de caisse.
+                      </p>
+                      <a
+                        href={`/track/${selectedOrder.deliveryToken}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-[#ff705f] hover:underline font-bold text-xs"
+                      >
+                        <span>Ouvrir la page livreur</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Actions Modal */}
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => handleManualReprint(selectedOrder.id)}
-                className="rounded-2xl bg-white/10 py-3.5 text-sm font-black hover:bg-white/20 transition flex items-center justify-center gap-2"
+                className="rounded-2xl bg-white/10 py-3.5 text-xs font-black hover:bg-white/20 transition flex items-center justify-center gap-2"
+                title="Envoyer à l'imprimante thermique Epson réseau"
               >
                 <Printer className="w-4 h-4 text-[#ff705f]" />
-                Réimprimer Ticket
+                Imprimer Réseau
               </button>
 
-              {selectedOrder.deliveryToken && (
-                <a
-                  href={`/track/${selectedOrder.deliveryToken}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-sm font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Vue Livreur QR
-                </a>
-              )}
+              <button
+                onClick={() => printThermalTicket(selectedOrder)}
+                className="rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-xs font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2"
+                title="Ouvrir le ticket thermique avec son QR Code à l'écran / boîte de dialogue d'impression"
+              >
+                <Printer className="w-4 h-4" />
+                Aperçu Ticket & QR
+              </button>
             </div>
           </div>
         </div>
