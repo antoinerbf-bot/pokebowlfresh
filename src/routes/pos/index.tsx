@@ -36,6 +36,7 @@ import {
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
 import { EscPosBuilder } from "../../lib/escpos";
+import QRCode from "qrcode";
 
 export const Route = createFileRoute("/pos/")({
   component: PosApplicationPage,
@@ -52,6 +53,8 @@ export function PosApplicationPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [activePrintOrder, setActivePrintOrder] = useState<Order | null>(null);
+  const [printQrDataUrl, setPrintQrDataUrl] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"kanban" | "history" | "settings">("kanban");
 
@@ -132,11 +135,7 @@ export function PosApplicationPage() {
       newOrders.forEach((o) => knownOrderIds.current.add(o.id));
       setOrders(newOrders);
 
-      // Auto-print des commandes en attente d'impression
-      const pendingPrint = newOrders.find((o) => o.printStatus === "pending" && (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"));
-      if (pendingPrint && printingOrderId !== pendingPrint.id) {
-        handleExecutePrint(pendingPrint);
-      }
+      // Impression à la demande : pas de blocage réseau automatique
     } catch (e) {
       console.error(e);
     } finally {
@@ -152,7 +151,7 @@ export function PosApplicationPage() {
     }
   }, [isUnlocked, pin]);
 
-  // Action d'impression
+  // Action d'impression réseau directe ePOS (si demandée explicitement)
   const handleExecutePrint = async (order: Order) => {
     setPrintingOrderId(order.id);
     try {
@@ -218,7 +217,7 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    await handleExecutePrint(targetOrder);
+    await printThermalTicket(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -233,15 +232,24 @@ export function PosApplicationPage() {
     }
   };
 
-  // Impression thermique (Boîte de dialogue native / Pilote imprimante)
-  const printThermalTicket = (order: Order | null, isTest = false) => {
+  // Impression thermique directe (Format 80mm - In-page + popup autonome)
+  const printThermalTicket = async (order: Order | null, isTest = false) => {
     if (!order && !isTest) return;
 
-    const qrUrl = order?.deliveryToken
-      ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
-          window.location.origin + "/track/" + order.deliveryToken,
-        )}`
-      : "";
+    let qrData = "";
+    if (order?.deliveryToken) {
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+      const trackUrl = `${origin}/track/${order.deliveryToken}`;
+      try {
+        qrData = await QRCode.toDataURL(trackUrl, { margin: 1, width: 150 });
+      } catch (err) {
+        console.warn("QR Code local gen error", err);
+      }
+    }
+
+    // 1. Mettre à jour l'état in-page pour l'impression instantanée
+    setActivePrintOrder(order);
+    setPrintQrDataUrl(qrData);
 
     const html = isTest
       ? `<!DOCTYPE html>
@@ -263,7 +271,7 @@ export function PosApplicationPage() {
 </head>
 <body>
   <div class="no-print">
-    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER</button>
+    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER SUR VOTRE IMPRIMANTE</button>
   </div>
   <h1>POKE N BOWL VISE</h1>
   <p>TEST IMPRIMANTE REUSSI</p>
@@ -273,11 +281,6 @@ export function PosApplicationPage() {
   <hr>
   <p>Pret pour les commandes.</p>
   <br><br>.
-  <script>
-    window.onload = function() {
-      setTimeout(function() { window.print(); }, 300);
-    };
-  </script>
 </body>
 </html>`
       : `<!DOCTYPE html>
@@ -300,7 +303,7 @@ export function PosApplicationPage() {
     .item { display: flex; justify-content: space-between; font-weight: bold; margin: 4px 0; }
     .topping { font-size: 11px; padding-left: 10px; color: #222; }
     .qr { margin-top: 10px; text-align: center; }
-    .qr img { width: 150px; height: 150px; display: block; margin: 6px auto; }
+    .qr img { width: 140px; height: 140px; display: block; margin: 4px auto; }
     .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
   </style>
 </head>
@@ -356,13 +359,13 @@ export function PosApplicationPage() {
     ${order?.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"}
   </div>
   ${
-    qrUrl
+    qrData
       ? `
     <hr>
     <div class="qr">
       <p style="font-size: 11px; font-weight: bold; margin: 0 0 2px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
-      <img src="${qrUrl}" alt="QR Code GPS">
-      <p style="font-size: 10px; color: #333; margin: 2px 0 0 0;">Itineraire 1-clic livreur</p>
+      <img src="${qrData}" alt="QR Code GPS">
+      <p style="font-size: 10px; color: #333; margin: 2px 0 0 0;">Itinéraire 1-clic livreur</p>
     </div>
   `
       : ""
@@ -371,53 +374,28 @@ export function PosApplicationPage() {
     <p>Merci pour votre commande !</p>
   </div>
   <br><br>.
-  <script>
-    window.onload = function() {
-      setTimeout(function() {
-        window.print();
-      }, 400);
-    };
-  </script>
 </body>
 </html>`;
 
-    // 1. Ouvrir une fenêtre d'impression dédiée
-    const printWindow = window.open("", "_blank", "width=420,height=700,menubar=no,toolbar=no,location=no,status=no");
-    if (printWindow) {
-      printWindow.document.open();
-      printWindow.document.write(html);
-      printWindow.document.close();
-      printWindow.focus();
-      return;
-    }
+    // 2. Déclencher window.print()
+    try {
+      const printWindow = window.open("", "_blank", "width=420,height=700");
+      if (printWindow) {
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+          printWindow.print();
+        }, 300);
+        return;
+      }
+    } catch {}
 
-    // 2. Si le popup a été bloqué par le navigateur, fallback sur l'iframe
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "fixed";
-    iframe.style.right = "0";
-    iframe.style.bottom = "0";
-    iframe.style.width = "400px";
-    iframe.style.height = "600px";
-    iframe.style.zIndex = "99999";
-    iframe.style.background = "#fff";
-    document.body.appendChild(iframe);
-
-    const doc = iframe.contentWindow?.document;
-    if (!doc) return;
-
-    doc.open();
-    doc.write(html);
-    doc.close();
-
-    iframe.contentWindow?.focus();
+    // 3. Fallback : Impression directe dans la page
     setTimeout(() => {
-      iframe.contentWindow?.print();
-      setTimeout(() => {
-        if (document.body.contains(iframe)) {
-          document.body.removeChild(iframe);
-        }
-      }, 60000);
-    }, 400);
+      window.print();
+    }, 150);
   };
 
   // Test d'impression direct
@@ -568,9 +546,114 @@ export function PosApplicationPage() {
   const completedOrdersList = orders.filter((o) => o.status === "completed" || o.status === "cancelled");
 
   return (
-    <div className="flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
-      {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]">
+    <>
+      <style>{`
+        @media print {
+          @page {
+            size: 80mm auto;
+            margin: 0mm;
+          }
+          html, body {
+            background: #ffffff !important;
+            color: #000000 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            overflow: visible !important;
+          }
+          .pos-screen-ui {
+            display: none !important;
+          }
+          #thermal-print-area {
+            display: block !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 72mm !important;
+            margin: 0 auto !important;
+            padding: 2mm 1mm !important;
+            background: #ffffff !important;
+            color: #000000 !important;
+          }
+        }
+      `}</style>
+
+      {/* Ticket Thermique Imprimable (visible uniquement lors du print) */}
+      <div id="thermal-print-area" className="hidden print:block text-black bg-white">
+        {activePrintOrder && (
+          <div style={{ width: "72mm", margin: "0 auto", padding: "4mm 0", fontFamily: "'Courier New', Courier, monospace", fontSize: "12px", lineHeight: "1.3" }}>
+            <div style={{ textAlign: "center" }}>
+              <h1 style={{ fontSize: "18px", fontWeight: "900", margin: "0 0 2px 0" }}>POKE N BOWL</h1>
+              <p style={{ margin: "1px 0" }}>Rue Haute 38, 4600 Vise</p>
+              <p style={{ margin: "1px 0" }}>Tel: 0491 28 14 56</p>
+              <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
+              <h2 style={{ fontSize: "15px", fontWeight: "900", margin: "4px 0" }}>
+                {activePrintOrder.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** RETRAIT ***"}
+              </h2>
+              <p style={{ fontWeight: "bold" }}>COMMANDE : {activePrintOrder.id}</p>
+              <p>Horaire : {activePrintOrder.customer.requestedTime}</p>
+            </div>
+            <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
+            <p><strong>Client :</strong> {activePrintOrder.customer.name}</p>
+            <p><strong>Tel    :</strong> {activePrintOrder.customer.phone}</p>
+            {activePrintOrder.customer.fulfillment === "delivery" && (
+              <>
+                <p><strong>Adresse:</strong> {activePrintOrder.customer.address}</p>
+                <p>{activePrintOrder.customer.postalCode} {activePrintOrder.customer.city}</p>
+              </>
+            )}
+            {activePrintOrder.customer.notes && (
+              <p style={{ fontWeight: "bold" }}>Note   : {activePrintOrder.customer.notes}</p>
+            )}
+            <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
+            <p style={{ fontWeight: "bold" }}>ARTICLES :</p>
+            {activePrintOrder.items.map((it, idx) => (
+              <div key={idx} style={{ margin: "3px 0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
+                  <span>{it.quantity}x {it.name}</span>
+                  <span>{(it.price * it.quantity).toFixed(2)} E</span>
+                </div>
+                {(it.toppings || []).map((top, tidx) => (
+                  <div key={tidx} style={{ paddingLeft: "10px", fontSize: "11px", color: "#333" }}>+ {top}</div>
+                ))}
+              </div>
+            ))}
+            <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
+            {activePrintOrder.customer.deliveryFee ? (
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span>Frais de livraison</span>
+                <span>{activePrintOrder.customer.deliveryFee.toFixed(2)} EUR</span>
+              </div>
+            ) : null}
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "15px", fontWeight: "900", marginTop: "4px" }}>
+              <span>TOTAL :</span>
+              <span>{activePrintOrder.total.toFixed(2)} EUR</span>
+            </div>
+            <div style={{ textAlign: "center", fontWeight: "bold", marginTop: "6px" }}>
+              {activePrintOrder.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"}
+            </div>
+            {printQrDataUrl && (
+              <>
+                <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
+                <div style={{ textAlign: "center" }}>
+                  <p style={{ fontSize: "10px", fontWeight: "bold", margin: "0 0 2px 0" }}>SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
+                  <img src={printQrDataUrl} alt="QR Code GPS" style={{ width: "140px", height: "140px", display: "block", margin: "4px auto" }} />
+                  <p style={{ fontSize: "9px", color: "#333", margin: "2px 0 0 0" }}>Itinéraire 1-clic livreur</p>
+                </div>
+              </>
+            )}
+            <div style={{ textAlign: "center", marginTop: "8px" }}>
+              <p>Merci pour votre commande !</p>
+            </div>
+            <br /><br />.
+          </div>
+        )}
+      </div>
+
+      <div className="pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
+        {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="flex h-3 w-3 relative">
@@ -1044,7 +1127,8 @@ export function PosApplicationPage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

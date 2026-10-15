@@ -107,13 +107,14 @@ export async function sendReceiptToPrinter(
           SOAPAction: '""',
         },
         body: xml,
+        signal: AbortSignal.timeout(2000), // Timeout strict de 2 secondes max
       });
 
       if (res.ok) {
         return { success: true, message: `Ticket imprimé avec succès sur ${config.printerIp} !` };
       }
     } catch (e: any) {
-      lastErr = e?.message ?? String(e);
+      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2s)" : (e?.message ?? String(e));
     }
   }
 
