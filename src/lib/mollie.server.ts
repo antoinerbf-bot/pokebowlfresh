@@ -9,7 +9,7 @@ function getApiKey(): string {
   const key = process.env.MOLLIE_API_KEY;
   if (!key) {
     throw new Error(
-      "MOLLIE_API_KEY manquante. Ajoute-la dans les variables d'environnement Vercel.",
+      "MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.",
     );
   }
   return key;
