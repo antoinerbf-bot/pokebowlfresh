@@ -233,129 +233,177 @@ export function PosApplicationPage() {
     }
   };
 
-  // Impression thermique native Android (Epson Print Enabler / Système Android)
+  // Impression thermique (Boîte de dialogue native / Pilote imprimante)
   const printThermalTicket = (order: Order | null, isTest = false) => {
+    if (!order && !isTest) return;
+
+    const qrUrl = order?.deliveryToken
+      ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
+          window.location.origin + "/track/" + order.deliveryToken,
+        )}`
+      : "";
+
+    const html = isTest
+      ? `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test Impression - Poke N Bowl</title>
+  <style>
+    @page { size: 80mm auto; margin: 0; }
+    @media print {
+      body { width: 72mm; margin: 0 auto; padding: 2mm 0; }
+      .no-print { display: none !important; }
+    }
+    body { font-family: 'Courier New', Courier, monospace; width: 72mm; margin: 0 auto; padding: 10px; font-size: 14px; text-align: center; color: #000; background: #fff; }
+    h1 { font-size: 19px; margin: 0 0 4px 0; font-weight: 900; }
+    hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+    .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER</button>
+  </div>
+  <h1>POKE N BOWL VISE</h1>
+  <p>TEST IMPRIMANTE REUSSI</p>
+  <hr>
+  <p>Date : ${new Date().toLocaleTimeString("fr-BE")}</p>
+  <p>Epson TM-m30II Connectee !</p>
+  <hr>
+  <p>Pret pour les commandes.</p>
+  <br><br>.
+  <script>
+    window.onload = function() {
+      setTimeout(function() { window.print(); }, 300);
+    };
+  </script>
+</body>
+</html>`
+      : `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ticket Commande ${order?.id}</title>
+  <style>
+    @page { size: 80mm auto; margin: 0; }
+    @media print {
+      body { width: 72mm; margin: 0 auto; padding: 2mm 0; }
+      .no-print { display: none !important; }
+    }
+    body { font-family: 'Courier New', Courier, monospace; width: 72mm; margin: 0 auto; padding: 8px; font-size: 13px; color: #000; background: #fff; line-height: 1.3; }
+    .center { text-align: center; }
+    h1 { font-size: 20px; margin: 0 0 2px 0; font-weight: 900; letter-spacing: 1px; }
+    h2 { font-size: 16px; margin: 4px 0; font-weight: 900; }
+    .bold { font-weight: bold; }
+    hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
+    .item { display: flex; justify-content: space-between; font-weight: bold; margin: 4px 0; }
+    .topping { font-size: 11px; padding-left: 10px; color: #222; }
+    .qr { margin-top: 10px; text-align: center; }
+    .qr img { width: 150px; height: 150px; display: block; margin: 6px auto; }
+    .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER SUR VOTRE IMPRIMANTE</button>
+  </div>
+  <div class="center">
+    <h1>POKE N BOWL</h1>
+    <p>Rue Haute 38, 4600 Vise</p>
+    <p>Tel: 0491 28 14 56</p>
+    <hr>
+    <h2>${order?.customer.fulfillment === "delivery" ? "*** TICKET LIVRAISON ***" : "*** TICKET RETRAIT ***"}</h2>
+    <p class="bold">COMMANDE : ${order?.id}</p>
+    <p>Horaire : ${order?.customer.requestedTime}</p>
+  </div>
+  <hr>
+  <p><span class="bold">Client :</span> ${order?.customer.name}</p>
+  <p><span class="bold">Tel    :</span> ${order?.customer.phone}</p>
+  ${
+    order?.customer.fulfillment === "delivery"
+      ? `<p><span class="bold">Adresse:</span> ${order.customer.address || ""}</p>
+         <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>`
+      : ""
+  }
+  ${order?.customer.notes ? `<p class="bold">Note   : ${order.customer.notes}</p>` : ""}
+  <hr>
+  <p class="bold">ARTICLES :</p>
+  ${
+    order?.items
+      .map(
+        (it) => `
+    <div class="item">
+      <span>${it.quantity}x ${it.name}</span>
+      <span>${(it.price * it.quantity).toFixed(2)} E</span>
+    </div>
+    ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
+  `,
+      )
+      .join("")
+  }
+  <hr>
+  ${
+    order?.customer.deliveryFee
+      ? `<div class="item"><span>Frais de livraison</span><span>${order.customer.deliveryFee.toFixed(2)} EUR</span></div>`
+      : ""
+  }
+  <div class="item" style="font-size: 16px; margin-top: 4px;">
+    <span>TOTAL :</span>
+    <span>${order?.total.toFixed(2)} EUR</span>
+  </div>
+  <div class="center bold" style="margin-top: 6px;">
+    ${order?.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"}
+  </div>
+  ${
+    qrUrl
+      ? `
+    <hr>
+    <div class="qr">
+      <p style="font-size: 11px; font-weight: bold; margin: 0 0 2px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
+      <img src="${qrUrl}" alt="QR Code GPS">
+      <p style="font-size: 10px; color: #333; margin: 2px 0 0 0;">Itineraire 1-clic livreur</p>
+    </div>
+  `
+      : ""
+  }
+  <div class="center" style="margin-top: 10px;">
+    <p>Merci pour votre commande !</p>
+  </div>
+  <br><br>.
+  <script>
+    window.onload = function() {
+      setTimeout(function() {
+        window.print();
+      }, 400);
+    };
+  </script>
+</body>
+</html>`;
+
+    // 1. Ouvrir une fenêtre d'impression dédiée
+    const printWindow = window.open("", "_blank", "width=420,height=700,menubar=no,toolbar=no,location=no,status=no");
+    if (printWindow) {
+      printWindow.document.open();
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      return;
+    }
+
+    // 2. Si le popup a été bloqué par le navigateur, fallback sur l'iframe
     const iframe = document.createElement("iframe");
     iframe.style.position = "fixed";
     iframe.style.right = "0";
     iframe.style.bottom = "0";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
-    iframe.style.border = "0";
+    iframe.style.width = "400px";
+    iframe.style.height = "600px";
+    iframe.style.zIndex = "99999";
+    iframe.style.background = "#fff";
     document.body.appendChild(iframe);
 
     const doc = iframe.contentWindow?.document;
     if (!doc) return;
-
-    const qrUrl = order?.deliveryToken
-      ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(window.location.origin + "/track/" + order.deliveryToken)}`
-      : "";
-
-    const html = isTest
-      ? `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          @page { size: 80mm auto; margin: 0; }
-          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 14px; text-align: center; color: #000; }
-          h1 { font-size: 20px; margin: 0 0 4px 0; }
-          hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
-        </style>
-      </head>
-      <body>
-        <h1>POKE N BOWL VISE</h1>
-        <p>TEST IMPRIMANTE REUSSI</p>
-        <hr>
-        <p>Date : ${new Date().toLocaleTimeString("fr-BE")}</p>
-        <p>Epson TM-m30II Connectee !</p>
-        <hr>
-        <p>Pret pour les commandes.</p>
-        <br><br>.
-      </body>
-      </html>
-    `
-      : `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          @page { size: 80mm auto; margin: 0; }
-          body { font-family: monospace; width: 72mm; margin: 0 auto; padding: 4mm 0; font-size: 13px; color: #000; }
-          .center { text-align: center; }
-          h1 { font-size: 19px; margin: 0 0 2px 0; }
-          h2 { font-size: 16px; margin: 4px 0; }
-          .bold { font-weight: bold; }
-          hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
-          .item { display: flex; justify-content: space-between; font-weight: bold; margin: 3px 0; }
-          .topping { font-size: 11px; padding-left: 10px; }
-          .qr { margin-top: 8px; text-align: center; }
-          .qr img { width: 140px; height: 140px; }
-        </style>
-      </head>
-      <body>
-        <div class="center">
-          <h1>POKE N BOWL</h1>
-          <p>Rue Haute 38, 4600 Vise</p>
-          <hr>
-          <h2>${order?.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}</h2>
-          <p class="bold">COMMANDE : ${order?.id}</p>
-          <p>Horaire : ${order?.customer.requestedTime}</p>
-        </div>
-        <hr>
-        <p><span class="bold">Client :</span> ${order?.customer.name}</p>
-        <p><span class="bold">Tel :</span> ${order?.customer.phone}</p>
-        ${
-          order?.customer.fulfillment === "delivery"
-            ? `<p><span class="bold">Adresse :</span> ${order.customer.address || ""}</p>
-               <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>`
-            : ""
-        }
-        ${order?.customer.notes ? `<p class="bold">Note : ${order.customer.notes}</p>` : ""}
-        <hr>
-        <p class="bold">ARTICLES :</p>
-        ${
-          order?.items
-            .map(
-              (it) => `
-          <div class="item">
-            <span>${it.quantity}x ${it.name}</span>
-            <span>${(it.price * it.quantity).toFixed(2)} E</span>
-          </div>
-          ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
-        `,
-            )
-            .join("")
-        }
-        <hr>
-        <div class="item" style="font-size: 16px;">
-          <span>TOTAL :</span>
-          <span>${order?.total.toFixed(2)} EUR</span>
-        </div>
-        <div class="center bold" style="margin-top: 4px;">
-          ${order?.status === "paid" ? "PAIEMENT VALIDE (EN LIGNE)" : "A PAYER SUR PLACE"}
-        </div>
-        ${
-          qrUrl
-            ? `
-          <hr>
-          <div class="qr">
-            <p style="font-size: 11px; font-weight: bold; margin: 0 0 4px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
-            <img src="${qrUrl}" alt="QR Code GPS">
-            <p style="font-size: 10px; color: #333; margin: 4px 0 0 0;">Itineraire 1-clic livreur</p>
-          </div>
-        `
-            : ""
-        }
-        <div class="center" style="margin-top: 8px;">
-          <p>Merci pour votre commande !</p>
-        </div>
-        <br><br>.
-      </body>
-      </html>
-    `;
 
     doc.open();
     doc.write(html);
@@ -364,7 +412,11 @@ export function PosApplicationPage() {
     iframe.contentWindow?.focus();
     setTimeout(() => {
       iframe.contentWindow?.print();
-      setTimeout(() => document.body.removeChild(iframe), 1500);
+      setTimeout(() => {
+        if (document.body.contains(iframe)) {
+          document.body.removeChild(iframe);
+        }
+      }, 60000);
     }, 400);
   };
 
