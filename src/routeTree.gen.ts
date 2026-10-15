@@ -17,6 +17,7 @@ import { Route as RecrutementRouteImport } from './routes/recrutement'
 import { Route as SurMesureRouteImport } from './routes/sur-mesure'
 import { Route as AdminStocksRouteImport } from './routes/admin/stocks'
 import { Route as ApiBancontactWebhookRouteImport } from './routes/api/bancontact-webhook'
+import { Route as ApiBankStatusRouteImport } from './routes/api/bank-status'
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
@@ -64,6 +65,11 @@ const AdminStocksRoute = AdminStocksRouteImport.update({
 const ApiBancontactWebhookRoute = ApiBancontactWebhookRouteImport.update({
   id: '/api/bancontact-webhook',
   path: '/api/bancontact-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBankStatusRoute = ApiBankStatusRouteImport.update({
+  id: '/api/bank-status',
+  path: '/api/bank-status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMollieWebhookRoute = ApiMollieWebhookRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
   '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
+  '/api/bank-status': typeof ApiBankStatusRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
   '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
+  '/api/bank-status': typeof ApiBankStatusRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/sur-mesure': typeof SurMesureRoute
   '/admin/stocks': typeof AdminStocksRoute
   '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
+  '/api/bank-status': typeof ApiBankStatusRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/sur-mesure'
     | '/admin/stocks'
     | '/api/bancontact-webhook'
+    | '/api/bank-status'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/sur-mesure'
     | '/admin/stocks'
     | '/api/bancontact-webhook'
+    | '/api/bank-status'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/sur-mesure'
     | '/admin/stocks'
     | '/api/bancontact-webhook'
+    | '/api/bank-status'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   SurMesureRoute: typeof SurMesureRoute
   AdminStocksRoute: typeof AdminStocksRoute
   ApiBancontactWebhookRoute: typeof ApiBancontactWebhookRoute
+  ApiBankStatusRoute: typeof ApiBankStatusRoute
   ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
   ApiOrdersRoute: typeof ApiOrdersRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       path: '/api/bancontact-webhook'
       fullPath: '/api/bancontact-webhook'
       preLoaderRoute: typeof ApiBancontactWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/bank-status': {
+      id: '/api/bank-status'
+      path: '/api/bank-status'
+      fullPath: '/api/bank-status'
+      preLoaderRoute: typeof ApiBankStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/mollie-webhook': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   SurMesureRoute: SurMesureRoute,
   AdminStocksRoute: AdminStocksRoute,
   ApiBancontactWebhookRoute: ApiBancontactWebhookRoute,
+  ApiBankStatusRoute: ApiBankStatusRoute,
   ApiMollieWebhookRoute: ApiMollieWebhookRoute,
   ApiOrdersRoute: ApiOrdersRoute,
   OrderSuccessRoute: OrderSuccessRoute,

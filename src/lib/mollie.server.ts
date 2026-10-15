@@ -5,8 +5,34 @@
 
 const MOLLIE_API = "https://api.mollie.com/v2";
 
+import { loadAndGetEnv } from "./env.server";
+
+export function getMollieApiKey(): string | undefined {
+  const env = loadAndGetEnv();
+  const direct = env.MOLLIE_API_KEY || env.MOLLIE_KEY;
+  if (direct) return direct.trim();
+
+  const candidates = [
+    env.BANCONTACT_PRO_API_KEY,
+    env.PAYCONIQ_API_KEY,
+    env.BANCONTACT_API_KEY,
+    env.API_KEY,
+  ];
+  for (const c of candidates) {
+    if (c && (c.startsWith("live_") || c.startsWith("test_"))) {
+      return c.trim();
+    }
+  }
+
+  return undefined;
+}
+
+export function isMollieConfigured(): boolean {
+  return Boolean(getMollieApiKey());
+}
+
 function getApiKey(): string {
-  const key = process.env.MOLLIE_API_KEY;
+  const key = getMollieApiKey();
   if (!key) {
     throw new Error(
       "MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.",

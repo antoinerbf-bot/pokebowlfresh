@@ -13,6 +13,8 @@ import { t as cs } from "../_libs/neondatabase__serverless.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
+import fs from "node:fs";
+import path from "node:path";
 //#region src/styles.css?transform-only
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
@@ -522,7 +524,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$16 = createRootRouteWithContext()({
+var Route$17 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -580,7 +582,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$16.useRouteContext();
+	const { queryClient } = Route$17.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -5313,7 +5315,7 @@ var RESTAURANT_SCHEMA = {
 		}
 	]
 };
-var Route$15 = createFileRoute("/")({
+var Route$16 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -5705,9 +5707,82 @@ function generateOrderId() {
 	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 //#endregion
+//#region src/lib/env.server.ts
+function parseEnvFile(filePath) {
+	try {
+		if (!fs.existsSync(filePath)) return {};
+		const content = fs.readFileSync(filePath, "utf-8");
+		const result = {};
+		for (const rawLine of content.split("\n")) {
+			const line = rawLine.trim();
+			if (!line || line.startsWith("#")) continue;
+			const eqIdx = line.indexOf("=");
+			if (eqIdx === -1) continue;
+			const key = line.slice(0, eqIdx).trim();
+			let val = line.slice(eqIdx + 1).trim();
+			if (val.startsWith("\"") && val.endsWith("\"") || val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+			result[key] = val;
+		}
+		return result;
+	} catch {
+		return {};
+	}
+}
+var loaded = false;
+function loadAndGetEnv() {
+	if (!loaded) {
+		const candidateFiles = [
+			path.resolve(process.cwd(), ".env"),
+			path.resolve(process.cwd(), ".env.local"),
+			"/home/puzo3938/pokenbowl.be/.env",
+			"/home/puzo3938/.env"
+		];
+		for (const file of candidateFiles) {
+			const parsed = parseEnvFile(file);
+			for (const [k, v] of Object.entries(parsed)) if (!process.env[k]) process.env[k] = v;
+		}
+		loaded = true;
+	}
+	return process.env;
+}
+function getAllBankKeyCandidates() {
+	const env = loadAndGetEnv();
+	const bankPatterns = [
+		"BANCONTACT",
+		"PAYCONIQ",
+		"MOLLIE",
+		"STRIPE",
+		"PAYMENT",
+		"VIVA",
+		"WORLDLINE"
+	];
+	const found = [];
+	for (const [k, v] of Object.entries(env)) {
+		if (!v) continue;
+		const upper = k.toUpperCase();
+		if (bankPatterns.some((pattern) => upper.includes(pattern)) || upper === "API_KEY") {
+			const str = String(v).trim();
+			const masked = str.length > 8 ? `${str.slice(0, 4)}...${str.slice(-4)} (${str.length} chars)` : `**** (${str.length} chars)`;
+			found.push({
+				name: k,
+				source: "process.env",
+				maskedValue: masked,
+				value: str
+			});
+		}
+	}
+	return found;
+}
+//#endregion
 //#region src/lib/bancontact-pro.server.ts
 function getBancontactProApiKey() {
-	return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
+	const env = loadAndGetEnv();
+	const candidate = env.BANCONTACT_PRO_API_KEY || env.PAYCONIQ_API_KEY || env.BANCONTACT_API_KEY || env.BANCONTACT_KEY || env.PAYCONIQ_KEY;
+	if (candidate && (candidate.startsWith("live_") || candidate.startsWith("test_"))) return;
+	return candidate?.trim();
+}
+function isBancontactProConfigured() {
+	return Boolean(getBancontactProApiKey());
 }
 function getAuthHeader(apiKey) {
 	const clean = apiKey.trim();
@@ -5765,6 +5840,66 @@ async function getBancontactProPayment(paymentId) {
 		lastErr = e?.message ?? String(e);
 	}
 	throw new Error(`Bancontact Pro get payment failed: ${lastErr}`);
+}
+//#endregion
+//#region src/lib/mollie.server.ts
+/**
+* Server-only Mollie helpers.
+* Requires env: MOLLIE_API_KEY (test_… or live_…)
+*/
+var MOLLIE_API = "https://api.mollie.com/v2";
+function getMollieApiKey() {
+	const env = loadAndGetEnv();
+	const direct = env.MOLLIE_API_KEY || env.MOLLIE_KEY;
+	if (direct) return direct.trim();
+	const candidates = [
+		env.BANCONTACT_PRO_API_KEY,
+		env.PAYCONIQ_API_KEY,
+		env.BANCONTACT_API_KEY,
+		env.API_KEY
+	];
+	for (const c of candidates) if (c && (c.startsWith("live_") || c.startsWith("test_"))) return c.trim();
+}
+function isMollieConfigured() {
+	return Boolean(getMollieApiKey());
+}
+function getApiKey() {
+	const key = getMollieApiKey();
+	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
+	return key;
+}
+async function createMolliePayment(params) {
+	const res = await fetch(`${MOLLIE_API}/payments`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${getApiKey()}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			amount: {
+				currency: "EUR",
+				value: params.amountValue
+			},
+			description: params.description,
+			redirectUrl: params.redirectUrl,
+			webhookUrl: params.webhookUrl,
+			metadata: params.metadata,
+			locale: params.locale ?? "fr_BE"
+		})
+	});
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie create payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
+async function getMolliePayment(paymentId) {
+	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
 }
 //#endregion
 //#region src/lib/order-store.ts
@@ -6231,6 +6366,28 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 			redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
 		};
 	}
+	if (isMollieConfigured() && !isBancontactProConfigured()) {
+		const webhookUrl = `${data.origin}/api/mollie-webhook`;
+		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
+		const payment = await createMolliePayment({
+			amountValue: total.toFixed(2),
+			description: `Poke N Bowl ${orderId}`,
+			redirectUrl,
+			webhookUrl,
+			metadata: { orderId: order.id }
+		});
+		order.molliePaymentId = payment.id;
+		await upsertOrder(order);
+		const payUrl = payment._links?.checkout?.href;
+		if (!payUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
+		return {
+			type: "online",
+			orderId: order.id,
+			total: order.total,
+			molliePaymentId: payment.id,
+			redirectUrl: payUrl
+		};
+	}
 	const webhookUrl = `${data.origin}/api/bancontact-webhook`;
 	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
 	const payment = await createBancontactProPayment({
@@ -6254,8 +6411,8 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 });
 var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
 	let order = await getOrderFromStore(data.orderId);
-	if (order?.molliePaymentId && order.status === "pending_payment") {
-		const paymentId = order.molliePaymentId.startsWith("bancontact:") ? order.molliePaymentId.slice(11) : order.molliePaymentId;
+	if (order?.molliePaymentId && order.status === "pending_payment") if (order.molliePaymentId.startsWith("bancontact:")) {
+		const paymentId = order.molliePaymentId.slice(11);
 		try {
 			const payment = await getBancontactProPayment(paymentId);
 			if (payment.status === "SUCCEEDED") {
@@ -6272,7 +6429,22 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 				await upsertOrder(order);
 			}
 		} catch {}
-	}
+	} else try {
+		const payment = await getMolliePayment(order.molliePaymentId);
+		if (payment.status === "paid") {
+			order = {
+				...order,
+				status: "paid"
+			};
+			await upsertOrder(order);
+		} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
+			order = {
+				...order,
+				status: payment.status === "expired" ? "expired" : "cancelled"
+			};
+			await upsertOrder(order);
+		}
+	} catch {}
 	if (!order) return { found: false };
 	return {
 		found: true,
@@ -6289,7 +6461,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$14 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$15 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -6298,14 +6470,14 @@ function CheckoutPage() {
 	const [email, setEmail] = (0, import_react.useState)("");
 	const [notes, setNotes] = (0, import_react.useState)("");
 	const [fulfillment, setFulfillment] = (0, import_react.useState)("delivery");
-	const [requestedTime, setRequestedTime] = (0, import_react.useState)("");
+	const pickupOptions = (0, import_react.useMemo)(() => buildPickupSlots(), []);
+	const [requestedTime, setRequestedTime] = (0, import_react.useState)(() => buildPickupSlots()[0] ?? "");
 	const [address, setAddress] = (0, import_react.useState)("");
 	const [postalCode, setPostalCode] = (0, import_react.useState)("");
 	const [city, setCity] = (0, import_react.useState)("");
 	const [paymentMethod, setPaymentMethod] = (0, import_react.useState)("online");
 	const [loading, setLoading] = (0, import_react.useState)(false);
 	const [error, setError] = (0, import_react.useState)(null);
-	const pickupOptions = (0, import_react.useMemo)(() => buildPickupSlots(), []);
 	const normalizedPostal = postalCode.trim().replace(/\s+/g, "");
 	const deliveryZone = (0, import_react.useMemo)(() => getDeliveryZone(postalCode), [postalCode]);
 	const deliveryFee = fulfillment === "delivery" && deliveryZone ? total >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
@@ -7092,7 +7264,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$13 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$14 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#2C1D16] text-[#EADCC9]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -7612,7 +7784,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$12 = createFileRoute("/contact")({
+var Route$13 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -7753,7 +7925,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$11 = createFileRoute("/recrutement")({
+var Route$12 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -7870,7 +8042,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$10 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$11 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -8569,7 +8741,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$9 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$10 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -8817,7 +8989,7 @@ function AdminStocksPage() {
 }
 //#endregion
 //#region src/routes/api/bancontact-webhook.ts
-var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$9 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -8852,25 +9024,74 @@ var Route$8 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 	}
 } } } });
 //#endregion
-//#region src/lib/mollie.server.ts
-/**
-* Server-only Mollie helpers.
-* Requires env: MOLLIE_API_KEY (test_… or live_…)
-*/
-var MOLLIE_API = "https://api.mollie.com/v2";
-function getApiKey() {
-	const key = process.env.MOLLIE_API_KEY;
-	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
-	return key;
-}
-async function getMolliePayment(paymentId) {
-	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
+//#region src/routes/api/bank-status.ts
+var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+	loadAndGetEnv();
+	const candidates = getAllBankKeyCandidates();
+	const bancontactKey = getBancontactProApiKey();
+	const mollieKey = getMollieApiKey();
+	const results = {
+		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+		bancontactConfigured: Boolean(bancontactKey),
+		mollieConfigured: Boolean(mollieKey),
+		detectedVariables: candidates.map((c) => ({
+			name: c.name,
+			masked: c.maskedValue
+		}))
+	};
+	if (mollieKey) try {
+		const mRes = await fetch("https://api.mollie.com/v2/methods", { headers: { Authorization: `Bearer ${mollieKey}` } });
+		const mData = await mRes.json().catch(() => null);
+		results.mollieTest = {
+			status: mRes.status,
+			ok: mRes.ok,
+			methods: mRes.ok && mData?._embedded?.methods ? mData._embedded.methods.map((m) => m.id) : void 0,
+			error: !mRes.ok ? mData?.detail || mData?.title || mRes.statusText : void 0
+		};
+	} catch (e) {
+		results.mollieTest = {
+			status: 0,
+			ok: false,
+			error: e?.message ?? String(e)
+		};
 	}
-	return await res.json();
-}
+	if (bancontactKey) {
+		const endpoints = ["https://api.payconiq.com/v3/payments", "https://merchant.api.bancontact.net/v3/payments"];
+		const bancontactTests = [];
+		for (const ep of endpoints) try {
+			const bRes = await fetch(ep, {
+				method: "POST",
+				headers: {
+					Authorization: bancontactKey.toLowerCase().startsWith("bearer ") ? bancontactKey : `Bearer ${bancontactKey}`,
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				},
+				body: JSON.stringify({})
+			});
+			const bText = await bRes.text().catch(() => "");
+			bancontactTests.push({
+				endpoint: ep,
+				status: bRes.status,
+				authorized: bRes.status !== 401 && bRes.status !== 403,
+				rawResponse: bText.slice(0, 200)
+			});
+		} catch (e) {
+			bancontactTests.push({
+				endpoint: ep,
+				status: 0,
+				error: e?.message ?? String(e)
+			});
+		}
+		results.bancontactTest = bancontactTests;
+	}
+	return new Response(JSON.stringify(results, null, 2), {
+		status: 200,
+		headers: {
+			"Content-Type": "application/json; charset=utf-8",
+			"Cache-Control": "no-store, max-age=0"
+		}
+	});
+} } } });
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
 var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
@@ -11415,65 +11636,70 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$15.update({
+var IndexRoute = Route$16.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var CheckoutRoute = Route$14.update({
+var CheckoutRoute = Route$15.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var CommanderRoute = Route$13.update({
+var CommanderRoute = Route$14.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var ContactRoute = Route$12.update({
+var ContactRoute = Route$13.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var RecrutementRoute = Route$11.update({
+var RecrutementRoute = Route$12.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var SurMesureRoute = Route$10.update({
+var SurMesureRoute = Route$11.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var AdminStocksRoute = Route$9.update({
+var AdminStocksRoute = Route$10.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
-var ApiBancontactWebhookRoute = Route$8.update({
+var ApiBancontactWebhookRoute = Route$9.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
+});
+var ApiBankStatusRoute = Route$8.update({
+	id: "/api/bank-status",
+	path: "/api/bank-status",
+	getParentRoute: () => Route$17
 });
 var ApiMollieWebhookRoute = Route$7.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
 var ApiOrdersRoute = Route$6.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$16
+	getParentRoute: () => Route$17
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -11484,32 +11710,33 @@ var rootRouteChildren = {
 	SurMesureRoute,
 	AdminStocksRoute,
 	ApiBancontactWebhookRoute,
+	ApiBankStatusRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
 	OrderSuccessRoute,
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$16
+		getParentRoute: () => Route$17
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$16
+		getParentRoute: () => Route$17
 	}),
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$16
+		getParentRoute: () => Route$17
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$16
+		getParentRoute: () => Route$17
 	})
 };
-var routeTree = Route$16._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$17._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

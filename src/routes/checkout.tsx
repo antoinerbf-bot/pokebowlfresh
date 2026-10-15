@@ -21,15 +21,14 @@ function CheckoutPage() {
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [fulfillment, setFulfillment] = useState<FulfillmentMethod>("delivery");
-  const [requestedTime, setRequestedTime] = useState("");
+  const pickupOptions = useMemo(() => buildPickupSlots(), []);
+  const [requestedTime, setRequestedTime] = useState(() => buildPickupSlots()[0] ?? "");
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("online");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const pickupOptions = useMemo(() => buildPickupSlots(), []);
   const normalizedPostal = postalCode.trim().replace(/\s+/g, "");
   const deliveryZone = useMemo(() => getDeliveryZone(postalCode), [postalCode]);
   const deliveryFee = fulfillment === "delivery" && deliveryZone ? (total >= 50 ? 0 : deliveryZone.feeUnder50) : 0;

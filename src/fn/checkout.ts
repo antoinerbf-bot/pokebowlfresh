@@ -13,6 +13,11 @@ import {
   getBancontactProPayment,
 } from "../lib/bancontact-pro.server";
 import {
+  isMollieConfigured,
+  createMolliePayment,
+  getMolliePayment,
+} from "../lib/mollie.server";
+import {
   getOrderFromStore,
   upsertOrder,
 } from "../lib/order-store";
@@ -241,6 +246,35 @@ export const submitCheckout = createServerFn({ method: "POST" })
       };
     }
 
+    if (isMollieConfigured() && !isBancontactProConfigured()) {
+      const webhookUrl = `${data.origin}/api/mollie-webhook`;
+      const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
+
+      const payment = await createMolliePayment({
+        amountValue: total.toFixed(2),
+        description: `Poke N Bowl ${orderId}`,
+        redirectUrl,
+        webhookUrl,
+        metadata: { orderId: order.id },
+      });
+
+      order.molliePaymentId = payment.id;
+      await upsertOrder(order);
+
+      const payUrl = payment._links?.checkout?.href;
+      if (!payUrl) {
+        throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
+      }
+
+      return {
+        type: "online" as const,
+        orderId: order.id,
+        total: order.total,
+        molliePaymentId: payment.id,
+        redirectUrl: payUrl,
+      };
+    }
+
     const webhookUrl = `${data.origin}/api/bancontact-webhook`;
     const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
 
@@ -279,29 +313,48 @@ export const getOrderStatus = createServerFn({ method: "GET" })
     let order = await getOrderFromStore(data.orderId);
 
     if (order?.molliePaymentId && order.status === "pending_payment") {
-      const paymentId = order.molliePaymentId.startsWith("bancontact:")
-        ? order.molliePaymentId.slice("bancontact:".length)
-        : order.molliePaymentId;
-
-      try {
-        const payment = await getBancontactProPayment(paymentId);
-        if (payment.status === "SUCCEEDED") {
-          order = { ...order, status: "paid" };
-          await upsertOrder(order);
-        } else if (
-          payment.status === "CANCELLED" ||
-          payment.status === "EXPIRED" ||
-          payment.status === "FAILED" ||
-          payment.status === "VOIDED"
-        ) {
-          order = {
-            ...order,
-            status: payment.status === "EXPIRED" ? "expired" : "cancelled",
-          };
-          await upsertOrder(order);
+      if (order.molliePaymentId.startsWith("bancontact:")) {
+        const paymentId = order.molliePaymentId.slice("bancontact:".length);
+        try {
+          const payment = await getBancontactProPayment(paymentId);
+          if (payment.status === "SUCCEEDED") {
+            order = { ...order, status: "paid" };
+            await upsertOrder(order);
+          } else if (
+            payment.status === "CANCELLED" ||
+            payment.status === "EXPIRED" ||
+            payment.status === "FAILED" ||
+            payment.status === "VOIDED"
+          ) {
+            order = {
+              ...order,
+              status: payment.status === "EXPIRED" ? "expired" : "cancelled",
+            };
+            await upsertOrder(order);
+          }
+        } catch {
+          // Keep local status if API temporarily unreachable
         }
-      } catch {
-        // Keep local status if API temporarily unreachable
+      } else {
+        try {
+          const payment = await getMolliePayment(order.molliePaymentId);
+          if (payment.status === "paid") {
+            order = { ...order, status: "paid" };
+            await upsertOrder(order);
+          } else if (
+            payment.status === "canceled" ||
+            payment.status === "expired" ||
+            payment.status === "failed"
+          ) {
+            order = {
+              ...order,
+              status: payment.status === "expired" ? "expired" : "cancelled",
+            };
+            await upsertOrder(order);
+          }
+        } catch {
+          // Keep local status if API temporarily unreachable
+        }
       }
     }
 

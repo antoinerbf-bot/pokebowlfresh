@@ -13,8 +13,23 @@
 const PROD_API = "https://merchant.api.bancontact.net/v3";
 const PREPROD_API = "https://merchant.api.preprod.bancontact.net/v3";
 
+import { loadAndGetEnv } from "./env.server";
+
 export function getBancontactProApiKey(): string | undefined {
-  return process.env.BANCONTACT_PRO_API_KEY || process.env.PAYCONIQ_API_KEY;
+  const env = loadAndGetEnv();
+  const candidate =
+    env.BANCONTACT_PRO_API_KEY ||
+    env.PAYCONIQ_API_KEY ||
+    env.BANCONTACT_API_KEY ||
+    env.BANCONTACT_KEY ||
+    env.PAYCONIQ_KEY;
+
+  if (candidate && (candidate.startsWith("live_") || candidate.startsWith("test_"))) {
+    // This is a Mollie key, not Bancontact Pro / Payconiq direct key
+    return undefined;
+  }
+
+  return candidate?.trim();
 }
 
 export function isBancontactProConfigured(): boolean {

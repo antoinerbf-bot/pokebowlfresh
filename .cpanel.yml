@@ -3,7 +3,7 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/puzo3938/pokenbowl.be/
     - /bin/mkdir -p $DEPLOYPATH
-    - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' -exec /bin/rm -rf {} +
+    - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' ! -name '.env*' -exec /bin/rm -rf {} +
     - /bin/cp -R src $DEPLOYPATH
     - /bin/cp -R public $DEPLOYPATH
     - /bin/cp -R .output $DEPLOYPATH
