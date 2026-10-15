@@ -5768,14 +5768,22 @@ function parseEnvFile(filePath) {
 	}
 }
 var loaded = false;
+var candidateFiles = [
+	path.resolve(process.cwd(), ".env"),
+	path.resolve(process.cwd(), ".env.local"),
+	"/home/puzo3938/pokenbowl.be/.env",
+	"/home/puzo3938/.env",
+	"/home/puzo3938/repositories/pokebowlfresh-git/.env",
+	"/home/puzo3938/repositories/pokebowlfresh-cpanel/.env"
+];
+function getCheckedFiles() {
+	return candidateFiles.map((f) => ({
+		file: f,
+		exists: fs.existsSync(f)
+	}));
+}
 function loadAndGetEnv() {
 	if (!loaded) {
-		const candidateFiles = [
-			path.resolve(process.cwd(), ".env"),
-			path.resolve(process.cwd(), ".env.local"),
-			"/home/puzo3938/pokenbowl.be/.env",
-			"/home/puzo3938/.env"
-		];
 		for (const file of candidateFiles) {
 			const parsed = parseEnvFile(file);
 			for (const [k, v] of Object.entries(parsed)) if (!process.env[k]) process.env[k] = v;
@@ -9076,7 +9084,18 @@ var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: a
 		detectedVariables: candidates.map((c) => ({
 			name: c.name,
 			masked: c.maskedValue
-		}))
+		})),
+		checkedEnvFiles: getCheckedFiles(),
+		existingEnvKeys: Object.keys(process.env).filter((k) => !k.startsWith("npm_") && !k.startsWith("NVM_") && !k.startsWith("PASSENGER_") && ![
+			"PATH",
+			"PWD",
+			"SHLVL",
+			"_",
+			"HOME",
+			"USER",
+			"SHELL",
+			"LOGNAME"
+		].includes(k))
 	};
 	if (mollieKey) try {
 		const mRes = await fetch("https://api.mollie.com/v2/methods", { headers: { Authorization: `Bearer ${mollieKey}` } });

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getBancontactProApiKey } from "../../lib/bancontact-pro.server";
 import { getMollieApiKey } from "../../lib/mollie.server";
-import { getAllBankKeyCandidates, loadAndGetEnv } from "../../lib/env.server";
+import { getAllBankKeyCandidates, getCheckedFiles, loadAndGetEnv } from "../../lib/env.server";
 
 export const Route = createFileRoute("/api/bank-status")({
   server: {
@@ -21,6 +21,14 @@ export const Route = createFileRoute("/api/bank-status")({
             name: c.name,
             masked: c.maskedValue,
           })),
+          checkedEnvFiles: getCheckedFiles(),
+          existingEnvKeys: Object.keys(process.env).filter(
+            (k) =>
+              !k.startsWith("npm_") &&
+              !k.startsWith("NVM_") &&
+              !k.startsWith("PASSENGER_") &&
+              !["PATH", "PWD", "SHLVL", "_", "HOME", "USER", "SHELL", "LOGNAME"].includes(k),
+          ),
         };
 
         // Test Mollie if key present

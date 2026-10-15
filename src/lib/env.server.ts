@@ -29,15 +29,24 @@ function parseEnvFile(filePath: string): Record<string, string> {
 
 let loaded = false;
 
+const candidateFiles = [
+  path.resolve(process.cwd(), ".env"),
+  path.resolve(process.cwd(), ".env.local"),
+  "/home/puzo3938/pokenbowl.be/.env",
+  "/home/puzo3938/.env",
+  "/home/puzo3938/repositories/pokebowlfresh-git/.env",
+  "/home/puzo3938/repositories/pokebowlfresh-cpanel/.env",
+];
+
+export function getCheckedFiles(): { file: string; exists: boolean }[] {
+  return candidateFiles.map((f) => ({
+    file: f,
+    exists: fs.existsSync(f),
+  }));
+}
+
 export function loadAndGetEnv(): NodeJS.ProcessEnv {
   if (!loaded) {
-    const candidateFiles = [
-      path.resolve(process.cwd(), ".env"),
-      path.resolve(process.cwd(), ".env.local"),
-      "/home/puzo3938/pokenbowl.be/.env",
-      "/home/puzo3938/.env",
-    ];
-
     for (const file of candidateFiles) {
       const parsed = parseEnvFile(file);
       for (const [k, v] of Object.entries(parsed)) {
