@@ -130,11 +130,11 @@ function SurMesurePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
+    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
       <CartDrawer />
 
       {/* ── Header ─────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#F6F1E9]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8">
           <Link
             to="/"
@@ -151,7 +151,7 @@ function SurMesurePage() {
                   type="button"
                   onClick={() => setLanguage(lang)}
                   className={`rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${
-                    language === lang ? "bg-[#10251f] text-white" : "text-[#7a847e] hover:text-[#17231f]"
+                    language === lang ? "bg-[#2C1D16] text-white" : "text-[#7a847e] hover:text-[#17231f]"
                   }`}
                 >
                   {lang}
@@ -167,7 +167,7 @@ function SurMesurePage() {
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
-              className="relative rounded-full bg-[#10251f] p-3 text-white transition hover:bg-[#1e3d33]"
+              className="relative rounded-full bg-[#2C1D16] p-3 text-white transition hover:bg-[#1e3d33]"
               aria-label={t("cart.title")}
             >
               <ShoppingBag className="h-4 w-4" />
@@ -191,10 +191,10 @@ function SurMesurePage() {
         </Link>
 
         {/* Hero Banner */}
-        <div className="mb-10 overflow-hidden rounded-[28px] bg-[#10251f] p-6 text-white shadow-lift sm:p-10">
+        <div className="mb-10 overflow-hidden rounded-[28px] bg-[#2C1D16] p-6 text-white shadow-lift sm:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#F5EFE6]">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#EADCC9]">
                 <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" /> Fiche officielle restaurant
               </div>
               <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
@@ -224,7 +224,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                  <span className="rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Format
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Taille</h2>
@@ -238,13 +238,13 @@ function SurMesurePage() {
                   className={[
                     "flex flex-col items-start rounded-2xl border-2 p-4 text-left transition-all duration-200",
                     selectedSize === "moyen"
-                      ? "border-[#10251f] bg-[#10251f] text-white shadow-sm"
-                      : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                      ? "border-[#2C1D16] bg-[#2C1D16] text-white shadow-sm"
+                      : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#2C1D16]/40",
                   ].join(" ")}
                 >
                   <div className="flex w-full items-center justify-between">
                     <span className="font-black text-sm uppercase">Moyen</span>
-                    <span className={`text-xs font-black ${selectedSize === "moyen" ? "text-[#F5EFE6]" : "text-[#7a847e]"}`}>
+                    <span className={`text-xs font-black ${selectedSize === "moyen" ? "text-[#EADCC9]" : "text-[#7a847e]"}`}>
                       Inclus (10.00€)
                     </span>
                   </div>
@@ -258,8 +258,8 @@ function SurMesurePage() {
                   className={[
                     "flex flex-col items-start rounded-2xl border-2 p-4 text-left transition-all duration-200",
                     selectedSize === "grand"
-                      ? "border-[#10251f] bg-[#10251f] text-white shadow-sm"
-                      : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                      ? "border-[#2C1D16] bg-[#2C1D16] text-white shadow-sm"
+                      : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#2C1D16]/40",
                   ].join(" ")}
                 >
                   <div className="flex w-full items-center justify-between">
@@ -279,7 +279,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                  <span className="rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 1
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Base</h2>
@@ -298,7 +298,7 @@ function SurMesurePage() {
                         "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left transition-all duration-200",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm"
-                          : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30",
+                          : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30",
                       ].join(" ")}
                     >
                       <span className="text-2xl">{base.emoji}</span>
@@ -321,7 +321,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                  <span className="rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 2
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">
@@ -332,7 +332,7 @@ function SurMesurePage() {
                   className={[
                     "rounded-full px-3 py-1 text-xs font-black transition-colors",
                     selectedMixIns.length >= INCLUDED_MIX_INS
-                      ? "bg-[#10251f] text-[#F5EFE6]"
+                      ? "bg-[#2C1D16] text-[#EADCC9]"
                       : "bg-[#ff705f]/10 text-[#ff705f]",
                   ].join(" ")}
                 >
@@ -369,7 +369,7 @@ function SurMesurePage() {
                         "flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-150",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm scale-[1.01]"
-                          : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30",
+                          : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30",
                       ].join(" ")}
                     >
                       <span className="text-xl">{mixIn.emoji}</span>
@@ -403,7 +403,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                  <span className="rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 3
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Protéine</h2>
@@ -422,7 +422,7 @@ function SurMesurePage() {
                         "flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center transition-all duration-200",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm"
-                          : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30",
+                          : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30",
                       ].join(" ")}
                     >
                       <span className="text-3xl mb-1">{prot.emoji}</span>
@@ -444,7 +444,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                  <span className="rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 4
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Sauce</h2>
@@ -463,7 +463,7 @@ function SurMesurePage() {
                         "flex items-center gap-2 rounded-2xl border-2 p-3 text-left transition-all duration-200",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm"
-                          : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30",
+                          : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30",
                       ].join(" ")}
                     >
                       <span className="text-xl">{sauce.emoji}</span>
@@ -485,14 +485,14 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                  <span className="rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 5
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">
                     Toppings croustillants
                   </h2>
                 </div>
-                <span className="rounded-full bg-[#10251f] px-3 py-1 text-xs font-black text-[#F5EFE6]">
+                <span className="rounded-full bg-[#2C1D16] px-3 py-1 text-xs font-black text-[#EADCC9]">
                   {selectedToppings.length <= 2
                     ? `${selectedToppings.length} / 2 inclus`
                     : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * 0.5).toFixed(2)}€)`}
@@ -514,7 +514,7 @@ function SurMesurePage() {
                         "flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-200",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm"
-                          : "border-[#e8e2d9] bg-white hover:border-[#10251f]/30",
+                          : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30",
                       ].join(" ")}
                     >
                       <span className="text-2xl">{top.emoji}</span>
@@ -546,7 +546,7 @@ function SurMesurePage() {
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#F5EFE6] border border-white/20 shadow">
+                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#2C1D16]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#EADCC9] border border-white/20 shadow">
                   Bol Bambou Débordant 🌿
                 </span>
                 <span className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white text-xs font-black drop-shadow">

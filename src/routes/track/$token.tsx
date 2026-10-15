@@ -52,7 +52,7 @@ function DeliveryTrackPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f7f4ec]">
+      <div className="flex min-h-screen items-center justify-center bg-[#F6F1E9]">
         <Loader2 className="h-8 w-8 animate-spin text-[#ff705f]" />
       </div>
     );
@@ -60,7 +60,7 @@ function DeliveryTrackPage() {
 
   if (error || !order) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f7f4ec] px-4 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F6F1E9] px-4 text-center">
         <AlertCircle className="h-12 w-12 text-[#ff705f]" />
         <h1 className="mt-4 text-2xl font-black text-[#17231f]">Lien invalide</h1>
         <p className="mt-2 text-sm text-[#758079]">{error ?? "Commande introuvable."}</p>
@@ -73,9 +73,9 @@ function DeliveryTrackPage() {
   const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}`;
 
   return (
-    <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
+    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
       {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-[#f7f4ec]/95 px-5 py-3 backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-black/5 bg-[#F6F1E9]/95 px-5 py-3 backdrop-blur-md">
         <div className="mx-auto flex max-w-lg items-center justify-between">
           <BrandLogo size="sm" />
           <span className="font-mono text-xs font-black bg-black/5 px-3 py-1 rounded-full">
@@ -210,7 +210,7 @@ function DeliveryTrackPage() {
             <button
               onClick={() => handleStatusChange("completed")}
               disabled={updating}
-              className="w-full rounded-2xl bg-[#10251f] py-4 text-white font-black text-base shadow-lg hover:bg-black transition flex items-center justify-center gap-2"
+              className="w-full rounded-2xl bg-[#2C1D16] py-4 text-white font-black text-base shadow-lg hover:bg-black transition flex items-center justify-center gap-2"
             >
               <CheckCircle className="h-5 w-5 text-[#22c55e]" />
               {updating ? "Mise à jour..." : "Marquer comme Livrée"}
@@ -218,7 +218,7 @@ function DeliveryTrackPage() {
           )}
 
           {order.status === "completed" && (
-            <div className="rounded-2xl bg-[#10251f] p-4 text-center text-[#F5EFE6] font-black text-sm">
+            <div className="rounded-2xl bg-[#2C1D16] p-4 text-center text-[#EADCC9] font-black text-sm">
               ✓ Commande terminée et livrée
             </div>
           )}

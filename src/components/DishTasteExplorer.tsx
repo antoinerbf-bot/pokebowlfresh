@@ -25,7 +25,7 @@ const INGREDIENTS_SHOWCASE = [
     subtitle: "Sélectionné à maturité parfaite",
     desc: "Un avocat crémeux tranché minute en éventail ou écrasé en guacamole maison. Aucun avocat dur ou sans saveur.",
     badge: "Maturité Contrôlée",
-    badgeColor: "#F5EFE6",
+    badgeColor: "#EADCC9",
     image: bowlSweetChicken,
     linkDish: "sweet-chicken",
     stats: "Vitamines E & Bons Lipides",
@@ -47,7 +47,7 @@ const INGREDIENTS_SHOWCASE = [
     subtitle: "Saisis à haute température",
     desc: "De généreux scampis bien dorés avec une subtile note fumée, combinés aux jalapeños frais et à notre spicy mayo maison.",
     badge: "Saisi Minute",
-    badgeColor: "#F5EFE6",
+    badgeColor: "#EADCC9",
     image: bowlScampis,
     linkDish: "scampis-royaux",
     stats: "Protéines maigres & Saveur grill",
@@ -62,11 +62,11 @@ export function DishTasteExplorer() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f]/10 px-3.5 py-1 text-xs font-black uppercase tracking-[0.2em] text-[#10251f]">
-              <Sparkles className="h-3.5 w-3.5 text-[#10251f]" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16]/10 px-3.5 py-1 text-xs font-black uppercase tracking-[0.2em] text-[#2C1D16]">
+              <Sparkles className="h-3.5 w-3.5 text-[#2C1D16]" />
               <span>Pourquoi c'est si addictif ?</span>
             </div>
-            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#10251f] tracking-tight">
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-black text-[#2C1D16] tracking-tight">
               L'exigence de la fraîcheur. <span className="text-[#ff705f]">Zéro compromis.</span>
             </h2>
           </div>
@@ -94,7 +94,7 @@ export function DishTasteExplorer() {
                   />
                   <div className="absolute top-3 left-3 z-10">
                     <span
-                      className="rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-wider text-[#10251f] shadow-md backdrop-blur-md"
+                      className="rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-wider text-[#2C1D16] shadow-md backdrop-blur-md"
                       style={{ backgroundColor: item.badgeColor }}
                     >
                       {item.badge}
@@ -107,7 +107,7 @@ export function DishTasteExplorer() {
                   <span className="text-[10px] font-black uppercase tracking-widest text-[#7d8b83]">
                     {item.subtitle}
                   </span>
-                  <h3 className="mt-1 text-lg font-black text-[#10251f] leading-snug">
+                  <h3 className="mt-1 text-lg font-black text-[#2C1D16] leading-snug">
                     {item.title}
                   </h3>
                   <p className="mt-2 text-xs leading-relaxed text-[#64746d]">
@@ -118,7 +118,7 @@ export function DishTasteExplorer() {
 
               {/* Action */}
               <div className="mt-5 pt-3 border-t border-black/5 flex items-center justify-between">
-                <span className="text-[11px] font-extrabold text-[#10251f]">
+                <span className="text-[11px] font-extrabold text-[#2C1D16]">
                   {item.stats}
                 </span>
                 <Link

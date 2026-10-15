@@ -98,7 +98,7 @@ function AdminStocksPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
+    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
       <header className="border-b border-black/5 bg-white">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-4">
           <div className="flex items-center gap-2">
@@ -108,7 +108,7 @@ function AdminStocksPage() {
           <button
             type="button"
             onClick={() => void load()}
-            className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3 py-2 text-xs font-bold text-white"
+            className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-3 py-2 text-xs font-bold text-white"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
             Actualiser
@@ -131,7 +131,7 @@ function AdminStocksPage() {
                 onChange={(e) => setPin(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && unlock()}
                 placeholder="Code admin"
-                className="flex-1 rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+                className="flex-1 rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
               />
               <button
                 type="button"
@@ -151,7 +151,7 @@ function AdminStocksPage() {
                   type="button"
                   onClick={() => setFilter(f)}
                   className={`rounded-full px-3 py-1.5 text-xs font-black uppercase tracking-wide ${
-                    filter === f ? "bg-[#10251f] text-white" : "bg-white text-[#758079]"
+                    filter === f ? "bg-[#2C1D16] text-white" : "bg-white text-[#758079]"
                   }`}
                 >
                   {f === "all" ? "Tout" : groupLabel[f]}
@@ -205,7 +205,7 @@ function AdminStocksPage() {
                       onClick={() => void toggle(row.id, !available)}
                       className={`shrink-0 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide transition ${
                         available
-                          ? "bg-[#10251f] text-[#F5EFE6]"
+                          ? "bg-[#2C1D16] text-[#EADCC9]"
                           : "bg-[#ff705f]/15 text-[#ff705f]"
                       }`}
                     >

@@ -35,9 +35,9 @@ export function BrandLogo({
 
   return (
     <div
-      className={`inline-flex flex-col items-center justify-center rounded-2xl bg-[#10251f] shadow-md border border-white/15 transition duration-200 select-none ${containerSizes} ${className}`}
+      className={`inline-flex flex-col items-center justify-center rounded-2xl bg-[#2C1D16] shadow-md border border-white/15 transition duration-200 select-none ${containerSizes} ${className}`}
       style={{
-        boxShadow: "0 4px 20px -2px rgba(16, 37, 31, 0.45)",
+        boxShadow: "0 4px 20px -2px rgba(44, 29, 22, 0.45)",
       }}
     >
       <div className="flex items-center justify-center gap-2 sm:gap-2.5 leading-none">
@@ -58,7 +58,7 @@ export function BrandLogo({
 
       {!compact && (
         <span
-          className={`font-black uppercase text-[#F5EFE6] text-center w-full leading-none ${subtextSizes}`}
+          className={`font-black uppercase text-[#EADCC9] text-center w-full leading-none ${subtextSizes}`}
         >
           SUR MESURE
         </span>

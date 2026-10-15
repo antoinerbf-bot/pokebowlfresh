@@ -46,12 +46,12 @@ export function MobileAppStickyBar() {
           transition={{ type: "spring", damping: 25, stiffness: 280 }}
           className="fixed bottom-3 inset-x-3 z-40 md:hidden pointer-events-auto"
         >
-          <div className="rounded-[26px] bg-[#10251f]/95 backdrop-blur-xl border border-white/20 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] flex items-center justify-between gap-2.5 text-white">
+          <div className="rounded-[26px] bg-[#2C1D16]/95 backdrop-blur-xl border border-white/20 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] flex items-center justify-between gap-2.5 text-white">
             
             {/* Raccourci rapide Atelier Sur-Mesure */}
             <a
               href="#composer"
-              className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] border border-white/15 active:scale-95 transition shrink-0"
+              className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] border border-white/15 active:scale-95 transition shrink-0"
             >
               <Sparkles className="h-3 w-3 stroke-[3]" />
               <span>Sur-mesure</span>
@@ -61,10 +61,10 @@ export function MobileAppStickyBar() {
             <button
               type="button"
               onClick={handleAction}
-              className="flex-1 flex items-center justify-between rounded-full bg-[#F5EFE6] px-4 py-2.5 text-[#10251f] shadow-lg transition active:scale-95 min-w-0 hover:bg-white"
+              className="flex-1 flex items-center justify-between rounded-full bg-[#EADCC9] px-4 py-2.5 text-[#2C1D16] shadow-lg transition active:scale-95 min-w-0 hover:bg-white"
             >
               <div className="flex items-center gap-2 truncate">
-                <div className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white">
+                <div className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#2C1D16] text-white">
                   <ShoppingBag className="h-3.5 w-3.5" />
                   {totalItemCount > 0 && (
                     <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white">

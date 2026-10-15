@@ -164,7 +164,7 @@ export function InteractiveBowlBuilder() {
   return (
     <div className="mx-auto max-w-[1340px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       {/* ── Cadre Général Clair & Lumineux (Harmonisé avec le fond du site) ── */}
-      <div className="relative overflow-hidden rounded-[36px] bg-white border border-[#e8dfcf] shadow-lift p-6 sm:p-10 lg:p-12">
+      <div className="relative overflow-hidden rounded-[36px] bg-white border border-[#E2D6C5] shadow-lift p-6 sm:p-10 lg:p-12">
         {/* Décoration douce d'arrière-plan */}
         <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-black/5 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl" />
@@ -172,11 +172,11 @@ export function InteractiveBowlBuilder() {
         {/* ── Entête du Module Sur-Mesure ── */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-black/5">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#F5EFE6] shadow-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-sm">
               <ChefHat className="h-3.5 w-3.5" />
               <span>Atelier Créatif · Bol en Bambou Naturel</span>
             </div>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]">
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
               Composez votre bowl <span className="text-[#ff705f]">sur-mesure.</span>
             </h2>
             <p className="mt-2 text-sm sm:text-base text-[#5a6760] font-medium leading-relaxed">
@@ -185,11 +185,11 @@ export function InteractiveBowlBuilder() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-[#faf8f4] border border-[#eee9de] p-3 px-5 text-right">
+            <div className="rounded-2xl bg-[#F3ECE1] border border-[#E2D6C5] p-3 px-5 text-right">
               <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#7d8b83]">
                 Prix calculé en direct
               </span>
-              <span className="text-2xl sm:text-3xl font-black text-[#10251f]">
+              <span className="text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 {totalPrice.toFixed(2)} €
               </span>
             </div>
@@ -214,19 +214,19 @@ export function InteractiveBowlBuilder() {
                 onClick={() => setActiveStep(s.step)}
                 className={`relative rounded-2xl p-3.5 text-left transition duration-200 border ${
                   isCurrent
-                    ? "bg-[#10251f] text-white border-[#10251f] shadow-md scale-[1.02]"
+                    ? "bg-[#2C1D16] text-white border-[#2C1D16] shadow-md scale-[1.02]"
                     : isDone
-                    ? "bg-[#f7f4ec] text-[#10251f] border-[#e8dfcf] hover:border-black/20"
+                    ? "bg-[#F3ECE1] text-[#2C1D16] border-[#E2D6C5] hover:border-black/20"
                     : "bg-white text-[#7d8b83] border-black/5 hover:border-black/15"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#F5EFE6]" : isDone ? "text-[#ff705f]" : "text-[#7d8b83]"}`}>
+                  <span className={`text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#EADCC9]" : isDone ? "text-[#ff705f]" : "text-[#7d8b83]"}`}>
                     {s.title}
                   </span>
                   {isDone && <CheckCircle2 className="h-4 w-4 text-[#ff705f]" />}
                 </div>
-                <span className={`mt-1 block text-xs font-bold truncate ${isCurrent ? "text-white/80" : isDone ? "text-[#10251f]" : "text-[#7d8b83]/70"}`}>
+                <span className={`mt-1 block text-xs font-bold truncate ${isCurrent ? "text-white/80" : isDone ? "text-[#2C1D16]" : "text-[#7d8b83]/70"}`}>
                   {s.detail}
                 </span>
               </button>
@@ -238,7 +238,7 @@ export function InteractiveBowlBuilder() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-start">
           
           {/* COLONNE GAUCHE : SÉLECTION DES INGRÉDIENTS */}
-          <div className="rounded-[30px] bg-[#faf8f4] border border-[#eee9de] p-6 sm:p-8">
+          <div className="rounded-[30px] bg-[#F3ECE1] border border-[#E2D6C5] p-6 sm:p-8">
             <div className="min-h-[340px]">
               
               {/* ÉTAPE 1 : FORMAT & BASE */}
@@ -251,7 +251,7 @@ export function InteractiveBowlBuilder() {
                 >
                   {/* Choix de la taille */}
                   <div>
-                    <h3 className="text-base font-black text-[#10251f] flex items-center gap-2 mb-3">
+                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-3">
                       <span>📏</span> Choisissez la taille de votre bol
                     </h3>
                     <div className="grid grid-cols-2 gap-3">
@@ -260,13 +260,13 @@ export function InteractiveBowlBuilder() {
                         onClick={() => setSize("moyen")}
                         className={`flex flex-col rounded-2xl p-4 border text-left transition ${
                           size === "moyen"
-                            ? "bg-white border-[#10251f] shadow-md ring-2 ring-[#10251f]/10"
+                            ? "bg-white border-[#2C1D16] shadow-md ring-2 ring-[#2C1D16]/10"
                             : "bg-white/60 border-black/10 hover:bg-white"
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-black text-sm text-[#10251f]">Format Moyen</span>
-                          <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-0.5 text-xs font-black text-[#10251f]">
+                          <span className="font-black text-sm text-[#2C1D16]">Format Moyen</span>
+                          <span className="rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2.5 py-0.5 text-xs font-black text-[#2C1D16]">
                             10.00 €
                           </span>
                         </div>
@@ -280,13 +280,13 @@ export function InteractiveBowlBuilder() {
                         onClick={() => setSize("grand")}
                         className={`flex flex-col rounded-2xl p-4 border text-left transition ${
                           size === "grand"
-                            ? "bg-white border-[#10251f] shadow-md ring-2 ring-[#10251f]/10"
+                            ? "bg-white border-[#2C1D16] shadow-md ring-2 ring-[#2C1D16]/10"
                             : "bg-white/60 border-black/10 hover:bg-white"
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-black text-sm text-[#10251f]">Grand Format</span>
-                          <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6]">
+                          <span className="font-black text-sm text-[#2C1D16]">Grand Format</span>
+                          <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-xs font-black text-[#EADCC9]">
                             13.00 €
                           </span>
                         </div>
@@ -299,7 +299,7 @@ export function InteractiveBowlBuilder() {
 
                   {/* Choix de la base */}
                   <div>
-                    <h3 className="text-base font-black text-[#10251f] flex items-center gap-2 mb-3">
+                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-3">
                       <span>🍚</span> Choisissez votre base (incluse)
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -316,7 +316,7 @@ export function InteractiveBowlBuilder() {
                         >
                           <span className="text-2xl">{b.emoji}</span>
                           <div>
-                            <span className="block text-xs font-black text-[#10251f]">{b.name}</span>
+                            <span className="block text-xs font-black text-[#2C1D16]">{b.name}</span>
                             <span className="text-[10px] text-[#7d8b83] font-medium">{b.desc}</span>
                           </div>
                         </button>
@@ -334,7 +334,7 @@ export function InteractiveBowlBuilder() {
                   exit={{ opacity: 0 }}
                   className="space-y-4"
                 >
-                  <h3 className="text-base font-black text-[#10251f] flex items-center gap-2 mb-2">
+                  <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-2">
                     <span>🍗</span> Choisissez votre protéine principale
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -352,7 +352,7 @@ export function InteractiveBowlBuilder() {
                         <span className="text-3xl">{p.emoji}</span>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
-                            <span className="font-black text-xs text-[#10251f]">{p.name}</span>
+                            <span className="font-black text-xs text-[#2C1D16]">{p.name}</span>
                             {p.extra > 0 && (
                               <span className="text-[10px] font-black text-[#ff705f] bg-[#ff705f]/10 px-2 py-0.5 rounded-full">
                                 +{p.extra.toFixed(2)} €
@@ -376,7 +376,7 @@ export function InteractiveBowlBuilder() {
                   className="space-y-4"
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base font-black text-[#10251f] flex items-center gap-2">
+                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2">
                       <span>🥑</span> Choisissez vos mix-ins frais (5 inclus)
                     </h3>
                     <span className="text-[11px] font-bold text-[#ff705f]">
@@ -396,7 +396,7 @@ export function InteractiveBowlBuilder() {
                           onClick={() => toggleMixin(m.id)}
                           className={`flex items-center gap-2 rounded-2xl p-3 border text-left transition ${
                             isSelected
-                              ? "bg-white border-[#10251f] shadow-sm ring-2 ring-[#10251f]/10 font-black text-[#10251f]"
+                              ? "bg-white border-[#2C1D16] shadow-sm ring-2 ring-[#2C1D16]/10 font-black text-[#2C1D16]"
                               : "bg-white/60 border-black/5 hover:bg-white text-[#5a6760] font-medium"
                           }`}
                         >
@@ -419,7 +419,7 @@ export function InteractiveBowlBuilder() {
                   className="space-y-6"
                 >
                   <div>
-                    <h3 className="text-base font-black text-[#10251f] flex items-center gap-2 mb-2">
+                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-2">
                       <span>🍶</span> Choisissez votre sauce signature (incluse)
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -436,7 +436,7 @@ export function InteractiveBowlBuilder() {
                         >
                           <span className="text-2xl">{s.emoji}</span>
                           <div>
-                            <span className="block text-xs font-black text-[#10251f]">{s.name}</span>
+                            <span className="block text-xs font-black text-[#2C1D16]">{s.name}</span>
                             <span className="text-[10px] text-[#7d8b83] font-medium">{s.desc}</span>
                           </div>
                         </button>
@@ -446,7 +446,7 @@ export function InteractiveBowlBuilder() {
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-base font-black text-[#10251f] flex items-center gap-2">
+                      <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2">
                         <span>🧅</span> Choisissez vos toppings croustillants (1 inclus · illimités)
                       </h3>
                       {selectedToppings.length > 0 && (
@@ -474,7 +474,7 @@ export function InteractiveBowlBuilder() {
                           >
                             <span className="text-xl">{tp.emoji}</span>
                             <div className="flex-1 min-w-0">
-                              <span className="block text-xs font-black text-[#10251f] truncate">{tp.name}</span>
+                              <span className="block text-xs font-black text-[#2C1D16] truncate">{tp.name}</span>
                               <span className="text-[9px] text-[#7d8b83] block truncate">{tp.desc}</span>
                             </div>
                             {isSelected && <Check className="h-4 w-4 text-[#ff705f] shrink-0" />}
@@ -496,7 +496,7 @@ export function InteractiveBowlBuilder() {
                 className={`text-xs font-black px-4 py-2 rounded-full transition ${
                   activeStep === 1
                     ? "opacity-30 cursor-not-allowed text-[#7d8b83]"
-                    : "text-[#10251f] hover:bg-black/5"
+                    : "text-[#2C1D16] hover:bg-black/5"
                 }`}
               >
                 ← Étape précédente
@@ -505,7 +505,7 @@ export function InteractiveBowlBuilder() {
               <button
                 type="button"
                 onClick={() => setActiveStep((curr) => (curr < 4 ? curr + 1 : 1))}
-                className="text-xs font-black px-4 py-2 rounded-full bg-[#10251f] text-white hover:bg-[#ff705f] transition"
+                className="text-xs font-black px-4 py-2 rounded-full bg-[#2C1D16] text-white hover:bg-[#ff705f] transition"
               >
                 {activeStep < 4 ? `Étape suivante (${activeStep + 1}/4) →` : "Revenir au début"}
               </button>
@@ -513,13 +513,13 @@ export function InteractiveBowlBuilder() {
           </div>
 
           {/* COLONNE DROITE : TICKET DE CUISINE & VISUALISATION EN DIRECT */}
-          <div className="rounded-[30px] bg-white border border-[#e8dfcf] p-6 sm:p-7 shadow-card flex flex-col justify-between">
+          <div className="rounded-[30px] bg-white border border-[#E2D6C5] p-6 sm:p-7 shadow-card flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-black/5">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">🥣</span>
                   <div>
-                    <h4 className="text-base font-black text-[#10251f]">Votre Recette en Direct</h4>
+                    <h4 className="text-base font-black text-[#2C1D16]">Votre Recette en Direct</h4>
                     <span className="text-[10px] font-bold text-[#059669]">
                       Bol en bambou naturel · Format {size === "grand" ? "Grand" : "Moyen"}
                     </span>
@@ -530,14 +530,14 @@ export function InteractiveBowlBuilder() {
                   <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#7d8b83]">
                     Total Recette
                   </span>
-                  <span className="text-2xl font-black text-[#10251f]">
+                  <span className="text-2xl font-black text-[#2C1D16]">
                     {totalPrice.toFixed(2)} €
                   </span>
                 </div>
               </div>
 
               {/* Aperçu visuel gourmand et appétissant du bol en bambou */}
-              <div className="relative my-4 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-[#faf8f4] shadow-md group">
+              <div className="relative my-4 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-[#F3ECE1] shadow-md group">
                 <img
                   src={activeBowlImage}
                   alt="Bol composé Poke N Bowl"
@@ -546,7 +546,7 @@ export function InteractiveBowlBuilder() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
                 
                 {/* Badge bol bambou */}
-                <div className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] border border-white/20 shadow">
+                <div className="absolute top-2.5 left-2.5 rounded-full bg-[#2C1D16]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] border border-white/20 shadow">
                   Bol Bambou Débordant 🌿
                 </div>
 
@@ -566,14 +566,14 @@ export function InteractiveBowlBuilder() {
               <div className="mt-5 space-y-3">
                 <div className="flex items-start justify-between text-xs">
                   <span className="font-bold text-[#7d8b83]">Base choisie :</span>
-                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                  <span className="font-black text-[#2C1D16] flex items-center gap-1.5">
                     <span>{base.emoji}</span> {base.name}
                   </span>
                 </div>
 
                 <div className="flex items-start justify-between text-xs">
                   <span className="font-bold text-[#7d8b83]">Protéine :</span>
-                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                  <span className="font-black text-[#2C1D16] flex items-center gap-1.5">
                     <span>{proteine.emoji}</span> {proteine.name}
                   </span>
                 </div>
@@ -593,7 +593,7 @@ export function InteractiveBowlBuilder() {
                       return (
                         <span
                           key={id}
-                          className="rounded-lg bg-[#f7f4ec] border border-[#e8dfcf] px-2 py-0.5 text-[10px] font-bold text-[#10251f]"
+                          className="rounded-lg bg-[#F3ECE1] border border-[#E2D6C5] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
                         >
                           {m?.emoji} {m?.name}
                         </span>
@@ -604,7 +604,7 @@ export function InteractiveBowlBuilder() {
 
                 <div className="flex items-start justify-between text-xs pt-1">
                   <span className="font-bold text-[#7d8b83]">Sauce :</span>
-                  <span className="font-black text-[#10251f] flex items-center gap-1.5">
+                  <span className="font-black text-[#2C1D16] flex items-center gap-1.5">
                     <span>{sauce.emoji}</span> {sauce.name}
                   </span>
                 </div>
@@ -624,7 +624,7 @@ export function InteractiveBowlBuilder() {
                       return (
                         <span
                           key={id}
-                          className="rounded-lg bg-[#f7f4ec] border border-[#e8dfcf] px-2 py-0.5 text-[10px] font-bold text-[#10251f]"
+                          className="rounded-lg bg-[#F3ECE1] border border-[#E2D6C5] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
                         >
                           {tp?.emoji} {tp?.name}
                         </span>
@@ -635,7 +635,7 @@ export function InteractiveBowlBuilder() {
               </div>
 
               {/* Tag Authenticité */}
-              <div className="mt-5 rounded-2xl bg-[#faf8f4] p-3 text-[11px] text-[#5a6760] flex items-center gap-2">
+              <div className="mt-5 rounded-2xl bg-[#F3ECE1] p-3 text-[11px] text-[#5a6760] flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-[#ff705f] shrink-0" />
                 <span>Bol en bambou véritable, 100% recyclable & réutilisable.</span>
               </div>
@@ -647,7 +647,7 @@ export function InteractiveBowlBuilder() {
                 type="button"
                 onClick={handleAddToCart}
                 className={`btn-primary w-full py-4 text-sm font-black flex items-center justify-center gap-2 shadow-lift transition duration-200 ${
-                  added ? "bg-[#10251f]" : ""
+                  added ? "bg-[#2C1D16]" : ""
                 }`}
               >
                 {added ? (

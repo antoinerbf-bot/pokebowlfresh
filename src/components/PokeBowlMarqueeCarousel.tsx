@@ -62,11 +62,11 @@ export function PokeBowlMarqueeCarousel() {
       {/* Top Header with title & navigation controls */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between px-1 mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#10251f] border border-black/5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16]/5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#2C1D16] border border-black/5">
             <span className="h-1.5 w-1.5 rounded-full bg-[#ff705f] animate-pulse" />
             ✦ Le Défilé de nos Bowls Signatures
           </div>
-          <h3 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-[#10251f]">
+          <h3 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-[#2C1D16]">
             Découvrez tous nos Poké Bowls en un coup d'œil
           </h3>
           <p className="mt-1 text-xs sm:text-sm text-[#68756f]">
@@ -81,7 +81,7 @@ export function PokeBowlMarqueeCarousel() {
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
             aria-label="Faire défiler vers la gauche"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -90,7 +90,7 @@ export function PokeBowlMarqueeCarousel() {
             onClick={() => scroll("right")}
             disabled={!canScrollRight}
             aria-label="Faire défiler vers la droite"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
@@ -128,8 +128,8 @@ export function PokeBowlMarqueeCarousel() {
                       isCrousty
                         ? "bg-[#8b5510] text-white"
                         : bowl.tagColor === "bestseller"
-                        ? "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]"
-                        : "bg-white/95 text-[#10251f]"
+                        ? "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]"
+                        : "bg-white/95 text-[#2C1D16]"
                     }`}
                   >
                     {isCrousty && <Flame className="h-3 w-3" />}
@@ -139,13 +139,13 @@ export function PokeBowlMarqueeCarousel() {
 
                 {/* Price Pill */}
                 <div className="absolute bottom-3.5 right-3.5">
-                  <span className="rounded-full bg-[#10251f] px-3.5 py-1.5 text-xs font-black text-white shadow-md border border-white/20">
+                  <span className="rounded-full bg-[#2C1D16] px-3.5 py-1.5 text-xs font-black text-white shadow-md border border-white/20">
                     {bowl.price.toFixed(2)} €
                   </span>
                 </div>
 
                 {isCrousty && (
-                  <span className="absolute bottom-3.5 left-3.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-[#10251f] shadow-md">
+                  <span className="absolute bottom-3.5 left-3.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-[#2C1D16] shadow-md">
                     Boisson incluse 🥤
                   </span>
                 )}
@@ -163,7 +163,7 @@ export function PokeBowlMarqueeCarousel() {
                     </span>
                   </div>
 
-                  <h4 className="mt-1 text-lg font-extrabold text-[#10251f] group-hover:text-[#ff705f] transition">
+                  <h4 className="mt-1 text-lg font-extrabold text-[#2C1D16] group-hover:text-[#ff705f] transition">
                     {bowl.name}
                   </h4>
 
@@ -176,7 +176,7 @@ export function PokeBowlMarqueeCarousel() {
                     {bowl.ingredients.slice(0, 4).map((ing, i) => (
                       <span
                         key={i}
-                        className="rounded-md bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-semibold text-[#10251f]/80"
+                        className="rounded-md bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-semibold text-[#2C1D16]/80"
                       >
                         {ing.emoji} {ing.name}
                       </span>
@@ -205,7 +205,7 @@ export function PokeBowlMarqueeCarousel() {
                       })
                     }
                     title="Ajouter direct au panier"
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F5EFE6] border border-[#e8ded0] text-[#10251f] shadow-sm transition hover:bg-[#ff705f] hover:text-white hover:border-[#ff705f] hover:scale-105 active:scale-95 font-black"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EADCC9] border border-[#D9C5AD] text-[#2C1D16] shadow-sm transition hover:bg-[#8D522A] hover:text-white hover:border-[#ff705f] hover:scale-105 active:scale-95 font-black"
                   >
                     <Plus className="h-5 w-5 stroke-[2.5]" />
                   </button>
@@ -213,7 +213,7 @@ export function PokeBowlMarqueeCarousel() {
                   <Link
                     to="/product/$productId"
                     params={{ productId: bowl.id }}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#10251f] py-3 px-3 text-[11px] font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-[1.02] active:scale-[0.98]"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#2C1D16] py-3 px-3 text-[11px] font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#8D522A] hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <span>Personnaliser</span>
                     <ArrowRight className="h-3 w-3" />

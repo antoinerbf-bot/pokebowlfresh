@@ -36,9 +36,9 @@ function ContactPage() {
           <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-soft flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F5EFE6] border border-[#e8ded0] text-black font-black">📍</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EADCC9] border border-[#D9C5AD] text-black font-black">📍</span>
                 <div>
-                  <h2 className="text-2xl font-black text-[#10251f]">Poké & Bowl Visé</h2>
+                  <h2 className="text-2xl font-black text-[#2C1D16]">Poké & Bowl Visé</h2>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Centre-ville Visé · Av. du Pont</p>
                 </div>
               </div>
@@ -51,7 +51,7 @@ function ContactPage() {
                 >
                   <MapPin className="h-5 w-5 shrink-0 text-[#ff705f] mt-0.5" />
                   <div>
-                    <p className="font-bold text-[#10251f]">Avenue du Pont 12</p>
+                    <p className="font-bold text-[#2C1D16]">Avenue du Pont 12</p>
                     <p className="text-sm text-muted-foreground">4600 Visé, Belgique</p>
                   </div>
                 </a>
@@ -62,14 +62,14 @@ function ContactPage() {
                   <PhoneCall className="h-5 w-5 shrink-0 text-[#ff705f]" />
                   <div>
                     <p className="text-xs text-muted-foreground font-bold">Téléphone direct</p>
-                    <span className="font-bold text-base text-[#10251f]">0491 28 14 56 (+32)</span>
+                    <span className="font-bold text-base text-[#2C1D16]">0491 28 14 56 (+32)</span>
                   </div>
                 </a>
               </div>
             </div>
 
             <div className="mt-6 pt-6 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
-              <span className="font-bold text-[#10251f]">🛵 Livraison & À emporter</span>
+              <span className="font-bold text-[#2C1D16]">🛵 Livraison & À emporter</span>
               <a href="https://instagram.com/POKE_NBOWL" target="_blank" rel="noreferrer" className="text-[#ff705f] font-black hover:underline">
                 @POKE_NBOWL
               </a>

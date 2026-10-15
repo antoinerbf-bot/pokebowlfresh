@@ -23,7 +23,7 @@ const CATEGORIES: CategoryCard[] = [
     id: "pokes",
     title: "Pokés & Chirashis",
     badge: "Dès 10,00 €",
-    badgeColor: "bg-[#10251f] text-[#F5EFE6]",
+    badgeColor: "bg-[#2C1D16] text-[#EADCC9]",
     image: bowlSaumon,
     targetId: "carte",
     desc: "Saumon atlantique minute, poulet doré & scampis royaux",
@@ -41,7 +41,7 @@ const CATEGORIES: CategoryCard[] = [
     id: "composer",
     title: "Atelier Sur-Mesure",
     badge: "Création Libre",
-    badgeColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+    badgeColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
     image: bowlSweet,
     targetId: "composer",
     desc: "Composez votre recette de A à Z avec 5 mix-ins frais",
@@ -86,21 +86,21 @@ export function PokawaCategoriesCarousel() {
   return (
     <section
       aria-label="Catégories gourmandes Poke N Bowl Visé"
-      className="py-14 sm:py-20 lg:py-24 bg-[#faf8f4] border-b border-black/5 overflow-hidden"
+      className="py-14 sm:py-20 lg:py-24 bg-[#F5EFEB] border-b border-[#E2D6C5] overflow-hidden"
     >
       <div className="mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8">
         {/* En-tête style Pokawa : "Vivez sainement, soyez gourmands" */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f] border border-black/5">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#2C1D16] border border-[#D9C5AD]">
               <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
               Fraîcheur & Gourmandise à Visé
             </div>
-            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]">
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
               Vivez sainement, <br className="hidden sm:inline" />
               <span className="text-[#ff705f]">soyez gourmands.</span>
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-[#5a6760] font-medium max-w-xl">
+            <p className="mt-2 text-xs sm:text-sm text-[#766358] font-medium max-w-xl">
               Chaque univers est préparé minute avec des produits rigoureusement sélectionnés. Glissez pour explorer :
             </p>
           </div>
@@ -111,7 +111,7 @@ export function PokawaCategoriesCarousel() {
               type="button"
               onClick={() => handleScroll("left")}
               aria-label="Catégories précédentes"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] hover:bg-[#10251f] hover:text-white transition active:scale-95"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FAF7F2] border border-[#E2D6C5] shadow-sm text-[#2C1D16] hover:bg-[#2C1D16] hover:text-[#FAF7F2] transition active:scale-95"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
@@ -119,7 +119,7 @@ export function PokawaCategoriesCarousel() {
               type="button"
               onClick={() => handleScroll("right")}
               aria-label="Catégories suivantes"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] hover:bg-[#10251f] hover:text-white transition active:scale-95"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FAF7F2] border border-[#E2D6C5] shadow-sm text-[#2C1D16] hover:bg-[#2C1D16] hover:text-[#FAF7F2] transition active:scale-95"
             >
               <ChevronRight className="h-5 w-5" />
             </button>
@@ -140,7 +140,7 @@ export function PokawaCategoriesCarousel() {
               className="group flex-shrink-0 w-[270px] sm:w-[290px] snap-start cursor-pointer select-none"
             >
               {/* Carte visuelle arrondie 30px (Style Pokawa Loop Carousel) */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-[30px] bg-[#e9e5dc] shadow-card transition-all duration-300 group-hover:shadow-lift border border-black/5">
+              <div className="relative aspect-square w-full overflow-hidden rounded-[30px] bg-[#e9e5dc] shadow-card transition-all duration-300 group-hover:shadow-lift border border-[#E2D6C5]">
                 <img
                   src={cat.image}
                   alt={cat.title}
@@ -167,10 +167,10 @@ export function PokawaCategoriesCarousel() {
 
               {/* Titre et flèche sous l'image (Style exact Pokawa Elementor) */}
               <div className="mt-4 flex items-center justify-between px-1">
-                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-[#10251f] group-hover:text-[#ff705f] transition">
+                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-[#2C1D16] group-hover:text-[#ff705f] transition">
                   {cat.title}
                 </h3>
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] transition duration-300 group-hover:bg-[#10251f] group-hover:text-white group-hover:translate-x-1">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FAF7F2] border border-[#E2D6C5] shadow-sm text-[#2C1D16] transition duration-300 group-hover:bg-[#2C1D16] group-hover:text-[#FAF7F2] group-hover:translate-x-1">
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </div>

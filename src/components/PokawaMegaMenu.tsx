@@ -172,12 +172,12 @@ export function PokawaMegaMenu({
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[94vw] max-w-[1100px] z-50 pointer-events-auto"
         >
-          <div className="overflow-hidden rounded-[32px] bg-[#fffaf2]/95 backdrop-blur-2xl border border-white/70 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] text-[#10251f]">
+          <div className="overflow-hidden rounded-[32px] bg-[#fffaf2]/95 backdrop-blur-2xl border border-white/70 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] text-[#2C1D16]">
             {/* Top Bar Pokawa */}
             <div className="flex items-center justify-between border-b border-black/5 bg-[#faf4ea] px-6 py-3 text-xs">
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 rounded-full bg-[#10b981] animate-pulse" />
-                <span className="font-black uppercase tracking-wider text-[#10251f]">
+                <span className="font-black uppercase tracking-wider text-[#2C1D16]">
                   La Carte Pokawa-Style · Poke N Bowl Visé
                 </span>
               </div>
@@ -218,8 +218,8 @@ export function PokawaMegaMenu({
                       }}
                       className={`group w-full flex items-center justify-between rounded-2xl p-3 text-left transition duration-200 ${
                         isActive
-                          ? "bg-[#10251f] text-white shadow-md scale-[1.02]"
-                          : "hover:bg-black/5 text-[#10251f]"
+                          ? "bg-[#2C1D16] text-white shadow-md scale-[1.02]"
+                          : "hover:bg-black/5 text-[#2C1D16]"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export function PokawaMegaMenu({
                       <span
                         className={`rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${
                           isActive
-                            ? "bg-[#10251f] text-[#F5EFE6]"
+                            ? "bg-[#2C1D16] text-[#EADCC9]"
                             : "bg-black/5 text-[#7a847e]"
                         }`}
                       >
@@ -260,7 +260,7 @@ export function PokawaMegaMenu({
                   <a
                     href="#composer"
                     onClick={onClose}
-                    className="flex items-center justify-between rounded-xl bg-[#F5EFE6] border border-[#e8ded0] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm hover:scale-[1.02] transition"
+                    className="flex items-center justify-between rounded-xl bg-[#EADCC9] border border-[#D9C5AD] p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm hover:scale-[1.02] transition"
                   >
                     <span className="flex items-center gap-1.5">
                       <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
@@ -278,7 +278,7 @@ export function PokawaMegaMenu({
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h4 className="text-sm font-black uppercase tracking-wider text-[#10251f]">
+                        <h4 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
                           Poké Bowls Signatures
                         </h4>
                         <p className="text-[11px] text-[#7a847e]">
@@ -302,7 +302,7 @@ export function PokawaMegaMenu({
                               alt={poke.name}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
-                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
+                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2 py-0.5 text-[10px] font-black text-[#2C1D16] shadow">
                               {poke.price.toFixed(2)} €
                             </span>
                             <span className="absolute bottom-1.5 left-1.5 rounded-md bg-black/60 px-1.5 py-0.5 text-[8px] font-bold text-white">
@@ -311,7 +311,7 @@ export function PokawaMegaMenu({
                           </div>
 
                           <div>
-                            <h5 className="text-xs font-black text-[#10251f] group-hover:text-[#ff705f] transition line-clamp-1">
+                            <h5 className="text-xs font-black text-[#2C1D16] group-hover:text-[#ff705f] transition line-clamp-1">
                               {poke.name}
                             </h5>
                             <p className="text-[10px] text-[#7a847e] line-clamp-1 mt-0.5">
@@ -329,7 +329,7 @@ export function PokawaMegaMenu({
                                   price: poke.price,
                                 })
                               }
-                              className="flex-1 flex items-center justify-center gap-1 rounded-xl bg-[#10251f] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
+                              className="flex-1 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
                             >
                               {addedDishId === poke.id ? (
                                 <>
@@ -346,7 +346,7 @@ export function PokawaMegaMenu({
                               to="/product/$productId"
                               params={{ productId: poke.id }}
                               onClick={onClose}
-                              className="flex h-7 w-7 items-center justify-center rounded-xl border border-black/10 hover:bg-black/5 text-[#10251f] transition"
+                              className="flex h-7 w-7 items-center justify-center rounded-xl border border-black/10 hover:bg-black/5 text-[#2C1D16] transition"
                               title="Personnaliser ce bowl"
                             >
                               <ExternalLink className="h-3 w-3" />
@@ -399,7 +399,7 @@ export function PokawaMegaMenu({
                           </div>
 
                           <div>
-                            <h5 className="text-sm font-black text-[#10251f]">
+                            <h5 className="text-sm font-black text-[#2C1D16]">
                               {crousty.name}
                             </h5>
                             <p className="text-xs text-[#7a847e] mt-0.5 line-clamp-2">
@@ -441,9 +441,9 @@ export function PokawaMegaMenu({
 
                 {/* 3. Atelier Sur-Mesure */}
                 {activeCat === "composer" && (
-                  <div className="rounded-2xl bg-gradient-to-br from-[#10251f] to-[#1c3830] text-white p-6 shadow-md flex flex-col justify-between h-full">
+                  <div className="rounded-2xl bg-gradient-to-br from-[#2C1D16] to-[#1c3830] text-white p-6 shadow-md flex flex-col justify-between h-full">
                     <div>
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5EFE6] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f]">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EADCC9] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16]">
                         <Sparkles className="h-3 w-3 stroke-[3] text-[#ff705f]" />
                         Créativité Illimitée
                       </span>
@@ -458,26 +458,26 @@ export function PokawaMegaMenu({
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 my-5 text-center">
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">🍚</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">1. Base</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#EADCC9]">1. Base</span>
                       </div>
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">🐟</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">2. Protéine</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#EADCC9]">2. Protéine</span>
                       </div>
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">🥑</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">3. 5 Mix-ins</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#EADCC9]">3. 5 Mix-ins</span>
                       </div>
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">✨</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">4. Sauce & Seeds</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#EADCC9]">4. Sauce & Seeds</span>
                       </div>
                     </div>
 
                     <a
                       href="#composer"
                       onClick={onClose}
-                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#F5EFE6] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg hover:bg-white transition"
+                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#EADCC9] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-lg hover:bg-[#F2E5D4] transition"
                     >
                       <span>Lancer l'atelier Sur-Mesure maintenant</span>
                       <ArrowRight className="h-4 w-4" />
@@ -490,14 +490,14 @@ export function PokawaMegaMenu({
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h4 className="text-sm font-black uppercase tracking-wider text-[#10251f]">
+                        <h4 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
                           Tiramisus Maison Gourmands
                         </h4>
                         <p className="text-[11px] text-[#7a847e]">
                           Préparés chaque matin par notre chef · Mascarpone aérien
                         </p>
                       </div>
-                      <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3 py-1 text-xs font-black text-[#10251f]">
+                      <span className="rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-3 py-1 text-xs font-black text-[#2C1D16]">
                         4,00 € l'unité
                       </span>
                     </div>
@@ -514,13 +514,13 @@ export function PokawaMegaMenu({
                               alt={dessert.name}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
-                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow">
+                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] shadow">
                               {dessert.price.toFixed(2)} €
                             </span>
                           </div>
 
                           <div>
-                            <h5 className="text-xs font-black text-[#10251f]">
+                            <h5 className="text-xs font-black text-[#2C1D16]">
                               {dessert.name}
                             </h5>
                             <p className="text-[10px] text-[#7a847e] mt-0.5 line-clamp-1">
@@ -531,7 +531,7 @@ export function PokawaMegaMenu({
                           <button
                             type="button"
                             onClick={() => handleQuickAdd(dessert)}
-                            className="mt-2.5 flex items-center justify-center gap-1 rounded-xl bg-[#10251f] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
+                            className="mt-2.5 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
                           >
                             {addedDishId === dessert.id ? (
                               <>
@@ -554,14 +554,14 @@ export function PokawaMegaMenu({
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h4 className="text-sm font-black uppercase tracking-wider text-[#10251f]">
+                        <h4 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
                           Boissons Fraîches Givron
                         </h4>
                         <p className="text-[11px] text-[#7a847e]">
                           Canettes 33cl et eaux SPA minérales 50cl servies très fraîches
                         </p>
                       </div>
-                      <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3 py-1 text-xs font-black text-[#10251f]">
+                      <span className="rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-3 py-1 text-xs font-black text-[#2C1D16]">
                         2,00 € l'unité
                       </span>
                     </div>
@@ -578,13 +578,13 @@ export function PokawaMegaMenu({
                               alt={drink.name}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
-                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow">
+                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] shadow">
                               {drink.price.toFixed(2)} €
                             </span>
                           </div>
 
                           <div>
-                            <h5 className="text-[11px] font-black text-[#10251f] truncate">
+                            <h5 className="text-[11px] font-black text-[#2C1D16] truncate">
                               {drink.name}
                             </h5>
                           </div>
@@ -592,7 +592,7 @@ export function PokawaMegaMenu({
                           <button
                             type="button"
                             onClick={() => handleQuickAdd(drink)}
-                            className="mt-2 flex items-center justify-center gap-1 rounded-xl bg-[#10251f] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
+                            className="mt-2 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
                           >
                             {addedDishId === drink.id ? (
                               <>

@@ -13,7 +13,7 @@ export function PokawaBrandValues() {
       id: "freshness",
       emoji: "🐟",
       tag: "Exigence fraîcheur",
-      tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+      tagColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
       title: "Fraîcheur Quotidienne",
       desc: "Découpe minute de nos légumes croquants et approvisionnement quotidien en saumon & scampis de première fraîcheur.",
       perk: "Découpe chaque matin à Visé",
@@ -43,7 +43,7 @@ export function PokawaBrandValues() {
       id: "custom",
       emoji: "✨",
       tag: "Sur-Mesure",
-      tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+      tagColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
       title: "Liberté & Transparence",
       desc: "Retirez n'importe quel allergène en 1 clic ou créez votre bowl personnalisé de A à Z avec 5 mix-ins frais inclus.",
       perk: "Zéro compromis sur vos goûts",
@@ -52,18 +52,18 @@ export function PokawaBrandValues() {
   ];
 
   return (
-    <section className="bg-[#faf8f4] py-16 sm:py-20 lg:py-24 border-y border-black/5">
+    <section className="bg-[#FAF6F0] py-16 sm:py-20 lg:py-24 border-y border-[#E2D6C5]">
       <div className="mx-auto max-w-[1340px] px-5 sm:px-6 lg:px-8">
         {/* Header style exact Pokawa : "Un poké plein de qualités" */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#10251f] border border-black/5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9] px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#2C1D16] border border-[#D9C5AD]">
             <Award className="h-3.5 w-3.5 text-[#ff705f]" />
             Nos Engagements & Notre Philosophie
           </div>
-          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]">
+          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
             Un poké plein de qualités
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-[#5a6760] font-medium">
+          <p className="mt-2 text-xs sm:text-sm text-[#766358] font-medium">
             Chez Poke N Bowl Visé, nous croyons qu'un repas rapide doit être sain, gourmand et préparé minute avec les meilleurs produits.
           </p>
         </div>
@@ -107,7 +107,7 @@ export function PokawaBrandValues() {
                 </p>
 
                 <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#F5EFE6] drop-shadow">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#EADCC9] drop-shadow">
                     <ShieldCheck className="h-3.5 w-3.5 text-[#ff705f]" />
                     {val.perk}
                   </span>
@@ -121,7 +121,7 @@ export function PokawaBrandValues() {
         <div className="mt-12 text-center">
           <Link
             to="/commander"
-            className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-7 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f] hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-7 py-3.5 text-xs font-black uppercase tracking-wider text-[#FAF7F2] shadow-soft transition hover:bg-[#8D522A] hover:scale-105 active:scale-95"
           >
             <span>Commander en ligne à Visé</span>
             <ArrowRight className="h-4 w-4" />

@@ -101,7 +101,7 @@ export function CartDrawer() {
               <ShoppingBag className="h-5 w-5 text-[#ff705f]" />
               {t("cart.title")}
             </SheetTitle>
-            <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6]">
+            <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-xs font-black text-[#EADCC9]">
               {items.reduce((s, i) => s + i.quantity, 0)} {items.length > 1 ? "articles" : "article"}
             </span>
           </div>
@@ -110,7 +110,7 @@ export function CartDrawer() {
           {items.length > 0 && (
             <div className="mt-3 pt-3 border-t border-black/5">
               <div className="flex items-center justify-between text-xs font-bold mb-1.5">
-                <span className="flex items-center gap-1.5 text-[#10251f]">
+                <span className="flex items-center gap-1.5 text-[#2C1D16]">
                   <Truck className="h-3.5 w-3.5 text-[#ff705f]" />
                   {diffToFree === 0 ? (
                     <span className="font-black text-emerald-700">
@@ -271,7 +271,7 @@ export function CartDrawer() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
-                    <span className="text-xs font-black uppercase tracking-wider text-[#10251f]">
+                    <span className="text-xs font-black uppercase tracking-wider text-[#2C1D16]">
                       Envie d'une douceur ou d'une boisson ?
                     </span>
                   </div>
@@ -297,7 +297,7 @@ export function CartDrawer() {
                         {cs.name}
                       </span>
                       <span className="text-[9px] text-[#7a847e]">{cs.subtitle}</span>
-                      <span className="mt-1 flex items-center gap-1 rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] group-hover:bg-[#ff705f] group-hover:text-white transition">
+                      <span className="mt-1 flex items-center gap-1 rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] group-hover:bg-[#ff705f] group-hover:text-white transition">
                         <Plus className="h-2.5 w-2.5" />
                         {cs.price.toFixed(2)} €
                       </span>

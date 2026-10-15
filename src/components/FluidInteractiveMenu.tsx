@@ -229,35 +229,35 @@ export function FluidInteractiveMenu() {
       aria-label="La carte Poke N Bowl Visé"
     >
       {/* ── Entête de section ────────────────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-black/5">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-[#E2D6C5]">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]">
-            <Sparkles className="h-3.5 w-3.5 text-[#10251f]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#2C1D16]">
+            <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
             Carte Officielle & Recettes Visétoises
           </div>
-          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#10251f]">
+          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
             Une carte claire, <span className="text-[#ff705f]">organisée & gourmande.</span>
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-[#5a6760] max-w-2xl font-medium">
+          <p className="mt-2 text-sm sm:text-base text-[#766358] max-w-2xl font-medium">
             Pokés servis dans de véritables bols en bambou naturel, Crousty Chicken chaud en boîte kraft avec boisson, desserts du jour et rafraîchissements givrés.
           </p>
         </div>
 
         {/* Barre de recherche instantanée */}
         <div className="relative w-full md:w-80">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#7d8b83]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8A796E]" />
           <input
             type="text"
             placeholder="Rechercher saumon, crousty, oreo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-full border border-black/10 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold text-[#10251f] placeholder-[#7d8b83] shadow-sm focus:border-[#ff705f] focus:outline-none focus:ring-2 focus:ring-[#ff705f]/30"
+            className="w-full rounded-full border border-[#E2D6C5] bg-[#FAF7F2] py-2.5 pl-10 pr-4 text-xs font-semibold text-[#2C1D16] placeholder-[#8A796E] shadow-sm focus:border-[#A25F30] focus:outline-none focus:ring-2 focus:ring-[#A25F30]/25"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7d8b83] hover:text-black"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#8A796E] hover:text-[#2C1D16]"
             >
               ✕
             </button>
@@ -286,15 +286,15 @@ export function FluidInteractiveMenu() {
               }}
               className={`relative flex items-center gap-2 rounded-full px-5 py-3 text-xs sm:text-sm font-black uppercase tracking-wider transition shrink-0 ${
                 isActive
-                  ? "bg-[#10251f] text-white shadow-lg scale-[1.02]"
-                  : "bg-white text-[#10251f]/80 hover:bg-[#10251f]/10 border border-black/5"
+                  ? "bg-[#2C1D16] text-[#FAF7F2] shadow-lg scale-[1.02]"
+                  : "bg-[#FAF7F2] text-[#2C1D16]/80 hover:bg-[#EFE8DC] border border-[#E2D6C5]"
               }`}
             >
               <span className="text-base">{cat.icon}</span>
               <span>{cat.label}</span>
               <span
                 className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  isActive ? "bg-[#F5EFE6] text-[#10251f]" : "bg-black/5 text-[#5a6760]"
+                  isActive ? "bg-[#EADCC9] text-[#2C1D16]" : "bg-[#EFE8DC] text-[#766358]"
                 }`}
               >
                 {cat.count}
@@ -335,7 +335,7 @@ export function FluidInteractiveMenu() {
       {totalResults === 0 && (
         <div className="mt-12 rounded-[32px] bg-white border border-black/5 p-12 text-center shadow-card">
           <span className="text-4xl">🔍</span>
-          <h3 className="mt-3 text-xl font-bold text-[#10251f]">Aucun plat ne correspond à votre recherche</h3>
+          <h3 className="mt-3 text-xl font-bold text-[#2C1D16]">Aucun plat ne correspond à votre recherche</h3>
           <p className="mt-1 text-xs text-[#7d8b83]">
             Essayez avec un autre mot-clé ou réinitialisez les filtres.
           </p>
@@ -346,7 +346,7 @@ export function FluidInteractiveMenu() {
               setActiveTaste("all");
               setSearchQuery("");
             }}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-5 py-2.5 text-xs font-bold text-white shadow-sm"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-5 py-2.5 text-xs font-bold text-white shadow-sm"
           >
             Réinitialiser les filtres
           </button>
@@ -360,11 +360,11 @@ export function FluidInteractiveMenu() {
         <div className="mt-12 pt-4">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-black/5">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#10251f]/5 px-3 py-1 text-[11px] font-extrabold text-[#10251f]">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16]/5 px-3 py-1 text-[11px] font-extrabold text-[#2C1D16]">
                 <span>🥗</span>
                 <span>Bols en Bois / Bambou Sculpté</span>
               </div>
-              <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#10251f]">
+              <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 Nos Poké Bowls Signatures
               </h3>
               <p className="text-xs sm:text-sm text-[#5a6760] mt-0.5">
@@ -461,14 +461,14 @@ export function FluidInteractiveMenu() {
                 <span>🧁</span>
                 <span>Douceurs Artisanales</span>
               </div>
-              <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#10251f]">
+              <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 Nos Tiramisus Maison
               </h3>
-              <p className="text-xs sm:text-sm text-[#5a6760] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#766358] mt-0.5">
                 Préparés chaque matin par notre chef. Mascarpone fouetté, biscuits croustillants & sauces gourmandes.
               </p>
             </div>
-            <span className="text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full">
+            <span className="text-xs font-black text-[#2C1D16] bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1.5 rounded-full">
               4,00 € l'unité
             </span>
           </div>
@@ -492,21 +492,21 @@ export function FluidInteractiveMenu() {
           CATÉGORIE 4 : NOS BOISSONS FRAÎCHES (Vraies photos de canettes & bouteilles)
          ═══════════════════════════════════════════════════════════════════════════ */}
       {(activeSection === "all" || activeSection === "boissons") && filteredDrinks.length > 0 && (
-        <div className="mt-16 pt-8 border-t border-black/5">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-black/5">
+        <div className="mt-16 pt-8 border-t border-[#E2D6C5]">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-[#E2D6C5]">
             <div>
               <div className="inline-flex items-center gap-1.5 rounded-full bg-[#0284c7]/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0284c7]">
                 <span>🧊</span>
                 <span>Servies Très Fraîches</span>
               </div>
-              <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#10251f]">
+              <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 Nos Boissons Fraîches
               </h3>
-              <p className="text-xs sm:text-sm text-[#5a6760] mt-0.5">
+              <p className="text-xs sm:text-sm text-[#766358] mt-0.5">
                 Canettes givrées 33cl et bouteilles d'eau SPA 50cl pour accompagner vos plats.
               </p>
             </div>
-            <span className="text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full">
+            <span className="text-xs font-black text-[#2C1D16] bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1.5 rounded-full">
               2,00 € l'unité
             </span>
           </div>
@@ -551,10 +551,10 @@ function DishCard({
   return (
     <motion.div
       layout
-      className={`group flex flex-col justify-between overflow-hidden rounded-[28px] border bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift ${
+      className={`group flex flex-col justify-between overflow-hidden rounded-[28px] border bg-[#FAF7F2] shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift ${
         isCroustySpecial
           ? "border-[#fed7aa] ring-2 ring-[#ea580c]/15"
-          : "border-black/5"
+          : "border-[#E2D6C5]"
       }`}
     >
       <div>
@@ -588,14 +588,14 @@ function DishCard({
             className={`absolute top-3.5 left-3.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur ${
               isCroustySpecial
                 ? "bg-[#ea580c] text-white"
-                : "bg-white/95 text-[#10251f]"
+                : "bg-[#FAF7F2]/95 text-[#2C1D16] border border-[#E2D6C5]"
             }`}
           >
             {item.badge}
           </span>
 
           {/* Badge Prix Supérieur Droit */}
-          <span className="absolute top-3.5 right-3.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md">
+          <span className="absolute top-3.5 right-3.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1 text-xs font-black text-[#2C1D16] shadow-md">
             {effectivePrice.toFixed(2)} €
           </span>
 
@@ -618,7 +618,7 @@ function DishCard({
 
         {/* Contenu textuel */}
         <div className="p-5 sm:p-6">
-          <h4 className="text-lg sm:text-xl font-black text-[#10251f] leading-snug">
+          <h4 className="text-lg sm:text-xl font-black text-[#2C1D16] leading-snug">
             {item.name}
           </h4>
 
@@ -632,7 +632,7 @@ function DishCard({
             </p>
           ) : null}
 
-          <p className="mt-2 text-xs leading-relaxed text-[#68756f] line-clamp-2">
+          <p className="mt-2 text-xs leading-relaxed text-[#766358] line-clamp-2">
             {item.desc}
           </p>
 
@@ -642,7 +642,7 @@ function DishCard({
               {item.ingredients.slice(0, 5).map((ing, i) => (
                 <span
                   key={i}
-                  className="rounded-lg bg-[#f7f4ec] px-2 py-0.5 text-[10px] font-bold text-[#10251f]/85 border border-[#e8dfcf]"
+                  className="rounded-lg bg-[#F3ECE1] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]/85 border border-[#E2D6C5]"
                 >
                   {ing.emoji} {ing.name}
                 </span>
@@ -667,7 +667,7 @@ function DishCard({
                   onClick={() => onToggleSize("moyen")}
                   className={`rounded-full px-2.5 py-1 text-[10px] font-black transition ${
                     selectedSize === "moyen"
-                      ? "bg-[#10251f] text-white shadow-sm"
+                      ? "bg-[#2C1D16] text-white shadow-sm"
                       : "text-[#5a6760] hover:text-black"
                   }`}
                 >
@@ -678,7 +678,7 @@ function DishCard({
                   onClick={() => onToggleSize("grand")}
                   className={`rounded-full px-2.5 py-1 text-[10px] font-black transition ${
                     selectedSize === "grand"
-                      ? "bg-[#10251f] text-white shadow-sm"
+                      ? "bg-[#2C1D16] text-white shadow-sm"
                       : "text-[#5a6760] hover:text-black"
                   }`}
                 >
@@ -692,7 +692,7 @@ function DishCard({
 
       {/* Boutons d'Action */}
       <div className="p-5 sm:p-6 pt-0 mt-auto">
-        <div className="flex items-center gap-2 pt-2 border-t border-black/5">
+        <div className="flex items-center gap-2 pt-2 border-t border-[#E2D6C5]">
           {/* Bouton 1-Clic d'ajout au panier */}
           <button
             type="button"
@@ -702,8 +702,8 @@ function DishCard({
               item.soldOut
                 ? "bg-black/10 text-black/30 cursor-not-allowed"
                 : isAdded
-                ? "bg-[#10251f] text-emerald-400 scale-105"
-                : "bg-[#F5EFE6] border border-[#e8ded0] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:border-[#ff705f] hover:scale-105 active:scale-95"
+                ? "bg-[#2C1D16] text-emerald-400 scale-105"
+                : "bg-[#EADCC9] border border-[#D9C5AD] text-[#2C1D16] hover:bg-[#A25F30] hover:text-[#FFFDF9] hover:border-[#A25F30] hover:scale-105 active:scale-95"
             }`}
             title={`Ajouter au panier (${effectivePrice.toFixed(2)} €)`}
           >
@@ -730,20 +730,20 @@ function DishCard({
             <Link
               to="/product/$productId"
               params={{ productId: item.dishId }}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#2C1D16] py-3 text-xs font-black uppercase tracking-wider text-[#FAF7F2] shadow-soft transition hover:bg-[#8D522A]"
             >
               <span>Personnaliser</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           ) : item.soldOut ? (
-            <span className="flex-1 text-center py-3 text-xs font-bold text-[#7d8b83]">
+            <span className="flex-1 text-center py-3 text-xs font-bold text-[#766358]">
               Épuisé aujourd'hui
             </span>
           ) : (
             <button
               type="button"
               onClick={onAdd}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10251f] py-3 text-xs font-black uppercase tracking-wider text-white shadow-soft transition hover:bg-[#ff705f]"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#2C1D16] py-3 text-xs font-black uppercase tracking-wider text-[#FAF7F2] shadow-soft transition hover:bg-[#8D522A]"
             >
               <span>Ajouter direct</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -768,8 +768,8 @@ function DrinkCard({
   isAdded: boolean;
 }) {
   return (
-    <div className="group flex flex-col justify-between overflow-hidden rounded-[22px] border border-black/5 bg-white p-3 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#f0eee9]">
+    <div className="group flex flex-col justify-between overflow-hidden rounded-[22px] border border-[#E2D6C5] bg-[#FAF7F2] p-3 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#e9e5dc]">
         {item.image ? (
           <img
             src={item.image}
@@ -779,16 +779,16 @@ function DrinkCard({
         ) : (
           <div className="flex h-full w-full items-center justify-center text-3xl">🥤</div>
         )}
-        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
+        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2 py-0.5 text-[10px] font-black text-[#2C1D16] shadow">
           {item.price.toFixed(2)} €
         </span>
       </div>
 
       <div className="mt-2.5">
-        <h5 className="text-xs font-black text-[#10251f] leading-tight line-clamp-1">
+        <h5 className="text-xs font-black text-[#2C1D16] leading-tight line-clamp-1">
           {item.name}
         </h5>
-        <p className="mt-0.5 text-[10px] text-[#7d8b83] line-clamp-1">
+        <p className="mt-0.5 text-[10px] text-[#766358] line-clamp-1">
           {item.packagingNote || "33 cl"}
         </p>
       </div>
@@ -798,8 +798,8 @@ function DrinkCard({
         onClick={onAdd}
         className={`mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-black transition ${
           isAdded
-            ? "bg-[#10251f] text-emerald-400"
-            : "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white"
+            ? "bg-[#2C1D16] text-emerald-400"
+            : "bg-[#2C1D16] text-[#FAF7F2] hover:bg-[#8D522A]"
         }`}
       >
         {isAdded ? (

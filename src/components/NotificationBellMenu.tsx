@@ -45,7 +45,7 @@ export function NotificationBellMenu() {
     {
       id: "notif-saumon",
       tag: "Best-Seller",
-      tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+      tagColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
       title: "Poké Bowls Frais du Jour",
       desc: "5 recettes signatures préparées à la commande : Saumon Wasabi, Sweet Chicken, Scampis Royal...",
       dishId: "bowl-saumon",
@@ -90,9 +90,9 @@ export function NotificationBellMenu() {
       {isOpen && (
         <div className="absolute right-0 top-12 z-50 w-[340px] sm:w-[380px] overflow-hidden rounded-3xl border border-black/10 bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-200">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-black/5 bg-[#10251f] px-5 py-4 text-white">
+          <div className="flex items-center justify-between border-b border-black/5 bg-[#2C1D16] px-5 py-4 text-white">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5EFE6] text-xs font-black text-[#10251f]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#EADCC9] text-xs font-black text-[#2C1D16]">
                 🔔
               </span>
               <div>
@@ -130,11 +130,11 @@ export function NotificationBellMenu() {
                     <span className={`rounded-md px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${notif.tagColor}`}>
                       {notif.tag}
                     </span>
-                    <span className="text-[10px] font-extrabold text-[#10251f]">
+                    <span className="text-[10px] font-extrabold text-[#2C1D16]">
                       {notif.price}
                     </span>
                   </div>
-                  <h4 className="mt-1 text-xs font-extrabold text-[#10251f] group-hover:text-[#ff705f] transition">
+                  <h4 className="mt-1 text-xs font-extrabold text-[#2C1D16] group-hover:text-[#ff705f] transition">
                     {notif.title}
                   </h4>
                   <p className="mt-0.5 text-[11px] leading-tight text-[#68756f] line-clamp-2">
@@ -154,7 +154,7 @@ export function NotificationBellMenu() {
             <Link
               to="/commander"
               onClick={() => setIsOpen(false)}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#10251f] py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff705f]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2C1D16] py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff705f]"
             >
               Voir toute la carte en ligne
               <ArrowRight className="h-3.5 w-3.5" />

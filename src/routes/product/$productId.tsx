@@ -35,11 +35,11 @@ export const Route = createFileRoute("/product/$productId")({
 
 /* ─── Tag colors ─────────────────────────────────────────────────── */
 const TAG_STYLES: Record<string, string> = {
-  signature:  "bg-[#10251f] text-[#F5EFE6]",
+  signature:  "bg-[#2C1D16] text-[#EADCC9]",
   bestseller: "bg-[#ff705f] text-white",
   premium:    "bg-[#7c4f1a] text-[#ffe9c2]",
   spicy:      "bg-[#c0350f] text-white",
-  new:        "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+  new:        "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
 };
 
 /* ─── Topping chip component ─────────────────────────────────────── */
@@ -171,7 +171,7 @@ function ProductPage() {
 
   if (!product) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f7f4ec] px-5">
+      <div className="flex min-h-screen items-center justify-center bg-[#F6F1E9] px-5">
         <div className="text-center">
           <h1 className="mb-4 text-3xl font-black">{t("product.not_found")}</h1>
           <Link to="/commander" className="text-[#ff705f] underline font-bold">
@@ -303,14 +303,14 @@ function ProductPage() {
     setIsCartOpen(true);
   };
 
-  const tagStyle = TAG_STYLES[product.tagColor ?? "signature"] ?? "bg-[#10251f] text-white";
+  const tagStyle = TAG_STYLES[product.tagColor ?? "signature"] ?? "bg-[#2C1D16] text-white";
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#f7f4ec] text-[#17231f]">
+    <div className="flex min-h-screen flex-col bg-[#F6F1E9] text-[#17231f]">
       <CartDrawer />
 
       {/* ── Sticky Header ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#F6F1E9]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-6">
           <Link
             to="/"
@@ -328,7 +328,7 @@ function ProductPage() {
                   type="button"
                   onClick={() => setLanguage(lang)}
                   className={`rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${
-                    language === lang ? "bg-[#10251f] text-white" : "text-[#7a847e] hover:text-[#17231f]"
+                    language === lang ? "bg-[#2C1D16] text-white" : "text-[#7a847e] hover:text-[#17231f]"
                   }`}
                 >
                   {lang}
@@ -344,7 +344,7 @@ function ProductPage() {
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
-              className="relative rounded-full bg-[#10251f] p-2.5 text-white transition hover:bg-[#1e3d33]"
+              className="relative rounded-full bg-[#2C1D16] p-2.5 text-white transition hover:bg-[#1e3d33]"
               aria-label={t("cart.title")}
             >
               <ShoppingCart className="h-4 w-4" />
@@ -380,14 +380,14 @@ function ProductPage() {
               <span className={`badge-tag absolute left-4 top-4 shadow-card ${tagStyle}`}>
                 {productOk ? product.tag : t("cmd.sold_out")}
               </span>
-              <span className="absolute bottom-4 right-4 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-4 py-2 text-base font-black text-[#10251f] shadow-card">
+              <span className="absolute bottom-4 right-4 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-4 py-2 text-base font-black text-[#2C1D16] shadow-card">
                 € {unitPrice.toFixed(2)}
               </span>
             </div>
 
             {/* Fiche info / Engagement fraîcheur */}
             <div className="rounded-[24px] border border-black/5 bg-white p-5 shadow-card space-y-3">
-              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#10251f]">
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#2C1D16]">
                 <ShieldCheck className="h-4 w-4 text-[#ff705f]" />
                 <span>Préparé minute sur commande à Visé</span>
               </div>
@@ -407,7 +407,7 @@ function ProductPage() {
                   {isCrousty ? "Crousty Chicken Chaud" : "Poké Bowl Signature"}
                 </span>
               </div>
-              <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#10251f]">
+              <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#2C1D16]">
                 {product.name}
               </h1>
               <p className="mt-2 text-sm leading-relaxed text-[#68756f]">
@@ -462,7 +462,7 @@ function ProductPage() {
                         <div className="flex items-center gap-2.5">
                           <span className="text-2xl">🍗</span>
                           <div className="text-left">
-                            <span className="block text-xs font-black text-[#10251f]">
+                            <span className="block text-xs font-black text-[#2C1D16]">
                               Supplément Poulet Croustillant
                             </span>
                             <span className="text-[10px] text-[#7a847e]">
@@ -499,13 +499,13 @@ function ProductPage() {
                           className={[
                             "flex flex-col items-start rounded-2xl border-2 p-3.5 text-left transition-all",
                             selectedSize === size.id
-                              ? "border-[#10251f] bg-[#10251f] text-white shadow-md"
-                              : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#10251f]/40",
+                              ? "border-[#2C1D16] bg-[#2C1D16] text-white shadow-md"
+                              : "border-[#e8e2d9] bg-[#faf8f4] text-[#17231f] hover:border-[#2C1D16]/40",
                           ].join(" ")}
                         >
                           <div className="flex w-full items-center justify-between">
                             <span className="font-black text-sm uppercase">{size.name}</span>
-                            <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#F5EFE6]" : "text-[#ff705f]"}`}>
+                            <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#EADCC9]" : "text-[#ff705f]"}`}>
                               {size.extraPrice === 0 ? "Inclus" : `+${size.extraPrice.toFixed(2)}€`}
                             </span>
                           </div>
@@ -556,7 +556,7 @@ function ProductPage() {
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">Incluse · change selon tes envies</p>
                     </div>
-                    <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-0.5 text-[10px] font-black text-[#10251f]">
+                    <span className="rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2.5 py-0.5 text-[10px] font-black text-[#2C1D16]">
                       {selectedBase}
                     </span>
                   </div>
@@ -634,7 +634,7 @@ function ProductPage() {
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">Incluse · changement gratuit</p>
                     </div>
-                    <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#F5EFE6]">
+                    <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-[10px] font-black text-[#EADCC9]">
                       {selectedSauce === "none" ? "Sans sauce" : selectedSauce}
                     </span>
                   </div>
@@ -831,7 +831,7 @@ function ProductPage() {
                     onClick={handleAddToCart}
                     className={[
                       "btn-primary w-full text-sm font-black py-4 shadow-lift transition-all",
-                      added ? "bg-[#10251f] scale-[0.99]" : "hover:scale-[1.01] active:scale-95",
+                      added ? "bg-[#2C1D16] scale-[0.99]" : "hover:scale-[1.01] active:scale-95",
                     ].join(" ")}
                   >
                     {added ? (
@@ -860,7 +860,7 @@ function ProductPage() {
             onClick={handleAddToCart}
             className={[
               "btn-primary w-full py-3.5 text-sm font-black shadow-glow-coral",
-              added ? "bg-[#10251f]" : "",
+              added ? "bg-[#2C1D16]" : "",
             ].join(" ")}
           >
             {added ? (

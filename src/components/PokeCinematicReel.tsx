@@ -21,7 +21,7 @@ const REEL_BOWLS: ReelBowl[] = [
     name: "Sweet Chicken",
     price: 10.00,
     tag: "Best-seller",
-    tagColor: "#F5EFE6",
+    tagColor: "#EADCC9",
     headline: "Poulet maison, mangue douce & teriyaki",
     description: "Vrais morceaux de filet de poulet, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants et sésame mix.",
     highlights: ["🍗 Poulet maison", "🥭 Mangue & Feta", "🧅 Oignons frits croustillants"],
@@ -41,7 +41,7 @@ const REEL_BOWLS: ReelBowl[] = [
     name: "Scampis Royal",
     price: 10.00,
     tag: "Signature",
-    tagColor: "#F5EFE6",
+    tagColor: "#EADCC9",
     headline: "Scampis, jalapeños & spicy mayo",
     description: "Scampis dorés, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños et flocons de chili.",
     highlights: ["🦐 Scampis dorés", "🌶️ Jalapeños & Spicy mayo", "🔥 Flocons de chili"],
@@ -92,7 +92,7 @@ export function PokeCinematicReel() {
       <div className="absolute -inset-6 rounded-[48px] bg-gradient-to-tr from-white/10 via-transparent to-[#ff705f]/15 blur-2xl transition-all duration-1000 -z-10" />
 
       {/* Main Reel Card */}
-      <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[#10251f] shadow-[0_30px_90px_-25px_rgba(0,0,0,0.85)]">
+      <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[#2C1D16] shadow-[0_30px_90px_-25px_rgba(0,0,0,0.85)]">
         
         {/* Progress bars (Instagram/Apple style) */}
         <div className="absolute top-4 inset-x-5 z-30 flex gap-2">
@@ -145,14 +145,14 @@ export function PokeCinematicReel() {
               />
               
               {/* Cinematic vignetting and glass overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#10251f] via-[#10251f]/20 to-black/35" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#2C1D16] via-[#2C1D16]/20 to-black/35" />
             </motion.div>
           </AnimatePresence>
 
           {/* Top badges */}
           <div className="absolute top-10 left-5 right-5 z-20 flex items-center justify-between">
             <span
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#10251f] shadow-md backdrop-blur-md"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#2C1D16] shadow-md backdrop-blur-md"
               style={{ backgroundColor: currentBowl.tagColor }}
             >
               <Sparkles className="h-3 w-3" />
@@ -196,10 +196,10 @@ export function PokeCinematicReel() {
         </div>
 
         {/* Lower Info & Direct Action */}
-        <div className="relative p-6 sm:p-7 bg-[#10251f] text-white">
+        <div className="relative p-6 sm:p-7 bg-[#2C1D16] text-white">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F5EFE6]">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#EADCC9]">
                 Recette officielle · Fait minute
               </p>
               <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
@@ -231,7 +231,7 @@ export function PokeCinematicReel() {
                 onClick={() => setCurrentIndex(idx)}
                 className={`shrink-0 rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-wider transition ${
                   idx === currentIndex
-                    ? "bg-white text-[#10251f] shadow"
+                    ? "bg-white text-[#2C1D16] shadow"
                     : "bg-white/10 text-white/60 hover:bg-white/20 hover:text-white"
                 }`}
               >

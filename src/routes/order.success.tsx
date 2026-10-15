@@ -75,7 +75,7 @@ function OrderSuccessPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f7f4ec]">
+      <div className="flex min-h-screen items-center justify-center bg-[#F6F1E9]">
         <Loader2 className="h-8 w-8 animate-spin text-[#ff705f]" />
       </div>
     );
@@ -87,8 +87,8 @@ function OrderSuccessPage() {
   const isFailed = order?.status === "cancelled" || order?.status === "expired";
 
   return (
-    <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
-      <header className="border-b border-black/5 bg-[#f7f4ec]/90">
+    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
+      <header className="border-b border-black/5 bg-[#F6F1E9]/90">
         <nav className="mx-auto flex max-w-[700px] items-center px-5 py-3 sm:px-8">
           <Link to="/" className="flex items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
             <BrandLogo size="md" />
@@ -143,14 +143,14 @@ function OrderSuccessPage() {
                   ? <>On prépare ta commande pour la livraison à <strong>{order.customer.requestedTime}</strong>.</>
                   : <>On prépare ton bowl pour <strong>{order.customer.requestedTime}</strong>.</>}
               </p>
-              <p className="mt-4 rounded-full bg-[#f7f4ec] px-4 py-2 font-mono text-sm font-black">
+              <p className="mt-4 rounded-full bg-[#F6F1E9] px-4 py-2 font-mono text-sm font-black">
                 {order.id}
               </p>
             </div>
 
             <div className="mt-8 space-y-3 border-t border-black/5 pt-6">
               {order.customer.fulfillment === "delivery" && (
-                <div className="rounded-2xl bg-[#f7f4ec] p-4 text-sm">
+                <div className="rounded-2xl bg-[#F6F1E9] p-4 text-sm">
                   <strong>Livraison</strong>
                   <div className="mt-1 text-[#758079]">{order.customer.address}</div>
                   <div className="text-[#758079]">{order.customer.postalCode} {order.customer.city}</div>
@@ -201,7 +201,7 @@ function OrderSuccessPage() {
                   <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <h3 className="text-base font-black text-[#10251f]">
+              <h3 className="text-base font-black text-[#2C1D16]">
                 Votre avis compte énormément pour nous !
               </h3>
               <p className="mt-1 text-xs text-[#758079] max-w-md mx-auto leading-relaxed">
@@ -211,7 +211,7 @@ function OrderSuccessPage() {
                 href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#F5EFE6] transition hover:scale-105 shadow-sm"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-6 py-2.5 text-xs font-black text-[#EADCC9] transition hover:scale-105 shadow-sm"
               >
                 <span>⭐ Laisser 5 étoiles sur Google</span>
               </a>
@@ -220,7 +220,7 @@ function OrderSuccessPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
               <Link
                 to="/"
-                className="rounded-full bg-[#10251f] px-6 py-3 text-center text-sm font-black text-white"
+                className="rounded-full bg-[#2C1D16] px-6 py-3 text-center text-sm font-black text-white"
               >
                 Retour à l'accueil
               </Link>

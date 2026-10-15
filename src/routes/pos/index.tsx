@@ -386,13 +386,13 @@ export function PosApplicationPage() {
   // Écran PIN
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen bg-[#10251f] flex items-center justify-center p-4 select-none">
+      <div className="min-h-screen bg-[#2C1D16] flex items-center justify-center p-4 select-none">
         <div className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl text-center space-y-6">
           <div className="mx-auto w-16 h-16 rounded-2xl bg-[#ff705f]/10 flex items-center justify-center text-[#ff705f]">
             <Shield className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="text-2xl font-black text-[#10251f]">POKE N BOWL</h1>
+            <h1 className="text-2xl font-black text-[#2C1D16]">POKE N BOWL</h1>
             <p className="text-sm font-bold text-[#7a847e] mt-1">Accès POS Caisse</p>
           </div>
 
@@ -428,7 +428,7 @@ export function PosApplicationPage() {
                     }
                   }
                 }}
-                className="h-16 rounded-2xl bg-[#f7f4ec] text-2xl font-black text-[#10251f] hover:bg-black/5 active:scale-95 transition"
+                className="h-16 rounded-2xl bg-[#F6F1E9] text-2xl font-black text-[#2C1D16] hover:bg-black/5 active:scale-95 transition"
               >
                 {num}
               </button>
@@ -455,7 +455,7 @@ export function PosApplicationPage() {
                   }
                 }
               }}
-              className="h-16 rounded-2xl bg-[#f7f4ec] text-2xl font-black text-[#10251f] active:scale-95 transition"
+              className="h-16 rounded-2xl bg-[#F6F1E9] text-2xl font-black text-[#2C1D16] active:scale-95 transition"
             >
               0
             </button>
@@ -485,7 +485,7 @@ export function PosApplicationPage() {
   return (
     <div className="flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
       {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#10251f]">
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="flex h-3 w-3 relative">
@@ -810,7 +810,7 @@ export function PosApplicationPage() {
                 <span className="text-base font-black">{selectedOrder.customer.name}</span>
                 <a
                   href={`tel:${selectedOrder.customer.phone}`}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#F5EFE6] bg-white/10 px-3 py-1.5 rounded-xl"
+                  className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 px-3 py-1.5 rounded-xl"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
                   {selectedOrder.customer.phone}
@@ -822,7 +822,7 @@ export function PosApplicationPage() {
                   <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
                 </div>
               ) : (
-                <p className="text-xs text-[#F5EFE6] font-bold">Retrait sur place</p>
+                <p className="text-xs text-[#EADCC9] font-bold">Retrait sur place</p>
               )}
               {selectedOrder.customer.notes && (
                 <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">

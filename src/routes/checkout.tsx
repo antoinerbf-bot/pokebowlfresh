@@ -36,7 +36,7 @@ function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#f7f4ec] flex flex-col items-center justify-center px-5">
+      <div className="min-h-screen bg-[#F6F1E9] flex flex-col items-center justify-center px-5">
         <p className="text-lg font-bold text-[#17231f]">Votre panier est vide.</p>
         <Link
           to="/commander"
@@ -107,8 +107,8 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f4ec] text-[#17231f]">
-      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f7f4ec]/90 backdrop-blur-xl">
+    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
+      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#F6F1E9]/90 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8">
           <Link to="/" className="flex items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
             <BrandLogo size="md" />
@@ -138,11 +138,11 @@ function CheckoutPage() {
             <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
               <h2 className="text-lg font-black">Mode de réception</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <button type="button" onClick={() => setFulfillment("delivery")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec]"}`}>
+                <button type="button" onClick={() => setFulfillment("delivery")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`}>
                   <span className="text-sm font-black">Livraison</span>
                   <span className="mt-1 block text-xs text-[#7a847e]">À domicile selon ton code postal</span>
                 </button>
-                <button type="button" onClick={() => setFulfillment("pickup")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#f7f4ec]"}`}>
+                <button type="button" onClick={() => setFulfillment("pickup")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`}>
                   <span className="text-sm font-black">Retrait sur place</span>
                   <span className="mt-1 block text-xs text-[#7a847e]">Poke N Bowl Visé</span>
                 </button>
@@ -158,7 +158,7 @@ function CheckoutPage() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                     placeholder="Prénom Nom"
                   />
                 </label>
@@ -169,7 +169,7 @@ function CheckoutPage() {
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                     placeholder="04xx xx xx xx"
                   />
                 </label>
@@ -179,7 +179,7 @@ function CheckoutPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                     placeholder="toi@email.com"
                   />
                 </label>
@@ -187,17 +187,17 @@ function CheckoutPage() {
                   <>
                     <label className="block sm:col-span-2">
                       <span className="text-xs font-bold text-[#7a847e]">Adresse *</span>
-                      <input required value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Rue et numéro" />
+                      <input required value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Rue et numéro" />
                     </label>
                     <label className="block">
                       <span className="text-xs font-bold text-[#7a847e]">Code postal *</span>
-                      <input required inputMode="numeric" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="4600" />
+                      <input required inputMode="numeric" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="4600" />
                     </label>
                     <label className="block">
                       <span className="text-xs font-bold text-[#7a847e]">Ville *</span>
-                      <input required value={city} onChange={(e) => setCity(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Visé" />
+                      <input required value={city} onChange={(e) => setCity(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Visé" />
                     </label>
-                    <div className="sm:col-span-2 rounded-xl bg-[#f7f4ec] px-4 py-3 text-xs font-bold text-[#17231f]">
+                    <div className="sm:col-span-2 rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-bold text-[#17231f]">
                       {deliveryZone ? <>Minimum : € {deliveryZone.minimumOrder.toFixed(2)} · Livraison : {total >= 50 ? "gratuite" : `€ ${deliveryZone.feeUnder50.toFixed(2)}`}</> : "Entre ton code postal pour connaître les frais de livraison."}
                     </div>
                   </>
@@ -208,7 +208,7 @@ function CheckoutPage() {
                     required
                     value={requestedTime}
                     onChange={(e) => setRequestedTime(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+                    className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                   >
                     <option value="">Choisir un créneau</option>
                     {pickupOptions.map((slot) => (
@@ -224,7 +224,7 @@ function CheckoutPage() {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
-                    className="mt-1 w-full resize-none rounded-xl border border-black/10 bg-[#f7f4ec] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
+                    className="mt-1 w-full resize-none rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                     placeholder="Optionnel"
                   />
                 </label>
@@ -240,7 +240,7 @@ function CheckoutPage() {
                   className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
                     paymentMethod === "online"
                       ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#f7f4ec] hover:border-black/20"
+                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
@@ -260,7 +260,7 @@ function CheckoutPage() {
                   className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
                     paymentMethod === "on_site"
                       ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#f7f4ec] hover:border-black/20"
+                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
                   }`}
                 >
                   <Store className="h-5 w-5 text-[#ff705f]" />
@@ -279,7 +279,7 @@ function CheckoutPage() {
             )}
           </div>
 
-          <aside className="h-fit rounded-[24px] bg-[#10251f] p-6 text-white lg:sticky lg:top-24">
+          <aside className="h-fit rounded-[24px] bg-[#2C1D16] p-6 text-white lg:sticky lg:top-24">
             <h2 className="text-lg font-black">Récapitulatif</h2>
             <ul className="mt-4 space-y-3">
               {items.map((item) => (

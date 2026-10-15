@@ -31,7 +31,7 @@ const NOTIFICATIONS: ToastNotification[] = [
   {
     id: "crousty-blanche",
     tag: "Nouveau au Menu",
-    tagColor: "bg-[#10251f] text-white",
+    tagColor: "bg-[#2C1D16] text-white",
     title: "Crousty Sauce Blanche",
     desc: "Petits morceaux de poulet croustillant dorés, sauce blanche onctueuse et oignons frits croquants.",
     dishId: "crousty-chicken-sauce-blanche",
@@ -42,7 +42,7 @@ const NOTIFICATIONS: ToastNotification[] = [
   {
     id: "etudiant-deal",
     tag: "Formule Étudiant",
-    tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+    tagColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
     title: "Formule Crousty Chicken à 11 €",
     desc: "1 Crousty Chicken au choix + 1 boisson 33cl offerte incluse (Coca, Ice-Tea, Fanta...).",
     dishId: "crousty-chicken-curry",
@@ -118,7 +118,7 @@ export function CroustyNotificationToast() {
               type="button"
               onClick={handleDismiss}
               aria-label="Fermer la notification"
-              className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/5 text-[#10251f]/60 hover:bg-black/10 hover:text-[#10251f] transition"
+              className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/5 text-[#2C1D16]/60 hover:bg-black/10 hover:text-[#2C1D16] transition"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -150,7 +150,7 @@ export function CroustyNotificationToast() {
                   </span>
                 </div>
 
-                <h4 className="mt-1 text-sm font-extrabold text-[#10251f] leading-snug">
+                <h4 className="mt-1 text-sm font-extrabold text-[#2C1D16] leading-snug">
                   {activeNotif.title}
                 </h4>
 
@@ -164,7 +164,7 @@ export function CroustyNotificationToast() {
                     to="/product/$productId"
                     params={{ productId: activeNotif.productId }}
                     onClick={() => setIsVisible(false)}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-[#10251f] px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff705f] hover:scale-105"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16] px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff705f] hover:scale-105"
                   >
                     <span>Commander ({activeNotif.price})</span>
                     <ArrowRight className="h-3 w-3" />

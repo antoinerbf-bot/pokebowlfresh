@@ -24,7 +24,7 @@ const CATEGORIES: CategoryItem[] = [
     title: "Pokés Signatures",
     subtitle: "5 recettes équilibrées",
     badge: "100% Frais",
-    badgeColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
+    badgeColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
     image: bowlSaumon,
     anchor: "#carte",
     icon: "🥗",
@@ -64,7 +64,7 @@ const CATEGORIES: CategoryItem[] = [
     title: "Boissons Fraîches",
     subtitle: "Canettes givrées & eaux",
     badge: "2,00 € l'unité",
-    badgeColor: "bg-[#10251f] text-white",
+    badgeColor: "bg-[#2C1D16] text-white",
     image: heroPoke,
     anchor: "#boissons",
     icon: "🥤",
@@ -110,10 +110,10 @@ export function PokawaCategoriesBar() {
         {/* Title Header with Pokawa Slogan style */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f]/5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#10251f]">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16]/5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#2C1D16]">
               <span>🥑</span> Explorez Notre Carte Complète
             </div>
-            <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]">
+            <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#2C1D16]">
               Vivez sainement, soyez gourmands.
             </h2>
             <p className="mt-1 text-xs sm:text-sm text-[#68756f]">
@@ -128,7 +128,7 @@ export function PokawaCategoriesBar() {
               onClick={() => scroll("left")}
               disabled={!canScrollLeft}
               aria-label="Faire défiler vers la gauche"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
             >
               <ChevronLeft className="h-4.5 w-4.5" />
             </button>
@@ -137,7 +137,7 @@ export function PokawaCategoriesBar() {
               onClick={() => scroll("right")}
               disabled={!canScrollRight}
               aria-label="Faire défiler vers la droite"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#10251f] shadow-sm transition hover:bg-[#10251f] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
             >
               <ChevronRight className="h-4.5 w-4.5" />
             </button>
@@ -181,7 +181,7 @@ export function PokawaCategoriesBar() {
 
               {/* Title & subtitle */}
               <div className="mt-3.5 px-1 pb-1">
-                <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-tight text-[#10251f] group-hover:text-[#ff705f] transition-colors">
+                <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-tight text-[#2C1D16] group-hover:text-[#ff705f] transition-colors">
                   {cat.title}
                 </h3>
                 <p className="mt-0.5 text-[11px] font-semibold text-[#68756f]">
@@ -189,7 +189,7 @@ export function PokawaCategoriesBar() {
                 </p>
 
                 {/* Bottom link style */}
-                <div className="mt-2.5 flex items-center justify-between border-t border-black/5 pt-2 text-[10px] font-black uppercase tracking-wider text-[#10251f]/75 group-hover:text-[#ff705f]">
+                <div className="mt-2.5 flex items-center justify-between border-t border-black/5 pt-2 text-[10px] font-black uppercase tracking-wider text-[#2C1D16]/75 group-hover:text-[#ff705f]">
                   <span>Voir la carte</span>
                   <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
                 </div>

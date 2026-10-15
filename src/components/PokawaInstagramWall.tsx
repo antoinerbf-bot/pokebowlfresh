@@ -59,11 +59,11 @@ export function PokawaInstagramWall() {
             <Instagram className="h-3.5 w-3.5" />
             La Communauté Poke N Bowl
           </div>
-          <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#10251f]">
+          <h2 className="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#2C1D16]">
             L’actu sur nos réseaux
           </h2>
           <p className="mt-2 text-sm text-[#68756f]">
-            Partagez vos bowls à Visé en story et taguez <span className="font-bold text-[#10251f]">@POKE_NBOWL</span> pour être reposté !
+            Partagez vos bowls à Visé en story et taguez <span className="font-bold text-[#2C1D16]">@POKE_NBOWL</span> pour être reposté !
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export function PokawaInstagramWall() {
 
               {/* Card Footer */}
               <div className="p-4 flex items-center justify-between text-xs text-[#68756f]">
-                <span className="font-extrabold text-[#10251f]">@POKE_NBOWL</span>
+                <span className="font-extrabold text-[#2C1D16]">@POKE_NBOWL</span>
                 <Instagram className="h-4 w-4 text-[#ff705f] group-hover:scale-110 transition-transform" />
               </div>
             </a>
@@ -127,7 +127,7 @@ export function PokawaInstagramWall() {
             href="https://instagram.com/POKE_NBOWL"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-full border-2 border-[#10251f] bg-white px-7 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-soft transition hover:bg-[#10251f] hover:text-white hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2.5 rounded-full border-2 border-[#2C1D16] bg-white px-7 py-3.5 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-soft transition hover:bg-[#2C1D16] hover:text-white hover:scale-105 active:scale-95"
           >
             <Instagram className="h-4 w-4 text-[#ff705f]" />
             <span>Suivez-nous sur Instagram @POKE_NBOWL</span>
