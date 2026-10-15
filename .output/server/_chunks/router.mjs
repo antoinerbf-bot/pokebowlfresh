@@ -9114,28 +9114,52 @@ var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: a
 		};
 	}
 	if (bancontactKey) {
-		const endpoints = ["https://api.payconiq.com/v3/payments", "https://merchant.api.bancontact.net/v3/payments"];
+		const endpoints = [
+			{
+				name: "Payconiq Prod",
+				url: "https://api.payconiq.com/v3/payments"
+			},
+			{
+				name: "Payconiq Preprod (Test)",
+				url: "https://api.preprod.payconiq.com/v3/payments"
+			},
+			{
+				name: "Bancontact Net Prod",
+				url: "https://merchant.api.bancontact.net/v3/payments"
+			},
+			{
+				name: "Bancontact Net Preprod (Test)",
+				url: "https://merchant.api.preprod.bancontact.net/v3/payments"
+			}
+		];
 		const bancontactTests = [];
 		for (const ep of endpoints) try {
-			const bRes = await fetch(ep, {
+			const bRes = await fetch(ep.url, {
 				method: "POST",
 				headers: {
 					Authorization: bancontactKey.toLowerCase().startsWith("bearer ") ? bancontactKey : `Bearer ${bancontactKey}`,
 					"Content-Type": "application/json",
 					Accept: "application/json"
 				},
-				body: JSON.stringify({})
+				body: JSON.stringify({
+					amount: 1e3,
+					currency: "EUR",
+					description: "Test Poke N Bowl",
+					reference: "TEST001"
+				})
 			});
 			const bText = await bRes.text().catch(() => "");
 			bancontactTests.push({
-				endpoint: ep,
+				name: ep.name,
+				endpoint: ep.url,
 				status: bRes.status,
 				authorized: bRes.status !== 401 && bRes.status !== 403,
-				rawResponse: bText.slice(0, 200)
+				rawResponse: bText.slice(0, 300)
 			});
 		} catch (e) {
 			bancontactTests.push({
-				endpoint: ep,
+				name: ep.name,
+				endpoint: ep.url,
 				status: 0,
 				error: e?.message ?? String(e)
 			});

@@ -58,14 +58,16 @@ export const Route = createFileRoute("/api/bank-status")({
         // Test Bancontact Pro / Payconiq if key present
         if (bancontactKey) {
           const endpoints = [
-            "https://api.payconiq.com/v3/payments",
-            "https://merchant.api.bancontact.net/v3/payments",
+            { name: "Payconiq Prod", url: "https://api.payconiq.com/v3/payments" },
+            { name: "Payconiq Preprod (Test)", url: "https://api.preprod.payconiq.com/v3/payments" },
+            { name: "Bancontact Net Prod", url: "https://merchant.api.bancontact.net/v3/payments" },
+            { name: "Bancontact Net Preprod (Test)", url: "https://merchant.api.preprod.bancontact.net/v3/payments" },
           ];
           const bancontactTests: any[] = [];
 
           for (const ep of endpoints) {
             try {
-              const bRes = await fetch(ep, {
+              const bRes = await fetch(ep.url, {
                 method: "POST",
                 headers: {
                   Authorization: bancontactKey.toLowerCase().startsWith("bearer ")
@@ -74,19 +76,25 @@ export const Route = createFileRoute("/api/bank-status")({
                   "Content-Type": "application/json",
                   Accept: "application/json",
                 },
-                body: JSON.stringify({}),
+                body: JSON.stringify({
+                  amount: 1000,
+                  currency: "EUR",
+                  description: "Test Poke N Bowl",
+                  reference: "TEST001",
+                }),
               });
               const bText = await bRes.text().catch(() => "");
               bancontactTests.push({
-                endpoint: ep,
+                name: ep.name,
+                endpoint: ep.url,
                 status: bRes.status,
-                // Status 400 or 422 means authorization succeeded, but empty body failed validation
                 authorized: bRes.status !== 401 && bRes.status !== 403,
-                rawResponse: bText.slice(0, 200),
+                rawResponse: bText.slice(0, 300),
               });
             } catch (e: any) {
               bancontactTests.push({
-                endpoint: ep,
+                name: ep.name,
+                endpoint: ep.url,
                 status: 0,
                 error: e?.message ?? String(e),
               });
