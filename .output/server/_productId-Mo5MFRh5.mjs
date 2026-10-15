@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { _ as Navigate, g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-kQeB2s5M.mjs";
+import { t as Route } from "./_productId-d4NJSVEZ.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { K as ArrowLeft, V as Check, _ as Plus, a as TriangleAlert, l as Sparkles, p as ShieldCheck, u as ShoppingCart, x as Minus } from "./_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-DK_WeGxc.mjs";
-import { t as useStock } from "./_ssr/useStock-Ch1iyECy.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-D-ohW7Ev.js
+import { t as useStock } from "./_ssr/useStock-6tVP2jq1.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-Mo5MFRh5.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {
@@ -20,40 +20,58 @@ var TAG_STYLES = {
 	spicy: "bg-[#c0350f] text-white",
 	new: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]"
 };
-function ToppingChip({ topping, selected, onToggle }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-		type: "button",
-		onClick: onToggle,
-		"aria-pressed": selected,
-		"aria-label": `${topping.name} +${topping.price.toFixed(2)}€`,
-		className: ["relative flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none", selected ? "border-[#ff705f] bg-[#fff3f1] shadow-[0_4px_16px_-4px_rgba(255,112,95,.45)] scale-[1.02]" : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4] active:scale-95"].join(" "),
-		children: [
-			selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#ff705f] shadow-sm",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
-					className: "h-3 w-3 text-white",
-					strokeWidth: 3
+function ToppingChip({ topping, qty, onAdd, onRemove }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: ["relative flex flex-col justify-between rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none", qty > 0 ? "border-[#ff705f] bg-[#fff3f1] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4]"].join(" "),
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col items-center gap-1",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-2xl leading-none",
+					role: "img",
+					"aria-hidden": "true",
+					children: topping.emoji
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-xs font-bold leading-tight text-[#17231f]",
+					children: topping.name
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] font-black text-[#ff705f]",
+					children: qty === 0 ? `+${topping.price.toFixed(2)} €` : `${qty} portion${qty > 1 ? "s" : ""} (+${(qty * topping.price).toFixed(2)}€)`
 				})
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-2xl leading-none",
-				role: "img",
-				"aria-hidden": "true",
-				children: topping.emoji
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-xs font-bold leading-tight text-[#17231f]",
-				children: topping.name
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-				className: "text-[11px] font-black text-[#ff705f]",
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "mt-2.5 flex items-center justify-center border-t border-black/5 pt-2",
+			children: qty > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-2",
 				children: [
-					"+",
-					topping.price.toFixed(2),
-					" €"
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: onRemove,
+						"aria-label": `Diminuer ${topping.name}`,
+						className: "flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3 stroke-[3]" })
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "w-5 text-center text-xs font-black text-[#2C1D16]",
+						children: qty
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: onAdd,
+						"aria-label": `Ajouter ${topping.name}`,
+						className: "flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" })
+					})
 				]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: onAdd,
+				className: "flex items-center gap-1 rounded-full bg-[#2C1D16] px-3 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter" })]
 			})
-		]
+		})]
 	});
 }
 function RemovableIngredientButton({ name, emoji, isRemoved, onToggle }) {
@@ -139,7 +157,7 @@ function ProductPage() {
 	const [extraChicken, setExtraChicken] = import_react.useState(false);
 	const [extraProtein, setExtraProtein] = import_react.useState(null);
 	const [selectedMixins, setSelectedMixins] = import_react.useState([]);
-	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [toppingQuantities, setToppingQuantities] = import_react.useState({});
 	const [extraSauce, setExtraSauce] = import_react.useState(null);
 	const [selectedDrink, setSelectedDrink] = import_react.useState(drinks[0]?.name || "Coca-Cola (33 cl)");
 	const [qty, setQty] = import_react.useState(1);
@@ -148,15 +166,33 @@ function ProductPage() {
 	const sizeExtra = !isCrousty && selectedSize === "grand" ? 3 : 0;
 	const extraProteinPrice = isCrousty ? extraChicken ? 2.5 : 0 : extraProtein ? 2.5 : 0;
 	const mixinsExtraPrice = selectedMixins.length * .5;
-	const toppingsExtraPrice = selectedToppings.length * .5;
+	const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
+	const toppingsExtraPrice = totalToppingsCount * .5;
 	const extraSaucePrice = extraSauce ? 1 : 0;
 	const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
 	const totalPrice = unitPrice * qty;
 	const toggleRemovedIngredient = (name) => {
 		setRemovedIngredients((cur) => cur.includes(name) ? cur.filter((n) => n !== name) : [...cur, name]);
 	};
-	const toggleTopping = (toppingName) => {
-		setSelectedToppings((cur) => cur.includes(toppingName) ? cur.filter((t) => t !== toppingName) : [...cur, toppingName]);
+	const addTopping = (name) => {
+		setToppingQuantities((cur) => ({
+			...cur,
+			[name]: (cur[name] ?? 0) + 1
+		}));
+	};
+	const removeTopping = (name) => {
+		setToppingQuantities((cur) => {
+			const current = cur[name] ?? 0;
+			if (current <= 1) {
+				const copy = { ...cur };
+				delete copy[name];
+				return copy;
+			}
+			return {
+				...cur,
+				[name]: current - 1
+			};
+		});
 	};
 	const toggleMixin = (mixinName) => {
 		setSelectedMixins((cur) => cur.includes(mixinName) ? cur.filter((m) => m !== mixinName) : [...cur, mixinName]);
@@ -179,8 +215,8 @@ function ProductPage() {
 		selectedMixins.forEach((m) => {
 			optionsList.push(`Légume / Mix-in (+0.50€) : ${m}`);
 		});
-		selectedToppings.forEach((t) => {
-			optionsList.push(`Topping (+0.50€) : ${t}`);
+		Object.entries(toppingQuantities).forEach(([t, q]) => {
+			if (q > 0) optionsList.push(`Topping (+0.50€) : ${t}${q > 1 ? ` (x${q})` : ""}`);
 		});
 		if (extraSauce) optionsList.push(`Sauce extra (+1€) : ${extraSauce}`);
 		addItem({
@@ -629,15 +665,15 @@ function ProductPage() {
 											children: "Toppings Croustillants"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-[11px] text-[#7a847e]",
-											children: "À volonté · choisis autant de toppings que tu veux (+0.50€ chaque)"
-										})] }), selectedToppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											children: "À volonté · choisis autant de portions que tu veux (+0.50€ chaque, même 10 ou 40 fois le même)"
+										})] }), totalToppingsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm",
 											children: [
-												selectedToppings.length,
-												" topping",
-												selectedToppings.length > 1 ? "s" : "",
+												totalToppingsCount,
+												" portion",
+												totalToppingsCount > 1 ? "s" : "",
 												" (+",
-												(selectedToppings.length * .5).toFixed(2),
+												toppingsExtraPrice.toFixed(2),
 												"€)"
 											]
 										})]
@@ -645,8 +681,9 @@ function ProductPage() {
 										className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
 										children: toppings.map((topping) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToppingChip, {
 											topping,
-											selected: selectedToppings.includes(topping.name),
-											onToggle: () => toggleTopping(topping.name)
+											qty: toppingQuantities[topping.name] ?? 0,
+											onAdd: () => addTopping(topping.name),
+											onRemove: () => removeTopping(topping.name)
 										}, topping.id))
 									})]
 								}),

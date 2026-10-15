@@ -4,10 +4,10 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { K as ArrowLeft, T as LoaderCircle, j as CreditCard, s as Store } from "../_libs/lucide-react.mjs";
+import { F as CircleCheckBig, I as CircleAlert, K as ArrowLeft, T as LoaderCircle, j as CreditCard, p as ShieldCheck, s as Store } from "../_libs/lucide-react.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
-import { n as submitCheckout } from "./checkout-C0BBU2Ej.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-BlhDXu9G.js
+import { n as submitCheckout } from "./checkout-BBgnH-8i.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-B1VyfSM0.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -26,9 +26,14 @@ function CheckoutPage() {
 	const [loading, setLoading] = (0, import_react.useState)(false);
 	const [error, setError] = (0, import_react.useState)(null);
 	const pickupOptions = (0, import_react.useMemo)(() => buildPickupSlots(), []);
+	const normalizedPostal = postalCode.trim().replace(/\s+/g, "");
 	const deliveryZone = (0, import_react.useMemo)(() => getDeliveryZone(postalCode), [postalCode]);
 	const deliveryFee = fulfillment === "delivery" && deliveryZone ? total >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
 	const orderTotal = total + deliveryFee;
+	const handleFulfillmentChange = (method) => {
+		setFulfillment(method);
+		if (method === "delivery") setPaymentMethod("online");
+	};
 	if (items.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-[#F6F1E9] flex flex-col items-center justify-center px-5",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -43,6 +48,20 @@ function CheckoutPage() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError(null);
+		if (fulfillment === "delivery") {
+			if (paymentMethod === "on_site") {
+				setError("Le paiement sur place n'est pas autorisé pour la livraison à domicile. Veuillez régler en ligne.");
+				return;
+			}
+			if (!deliveryZone) {
+				setError("Cette zone de livraison n'est pas desservie. Veuillez choisir « Retrait sur place ».");
+				return;
+			}
+			if (total < deliveryZone.minimumOrder) {
+				setError(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+				return;
+			}
+		}
 		setLoading(true);
 		try {
 			const origin = window.location.origin;
@@ -133,25 +152,25 @@ function CheckoutPage() {
 									className: "mt-4 grid gap-3 sm:grid-cols-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
-										onClick: () => setFulfillment("delivery"),
-										className: `rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`,
+										onClick: () => handleFulfillmentChange("delivery"),
+										className: `rounded-2xl border-2 p-4 text-left transition ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9] hover:border-black/20"}`,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-sm font-black",
-											children: "Livraison"
+											children: "🛵 Livraison"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "mt-1 block text-xs text-[#7a847e]",
 											children: "À domicile selon ton code postal"
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
-										onClick: () => setFulfillment("pickup"),
-										className: `rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`,
+										onClick: () => handleFulfillmentChange("pickup"),
+										className: `rounded-2xl border-2 p-4 text-left transition ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9] hover:border-black/20"}`,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-sm font-black",
-											children: "Retrait sur place"
+											children: "🛍️ Retrait sur place"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "mt-1 block text-xs text-[#7a847e]",
-											children: "Poke N Bowl Visé"
+											children: "Poke N Bowl Visé (Sans minimum)"
 										})]
 									})]
 								})]
@@ -209,7 +228,7 @@ function CheckoutPage() {
 												className: "block sm:col-span-2",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-xs font-bold text-[#7a847e]",
-													children: "Adresse *"
+													children: "Adresse de livraison *"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 													required: true,
 													value: address,
@@ -245,14 +264,48 @@ function CheckoutPage() {
 													placeholder: "Visé"
 												})]
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "sm:col-span-2 rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-bold text-[#17231f]",
-												children: deliveryZone ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-													"Minimum : € ",
-													deliveryZone.minimumOrder.toFixed(2),
-													" · Livraison : ",
-													total >= 50 ? "gratuite" : `€ ${deliveryZone.feeUnder50.toFixed(2)}`
-												] }) : "Entre ton code postal pour connaître les frais de livraison."
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "sm:col-span-2",
+												children: [
+													!normalizedPostal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-medium text-[#7a847e]",
+														children: "Entre ton code postal pour calculer les frais de livraison (19 zones desservies autour de Visé)."
+													}),
+													normalizedPostal.length >= 4 && !deliveryZone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-start gap-2.5 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-bold text-red-700",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-4 w-4 shrink-0 text-red-600 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+															"Code postal ",
+															normalizedPostal,
+															" non desservi en livraison."
+														] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "block font-normal text-red-600 mt-0.5",
+															children: "Choisis l'option « Retrait sur place » pour retirer ta commande au restaurant."
+														})] })]
+													}),
+													deliveryZone && total < deliveryZone.minimumOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-bold text-amber-900",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-4 w-4 shrink-0 text-amber-600 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+															"Minimum de commande : € ",
+															deliveryZone.minimumOrder.toFixed(2),
+															" pour ce code postal."
+														] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+															className: "block font-normal text-amber-700 mt-0.5",
+															children: [
+																"Il te manque encore € ",
+																(deliveryZone.minimumOrder - total).toFixed(2),
+																" pour valider la livraison."
+															]
+														})] })]
+													}),
+													deliveryZone && total >= deliveryZone.minimumOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-800",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "h-4 w-4 shrink-0 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+															"Zone validée : frais de livraison ",
+															total >= 50 ? "offerts 🎉" : `de € ${deliveryZone.feeUnder50.toFixed(2)}`,
+															" (livraison offerte dès 50 €)"
+														] })]
+													})
+												]
 											})
 										] }),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
@@ -295,7 +348,32 @@ function CheckoutPage() {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "text-lg font-black",
 									children: "Paiement"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								}), fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-4 space-y-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl border-2 border-[#ff705f] bg-[#fff5f3] p-4 text-left",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between w-full",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
+													children: "Bancontact & En ligne"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "mt-1 block text-sm font-black text-[#17231f]",
+												children: "Paiement en ligne sécurisé"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-[#7a847e]",
+												children: "Application bancaire belge, Payconiq (QR code) ou Carte bancaire"
+											})
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2 rounded-xl bg-[#F6F1E9] p-3 text-xs text-[#766358] border border-black/5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-4 w-4 text-emerald-600 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Paiement en ligne requis pour la livraison à domicile." }), " (Le paiement sur place est réservé au retrait au restaurant)."] })]
+									})]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "mt-4 grid gap-3 sm:grid-cols-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
@@ -306,16 +384,16 @@ function CheckoutPage() {
 												className: "flex items-center justify-between w-full",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
-													children: "Bancontact Pro"
+													children: "Bancontact"
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-sm font-black",
-												children: "Bancontact Pro"
+												children: "Bancontact & En ligne"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "Application bancaire belge & Payconiq (QR code)"
+												children: "Bancontact Pro, Payconiq, Carte bancaire"
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -330,7 +408,7 @@ function CheckoutPage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "À la récupération — sans frais en ligne"
+												children: "Espèces ou Bancontact au comptoir lors du retrait"
 											})
 										]
 									})]

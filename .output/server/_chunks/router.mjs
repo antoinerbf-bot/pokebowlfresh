@@ -17,7 +17,7 @@ import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BqrDS7e8.css";
+var styles_default = "/assets/styles-BHo3obvG.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -6118,12 +6118,27 @@ function canonicalizeItems(items) {
 			}
 			const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
 			if (toppingLine) {
-				const parsed = toppingLine.replace(/^Toppings?\s*:\s*/i, "").replace(/\s*\(\+[\d.,]+€\)\s*$/, "").split(",").map((s) => s.trim()).filter((s) => s.length > 0 && !/aucun/i.test(s));
-				const extraToppings = Math.max(0, parsed.length - 2);
+				const rawContent = toppingLine.replace(/^Toppings?\s*:\s*/i, "").replace(/\s*\(\+[\d.,]+€\)\s*$/, "");
+				let totalToppingUnits = 0;
+				if (!/aucun/i.test(rawContent)) {
+					const parts = rawContent.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+					for (const part of parts) {
+						const match = part.match(/\(x(\d+)\)/i) || part.match(/x(\d+)/i);
+						const count = match ? parseInt(match[1], 10) : 1;
+						totalToppingUnits += isNaN(count) ? 1 : count;
+					}
+				}
+				const extraToppings = Math.max(0, totalToppingUnits - 2);
 				unitPrice += extraToppings * .5;
 			} else {
 				const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
-				const extraToppings = Math.max(0, individualToppings.length - 2);
+				let totalToppingUnits = 0;
+				for (const t of individualToppings) {
+					const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
+					const count = match ? parseInt(match[1], 10) : 1;
+					totalToppingUnits += isNaN(count) ? 1 : count;
+				}
+				const extraToppings = Math.max(0, totalToppingUnits - 2);
 				unitPrice += extraToppings * .5;
 			}
 			return {
@@ -6133,13 +6148,19 @@ function canonicalizeItems(items) {
 				toppings: opts
 			};
 		}
-		const bowl = bowls.find((b) => b.id === item.id);
+		const bowl = bowls.find((b) => b.id === item.id || item.id === `${b.id}-moyen` || item.id === `${b.id}-grand` || item.id.startsWith(b.id));
 		if (bowl) {
 			let unitPrice = bowl.price;
 			const opts = item.toppings ?? [];
 			if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) unitPrice += 3;
-			const toppingEntries = opts.filter((t) => /^Topping\s*:/i.test(t));
-			unitPrice += toppingEntries.length * .5;
+			const toppingEntries = opts.filter((t) => /^Topping/i.test(t));
+			let totalSignatureToppings = 0;
+			for (const t of toppingEntries) {
+				const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
+				const count = match ? parseInt(match[1], 10) : 1;
+				totalSignatureToppings += isNaN(count) ? 1 : count;
+			}
+			unitPrice += totalSignatureToppings * .5;
 			const extraSauces = opts.filter((t) => /sauce extra/i.test(t));
 			unitPrice += extraSauces.length * 1;
 			return {
@@ -6171,6 +6192,7 @@ var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema
 	if (subtotal <= 0) throw new Error("Panier invalide");
 	const deliveryZone = data.customer.fulfillment === "delivery" ? getDeliveryZone(data.customer.postalCode ?? "") : null;
 	if (data.customer.fulfillment === "delivery") {
+		if (data.paymentMethod === "on_site") throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
 		if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
 		if (subtotal < deliveryZone.minimumOrder) throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
 		if (!data.customer.address?.trim() || !data.customer.city?.trim()) throw new Error("Adresse de livraison incomplète.");
@@ -6284,9 +6306,14 @@ function CheckoutPage() {
 	const [loading, setLoading] = (0, import_react.useState)(false);
 	const [error, setError] = (0, import_react.useState)(null);
 	const pickupOptions = (0, import_react.useMemo)(() => buildPickupSlots(), []);
+	const normalizedPostal = postalCode.trim().replace(/\s+/g, "");
 	const deliveryZone = (0, import_react.useMemo)(() => getDeliveryZone(postalCode), [postalCode]);
 	const deliveryFee = fulfillment === "delivery" && deliveryZone ? total >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
 	const orderTotal = total + deliveryFee;
+	const handleFulfillmentChange = (method) => {
+		setFulfillment(method);
+		if (method === "delivery") setPaymentMethod("online");
+	};
 	if (items.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-[#F6F1E9] flex flex-col items-center justify-center px-5",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -6301,6 +6328,20 @@ function CheckoutPage() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError(null);
+		if (fulfillment === "delivery") {
+			if (paymentMethod === "on_site") {
+				setError("Le paiement sur place n'est pas autorisé pour la livraison à domicile. Veuillez régler en ligne.");
+				return;
+			}
+			if (!deliveryZone) {
+				setError("Cette zone de livraison n'est pas desservie. Veuillez choisir « Retrait sur place ».");
+				return;
+			}
+			if (total < deliveryZone.minimumOrder) {
+				setError(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+				return;
+			}
+		}
 		setLoading(true);
 		try {
 			const origin = window.location.origin;
@@ -6391,25 +6432,25 @@ function CheckoutPage() {
 									className: "mt-4 grid gap-3 sm:grid-cols-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
-										onClick: () => setFulfillment("delivery"),
-										className: `rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`,
+										onClick: () => handleFulfillmentChange("delivery"),
+										className: `rounded-2xl border-2 p-4 text-left transition ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9] hover:border-black/20"}`,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-sm font-black",
-											children: "Livraison"
+											children: "🛵 Livraison"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "mt-1 block text-xs text-[#7a847e]",
 											children: "À domicile selon ton code postal"
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
-										onClick: () => setFulfillment("pickup"),
-										className: `rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`,
+										onClick: () => handleFulfillmentChange("pickup"),
+										className: `rounded-2xl border-2 p-4 text-left transition ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9] hover:border-black/20"}`,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-sm font-black",
-											children: "Retrait sur place"
+											children: "🛍️ Retrait sur place"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "mt-1 block text-xs text-[#7a847e]",
-											children: "Poke N Bowl Visé"
+											children: "Poke N Bowl Visé (Sans minimum)"
 										})]
 									})]
 								})]
@@ -6467,7 +6508,7 @@ function CheckoutPage() {
 												className: "block sm:col-span-2",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-xs font-bold text-[#7a847e]",
-													children: "Adresse *"
+													children: "Adresse de livraison *"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 													required: true,
 													value: address,
@@ -6503,14 +6544,48 @@ function CheckoutPage() {
 													placeholder: "Visé"
 												})]
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "sm:col-span-2 rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-bold text-[#17231f]",
-												children: deliveryZone ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-													"Minimum : € ",
-													deliveryZone.minimumOrder.toFixed(2),
-													" · Livraison : ",
-													total >= 50 ? "gratuite" : `€ ${deliveryZone.feeUnder50.toFixed(2)}`
-												] }) : "Entre ton code postal pour connaître les frais de livraison."
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "sm:col-span-2",
+												children: [
+													!normalizedPostal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-medium text-[#7a847e]",
+														children: "Entre ton code postal pour calculer les frais de livraison (19 zones desservies autour de Visé)."
+													}),
+													normalizedPostal.length >= 4 && !deliveryZone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-start gap-2.5 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-bold text-red-700",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-4 w-4 shrink-0 text-red-600 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+															"Code postal ",
+															normalizedPostal,
+															" non desservi en livraison."
+														] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "block font-normal text-red-600 mt-0.5",
+															children: "Choisis l'option « Retrait sur place » pour retirer ta commande au restaurant."
+														})] })]
+													}),
+													deliveryZone && total < deliveryZone.minimumOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-bold text-amber-900",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-4 w-4 shrink-0 text-amber-600 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+															"Minimum de commande : € ",
+															deliveryZone.minimumOrder.toFixed(2),
+															" pour ce code postal."
+														] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+															className: "block font-normal text-amber-700 mt-0.5",
+															children: [
+																"Il te manque encore € ",
+																(deliveryZone.minimumOrder - total).toFixed(2),
+																" pour valider la livraison."
+															]
+														})] })]
+													}),
+													deliveryZone && total >= deliveryZone.minimumOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-800",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "h-4 w-4 shrink-0 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+															"Zone validée : frais de livraison ",
+															total >= 50 ? "offerts 🎉" : `de € ${deliveryZone.feeUnder50.toFixed(2)}`,
+															" (livraison offerte dès 50 €)"
+														] })]
+													})
+												]
 											})
 										] }),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
@@ -6553,7 +6628,32 @@ function CheckoutPage() {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "text-lg font-black",
 									children: "Paiement"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								}), fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-4 space-y-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl border-2 border-[#ff705f] bg-[#fff5f3] p-4 text-left",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between w-full",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
+													children: "Bancontact & En ligne"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "mt-1 block text-sm font-black text-[#17231f]",
+												children: "Paiement en ligne sécurisé"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-[#7a847e]",
+												children: "Application bancaire belge, Payconiq (QR code) ou Carte bancaire"
+											})
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2 rounded-xl bg-[#F6F1E9] p-3 text-xs text-[#766358] border border-black/5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-4 w-4 text-emerald-600 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Paiement en ligne requis pour la livraison à domicile." }), " (Le paiement sur place est réservé au retrait au restaurant)."] })]
+									})]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "mt-4 grid gap-3 sm:grid-cols-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
@@ -6564,16 +6664,16 @@ function CheckoutPage() {
 												className: "flex items-center justify-between w-full",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]",
-													children: "Bancontact Pro"
+													children: "Bancontact"
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-sm font-black",
-												children: "Bancontact Pro"
+												children: "Bancontact & En ligne"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "Application bancaire belge & Payconiq (QR code)"
+												children: "Bancontact Pro, Payconiq, Carte bancaire"
 											})
 										]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -6588,7 +6688,7 @@ function CheckoutPage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7a847e]",
-												children: "À la récupération — sans frais en ligne"
+												children: "Espèces ou Bancontact au comptoir lors du retrait"
 											})
 										]
 									})]
@@ -7783,7 +7883,7 @@ function SurMesurePage() {
 	const [selectedMixIns, setSelectedMixIns] = import_react.useState([]);
 	const [selectedProtein, setSelectedProtein] = import_react.useState(detailedProteins[0]);
 	const [selectedSauce, setSelectedSauce] = import_react.useState(detailedSauces[0]);
-	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [toppingQuantities, setToppingQuantities] = import_react.useState({});
 	const [qty, setQty] = import_react.useState(1);
 	const [added, setAdded] = import_react.useState(false);
 	const activeBowlImage = selectedProtein ? {
@@ -7795,17 +7895,36 @@ function SurMesurePage() {
 	const toggleMixIn = (name) => {
 		setSelectedMixIns((cur) => cur.includes(name) ? cur.filter((item) => item !== name) : [...cur, name]);
 	};
-	const toggleTopping = (name) => {
-		setSelectedToppings((cur) => cur.includes(name) ? cur.filter((t) => t !== name) : [...cur, name]);
+	const addTopping = (name) => {
+		setToppingQuantities((cur) => ({
+			...cur,
+			[name]: (cur[name] ?? 0) + 1
+		}));
+	};
+	const removeTopping = (name) => {
+		setToppingQuantities((cur) => {
+			const current = cur[name] ?? 0;
+			if (current <= 1) {
+				const copy = { ...cur };
+				delete copy[name];
+				return copy;
+			}
+			return {
+				...cur,
+				[name]: current - 1
+			};
+		});
 	};
 	const sizeExtra = selectedSize === "grand" ? 3 : 0;
 	const proteinExtra = selectedProtein?.extraPrice ?? 0;
 	const extraMixInsCount = Math.max(0, selectedMixIns.length - INCLUDED_MIX_INS);
 	const mixInsExtra = extraMixInsCount * .5;
-	const extraToppingsCount = Math.max(0, selectedToppings.length - 2);
+	const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
+	const extraToppingsCount = Math.max(0, totalToppingsCount - 2);
 	const toppingsExtra = extraToppingsCount * .5;
 	const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + mixInsExtra + toppingsExtra;
 	const totalPrice = unitPrice * qty;
+	const toppingsFormatted = Object.entries(toppingQuantities).filter(([_, q]) => q > 0).map(([name, q]) => q > 1 ? `${name} (x${q})` : name);
 	const isBaseReady = selectedBase !== null;
 	const isMixInsReady = selectedMixIns.length >= 1;
 	const isProteinReady = selectedProtein !== null;
@@ -7826,7 +7945,7 @@ function SurMesurePage() {
 			`Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
 			`Protéine : ${selectedProtein.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
 			`Sauce : ${selectedSauce.name}`,
-			...selectedToppings.length > 0 ? [`Toppings : ${selectedToppings.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`] : ["Toppings : Aucun"]
+			...toppingsFormatted.length > 0 ? [`Toppings : ${toppingsFormatted.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`] : ["Toppings : Aucun"]
 		];
 		const activeBowlImage = selectedProtein ? {
 			poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
@@ -8214,42 +8333,68 @@ function SurMesurePage() {
 												children: "Toppings croustillants"
 											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "rounded-full bg-[#2C1D16] px-3 py-1 text-xs font-black text-[#EADCC9]",
-												children: selectedToppings.length <= 2 ? `${selectedToppings.length} / 2 inclus` : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * .5).toFixed(2)}€)`
+												children: totalToppingsCount <= 2 ? `${totalToppingsCount} / 2 inclus` : `2 inclus + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)`
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 											className: "mb-4 text-xs font-semibold text-[#7a847e]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "2 toppings inclus dans la formule" }), " · Toppings supplémentaires à volonté (+0.50€ chaque) :"]
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "2 portions incluses dans la formule" }), " · Prenez autant de portions que vous souhaitez (+0.50€ chaque portion extra, même 10 ou 40 fois le même) :"]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
 											children: toppings.map((top) => {
-												const isSelected = selectedToppings.includes(top.name);
-												const isExtra = isSelected && selectedToppings.indexOf(top.name) >= 2;
-												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-													type: "button",
-													onClick: () => toggleTopping(top.name),
-													className: ["flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-200", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30"].join(" "),
-													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												const q = toppingQuantities[top.name] ?? 0;
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: ["flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-200", q > 0 ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30"].join(" "),
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2.5",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: "text-2xl",
 															children: top.emoji
-														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "min-w-0 flex-1",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																className: "truncate text-xs font-bold text-[#17231f]",
 																children: top.name
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																className: "text-[10px] font-black text-[#ff705f]",
-																children: isSelected ? isExtra ? "+0.50 € (extra)" : "Inclus" : "+0.50 € extra"
+																children: q === 0 ? "0.50 € / portion" : `${q} portion${q > 1 ? "s" : ""}`
 															})]
-														}),
-														isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-															className: "flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-2.5 w-2.5 stroke-[3]" })
-														})
-													]
+														})]
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "mt-2.5 flex items-center justify-between border-t border-black/5 pt-2",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-[10px] font-bold text-[#766358]",
+															children: q > 0 ? `x${q}` : "Extra +0.50€"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex items-center gap-1.5",
+															children: q > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+																	type: "button",
+																	onClick: () => removeTopping(top.name),
+																	className: "flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+																	"aria-label": "Diminuer",
+																	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3 stroke-[3]" })
+																}),
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	className: "w-5 text-center text-xs font-black text-[#2C1D16]",
+																	children: q
+																}),
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+																	type: "button",
+																	onClick: () => addTopping(top.name),
+																	className: "flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm",
+																	"aria-label": "Augmenter",
+																	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" })
+																})
+															] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+																type: "button",
+																onClick: () => addTopping(top.name),
+																className: "flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[10px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter" })]
+															})
+														})]
+													})]
 												}, top.id);
 											})
 										})
@@ -8351,7 +8496,7 @@ function SurMesurePage() {
 													children: "Toppings :"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "font-bold text-[#17231f] text-right",
-													children: selectedToppings.length > 0 ? `${selectedToppings.join(", ")} (${Math.min(2, selectedToppings.length)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra` : ""})` : "Aucun topping"
+													children: totalToppingsCount > 0 ? `${toppingsFormatted.join(", ")} (${Math.min(2, totalToppingsCount)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)` : ""})` : "Aucun topping"
 												})]
 											})
 										]
@@ -10185,40 +10330,58 @@ var TAG_STYLES = {
 	spicy: "bg-[#c0350f] text-white",
 	new: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]"
 };
-function ToppingChip({ topping, selected, onToggle }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-		type: "button",
-		onClick: onToggle,
-		"aria-pressed": selected,
-		"aria-label": `${topping.name} +${topping.price.toFixed(2)}€`,
-		className: ["relative flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none", selected ? "border-[#ff705f] bg-[#fff3f1] shadow-[0_4px_16px_-4px_rgba(255,112,95,.45)] scale-[1.02]" : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4] active:scale-95"].join(" "),
-		children: [
-			selected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#ff705f] shadow-sm",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
-					className: "h-3 w-3 text-white",
-					strokeWidth: 3
+function ToppingChip({ topping, qty, onAdd, onRemove }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: ["relative flex flex-col justify-between rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none", qty > 0 ? "border-[#ff705f] bg-[#fff3f1] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4]"].join(" "),
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col items-center gap-1",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-2xl leading-none",
+					role: "img",
+					"aria-hidden": "true",
+					children: topping.emoji
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-xs font-bold leading-tight text-[#17231f]",
+					children: topping.name
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] font-black text-[#ff705f]",
+					children: qty === 0 ? `+${topping.price.toFixed(2)} €` : `${qty} portion${qty > 1 ? "s" : ""} (+${(qty * topping.price).toFixed(2)}€)`
 				})
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-2xl leading-none",
-				role: "img",
-				"aria-hidden": "true",
-				children: topping.emoji
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-xs font-bold leading-tight text-[#17231f]",
-				children: topping.name
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-				className: "text-[11px] font-black text-[#ff705f]",
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "mt-2.5 flex items-center justify-center border-t border-black/5 pt-2",
+			children: qty > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-2",
 				children: [
-					"+",
-					topping.price.toFixed(2),
-					" €"
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: onRemove,
+						"aria-label": `Diminuer ${topping.name}`,
+						className: "flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3 stroke-[3]" })
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "w-5 text-center text-xs font-black text-[#2C1D16]",
+						children: qty
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: onAdd,
+						"aria-label": `Ajouter ${topping.name}`,
+						className: "flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" })
+					})
 				]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: onAdd,
+				className: "flex items-center gap-1 rounded-full bg-[#2C1D16] px-3 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter" })]
 			})
-		]
+		})]
 	});
 }
 function RemovableIngredientButton({ name, emoji, isRemoved, onToggle }) {
@@ -10304,7 +10467,7 @@ function ProductPage() {
 	const [extraChicken, setExtraChicken] = import_react.useState(false);
 	const [extraProtein, setExtraProtein] = import_react.useState(null);
 	const [selectedMixins, setSelectedMixins] = import_react.useState([]);
-	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [toppingQuantities, setToppingQuantities] = import_react.useState({});
 	const [extraSauce, setExtraSauce] = import_react.useState(null);
 	const [selectedDrink, setSelectedDrink] = import_react.useState(drinks[0]?.name || "Coca-Cola (33 cl)");
 	const [qty, setQty] = import_react.useState(1);
@@ -10313,15 +10476,33 @@ function ProductPage() {
 	const sizeExtra = !isCrousty && selectedSize === "grand" ? 3 : 0;
 	const extraProteinPrice = isCrousty ? extraChicken ? 2.5 : 0 : extraProtein ? 2.5 : 0;
 	const mixinsExtraPrice = selectedMixins.length * .5;
-	const toppingsExtraPrice = selectedToppings.length * .5;
+	const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
+	const toppingsExtraPrice = totalToppingsCount * .5;
 	const extraSaucePrice = extraSauce ? 1 : 0;
 	const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
 	const totalPrice = unitPrice * qty;
 	const toggleRemovedIngredient = (name) => {
 		setRemovedIngredients((cur) => cur.includes(name) ? cur.filter((n) => n !== name) : [...cur, name]);
 	};
-	const toggleTopping = (toppingName) => {
-		setSelectedToppings((cur) => cur.includes(toppingName) ? cur.filter((t) => t !== toppingName) : [...cur, toppingName]);
+	const addTopping = (name) => {
+		setToppingQuantities((cur) => ({
+			...cur,
+			[name]: (cur[name] ?? 0) + 1
+		}));
+	};
+	const removeTopping = (name) => {
+		setToppingQuantities((cur) => {
+			const current = cur[name] ?? 0;
+			if (current <= 1) {
+				const copy = { ...cur };
+				delete copy[name];
+				return copy;
+			}
+			return {
+				...cur,
+				[name]: current - 1
+			};
+		});
 	};
 	const toggleMixin = (mixinName) => {
 		setSelectedMixins((cur) => cur.includes(mixinName) ? cur.filter((m) => m !== mixinName) : [...cur, mixinName]);
@@ -10344,8 +10525,8 @@ function ProductPage() {
 		selectedMixins.forEach((m) => {
 			optionsList.push(`Légume / Mix-in (+0.50€) : ${m}`);
 		});
-		selectedToppings.forEach((t) => {
-			optionsList.push(`Topping (+0.50€) : ${t}`);
+		Object.entries(toppingQuantities).forEach(([t, q]) => {
+			if (q > 0) optionsList.push(`Topping (+0.50€) : ${t}${q > 1 ? ` (x${q})` : ""}`);
 		});
 		if (extraSauce) optionsList.push(`Sauce extra (+1€) : ${extraSauce}`);
 		addItem({
@@ -10794,15 +10975,15 @@ function ProductPage() {
 											children: "Toppings Croustillants"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-[11px] text-[#7a847e]",
-											children: "À volonté · choisis autant de toppings que tu veux (+0.50€ chaque)"
-										})] }), selectedToppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											children: "À volonté · choisis autant de portions que tu veux (+0.50€ chaque, même 10 ou 40 fois le même)"
+										})] }), totalToppingsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm",
 											children: [
-												selectedToppings.length,
-												" topping",
-												selectedToppings.length > 1 ? "s" : "",
+												totalToppingsCount,
+												" portion",
+												totalToppingsCount > 1 ? "s" : "",
 												" (+",
-												(selectedToppings.length * .5).toFixed(2),
+												toppingsExtraPrice.toFixed(2),
 												"€)"
 											]
 										})]
@@ -10810,8 +10991,9 @@ function ProductPage() {
 										className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
 										children: toppings.map((topping) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToppingChip, {
 											topping,
-											selected: selectedToppings.includes(topping.name),
-											onToggle: () => toggleTopping(topping.name)
+											qty: toppingQuantities[topping.name] ?? 0,
+											onAdd: () => addTopping(topping.name),
+											onRemove: () => removeTopping(topping.name)
 										}, topping.id))
 									})]
 								}),

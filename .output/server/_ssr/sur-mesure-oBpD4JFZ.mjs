@@ -8,7 +8,7 @@ import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { K as ArrowLeft, V as Check, _ as Plus, d as ShoppingBag, l as Sparkles, x as Minus } from "../_libs/lucide-react.mjs";
 import { i as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-DK_WeGxc.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-CWaxUs3P.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-oBpD4JFZ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -23,7 +23,7 @@ function SurMesurePage() {
 	const [selectedMixIns, setSelectedMixIns] = import_react.useState([]);
 	const [selectedProtein, setSelectedProtein] = import_react.useState(detailedProteins[0]);
 	const [selectedSauce, setSelectedSauce] = import_react.useState(detailedSauces[0]);
-	const [selectedToppings, setSelectedToppings] = import_react.useState([]);
+	const [toppingQuantities, setToppingQuantities] = import_react.useState({});
 	const [qty, setQty] = import_react.useState(1);
 	const [added, setAdded] = import_react.useState(false);
 	const activeBowlImage = selectedProtein ? {
@@ -35,17 +35,36 @@ function SurMesurePage() {
 	const toggleMixIn = (name) => {
 		setSelectedMixIns((cur) => cur.includes(name) ? cur.filter((item) => item !== name) : [...cur, name]);
 	};
-	const toggleTopping = (name) => {
-		setSelectedToppings((cur) => cur.includes(name) ? cur.filter((t) => t !== name) : [...cur, name]);
+	const addTopping = (name) => {
+		setToppingQuantities((cur) => ({
+			...cur,
+			[name]: (cur[name] ?? 0) + 1
+		}));
+	};
+	const removeTopping = (name) => {
+		setToppingQuantities((cur) => {
+			const current = cur[name] ?? 0;
+			if (current <= 1) {
+				const copy = { ...cur };
+				delete copy[name];
+				return copy;
+			}
+			return {
+				...cur,
+				[name]: current - 1
+			};
+		});
 	};
 	const sizeExtra = selectedSize === "grand" ? 3 : 0;
 	const proteinExtra = selectedProtein?.extraPrice ?? 0;
 	const extraMixInsCount = Math.max(0, selectedMixIns.length - INCLUDED_MIX_INS);
 	const mixInsExtra = extraMixInsCount * .5;
-	const extraToppingsCount = Math.max(0, selectedToppings.length - 2);
+	const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
+	const extraToppingsCount = Math.max(0, totalToppingsCount - 2);
 	const toppingsExtra = extraToppingsCount * .5;
 	const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + mixInsExtra + toppingsExtra;
 	const totalPrice = unitPrice * qty;
+	const toppingsFormatted = Object.entries(toppingQuantities).filter(([_, q]) => q > 0).map(([name, q]) => q > 1 ? `${name} (x${q})` : name);
 	const isBaseReady = selectedBase !== null;
 	const isMixInsReady = selectedMixIns.length >= 1;
 	const isProteinReady = selectedProtein !== null;
@@ -66,7 +85,7 @@ function SurMesurePage() {
 			`Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
 			`Protéine : ${selectedProtein.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
 			`Sauce : ${selectedSauce.name}`,
-			...selectedToppings.length > 0 ? [`Toppings : ${selectedToppings.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`] : ["Toppings : Aucun"]
+			...toppingsFormatted.length > 0 ? [`Toppings : ${toppingsFormatted.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`] : ["Toppings : Aucun"]
 		];
 		const activeBowlImage = selectedProtein ? {
 			poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
@@ -454,42 +473,68 @@ function SurMesurePage() {
 												children: "Toppings croustillants"
 											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "rounded-full bg-[#2C1D16] px-3 py-1 text-xs font-black text-[#EADCC9]",
-												children: selectedToppings.length <= 2 ? `${selectedToppings.length} / 2 inclus` : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * .5).toFixed(2)}€)`
+												children: totalToppingsCount <= 2 ? `${totalToppingsCount} / 2 inclus` : `2 inclus + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)`
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 											className: "mb-4 text-xs font-semibold text-[#7a847e]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "2 toppings inclus dans la formule" }), " · Toppings supplémentaires à volonté (+0.50€ chaque) :"]
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "2 portions incluses dans la formule" }), " · Prenez autant de portions que vous souhaitez (+0.50€ chaque portion extra, même 10 ou 40 fois le même) :"]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
 											children: toppings.map((top) => {
-												const isSelected = selectedToppings.includes(top.name);
-												const isExtra = isSelected && selectedToppings.indexOf(top.name) >= 2;
-												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-													type: "button",
-													onClick: () => toggleTopping(top.name),
-													className: ["flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-200", isSelected ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30"].join(" "),
-													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												const q = toppingQuantities[top.name] ?? 0;
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: ["flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-200", q > 0 ? "border-[#ff705f] bg-[#fff1ee] shadow-sm" : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30"].join(" "),
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2.5",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: "text-2xl",
 															children: top.emoji
-														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "min-w-0 flex-1",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																className: "truncate text-xs font-bold text-[#17231f]",
 																children: top.name
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 																className: "text-[10px] font-black text-[#ff705f]",
-																children: isSelected ? isExtra ? "+0.50 € (extra)" : "Inclus" : "+0.50 € extra"
+																children: q === 0 ? "0.50 € / portion" : `${q} portion${q > 1 ? "s" : ""}`
 															})]
-														}),
-														isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-															className: "flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-2.5 w-2.5 stroke-[3]" })
-														})
-													]
+														})]
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "mt-2.5 flex items-center justify-between border-t border-black/5 pt-2",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-[10px] font-bold text-[#766358]",
+															children: q > 0 ? `x${q}` : "Extra +0.50€"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex items-center gap-1.5",
+															children: q > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+																	type: "button",
+																	onClick: () => removeTopping(top.name),
+																	className: "flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+																	"aria-label": "Diminuer",
+																	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3 stroke-[3]" })
+																}),
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	className: "w-5 text-center text-xs font-black text-[#2C1D16]",
+																	children: q
+																}),
+																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+																	type: "button",
+																	onClick: () => addTopping(top.name),
+																	className: "flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm",
+																	"aria-label": "Augmenter",
+																	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" })
+																})
+															] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+																type: "button",
+																onClick: () => addTopping(top.name),
+																className: "flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[10px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm",
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ajouter" })]
+															})
+														})]
+													})]
 												}, top.id);
 											})
 										})
@@ -591,7 +636,7 @@ function SurMesurePage() {
 													children: "Toppings :"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "font-bold text-[#17231f] text-right",
-													children: selectedToppings.length > 0 ? `${selectedToppings.join(", ")} (${Math.min(2, selectedToppings.length)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra` : ""})` : "Aucun topping"
+													children: totalToppingsCount > 0 ? `${toppingsFormatted.join(", ")} (${Math.min(2, totalToppingsCount)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)` : ""})` : "Aucun topping"
 												})]
 											})
 										]

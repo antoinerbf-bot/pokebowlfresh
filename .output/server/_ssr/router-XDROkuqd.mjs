@@ -4,22 +4,22 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$14 } from "../_productId-kQeB2s5M.mjs";
+import { t as Route$14 } from "../_productId-d4NJSVEZ.mjs";
 import { A as ExternalLink, F as CircleCheckBig, M as CookingPot, f as Shield, g as Printer, h as RefreshCw, i as Truck, m as Search, n as VolumeX, r as Volume2, v as Phone } from "../_libs/lucide-react.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-BtSJch6o.mjs";
+import { t as createSsrRpc } from "./createSsrRpc-BGp5L04o.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as Route$15 } from "../_token-DLHO6k82.mjs";
+import { t as Route$15 } from "../_token-C_BmALQm.mjs";
 import { n as getBancontactProPayment } from "./bancontact-pro.server-CodjVMhX.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, t as acknowledgePrint } from "./order-store-4tO4OvTG.mjs";
-import { t as Route$16 } from "./order.success-C4cVwQSJ.mjs";
+import { t as Route$16 } from "./order.success-LKjkWz-X.mjs";
 import { t as EscPosBuilder } from "./escpos-C99SgK7y.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CbpQAY2u.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-XDROkuqd.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-BqrDS7e8.css";
+var styles_default = "/assets/styles-BHo3obvG.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -260,9 +260,9 @@ var Route$12 = createFileRoute("/")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./checkout-BlhDXu9G.mjs");
+var $$splitComponentImporter$5 = () => import("./checkout-B1VyfSM0.mjs");
 var Route$11 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-DpyRuVMV.mjs");
+var $$splitComponentImporter$4 = () => import("./commander-C10g8h0r.mjs");
 var Route$10 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./contact-BtgKvkc7.mjs");
 var Route$9 = createFileRoute("/contact")({
@@ -274,9 +274,9 @@ var Route$8 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./sur-mesure-CWaxUs3P.mjs");
+var $$splitComponentImporter$1 = () => import("./sur-mesure-oBpD4JFZ.mjs");
 var Route$7 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./stocks-C10x8Rju.mjs");
+var $$splitComponentImporter = () => import("./stocks-d-CCA06U.mjs");
 var Route$6 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var Route$5 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
