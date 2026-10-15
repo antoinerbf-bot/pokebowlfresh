@@ -42,44 +42,75 @@ const TAG_STYLES: Record<string, string> = {
   new:        "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
 };
 
-/* ─── Topping chip component ─────────────────────────────────────── */
+/* ─── Topping chip component with quantity stepper ───────────────── */
 function ToppingChip({
   topping,
-  selected,
-  onToggle,
+  qty,
+  onAdd,
+  onRemove,
 }: {
   topping: Topping;
-  selected: boolean;
-  onToggle: () => void;
+  qty: number;
+  onAdd: () => void;
+  onRemove: () => void;
 }) {
+  const isSelected = qty > 0;
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-pressed={selected}
-      aria-label={`${topping.name} +${topping.price.toFixed(2)}€`}
+    <div
       className={[
-        "relative flex flex-col items-center justify-center gap-1.5 rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none",
-        selected
-          ? "border-[#ff705f] bg-[#fff3f1] shadow-[0_4px_16px_-4px_rgba(255,112,95,.45)] scale-[1.02]"
-          : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4] active:scale-95",
+        "relative flex flex-col justify-between rounded-2xl border-2 p-3 text-center transition-all duration-200 select-none",
+        isSelected
+          ? "border-[#ff705f] bg-[#fff3f1] shadow-sm"
+          : "border-[#e8e2d9] bg-white hover:border-[#ff705f]/50 hover:bg-[#faf8f4]",
       ].join(" ")}
     >
-      {selected && (
-        <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#ff705f] shadow-sm">
-          <Check className="h-3 w-3 text-white" strokeWidth={3} />
+      <div className="flex flex-col items-center gap-1">
+        <span className="text-2xl leading-none" role="img" aria-hidden="true">
+          {topping.emoji}
         </span>
-      )}
-      <span className="text-2xl leading-none" role="img" aria-hidden="true">
-        {topping.emoji}
-      </span>
-      <span className="text-xs font-bold leading-tight text-[#17231f]">
-        {topping.name}
-      </span>
-      <span className="text-[11px] font-black text-[#ff705f]">
-        +{topping.price.toFixed(2)} €
-      </span>
-    </button>
+        <span className="text-xs font-bold leading-tight text-[#17231f]">
+          {topping.name}
+        </span>
+        <span className="text-[10px] font-black text-[#ff705f]">
+          {qty === 0 ? `+${topping.price.toFixed(2)} €` : `${qty} portion${qty > 1 ? "s" : ""} (+${(qty * topping.price).toFixed(2)}€)`}
+        </span>
+      </div>
+
+      <div className="mt-2.5 flex items-center justify-center border-t border-black/5 pt-2">
+        {qty > 0 ? (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onRemove}
+              aria-label={`Diminuer ${topping.name}`}
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm"
+            >
+              <Minus className="h-3 w-3 stroke-[3]" />
+            </button>
+            <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+              {qty}
+            </span>
+            <button
+              type="button"
+              onClick={onAdd}
+              aria-label={`Ajouter ${topping.name}`}
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm"
+            >
+              <Plus className="h-3 w-3 stroke-[3]" />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={onAdd}
+            className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-3 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm"
+          >
+            <Plus className="h-3 w-3" />
+            <span>Ajouter</span>
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -195,7 +226,7 @@ function ProductPage() {
   const [extraChicken, setExtraChicken] = React.useState(false); // Crousty : supplément poulet croustillant (+2.50 €)
   const [extraProtein, setExtraProtein] = React.useState<string | null>(null); // Poké : supplément protéine (+2.50 €)
   const [selectedMixins, setSelectedMixins] = React.useState<string[]>([]); // Légumes / Fruits (+0.50 € chaque, illimité)
-  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]); // Toppings croustillants (+0.50 € chaque, illimité)
+  const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({}); // Toppings (+0.50 € chaque portion, illimité)
   const [extraSauce, setExtraSauce] = React.useState<string | null>(null); // 2ème pot de sauce (+1.00 €)
   const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
   const [qty, setQty] = React.useState(1);
@@ -208,7 +239,8 @@ function ProductPage() {
   const sizeExtra = !isCrousty && selectedSize === "grand" ? 3.00 : 0;
   const extraProteinPrice = (isCrousty ? (extraChicken ? 2.50 : 0) : (extraProtein ? 2.50 : 0));
   const mixinsExtraPrice = selectedMixins.length * 0.50;
-  const toppingsExtraPrice = selectedToppings.length * 0.50;
+  const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
+  const toppingsExtraPrice = totalToppingsCount * 0.50;
   const extraSaucePrice = extraSauce ? 1.00 : 0;
 
   const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
@@ -221,13 +253,24 @@ function ProductPage() {
     );
   };
 
-  // Toggle topping additionnel (illimité)
-  const toggleTopping = (toppingName: string) => {
-    setSelectedToppings((cur) =>
-      cur.includes(toppingName)
-        ? cur.filter((t) => t !== toppingName)
-        : [...cur, toppingName]
-    );
+  // Topping stepper (illimité, chaque portion à +0.50€)
+  const addTopping = (name: string) => {
+    setToppingQuantities((cur) => ({
+      ...cur,
+      [name]: (cur[name] ?? 0) + 1,
+    }));
+  };
+
+  const removeTopping = (name: string) => {
+    setToppingQuantities((cur) => {
+      const current = cur[name] ?? 0;
+      if (current <= 1) {
+        const copy = { ...cur };
+        delete copy[name];
+        return copy;
+      }
+      return { ...cur, [name]: current - 1 };
+    });
   };
 
   // Toggle légume / mix-in additionnel (illimité)
@@ -279,8 +322,10 @@ function ProductPage() {
     });
 
     // Toppings payants sélectionnés
-    selectedToppings.forEach((t) => {
-      optionsList.push(`Topping (+0.50€) : ${t}`);
+    Object.entries(toppingQuantities).forEach(([t, q]) => {
+      if (q > 0) {
+        optionsList.push(`Topping (+0.50€) : ${t}${q > 1 ? ` (x${q})` : ""}`);
+      }
     });
 
     // Sauce extra payante
@@ -748,12 +793,12 @@ function ProductPage() {
                         Toppings Croustillants
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">
-                        À volonté · choisis autant de toppings que tu veux (+0.50€ chaque)
+                        À volonté · choisis autant de portions que tu veux (+0.50€ chaque, même 10 ou 40 fois le même)
                       </p>
                     </div>
-                    {selectedToppings.length > 0 && (
+                    {totalToppingsCount > 0 && (
                       <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                        {selectedToppings.length} topping{selectedToppings.length > 1 ? "s" : ""} (+{(selectedToppings.length * 0.5).toFixed(2)}€)
+                        {totalToppingsCount} portion{totalToppingsCount > 1 ? "s" : ""} (+{toppingsExtraPrice.toFixed(2)}€)
                       </span>
                     )}
                   </div>
@@ -763,8 +808,9 @@ function ProductPage() {
                       <ToppingChip
                         key={topping.id}
                         topping={topping}
-                        selected={selectedToppings.includes(topping.name)}
-                        onToggle={() => toggleTopping(topping.name)}
+                        qty={toppingQuantities[topping.name] ?? 0}
+                        onAdd={() => addTopping(topping.name)}
+                        onRemove={() => removeTopping(topping.name)}
                       />
                     ))}
                   </div>

@@ -85,17 +85,29 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       // Toppings (2 inclus, +0.50€ chacun au-delà)
       const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
       if (toppingLine) {
-        const parsed = toppingLine
+        const rawContent = toppingLine
           .replace(/^Toppings?\s*:\s*/i, "")
-          .replace(/\s*\(\+[\d.,]+€\)\s*$/, "")
-          .split(",")
-          .map((s) => s.trim())
-          .filter((s) => s.length > 0 && !/aucun/i.test(s));
-        const extraToppings = Math.max(0, parsed.length - 2);
+          .replace(/\s*\(\+[\d.,]+€\)\s*$/, "");
+        let totalToppingUnits = 0;
+        if (!/aucun/i.test(rawContent)) {
+          const parts = rawContent.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+          for (const part of parts) {
+            const match = part.match(/\(x(\d+)\)/i) || part.match(/x(\d+)/i);
+            const count = match ? parseInt(match[1], 10) : 1;
+            totalToppingUnits += isNaN(count) ? 1 : count;
+          }
+        }
+        const extraToppings = Math.max(0, totalToppingUnits - 2);
         unitPrice += extraToppings * 0.50;
       } else {
         const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
-        const extraToppings = Math.max(0, individualToppings.length - 2);
+        let totalToppingUnits = 0;
+        for (const t of individualToppings) {
+          const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
+          const count = match ? parseInt(match[1], 10) : 1;
+          totalToppingUnits += isNaN(count) ? 1 : count;
+        }
+        const extraToppings = Math.max(0, totalToppingUnits - 2);
         unitPrice += extraToppings * 0.50;
       }
 
@@ -108,7 +120,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
     }
 
     // ─── 2. Bowls signatures ─────────────────────────────────────────
-    const bowl = bowls.find((b) => b.id === item.id);
+    const bowl = bowls.find((b) => b.id === item.id || item.id === `${b.id}-moyen` || item.id === `${b.id}-grand` || item.id.startsWith(b.id));
     if (bowl) {
       let unitPrice = bowl.price;
       const opts = item.toppings ?? [];
@@ -118,9 +130,15 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += 3.00;
       }
 
-      // Toppings additionnels (+0.50€ chacun)
-      const toppingEntries = opts.filter((t) => /^Topping\s*:/i.test(t));
-      unitPrice += toppingEntries.length * 0.50;
+      // Toppings additionnels (+0.50€ chaque portion, illimité)
+      const toppingEntries = opts.filter((t) => /^Topping/i.test(t));
+      let totalSignatureToppings = 0;
+      for (const t of toppingEntries) {
+        const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
+        const count = match ? parseInt(match[1], 10) : 1;
+        totalSignatureToppings += isNaN(count) ? 1 : count;
+      }
+      unitPrice += totalSignatureToppings * 0.50;
 
       // Sauce extra (+1.00€)
       const extraSauces = opts.filter((t) => /sauce extra/i.test(t));
@@ -174,6 +192,9 @@ export const submitCheckout = createServerFn({ method: "POST" })
       : null;
 
     if (data.customer.fulfillment === "delivery") {
+      if (data.paymentMethod === "on_site") {
+        throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
+      }
       if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
       if (subtotal < deliveryZone.minimumOrder) {
         throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);

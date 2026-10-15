@@ -40,7 +40,7 @@ function SurMesurePage() {
   const [selectedMixIns, setSelectedMixIns] = React.useState<string[]>([]);
   const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0]);
   const [selectedSauce, setSelectedSauce] = React.useState<CustomIngredientOption | null>(detailedSauces[0]);
-  const [selectedToppings, setSelectedToppings] = React.useState<string[]>([]);
+  const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({});
   const [qty, setQty] = React.useState(1);
   const [added, setAdded] = React.useState(false);
 
@@ -59,11 +59,24 @@ function SurMesurePage() {
     );
   };
 
-  // Toggle Topping (2 inclus, illimité à +0.50€ au-delà)
-  const toggleTopping = (name: string) => {
-    setSelectedToppings((cur) =>
-      cur.includes(name) ? cur.filter((t) => t !== name) : [...cur, name]
-    );
+  // Topping stepper (2 portions incluses, illimité à +0.50€ chaque portion supplémentaire)
+  const addTopping = (name: string) => {
+    setToppingQuantities((cur) => ({
+      ...cur,
+      [name]: (cur[name] ?? 0) + 1,
+    }));
+  };
+
+  const removeTopping = (name: string) => {
+    setToppingQuantities((cur) => {
+      const current = cur[name] ?? 0;
+      if (current <= 1) {
+        const copy = { ...cur };
+        delete copy[name];
+        return copy;
+      }
+      return { ...cur, [name]: current - 1 };
+    });
   };
 
   // Pricing calculations (5 mix-ins inclus, 2 toppings inclus, Grand = 13€ soit +3€)
@@ -71,10 +84,15 @@ function SurMesurePage() {
   const proteinExtra = selectedProtein?.extraPrice ?? 0;
   const extraMixInsCount = Math.max(0, selectedMixIns.length - INCLUDED_MIX_INS);
   const mixInsExtra = extraMixInsCount * 0.50;
-  const extraToppingsCount = Math.max(0, selectedToppings.length - 2);
+  const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
+  const extraToppingsCount = Math.max(0, totalToppingsCount - 2);
   const toppingsExtra = extraToppingsCount * 0.50;
   const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + mixInsExtra + toppingsExtra;
   const totalPrice = unitPrice * qty;
+
+  const toppingsFormatted = Object.entries(toppingQuantities)
+    .filter(([_, q]) => q > 0)
+    .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name));
 
   // Validation
   const isBaseReady = selectedBase !== null;
@@ -100,8 +118,8 @@ function SurMesurePage() {
       `Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
       `Protéine : ${selectedProtein.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
       `Sauce : ${selectedSauce.name}`,
-      ...(selectedToppings.length > 0
-        ? [`Toppings : ${selectedToppings.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`]
+      ...(toppingsFormatted.length > 0
+        ? [`Toppings : ${toppingsFormatted.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`]
         : ["Toppings : Aucun"]),
     ];
 
@@ -493,43 +511,78 @@ function SurMesurePage() {
                   </h2>
                 </div>
                 <span className="rounded-full bg-[#2C1D16] px-3 py-1 text-xs font-black text-[#EADCC9]">
-                  {selectedToppings.length <= 2
-                    ? `${selectedToppings.length} / 2 inclus`
-                    : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * 0.5).toFixed(2)}€)`}
+                  {totalToppingsCount <= 2
+                    ? `${totalToppingsCount} / 2 inclus`
+                    : `2 inclus + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)`}
                 </span>
               </div>
               <p className="mb-4 text-xs font-semibold text-[#7a847e]">
-                <strong>2 toppings inclus dans la formule</strong> · Toppings supplémentaires à volonté (+0.50€ chaque) :
+                <strong>2 portions incluses dans la formule</strong> · Prenez autant de portions que vous souhaitez (+0.50€ chaque portion extra, même 10 ou 40 fois le même) :
               </p>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {toppings.map((top) => {
-                  const isSelected = selectedToppings.includes(top.name);
-                  const isExtra = isSelected && selectedToppings.indexOf(top.name) >= 2;
+                  const q = toppingQuantities[top.name] ?? 0;
+                  const isSelected = q > 0;
                   return (
-                    <button
+                    <div
                       key={top.id}
-                      type="button"
-                      onClick={() => toggleTopping(top.name)}
                       className={[
-                        "flex items-center gap-2.5 rounded-2xl border-2 p-3 text-left transition-all duration-200",
+                        "flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-200",
                         isSelected
                           ? "border-[#ff705f] bg-[#fff1ee] shadow-sm"
                           : "border-[#e8e2d9] bg-white hover:border-[#2C1D16]/30",
                       ].join(" ")}
                     >
-                      <span className="text-2xl">{top.emoji}</span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-xs font-bold text-[#17231f]">{top.name}</p>
-                        <p className="text-[10px] font-black text-[#ff705f]">
-                          {isSelected ? (isExtra ? "+0.50 € (extra)" : "Inclus") : "+0.50 € extra"}
-                        </p>
-                      </div>
-                      {isSelected && (
-                        <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
-                          <Check className="h-2.5 w-2.5 stroke-[3]" />
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-2xl">{top.emoji}</span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-xs font-bold text-[#17231f]">{top.name}</p>
+                          <p className="text-[10px] font-black text-[#ff705f]">
+                            {q === 0 ? "0.50 € / portion" : `${q} portion${q > 1 ? "s" : ""}`}
+                          </p>
                         </div>
-                      )}
-                    </button>
+                      </div>
+
+                      <div className="mt-2.5 flex items-center justify-between border-t border-black/5 pt-2">
+                        <span className="text-[10px] font-bold text-[#766358]">
+                          {q > 0 ? `x${q}` : "Extra +0.50€"}
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          {q > 0 ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => removeTopping(top.name)}
+                                className="flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm"
+                                aria-label="Diminuer"
+                              >
+                                <Minus className="h-3 w-3 stroke-[3]" />
+                              </button>
+                              <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+                                {q}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => addTopping(top.name)}
+                                className="flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm"
+                                aria-label="Augmenter"
+                              >
+                                <Plus className="h-3 w-3 stroke-[3]" />
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => addTopping(top.name)}
+                              className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[10px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm"
+                            >
+                              <Plus className="h-3 w-3" />
+                              <span>Ajouter</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -605,8 +658,8 @@ function SurMesurePage() {
                 <div className="pt-2 flex justify-between gap-2">
                   <span className="font-semibold text-[#7a847e]">Toppings :</span>
                   <span className="font-bold text-[#17231f] text-right">
-                    {selectedToppings.length > 0
-                      ? `${selectedToppings.join(", ")} (${Math.min(2, selectedToppings.length)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra` : ""})`
+                    {totalToppingsCount > 0
+                      ? `${toppingsFormatted.join(", ")} (${Math.min(2, totalToppingsCount)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)` : ""})`
                       : "Aucun topping"}
                   </span>
                 </div>

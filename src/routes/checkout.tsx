@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, CreditCard, Store, Loader2 } from "lucide-react";
+import { ArrowLeft, CreditCard, Store, Loader2, ShieldCheck, AlertCircle, CheckCircle } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import { useCart } from "../context/CartContext";
@@ -30,9 +30,17 @@ function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
 
   const pickupOptions = useMemo(() => buildPickupSlots(), []);
+  const normalizedPostal = postalCode.trim().replace(/\s+/g, "");
   const deliveryZone = useMemo(() => getDeliveryZone(postalCode), [postalCode]);
   const deliveryFee = fulfillment === "delivery" && deliveryZone ? (total >= 50 ? 0 : deliveryZone.feeUnder50) : 0;
   const orderTotal = total + deliveryFee;
+
+  const handleFulfillmentChange = (method: FulfillmentMethod) => {
+    setFulfillment(method);
+    if (method === "delivery") {
+      setPaymentMethod("online");
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -51,6 +59,22 @@ function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (fulfillment === "delivery") {
+      if (paymentMethod === "on_site") {
+        setError("Le paiement sur place n'est pas autorisé pour la livraison à domicile. Veuillez régler en ligne.");
+        return;
+      }
+      if (!deliveryZone) {
+        setError("Cette zone de livraison n'est pas desservie. Veuillez choisir « Retrait sur place ».");
+        return;
+      }
+      if (total < deliveryZone.minimumOrder) {
+        setError(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -138,13 +162,29 @@ function CheckoutPage() {
             <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
               <h2 className="text-lg font-black">Mode de réception</h2>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <button type="button" onClick={() => setFulfillment("delivery")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`}>
-                  <span className="text-sm font-black">Livraison</span>
+                <button
+                  type="button"
+                  onClick={() => handleFulfillmentChange("delivery")}
+                  className={`rounded-2xl border-2 p-4 text-left transition ${
+                    fulfillment === "delivery"
+                      ? "border-[#ff705f] bg-[#fff5f3]"
+                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                  }`}
+                >
+                  <span className="text-sm font-black">🛵 Livraison</span>
                   <span className="mt-1 block text-xs text-[#7a847e]">À domicile selon ton code postal</span>
                 </button>
-                <button type="button" onClick={() => setFulfillment("pickup")} className={`rounded-2xl border-2 p-4 text-left ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9]"}`}>
-                  <span className="text-sm font-black">Retrait sur place</span>
-                  <span className="mt-1 block text-xs text-[#7a847e]">Poke N Bowl Visé</span>
+                <button
+                  type="button"
+                  onClick={() => handleFulfillmentChange("pickup")}
+                  className={`rounded-2xl border-2 p-4 text-left transition ${
+                    fulfillment === "pickup"
+                      ? "border-[#ff705f] bg-[#fff5f3]"
+                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                  }`}
+                >
+                  <span className="text-sm font-black">🛍️ Retrait sur place</span>
+                  <span className="mt-1 block text-xs text-[#7a847e]">Poke N Bowl Visé (Sans minimum)</span>
                 </button>
               </div>
             </section>
@@ -186,7 +226,7 @@ function CheckoutPage() {
                 {fulfillment === "delivery" && (
                   <>
                     <label className="block sm:col-span-2">
-                      <span className="text-xs font-bold text-[#7a847e]">Adresse *</span>
+                      <span className="text-xs font-bold text-[#7a847e]">Adresse de livraison *</span>
                       <input required value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Rue et numéro" />
                     </label>
                     <label className="block">
@@ -197,8 +237,47 @@ function CheckoutPage() {
                       <span className="text-xs font-bold text-[#7a847e]">Ville *</span>
                       <input required value={city} onChange={(e) => setCity(e.target.value)} className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]" placeholder="Visé" />
                     </label>
-                    <div className="sm:col-span-2 rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-bold text-[#17231f]">
-                      {deliveryZone ? <>Minimum : € {deliveryZone.minimumOrder.toFixed(2)} · Livraison : {total >= 50 ? "gratuite" : `€ ${deliveryZone.feeUnder50.toFixed(2)}`}</> : "Entre ton code postal pour connaître les frais de livraison."}
+
+                    {/* Feedback temps réel sur la zone de livraison */}
+                    <div className="sm:col-span-2">
+                      {!normalizedPostal && (
+                        <div className="rounded-xl bg-[#F6F1E9] px-4 py-3 text-xs font-medium text-[#7a847e]">
+                          Entre ton code postal pour calculer les frais de livraison (19 zones desservies autour de Visé).
+                        </div>
+                      )}
+
+                      {normalizedPostal.length >= 4 && !deliveryZone && (
+                        <div className="flex items-start gap-2.5 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-bold text-red-700">
+                          <AlertCircle className="h-4 w-4 shrink-0 text-red-600 mt-0.5" />
+                          <div>
+                            <span>Code postal {normalizedPostal} non desservi en livraison.</span>
+                            <span className="block font-normal text-red-600 mt-0.5">
+                              Choisis l'option « Retrait sur place » pour retirer ta commande au restaurant.
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {deliveryZone && total < deliveryZone.minimumOrder && (
+                        <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-bold text-amber-900">
+                          <AlertCircle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
+                          <div>
+                            <span>Minimum de commande : € {deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.</span>
+                            <span className="block font-normal text-amber-700 mt-0.5">
+                              Il te manque encore € {(deliveryZone.minimumOrder - total).toFixed(2)} pour valider la livraison.
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {deliveryZone && total >= deliveryZone.minimumOrder && (
+                        <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-800">
+                          <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" />
+                          <span>
+                            Zone validée : frais de livraison {total >= 50 ? "offerts 🎉" : `de € ${deliveryZone.feeUnder50.toFixed(2)}`} (livraison offerte dès 50 €)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
@@ -233,43 +312,68 @@ function CheckoutPage() {
 
             <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
               <h2 className="text-lg font-black">Paiement</h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod("online")}
-                  className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
-                    paymentMethod === "online"
-                      ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <CreditCard className="h-5 w-5 text-[#ff705f]" />
-                    <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
-                      Bancontact Pro
+
+              {fulfillment === "delivery" ? (
+                <div className="mt-4 space-y-3">
+                  <div className="rounded-2xl border-2 border-[#ff705f] bg-[#fff5f3] p-4 text-left">
+                    <div className="flex items-center justify-between w-full">
+                      <CreditCard className="h-5 w-5 text-[#ff705f]" />
+                      <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
+                        Bancontact & En ligne
+                      </span>
+                    </div>
+                    <span className="mt-1 block text-sm font-black text-[#17231f]">Paiement en ligne sécurisé</span>
+                    <span className="text-xs text-[#7a847e]">
+                      Application bancaire belge, Payconiq (QR code) ou Carte bancaire
                     </span>
                   </div>
-                  <span className="text-sm font-black">Bancontact Pro</span>
-                  <span className="text-xs text-[#7a847e]">
-                    Application bancaire belge & Payconiq (QR code)
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod("on_site")}
-                  className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
-                    paymentMethod === "on_site"
-                      ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
-                  }`}
-                >
-                  <Store className="h-5 w-5 text-[#ff705f]" />
-                  <span className="text-sm font-black">Payer sur place</span>
-                  <span className="text-xs text-[#7a847e]">
-                    À la récupération — sans frais en ligne
-                  </span>
-                </button>
-              </div>
+
+                  <div className="flex items-center gap-2 rounded-xl bg-[#F6F1E9] p-3 text-xs text-[#766358] border border-black/5">
+                    <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>
+                      <strong>Paiement en ligne requis pour la livraison à domicile.</strong> (Le paiement sur place est réservé au retrait au restaurant).
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("online")}
+                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
+                      paymentMethod === "online"
+                        ? "border-[#ff705f] bg-[#fff5f3]"
+                        : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <CreditCard className="h-5 w-5 text-[#ff705f]" />
+                      <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
+                        Bancontact
+                      </span>
+                    </div>
+                    <span className="text-sm font-black">Bancontact & En ligne</span>
+                    <span className="text-xs text-[#7a847e]">
+                      Bancontact Pro, Payconiq, Carte bancaire
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("on_site")}
+                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
+                      paymentMethod === "on_site"
+                        ? "border-[#ff705f] bg-[#fff5f3]"
+                        : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                    }`}
+                  >
+                    <Store className="h-5 w-5 text-[#ff705f]" />
+                    <span className="text-sm font-black">Payer sur place</span>
+                    <span className="text-xs text-[#7a847e]">
+                      Espèces ou Bancontact au comptoir lors du retrait
+                    </span>
+                  </button>
+                </div>
+              )}
             </section>
 
             {error && (
