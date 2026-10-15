@@ -58,7 +58,7 @@ export function BrandLogo({
 
       {!compact && (
         <span
-          className={`font-black uppercase text-[#d7ff45] text-center w-full leading-none ${subtextSizes}`}
+          className={`font-black uppercase text-[#F5EFE6] text-center w-full leading-none ${subtextSizes}`}
         >
           SUR MESURE
         </span>

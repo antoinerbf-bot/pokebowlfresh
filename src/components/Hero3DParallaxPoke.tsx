@@ -48,7 +48,7 @@ const HERO_DISHES: HeroDish[] = [
     price: 10.0,
     grandPrice: 13.0,
     tag: "Best-Seller ⭐",
-    tagColor: "#d7ff45",
+    tagColor: "#F5EFE6",
     glowColor: "rgba(215, 255, 69, 0.22)",
     tasteProfile: "Doux, fruité & umami caramélisé",
     description:
@@ -88,7 +88,7 @@ const HERO_DISHES: HeroDish[] = [
     price: 10.0,
     grandPrice: 13.0,
     tag: "Saisi au Grill 🦐",
-    tagColor: "#d7ff45",
+    tagColor: "#F5EFE6",
     glowColor: "rgba(215, 255, 69, 0.22)",
     tasteProfile: "Scampis saisis, guacamole onctueux & spicy mayo",
     description:
@@ -236,8 +236,8 @@ export function Hero3DParallaxPoke() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-bold text-white/90 backdrop-blur-md"
           >
-            <span className="flex h-2 w-2 rounded-full bg-[#d7ff45] animate-ping" />
-            <span className="text-[#d7ff45] font-extrabold">EN DIRECT DE VISÉ</span>
+            <span className="flex h-2 w-2 rounded-full bg-[#F5EFE6] animate-ping" />
+            <span className="text-[#F5EFE6] font-extrabold">EN DIRECT DE VISÉ</span>
             <span className="text-white/40">·</span>
             <span>Avenue du Pont 12</span>
             <span className="text-white/40">·</span>
@@ -245,8 +245,8 @@ export function Hero3DParallaxPoke() {
           </motion.div>
 
           <div className="flex items-center gap-3 text-xs text-white/70">
-            <span className="flex items-center gap-1 font-bold text-[#d7ff45]">
-              <Star className="h-3.5 w-3.5 fill-[#d7ff45]" /> 4.9/5
+            <span className="flex items-center gap-1 font-bold text-[#F5EFE6]">
+              <Star className="h-3.5 w-3.5 fill-[#F5EFE6]" /> 4.9/5
             </span>
             <span className="hidden sm:inline text-white/40">|</span>
             <span className="hidden sm:inline font-semibold">Plus de 150 avis gourmands</span>
@@ -336,7 +336,7 @@ export function Hero3DParallaxPoke() {
                       <div className="absolute bottom-5 inset-x-5 z-20">
                         <div className="rounded-2xl border border-white/20 bg-black/75 p-3.5 text-xs text-white backdrop-blur-md shadow-xl flex items-center justify-between gap-3">
                           <div className="min-w-0">
-                            <span className="block text-[9px] font-black uppercase tracking-widest text-[#d7ff45]">
+                            <span className="block text-[9px] font-black uppercase tracking-widest text-[#F5EFE6]">
                               Notes Gustatives
                             </span>
                             <p className="truncate font-bold text-white/95 text-xs">
@@ -395,7 +395,7 @@ export function Hero3DParallaxPoke() {
                 type="button"
                 onClick={handlePrev}
                 aria-label="Plat précédent"
-                className="absolute -left-4 top-1/2 z-40 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-[#0d221c]/90 text-white shadow-xl backdrop-blur-md transition hover:bg-[#d7ff45] hover:text-[#10251f] hover:scale-110 active:scale-95"
+                className="absolute -left-4 top-1/2 z-40 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-[#0d221c]/90 text-white shadow-xl backdrop-blur-md transition hover:bg-[#F5EFE6] hover:text-[#10251f] hover:scale-110 active:scale-95"
               >
                 <ChevronLeft className="h-6 w-6" />
               </button>
@@ -403,7 +403,7 @@ export function Hero3DParallaxPoke() {
                 type="button"
                 onClick={handleNext}
                 aria-label="Plat suivant"
-                className="absolute -right-4 top-1/2 z-40 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-[#0d221c]/90 text-white shadow-xl backdrop-blur-md transition hover:bg-[#d7ff45] hover:text-[#10251f] hover:scale-110 active:scale-95"
+                className="absolute -right-4 top-1/2 z-40 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-[#0d221c]/90 text-white shadow-xl backdrop-blur-md transition hover:bg-[#F5EFE6] hover:text-[#10251f] hover:scale-110 active:scale-95"
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
@@ -418,7 +418,7 @@ export function Hero3DParallaxPoke() {
                   onClick={() => setCurrentIndex(idx)}
                   className={`group relative shrink-0 rounded-2xl px-3.5 py-2 text-xs font-black uppercase tracking-wider transition-all duration-200 ${
                     idx === currentIndex
-                      ? "bg-[#d7ff45] text-[#10251f] shadow-lg scale-105"
+                      ? "bg-[#F5EFE6] text-[#10251f] shadow-lg scale-105"
                       : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
                   }`}
                 >
@@ -437,7 +437,7 @@ export function Hero3DParallaxPoke() {
               transition={{ duration: 0.7 }}
             >
               {/* Punchy Eyebrow */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/40 bg-[#d7ff45]/10 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#d7ff45]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#F5EFE6]/40 bg-[#F5EFE6]/10 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[#F5EFE6]">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Expérience Culinaire 100% Fraîcheur</span>
               </div>
@@ -445,7 +445,7 @@ export function Hero3DParallaxPoke() {
               {/* Main Headline */}
               <h1 className="mt-4 font-display text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight">
                 <span className="block text-white">L'art du Poké Bowl</span>
-                <span className="block text-[#d7ff45]">généreux & fait minute.</span>
+                <span className="block text-[#F5EFE6]">généreux & fait minute.</span>
               </h1>
 
               <p className="mt-4 max-w-xl text-base sm:text-lg leading-relaxed text-white/80">
@@ -463,7 +463,7 @@ export function Hero3DParallaxPoke() {
             >
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-4">
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#d7ff45]">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#F5EFE6]">
                     {currentDish.tag}
                   </span>
                   <h3 className="text-2xl font-black text-white">{currentDish.name}</h3>
@@ -471,7 +471,7 @@ export function Hero3DParallaxPoke() {
 
                 {/* Price Display */}
                 <div className="text-right">
-                  <span className="block text-3xl font-black text-[#d7ff45] tracking-tight">
+                  <span className="block text-3xl font-black text-[#F5EFE6] tracking-tight">
                     {activePrice.toFixed(2)} €
                   </span>
                   {currentDish.isHotCombo ? (
@@ -508,7 +508,7 @@ export function Hero3DParallaxPoke() {
                       onClick={() => setSelectedSize("moyen")}
                       className={`rounded-xl px-4 py-2 text-xs font-black uppercase tracking-wider transition ${
                         selectedSize === "moyen"
-                          ? "bg-[#d7ff45] text-[#10251f] shadow"
+                          ? "bg-[#F5EFE6] text-[#10251f] shadow"
                           : "text-white/70 hover:text-white"
                       }`}
                     >
@@ -519,7 +519,7 @@ export function Hero3DParallaxPoke() {
                       onClick={() => setSelectedSize("grand")}
                       className={`rounded-xl px-4 py-2 text-xs font-black uppercase tracking-wider transition ${
                         selectedSize === "grand"
-                          ? "bg-[#d7ff45] text-[#10251f] shadow"
+                          ? "bg-[#F5EFE6] text-[#10251f] shadow"
                           : "text-white/70 hover:text-white"
                       }`}
                     >
@@ -534,7 +534,7 @@ export function Hero3DParallaxPoke() {
                 <button
                   type="button"
                   onClick={handleQuickAdd}
-                  className="flex-1 inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#d7ff45] py-4 px-6 text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_10px_30px_rgba(215,255,69,0.35)] transition hover:bg-white hover:scale-[1.02] active:scale-98"
+                  className="flex-1 inline-flex items-center justify-center gap-2.5 rounded-2xl bg-[#F5EFE6] py-4 px-6 text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_10px_30px_rgba(215,255,69,0.35)] transition hover:bg-white hover:scale-[1.02] active:scale-98"
                 >
                   {addedSuccess ? (
                     <>
@@ -554,7 +554,7 @@ export function Hero3DParallaxPoke() {
                   params={{ productId: currentDish.id }}
                   className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/10 py-4 px-5 text-xs font-black uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:scale-[1.02]"
                 >
-                  <Sparkles className="h-4 w-4 text-[#d7ff45]" />
+                  <Sparkles className="h-4 w-4 text-[#F5EFE6]" />
                   <span>Personnaliser</span>
                 </Link>
               </div>
@@ -562,10 +562,10 @@ export function Hero3DParallaxPoke() {
               {/* Guarantees */}
               <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-white/60 pt-3 border-t border-white/10">
                 <span className="flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-[#d7ff45]" /> Prêt en 10-15 min
+                  <Clock className="h-3.5 w-3.5 text-[#F5EFE6]" /> Prêt en 10-15 min
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#d7ff45]" /> Ingrédients frais garantis
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#F5EFE6]" /> Ingrédients frais garantis
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span>🛵</span> Livraison à domicile dispo
@@ -578,7 +578,7 @@ export function Hero3DParallaxPoke() {
               <span className="font-semibold">Envie de créer votre propre combinaison de A à Z ?</span>
               <Link
                 to="/sur-mesure"
-                className="font-black text-[#d7ff45] hover:underline flex items-center gap-1"
+                className="font-black text-[#F5EFE6] hover:underline flex items-center gap-1"
               >
                 <span>Créer Sur-Mesure (10€)</span>
                 <ArrowRight className="h-3.5 w-3.5" />

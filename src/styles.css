@@ -84,8 +84,8 @@
   --coral:           oklch(0.70 0.185 30);      /* orange-corail chaleureux */
   --coral-light:     oklch(0.82 0.13 30);
   --coral-foreground:oklch(1 0 0);
-  --lime:            oklch(0.83 0.195 128);      /* vert lime signature */
-  --lime-dark:       oklch(0.68 0.18 128);
+  --lime:            oklch(0.95 0.035 88);       /* sable crème signature */
+  --lime-dark:       oklch(0.88 0.05 84);
   --sand:            oklch(0.956 0.028 90);      /* sable clair */
   --sand-dark:       oklch(0.91 0.048 88);
   --warm:            oklch(0.92 0.038 82);       /* crème chaude */

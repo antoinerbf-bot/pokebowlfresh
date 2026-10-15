@@ -35,11 +35,11 @@ export const Route = createFileRoute("/product/$productId")({
 
 /* ─── Tag colors ─────────────────────────────────────────────────── */
 const TAG_STYLES: Record<string, string> = {
-  signature:  "bg-[#10251f] text-[#d7ff45]",
+  signature:  "bg-[#10251f] text-[#F5EFE6]",
   bestseller: "bg-[#ff705f] text-white",
   premium:    "bg-[#7c4f1a] text-[#ffe9c2]",
   spicy:      "bg-[#c0350f] text-white",
-  new:        "bg-[#d7ff45] text-[#10251f]",
+  new:        "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 };
 
 /* ─── Topping chip component ─────────────────────────────────────── */
@@ -380,7 +380,7 @@ function ProductPage() {
               <span className={`badge-tag absolute left-4 top-4 shadow-card ${tagStyle}`}>
                 {productOk ? product.tag : t("cmd.sold_out")}
               </span>
-              <span className="absolute bottom-4 right-4 rounded-full bg-[#d7ff45] px-4 py-2 text-base font-black text-[#10251f] shadow-card">
+              <span className="absolute bottom-4 right-4 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-4 py-2 text-base font-black text-[#10251f] shadow-card">
                 € {unitPrice.toFixed(2)}
               </span>
             </div>
@@ -505,7 +505,7 @@ function ProductPage() {
                         >
                           <div className="flex w-full items-center justify-between">
                             <span className="font-black text-sm uppercase">{size.name}</span>
-                            <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
+                            <span className={`text-xs font-black ${selectedSize === size.id ? "text-[#F5EFE6]" : "text-[#ff705f]"}`}>
                               {size.extraPrice === 0 ? "Inclus" : `+${size.extraPrice.toFixed(2)}€`}
                             </span>
                           </div>
@@ -556,7 +556,7 @@ function ProductPage() {
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">Incluse · change selon tes envies</p>
                     </div>
-                    <span className="rounded-full bg-[#d7ff45]/20 px-2.5 py-0.5 text-[10px] font-black text-[#10251f]">
+                    <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-0.5 text-[10px] font-black text-[#10251f]">
                       {selectedBase}
                     </span>
                   </div>
@@ -634,7 +634,7 @@ function ProductPage() {
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">Incluse · changement gratuit</p>
                     </div>
-                    <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#d7ff45]">
+                    <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-[10px] font-black text-[#F5EFE6]">
                       {selectedSauce === "none" ? "Sans sauce" : selectedSauce}
                     </span>
                   </div>
@@ -836,7 +836,7 @@ function ProductPage() {
                   >
                     {added ? (
                       <span className="flex items-center justify-center gap-2">
-                        <Check className="h-5 w-5 text-[#d7ff45]" /> Ajouté au panier !
+                        <Check className="h-5 w-5 text-[#22c55e]" /> Ajouté au panier !
                       </span>
                     ) : (
                       <span className="flex items-center justify-center gap-2">
@@ -865,7 +865,7 @@ function ProductPage() {
           >
             {added ? (
               <span className="flex items-center justify-center gap-2">
-                <Check className="h-4 w-4 text-[#d7ff45]" /> Ajouté !
+                <Check className="h-4 w-4 text-[#22c55e]" /> Ajouté !
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">

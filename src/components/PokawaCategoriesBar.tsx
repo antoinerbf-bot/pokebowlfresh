@@ -24,7 +24,7 @@ const CATEGORIES: CategoryItem[] = [
     title: "Pokés Signatures",
     subtitle: "5 recettes équilibrées",
     badge: "100% Frais",
-    badgeColor: "bg-[#d7ff45] text-[#10251f]",
+    badgeColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
     image: bowlSaumon,
     anchor: "#carte",
     icon: "🥗",

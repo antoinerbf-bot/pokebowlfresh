@@ -75,13 +75,13 @@ export function PokeBowlCraftingExperience() {
   return (
     <div className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[#0d211b] p-6 sm:p-10 lg:p-12 text-white shadow-lift">
       {/* Decorative ambient lights */}
-      <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#d7ff45]/10 blur-3xl pointer-events-none" />
+      <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-white/5 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl pointer-events-none" />
 
       {/* Header */}
       <div className="relative z-10 max-w-2xl">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#d7ff45]/25 bg-[#d7ff45]/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff45]">
-          <Layers className="h-3 w-3" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#F5EFE6]">
+          <Layers className="h-3 w-3 text-[#ff705f]" />
           Anatomie d'un Poké Bowl
         </div>
         <h2 className="mt-4 text-2xl font-extrabold leading-tight text-white sm:text-3xl lg:text-4xl">
@@ -106,7 +106,7 @@ export function PokeBowlCraftingExperience() {
                 onClick={() => setActiveStep(idx)}
                 className={`group w-full text-left rounded-2xl p-4 sm:p-5 transition-all duration-300 border ${
                   isActive
-                    ? "bg-white/10 border-[#d7ff45]/50 shadow-lg"
+                    ? "bg-white/10 border-white/40 shadow-lg"
                     : "bg-white/[0.03] border-white/5 hover:bg-white/[0.06] hover:border-white/15"
                 }`}
               >
@@ -115,7 +115,7 @@ export function PokeBowlCraftingExperience() {
                     <span
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-black text-xs transition ${
                         isActive
-                          ? "bg-[#d7ff45] text-[#10251f]"
+                          ? "bg-[#F5EFE6] text-[#10251f]"
                           : "bg-white/10 text-white/70 group-hover:bg-white/20"
                       }`}
                     >
@@ -123,7 +123,7 @@ export function PokeBowlCraftingExperience() {
                     </span>
                     <div>
                       <p className={`text-[10px] font-black uppercase tracking-wider ${
-                        isActive ? "text-[#d7ff45]" : "text-white/45"
+                        isActive ? "text-[#F5EFE6]" : "text-white/45"
                       }`}>
                         {step.subtitle}
                       </p>
@@ -152,7 +152,7 @@ export function PokeBowlCraftingExperience() {
                           key={i}
                           className="inline-flex items-center gap-1 rounded-full bg-[#10251f] px-2.5 py-1 text-[10px] font-bold text-white/90 border border-white/10"
                         >
-                          <Check className="h-3 w-3 text-[#d7ff45]" />
+                          <Check className="h-3 w-3 text-[#22c55e]" />
                           {ing}
                         </span>
                       ))}
@@ -188,8 +188,8 @@ export function PokeBowlCraftingExperience() {
 
               {/* Floating Layer Indicator */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] backdrop-blur-md border border-white/10">
-                  <Sparkles className="h-3 w-3" />
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] backdrop-blur-md border border-white/10">
+                  <Sparkles className="h-3 w-3 text-[#ff705f]" />
                   Couche {current.number} / 05
                 </span>
                 <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-black text-white backdrop-blur-md">
@@ -201,7 +201,7 @@ export function PokeBowlCraftingExperience() {
               <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-black/75 p-4 backdrop-blur-md border border-white/10">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#d7ff45]">
+                    <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#F5EFE6]">
                       Composition maîtrisée
                     </p>
                     <p className="text-sm font-black text-white">
@@ -210,7 +210,7 @@ export function PokeBowlCraftingExperience() {
                   </div>
                   <Link
                     to="/sur-mesure"
-                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] transition hover:scale-110"
+                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F5EFE6] text-[#10251f] transition hover:scale-110"
                     aria-label="Composer mon bowl"
                   >
                     <ArrowRight className="h-4 w-4" />
@@ -222,7 +222,7 @@ export function PokeBowlCraftingExperience() {
             {/* Bottom Stepper CTA */}
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
               <div className="flex items-center gap-2">
-                <Utensils className="h-4 w-4 text-[#d7ff45]" />
+                <Utensils className="h-4 w-4 text-[#F5EFE6]" />
                 <span className="text-xs font-bold text-white/80">
                   Composez chaque couche selon vos envies
                 </span>

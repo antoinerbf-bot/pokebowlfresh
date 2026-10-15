@@ -45,7 +45,7 @@ export function NotificationBellMenu() {
     {
       id: "notif-saumon",
       tag: "Best-Seller",
-      tagColor: "bg-[#d7ff45] text-[#10251f]",
+      tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
       title: "Poké Bowls Frais du Jour",
       desc: "5 recettes signatures préparées à la commande : Saumon Wasabi, Sweet Chicken, Scampis Royal...",
       dishId: "bowl-saumon",
@@ -92,7 +92,7 @@ export function NotificationBellMenu() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-black/5 bg-[#10251f] px-5 py-4 text-white">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5EFE6] text-xs font-black text-[#10251f]">
                 🔔
               </span>
               <div>

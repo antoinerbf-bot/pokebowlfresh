@@ -51,7 +51,7 @@ export function MobileAppStickyBar() {
             {/* Raccourci rapide Atelier Sur-Mesure */}
             <a
               href="#composer"
-              className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/15 active:scale-95 transition shrink-0"
+              className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] border border-white/15 active:scale-95 transition shrink-0"
             >
               <Sparkles className="h-3 w-3 stroke-[3]" />
               <span>Sur-mesure</span>
@@ -61,7 +61,7 @@ export function MobileAppStickyBar() {
             <button
               type="button"
               onClick={handleAction}
-              className="flex-1 flex items-center justify-between rounded-full bg-[#d7ff45] px-4 py-2.5 text-[#10251f] shadow-lg transition active:scale-95 min-w-0"
+              className="flex-1 flex items-center justify-between rounded-full bg-[#F5EFE6] px-4 py-2.5 text-[#10251f] shadow-lg transition active:scale-95 min-w-0 hover:bg-white"
             >
               <div className="flex items-center gap-2 truncate">
                 <div className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white">

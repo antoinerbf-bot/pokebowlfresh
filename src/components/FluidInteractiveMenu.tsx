@@ -231,7 +231,7 @@ export function FluidInteractiveMenu() {
       {/* ── Entête de section ────────────────────────────────────────── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-black/5">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#d7ff45]/40 border border-[#b2db16] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#10251f]">
             <Sparkles className="h-3.5 w-3.5 text-[#10251f]" />
             Carte Officielle & Recettes Visétoises
           </div>
@@ -251,7 +251,7 @@ export function FluidInteractiveMenu() {
             placeholder="Rechercher saumon, crousty, oreo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-full border border-black/10 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold text-[#10251f] placeholder-[#7d8b83] shadow-sm focus:border-[#d7ff45] focus:outline-none focus:ring-2 focus:ring-[#d7ff45]/40"
+            className="w-full rounded-full border border-black/10 bg-white py-2.5 pl-10 pr-4 text-xs font-semibold text-[#10251f] placeholder-[#7d8b83] shadow-sm focus:border-[#ff705f] focus:outline-none focus:ring-2 focus:ring-[#ff705f]/30"
           />
           {searchQuery && (
             <button
@@ -294,7 +294,7 @@ export function FluidInteractiveMenu() {
               <span>{cat.label}</span>
               <span
                 className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                  isActive ? "bg-[#d7ff45] text-[#10251f]" : "bg-black/5 text-[#5a6760]"
+                  isActive ? "bg-[#F5EFE6] text-[#10251f]" : "bg-black/5 text-[#5a6760]"
                 }`}
               >
                 {cat.count}
@@ -468,7 +468,7 @@ export function FluidInteractiveMenu() {
                 Préparés chaque matin par notre chef. Mascarpone fouetté, biscuits croustillants & sauces gourmandes.
               </p>
             </div>
-            <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">
+            <span className="text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full">
               4,00 € l'unité
             </span>
           </div>
@@ -506,7 +506,7 @@ export function FluidInteractiveMenu() {
                 Canettes givrées 33cl et bouteilles d'eau SPA 50cl pour accompagner vos plats.
               </p>
             </div>
-            <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">
+            <span className="text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full">
               2,00 € l'unité
             </span>
           </div>
@@ -595,7 +595,7 @@ function DishCard({
           </span>
 
           {/* Badge Prix Supérieur Droit */}
-          <span className="absolute top-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md">
+          <span className="absolute top-3.5 right-3.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-md">
             {effectivePrice.toFixed(2)} €
           </span>
 
@@ -702,8 +702,8 @@ function DishCard({
               item.soldOut
                 ? "bg-black/10 text-black/30 cursor-not-allowed"
                 : isAdded
-                ? "bg-[#10251f] text-[#d7ff45] scale-105"
-                : "bg-[#d7ff45] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95"
+                ? "bg-[#10251f] text-emerald-400 scale-105"
+                : "bg-[#F5EFE6] border border-[#e8ded0] text-[#10251f] hover:bg-[#ff705f] hover:text-white hover:border-[#ff705f] hover:scale-105 active:scale-95"
             }`}
             title={`Ajouter au panier (${effectivePrice.toFixed(2)} €)`}
           >
@@ -718,7 +718,7 @@ function DishCard({
                 initial={{ opacity: 0, y: 0, scale: 0.6 }}
                 animate={{ opacity: 1, y: -24, scale: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute -top-1 font-black text-xs text-[#10251f] bg-[#d7ff45] px-1.5 py-0.5 rounded-full shadow"
+                className="absolute -top-1 font-black text-xs text-white bg-emerald-600 px-1.5 py-0.5 rounded-full shadow"
               >
                 +1
               </motion.span>
@@ -779,7 +779,7 @@ function DrinkCard({
         ) : (
           <div className="flex h-full w-full items-center justify-center text-3xl">🥤</div>
         )}
-        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
+        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
           {item.price.toFixed(2)} €
         </span>
       </div>
@@ -798,8 +798,8 @@ function DrinkCard({
         onClick={onAdd}
         className={`mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-black transition ${
           isAdded
-            ? "bg-[#10251f] text-[#d7ff45]"
-            : "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"
+            ? "bg-[#10251f] text-emerald-400"
+            : "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white"
         }`}
       >
         {isAdded ? (

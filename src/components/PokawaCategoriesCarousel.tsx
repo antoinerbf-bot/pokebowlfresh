@@ -23,7 +23,7 @@ const CATEGORIES: CategoryCard[] = [
     id: "pokes",
     title: "Pokés & Chirashis",
     badge: "Dès 10,00 €",
-    badgeColor: "bg-[#10251f] text-[#d7ff45]",
+    badgeColor: "bg-[#10251f] text-[#F5EFE6]",
     image: bowlSaumon,
     targetId: "carte",
     desc: "Saumon atlantique minute, poulet doré & scampis royaux",
@@ -41,7 +41,7 @@ const CATEGORIES: CategoryCard[] = [
     id: "composer",
     title: "Atelier Sur-Mesure",
     badge: "Création Libre",
-    badgeColor: "bg-[#d7ff45] text-[#10251f]",
+    badgeColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
     image: bowlSweet,
     targetId: "composer",
     desc: "Composez votre recette de A à Z avec 5 mix-ins frais",
@@ -170,7 +170,7 @@ export function PokawaCategoriesCarousel() {
                 <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-[#10251f] group-hover:text-[#ff705f] transition">
                   {cat.title}
                 </h3>
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] transition duration-300 group-hover:bg-[#d7ff45] group-hover:translate-x-1">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white border border-black/10 shadow-sm text-[#10251f] transition duration-300 group-hover:bg-[#10251f] group-hover:text-white group-hover:translate-x-1">
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </div>

@@ -212,13 +212,13 @@ function DeliveryTrackPage() {
               disabled={updating}
               className="w-full rounded-2xl bg-[#10251f] py-4 text-white font-black text-base shadow-lg hover:bg-black transition flex items-center justify-center gap-2"
             >
-              <CheckCircle className="h-5 w-5 text-[#d7ff45]" />
+              <CheckCircle className="h-5 w-5 text-[#22c55e]" />
               {updating ? "Mise à jour..." : "Marquer comme Livrée"}
             </button>
           )}
 
           {order.status === "completed" && (
-            <div className="rounded-2xl bg-[#10251f] p-4 text-center text-[#d7ff45] font-black text-sm">
+            <div className="rounded-2xl bg-[#10251f] p-4 text-center text-[#F5EFE6] font-black text-sm">
               ✓ Commande terminée et livrée
             </div>
           )}

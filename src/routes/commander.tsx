@@ -49,11 +49,11 @@ export const Route = createFileRoute("/commander")({ component: CommanderPage })
 
 /* ─── Tag badge styles ───────────────────────────────────────────── */
 const TAG_STYLES: Record<string, string> = {
-  signature:  "bg-[#10251f] text-[#d7ff45]",
+  signature:  "bg-[#10251f] text-[#F5EFE6]",
   bestseller: "bg-[#ff705f] text-white",
   premium:    "bg-[#7c4f1a] text-[#ffe9c2]",
   spicy:      "bg-[#c0350f] text-white",
-  new:        "bg-[#d7ff45] text-[#10251f]",
+  new:        "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
 };
 
 function CommanderPage() {
@@ -131,7 +131,7 @@ function CommanderPage() {
         {/* ── Hero section ─────────────────────────────────────── */}
         <section className="relative overflow-hidden bg-[#10251f] px-5 py-14 text-white sm:px-8 sm:py-20 lg:py-24">
           {/* Déco background */}
-          <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[#d7ff45]/5 blur-3xl" />
+          <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 left-1/4 h-60 w-60 rounded-full bg-[#ff705f]/8 blur-3xl" />
 
           <div className="mx-auto max-w-[1200px]">
@@ -148,7 +148,7 @@ function CommanderPage() {
               </div>
 
               <div className="flex-1">
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#d7ff45]">
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#F5EFE6]">
                   {t("cmd.eyebrow")}
                 </p>
                 <h1 className="mt-2 text-[clamp(2rem,8vw,4rem)] font-black leading-[1.06] tracking-[-0.025em]">
@@ -168,13 +168,13 @@ function CommanderPage() {
               <div className="flex items-center gap-5">
                 <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl shadow-md sm:h-28 sm:w-28">
                   <DishImage dishId="sur-mesure" alt="Poke Bowl sur mesure" className="h-full w-full object-cover" />
-                  <span className="absolute bottom-1.5 left-1.5 rounded-full bg-[#10251f]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#d7ff45]">
+                  <span className="absolute bottom-1.5 left-1.5 rounded-full bg-[#10251f]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#F5EFE6]">
                     5 étapes
                   </span>
                 </div>
                 <div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
-                    <Sparkles className="h-3 w-3" /> Fiche officielle restaurant
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
+                    <Sparkles className="h-3 w-3 text-[#ff705f]" /> Fiche officielle restaurant
                   </div>
                   <h3 className="mt-1 text-2xl font-black sm:text-3xl">Poke (n) Bowl sur mesure</h3>
                   <p className="mt-1 max-w-lg text-xs leading-relaxed text-white/75 sm:text-sm">
@@ -185,7 +185,7 @@ function CommanderPage() {
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <span className="block text-[10px] font-bold uppercase tracking-wider text-white/50">Formule</span>
-                  <span className="text-2xl font-black text-[#d7ff45]">10.00 €</span>
+                  <span className="text-2xl font-black text-[#ff705f]">10.00 €</span>
                 </div>
                 <Link
                   to="/sur-mesure"
@@ -262,7 +262,7 @@ function CommanderPage() {
                     key={bowl.id}
                     to="/product/$productId"
                     params={{ productId: bowl.id }}
-                    className="group block overflow-hidden rounded-[28px] bg-white shadow-card ring-2 ring-[#d7ff45] ring-offset-2 ring-offset-[#f7f4ec] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                    className="group block overflow-hidden rounded-[28px] bg-white shadow-card ring-2 ring-[#ff705f]/30 ring-offset-2 ring-offset-[#f7f4ec] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
                   >
                     <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                   </Link>
@@ -282,9 +282,9 @@ function CommanderPage() {
           <div className="mt-14 overflow-hidden rounded-[28px] bg-[#10251f] sm:mt-16 lg:mt-20">
             <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
               <div className="flex items-center gap-3">
-                <Sparkles className="h-5 w-5 shrink-0 text-[#d7ff45]" />
+                <Sparkles className="h-5 w-5 shrink-0 text-[#ff705f]" />
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d7ff45]">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#F5EFE6]">
                     {t("cmd.customization_title")}
                   </p>
                   <p className="mt-0.5 text-sm text-white/55">{t("cmd.customization_note")}</p>
@@ -306,7 +306,7 @@ function CommanderPage() {
                 { label: t("cmd.toppings"), items: toppings.map((t) => `${t.emoji} ${t.name}`), emoji: "✨" },
               ].map(({ label, items, emoji }) => (
                 <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                  <h3 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#d7ff45]">
+                  <h3 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#F5EFE6]">
                     <span>{emoji}</span> {label}
                   </h3>
                   <div className="mt-3 space-y-1.5">
@@ -334,7 +334,7 @@ function CommanderPage() {
                     {t("cmd.desserts")}
                   </h2>
                 </div>
-                <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">
+                <span className="text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full">
                   4,00 € la pièce
                 </span>
               </div>
@@ -356,7 +356,7 @@ function CommanderPage() {
                             !ok ? "grayscale contrast-75" : ""
                           }`}
                         />
-                        <span className="absolute top-2 right-2 rounded-full bg-[#d7ff45] px-2.5 py-0.5 text-xs font-black text-[#10251f] shadow">
+                        <span className="absolute top-2 right-2 rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6] shadow">
                           4.00 €
                         </span>
                         {!ok && (
@@ -376,7 +376,7 @@ function CommanderPage() {
                           onClick={() => quickAdd({ id: d.id, name: d.name, price: d.price, image: imgSrc })}
                           className={`rounded-xl px-3.5 py-2 text-xs font-black transition ${
                             ok
-                              ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"
+                              ? "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white"
                               : "bg-black/10 text-black/30 cursor-not-allowed"
                           }`}
                         >
@@ -400,7 +400,7 @@ function CommanderPage() {
                     {t("cmd.drinks")}
                   </h2>
                 </div>
-                <span className="text-xs font-black text-[#10251f] bg-[#d7ff45] px-3.5 py-1.5 rounded-full">
+                <span className="text-xs font-black text-[#10251f] bg-[#F5EFE6] border border-[#e8ded0] px-3.5 py-1.5 rounded-full">
                   2,00 € la canette / bouteille
                 </span>
               </div>
@@ -426,7 +426,7 @@ function CommanderPage() {
                         ) : (
                           <div className="flex h-full w-full items-center justify-center text-3xl">🥤</div>
                         )}
-                        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
+                        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow">
                           2.00 €
                         </span>
                       </div>
@@ -441,7 +441,7 @@ function CommanderPage() {
                           onClick={() => quickAdd({ id: drink.id, name: drink.name, price: drink.price, image: imgSrc })}
                           className={`mt-2 flex w-full items-center justify-center rounded-xl py-1.5 text-[11px] font-black transition ${
                             ok
-                              ? "bg-[#10251f] text-white hover:bg-[#d7ff45] hover:text-[#10251f]"
+                              ? "bg-[#10251f] text-white hover:bg-[#ff705f] hover:text-white"
                               : "bg-black/10 text-black/30 cursor-not-allowed"
                           }`}
                         >
@@ -505,7 +505,7 @@ function BowlCard({
         </span>
 
         {/* Prix */}
-        <span className="absolute bottom-3 right-3 rounded-full bg-[#d7ff45] px-3 py-1.5 text-sm font-black text-[#10251f] sm:bottom-4 sm:right-4">
+        <span className="absolute bottom-3 right-3 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-3 py-1.5 text-sm font-black text-[#10251f] shadow-md sm:bottom-4 sm:right-4">
           € {bowl.price.toFixed(2)}
         </span>
       </div>

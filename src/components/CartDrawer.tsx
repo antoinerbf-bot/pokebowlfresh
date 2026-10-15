@@ -101,7 +101,7 @@ export function CartDrawer() {
               <ShoppingBag className="h-5 w-5 text-[#ff705f]" />
               {t("cart.title")}
             </SheetTitle>
-            <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#d7ff45]">
+            <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6]">
               {items.reduce((s, i) => s + i.quantity, 0)} {items.length > 1 ? "articles" : "article"}
             </span>
           </div>
@@ -297,7 +297,7 @@ export function CartDrawer() {
                         {cs.name}
                       </span>
                       <span className="text-[9px] text-[#7a847e]">{cs.subtitle}</span>
-                      <span className="mt-1 flex items-center gap-1 rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] group-hover:bg-[#ff705f] group-hover:text-white transition">
+                      <span className="mt-1 flex items-center gap-1 rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] group-hover:bg-[#ff705f] group-hover:text-white transition">
                         <Plus className="h-2.5 w-2.5" />
                         {cs.price.toFixed(2)} €
                       </span>

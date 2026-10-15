@@ -13,7 +13,7 @@ export function PokawaBrandValues() {
       id: "freshness",
       emoji: "🐟",
       tag: "Exigence fraîcheur",
-      tagColor: "bg-[#d7ff45] text-[#10251f]",
+      tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
       title: "Fraîcheur Quotidienne",
       desc: "Découpe minute de nos légumes croquants et approvisionnement quotidien en saumon & scampis de première fraîcheur.",
       perk: "Découpe chaque matin à Visé",
@@ -43,7 +43,7 @@ export function PokawaBrandValues() {
       id: "custom",
       emoji: "✨",
       tag: "Sur-Mesure",
-      tagColor: "bg-[#d7ff45] text-[#10251f]",
+      tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
       title: "Liberté & Transparence",
       desc: "Retirez n'importe quel allergène en 1 clic ou créez votre bowl personnalisé de A à Z avec 5 mix-ins frais inclus.",
       perk: "Zéro compromis sur vos goûts",
@@ -107,8 +107,8 @@ export function PokawaBrandValues() {
                 </p>
 
                 <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#d7ff45] drop-shadow">
-                    <ShieldCheck className="h-3.5 w-3.5" />
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#F5EFE6] drop-shadow">
+                    <ShieldCheck className="h-3.5 w-3.5 text-[#ff705f]" />
                     {val.perk}
                   </span>
                 </div>

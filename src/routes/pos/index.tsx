@@ -489,8 +489,8 @@ export function PosApplicationPage() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d7ff45] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#d7ff45]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
             <span className="text-lg font-black tracking-wider text-white">POKENBOWL POS</span>
           </div>
@@ -532,7 +532,7 @@ export function PosApplicationPage() {
               savePrinterConfig(updated);
             }}
             className={`rounded-xl p-2.5 transition ${
-              config.soundEnabled ? "bg-[#d7ff45]/20 text-[#d7ff45]" : "bg-white/5 text-[#6c7d76]"
+              config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
             }`}
             title="Activer/Désactiver son"
           >
@@ -810,9 +810,9 @@ export function PosApplicationPage() {
                 <span className="text-base font-black">{selectedOrder.customer.name}</span>
                 <a
                   href={`tel:${selectedOrder.customer.phone}`}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#d7ff45] bg-[#d7ff45]/15 px-3 py-1.5 rounded-xl"
+                  className="flex items-center gap-1.5 text-xs font-bold text-[#F5EFE6] bg-white/10 px-3 py-1.5 rounded-xl"
                 >
-                  <Phone className="w-3.5 h-3.5" />
+                  <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
                   {selectedOrder.customer.phone}
                 </a>
               </div>
@@ -822,7 +822,7 @@ export function PosApplicationPage() {
                   <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
                 </div>
               ) : (
-                <p className="text-xs text-[#d7ff45] font-bold">Retrait sur place</p>
+                <p className="text-xs text-[#F5EFE6] font-bold">Retrait sur place</p>
               )}
               {selectedOrder.customer.notes && (
                 <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">

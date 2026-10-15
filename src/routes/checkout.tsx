@@ -312,7 +312,7 @@ function CheckoutPage() {
                 <div className="mt-1 text-right">
                   <div className="text-xs text-white/50">Sous-total · € {total.toFixed(2)}</div>
                   {fulfillment === "delivery" && <div className="text-xs text-white/50">Livraison · {deliveryFee === 0 ? "Gratuite" : `€ ${deliveryFee.toFixed(2)}`}</div>}
-                  <div className="text-2xl font-black text-[#d7ff45]">€ {orderTotal.toFixed(2)}</div>
+                  <div className="text-2xl font-black text-[#ff705f]">€ {orderTotal.toFixed(2)}</div>
                 </div>
               </div>
             </div>

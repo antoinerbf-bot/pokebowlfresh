@@ -41,7 +41,7 @@ export function SocialProofBanner() {
           </div>
 
           <div className="flex items-center gap-2.5 rounded-2xl bg-[#faf8f4] border border-black/5 px-3.5 py-2">
-            <Sparkles className="h-4 w-4 text-[#d7ff45] shrink-0" />
+            <Sparkles className="h-4 w-4 text-[#ff705f] shrink-0" />
             <div>
               <span className="block text-xs font-black text-[#10251f]">100% Fait Minute</span>
               <span className="block text-[10px] text-[#7a847e]">Saumon découpé du matin</span>

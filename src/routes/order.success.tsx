@@ -133,7 +133,7 @@ function OrderSuccessPage() {
         ) : (
           <div className="rounded-[28px] bg-white p-8 shadow-lg">
             <div className="flex flex-col items-center text-center">
-              <CheckCircle2 className="h-14 w-14 text-[#d7ff45]" />
+              <CheckCircle2 className="h-14 w-14 text-[#22c55e]" />
               <h1 className="mt-4 text-3xl font-black sm:text-4xl">
                 {isPaid ? "Commande payée !" : "Commande confirmée !"}
               </h1>
@@ -211,7 +211,7 @@ function OrderSuccessPage() {
                 href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#d7ff45] transition hover:scale-105 shadow-sm"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#10251f] px-6 py-2.5 text-xs font-black text-[#F5EFE6] transition hover:scale-105 shadow-sm"
               >
                 <span>⭐ Laisser 5 étoiles sur Google</span>
               </a>

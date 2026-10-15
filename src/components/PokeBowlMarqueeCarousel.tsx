@@ -128,7 +128,7 @@ export function PokeBowlMarqueeCarousel() {
                       isCrousty
                         ? "bg-[#8b5510] text-white"
                         : bowl.tagColor === "bestseller"
-                        ? "bg-[#d7ff45] text-[#10251f]"
+                        ? "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]"
                         : "bg-white/95 text-[#10251f]"
                     }`}
                   >
@@ -145,7 +145,7 @@ export function PokeBowlMarqueeCarousel() {
                 </div>
 
                 {isCrousty && (
-                  <span className="absolute bottom-3.5 left-3.5 rounded-full bg-[#d7ff45] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-[#10251f] shadow-md">
+                  <span className="absolute bottom-3.5 left-3.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-[#10251f] shadow-md">
                     Boisson incluse 🥤
                   </span>
                 )}
@@ -205,7 +205,7 @@ export function PokeBowlMarqueeCarousel() {
                       })
                     }
                     title="Ajouter direct au panier"
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#d7ff45] text-[#10251f] shadow-sm transition hover:bg-[#ff705f] hover:text-white hover:scale-105 active:scale-95 font-black"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F5EFE6] border border-[#e8ded0] text-[#10251f] shadow-sm transition hover:bg-[#ff705f] hover:text-white hover:border-[#ff705f] hover:scale-105 active:scale-95 font-black"
                   >
                     <Plus className="h-5 w-5 stroke-[2.5]" />
                   </button>

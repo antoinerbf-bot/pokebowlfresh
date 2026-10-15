@@ -100,14 +100,14 @@ export function PokawaFloatingNavbar() {
             <span className="text-xl sm:text-2xl font-black uppercase tracking-[0.2em] text-white">
               POKE
             </span>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f] shadow-md">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F5EFE6] text-xs font-black text-[#10251f] shadow-md">
               N
             </span>
             <span className="text-xl sm:text-2xl font-black uppercase tracking-[0.2em] text-white">
               BOWL
             </span>
           </div>
-          <span className="text-[8px] font-black uppercase tracking-[0.35em] text-[#d7ff45] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mt-0.5">
+          <span className="text-[8px] font-black uppercase tracking-[0.35em] text-[#F5EFE6] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mt-0.5">
             VISÉ · BELGIQUE
           </span>
         </Link>
@@ -230,7 +230,7 @@ export function PokawaFloatingNavbar() {
             <a
               href="#composer"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between rounded-2xl bg-[#d7ff45] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm active:scale-98 transition"
+              className="flex items-center justify-between rounded-2xl bg-[#F5EFE6] border border-[#e8ded0] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm active:scale-98 transition"
             >
               <span className="flex items-center gap-2.5">
                 <span className="text-base">🥣</span>

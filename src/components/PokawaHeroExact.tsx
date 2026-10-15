@@ -211,7 +211,7 @@ export function PokawaHeroExact() {
           className="absolute top-20 sm:top-24 right-4 sm:right-8 z-20 hidden md:flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md px-3.5 py-1.5 border border-white/20 text-white shadow-lg pointer-events-none"
         >
           <span className="text-base">{slide.ingredientCallout.emoji}</span>
-          <span className="text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+          <span className="text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
             {slide.ingredientCallout.text}
           </span>
         </motion.div>
@@ -229,10 +229,10 @@ export function PokawaHeroExact() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-xl space-y-2.5"
             >
-              {/* Badge discret */}
+              {/* Badge discret crème */}
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f] shadow-md">
-                  <Sparkles className="h-3 w-3 stroke-[2.5]" />
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5EFE6] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f] shadow-md border border-[#e2d6c3]">
+                  <Sparkles className="h-3 w-3 stroke-[2.5] text-[#ff705f]" />
                   {slide.badge}
                 </span>
                 <span className="text-[11px] font-black text-white/80 drop-shadow">
@@ -255,9 +255,9 @@ export function PokawaHeroExact() {
                 <button
                   type="button"
                   onClick={handleQuickAdd}
-                  className="group relative inline-flex items-center gap-2 rounded-full bg-[#d7ff45] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_8px_25px_rgba(215,255,69,0.35)] transition hover:bg-white hover:scale-105 active:scale-95"
+                  className="group relative inline-flex items-center gap-2 rounded-full bg-[#F5EFE6] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#10251f] shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition hover:bg-white hover:scale-105 active:scale-95 border border-white/40"
                 >
-                  <Plus className="h-4 w-4 stroke-[3]" />
+                  <Plus className="h-4 w-4 stroke-[3] text-[#10251f]" />
                   <span>Ajouter · {slide.price.toFixed(2)} €</span>
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" />
 
@@ -278,7 +278,7 @@ export function PokawaHeroExact() {
 
                 <a
                   href="#carte"
-                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#d7ff45] hover:underline ml-1 drop-shadow"
+                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#F5EFE6] hover:underline ml-1 drop-shadow"
                 >
                   La Carte →
                 </a>
@@ -300,7 +300,7 @@ export function PokawaHeroExact() {
               aria-label={`Aller au plat ${s.dishName}`}
               className={`transition-all duration-300 rounded-full ${
                 isActive
-                  ? "w-8 h-2.5 bg-[#d7ff45] shadow-[0_0_12px_rgba(215,255,69,0.8)]"
+                  ? "w-8 h-2.5 bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)]"
                   : "w-2.5 h-2.5 bg-white/40 hover:bg-white/80"
               }`}
             />

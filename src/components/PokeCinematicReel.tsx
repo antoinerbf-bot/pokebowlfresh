@@ -21,7 +21,7 @@ const REEL_BOWLS: ReelBowl[] = [
     name: "Sweet Chicken",
     price: 10.00,
     tag: "Best-seller",
-    tagColor: "#d7ff45",
+    tagColor: "#F5EFE6",
     headline: "Poulet maison, mangue douce & teriyaki",
     description: "Vrais morceaux de filet de poulet, guacamole, maïs, tomates cerises, mangue, feta, sauce teriyaki, oignons croustillants et sésame mix.",
     highlights: ["🍗 Poulet maison", "🥭 Mangue & Feta", "🧅 Oignons frits croustillants"],
@@ -41,7 +41,7 @@ const REEL_BOWLS: ReelBowl[] = [
     name: "Scampis Royal",
     price: 10.00,
     tag: "Signature",
-    tagColor: "#d7ff45",
+    tagColor: "#F5EFE6",
     headline: "Scampis, jalapeños & spicy mayo",
     description: "Scampis dorés, guacamole, edamame, tomates, concombre, poivrons, spicy mayo, jalapeños et flocons de chili.",
     highlights: ["🦐 Scampis dorés", "🌶️ Jalapeños & Spicy mayo", "🔥 Flocons de chili"],
@@ -89,7 +89,7 @@ export function PokeCinematicReel() {
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Background ambient glow matching current bowl */}
-      <div className="absolute -inset-6 rounded-[48px] bg-gradient-to-tr from-[#d7ff45]/15 via-transparent to-[#ff705f]/15 blur-2xl transition-all duration-1000 -z-10" />
+      <div className="absolute -inset-6 rounded-[48px] bg-gradient-to-tr from-white/10 via-transparent to-[#ff705f]/15 blur-2xl transition-all duration-1000 -z-10" />
 
       {/* Main Reel Card */}
       <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-[#10251f] shadow-[0_30px_90px_-25px_rgba(0,0,0,0.85)]">
@@ -110,7 +110,7 @@ export function PokeCinematicReel() {
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     isActive
-                      ? "bg-[#d7ff45]"
+                      ? "bg-white"
                       : isPassed
                       ? "bg-white/80"
                       : "bg-transparent"
@@ -199,7 +199,7 @@ export function PokeCinematicReel() {
         <div className="relative p-6 sm:p-7 bg-[#10251f] text-white">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d7ff45]">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F5EFE6]">
                 Recette officielle · Fait minute
               </p>
               <h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">

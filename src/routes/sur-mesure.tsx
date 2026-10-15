@@ -194,8 +194,8 @@ function SurMesurePage() {
         <div className="mb-10 overflow-hidden rounded-[28px] bg-[#10251f] p-6 text-white shadow-lift sm:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#d7ff45]">
-                <Sparkles className="h-3.5 w-3.5" /> Fiche officielle restaurant
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#F5EFE6]">
+                <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" /> Fiche officielle restaurant
               </div>
               <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
                 Poke (n) Bowl <span className="text-[#ff705f]">sur mesure</span>
@@ -208,7 +208,7 @@ function SurMesurePage() {
             <div className="flex items-center gap-4 rounded-2xl bg-white/[0.07] p-5 backdrop-blur-md sm:flex-col sm:items-start">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-wider text-white/50">Formule de base</p>
-                <p className="text-3xl font-black text-[#d7ff45] sm:text-4xl">10.00 €</p>
+                <p className="text-3xl font-black text-[#ff705f] sm:text-4xl">10.00 €</p>
               </div>
               <span className="text-xs font-semibold text-white/60">
                 Base + 5 mix-ins + protéine + sauce
@@ -224,7 +224,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
                     Format
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Taille</h2>
@@ -244,7 +244,7 @@ function SurMesurePage() {
                 >
                   <div className="flex w-full items-center justify-between">
                     <span className="font-black text-sm uppercase">Moyen</span>
-                    <span className={`text-xs font-black ${selectedSize === "moyen" ? "text-[#d7ff45]" : "text-[#7a847e]"}`}>
+                    <span className={`text-xs font-black ${selectedSize === "moyen" ? "text-[#F5EFE6]" : "text-[#7a847e]"}`}>
                       Inclus (10.00€)
                     </span>
                   </div>
@@ -264,7 +264,7 @@ function SurMesurePage() {
                 >
                   <div className="flex w-full items-center justify-between">
                     <span className="font-black text-sm uppercase">Grand</span>
-                    <span className={`text-xs font-black ${selectedSize === "grand" ? "text-[#d7ff45]" : "text-[#ff705f]"}`}>
+                    <span className={`text-xs font-black ${selectedSize === "grand" ? "text-[#ff705f]" : "text-[#ff705f]"}`}>
                       +3.00 € (13 €)
                     </span>
                   </div>
@@ -279,7 +279,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
                     Étape 1
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Base</h2>
@@ -321,7 +321,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
                     Étape 2
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">
@@ -332,7 +332,7 @@ function SurMesurePage() {
                   className={[
                     "rounded-full px-3 py-1 text-xs font-black transition-colors",
                     selectedMixIns.length >= INCLUDED_MIX_INS
-                      ? "bg-[#10251f] text-[#d7ff45]"
+                      ? "bg-[#10251f] text-[#F5EFE6]"
                       : "bg-[#ff705f]/10 text-[#ff705f]",
                   ].join(" ")}
                 >
@@ -349,7 +349,7 @@ function SurMesurePage() {
                     : `5 mix-ins inclus · Choisissez-en autant que vous voulez (+0,50 € par ingrédient supplémentaire) :`}
                 </span>
                 {extraMixInsCount > 0 && (
-                  <span className="rounded-full bg-[#d7ff45]/30 px-2 py-0.5 text-[10px] font-extrabold text-[#10251f]">
+                  <span className="rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[10px] font-extrabold text-[#ff705f]">
                     +{mixInsExtra.toFixed(2)} € de suppléments mix-ins
                   </span>
                 )}
@@ -403,7 +403,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
                     Étape 3
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Protéine</h2>
@@ -444,7 +444,7 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
                     Étape 4
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">Choisis ta Sauce</h2>
@@ -485,14 +485,14 @@ function SurMesurePage() {
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#d7ff45]">
+                  <span className="rounded-md bg-[#10251f] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6]">
                     Étape 5
                   </span>
                   <h2 className="mt-1 text-xl font-black text-[#17231f]">
                     Toppings croustillants
                   </h2>
                 </div>
-                <span className="rounded-full bg-[#10251f] px-3 py-1 text-xs font-black text-[#d7ff45]">
+                <span className="rounded-full bg-[#10251f] px-3 py-1 text-xs font-black text-[#F5EFE6]">
                   {selectedToppings.length <= 2
                     ? `${selectedToppings.length} / 2 inclus`
                     : `2 inclus + ${selectedToppings.length - 2} extra (+${((selectedToppings.length - 2) * 0.5).toFixed(2)}€)`}
@@ -546,7 +546,7 @@ function SurMesurePage() {
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#d7ff45] border border-white/20 shadow">
+                <span className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#F5EFE6] border border-white/20 shadow">
                   Bol Bambou Débordant 🌿
                 </span>
                 <span className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white text-xs font-black drop-shadow">

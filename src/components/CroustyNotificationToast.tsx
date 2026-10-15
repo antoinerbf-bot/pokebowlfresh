@@ -42,7 +42,7 @@ const NOTIFICATIONS: ToastNotification[] = [
   {
     id: "etudiant-deal",
     tag: "Formule Étudiant",
-    tagColor: "bg-[#d7ff45] text-[#10251f]",
+    tagColor: "bg-[#F5EFE6] text-[#10251f] border border-[#e8ded0]",
     title: "Formule Crousty Chicken à 11 €",
     desc: "1 Crousty Chicken au choix + 1 boisson 33cl offerte incluse (Coca, Ice-Tea, Fanta...).",
     dishId: "crousty-chicken-curry",
@@ -111,7 +111,7 @@ export function CroustyNotificationToast() {
             className="pointer-events-auto relative overflow-hidden rounded-3xl border border-black/10 bg-white/95 p-4 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.25)] backdrop-blur-xl transition hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.35)]"
           >
             {/* Ambient subtle glow */}
-            <div className="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#d7ff45]/20 blur-2xl pointer-events-none" />
+            <div className="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#ff705f]/15 blur-2xl pointer-events-none" />
 
             {/* Close button */}
             <button

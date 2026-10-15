@@ -205,7 +205,7 @@ function AdminStocksPage() {
                       onClick={() => void toggle(row.id, !available)}
                       className={`shrink-0 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wide transition ${
                         available
-                          ? "bg-[#d7ff45] text-[#10251f]"
+                          ? "bg-[#10251f] text-[#F5EFE6]"
                           : "bg-[#ff705f]/15 text-[#ff705f]"
                       }`}
                     >

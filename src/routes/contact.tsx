@@ -36,7 +36,7 @@ function ContactPage() {
           <div className="rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-soft flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d7ff45] text-black font-black">📍</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F5EFE6] border border-[#e8ded0] text-black font-black">📍</span>
                 <div>
                   <h2 className="text-2xl font-black text-[#10251f]">Poké & Bowl Visé</h2>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Centre-ville Visé · Av. du Pont</p>

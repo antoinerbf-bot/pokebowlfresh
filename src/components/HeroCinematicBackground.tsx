@@ -83,8 +83,8 @@ const SLIDES: SlideData[] = [
     price: 10.0,
     grandPrice: 13.0,
     badge: "Best-Seller N°1 ⭐",
-    badgeColor: "#d7ff45",
-    accentColor: "#d7ff45",
+    badgeColor: "#F5EFE6",
+    accentColor: "#F5EFE6",
     image: bowlSweetChicken,
     ingredients: [
       { name: "Poulet Mariné Doré", emoji: "🍗" },
@@ -140,8 +140,8 @@ const SLIDES: SlideData[] = [
     price: 10.0,
     grandPrice: 13.0,
     badge: "Saisi au Grill 🦐",
-    badgeColor: "#d7ff45",
-    accentColor: "#d7ff45",
+    badgeColor: "#F5EFE6",
+    accentColor: "#F5EFE6",
     image: bowlScampis,
     ingredients: [
       { name: "Scampis Royaux Grillés", emoji: "🦐" },
@@ -196,8 +196,8 @@ const SLIDES: SlideData[] = [
     price: 11.0,
     grandPrice: 11.0,
     badge: "Formule 11€ Boisson 🥤",
-    badgeColor: "#d7ff45",
-    accentColor: "#d7ff45",
+    badgeColor: "#F5EFE6",
+    accentColor: "#F5EFE6",
     image: bowlCroustyBlanche,
     isHotCombo: true,
     ingredients: [
@@ -359,8 +359,8 @@ export function HeroCinematicBackground() {
       <div className="relative z-20 pt-20 sm:pt-24 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1340px] flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-black/40 px-3.5 py-1.5 backdrop-blur-md">
-            <span className="flex h-2 w-2 rounded-full bg-[#d7ff45] animate-pulse" />
-            <span className="font-extrabold uppercase tracking-[0.15em] text-[#d7ff45] text-[10px]">
+            <span className="flex h-2 w-2 rounded-full bg-[#F5EFE6] animate-pulse" />
+            <span className="font-extrabold uppercase tracking-[0.15em] text-[#F5EFE6] text-[10px]">
               Service Ouvert à Visé
             </span>
             <span className="text-white/40">·</span>
@@ -371,7 +371,7 @@ export function HeroCinematicBackground() {
 
           <div className="flex items-center gap-3 text-white/80 text-[11px]">
             <div className="flex items-center gap-1.5 font-bold">
-              <span className="text-[#d7ff45]">★ 4.9/5</span>
+              <span className="text-[#F5EFE6]">★ 4.9/5</span>
               <span className="text-white/40">·</span>
               <span>Plus de 150 avis gourmands</span>
             </div>
@@ -465,7 +465,7 @@ export function HeroCinematicBackground() {
                         onClick={() => setSelectedSize("moyen")}
                         className={`rounded-full px-3.5 py-1 text-xs font-black transition ${
                           selectedSize === "moyen"
-                            ? "bg-[#d7ff45] text-[#0a1512] shadow"
+                            ? "bg-[#F5EFE6] text-[#0a1512] shadow"
                             : "text-white/70 hover:text-white"
                         }`}
                       >
@@ -476,7 +476,7 @@ export function HeroCinematicBackground() {
                         onClick={() => setSelectedSize("grand")}
                         className={`rounded-full px-3.5 py-1 text-xs font-black transition ${
                           selectedSize === "grand"
-                            ? "bg-[#d7ff45] text-[#0a1512] shadow"
+                            ? "bg-[#F5EFE6] text-[#0a1512] shadow"
                             : "text-white/70 hover:text-white"
                         }`}
                       >
@@ -492,7 +492,7 @@ export function HeroCinematicBackground() {
                   <button
                     type="button"
                     onClick={handleQuickAdd}
-                    className="relative group inline-flex items-center gap-2.5 rounded-full bg-[#d7ff45] px-6 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#0a1512] shadow-2xl transition hover:bg-white hover:scale-105 active:scale-95"
+                    className="relative group inline-flex items-center gap-2.5 rounded-full bg-[#F5EFE6] px-6 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#0a1512] shadow-2xl transition hover:bg-white hover:scale-105 active:scale-95"
                   >
                     <Plus className="h-4 w-4 stroke-[3]" />
                     <span>
@@ -506,7 +506,7 @@ export function HeroCinematicBackground() {
                         initial={{ opacity: 0, y: 10, scale: 0.8 }}
                         animate={{ opacity: 1, y: -42, scale: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-x-0 mx-auto -top-2 flex w-max items-center gap-1.5 rounded-full bg-[#10251f] border border-[#d7ff45] px-3 py-1 text-[11px] font-black text-[#d7ff45] shadow-2xl"
+                        className="absolute inset-x-0 mx-auto -top-2 flex w-max items-center gap-1.5 rounded-full bg-[#10251f] border border-[#F5EFE6] px-3 py-1 text-[11px] font-black text-[#F5EFE6] shadow-2xl"
                       >
                         <Check className="h-3 w-3 stroke-[3]" /> Ajouté au panier !
                       </motion.span>
@@ -526,7 +526,7 @@ export function HeroCinematicBackground() {
                   {/* Lien Sur-Mesure */}
                   <Link
                     to="/sur-mesure"
-                    className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#d7ff45] hover:underline sm:ml-2"
+                    className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#F5EFE6] hover:underline sm:ml-2"
                   >
                     <span>Ou compose de A à Z</span>
                     <span>→</span>
@@ -557,12 +557,12 @@ export function HeroCinematicBackground() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
                   {/* Tag coin gauche */}
-                  <span className="absolute top-3.5 left-3.5 rounded-full bg-[#10251f]/85 border border-white/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] backdrop-blur">
+                  <span className="absolute top-3.5 left-3.5 rounded-full bg-[#10251f]/85 border border-white/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] backdrop-blur">
                     ✦ Fait Minute à Visé
                   </span>
 
                   {/* Badge Prix coin droit */}
-                  <span className="absolute top-3.5 right-3.5 rounded-full bg-[#d7ff45] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-lg">
+                  <span className="absolute top-3.5 right-3.5 rounded-full bg-[#F5EFE6] px-3.5 py-1 text-xs font-black text-[#10251f] shadow-lg">
                     {effectivePrice.toFixed(2)} €
                   </span>
 
@@ -579,7 +579,7 @@ export function HeroCinematicBackground() {
                     <Link
                       to="/product/$productId"
                       params={{ productId: currentSlide.id }}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#10251f] shadow-lg transition hover:scale-110 hover:bg-[#d7ff45]"
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#10251f] shadow-lg transition hover:scale-110 hover:bg-[#F5EFE6]"
                       title="Voir le détail et personnaliser"
                     >
                       <ArrowRight className="h-4 w-4" />
@@ -590,13 +590,13 @@ export function HeroCinematicBackground() {
                 {/* Petite barre de réassurance sous la carte */}
                 <div className="mt-3.5 flex items-center justify-between text-[11px] font-bold text-white/80 px-2">
                   <span className="flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-[#d7ff45]" /> 10-15 min
+                    <Clock className="h-3.5 w-3.5 text-[#F5EFE6]" /> 10-15 min
                   </span>
                   <span className="flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5 text-[#ff705f]" /> Centre de Visé
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-[#d7ff45]" /> Zéro surgelé
+                    <Sparkles className="h-3.5 w-3.5 text-[#F5EFE6]" /> Zéro surgelé
                   </span>
                 </div>
               </motion.div>
@@ -628,7 +628,7 @@ export function HeroCinematicBackground() {
         <div className="mx-auto max-w-[1340px] flex flex-col md:flex-row items-center justify-between gap-3">
           {/* Label et numéro de slide */}
           <div className="flex items-center gap-3 text-xs font-bold text-white/70">
-            <span className="font-mono text-[#d7ff45]">
+            <span className="font-mono text-[#F5EFE6]">
               0{currentIndex + 1} / 0{SLIDES.length}
             </span>
             <span className="hidden sm:inline text-white/30">|</span>
@@ -663,7 +663,7 @@ export function HeroCinematicBackground() {
                   <div className="min-w-0 pr-1">
                     <p
                       className={`text-[11px] font-black uppercase tracking-tight truncate ${
-                        isActive ? "text-[#d7ff45]" : "text-white"
+                        isActive ? "text-[#F5EFE6]" : "text-white"
                       }`}
                     >
                       {slide.name}
@@ -680,7 +680,7 @@ export function HeroCinematicBackground() {
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: AUTOPLAY_DURATION / 1000, ease: "linear" }}
-                      className="absolute bottom-0 inset-x-0 h-[2.5px] rounded-b-2xl bg-[#d7ff45]"
+                      className="absolute bottom-0 inset-x-0 h-[2.5px] rounded-b-2xl bg-[#F5EFE6]"
                     />
                   )}
                 </button>

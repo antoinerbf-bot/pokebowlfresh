@@ -127,18 +127,18 @@ function Ticker() {
       className="mx-6 inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.16em] sm:text-[11px]"
     >
       Poke N Bowl
-      <span className="text-[#10251f]/40">✦</span>
+      <span className="text-[#ff705f]">✦</span>
       Fresh Food Visé
-      <span className="text-[#10251f]/40">✦</span>
+      <span className="text-[#ff705f]">✦</span>
       Fait Minute
-      <span className="text-[#10251f]/40">✦</span>
+      <span className="text-[#ff705f]">✦</span>
       Crousty Chicken
-      <span className="text-[#10251f]/40">✦</span>
+      <span className="text-[#ff705f]">✦</span>
     </span>
   ));
 
   return (
-    <div className="overflow-hidden bg-[#d7ff45] py-3 text-[#10251f] shadow-inner">
+    <div className="overflow-hidden bg-[#10251f] py-3.5 text-[#F5EFE6] border-y border-white/10 shadow-sm">
       <motion.div
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
@@ -211,18 +211,18 @@ function Index() {
           <Reveal>
             <Link
               to="/recrutement"
-              className="group mx-auto flex max-w-[1240px] items-center justify-between gap-5 rounded-[28px] bg-[#d7ff45] p-6 transition duration-300 hover:-translate-y-1.5 sm:rounded-[34px] sm:p-9 shadow-card"
+              className="group mx-auto flex max-w-[1240px] items-center justify-between gap-5 rounded-[28px] bg-gradient-to-r from-[#10251f] via-[#16332b] to-[#1c3e34] text-white p-6 transition duration-300 hover:-translate-y-1.5 sm:rounded-[34px] sm:p-9 shadow-card border border-white/10"
             >
               <div className="min-w-0">
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#36420c]">
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#ff705f]">
                   <BriefcaseBusiness className="h-4 w-4 shrink-0" />
                   {t("recruit.banner_tag")}
                 </div>
-                <h2 className="mt-2 break-words text-xl sm:text-2xl lg:text-3xl font-black text-[#10251f]">
+                <h2 className="mt-2 break-words text-xl sm:text-2xl lg:text-3xl font-black text-white">
                   {t("recruit.banner_title")}
                 </h2>
               </div>
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#10251f] text-white transition group-hover:scale-110 shadow-md">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#F5EFE6] text-[#10251f] transition group-hover:scale-110 shadow-md">
                 <ArrowRight className="h-5 w-5" />
               </span>
             </Link>
@@ -254,7 +254,7 @@ function Index() {
                   <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 bg-[#faf8f4] p-5 sm:px-6">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#d7ff45] text-xs font-black text-[#10251f]">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F5EFE6] border border-[#e8ded0] text-xs font-black text-[#10251f]">
                           📍
                         </span>
                         <h3 className="font-extrabold text-[#10251f] text-base">
@@ -302,14 +302,14 @@ function Index() {
                     <div className="flex items-center justify-between border-b border-black/5 pb-4">
                       <div className="flex items-center gap-2.5">
                         <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#10251f] text-white">
-                          <Clock className="h-4 w-4 text-[#d7ff45]" />
+                          <Clock className="h-4 w-4 text-[#ff705f]" />
                         </span>
                         <div>
                           <h3 className="text-lg font-black text-[#10251f]">Horaires d'ouverture</h3>
                           <p className="text-[11px] text-[#7d8b83]">Poke N Bowl Visé · En plein centre</p>
                         </div>
                       </div>
-                      <span className="rounded-full bg-[#d7ff45]/40 border border-[#b8e612] px-3 py-1 text-[10px] font-black uppercase text-[#10251f]">
+                      <span className="rounded-full bg-[#ecfdf5] border border-[#a7f3d0] text-[#065f46] px-3 py-1 text-[10px] font-bold uppercase">
                         ● Ouvert pour le service
                       </span>
                     </div>

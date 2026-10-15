@@ -21,7 +21,7 @@ function RecruitmentPage() {
       </header>
       <main className="mx-auto max-w-6xl px-5 py-16 md:py-24">
         <section className="relative overflow-hidden rounded-[2.5rem] bg-[linear-gradient(135deg,oklch(0.24_0.045_195),oklch(0.38_0.08_175))] p-8 text-white shadow-lift md:p-14">
-          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-lime/20 blur-3xl" />
+          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
           <div className="relative max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-widest"><BriefcaseBusiness className="h-4 w-4" /> On recrute</span>
             <h1 className="mt-6 break-words text-5xl font-black leading-[1.08] tracking-[-0.02em] md:text-7xl">Rejoins l’aventure Poke N Bowl.</h1>

@@ -166,13 +166,13 @@ export function InteractiveBowlBuilder() {
       {/* ── Cadre Général Clair & Lumineux (Harmonisé avec le fond du site) ── */}
       <div className="relative overflow-hidden rounded-[36px] bg-white border border-[#e8dfcf] shadow-lift p-6 sm:p-10 lg:p-12">
         {/* Décoration douce d'arrière-plan */}
-        <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-[#d7ff45]/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-black/5 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#ff705f]/10 blur-3xl" />
 
         {/* ── Entête du Module Sur-Mesure ── */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-black/5">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#d7ff45] shadow-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#10251f] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#F5EFE6] shadow-sm">
               <ChefHat className="h-3.5 w-3.5" />
               <span>Atelier Créatif · Bol en Bambou Naturel</span>
             </div>
@@ -221,7 +221,7 @@ export function InteractiveBowlBuilder() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#d7ff45]" : isDone ? "text-[#ff705f]" : "text-[#7d8b83]"}`}>
+                  <span className={`text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#F5EFE6]" : isDone ? "text-[#ff705f]" : "text-[#7d8b83]"}`}>
                     {s.title}
                   </span>
                   {isDone && <CheckCircle2 className="h-4 w-4 text-[#ff705f]" />}
@@ -266,7 +266,7 @@ export function InteractiveBowlBuilder() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-black text-sm text-[#10251f]">Format Moyen</span>
-                          <span className="rounded-full bg-[#d7ff45] px-2.5 py-0.5 text-xs font-black text-[#10251f]">
+                          <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2.5 py-0.5 text-xs font-black text-[#10251f]">
                             10.00 €
                           </span>
                         </div>
@@ -286,7 +286,7 @@ export function InteractiveBowlBuilder() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-black text-sm text-[#10251f]">Grand Format</span>
-                          <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#d7ff45]">
+                          <span className="rounded-full bg-[#10251f] px-2.5 py-0.5 text-xs font-black text-[#F5EFE6]">
                             13.00 €
                           </span>
                         </div>
@@ -546,7 +546,7 @@ export function InteractiveBowlBuilder() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
                 
                 {/* Badge bol bambou */}
-                <div className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#d7ff45] border border-white/20 shadow">
+                <div className="absolute top-2.5 left-2.5 rounded-full bg-[#10251f]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F5EFE6] border border-white/20 shadow">
                   Bol Bambou Débordant 🌿
                 </div>
 
@@ -652,7 +652,7 @@ export function InteractiveBowlBuilder() {
               >
                 {added ? (
                   <>
-                    <Check className="h-4 w-4 text-[#d7ff45]" />
+                    <Check className="h-4 w-4 text-[#22c55e]" />
                     <span>Bowl ajouté ! Retour à l'étape 1...</span>
                   </>
                 ) : (

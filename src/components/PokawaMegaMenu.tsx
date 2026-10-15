@@ -245,7 +245,7 @@ export function PokawaMegaMenu({
                       <span
                         className={`rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${
                           isActive
-                            ? "bg-[#d7ff45] text-[#10251f]"
+                            ? "bg-[#10251f] text-[#F5EFE6]"
                             : "bg-black/5 text-[#7a847e]"
                         }`}
                       >
@@ -260,10 +260,10 @@ export function PokawaMegaMenu({
                   <a
                     href="#composer"
                     onClick={onClose}
-                    className="flex items-center justify-between rounded-xl bg-[#d7ff45] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm hover:scale-[1.02] transition"
+                    className="flex items-center justify-between rounded-xl bg-[#F5EFE6] border border-[#e8ded0] p-3 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-sm hover:scale-[1.02] transition"
                   >
                     <span className="flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5" />
+                      <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
                       Composer son Bowl
                     </span>
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -302,7 +302,7 @@ export function PokawaMegaMenu({
                               alt={poke.name}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
-                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#d7ff45] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
+                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-2 py-0.5 text-[10px] font-black text-[#10251f] shadow">
                               {poke.price.toFixed(2)} €
                             </span>
                             <span className="absolute bottom-1.5 left-1.5 rounded-md bg-black/60 px-1.5 py-0.5 text-[8px] font-bold text-white">
@@ -443,8 +443,8 @@ export function PokawaMegaMenu({
                 {activeCat === "composer" && (
                   <div className="rounded-2xl bg-gradient-to-br from-[#10251f] to-[#1c3830] text-white p-6 shadow-md flex flex-col justify-between h-full">
                     <div>
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d7ff45] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f]">
-                        <Sparkles className="h-3 w-3 stroke-[3]" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5EFE6] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#10251f]">
+                        <Sparkles className="h-3 w-3 stroke-[3] text-[#ff705f]" />
                         Créativité Illimitée
                       </span>
                       <h4 className="mt-3 text-2xl font-black text-white">
@@ -458,26 +458,26 @@ export function PokawaMegaMenu({
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 my-5 text-center">
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">🍚</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#d7ff45]">1. Base</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">1. Base</span>
                       </div>
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">🐟</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#d7ff45]">2. Protéine</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">2. Protéine</span>
                       </div>
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">🥑</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#d7ff45]">3. 5 Mix-ins</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">3. 5 Mix-ins</span>
                       </div>
                       <div className="rounded-xl bg-white/10 p-2.5">
                         <span className="text-xl">✨</span>
-                        <span className="block text-[10px] font-bold mt-1 text-[#d7ff45]">4. Sauce & Seeds</span>
+                        <span className="block text-[10px] font-bold mt-1 text-[#F5EFE6]">4. Sauce & Seeds</span>
                       </div>
                     </div>
 
                     <a
                       href="#composer"
                       onClick={onClose}
-                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#d7ff45] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg hover:bg-white transition"
+                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#F5EFE6] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#10251f] shadow-lg hover:bg-white transition"
                     >
                       <span>Lancer l'atelier Sur-Mesure maintenant</span>
                       <ArrowRight className="h-4 w-4" />
@@ -497,7 +497,7 @@ export function PokawaMegaMenu({
                           Préparés chaque matin par notre chef · Mascarpone aérien
                         </p>
                       </div>
-                      <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]">
+                      <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3 py-1 text-xs font-black text-[#10251f]">
                         4,00 € l'unité
                       </span>
                     </div>
@@ -514,7 +514,7 @@ export function PokawaMegaMenu({
                               alt={dessert.name}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
-                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] shadow">
+                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow">
                               {dessert.price.toFixed(2)} €
                             </span>
                           </div>
@@ -561,7 +561,7 @@ export function PokawaMegaMenu({
                           Canettes 33cl et eaux SPA minérales 50cl servies très fraîches
                         </p>
                       </div>
-                      <span className="rounded-full bg-[#d7ff45] px-3 py-1 text-xs font-black text-[#10251f]">
+                      <span className="rounded-full bg-[#F5EFE6] border border-[#e8ded0] px-3 py-1 text-xs font-black text-[#10251f]">
                         2,00 € l'unité
                       </span>
                     </div>
@@ -578,7 +578,7 @@ export function PokawaMegaMenu({
                               alt={drink.name}
                               className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
-                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#d7ff45] shadow">
+                            <span className="absolute top-1.5 right-1.5 rounded-full bg-[#10251f] px-2 py-0.5 text-[10px] font-black text-[#F5EFE6] shadow">
                               {drink.price.toFixed(2)} €
                             </span>
                           </div>
