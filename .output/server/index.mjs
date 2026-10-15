@@ -164,6 +164,13 @@ var public_assets_data_default = {
 		"size": 806,
 		"path": "../public/favicon.png"
 	},
+	"/logo.png": {
+		"type": "image/png",
+		"etag": "\"9b21-YFSBMVsf2GVHZm6DGL6auk3moww\"",
+		"mtime": "2026-10-15T11:34:18.073Z",
+		"size": 39713,
+		"path": "../public/logo.png"
+	},
 	"/logo.svg": {
 		"type": "image/svg+xml",
 		"etag": "\"59c-Df8a7OZ1AOBNdEwVWfOUUdISEY8\"",
@@ -241,6 +248,20 @@ var public_assets_data_default = {
 		"size": 264431,
 		"path": "../public/assets/bowl-crousty-curry-CRZGKMUK.jpg"
 	},
+	"/assets/bowl-saumon-CRYVYQxR.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"33b41-kmxkI+v19URLzSyHi+mUmIeJmiU\"",
+		"mtime": "2026-10-15T11:34:17.167Z",
+		"size": 211777,
+		"path": "../public/assets/bowl-saumon-CRYVYQxR.jpg"
+	},
+	"/assets/bowl-scampis-DlEe1YXf.jpg": {
+		"type": "image/jpeg",
+		"etag": "\"4be0b-BT7H6oUL10i1fY2DeX7N1G4fyyY\"",
+		"mtime": "2026-10-15T11:34:17.167Z",
+		"size": 310795,
+		"path": "../public/assets/bowl-scampis-DlEe1YXf.jpg"
+	},
 	"/assets/briefcase-business-DJeAkziv.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"145-Icqw7COrVhO91vSmQRwPu6aynHU\"",
@@ -273,6 +294,13 @@ var public_assets_data_default = {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"fa-2kjAovRoSd1mtrV0pDXgDnuN8MQ\"",
 		"mtime": "2026-10-15T15:21:50.154Z",
+		"size": 250,
+		"path": "../public/assets/circle-alert-ClvmKOUA.js"
+	},
+	"/assets/circle-alert-ClvmKOUA.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"fa-2kjAovRoSd1mtrV0pDXgDnuN8MQ\"",
+		"mtime": "2026-10-15T11:34:17.166Z",
 		"size": 250,
 		"path": "../public/assets/circle-alert-ClvmKOUA.js"
 	},
@@ -542,6 +570,13 @@ var public_assets_data_default = {
 		"size": 160842,
 		"path": "../public/assets/styles-BFh_gzTr.css"
 	},
+	"/assets/sur-mesure-BUrcuAFr.js": {
+		"type": "text/javascript; charset=utf-8",
+		"etag": "\"585d-ZlfnklX3Tn07Ea2uWKXnhXhtk2M\"",
+		"mtime": "2026-10-15T11:34:17.167Z",
+		"size": 22621,
+		"path": "../public/assets/sur-mesure-BUrcuAFr.js"
+	},
 	"/assets/useStock-CYuKnEsX.js": {
 		"type": "text/javascript; charset=utf-8",
 		"etag": "\"1e8-6Upexz5TXGKApBV0BGkkF4w9ukM\"",
@@ -656,11 +691,11 @@ var multiHandler = (...handlers) => {
 	const middleware = handlers.filter(Boolean).map((h) => toMiddleware(h));
 	return (ev) => callMiddleware(ev, middleware, final);
 };
-var _lazy_gmTYTR = defineLazyEventHandler(() => import("./_chunks/ssr-renderer.mjs"));
+var _lazy_XAhvdF = defineLazyEventHandler(() => import("./_chunks/ssr-renderer.mjs"));
 var findRoute = /* @__PURE__ */ (() => {
 	const $0 = {
 		route: "/**",
-		handler: multiHandler(toEventHandler(server_default), _lazy_gmTYTR)
+		handler: multiHandler(toEventHandler(server_default), _lazy_XAhvdF)
 	};
 	return (m, p) => {
 		if (p.charCodeAt(p.length - 1) === 47) p = p.slice(0, -1) || "/";
