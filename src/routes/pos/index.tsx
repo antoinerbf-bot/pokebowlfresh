@@ -191,8 +191,10 @@ export function PosApplicationPage() {
       const now = new Date().toLocaleTimeString();
       if (isOk) {
         setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} imprimée.`, type: "ok" }, ...prev.slice(0, 30)]);
+        alert(`✅ Ticket envoyé avec succès à l'imprimante réseau (${config.printerIp}) !`);
       } else {
         setPrintLog((prev) => [{ time: now, msg: `Échec ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
+        alert(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n👉 Cliquez sur "Imprimer Ticket Direct" pour sortir le ticket via votre imprimante de caisse.`);
       }
     } catch (err: any) {
       console.error(err);
@@ -211,9 +213,11 @@ export function PosApplicationPage() {
   };
 
   const handleManualReprint = async (orderId: string) => {
-    const targetOrder = orders.find((o) => o.id === orderId);
-    if (!targetOrder) return;
-    // Réimpression via le client réseau Epson, sans ouvrir la boîte d'impression du navigateur.
+    const targetOrder = orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null);
+    if (!targetOrder) {
+      alert("Commande introuvable.");
+      return;
+    }
     await handleExecutePrint(targetOrder);
   };
 
@@ -968,21 +972,21 @@ export function PosApplicationPage() {
             {/* Actions Modal */}
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
-                onClick={() => handleManualReprint(selectedOrder.id)}
-                className="rounded-2xl bg-white/10 py-3.5 text-xs font-black hover:bg-white/20 transition flex items-center justify-center gap-2"
-                title="Envoyer à l'imprimante thermique Epson réseau"
+                onClick={() => printThermalTicket(selectedOrder)}
+                className="rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                title="Lancer l'impression directe du ticket thermique 80mm avec QR Code"
               >
-                <Printer className="w-4 h-4 text-[#ff705f]" />
-                Imprimer Réseau
+                <Printer className="w-4 h-4" />
+                Imprimer Ticket Direct
               </button>
 
               <button
-                onClick={() => printThermalTicket(selectedOrder)}
-                className="rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-xs font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2"
-                title="Ouvrir le ticket thermique avec son QR Code à l'écran / boîte de dialogue d'impression"
+                onClick={() => handleManualReprint(selectedOrder.id)}
+                className="rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                title={`Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`}
               >
-                <Printer className="w-4 h-4" />
-                Aperçu Ticket & QR
+                <Printer className="w-4 h-4 text-[#ff705f]" />
+                Imprimer Réseau ({config.printerIp})
               </button>
             </div>
           </div>

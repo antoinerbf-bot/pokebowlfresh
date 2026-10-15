@@ -20,7 +20,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BFh_gzTr.css";
+var styles_default = "/assets/styles-QOsBUGmO.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -10189,16 +10189,21 @@ function PosApplicationPage() {
 				error: errorMsg || void 0
 			} });
 			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
-			if (isOk) setPrintLog((prev) => [{
-				time: now,
-				msg: `Commande ${order.id} imprimée.`,
-				type: "ok"
-			}, ...prev.slice(0, 30)]);
-			else setPrintLog((prev) => [{
-				time: now,
-				msg: `Échec ${order.id} : ${errorMsg}`,
-				type: "err"
-			}, ...prev.slice(0, 30)]);
+			if (isOk) {
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Commande ${order.id} imprimée.`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				alert(`✅ Ticket envoyé avec succès à l'imprimante réseau (${config.printerIp}) !`);
+			} else {
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Échec ${order.id} : ${errorMsg}`,
+					type: "err"
+				}, ...prev.slice(0, 30)]);
+				alert(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n👉 Cliquez sur "Imprimer Ticket Direct" pour sortir le ticket via votre imprimante de caisse.`);
+			}
 		} catch (err) {
 			console.error(err);
 			await ackPosPrint({ data: {
@@ -10213,8 +10218,11 @@ function PosApplicationPage() {
 		}
 	};
 	const handleManualReprint = async (orderId) => {
-		const targetOrder = orders.find((o) => o.id === orderId);
-		if (!targetOrder) return;
+		const targetOrder = orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null);
+		if (!targetOrder) {
+			alert("Commande introuvable.");
+			return;
+		}
 		await handleExecutePrint(targetOrder);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
@@ -10983,15 +10991,20 @@ function PosApplicationPage() {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-3 pt-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => handleManualReprint(selectedOrder.id),
-								className: "rounded-2xl bg-white/10 py-3.5 text-xs font-black hover:bg-white/20 transition flex items-center justify-center gap-2",
-								title: "Envoyer à l'imprimante thermique Epson réseau",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), "Imprimer Réseau"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => printThermalTicket(selectedOrder),
-								className: "rounded-2xl bg-[#ff705f]/20 text-[#ff705f] py-3.5 text-xs font-black hover:bg-[#ff705f]/30 transition flex items-center justify-center gap-2",
-								title: "Ouvrir le ticket thermique avec son QR Code à l'écran / boîte de dialogue d'impression",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Aperçu Ticket & QR"]
+								className: "rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+								title: "Lancer l'impression directe du ticket thermique 80mm avec QR Code",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Imprimer Ticket Direct"]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => handleManualReprint(selectedOrder.id),
+								className: "rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer",
+								title: `Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }),
+									"Imprimer Réseau (",
+									config.printerIp,
+									")"
+								]
 							})]
 						})
 					]
