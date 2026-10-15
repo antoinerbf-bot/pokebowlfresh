@@ -17,14 +17,39 @@ function DeliveryTrackPage() {
 
   const fetchOrder = async () => {
     try {
+      // 1. Appel direct ultra-rapide à l'API REST /api/track-order
+      const raw = await fetch(`/api/track-order?token=${encodeURIComponent(token)}`, {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+      if (raw.ok) {
+        const data = await raw.json();
+        if (data.found && data.order) {
+          setOrder(data.order);
+          setError(null);
+          setLoading(false);
+          return;
+        }
+      }
+
+      // 2. Fallback createServerFn
       const res = await getDeliveryOrder({ data: { token } });
       if (res.found) {
         setOrder(res.order);
+        setError(null);
       } else {
         setError("Commande introuvable ou lien expiré.");
       }
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      console.warn("[Track] Erreur API REST, fallback createServerFn:", e);
+      try {
+        const res = await getDeliveryOrder({ data: { token } });
+        if (res.found) {
+          setOrder(res.order);
+          setError(null);
+          return;
+        }
+      } catch {}
       setError("Impossible de charger les données de la commande.");
     } finally {
       setLoading(false);
@@ -33,13 +58,22 @@ function DeliveryTrackPage() {
 
   useEffect(() => {
     fetchOrder();
-    const interval = setInterval(fetchOrder, 15000);
+    const interval = setInterval(fetchOrder, 10000);
     return () => clearInterval(interval);
   }, [token]);
 
   const handleStatusChange = async (newStatus: "delivering" | "completed") => {
     setUpdating(true);
     try {
+      const res = await fetch("/api/track-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, status: newStatus }),
+      });
+      if (res.ok) {
+        await fetchOrder();
+        return;
+      }
       await updateDeliveryStatus({ data: { token, status: newStatus } });
       await fetchOrder();
     } catch (e) {
@@ -53,24 +87,46 @@ function DeliveryTrackPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F6F1E9]">
-        <Loader2 className="h-8 w-8 animate-spin text-[#ff705f]" />
+        <div className="text-center space-y-3">
+          <Loader2 className="h-10 w-10 animate-spin text-[#ff705f] mx-auto" />
+          <p className="text-xs font-black uppercase tracking-wider text-[#758079]">
+            Chargement de la livraison...
+          </p>
+        </div>
       </div>
     );
   }
 
   if (error || !order) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F6F1E9] px-4 text-center">
-        <AlertCircle className="h-12 w-12 text-[#ff705f]" />
-        <h1 className="mt-4 text-2xl font-black text-[#17231f]">Lien invalide</h1>
-        <p className="mt-2 text-sm text-[#758079]">{error ?? "Commande introuvable."}</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#F6F1E9] px-6 text-center">
+        <div className="w-16 h-16 rounded-full bg-[#ff705f]/15 flex items-center justify-center mb-4">
+          <AlertCircle className="h-9 w-9 text-[#ff705f]" />
+        </div>
+        <h1 className="text-2xl font-black text-[#17231f]">Lien invalide ou expiré</h1>
+        <p className="mt-2 text-sm font-medium text-[#758079] max-w-sm">
+          {error ?? "La commande demandée est introuvable."}
+        </p>
+        <p className="mt-2 font-mono text-xs bg-black/5 px-3 py-1.5 rounded-lg text-[#17231f]">
+          Réf : {token}
+        </p>
+        <button
+          onClick={() => {
+            setLoading(true);
+            setError(null);
+            fetchOrder();
+          }}
+          className="mt-6 rounded-2xl bg-[#ff705f] px-6 py-3 font-black text-white text-sm shadow hover:bg-[#ff5a47] transition active:scale-95"
+        >
+          🔄 Réessayer la recherche
+        </button>
       </div>
     );
   }
 
   const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
-  const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}`;
+  const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
   const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
 
   return (

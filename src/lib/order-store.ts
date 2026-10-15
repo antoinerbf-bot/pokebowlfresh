@@ -25,11 +25,11 @@ function isPostgresConfigured(): boolean {
   return Boolean(process.env.DATABASE_URL?.trim());
 }
 
-// ─── Stockage Local JSON (quand DATABASE_URL n'est pas configuré sur O2Switch) ───
+// ─── Stockage Local JSON (Multi-processus Phusion Passenger O2Switch) ───
 const memoryOrders = new Map<string, Order>();
-let memoryLoaded = false;
+let lastLoadedTime = 0;
 
-function getStoreFilePath(): string {
+function getStoreCandidatePaths(): string[] {
   const candidateDirs = [
     process.env.ORDERS_DATA_DIR,
     "/home/puzo3938/pokenbowl.be",
@@ -37,42 +37,85 @@ function getStoreFilePath(): string {
     "/tmp",
   ].filter(Boolean) as string[];
 
+  const paths: string[] = [];
   for (const dir of candidateDirs) {
     try {
-      if (fs.existsSync(dir)) {
-        return path.join(dir, "pokenbowl-orders.json");
-      }
+      paths.push(path.join(dir, "pokenbowl-orders.json"));
+    } catch {}
+  }
+  return paths;
+}
+
+function getStoreFilePath(): string {
+  const candidates = getStoreCandidatePaths();
+  // 1. Si le fichier existe déjà dans l'un des dossiers, le réutiliser
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) return p;
+    } catch {}
+  }
+  // 2. Sinon chercher le premier dossier parent existant
+  for (const p of candidates) {
+    try {
+      const dir = path.dirname(p);
+      if (fs.existsSync(dir)) return p;
     } catch {}
   }
   return path.join(process.cwd(), "pokenbowl-orders.json");
 }
 
-function loadLocalOrders(): void {
-  if (memoryLoaded) return;
-  memoryLoaded = true;
-  try {
-    const filePath = getStoreFilePath();
-    if (fs.existsSync(filePath)) {
-      const raw = fs.readFileSync(filePath, "utf-8");
-      const list = JSON.parse(raw);
-      if (Array.isArray(list)) {
-        for (const item of list) {
-          if (item?.id) {
-            memoryOrders.set(item.id, item);
+export function loadLocalOrders(force = false): void {
+  const now = Date.now();
+  // Ne pas recharger plus d'une fois toutes les 300ms sauf si forcé
+  if (!force && now - lastLoadedTime < 300 && memoryOrders.size > 0) {
+    return;
+  }
+  lastLoadedTime = now;
+
+  const candidates = getStoreCandidatePaths();
+  for (const filePath of candidates) {
+    try {
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, "utf-8");
+        if (raw && raw.trim().length > 2) {
+          const list = JSON.parse(raw);
+          if (Array.isArray(list)) {
+            for (const item of list) {
+              if (item?.id) {
+                const existing = memoryOrders.get(item.id);
+                if (!existing || item.status !== existing.status || item.deliveryToken || !existing.deliveryToken) {
+                  memoryOrders.set(item.id, item);
+                }
+              }
+            }
           }
         }
       }
+    } catch (err) {
+      // Ignorer les erreurs individuelles de lecture
     }
-  } catch (err) {
-    console.error("[OrderStore] Échec lecture fichier local commandes:", err);
   }
 }
 
-function saveLocalOrders(): void {
+export function saveLocalOrders(): void {
   try {
-    const filePath = getStoreFilePath();
     const list = Array.from(memoryOrders.values());
-    fs.writeFileSync(filePath, JSON.stringify(list, null, 2), "utf-8");
+    const jsonStr = JSON.stringify(list, null, 2);
+    const candidates = getStoreCandidatePaths();
+
+    for (const filePath of candidates) {
+      try {
+        const dir = path.dirname(filePath);
+        if (fs.existsSync(dir)) {
+          fs.writeFileSync(filePath, jsonStr, "utf-8");
+        }
+      } catch {}
+    }
+
+    // Sauvegarde miroir ultra-fiable dans /tmp (accessible par tous les workers Passenger)
+    try {
+      fs.writeFileSync("/tmp/pokenbowl-orders.json", jsonStr, "utf-8");
+    } catch {}
   } catch (err) {
     console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
   }
@@ -160,129 +203,225 @@ function rowToOrder(row: DbRow): Order {
 }
 
 export async function getOrderFromStore(id: string): Promise<Order | undefined> {
-  if (!isPostgresConfigured()) {
-    loadLocalOrders();
-    return memoryOrders.get(id);
+  const rawId = (id ?? "").trim();
+  if (!rawId) return undefined;
+  const cleanId = decodeURIComponent(rawId).trim();
+  const lowerId = cleanId.toLowerCase();
+
+  // 1. Synchronisation disque immédiate
+  loadLocalOrders(true);
+  const localMatch =
+    memoryOrders.get(cleanId) ||
+    Array.from(memoryOrders.values()).find((o) => {
+      if (!o) return false;
+      const oId = (o.id ?? "").trim();
+      const dt = (o.deliveryToken ?? "").trim();
+      return (
+        oId === cleanId ||
+        oId.toLowerCase() === lowerId ||
+        dt === cleanId ||
+        dt.toLowerCase() === lowerId
+      );
+    });
+
+  if (localMatch) return localMatch;
+
+  // 2. Si Postgres configuré, requêter la base
+  if (isPostgresConfigured()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      const rows = await sql<DbRow>`
+        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+               customer_json, items_json, total, currency,
+               print_status, printed_at, print_claimed_at, print_attempts, print_error
+        FROM orders
+        WHERE id = ${cleanId}
+           OR delivery_token = ${cleanId}
+           OR LOWER(id) = ${lowerId}
+           OR LOWER(delivery_token) = ${lowerId}
+        LIMIT 1
+      `;
+      const row = rows[0];
+      if (row) return rowToOrder(row);
+    } catch (err) {
+      console.error("[OrderStore] Erreur getOrderFromStore Postgres:", err);
+    }
   }
 
-  await ensureSchema();
-  const sql = getSql();
-  const rows = await sql<DbRow>`
-    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-           customer_json, items_json, total, currency,
-           print_status, printed_at, print_claimed_at, print_attempts, print_error
-    FROM orders
-    WHERE id = ${id}
-    LIMIT 1
-  `;
-  const row = rows[0];
-  return row ? rowToOrder(row) : undefined;
+  return undefined;
 }
 
 export async function getOrderByDeliveryToken(token: string): Promise<Order | undefined> {
-  if (!isPostgresConfigured()) {
-    loadLocalOrders();
-    return Array.from(memoryOrders.values()).find((o) => o.deliveryToken === token);
+  const rawToken = (token ?? "").trim();
+  if (!rawToken) return undefined;
+  const cleanToken = decodeURIComponent(rawToken).trim();
+  const lowerToken = cleanToken.toLowerCase();
+
+  // 1. Toujours forcer le rechargement depuis le disque partagé
+  loadLocalOrders(true);
+
+  // 2. Recherche tolérante locale : par deliveryToken OU par ID de commande (insensible à la casse)
+  const localMatch = Array.from(memoryOrders.values()).find((o) => {
+    if (!o) return false;
+    const dt = (o.deliveryToken ?? "").trim();
+    const id = (o.id ?? "").trim();
+    return (
+      (dt && (dt === cleanToken || dt.toLowerCase() === lowerToken)) ||
+      (id && (id === cleanToken || id.toLowerCase() === lowerToken))
+    );
+  });
+
+  if (localMatch) {
+    return localMatch;
   }
 
-  await ensureSchema();
-  const sql = getSql();
-  const rows = await sql<DbRow>`
-    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-           customer_json, items_json, total, currency,
-           print_status, printed_at, print_claimed_at, print_attempts, print_error
-    FROM orders
-    WHERE delivery_token = ${token}
-    LIMIT 1
-  `;
-  const row = rows[0];
-  return row ? rowToOrder(row) : undefined;
+  // 3. Fallback Postgres
+  if (isPostgresConfigured()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      const rows = await sql<DbRow>`
+        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+               customer_json, items_json, total, currency,
+               print_status, printed_at, print_claimed_at, print_attempts, print_error
+        FROM orders
+        WHERE delivery_token = ${cleanToken}
+           OR id = ${cleanToken}
+           OR LOWER(delivery_token) = ${lowerToken}
+           OR LOWER(id) = ${lowerToken}
+        LIMIT 1
+      `;
+      const row = rows[0];
+      if (row) return rowToOrder(row);
+    } catch (err) {
+      console.error("[OrderStore] Erreur getOrderByDeliveryToken Postgres:", err);
+    }
+  }
+
+  return undefined;
 }
 
 export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
+  loadLocalOrders(true);
   if (!isPostgresConfigured()) {
-    loadLocalOrders();
     return Array.from(memoryOrders.values())
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit);
   }
 
-  await ensureSchema();
-  const sql = getSql();
-  const rows = await sql<DbRow>`
-    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-           customer_json, items_json, total, currency,
-           print_status, printed_at, print_claimed_at, print_attempts, print_error
-    FROM orders
-    ORDER BY created_at DESC
-    LIMIT ${limit}
-  `;
-  return rows.map(rowToOrder);
+  try {
+    await ensureSchema();
+    const sql = getSql();
+    const rows = await sql<DbRow>`
+      SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+             customer_json, items_json, total, currency,
+             print_status, printed_at, print_claimed_at, print_attempts, print_error
+      FROM orders
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `;
+    return rows.map(rowToOrder);
+  } catch (err) {
+    console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
+    return Array.from(memoryOrders.values())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+  }
 }
 
 export async function upsertOrder(order: Order): Promise<void> {
+  // Sauvegarde locale systématique (partagée entre tous les workers Passenger)
+  loadLocalOrders(true);
+  memoryOrders.set(order.id, { ...order });
+  saveLocalOrders();
+
   if (!isPostgresConfigured()) {
-    loadLocalOrders();
-    memoryOrders.set(order.id, { ...order });
-    saveLocalOrders();
     return;
   }
 
-  await ensureSchema();
-  const sql = getSql();
-  await sql`
-    INSERT INTO orders (
-      id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-      customer_json, items_json, total, currency
-    )
-    VALUES (
-      ${order.id},
-      ${order.deliveryToken ?? null},
-      ${order.createdAt},
-      ${order.status},
-      ${order.paymentMethod},
-      ${order.molliePaymentId ?? null},
-      ${JSON.stringify(order.customer)},
-      ${JSON.stringify(order.items)},
-      ${order.total},
-      ${order.currency}
-    )
-    ON CONFLICT (id) DO UPDATE SET
-      delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
-      status = EXCLUDED.status,
-      payment_method = EXCLUDED.payment_method,
-      mollie_payment_id = EXCLUDED.mollie_payment_id,
-      customer_json = EXCLUDED.customer_json,
-      items_json = EXCLUDED.items_json,
-      total = EXCLUDED.total,
-      currency = EXCLUDED.currency
-  `;
+  try {
+    await ensureSchema();
+    const sql = getSql();
+    await sql`
+      INSERT INTO orders (
+        id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+        customer_json, items_json, total, currency
+      )
+      VALUES (
+        ${order.id},
+        ${order.deliveryToken ?? null},
+        ${order.createdAt},
+        ${order.status},
+        ${order.paymentMethod},
+        ${order.molliePaymentId ?? null},
+        ${JSON.stringify(order.customer)},
+        ${JSON.stringify(order.items)},
+        ${order.total},
+        ${order.currency}
+      )
+      ON CONFLICT (id) DO UPDATE SET
+        delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
+        status = EXCLUDED.status,
+        payment_method = EXCLUDED.payment_method,
+        mollie_payment_id = EXCLUDED.mollie_payment_id,
+        customer_json = EXCLUDED.customer_json,
+        items_json = EXCLUDED.items_json,
+        total = EXCLUDED.total,
+        currency = EXCLUDED.currency
+    `;
+  } catch (err) {
+    console.error("[OrderStore] Erreur upsertOrder Postgres:", err);
+  }
 }
 
 export async function updateOrderStatus(orderId: string, status: Order["status"]): Promise<void> {
-  if (!isPostgresConfigured()) {
-    loadLocalOrders();
-    const order = memoryOrders.get(orderId);
-    if (order) {
-      order.status = status;
-      saveLocalOrders();
-    }
-    return;
+  const cleanId = (orderId ?? "").trim();
+  if (!cleanId) return;
+  const lowerId = cleanId.toLowerCase();
+
+  loadLocalOrders(true);
+  let order = memoryOrders.get(cleanId);
+  if (!order) {
+    order = Array.from(memoryOrders.values()).find(
+      (o) =>
+        (o.id && o.id.toLowerCase() === lowerId) ||
+        (o.deliveryToken && o.deliveryToken.toLowerCase() === lowerId)
+    );
+  }
+  if (order) {
+    order.status = status;
+    memoryOrders.set(order.id, order);
+    saveLocalOrders();
   }
 
-  await ensureSchema();
-  const sql = getSql();
-  await sql`
-    UPDATE orders
-    SET status = ${status}
-    WHERE id = ${orderId}
-  `;
+  if (isPostgresConfigured()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      await sql`
+        UPDATE orders
+        SET status = ${status}
+        WHERE id = ${cleanId}
+           OR delivery_token = ${cleanId}
+           OR LOWER(id) = ${lowerId}
+           OR LOWER(delivery_token) = ${lowerId}
+      `;
+    } catch (err) {
+      console.error("[OrderStore] Erreur updateOrderStatus Postgres:", err);
+    }
+  }
 }
 
 export async function requestOrderReprint(orderId: string): Promise<void> {
+  const cleanId = (orderId ?? "").trim();
+  if (!cleanId) return;
+
   if (!isPostgresConfigured()) {
-    loadLocalOrders();
-    const order = memoryOrders.get(orderId);
+    loadLocalOrders(true);
+    const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find(
+      (o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId
+    );
     if (order) {
       order.printStatus = "pending";
       order.printError = null;
@@ -298,13 +437,13 @@ export async function requestOrderReprint(orderId: string): Promise<void> {
     SET print_status = 'pending',
         print_claimed_at = NULL,
         print_error = NULL
-    WHERE id = ${orderId}
+    WHERE id = ${cleanId}
   `;
 }
 
 export async function claimNextPrintJob(): Promise<Order | undefined> {
   if (!isPostgresConfigured()) {
-    loadLocalOrders();
+    loadLocalOrders(true);
     const eligible = ["paid", "awaiting_pickup", "awaiting_delivery", "preparing", "ready", "delivering"];
     const next = Array.from(memoryOrders.values())
       .filter((o) => eligible.includes(o.status) && (o.printStatus === "pending" || !o.printStatus))
@@ -351,9 +490,14 @@ export async function acknowledgePrint(
   success: boolean,
   errorMessage?: string,
 ): Promise<void> {
+  const cleanId = (orderId ?? "").trim();
+  if (!cleanId) return;
+
   if (!isPostgresConfigured()) {
-    loadLocalOrders();
-    const order = memoryOrders.get(orderId);
+    loadLocalOrders(true);
+    const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find(
+      (o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId
+    );
     if (order) {
       if (success) {
         order.printStatus = "printed";

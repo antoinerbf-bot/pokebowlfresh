@@ -58,9 +58,10 @@ export function PosApplicationPage() {
   const [modalQrDataUrl, setModalQrDataUrl] = useState<string>("");
 
   useEffect(() => {
-    if (selectedOrder?.deliveryToken) {
+    const token = selectedOrder?.deliveryToken || selectedOrder?.id;
+    if (token) {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      const trackUrl = `${origin}/track/${selectedOrder.deliveryToken}`;
+      const trackUrl = `${origin}/track/${token}`;
       QRCode.toDataURL(trackUrl, {
         errorCorrectionLevel: "H",
         margin: 4,
@@ -256,9 +257,10 @@ export function PosApplicationPage() {
     if (!order && !isTest) return;
 
     let qrData = "";
-    if (order?.deliveryToken) {
+    const token = order?.deliveryToken || order?.id;
+    if (token) {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      const trackUrl = `${origin}/track/${order.deliveryToken}`;
+      const trackUrl = `${origin}/track/${token}`;
       try {
         qrData = await QRCode.toDataURL(trackUrl, {
           errorCorrectionLevel: "H",
@@ -1097,7 +1099,7 @@ export function PosApplicationPage() {
                   </a>
                 </div>
 
-                {selectedOrder.deliveryToken && (
+                {(selectedOrder.deliveryToken || selectedOrder.id) && (
                   <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl">
                     <div className="bg-white p-2.5 rounded-xl shadow-lg shrink-0">
                       {modalQrDataUrl ? (
@@ -1123,7 +1125,7 @@ export function PosApplicationPage() {
                       </p>
                       <div className="pt-1 flex gap-2">
                         <a
-                          href={`/track/${selectedOrder.deliveryToken}`}
+                          href={`/track/${selectedOrder.deliveryToken || selectedOrder.id}`}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition"

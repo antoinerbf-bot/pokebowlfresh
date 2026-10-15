@@ -6,7 +6,13 @@ import crypto from "node:crypto";
 export const Route = createFileRoute("/api/create-test-order")({
   server: {
     handlers: {
-      POST: async () => {
+      GET: async () => createHandler(),
+      POST: async () => createHandler(),
+    },
+  },
+});
+
+async function createHandler() {
         try {
           const testId = generateOrderId();
           const deliveryToken =
@@ -79,7 +85,4 @@ export const Route = createFileRoute("/api/create-test-order")({
             },
           );
         }
-      },
-    },
-  },
-});
+}

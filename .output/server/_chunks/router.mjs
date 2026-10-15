@@ -526,7 +526,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$18 = createRootRouteWithContext()({
+var Route$19 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -584,7 +584,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$18.useRouteContext();
+	const { queryClient } = Route$19.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -5356,7 +5356,7 @@ var RESTAURANT_SCHEMA = {
 		}
 	]
 };
-var Route$17 = createFileRoute("/")({
+var Route$18 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -5960,40 +5960,52 @@ function isPostgresConfigured() {
 	return Boolean(process.env.DATABASE_URL?.trim());
 }
 var memoryOrders = /* @__PURE__ */ new Map();
-var memoryLoaded = false;
-function getStoreFilePath() {
+var lastLoadedTime = 0;
+function getStoreCandidatePaths() {
 	const candidateDirs = [
 		process.env.ORDERS_DATA_DIR,
 		"/home/puzo3938/pokenbowl.be",
 		process.cwd(),
 		"/tmp"
 	].filter(Boolean);
+	const paths = [];
 	for (const dir of candidateDirs) try {
-		if (fs.existsSync(dir)) return path.join(dir, "pokenbowl-orders.json");
+		paths.push(path.join(dir, "pokenbowl-orders.json"));
 	} catch {}
-	return path.join(process.cwd(), "pokenbowl-orders.json");
+	return paths;
 }
-function loadLocalOrders() {
-	if (memoryLoaded) return;
-	memoryLoaded = true;
-	try {
-		const filePath = getStoreFilePath();
+function loadLocalOrders(force = false) {
+	const now = Date.now();
+	if (!force && now - lastLoadedTime < 300 && memoryOrders.size > 0) return;
+	lastLoadedTime = now;
+	const candidates = getStoreCandidatePaths();
+	for (const filePath of candidates) try {
 		if (fs.existsSync(filePath)) {
 			const raw = fs.readFileSync(filePath, "utf-8");
-			const list = JSON.parse(raw);
-			if (Array.isArray(list)) {
-				for (const item of list) if (item?.id) memoryOrders.set(item.id, item);
+			if (raw && raw.trim().length > 2) {
+				const list = JSON.parse(raw);
+				if (Array.isArray(list)) {
+					for (const item of list) if (item?.id) {
+						const existing = memoryOrders.get(item.id);
+						if (!existing || item.status !== existing.status || item.deliveryToken || !existing.deliveryToken) memoryOrders.set(item.id, item);
+					}
+				}
 			}
 		}
-	} catch (err) {
-		console.error("[OrderStore] Échec lecture fichier local commandes:", err);
-	}
+	} catch (err) {}
 }
 function saveLocalOrders() {
 	try {
-		const filePath = getStoreFilePath();
 		const list = Array.from(memoryOrders.values());
-		fs.writeFileSync(filePath, JSON.stringify(list, null, 2), "utf-8");
+		const jsonStr = JSON.stringify(list, null, 2);
+		const candidates = getStoreCandidatePaths();
+		for (const filePath of candidates) try {
+			const dir = path.dirname(filePath);
+			if (fs.existsSync(dir)) fs.writeFileSync(filePath, jsonStr, "utf-8");
+		} catch {}
+		try {
+			fs.writeFileSync("/tmp/pokenbowl-orders.json", jsonStr, "utf-8");
+		} catch {}
 	} catch (err) {
 		console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
 	}
@@ -6069,109 +6081,155 @@ function rowToOrder(row) {
 	};
 }
 async function getOrderFromStore(id) {
-	if (!isPostgresConfigured()) {
-		loadLocalOrders();
-		return memoryOrders.get(id);
+	const rawId = (id ?? "").trim();
+	if (!rawId) return void 0;
+	const cleanId = decodeURIComponent(rawId).trim();
+	const lowerId = cleanId.toLowerCase();
+	loadLocalOrders(true);
+	const localMatch = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => {
+		if (!o) return false;
+		const oId = (o.id ?? "").trim();
+		const dt = (o.deliveryToken ?? "").trim();
+		return oId === cleanId || oId.toLowerCase() === lowerId || dt === cleanId || dt.toLowerCase() === lowerId;
+	});
+	if (localMatch) return localMatch;
+	if (isPostgresConfigured()) try {
+		await ensureSchema();
+		const row = (await getSql()`
+        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+               customer_json, items_json, total, currency,
+               print_status, printed_at, print_claimed_at, print_attempts, print_error
+        FROM orders
+        WHERE id = ${cleanId}
+           OR delivery_token = ${cleanId}
+           OR LOWER(id) = ${lowerId}
+           OR LOWER(delivery_token) = ${lowerId}
+        LIMIT 1
+      `)[0];
+		if (row) return rowToOrder(row);
+	} catch (err) {
+		console.error("[OrderStore] Erreur getOrderFromStore Postgres:", err);
 	}
-	await ensureSchema();
-	const row = (await getSql()`
-    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-           customer_json, items_json, total, currency,
-           print_status, printed_at, print_claimed_at, print_attempts, print_error
-    FROM orders
-    WHERE id = ${id}
-    LIMIT 1
-  `)[0];
-	return row ? rowToOrder(row) : void 0;
 }
 async function getOrderByDeliveryToken(token) {
-	if (!isPostgresConfigured()) {
-		loadLocalOrders();
-		return Array.from(memoryOrders.values()).find((o) => o.deliveryToken === token);
+	const rawToken = (token ?? "").trim();
+	if (!rawToken) return void 0;
+	const cleanToken = decodeURIComponent(rawToken).trim();
+	const lowerToken = cleanToken.toLowerCase();
+	loadLocalOrders(true);
+	const localMatch = Array.from(memoryOrders.values()).find((o) => {
+		if (!o) return false;
+		const dt = (o.deliveryToken ?? "").trim();
+		const id = (o.id ?? "").trim();
+		return dt && (dt === cleanToken || dt.toLowerCase() === lowerToken) || id && (id === cleanToken || id.toLowerCase() === lowerToken);
+	});
+	if (localMatch) return localMatch;
+	if (isPostgresConfigured()) try {
+		await ensureSchema();
+		const row = (await getSql()`
+        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+               customer_json, items_json, total, currency,
+               print_status, printed_at, print_claimed_at, print_attempts, print_error
+        FROM orders
+        WHERE delivery_token = ${cleanToken}
+           OR id = ${cleanToken}
+           OR LOWER(delivery_token) = ${lowerToken}
+           OR LOWER(id) = ${lowerToken}
+        LIMIT 1
+      `)[0];
+		if (row) return rowToOrder(row);
+	} catch (err) {
+		console.error("[OrderStore] Erreur getOrderByDeliveryToken Postgres:", err);
 	}
-	await ensureSchema();
-	const row = (await getSql()`
-    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-           customer_json, items_json, total, currency,
-           print_status, printed_at, print_claimed_at, print_attempts, print_error
-    FROM orders
-    WHERE delivery_token = ${token}
-    LIMIT 1
-  `)[0];
-	return row ? rowToOrder(row) : void 0;
 }
 async function listOrdersFromStore(limit = 200) {
-	if (!isPostgresConfigured()) {
-		loadLocalOrders();
+	loadLocalOrders(true);
+	if (!isPostgresConfigured()) return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+	try {
+		await ensureSchema();
+		return (await getSql()`
+      SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+             customer_json, items_json, total, currency,
+             print_status, printed_at, print_claimed_at, print_attempts, print_error
+      FROM orders
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `).map(rowToOrder);
+	} catch (err) {
+		console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
 		return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
 	}
-	await ensureSchema();
-	return (await getSql()`
-    SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-           customer_json, items_json, total, currency,
-           print_status, printed_at, print_claimed_at, print_attempts, print_error
-    FROM orders
-    ORDER BY created_at DESC
-    LIMIT ${limit}
-  `).map(rowToOrder);
 }
 async function upsertOrder(order) {
-	if (!isPostgresConfigured()) {
-		loadLocalOrders();
-		memoryOrders.set(order.id, { ...order });
-		saveLocalOrders();
-		return;
+	loadLocalOrders(true);
+	memoryOrders.set(order.id, { ...order });
+	saveLocalOrders();
+	if (!isPostgresConfigured()) return;
+	try {
+		await ensureSchema();
+		await getSql()`
+      INSERT INTO orders (
+        id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+        customer_json, items_json, total, currency
+      )
+      VALUES (
+        ${order.id},
+        ${order.deliveryToken ?? null},
+        ${order.createdAt},
+        ${order.status},
+        ${order.paymentMethod},
+        ${order.molliePaymentId ?? null},
+        ${JSON.stringify(order.customer)},
+        ${JSON.stringify(order.items)},
+        ${order.total},
+        ${order.currency}
+      )
+      ON CONFLICT (id) DO UPDATE SET
+        delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
+        status = EXCLUDED.status,
+        payment_method = EXCLUDED.payment_method,
+        mollie_payment_id = EXCLUDED.mollie_payment_id,
+        customer_json = EXCLUDED.customer_json,
+        items_json = EXCLUDED.items_json,
+        total = EXCLUDED.total,
+        currency = EXCLUDED.currency
+    `;
+	} catch (err) {
+		console.error("[OrderStore] Erreur upsertOrder Postgres:", err);
 	}
-	await ensureSchema();
-	await getSql()`
-    INSERT INTO orders (
-      id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-      customer_json, items_json, total, currency
-    )
-    VALUES (
-      ${order.id},
-      ${order.deliveryToken ?? null},
-      ${order.createdAt},
-      ${order.status},
-      ${order.paymentMethod},
-      ${order.molliePaymentId ?? null},
-      ${JSON.stringify(order.customer)},
-      ${JSON.stringify(order.items)},
-      ${order.total},
-      ${order.currency}
-    )
-    ON CONFLICT (id) DO UPDATE SET
-      delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
-      status = EXCLUDED.status,
-      payment_method = EXCLUDED.payment_method,
-      mollie_payment_id = EXCLUDED.mollie_payment_id,
-      customer_json = EXCLUDED.customer_json,
-      items_json = EXCLUDED.items_json,
-      total = EXCLUDED.total,
-      currency = EXCLUDED.currency
-  `;
 }
 async function updateOrderStatus(orderId, status) {
-	if (!isPostgresConfigured()) {
-		loadLocalOrders();
-		const order = memoryOrders.get(orderId);
-		if (order) {
-			order.status = status;
-			saveLocalOrders();
-		}
-		return;
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return;
+	const lowerId = cleanId.toLowerCase();
+	loadLocalOrders(true);
+	let order = memoryOrders.get(cleanId);
+	if (!order) order = Array.from(memoryOrders.values()).find((o) => o.id && o.id.toLowerCase() === lowerId || o.deliveryToken && o.deliveryToken.toLowerCase() === lowerId);
+	if (order) {
+		order.status = status;
+		memoryOrders.set(order.id, order);
+		saveLocalOrders();
 	}
-	await ensureSchema();
-	await getSql()`
-    UPDATE orders
-    SET status = ${status}
-    WHERE id = ${orderId}
-  `;
+	if (isPostgresConfigured()) try {
+		await ensureSchema();
+		await getSql()`
+        UPDATE orders
+        SET status = ${status}
+        WHERE id = ${cleanId}
+           OR delivery_token = ${cleanId}
+           OR LOWER(id) = ${lowerId}
+           OR LOWER(delivery_token) = ${lowerId}
+      `;
+	} catch (err) {
+		console.error("[OrderStore] Erreur updateOrderStatus Postgres:", err);
+	}
 }
 async function requestOrderReprint(orderId) {
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return;
 	if (!isPostgresConfigured()) {
-		loadLocalOrders();
-		const order = memoryOrders.get(orderId);
+		loadLocalOrders(true);
+		const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId);
 		if (order) {
 			order.printStatus = "pending";
 			order.printError = null;
@@ -6185,12 +6243,12 @@ async function requestOrderReprint(orderId) {
     SET print_status = 'pending',
         print_claimed_at = NULL,
         print_error = NULL
-    WHERE id = ${orderId}
+    WHERE id = ${cleanId}
   `;
 }
 async function claimNextPrintJob() {
 	if (!isPostgresConfigured()) {
-		loadLocalOrders();
+		loadLocalOrders(true);
 		const eligible = [
 			"paid",
 			"awaiting_pickup",
@@ -6234,9 +6292,11 @@ async function claimNextPrintJob() {
 	return row ? rowToOrder(row) : void 0;
 }
 async function acknowledgePrint(orderId, success, errorMessage) {
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return;
 	if (!isPostgresConfigured()) {
-		loadLocalOrders();
-		const order = memoryOrders.get(orderId);
+		loadLocalOrders(true);
+		const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId);
 		if (order) {
 			if (success) {
 				order.printStatus = "printed";
@@ -6627,7 +6687,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$16 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$17 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -7430,7 +7490,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$15 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$16 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#2C1D16] text-[#EADCC9]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -7950,7 +8010,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$14 = createFileRoute("/contact")({
+var Route$15 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -8091,7 +8151,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$13 = createFileRoute("/recrutement")({
+var Route$14 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -8208,7 +8268,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$12 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$13 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -8907,7 +8967,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$11 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$12 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -9155,7 +9215,7 @@ function AdminStocksPage() {
 }
 //#endregion
 //#region src/routes/api/bancontact-webhook.ts
-var Route$10 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$11 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9191,7 +9251,7 @@ var Route$10 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: 
 } } } });
 //#endregion
 //#region src/routes/api/bank-status.ts
-var Route$9 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+var Route$10 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
 	loadAndGetEnv();
 	const candidates = getAllBankKeyCandidates();
 	const bancontactKey = getBancontactProApiKey();
@@ -9295,7 +9355,11 @@ var Route$9 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routes/api/create-test-order.ts
-var Route$8 = createFileRoute("/api/create-test-order")({ server: { handlers: { POST: async () => {
+var Route$9 = createFileRoute("/api/create-test-order")({ server: { handlers: {
+	GET: async () => createHandler(),
+	POST: async () => createHandler()
+} } });
+async function createHandler() {
 	try {
 		const testId = generateOrderId();
 		const deliveryToken = typeof crypto$1?.randomUUID === "function" ? crypto$1.randomUUID().replace(/-/g, "") : Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
@@ -9367,10 +9431,10 @@ var Route$8 = createFileRoute("/api/create-test-order")({ server: { handlers: { 
 			}
 		});
 	}
-} } } });
+}
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
-var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$8 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9407,7 +9471,7 @@ var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POS
 * GET /api/orders
 * Liste les commandes persistées.
 */
-var Route$6 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
+var Route$7 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
 	const expected = process.env.ADMIN_SECRET;
 	if (!expected || request.headers.get("x-admin-secret") !== expected) return new Response("Unauthorized", { status: 401 });
 	const orders = await listOrdersFromStore();
@@ -9419,6 +9483,117 @@ var Route$6 = createFileRoute("/api/orders")({ server: { handlers: { GET: async 
 		}
 	});
 } } } });
+//#endregion
+//#region src/routes/api/track-order.ts
+var Route$6 = createFileRoute("/api/track-order")({ server: { handlers: {
+	GET: async ({ request }) => {
+		try {
+			const token = (new URL(request.url).searchParams.get("token") || "").trim();
+			if (!token) return new Response(JSON.stringify({
+				found: false,
+				error: "Token ou ID manquant."
+			}), {
+				status: 200,
+				headers: {
+					"Content-Type": "application/json; charset=utf-8",
+					"Cache-Control": "no-store"
+				}
+			});
+			const order = await getOrderByDeliveryToken(token);
+			if (!order) return new Response(JSON.stringify({
+				found: false,
+				error: "Commande introuvable pour ce lien."
+			}), {
+				status: 200,
+				headers: {
+					"Content-Type": "application/json; charset=utf-8",
+					"Cache-Control": "no-store"
+				}
+			});
+			return new Response(JSON.stringify({
+				found: true,
+				order: {
+					id: order.id,
+					deliveryToken: order.deliveryToken,
+					createdAt: order.createdAt,
+					status: order.status,
+					fulfillment: order.customer?.fulfillment ?? "delivery",
+					requestedTime: order.customer?.requestedTime ?? "Dès que possible",
+					customerName: order.customer?.name ?? "Client",
+					customerPhone: order.customer?.phone ?? "",
+					notes: order.customer?.notes ?? "",
+					address: order.customer?.address ?? "",
+					postalCode: order.customer?.postalCode ?? "",
+					city: order.customer?.city ?? "",
+					deliveryFee: order.customer?.deliveryFee,
+					total: Number(order.total || 0),
+					paymentMethod: order.paymentMethod,
+					items: (order.items || []).map((i) => ({
+						name: i.name,
+						quantity: i.quantity,
+						toppings: i.toppings
+					}))
+				}
+			}), {
+				status: 200,
+				headers: {
+					"Content-Type": "application/json; charset=utf-8",
+					"Cache-Control": "no-store"
+				}
+			});
+		} catch (err) {
+			return new Response(JSON.stringify({
+				found: false,
+				error: err?.message || String(err)
+			}), {
+				status: 200,
+				headers: {
+					"Content-Type": "application/json; charset=utf-8",
+					"Cache-Control": "no-store"
+				}
+			});
+		}
+	},
+	POST: async ({ request }) => {
+		try {
+			const body = await request.json();
+			const token = (body?.token ?? "").trim();
+			const status = body?.status;
+			if (!token || !status) return new Response(JSON.stringify({
+				success: false,
+				error: "Paramètres token ou status manquants."
+			}), {
+				status: 400,
+				headers: { "Content-Type": "application/json; charset=utf-8" }
+			});
+			const order = await getOrderByDeliveryToken(token);
+			if (!order) return new Response(JSON.stringify({
+				success: false,
+				error: "Commande introuvable."
+			}), {
+				status: 404,
+				headers: { "Content-Type": "application/json; charset=utf-8" }
+			});
+			await updateOrderStatus(order.id, status);
+			return new Response(JSON.stringify({
+				success: true,
+				newStatus: status,
+				orderId: order.id
+			}), {
+				status: 200,
+				headers: { "Content-Type": "application/json; charset=utf-8" }
+			});
+		} catch (err) {
+			return new Response(JSON.stringify({
+				success: false,
+				error: err?.message || String(err)
+			}), {
+				status: 500,
+				headers: { "Content-Type": "application/json; charset=utf-8" }
+			});
+		}
+	}
+} } });
 //#endregion
 //#region src/routes/order.success.tsx
 var Route$5 = createFileRoute("/order/success")({
@@ -10094,8 +10269,9 @@ function PosApplicationPage() {
 	const [printQrDataUrl, setPrintQrDataUrl] = (0, import_react.useState)("");
 	const [modalQrDataUrl, setModalQrDataUrl] = (0, import_react.useState)("");
 	(0, import_react.useEffect)(() => {
-		if (selectedOrder?.deliveryToken) {
-			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${selectedOrder.deliveryToken}`;
+		const token = selectedOrder?.deliveryToken || selectedOrder?.id;
+		if (token) {
+			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${token}`;
 			import_lib.toDataURL(trackUrl, {
 				errorCorrectionLevel: "H",
 				margin: 4,
@@ -10205,8 +10381,9 @@ function PosApplicationPage() {
 	const printThermalTicket = async (order, isTest = false) => {
 		if (!order && !isTest) return;
 		let qrData = "";
-		if (order?.deliveryToken) {
-			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${order.deliveryToken}`;
+		const token = order?.deliveryToken || order?.id;
+		if (token) {
+			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${token}`;
 			try {
 				qrData = await import_lib.toDataURL(trackUrl, {
 					errorCorrectionLevel: "H",
@@ -11169,7 +11346,7 @@ function PosApplicationPage() {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze"]
 										})]
 									}),
-									selectedOrder.deliveryToken && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									(selectedOrder.deliveryToken || selectedOrder.id) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "bg-white p-2.5 rounded-xl shadow-lg shrink-0",
@@ -11213,7 +11390,7 @@ function PosApplicationPage() {
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 													className: "pt-1 flex gap-2",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-														href: `/track/${selectedOrder.deliveryToken}`,
+														href: `/track/${selectedOrder.deliveryToken || selectedOrder.id}`,
 														target: "_blank",
 														rel: "noreferrer",
 														className: "inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition",
@@ -12089,8 +12266,8 @@ function ProductPage() {
 }
 //#endregion
 //#region src/fn/delivery.ts
-var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ token: stringType().min(8) })).handler(async ({ data }) => {
-	const order = await getOrderByDeliveryToken(data.token);
+var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ token: stringType().min(1) })).handler(async ({ data }) => {
+	const order = await getOrderByDeliveryToken((data.token ?? "").trim());
 	if (!order) return { found: false };
 	return {
 		found: true,
@@ -12098,18 +12275,18 @@ var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ 
 			id: order.id,
 			createdAt: order.createdAt,
 			status: order.status,
-			fulfillment: order.customer.fulfillment,
-			requestedTime: order.customer.requestedTime,
-			customerName: order.customer.name,
-			customerPhone: order.customer.phone,
-			notes: order.customer.notes,
-			address: order.customer.address,
-			postalCode: order.customer.postalCode,
-			city: order.customer.city,
-			deliveryFee: order.customer.deliveryFee,
-			total: order.total,
+			fulfillment: order.customer?.fulfillment ?? "delivery",
+			requestedTime: order.customer?.requestedTime ?? "Dès que possible",
+			customerName: order.customer?.name ?? "Client",
+			customerPhone: order.customer?.phone ?? "",
+			notes: order.customer?.notes ?? "",
+			address: order.customer?.address ?? "",
+			postalCode: order.customer?.postalCode ?? "",
+			city: order.customer?.city ?? "",
+			deliveryFee: order.customer?.deliveryFee,
+			total: Number(order.total || 0),
 			paymentMethod: order.paymentMethod,
-			items: order.items.map((i) => ({
+			items: (order.items || []).map((i) => ({
 				name: i.name,
 				quantity: i.quantity,
 				toppings: i.toppings
@@ -12118,10 +12295,10 @@ var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ 
 	};
 });
 var updateDeliveryStatus = createServerFn({ method: "POST" }).validator(objectType({
-	token: stringType().min(8),
+	token: stringType().min(1),
 	status: enumType(["delivering", "completed"])
 })).handler(async ({ data }) => {
-	const order = await getOrderByDeliveryToken(data.token);
+	const order = await getOrderByDeliveryToken((data.token ?? "").trim());
 	if (!order) throw new Error("Commande introuvable");
 	await updateOrderStatus(order.id, data.status);
 	return { success: true };
@@ -12137,11 +12314,34 @@ function DeliveryTrackPage() {
 	const [error, setError] = (0, import_react.useState)(null);
 	const fetchOrder = async () => {
 		try {
+			const raw = await fetch(`/api/track-order?token=${encodeURIComponent(token)}`, {
+				headers: { Accept: "application/json" },
+				cache: "no-store"
+			});
+			if (raw.ok) {
+				const data = await raw.json();
+				if (data.found && data.order) {
+					setOrder(data.order);
+					setError(null);
+					setLoading(false);
+					return;
+				}
+			}
 			const res = await getDeliveryOrder({ data: { token } });
-			if (res.found) setOrder(res.order);
-			else setError("Commande introuvable ou lien expiré.");
+			if (res.found) {
+				setOrder(res.order);
+				setError(null);
+			} else setError("Commande introuvable ou lien expiré.");
 		} catch (e) {
-			console.error(e);
+			console.warn("[Track] Erreur API REST, fallback createServerFn:", e);
+			try {
+				const res = await getDeliveryOrder({ data: { token } });
+				if (res.found) {
+					setOrder(res.order);
+					setError(null);
+					return;
+				}
+			} catch {}
 			setError("Impossible de charger les données de la commande.");
 		} finally {
 			setLoading(false);
@@ -12149,12 +12349,23 @@ function DeliveryTrackPage() {
 	};
 	(0, import_react.useEffect)(() => {
 		fetchOrder();
-		const interval = setInterval(fetchOrder, 15e3);
+		const interval = setInterval(fetchOrder, 1e4);
 		return () => clearInterval(interval);
 	}, [token]);
 	const handleStatusChange = async (newStatus) => {
 		setUpdating(true);
 		try {
+			if ((await fetch("/api/track-order", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					token,
+					status: newStatus
+				})
+			})).ok) {
+				await fetchOrder();
+				return;
+			}
 			await updateDeliveryStatus({ data: {
 				token,
 				status: newStatus
@@ -12169,25 +12380,47 @@ function DeliveryTrackPage() {
 	};
 	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-[#F6F1E9]",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-8 w-8 animate-spin text-[#ff705f]" })
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "text-center space-y-3",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-10 w-10 animate-spin text-[#ff705f] mx-auto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs font-black uppercase tracking-wider text-[#758079]",
+				children: "Chargement de la livraison..."
+			})]
+		})
 	});
 	if (error || !order) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "flex min-h-screen flex-col items-center justify-center bg-[#F6F1E9] px-4 text-center",
+		className: "flex min-h-screen flex-col items-center justify-center bg-[#F6F1E9] px-6 text-center",
 		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-12 w-12 text-[#ff705f]" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "w-16 h-16 rounded-full bg-[#ff705f]/15 flex items-center justify-center mb-4",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-9 w-9 text-[#ff705f]" })
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-				className: "mt-4 text-2xl font-black text-[#17231f]",
-				children: "Lien invalide"
+				className: "text-2xl font-black text-[#17231f]",
+				children: "Lien invalide ou expiré"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mt-2 text-sm text-[#758079]",
-				children: error ?? "Commande introuvable."
+				className: "mt-2 text-sm font-medium text-[#758079] max-w-sm",
+				children: error ?? "La commande demandée est introuvable."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-2 font-mono text-xs bg-black/5 px-3 py-1.5 rounded-lg text-[#17231f]",
+				children: ["Réf : ", token]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				onClick: () => {
+					setLoading(true);
+					setError(null);
+					fetchOrder();
+				},
+				className: "mt-6 rounded-2xl bg-[#ff705f] px-6 py-3 font-black text-white text-sm shadow hover:bg-[#ff5a47] transition active:scale-95",
+				children: "🔄 Réessayer la recherche"
 			})
 		]
 	});
 	const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
 	const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
-	const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}`;
+	const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
 	const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-[#F6F1E9] text-[#17231f]",
@@ -12432,75 +12665,80 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$17.update({
+var IndexRoute = Route$18.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var CheckoutRoute = Route$16.update({
+var CheckoutRoute = Route$17.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var CommanderRoute = Route$15.update({
+var CommanderRoute = Route$16.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var ContactRoute = Route$14.update({
+var ContactRoute = Route$15.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var RecrutementRoute = Route$13.update({
+var RecrutementRoute = Route$14.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var SurMesureRoute = Route$12.update({
+var SurMesureRoute = Route$13.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var AdminStocksRoute = Route$11.update({
+var AdminStocksRoute = Route$12.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var ApiBancontactWebhookRoute = Route$10.update({
+var ApiBancontactWebhookRoute = Route$11.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var ApiBankStatusRoute = Route$9.update({
+var ApiBankStatusRoute = Route$10.update({
 	id: "/api/bank-status",
 	path: "/api/bank-status",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var ApiCreateTestOrderRoute = Route$8.update({
+var ApiCreateTestOrderRoute = Route$9.update({
 	id: "/api/create-test-order",
 	path: "/api/create-test-order",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var ApiMollieWebhookRoute = Route$7.update({
+var ApiMollieWebhookRoute = Route$8.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
-var ApiOrdersRoute = Route$6.update({
+var ApiOrdersRoute = Route$7.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
+});
+var ApiTrackOrderRoute = Route$6.update({
+	id: "/api/track-order",
+	path: "/api/track-order",
+	getParentRoute: () => Route$19
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$18
+	getParentRoute: () => Route$19
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -12515,30 +12753,31 @@ var rootRouteChildren = {
 	ApiCreateTestOrderRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
+	ApiTrackOrderRoute,
 	OrderSuccessRoute,
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$18
+		getParentRoute: () => Route$19
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$18
+		getParentRoute: () => Route$19
 	}),
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$18
+		getParentRoute: () => Route$19
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$18
+		getParentRoute: () => Route$19
 	})
 };
-var routeTree = Route$18._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$19._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {
