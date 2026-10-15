@@ -19,7 +19,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BHo3obvG.css";
+var styles_default = "/assets/styles-BPxM34JH.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -746,7 +746,7 @@ var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
 var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 //#endregion
 //#region src/assets/bowl-spicy-chicken.jpg
-var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-Bko5BGRq.jpg";
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B-7nVWlP.jpg";
 //#endregion
 //#region src/assets/bowl-crousty-curry.jpg
 var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CRZGKMUK.jpg";
@@ -1775,9 +1775,9 @@ var NOTIFICATIONS = [
 	{
 		id: "crousty-curry",
 		tag: "Spécialité Chaude",
-		tagColor: "bg-[#8b5510] text-white",
+		tagColor: "bg-[#8b5510]/80 text-[#ffe2a8] border border-[#ffaa33]/30",
 		title: "Crousty Chicken Curry",
-		desc: "Poulet ultra croustillant doré, sauce curry maison & oignons frits. Boisson 33cl incluse !",
+		desc: "Poulet croustillant doré, curry maison & oignons frits. Boisson 33cl incluse !",
 		dishId: "crousty-chicken-curry",
 		price: "11,00 €",
 		badgeEmoji: "🍗",
@@ -1786,9 +1786,9 @@ var NOTIFICATIONS = [
 	{
 		id: "crousty-blanche",
 		tag: "Nouveau au Menu",
-		tagColor: "bg-[#2C1D16] text-white",
+		tagColor: "bg-white/10 text-[#F6F1E9] border border-white/20",
 		title: "Crousty Sauce Blanche",
-		desc: "Petits morceaux de poulet croustillant dorés, sauce blanche onctueuse et oignons frits croquants.",
+		desc: "Bouchées croustillantes dorées, sauce blanche onctueuse & oignons frits.",
 		dishId: "crousty-chicken-sauce-blanche",
 		price: "11,00 €",
 		badgeEmoji: "🤍",
@@ -1797,9 +1797,9 @@ var NOTIFICATIONS = [
 	{
 		id: "etudiant-deal",
 		tag: "Formule Étudiant",
-		tagColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
-		title: "Formule Crousty Chicken à 11 €",
-		desc: "1 Crousty Chicken au choix + 1 boisson 33cl offerte incluse (Coca, Ice-Tea, Fanta...).",
+		tagColor: "bg-[#ff705f]/20 text-[#ffb0a3] border border-[#ff705f]/40",
+		title: "Menu Crousty + Boisson 11 €",
+		desc: "1 Crousty Chicken chaud au choix + boisson 33cl fraîche incluse (Coca, Ice-Tea...).",
 		dishId: "crousty-chicken-curry",
 		price: "11,00 €",
 		badgeEmoji: "🎓",
@@ -1814,7 +1814,7 @@ function CroustyNotificationToast() {
 	(0, import_react.useEffect)(() => {
 		const initialTimer = setTimeout(() => {
 			if (!isDismissed) setIsVisible(true);
-		}, 3500);
+		}, 4e3);
 		return () => clearTimeout(initialTimer);
 	}, [isDismissed]);
 	(0, import_react.useEffect)(() => {
@@ -1826,7 +1826,7 @@ function CroustyNotificationToast() {
 					setCurrentIndex((prev) => (prev + 1) % NOTIFICATIONS.length);
 					setIsVisible(true);
 				}
-			}, 9e3);
+			}, 1e4);
 			return () => clearTimeout(nextTimer);
 		}, 7e3);
 		return () => clearTimeout(hideTimer);
@@ -1836,56 +1836,95 @@ function CroustyNotificationToast() {
 		isDismissed
 	]);
 	const activeNotif = NOTIFICATIONS[currentIndex];
-	const handleDismiss = () => {
+	const handleDismiss = (e) => {
+		e.stopPropagation();
 		setIsVisible(false);
 		setIsDismissed(true);
-		setTimeout(() => setIsDismissed(false), 45e3);
+		setTimeout(() => setIsDismissed(false), 6e4);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "fixed bottom-4 left-4 z-40 max-w-[370px] pointer-events-none sm:bottom-6 sm:left-6",
+		className: "fixed bottom-4 right-3 z-40 max-w-[calc(100vw-24px)] pointer-events-none sm:bottom-6 sm:right-6 sm:max-w-[340px]",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatePresence, { children: isVisible && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(motion.div, {
 			initial: {
 				opacity: 0,
-				y: 30,
-				scale: .94
+				x: 40,
+				scale: .92
 			},
 			animate: {
 				opacity: 1,
-				y: 0,
+				x: 0,
 				scale: 1
 			},
 			exit: {
 				opacity: 0,
-				y: 20,
-				scale: .94
+				x: 30,
+				scale: .92
 			},
 			transition: {
 				type: "spring",
-				damping: 25,
-				stiffness: 280
+				damping: 26,
+				stiffness: 300
 			},
 			onMouseEnter: () => setIsHovered(true),
 			onMouseLeave: () => setIsHovered(false),
-			className: "pointer-events-auto relative overflow-hidden rounded-3xl border border-black/10 bg-white/95 p-4 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.25)] backdrop-blur-xl transition hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.35)]",
+			className: "pointer-events-auto relative overflow-hidden rounded-2xl border border-white/15 bg-[#231711]/85 p-3 sm:p-4 text-white shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)] backdrop-blur-xl transition hover:border-[#ff705f]/40 hover:bg-[#231711]/92",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#ff705f]/15 blur-2xl pointer-events-none" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-8 -right-8 h-24 w-24 rounded-full bg-[#ff705f]/20 blur-xl pointer-events-none" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
 					onClick: handleDismiss,
 					"aria-label": "Fermer la notification",
-					className: "absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/5 text-[#2C1D16]/60 hover:bg-black/10 hover:text-[#2C1D16] transition",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-3.5 w-3.5" })
+					className: "absolute top-2.5 right-2.5 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-3 w-3" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex sm:hidden items-center gap-2.5 pr-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/product/$productId",
+						params: { productId: activeNotif.productId },
+						onClick: () => setIsVisible(false),
+						className: "flex items-center gap-2.5 flex-1 min-w-0",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-black/20 border border-white/10 shadow-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
+								dishId: activeNotif.dishId,
+								alt: activeNotif.title,
+								className: "h-full w-full object-cover"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "absolute -bottom-1 -right-1 text-[10px]",
+								children: activeNotif.badgeEmoji
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "min-w-0 flex-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[11px] font-black text-white truncate",
+									children: activeNotif.title
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] font-extrabold text-[#ff9f43]",
+									children: activeNotif.price
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-[10px] text-[#D9C5AD] flex items-center gap-1",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Boisson 33cl incluse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[#ff705f] font-bold",
+									children: "→ Voir"
+								})]
+							})]
+						})]
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-start gap-3.5 pr-5",
+					className: "hidden sm:flex items-start gap-3 pr-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "relative h-18 w-18 shrink-0 overflow-hidden rounded-2xl bg-[#ece8dc] border border-black/5 shadow-sm",
+						className: "relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-black/30 border border-white/10 shadow-sm",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 							dishId: activeNotif.dishId,
 							alt: activeNotif.title,
 							className: "h-full w-full object-cover"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "absolute bottom-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-white text-[11px] shadow-sm",
+							className: "absolute bottom-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#231711] text-[9px] border border-white/20",
 							children: activeNotif.badgeEmoji
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -1894,35 +1933,35 @@ function CroustyNotificationToast() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-center gap-1.5 flex-wrap",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: `inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider ${activeNotif.tagColor}`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-2.5 w-2.5" }), activeNotif.tag]
+									className: `inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8.5px] font-black uppercase tracking-wider ${activeNotif.tagColor}`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-2.5 w-2.5 text-[#ff705f]" }), activeNotif.tag]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[10px] font-extrabold text-[#8b5510]",
+									className: "text-[10px] font-extrabold text-[#ffb088]",
 									children: activeNotif.price
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
-								className: "mt-1 text-sm font-extrabold text-[#2C1D16] leading-snug",
+								className: "mt-1 text-xs font-black text-[#F6F1E9] leading-snug",
 								children: activeNotif.title
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "mt-0.5 text-[11px] leading-relaxed text-[#68756f] line-clamp-2",
+								className: "mt-0.5 text-[10.5px] leading-relaxed text-[#D9C5AD]/85 line-clamp-2",
 								children: activeNotif.desc
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "mt-2.5 flex items-center justify-between",
+								className: "mt-2 flex items-center justify-between",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 									to: "/product/$productId",
 									params: { productId: activeNotif.productId },
 									onClick: () => setIsVisible(false),
-									className: "inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16] px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff705f] hover:scale-105",
+									className: "inline-flex items-center gap-1.5 rounded-full bg-[#ff705f] px-3 py-1 text-[9.5px] font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff5542] hover:scale-105",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
 										"Commander (",
 										activeNotif.price,
 										")"
-									] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3 w-3" })]
+									] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-2.5 w-2.5" })]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[9px] font-bold text-[#7d8b83]",
+									className: "text-[9px] font-semibold text-[#D9C5AD]/70",
 									children: "Boisson incluse"
 								})]
 							})
@@ -1930,7 +1969,7 @@ function CroustyNotificationToast() {
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-2.5 h-1 w-full overflow-hidden rounded-full bg-black/5",
+					className: "mt-2 h-0.5 w-full overflow-hidden rounded-full bg-white/10",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(motion.div, {
 						initial: { width: "100%" },
 						animate: { width: isHovered ? "100%" : "0%" },
@@ -9571,7 +9610,7 @@ function buildDeliveryReceipt(order, origin = "https://pokenbowl.be") {
 	b.bold(false).line();
 	const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken ?? ""}`;
 	b.divider("=");
-	b.align("center").bold(true).line("SCANNEZ POUR SUIVRE LA COMMANDE").bold(false).line().qrCode(trackUrl, 6).line().line("Acces livreur / GPS").line("pokenbowl.be").align("left");
+	b.align("center").bold(true).line("SCANNEZ POUR GPS ET ITINERAIRE").bold(false).line("Waze & Google Maps en 1-clic").line().qrCode(trackUrl, 6).line().line("Suivi livreur & contact client").align("left");
 	b.divider("=");
 	b.line("Merci de votre confiance !");
 	b.feed(4).cut(true);

@@ -306,13 +306,13 @@ export function buildDeliveryReceipt(order: Order, origin = "https://pokenbowl.b
   b.divider("=");
   b.align("center")
     .bold(true)
-    .line("SCANNEZ POUR SUIVRE LA COMMANDE")
+    .line("SCANNEZ POUR GPS ET ITINERAIRE")
     .bold(false)
+    .line("Waze & Google Maps en 1-clic")
     .line()
     .qrCode(trackUrl, 6)
     .line()
-    .line("Acces livreur / GPS")
-    .line("pokenbowl.be")
+    .line("Suivi livreur & contact client")
     .align("left");
 
   b.divider("=");

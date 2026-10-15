@@ -310,8 +310,9 @@ export function PosApplicationPage() {
             ? `
           <hr>
           <div class="qr">
-            <p style="font-size: 11px; font-weight: bold;">SCANNEZ POUR GPS ET LIVREUR</p>
-            <img src="${qrUrl}" alt="QR Code">
+            <p style="font-size: 11px; font-weight: bold; margin: 0 0 4px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
+            <img src="${qrUrl}" alt="QR Code GPS">
+            <p style="font-size: 10px; color: #333; margin: 4px 0 0 0;">Itineraire 1-clic livreur</p>
           </div>
         `
             : ""
