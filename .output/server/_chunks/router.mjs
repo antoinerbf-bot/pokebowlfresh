@@ -5836,7 +5836,11 @@ function getAuthHeader(apiKey) {
 	return clean.toLowerCase().startsWith("bearer ") ? clean : `Bearer ${clean}`;
 }
 var CANDIDATE_PROD_URLS = ["https://api.payconiq.com/v3", "https://merchant.api.bancontact.net/v3"];
-var CANDIDATE_PREPROD_URLS = ["https://api.preprod.payconiq.com/v3", "https://merchant.api.preprod.bancontact.net/v3"];
+var CANDIDATE_PREPROD_URLS = [
+	"https://api.ext.payconiq.com/v3",
+	"https://api.preprod.payconiq.com/v3",
+	"https://merchant.api.preprod.bancontact.net/v3"
+];
 function getCandidateUrls() {
 	const env = (process.env.BANCONTACT_PRO_ENV || "production").toLowerCase();
 	return env === "preprod" || env === "test" ? CANDIDATE_PREPROD_URLS : CANDIDATE_PROD_URLS;
@@ -9120,8 +9124,8 @@ var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: a
 				url: "https://api.payconiq.com/v3/payments"
 			},
 			{
-				name: "Payconiq Preprod (Test)",
-				url: "https://api.preprod.payconiq.com/v3/payments"
+				name: "Payconiq EXT (Sandbox/Test)",
+				url: "https://api.ext.payconiq.com/v3/payments"
 			},
 			{
 				name: "Bancontact Net Prod",

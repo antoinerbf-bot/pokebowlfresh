@@ -47,6 +47,7 @@ const CANDIDATE_PROD_URLS = [
 ];
 
 const CANDIDATE_PREPROD_URLS = [
+  "https://api.ext.payconiq.com/v3",
   "https://api.preprod.payconiq.com/v3",
   "https://merchant.api.preprod.bancontact.net/v3",
 ];

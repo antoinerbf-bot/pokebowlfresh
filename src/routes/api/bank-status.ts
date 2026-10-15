@@ -59,7 +59,7 @@ export const Route = createFileRoute("/api/bank-status")({
         if (bancontactKey) {
           const endpoints = [
             { name: "Payconiq Prod", url: "https://api.payconiq.com/v3/payments" },
-            { name: "Payconiq Preprod (Test)", url: "https://api.preprod.payconiq.com/v3/payments" },
+            { name: "Payconiq EXT (Sandbox/Test)", url: "https://api.ext.payconiq.com/v3/payments" },
             { name: "Bancontact Net Prod", url: "https://merchant.api.bancontact.net/v3/payments" },
             { name: "Bancontact Net Preprod (Test)", url: "https://merchant.api.preprod.bancontact.net/v3/payments" },
           ];
