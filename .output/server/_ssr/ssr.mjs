@@ -93,7 +93,7 @@ function renderErrorPage() {
 }
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-C2CTAa3p.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-DsBBD6OY.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -116,10 +116,17 @@ function isH3SwallowedErrorBody(body) {
 	}
 }
 var server_default = { async fetch(request, env, ctx) {
+	const isApiOrServerFn = request.url.includes("/api/") || request.url.includes("/_server") || Boolean(request.headers.get("accept")?.includes("application/json"));
 	try {
-		return await normalizeCatastrophicSsrResponse(await (await getServerEntry()).fetch(request, env, ctx));
+		const response = await (await getServerEntry()).fetch(request, env, ctx);
+		if (isApiOrServerFn) return response;
+		return await normalizeCatastrophicSsrResponse(response);
 	} catch (error) {
 		console.error(error);
+		if (isApiOrServerFn) return new Response(JSON.stringify({ error: error?.message ?? String(error) }), {
+			status: 500,
+			headers: { "content-type": "application/json" }
+		});
 		return new Response(renderErrorPage(), {
 			status: 500,
 			headers: { "content-type": "text/html; charset=utf-8" }

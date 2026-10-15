@@ -68,14 +68,23 @@ export function PosApplicationPage() {
   const handleCreateTestOrder = async () => {
     setCreatingTestOrder(true);
     try {
-      const res = await createTestDeliveryOrder({ data: { pin: pin || "1234" } });
-      if (res?.order) {
-        playAlertSound();
-        await loadOrders();
-        setSelectedOrder(res.order as any);
+      const response = await fetch("/api/create-test-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!data.success || !data.order) {
+        alert("Erreur : " + (data.error ?? "Échec création"));
+        return;
       }
+      playAlertSound();
+      await loadOrders();
+      setSelectedOrder(data.order as any);
     } catch (e: any) {
-      alert("Erreur lors de la création de la commande test : " + (e?.message ?? e));
+      alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
     } finally {
       setCreatingTestOrder(false);
     }

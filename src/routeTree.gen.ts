@@ -18,6 +18,7 @@ import { Route as SurMesureRouteImport } from './routes/sur-mesure'
 import { Route as AdminStocksRouteImport } from './routes/admin/stocks'
 import { Route as ApiBancontactWebhookRouteImport } from './routes/api/bancontact-webhook'
 import { Route as ApiBankStatusRouteImport } from './routes/api/bank-status'
+import { Route as ApiCreateTestOrderRouteImport } from './routes/api/create-test-order'
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
@@ -72,6 +73,11 @@ const ApiBankStatusRoute = ApiBankStatusRouteImport.update({
   path: '/api/bank-status',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCreateTestOrderRoute = ApiCreateTestOrderRouteImport.update({
+  id: '/api/create-test-order',
+  path: '/api/create-test-order',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMollieWebhookRoute = ApiMollieWebhookRouteImport.update({
   id: '/api/mollie-webhook',
   path: '/api/mollie-webhook',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/admin/stocks': typeof AdminStocksRoute
   '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
   '/api/bank-status': typeof ApiBankStatusRoute
+  '/api/create-test-order': typeof ApiCreateTestOrderRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/admin/stocks': typeof AdminStocksRoute
   '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
   '/api/bank-status': typeof ApiBankStatusRoute
+  '/api/create-test-order': typeof ApiCreateTestOrderRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/admin/stocks': typeof AdminStocksRoute
   '/api/bancontact-webhook': typeof ApiBancontactWebhookRoute
   '/api/bank-status': typeof ApiBankStatusRoute
+  '/api/create-test-order': typeof ApiCreateTestOrderRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/orders': typeof ApiOrdersRoute
   '/order/success': typeof OrderSuccessRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/admin/stocks'
     | '/api/bancontact-webhook'
     | '/api/bank-status'
+    | '/api/create-test-order'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/admin/stocks'
     | '/api/bancontact-webhook'
     | '/api/bank-status'
+    | '/api/create-test-order'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/admin/stocks'
     | '/api/bancontact-webhook'
     | '/api/bank-status'
+    | '/api/create-test-order'
     | '/api/mollie-webhook'
     | '/api/orders'
     | '/order/success'
@@ -241,6 +253,7 @@ export interface RootRouteChildren {
   AdminStocksRoute: typeof AdminStocksRoute
   ApiBancontactWebhookRoute: typeof ApiBancontactWebhookRoute
   ApiBankStatusRoute: typeof ApiBankStatusRoute
+  ApiCreateTestOrderRoute: typeof ApiCreateTestOrderRoute
   ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
   ApiOrdersRoute: typeof ApiOrdersRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
@@ -316,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBankStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/create-test-order': {
+      id: '/api/create-test-order'
+      path: '/api/create-test-order'
+      fullPath: '/api/create-test-order'
+      preLoaderRoute: typeof ApiCreateTestOrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/mollie-webhook': {
       id: '/api/mollie-webhook'
       path: '/api/mollie-webhook'
@@ -385,6 +405,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminStocksRoute: AdminStocksRoute,
   ApiBancontactWebhookRoute: ApiBancontactWebhookRoute,
   ApiBankStatusRoute: ApiBankStatusRoute,
+  ApiCreateTestOrderRoute: ApiCreateTestOrderRoute,
   ApiMollieWebhookRoute: ApiMollieWebhookRoute,
   ApiOrdersRoute: ApiOrdersRoute,
   OrderSuccessRoute: OrderSuccessRoute,

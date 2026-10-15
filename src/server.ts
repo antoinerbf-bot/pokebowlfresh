@@ -46,12 +46,26 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const isApiOrServerFn =
+      request.url.includes("/api/") ||
+      request.url.includes("/_server") ||
+      Boolean(request.headers.get("accept")?.includes("application/json"));
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
+      if (isApiOrServerFn) {
+        return response;
+      }
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
+      if (isApiOrServerFn) {
+        return new Response(JSON.stringify({ error: (error as any)?.message ?? String(error) }), {
+          status: 500,
+          headers: { "content-type": "application/json" },
+        });
+      }
       return new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },

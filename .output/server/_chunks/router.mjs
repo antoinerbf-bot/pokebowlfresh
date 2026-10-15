@@ -13,6 +13,7 @@ import { t as cs } from "../_libs/neondatabase__serverless.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
+import crypto$1 from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 //#region src/styles.css?transform-only
@@ -524,7 +525,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$17 = createRootRouteWithContext()({
+var Route$18 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -582,7 +583,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$17.useRouteContext();
+	const { queryClient } = Route$18.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -5354,7 +5355,7 @@ var RESTAURANT_SCHEMA = {
 		}
 	]
 };
-var Route$16 = createFileRoute("/")({
+var Route$17 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -6625,7 +6626,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$15 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$16 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -7428,7 +7429,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$14 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$15 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#2C1D16] text-[#EADCC9]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -7948,7 +7949,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$13 = createFileRoute("/contact")({
+var Route$14 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -8089,7 +8090,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$12 = createFileRoute("/recrutement")({
+var Route$13 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -8206,7 +8207,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$11 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$12 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -8905,7 +8906,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$10 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$11 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -9153,7 +9154,7 @@ function AdminStocksPage() {
 }
 //#endregion
 //#region src/routes/api/bancontact-webhook.ts
-var Route$9 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$10 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9189,7 +9190,7 @@ var Route$9 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 } } } });
 //#endregion
 //#region src/routes/api/bank-status.ts
-var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+var Route$9 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
 	loadAndGetEnv();
 	const candidates = getAllBankKeyCandidates();
 	const bancontactKey = getBancontactProApiKey();
@@ -9290,6 +9291,81 @@ var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: a
 			"Cache-Control": "no-store, max-age=0"
 		}
 	});
+} } } });
+//#endregion
+//#region src/routes/api/create-test-order.ts
+var Route$8 = createFileRoute("/api/create-test-order")({ server: { handlers: { POST: async () => {
+	try {
+		const testId = generateOrderId();
+		const deliveryToken = typeof crypto$1?.randomUUID === "function" ? crypto$1.randomUUID().replace(/-/g, "") : Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+		const testOrder = {
+			id: testId,
+			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+			status: "paid",
+			paymentMethod: "online",
+			printStatus: "pending",
+			deliveryToken,
+			currency: "EUR",
+			customer: {
+				name: "Jean Dupont (TEST LIVREUR GPS)",
+				phone: "+32 499 12 34 56",
+				email: "livreur.test@pokenbowl.be",
+				fulfillment: "delivery",
+				requestedTime: "Dès que possible",
+				address: "Avenue Reine Astrid 15",
+				postalCode: "4600",
+				city: "Visé",
+				deliveryFee: 2,
+				notes: "Test Waze & Google Maps - Sonner interphone 2B"
+			},
+			items: [{
+				id: "spicy-chicken",
+				name: "Spicy Chicken Poké (Grand)",
+				price: 15.5,
+				quantity: 1,
+				toppings: [
+					"Avocat",
+					"Oignons frits",
+					"Sauce Spicy Mayo"
+				]
+			}, {
+				id: "crousty-chicken",
+				name: "Crousty Chicken Poké",
+				price: 14.5,
+				quantity: 1,
+				toppings: [
+					"Sauce Sésame",
+					"Edamame",
+					"Cacahuètes"
+				]
+			}],
+			total: 32
+		};
+		await upsertOrder(testOrder);
+		return new Response(JSON.stringify({
+			success: true,
+			order: testOrder
+		}), {
+			status: 200,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+	} catch (err) {
+		console.error("[create-test-order] Error:", err);
+		return new Response(JSON.stringify({
+			success: false,
+			error: err?.message ?? String(err),
+			stack: err?.stack
+		}), {
+			status: 200,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+	}
 } } } });
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
@@ -9852,7 +9928,7 @@ var ackPosPrint = createServerFn({ method: "POST" }).validator(objectType({
 	await acknowledgePrint(data.orderId, data.success, data.error);
 	return { success: true };
 });
-var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(async ({ data }) => {
+createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(async ({ data }) => {
 	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
 	const testId = generateOrderId();
 	const deliveryToken = crypto.randomUUID().replace(/-/g, "");
@@ -10022,14 +10098,22 @@ function PosApplicationPage() {
 	const handleCreateTestOrder = async () => {
 		setCreatingTestOrder(true);
 		try {
-			const res = await createTestDeliveryOrder({ data: { pin: pin || "1234" } });
-			if (res?.order) {
-				playAlertSound();
-				await loadOrders();
-				setSelectedOrder(res.order);
+			const data = await (await fetch("/api/create-test-order", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
+				}
+			})).json();
+			if (!data.success || !data.order) {
+				alert("Erreur : " + (data.error ?? "Échec création"));
+				return;
 			}
+			playAlertSound();
+			await loadOrders();
+			setSelectedOrder(data.order);
 		} catch (e) {
-			alert("Erreur lors de la création de la commande test : " + (e?.message ?? e));
+			alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
 		} finally {
 			setCreatingTestOrder(false);
 		}
@@ -12080,70 +12164,75 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$16.update({
+var IndexRoute = Route$17.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var CheckoutRoute = Route$15.update({
+var CheckoutRoute = Route$16.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var CommanderRoute = Route$14.update({
+var CommanderRoute = Route$15.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ContactRoute = Route$13.update({
+var ContactRoute = Route$14.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var RecrutementRoute = Route$12.update({
+var RecrutementRoute = Route$13.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var SurMesureRoute = Route$11.update({
+var SurMesureRoute = Route$12.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var AdminStocksRoute = Route$10.update({
+var AdminStocksRoute = Route$11.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiBancontactWebhookRoute = Route$9.update({
+var ApiBancontactWebhookRoute = Route$10.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiBankStatusRoute = Route$8.update({
+var ApiBankStatusRoute = Route$9.update({
 	id: "/api/bank-status",
 	path: "/api/bank-status",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
+});
+var ApiCreateTestOrderRoute = Route$8.update({
+	id: "/api/create-test-order",
+	path: "/api/create-test-order",
+	getParentRoute: () => Route$18
 });
 var ApiMollieWebhookRoute = Route$7.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
 var ApiOrdersRoute = Route$6.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -12155,32 +12244,33 @@ var rootRouteChildren = {
 	AdminStocksRoute,
 	ApiBancontactWebhookRoute,
 	ApiBankStatusRoute,
+	ApiCreateTestOrderRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
 	OrderSuccessRoute,
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	}),
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	})
 };
-var routeTree = Route$17._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$18._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {
