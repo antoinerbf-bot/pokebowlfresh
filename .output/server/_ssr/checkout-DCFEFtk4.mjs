@@ -1,10 +1,10 @@
 import { c as desserts, p as drinks, r as bowls } from "./data-Bi2irjzU.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { a as numberType, i as literalType, o as objectType, r as enumType, s as stringType, t as arrayType } from "../_libs/zod.mjs";
+import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
 import { t as createServerRpc } from "./createServerRpc-B90ckaqP.mjs";
 import { n as getBancontactProPayment, t as createBancontactProPayment } from "./bancontact-pro.server-CodjVMhX.mjs";
 import { c as upsertOrder, i as getOrderFromStore } from "./order-store-4tO4OvTG.mjs";
-import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/checkout-DCFEFtk4.js
 function generateOrderId() {
 	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
