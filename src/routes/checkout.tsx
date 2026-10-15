@@ -246,12 +246,12 @@ function CheckoutPage() {
                   <div className="flex items-center justify-between w-full">
                     <CreditCard className="h-5 w-5 text-[#ff705f]" />
                     <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
-                      Bancontact
+                      Bancontact Pro
                     </span>
                   </div>
-                  <span className="text-sm font-black">Bancontact & En ligne</span>
+                  <span className="text-sm font-black">Bancontact Pro</span>
                   <span className="text-xs text-[#7a847e]">
-                    Bancontact Pro, Payconiq, Carte bancaire
+                    Application bancaire belge & Payconiq (QR code)
                   </span>
                 </button>
                 <button

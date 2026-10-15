@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Server-only Bancontact Pro (Payconiq by Bancontact) API helper.
  *
  * Supported environments:
@@ -21,9 +21,26 @@ export function isBancontactProConfigured(): boolean {
   return Boolean(getBancontactProApiKey());
 }
 
-function getApiBaseUrl(): string {
+function getAuthHeader(apiKey: string): string {
+  const clean = apiKey.trim();
+  return clean.toLowerCase().startsWith("bearer ") ? clean : `Bearer ${clean}`;
+}
+
+const CANDIDATE_PROD_URLS = [
+  "https://api.payconiq.com/v3",
+  "https://merchant.api.bancontact.net/v3",
+];
+
+const CANDIDATE_PREPROD_URLS = [
+  "https://api.preprod.payconiq.com/v3",
+  "https://merchant.api.preprod.bancontact.net/v3",
+];
+
+function getCandidateUrls(): string[] {
   const env = (process.env.BANCONTACT_PRO_ENV || "production").toLowerCase();
-  return env === "preprod" || env === "test" ? PREPROD_API : PROD_API;
+  return env === "preprod" || env === "test"
+    ? CANDIDATE_PREPROD_URLS
+    : CANDIDATE_PROD_URLS;
 }
 
 export type BancontactProStatus =
@@ -65,37 +82,44 @@ export async function createBancontactProPayment(params: {
   const apiKey = getBancontactProApiKey();
   if (!apiKey) {
     throw new Error(
-      "BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.",
+      "BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.",
     );
   }
 
   const amountCents = Math.round(params.amountEur * 100);
+  const urls = getCandidateUrls();
+  let lastErr = "";
 
-  const res = await fetch(`${getApiBaseUrl()}/payments`, {
-    method: "POST",
-    headers: {
-      Authorization: apiKey,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      amount: amountCents,
-      currency: "EUR",
-      description: params.description,
-      reference: params.reference,
-      returnUrl: params.returnUrl,
-      callbackUrl: params.callbackUrl,
-    }),
-  });
+  for (const baseUrl of urls) {
+    try {
+      const res = await fetch(`${baseUrl}/payments`, {
+        method: "POST",
+        headers: {
+          Authorization: getAuthHeader(apiKey),
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          amount: amountCents,
+          currency: "EUR",
+          description: params.description,
+          reference: params.reference,
+          returnUrl: params.returnUrl,
+          callbackUrl: params.callbackUrl,
+        }),
+      });
 
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(
-      `Bancontact Pro create payment failed (${res.status}): ${errText}`,
-    );
+      if (res.ok) {
+        return (await res.json()) as BancontactProPayment;
+      }
+
+      lastErr = await res.text();
+    } catch (e: any) {
+      lastErr = e?.message ?? String(e);
+    }
   }
 
-  return (await res.json()) as BancontactProPayment;
+  throw new Error(`Bancontact Pro create payment failed: ${lastErr}`);
 }
 
 export async function getBancontactProPayment(
@@ -104,23 +128,31 @@ export async function getBancontactProPayment(
   const apiKey = getBancontactProApiKey();
   if (!apiKey) {
     throw new Error(
-      "BANCONTACT_PRO_API_KEY manquante. Renseigne la cle API dans les variables d'environnement.",
+      "BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.",
     );
   }
 
-  const res = await fetch(`${getApiBaseUrl()}/payments/${paymentId}`, {
-    headers: {
-      Authorization: apiKey,
-      Accept: "application/json",
-    },
-  });
+  const urls = getCandidateUrls();
+  let lastErr = "";
 
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(
-      `Bancontact Pro get payment failed (${res.status}): ${errText}`,
-    );
+  for (const baseUrl of urls) {
+    try {
+      const res = await fetch(`${baseUrl}/payments/${paymentId}`, {
+        headers: {
+          Authorization: getAuthHeader(apiKey),
+          Accept: "application/json",
+        },
+      });
+
+      if (res.ok) {
+        return (await res.json()) as BancontactProPayment;
+      }
+
+      lastErr = await res.text();
+    } catch (e: any) {
+      lastErr = e?.message ?? String(e);
+    }
   }
 
-  return (await res.json()) as BancontactProPayment;
+  throw new Error(`Bancontact Pro get payment failed: ${lastErr}`);
 }
