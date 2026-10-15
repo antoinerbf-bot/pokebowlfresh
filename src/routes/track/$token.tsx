@@ -71,6 +71,7 @@ function DeliveryTrackPage() {
   const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
   const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}`;
+  const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
 
   return (
     <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
@@ -125,12 +126,17 @@ function DeliveryTrackPage() {
         {/* Adresse de livraison & GPS */}
         {order.fulfillment === "delivery" ? (
           <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3">
-            <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Adresse de Livraison</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Adresse de Livraison</h2>
+              <span className="text-[11px] font-bold bg-[#ff705f]/15 text-[#ff705f] px-2.5 py-0.5 rounded-full">
+                Navigation 1-Clic
+              </span>
+            </div>
             <div className="flex items-start gap-2">
               <MapPin className="h-5 w-5 text-[#ff705f] shrink-0 mt-0.5" />
               <div>
-                <p className="font-bold text-base leading-snug">{order.address}</p>
-                <p className="text-sm text-[#7a847e]">{order.postalCode} {order.city}</p>
+                <p className="font-black text-lg leading-snug">{order.address}</p>
+                <p className="text-sm font-bold text-[#7a847e]">{order.postalCode} {order.city}</p>
               </div>
             </div>
 
@@ -140,12 +146,12 @@ function DeliveryTrackPage() {
               </div>
             )}
 
-            <div className="pt-2 grid grid-cols-2 gap-2">
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <a
                 href={mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] text-white py-3 font-bold text-sm shadow hover:bg-[#3367d6] transition"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95"
               >
                 <Navigation className="h-4 w-4" />
                 Google Maps
@@ -154,10 +160,19 @@ function DeliveryTrackPage() {
                 href={wazeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] text-[#003d52] py-3 font-bold text-sm shadow hover:bg-[#2bb8e6] transition"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-3.5 px-3 font-black text-sm shadow transition active:scale-95"
               >
                 <Navigation className="h-4 w-4" />
                 Waze
+              </a>
+              <a
+                href={appleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-xl bg-[#17231f] hover:bg-black text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95"
+              >
+                <Navigation className="h-4 w-4" />
+                Apple Plans
               </a>
             </div>
           </section>

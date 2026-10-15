@@ -55,6 +55,25 @@ export function PosApplicationPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [activePrintOrder, setActivePrintOrder] = useState<Order | null>(null);
   const [printQrDataUrl, setPrintQrDataUrl] = useState<string>("");
+  const [modalQrDataUrl, setModalQrDataUrl] = useState<string>("");
+
+  useEffect(() => {
+    if (selectedOrder?.deliveryToken) {
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+      const trackUrl = `${origin}/track/${selectedOrder.deliveryToken}`;
+      QRCode.toDataURL(trackUrl, {
+        errorCorrectionLevel: "H",
+        margin: 4,
+        width: 320,
+        color: { dark: "#000000", light: "#ffffff" },
+      })
+        .then(setModalQrDataUrl)
+        .catch(() => {});
+    } else {
+      setModalQrDataUrl("");
+    }
+  }, [selectedOrder]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"kanban" | "history" | "settings">("kanban");
 
@@ -241,7 +260,12 @@ export function PosApplicationPage() {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
       const trackUrl = `${origin}/track/${order.deliveryToken}`;
       try {
-        qrData = await QRCode.toDataURL(trackUrl, { margin: 1, width: 150 });
+        qrData = await QRCode.toDataURL(trackUrl, {
+          errorCorrectionLevel: "H",
+          margin: 4,
+          width: 280,
+          color: { dark: "#000000", light: "#ffffff" },
+        });
       } catch (err) {
         console.warn("QR Code local gen error", err);
       }
@@ -1074,30 +1098,40 @@ export function PosApplicationPage() {
                 </div>
 
                 {selectedOrder.deliveryToken && (
-                  <div className="pt-2 border-t border-white/10 flex items-center gap-3">
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(
-                        (typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be") +
-                          "/track/" +
-                          selectedOrder.deliveryToken,
-                      )}`}
-                      alt="QR Code GPS"
-                      className="w-16 h-16 rounded-xl bg-white p-1 shrink-0"
-                    />
-                    <div className="text-xs space-y-1">
-                      <p className="font-bold text-white">QR Code GPS du ticket</p>
-                      <p className="text-[#8ea39b] text-[11px] leading-tight">
-                        Le livreur peut scanner ce QR directement sur l'écran ou sur le ticket de caisse.
+                  <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl">
+                    <div className="bg-white p-2.5 rounded-xl shadow-lg shrink-0">
+                      {modalQrDataUrl ? (
+                        <img
+                          src={modalQrDataUrl}
+                          alt="QR Code GPS Livreur"
+                          className="w-36 h-36 block"
+                          style={{ imageRendering: "pixelated" }}
+                        />
+                      ) : (
+                        <div className="w-36 h-36 flex items-center justify-center text-black text-xs font-bold">
+                          Génération...
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-xs space-y-2 flex-1">
+                      <p className="font-black text-white text-sm">QR Code GPS Haute Précision</p>
+                      <p className="text-[#8ea39b] text-xs leading-relaxed">
+                        Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS <strong>Waze</strong> ou <strong>Google Maps</strong> vers :
                       </p>
-                      <a
-                        href={`/track/${selectedOrder.deliveryToken}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-[#ff705f] hover:underline font-bold text-xs"
-                      >
-                        <span>Ouvrir la page livreur</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
+                      <p className="text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10">
+                        📍 {selectedOrder.customer.address}, {selectedOrder.customer.postalCode} {selectedOrder.customer.city}
+                      </p>
+                      <div className="pt-1 flex gap-2">
+                        <a
+                          href={`/track/${selectedOrder.deliveryToken}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition"
+                        >
+                          <span>📱 Tester la page livreur en direct</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 )}

@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-B-wNSO1G.css";
+var styles_default = "/assets/styles-C7WeyOMO.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -10092,6 +10092,21 @@ function PosApplicationPage() {
 	const [selectedOrder, setSelectedOrder] = (0, import_react.useState)(null);
 	const [activePrintOrder, setActivePrintOrder] = (0, import_react.useState)(null);
 	const [printQrDataUrl, setPrintQrDataUrl] = (0, import_react.useState)("");
+	const [modalQrDataUrl, setModalQrDataUrl] = (0, import_react.useState)("");
+	(0, import_react.useEffect)(() => {
+		if (selectedOrder?.deliveryToken) {
+			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${selectedOrder.deliveryToken}`;
+			import_lib.toDataURL(trackUrl, {
+				errorCorrectionLevel: "H",
+				margin: 4,
+				width: 320,
+				color: {
+					dark: "#000000",
+					light: "#ffffff"
+				}
+			}).then(setModalQrDataUrl).catch(() => {});
+		} else setModalQrDataUrl("");
+	}, [selectedOrder]);
 	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
 	const [activeTab, setActiveTab] = (0, import_react.useState)("kanban");
 	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
@@ -10194,8 +10209,13 @@ function PosApplicationPage() {
 			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${order.deliveryToken}`;
 			try {
 				qrData = await import_lib.toDataURL(trackUrl, {
-					margin: 1,
-					width: 150
+					errorCorrectionLevel: "H",
+					margin: 4,
+					width: 280,
+					color: {
+						dark: "#000000",
+						light: "#ffffff"
+					}
 				});
 			} catch (err) {
 				console.warn("QR Code local gen error", err);
@@ -11150,28 +11170,55 @@ function PosApplicationPage() {
 										})]
 									}),
 									selectedOrder.deliveryToken && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "pt-2 border-t border-white/10 flex items-center gap-3",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-											src: `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent((typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be") + "/track/" + selectedOrder.deliveryToken)}`,
-											alt: "QR Code GPS",
-											className: "w-16 h-16 rounded-xl bg-white p-1 shrink-0"
+										className: "pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "bg-white p-2.5 rounded-xl shadow-lg shrink-0",
+											children: modalQrDataUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+												src: modalQrDataUrl,
+												alt: "QR Code GPS Livreur",
+												className: "w-36 h-36 block",
+												style: { imageRendering: "pixelated" }
+											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "w-36 h-36 flex items-center justify-center text-black text-xs font-bold",
+												children: "Génération..."
+											})
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "text-xs space-y-1",
+											className: "text-xs space-y-2 flex-1",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "font-bold text-white",
-													children: "QR Code GPS du ticket"
+													className: "font-black text-white text-sm",
+													children: "QR Code GPS Haute Précision"
 												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "text-[#8ea39b] text-[11px] leading-tight",
-													children: "Le livreur peut scanner ce QR directement sur l'écran ou sur le ticket de caisse."
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+													className: "text-[#8ea39b] text-xs leading-relaxed",
+													children: [
+														"Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Waze" }),
+														" ou ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Google Maps" }),
+														" vers :"
+													]
 												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-													href: `/track/${selectedOrder.deliveryToken}`,
-													target: "_blank",
-													rel: "noreferrer",
-													className: "inline-flex items-center gap-1 text-[#ff705f] hover:underline font-bold text-xs",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ouvrir la page livreur" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3 h-3" })]
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+													className: "text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10",
+													children: [
+														"📍 ",
+														selectedOrder.customer.address,
+														", ",
+														selectedOrder.customer.postalCode,
+														" ",
+														selectedOrder.customer.city
+													]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "pt-1 flex gap-2",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+														href: `/track/${selectedOrder.deliveryToken}`,
+														target: "_blank",
+														rel: "noreferrer",
+														className: "inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📱 Tester la page livreur en direct" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
+													})
 												})
 											]
 										})]
@@ -12141,6 +12188,7 @@ function DeliveryTrackPage() {
 	const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
 	const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
 	const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}`;
+	const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-[#F6F1E9] text-[#17231f]",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
@@ -12204,17 +12252,23 @@ function DeliveryTrackPage() {
 				order.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-							className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
-							children: "Adresse de Livraison"
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+								children: "Adresse de Livraison"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] font-bold bg-[#ff705f]/15 text-[#ff705f] px-2.5 py-0.5 rounded-full",
+								children: "Navigation 1-Clic"
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-start gap-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5 text-[#ff705f] shrink-0 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "font-bold text-base leading-snug",
+								className: "font-black text-lg leading-snug",
 								children: order.address
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								className: "text-sm text-[#7a847e]",
+								className: "text-sm font-bold text-[#7a847e]",
 								children: [
 									order.postalCode,
 									" ",
@@ -12231,20 +12285,30 @@ function DeliveryTrackPage() {
 							]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "pt-2 grid grid-cols-2 gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: mapsUrl,
-								target: "_blank",
-								rel: "noopener noreferrer",
-								className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] text-white py-3 font-bold text-sm shadow hover:bg-[#3367d6] transition",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Google Maps"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: wazeUrl,
-								target: "_blank",
-								rel: "noopener noreferrer",
-								className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] text-[#003d52] py-3 font-bold text-sm shadow hover:bg-[#2bb8e6] transition",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Waze"]
-							})]
+							className: "pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: mapsUrl,
+									target: "_blank",
+									rel: "noopener noreferrer",
+									className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Google Maps"]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: wazeUrl,
+									target: "_blank",
+									rel: "noopener noreferrer",
+									className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-3.5 px-3 font-black text-sm shadow transition active:scale-95",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Waze"]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: appleMapsUrl,
+									target: "_blank",
+									rel: "noopener noreferrer",
+									className: "flex items-center justify-center gap-2 rounded-xl bg-[#17231f] hover:bg-black text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Apple Plans"]
+								})
+							]
 						})
 					]
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
