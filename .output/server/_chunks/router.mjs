@@ -10308,8 +10308,11 @@ function PosApplicationPage() {
 				return;
 			}
 			playAlertSound();
-			await loadOrders();
+			knownOrderStatuses.current.set(data.order.id, data.order.status);
+			initialOrdersLoaded.current = true;
 			setSelectedOrder(data.order);
+			await loadOrders();
+			await handleExecutePrint(data.order);
 		} catch (e) {
 			alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
 		} finally {

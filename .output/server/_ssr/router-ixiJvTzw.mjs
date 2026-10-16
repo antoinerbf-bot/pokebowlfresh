@@ -19,7 +19,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-B7CcFdl_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-ixiJvTzw.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -829,8 +829,11 @@ function PosApplicationPage() {
 				return;
 			}
 			playAlertSound();
-			await loadOrders();
+			knownOrderStatuses.current.set(data.order.id, data.order.status);
+			initialOrdersLoaded.current = true;
 			setSelectedOrder(data.order);
+			await loadOrders();
+			await handleExecutePrint(data.order);
 		} catch (e) {
 			alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
 		} finally {

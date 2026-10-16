@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-ChbMkL-u.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BIFxH7xj.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/__root.tsx",
@@ -24,7 +24,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/api/printer/queue"
 		],
 		preloads: [
-			"/assets/index-DPBLm3MG.js",
+			"/assets/index-LhBDUEK0.js",
 			"/assets/createLucideIcon-zy-1MMUP.js",
 			"/assets/link-D0rUQ_ra.js",
 			"/assets/createServerFn-C1JWGbHh.js"
@@ -32,15 +32,15 @@ var tsrStartManifest = () => ({ routes: {
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-DPBLm3MG.js"
+			src: "/assets/index-LhBDUEK0.js"
 		} }]
 	},
 	"/": {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-BYjWhu96.js",
-			"/assets/CartDrawer-CEcme9sA.js",
+			"/assets/routes-B-b-OtaY.js",
+			"/assets/CartDrawer-DFWnt7fU.js",
 			"/assets/briefcase-business-DJeAkziv.js",
 			"/assets/check-PxzYpF26.js",
 			"/assets/circle-check-xE2Wlw9j.js",
@@ -58,7 +58,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/checkout.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/checkout-rHlNGd6U.js",
+			"/assets/checkout-hKdz0VoW.js",
 			"/assets/arrow-left-BCa9TLr_.js",
 			"/assets/circle-alert-ClvmKOUA.js",
 			"/assets/checkout-CMIV77ms.js",
@@ -71,9 +71,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/commander.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/commander-DZzBgwwi.js",
+			"/assets/commander-DVXpM7AG.js",
 			"/assets/arrow-left-BCa9TLr_.js",
-			"/assets/CartDrawer-CEcme9sA.js",
+			"/assets/CartDrawer-DFWnt7fU.js",
 			"/assets/shopping-bag-Zw7p0j3b.js",
 			"/assets/data-lJNOC6Y9.js",
 			"/assets/BrandLogo-CvDJu50B.js",
@@ -109,9 +109,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/sur-mesure.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/sur-mesure-DMy_dZA9.js",
+			"/assets/sur-mesure-CUCOokGs.js",
 			"/assets/arrow-left-BCa9TLr_.js",
-			"/assets/CartDrawer-CEcme9sA.js",
+			"/assets/CartDrawer-DFWnt7fU.js",
 			"/assets/check-PxzYpF26.js",
 			"/assets/shopping-bag-Zw7p0j3b.js",
 			"/assets/data-lJNOC6Y9.js",
@@ -122,7 +122,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/admin/stocks.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/stocks-CZPvWIVG.js",
+			"/assets/stocks-Di2UzStT.js",
 			"/assets/loader-circle-m3U77eaX.js",
 			"/assets/stock-CaiRIRLh.js"
 		]
@@ -131,7 +131,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/order.success.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/order.success-udwYqhK2.js",
+			"/assets/order.success-CTBXIKGJ.js",
 			"/assets/circle-check-xE2Wlw9j.js",
 			"/assets/clock-BrBAgSRU.js",
 			"/assets/checkout-CMIV77ms.js",
@@ -144,9 +144,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/product/$productId.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_productId-MxfPZKQB.js",
+			"/assets/_productId-DkQyA0Ox.js",
 			"/assets/arrow-left-BCa9TLr_.js",
-			"/assets/CartDrawer-CEcme9sA.js",
+			"/assets/CartDrawer-DFWnt7fU.js",
 			"/assets/check-PxzYpF26.js",
 			"/assets/shield-check-qvFTR-Jy.js",
 			"/assets/data-lJNOC6Y9.js",
@@ -158,7 +158,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/track/$token.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_token-CtXbImdA.js",
+			"/assets/_token-BoqKlsjI.js",
 			"/assets/circle-alert-ClvmKOUA.js",
 			"/assets/clock-BrBAgSRU.js",
 			"/assets/loader-circle-m3U77eaX.js",
