@@ -85,7 +85,9 @@ export function PosApplicationPage() {
   const [printLog, setPrintLog] = useState<{ time: string; msg: string; type: "ok" | "err" }[]>([]);
 
   // Garder trace des IDs pour les nouvelles alertes
-  const knownOrderIds = useRef<Set<string>>(new Set());
+  const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
+  const initialOrdersLoaded = useRef(false);
+  const autoPrintInFlight = useRef<Set<string>>(new Set());
   const [creatingTestOrder, setCreatingTestOrder] = useState(false);
 
   const handleCreateTestOrder = async () => {
@@ -140,22 +142,33 @@ export function PosApplicationPage() {
       const res = await getPosOrders({ data: { pin } });
       const newOrders = res.orders;
 
-      // Détecter nouvelles commandes payées non encore vues
-      if (knownOrderIds.current.size > 0) {
-        const hasNew = newOrders.some(
-          (o) =>
-            !knownOrderIds.current.has(o.id) &&
-            (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"),
-        );
-        if (hasNew) {
-          playAlertSound();
-        }
-      }
+      // Au premier chargement, mémoriser l'état existant sans réimprimer l'historique.
+      // Ensuite, imprimer automatiquement toute nouvelle commande payée ou passant à un état prêt.
+      const printableStatuses: Order["status"][] = ["paid", "awaiting_pickup", "awaiting_delivery"];
+      const newlyPrintable = initialOrdersLoaded.current
+        ? newOrders.filter((o) => {
+            const previousStatus = knownOrderStatuses.current.get(o.id);
+            const becamePrintable = printableStatuses.includes(o.status) &&
+              (!previousStatus || !printableStatuses.includes(previousStatus));
+            const notAlreadyPrinted = o.printStatus !== "printed";
+            return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
+          })
+        : [];
 
-      newOrders.forEach((o) => knownOrderIds.current.add(o.id));
+      if (newlyPrintable.length > 0) playAlertSound();
+
+      newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
+      initialOrdersLoaded.current = true;
       setOrders(newOrders);
 
-      // Impression à la demande : pas de blocage réseau automatique
+      // L'impression est déclenchée une seule fois lors de la détection de la commande.
+      // Le verrou local évite les doubles appels pendant le polling de 4 secondes.
+      for (const order of newlyPrintable) {
+        autoPrintInFlight.current.add(order.id);
+        void handleExecutePrint(order).finally(() => {
+          autoPrintInFlight.current.delete(order.id);
+        });
+      }
     } catch (e) {
       console.error(e);
     } finally {
