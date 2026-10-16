@@ -237,7 +237,7 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    await printThermalTicket(targetOrder);
+    // Réimpression via ePOS réseau (évite la boîte de dialogue Chrome qui cherche une imprimante).\n    // Le ticket est régénéré côté serveur avec le QR de suivi actuel.\n    await handleExecutePrint(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
