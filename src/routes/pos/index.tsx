@@ -196,24 +196,34 @@ export function PosApplicationPage() {
       }
 
       const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
-      const isOk = totalExpected === 0 || successCount > 0;
+      // Une impression n'est réussie que si TOUS les tickets activés sont sortis.
+      // Ne jamais marquer la commande comme imprimée si aucun ticket n'était activé.
+      const isOk = totalExpected > 0 && successCount === totalExpected;
+      if (totalExpected === 0) {
+        errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
+      } else if (successCount < totalExpected && !errorMsg) {
+        errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
+      }
 
       await ackPosPrint({
         data: {
           pin,
           orderId: order.id,
           success: isOk,
-          error: errorMsg || undefined,
+          error: isOk ? undefined : errorMsg,
         },
       });
 
       const now = new Date().toLocaleTimeString();
       if (isOk) {
-        setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} imprimée.`, type: "ok" }, ...prev.slice(0, 30)]);
-        alert(`✅ Ticket envoyé avec succès à l'imprimante réseau (${config.printerIp}) !`);
+        setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} : tous les tickets imprimés.`, type: "ok" }, ...prev.slice(0, 30)]);
+        alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
       } else {
-        setPrintLog((prev) => [{ time: now, msg: `Échec ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
-        alert(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n👉 Cliquez sur "Imprimer Ticket Direct" pour sortir le ticket via votre imprimante de caisse.`);
+        const partial = successCount > 0
+          ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).`
+          : "";
+        setPrintLog((prev) => [{ time: now, msg: `Échec/partiel ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
+        alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
       }
     } catch (err: any) {
       console.error(err);
