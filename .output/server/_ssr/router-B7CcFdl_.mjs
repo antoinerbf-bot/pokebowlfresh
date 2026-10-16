@@ -19,7 +19,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BDt3zDup.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-B7CcFdl_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -671,12 +671,12 @@ createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
 	orderId: stringType().min(1)
 })).handler(createSsrRpc("6515ae2b4b334ce5935aaa2290fe5a760aa9de9e4dbd2160f973f92e3ad32045"));
-createServerFn({ method: "POST" }).validator(objectType({
+var getOrderReceipts = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
 	orderId: stringType().min(1),
 	origin: stringType().optional()
 })).handler(createSsrRpc("ae058d51b0dbcb532d02de73a2c4d7357c52b93b90a304439be634b235fa5013"));
-createServerFn({ method: "POST" }).validator(objectType({
+var ackPosPrint = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
 	orderId: stringType().min(1),
 	success: booleanType(),
@@ -810,7 +810,9 @@ function PosApplicationPage() {
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
-	const knownOrderIds = (0, import_react.useRef)(/* @__PURE__ */ new Set());
+	const knownOrderStatuses = (0, import_react.useRef)(/* @__PURE__ */ new Map());
+	const initialOrdersLoaded = (0, import_react.useRef)(false);
+	const autoPrintInFlight = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
 	const handleCreateTestOrder = async () => {
 		setCreatingTestOrder(true);
@@ -857,11 +859,27 @@ function PosApplicationPage() {
 	const loadOrders = async () => {
 		try {
 			const newOrders = (await getPosOrders({ data: { pin } })).orders;
-			if (knownOrderIds.current.size > 0) {
-				if (newOrders.some((o) => !knownOrderIds.current.has(o.id) && (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"))) playAlertSound();
-			}
-			newOrders.forEach((o) => knownOrderIds.current.add(o.id));
+			const printableStatuses = [
+				"paid",
+				"awaiting_pickup",
+				"awaiting_delivery"
+			];
+			const newlyPrintable = initialOrdersLoaded.current ? newOrders.filter((o) => {
+				const previousStatus = knownOrderStatuses.current.get(o.id);
+				const becamePrintable = printableStatuses.includes(o.status) && (!previousStatus || !printableStatuses.includes(previousStatus));
+				const notAlreadyPrinted = o.printStatus !== "printed";
+				return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
+			}) : [];
+			if (newlyPrintable.length > 0) playAlertSound();
+			newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
+			initialOrdersLoaded.current = true;
 			setOrders(newOrders);
+			for (const order of newlyPrintable) {
+				autoPrintInFlight.current.add(order.id);
+				handleExecutePrint(order).finally(() => {
+					autoPrintInFlight.current.delete(order.id);
+				});
+			}
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -875,6 +893,67 @@ function PosApplicationPage() {
 			return () => clearInterval(timer);
 		}
 	}, [isUnlocked, pin]);
+	const handleExecutePrint = async (order) => {
+		setPrintingOrderId(order.id);
+		try {
+			const origin = window.location.origin;
+			const receipts = await getOrderReceipts({ data: {
+				pin,
+				orderId: order.id,
+				origin
+			} });
+			let successCount = 0;
+			let errorMsg = "";
+			if (config.autoPrintKitchen && receipts.kitchenReceiptB64) {
+				const resKitchen = await sendReceiptToPrinter(receipts.kitchenReceiptB64, config);
+				if (resKitchen.success) successCount++;
+				else errorMsg += `[Cuisine] ${resKitchen.message} `;
+			}
+			if (config.autoPrintDelivery && receipts.deliveryReceiptB64) {
+				const resDelivery = await sendReceiptToPrinter(receipts.deliveryReceiptB64, config);
+				if (resDelivery.success) successCount++;
+				else errorMsg += `[Livreur] ${resDelivery.message} `;
+			}
+			const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
+			const isOk = totalExpected > 0 && successCount === totalExpected;
+			if (totalExpected === 0) errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
+			else if (successCount < totalExpected && !errorMsg) errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
+			await ackPosPrint({ data: {
+				pin,
+				orderId: order.id,
+				success: isOk,
+				error: isOk ? void 0 : errorMsg
+			} });
+			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+			if (isOk) {
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Commande ${order.id} : tous les tickets imprimés.`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
+			} else {
+				const partial = successCount > 0 ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).` : "";
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Échec/partiel ${order.id} : ${errorMsg}`,
+					type: "err"
+				}, ...prev.slice(0, 30)]);
+				alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
+			}
+		} catch (err) {
+			console.error(err);
+			await ackPosPrint({ data: {
+				pin,
+				orderId: order.id,
+				success: false,
+				error: err?.message ?? "Erreur inattendue"
+			} });
+		} finally {
+			setPrintingOrderId(null);
+			loadOrders();
+		}
+	};
 	const handleManualReprint = async (orderId) => {
 		if (!(orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null))) {
 			alert("Commande introuvable.");
