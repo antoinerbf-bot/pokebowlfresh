@@ -10355,12 +10355,10 @@ function PosApplicationPage() {
 		}
 	}, [isUnlocked, pin]);
 	const handleManualReprint = async (orderId) => {
-		const targetOrder = orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null);
-		if (!targetOrder) {
+		if (!(orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null))) {
 			alert("Commande introuvable.");
 			return;
 		}
-		await printThermalTicket(targetOrder);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {

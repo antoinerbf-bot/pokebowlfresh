@@ -19,7 +19,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-ByDvuE_J.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BDt3zDup.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -876,12 +876,10 @@ function PosApplicationPage() {
 		}
 	}, [isUnlocked, pin]);
 	const handleManualReprint = async (orderId) => {
-		const targetOrder = orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null);
-		if (!targetOrder) {
+		if (!(orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null))) {
 			alert("Commande introuvable.");
 			return;
 		}
-		await printThermalTicket(targetOrder);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
