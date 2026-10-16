@@ -106,8 +106,15 @@ export function PosApplicationPage() {
         return;
       }
       playAlertSound();
-      await loadOrders();
+      // Marquer la commande avant le rafraîchissement pour éviter que le polling
+      // ne lance une seconde impression en parallèle.
+      knownOrderStatuses.current.set(data.order.id, data.order.status);
+      initialOrdersLoaded.current = true;
       setSelectedOrder(data.order as any);
+      await loadOrders();
+      // Le bouton de test doit imprimer explicitement le ticket de livraison
+      // avec son QR de suivi, même si la détection automatique a raté la commande.
+      await handleExecutePrint(data.order as Order);
     } catch (e: any) {
       alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
     } finally {
