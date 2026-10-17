@@ -7372,8 +7372,10 @@ function CheckoutPage() {
 				}
 			});
 		} catch (err) {
-			console.error(err);
-			setError(err instanceof Error ? err.message : "Une erreur est survenue. Réessaie ou choisis « Payer sur place ».");
+			console.error("[Checkout] Échec de création de commande:", err);
+			const candidate = err;
+			const message = typeof candidate?.data?.message === "string" && candidate.data.message || typeof candidate?.cause?.message === "string" && candidate.cause.message || typeof candidate?.message === "string" && candidate.message || typeof candidate?.data?.error === "string" && candidate.data.error || "Le serveur n’a pas pu créer la commande. Vérifiez la connexion puis réessayez. Si le problème persiste, consultez les journaux d’erreurs du serveur.";
+			setError(message);
 			setLoading(false);
 		}
 	};

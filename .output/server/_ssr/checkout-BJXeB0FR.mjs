@@ -7,7 +7,7 @@ import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { E as LoaderCircle, L as CircleCheckBig, M as CreditCard, R as CircleAlert, X as ArrowLeft, p as ShieldCheck, s as Store } from "../_libs/lucide-react.mjs";
 import { t as getDeliveryZone } from "./delivery-P4X_oDrn.mjs";
 import { n as submitCheckout } from "./checkout-CoBgyNFK.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-YvXJ1ADG.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-BJXeB0FR.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -100,8 +100,10 @@ function CheckoutPage() {
 				}
 			});
 		} catch (err) {
-			console.error(err);
-			setError(err instanceof Error ? err.message : "Une erreur est survenue. Réessaie ou choisis « Payer sur place ».");
+			console.error("[Checkout] Échec de création de commande:", err);
+			const candidate = err;
+			const message = typeof candidate?.data?.message === "string" && candidate.data.message || typeof candidate?.cause?.message === "string" && candidate.cause.message || typeof candidate?.message === "string" && candidate.message || typeof candidate?.data?.error === "string" && candidate.data.error || "Le serveur n’a pas pu créer la commande. Vérifiez la connexion puis réessayez. Si le problème persiste, consultez les journaux d’erreurs du serveur.";
+			setError(message);
 			setLoading(false);
 		}
 	};
