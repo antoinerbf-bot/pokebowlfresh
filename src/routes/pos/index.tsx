@@ -85,7 +85,9 @@ export function PosApplicationPage() {
   const [printLog, setPrintLog] = useState<{ time: string; msg: string; type: "ok" | "err" }[]>([]);
 
   // Garder trace des IDs pour les nouvelles alertes
-  const knownOrderIds = useRef<Set<string>>(new Set());
+  const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
+  const initialOrdersLoaded = useRef(false);
+  const autoPrintInFlight = useRef<Set<string>>(new Set());
   const [creatingTestOrder, setCreatingTestOrder] = useState(false);
 
   const handleCreateTestOrder = async () => {
@@ -165,19 +167,23 @@ export function PosApplicationPage() {
         newOrders = res.orders;
       }
 
-      // Détecter nouvelles commandes payées non encore vues
-      if (knownOrderIds.current.size > 0) {
-        const hasNew = newOrders.some(
-          (o) =>
-            !knownOrderIds.current.has(o.id) &&
-            (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"),
-        );
-        if (hasNew) {
-          playAlertSound();
-        }
-      }
+      // Au premier chargement, mémoriser l'état existant sans réimprimer l'historique.
+      // Ensuite, imprimer automatiquement toute nouvelle commande payée ou passant à un état prêt.
+      const printableStatuses: Order["status"][] = ["paid", "awaiting_pickup", "awaiting_delivery"];
+      const newlyPrintable = initialOrdersLoaded.current
+        ? newOrders.filter((o) => {
+            const previousStatus = knownOrderStatuses.current.get(o.id);
+            const becamePrintable = printableStatuses.includes(o.status) &&
+              (!previousStatus || !printableStatuses.includes(previousStatus));
+            const notAlreadyPrinted = o.printStatus !== "printed";
+            return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
+          })
+        : [];
 
-      newOrders.forEach((o) => knownOrderIds.current.add(o.id));
+      if (newlyPrintable.length > 0) playAlertSound();
+
+      newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
+      initialOrdersLoaded.current = true;
       setOrders(newOrders);
     } catch (e) {
       console.error("[POS] Erreur globale loadOrders:", e);
@@ -219,24 +225,34 @@ export function PosApplicationPage() {
       }
 
       const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
-      const isOk = totalExpected === 0 || successCount > 0;
+      // Une impression n'est réussie que si TOUS les tickets activés sont sortis.
+      // Ne jamais marquer la commande comme imprimée si aucun ticket n'était activé.
+      const isOk = totalExpected > 0 && successCount === totalExpected;
+      if (totalExpected === 0) {
+        errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
+      } else if (successCount < totalExpected && !errorMsg) {
+        errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
+      }
 
       await ackPosPrint({
         data: {
           pin,
           orderId: order.id,
           success: isOk,
-          error: errorMsg || undefined,
+          error: isOk ? undefined : errorMsg,
         },
       });
 
       const now = new Date().toLocaleTimeString();
       if (isOk) {
-        setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} imprimée.`, type: "ok" }, ...prev.slice(0, 30)]);
-        alert(`✅ Ticket envoyé avec succès à l'imprimante réseau (${config.printerIp}) !`);
+        setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} : tous les tickets imprimés.`, type: "ok" }, ...prev.slice(0, 30)]);
+        alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
       } else {
-        setPrintLog((prev) => [{ time: now, msg: `Échec ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
-        alert(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n👉 Cliquez sur "Imprimer Ticket Direct" pour sortir le ticket via votre imprimante de caisse.`);
+        const partial = successCount > 0
+          ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).`
+          : "";
+        setPrintLog((prev) => [{ time: now, msg: `Échec/partiel ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
+        alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
       }
     } catch (err: any) {
       console.error(err);
@@ -260,7 +276,7 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    await printThermalTicket(targetOrder);
+    // Réimpression via ePOS réseau (évite la boîte de dialogue Chrome qui cherche une imprimante).\n    // Le ticket est régénéré côté serveur avec le QR de suivi actuel.\n    await handleExecutePrint(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
