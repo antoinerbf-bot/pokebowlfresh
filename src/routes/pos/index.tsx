@@ -185,6 +185,16 @@ export function PosApplicationPage() {
       newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
       initialOrdersLoaded.current = true;
       setOrders(newOrders);
+
+      // Send real orders through the same validated Epson network path as the printer test.
+      // Lock the order ID before sending so the 4-second polling cannot create duplicates.
+      for (const order of newlyPrintable) {
+        if (autoPrintInFlight.current.has(order.id)) continue;
+        autoPrintInFlight.current.add(order.id);
+        void handleExecutePrint(order, true).finally(() => {
+          autoPrintInFlight.current.delete(order.id);
+        });
+      }
     } catch (e) {
       console.error("[POS] Erreur globale loadOrders:", e);
     } finally {
@@ -201,7 +211,7 @@ export function PosApplicationPage() {
   }, [isUnlocked, pin]);
 
   // Action d'impression réseau directe ePOS (si demandée explicitement)
-  const handleExecutePrint = async (order: Order) => {
+  const handleExecutePrint = async (order: Order, silent = false) => {
     setPrintingOrderId(order.id);
     try {
       const origin = window.location.origin;
@@ -246,13 +256,13 @@ export function PosApplicationPage() {
       const now = new Date().toLocaleTimeString();
       if (isOk) {
         setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} : tous les tickets imprimés.`, type: "ok" }, ...prev.slice(0, 30)]);
-        alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
+        if (!silent) alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
       } else {
         const partial = successCount > 0
           ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).`
           : "";
         setPrintLog((prev) => [{ time: now, msg: `Échec/partiel ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
-        alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
+        if (!silent) alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
       }
     } catch (err: any) {
       console.error(err);
@@ -780,17 +790,6 @@ export function PosApplicationPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Bouton Commande Test Livreur / GPS */}
-          <button
-            onClick={handleCreateTestOrder}
-            disabled={creatingTestOrder}
-            className="flex items-center gap-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-2 text-xs font-black hover:bg-amber-500/30 active:scale-95 transition disabled:opacity-50"
-            title="Créer une fausse commande de livraison avec QR Code GPS (Waze & Google Maps)"
-          >
-            <Truck className="h-4 w-4 text-amber-400" />
-            <span>{creatingTestOrder ? "Création..." : "+ Test Livraison (QR GPS)"}</span>
-          </button>
-
           {/* Toggle Son */}
           <button
             onClick={() => {
@@ -1203,24 +1202,17 @@ export function PosApplicationPage() {
             )}
 
             {/* Actions Modal */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <button
-                onClick={() => printThermalTicket(selectedOrder)}
-                className="rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
-                title="Lancer l'impression directe du ticket thermique 80mm avec QR Code"
-              >
-                <Printer className="w-4 h-4" />
-                Imprimer Ticket Direct
-              </button>
-
+            <div className="pt-2">
               <button
                 onClick={() => handleManualReprint(selectedOrder.id)}
-                className="rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
-                title={`Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`}
+                disabled={printingOrderId === selectedOrder.id}
+                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                title="Imprimer via le chemin réseau validé de l’Epson"
               >
-                <Printer className="w-4 h-4 text-[#ff705f]" />
-                Imprimer Réseau ({config.printerIp})
+                <Printer className="w-4 h-4" />
+                {printingOrderId === selectedOrder.id ? "Envoi à l’imprimante…" : "Imprimer le ticket + QR"}
               </button>
+            </div>
             </div>
           </div>
         </div>
