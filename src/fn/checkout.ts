@@ -186,6 +186,7 @@ function computeSubtotal(items: OrderItem[]): number {
 export const submitCheckout = createServerFn({ method: "POST" })
   .validator(checkoutSchema)
   .handler(async ({ data }) => {
+    try {
     console.info("[Checkout] submitCheckout started", { fulfillment: data.customer.fulfillment, paymentMethod: data.paymentMethod, itemCount: data.items.length });
     const items = canonicalizeItems(data.items);
     const subtotal = computeSubtotal(items);
@@ -306,7 +307,15 @@ export const submitCheckout = createServerFn({ method: "POST" })
       molliePaymentId: payment.paymentId,
       redirectUrl: payUrl,
     };
-  });
+    } catch (error) {
+      console.error("[Checkout] submitCheckout failed:", error);
+      return {
+        type: "error" as const,
+        message: error instanceof Error && error.message
+          ? error.message
+          : "Erreur serveur pendant la création de la commande. Consultez les journaux de l’application.",
+      };
+    };
 
 export const getOrderStatus = createServerFn({ method: "GET" })
   .validator(z.object({ orderId: z.string().min(1) }))
