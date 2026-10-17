@@ -1,4 +1,4 @@
-import { u as mergeHeaders } from "../_libs/@tanstack/react-start+[...].mjs";
+import { l as mergeHeaders } from "../_libs/@tanstack/react-start+[...].mjs";
 import { j as parseRedirect, k as isRedirect } from "../_libs/@tanstack/react-router+[...].mjs";
 import { AsyncLocalStorage } from "node:async_hooks";
 //#region node_modules/.nitro/vite/services/ssr/assets/createServerFn-CIHAFgYl.js

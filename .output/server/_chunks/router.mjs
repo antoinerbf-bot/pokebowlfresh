@@ -1,5 +1,5 @@
 import { i as __toESM } from "../_runtime.mjs";
-import { i as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
+import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
@@ -526,7 +526,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$19 = createRootRouteWithContext()({
+var Route$20 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -584,7 +584,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$19.useRouteContext();
+	const { queryClient } = Route$20.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -5356,7 +5356,7 @@ var RESTAURANT_SCHEMA = {
 		}
 	]
 };
-var Route$18 = createFileRoute("/")({
+var Route$19 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -6687,7 +6687,7 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 });
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$17 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$18 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -7490,7 +7490,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$16 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$17 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#2C1D16] text-[#EADCC9]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -8010,7 +8010,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$15 = createFileRoute("/contact")({
+var Route$16 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -8151,7 +8151,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$14 = createFileRoute("/recrutement")({
+var Route$15 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -8268,7 +8268,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$13 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$14 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -8967,7 +8967,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$12 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$13 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -9215,7 +9215,7 @@ function AdminStocksPage() {
 }
 //#endregion
 //#region src/routes/api/bancontact-webhook.ts
-var Route$11 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$12 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9251,7 +9251,7 @@ var Route$11 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: 
 } } } });
 //#endregion
 //#region src/routes/api/bank-status.ts
-var Route$10 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+var Route$11 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
 	loadAndGetEnv();
 	const candidates = getAllBankKeyCandidates();
 	const bancontactKey = getBancontactProApiKey();
@@ -9355,7 +9355,7 @@ var Route$10 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: 
 } } } });
 //#endregion
 //#region src/routes/api/create-test-order.ts
-var Route$9 = createFileRoute("/api/create-test-order")({ server: { handlers: {
+var Route$10 = createFileRoute("/api/create-test-order")({ server: { handlers: {
 	GET: async () => createHandler(),
 	POST: async () => createHandler()
 } } });
@@ -9434,7 +9434,7 @@ async function createHandler() {
 }
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
-var Route$8 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$9 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9471,7 +9471,7 @@ var Route$8 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POS
 * GET /api/orders
 * Liste les commandes persistées.
 */
-var Route$7 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
+var Route$8 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
 	const expected = process.env.ADMIN_SECRET;
 	if (!expected || request.headers.get("x-admin-secret") !== expected) return new Response("Unauthorized", { status: 401 });
 	const orders = await listOrdersFromStore();
@@ -9483,6 +9483,59 @@ var Route$7 = createFileRoute("/api/orders")({ server: { handlers: { GET: async 
 		}
 	});
 } } } });
+//#endregion
+//#region src/routes/api/pos-orders.ts
+var Route$7 = createFileRoute("/api/pos-orders")({ server: { handlers: {
+	GET: async () => {
+		try {
+			const orders = await listOrdersFromStore(100);
+			return new Response(JSON.stringify({
+				success: true,
+				orders
+			}), {
+				status: 200,
+				headers: {
+					"Content-Type": "application/json; charset=utf-8",
+					"Cache-Control": "no-store"
+				}
+			});
+		} catch (err) {
+			return new Response(JSON.stringify({
+				success: false,
+				error: err?.message || String(err),
+				orders: []
+			}), {
+				status: 200,
+				headers: { "Content-Type": "application/json; charset=utf-8" }
+			});
+		}
+	},
+	POST: async ({ request }) => {
+		try {
+			const { orderId, status } = await request.json();
+			if (!orderId || !status) return new Response(JSON.stringify({
+				success: false,
+				error: "orderId ou status manquant"
+			}), {
+				status: 400,
+				headers: { "Content-Type": "application/json" }
+			});
+			await updateOrderStatus(orderId, status);
+			return new Response(JSON.stringify({ success: true }), {
+				status: 200,
+				headers: { "Content-Type": "application/json" }
+			});
+		} catch (err) {
+			return new Response(JSON.stringify({
+				success: false,
+				error: err?.message || String(err)
+			}), {
+				status: 500,
+				headers: { "Content-Type": "application/json" }
+			});
+		}
+	}
+} } });
 //#endregion
 //#region src/routes/api/track-order.ts
 var Route$6 = createFileRoute("/api/track-order")({ server: { handlers: {
@@ -10306,8 +10359,10 @@ function PosApplicationPage() {
 				return;
 			}
 			playAlertSound();
-			await loadOrders();
-			setSelectedOrder(data.order);
+			const created = data.order;
+			setOrders((prev) => [created, ...prev.filter((o) => o.id !== created.id)]);
+			setSelectedOrder(created);
+			loadOrders().catch(() => {});
 		} catch (e) {
 			alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
 		} finally {
@@ -10335,14 +10390,27 @@ function PosApplicationPage() {
 	};
 	const loadOrders = async () => {
 		try {
-			const newOrders = (await getPosOrders({ data: { pin } })).orders;
+			let newOrders = null;
+			try {
+				const resRest = await fetch("/api/pos-orders", {
+					headers: { Accept: "application/json" },
+					cache: "no-store"
+				});
+				if (resRest.ok) {
+					const json = await resRest.json();
+					if (json.success && Array.isArray(json.orders)) newOrders = json.orders;
+				}
+			} catch (err) {
+				console.warn("[POS] Erreur REST /api/pos-orders, fallback RPC:", err);
+			}
+			if (!newOrders) newOrders = (await getPosOrders({ data: { pin } })).orders;
 			if (knownOrderIds.current.size > 0) {
 				if (newOrders.some((o) => !knownOrderIds.current.has(o.id) && (o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery"))) playAlertSound();
 			}
 			newOrders.forEach((o) => knownOrderIds.current.add(o.id));
 			setOrders(newOrders);
 		} catch (e) {
-			console.error(e);
+			console.error("[POS] Erreur globale loadOrders:", e);
 		} finally {
 			setLoading(false);
 		}
@@ -10364,6 +10432,30 @@ function PosApplicationPage() {
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
+			try {
+				const res = await fetch("/api/pos-orders", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						orderId,
+						status
+					})
+				});
+				if (res.ok) {
+					if ((await res.json()).success) {
+						setOrders((prev) => prev.map((o) => o.id === orderId ? {
+							...o,
+							status
+						} : o));
+						if (selectedOrder && selectedOrder.id === orderId) setSelectedOrder((prev) => prev ? {
+							...prev,
+							status
+						} : null);
+						loadOrders().catch(() => {});
+						return;
+					}
+				}
+			} catch {}
 			await setPosOrderStatus({ data: {
 				pin,
 				orderId,
@@ -12665,80 +12757,85 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$18.update({
+var IndexRoute = Route$19.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var CheckoutRoute = Route$17.update({
+var CheckoutRoute = Route$18.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var CommanderRoute = Route$16.update({
+var CommanderRoute = Route$17.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var ContactRoute = Route$15.update({
+var ContactRoute = Route$16.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var RecrutementRoute = Route$14.update({
+var RecrutementRoute = Route$15.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var SurMesureRoute = Route$13.update({
+var SurMesureRoute = Route$14.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var AdminStocksRoute = Route$12.update({
+var AdminStocksRoute = Route$13.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var ApiBancontactWebhookRoute = Route$11.update({
+var ApiBancontactWebhookRoute = Route$12.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var ApiBankStatusRoute = Route$10.update({
+var ApiBankStatusRoute = Route$11.update({
 	id: "/api/bank-status",
 	path: "/api/bank-status",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var ApiCreateTestOrderRoute = Route$9.update({
+var ApiCreateTestOrderRoute = Route$10.update({
 	id: "/api/create-test-order",
 	path: "/api/create-test-order",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var ApiMollieWebhookRoute = Route$8.update({
+var ApiMollieWebhookRoute = Route$9.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
-var ApiOrdersRoute = Route$7.update({
+var ApiOrdersRoute = Route$8.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
+});
+var ApiPosOrdersRoute = Route$7.update({
+	id: "/api/pos-orders",
+	path: "/api/pos-orders",
+	getParentRoute: () => Route$20
 });
 var ApiTrackOrderRoute = Route$6.update({
 	id: "/api/track-order",
 	path: "/api/track-order",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$19
+	getParentRoute: () => Route$20
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -12753,31 +12850,32 @@ var rootRouteChildren = {
 	ApiCreateTestOrderRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
+	ApiPosOrdersRoute,
 	ApiTrackOrderRoute,
 	OrderSuccessRoute,
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$19
+		getParentRoute: () => Route$20
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$19
+		getParentRoute: () => Route$20
 	}),
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$19
+		getParentRoute: () => Route$20
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$19
+		getParentRoute: () => Route$20
 	})
 };
-var routeTree = Route$19._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$20._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

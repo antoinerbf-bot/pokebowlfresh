@@ -104,8 +104,12 @@ export function PosApplicationPage() {
         return;
       }
       playAlertSound();
-      await loadOrders();
-      setSelectedOrder(data.order as any);
+      const created = data.order as Order;
+      // Affichage immédiat dans la modale et la liste
+      setOrders((prev) => [created, ...prev.filter((o) => o.id !== created.id)]);
+      setSelectedOrder(created);
+      // Synchronisation en arrière-plan sans bloquer
+      loadOrders().catch(() => {});
     } catch (e: any) {
       alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
     } finally {
@@ -134,11 +138,32 @@ export function PosApplicationPage() {
     }
   };
 
-  // Chargement des commandes
+  // Chargement des commandes (Double stratégie : API REST directe puis RPC)
   const loadOrders = async () => {
     try {
-      const res = await getPosOrders({ data: { pin } });
-      const newOrders = res.orders;
+      let newOrders: Order[] | null = null;
+
+      // 1. Essayer l'API REST directe /api/pos-orders
+      try {
+        const resRest = await fetch("/api/pos-orders", {
+          headers: { Accept: "application/json" },
+          cache: "no-store",
+        });
+        if (resRest.ok) {
+          const json = await resRest.json();
+          if (json.success && Array.isArray(json.orders)) {
+            newOrders = json.orders;
+          }
+        }
+      } catch (err) {
+        console.warn("[POS] Erreur REST /api/pos-orders, fallback RPC:", err);
+      }
+
+      // 2. Fallback createServerFn
+      if (!newOrders) {
+        const res = await getPosOrders({ data: { pin } });
+        newOrders = res.orders;
+      }
 
       // Détecter nouvelles commandes payées non encore vues
       if (knownOrderIds.current.size > 0) {
@@ -154,10 +179,8 @@ export function PosApplicationPage() {
 
       newOrders.forEach((o) => knownOrderIds.current.add(o.id));
       setOrders(newOrders);
-
-      // Impression à la demande : pas de blocage réseau automatique
     } catch (e) {
-      console.error(e);
+      console.error("[POS] Erreur globale loadOrders:", e);
     } finally {
       setLoading(false);
     }
@@ -242,6 +265,29 @@ export function PosApplicationPage() {
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
     try {
+      // 1. Essayer API REST
+      try {
+        const res = await fetch("/api/pos-orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId, status }),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success) {
+            setOrders((prev) =>
+              prev.map((o) => (o.id === orderId ? { ...o, status } : o)),
+            );
+            if (selectedOrder && selectedOrder.id === orderId) {
+              setSelectedOrder((prev) => (prev ? { ...prev, status } : null));
+            }
+            loadOrders().catch(() => {});
+            return;
+          }
+        }
+      } catch {}
+
+      // 2. Fallback serverFn
       await setPosOrderStatus({ data: { pin, orderId, status } });
       await loadOrders();
       if (selectedOrder && selectedOrder.id === orderId) {

@@ -1,4 +1,4 @@
-import { r as createMiddleware } from "./@tanstack/react-start+[...].mjs";
+import { n as createMiddleware } from "./@tanstack/react-start+[...].mjs";
 //#region node_modules/@tanstack/start-client-core/dist/esm/createStart.js
 function dedupeSerializationAdapters(deduped, serializationAdapters) {
 	for (let i = 0, len = serializationAdapters.length; i < len; i++) {
