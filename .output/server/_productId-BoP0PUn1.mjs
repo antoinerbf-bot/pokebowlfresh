@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { _ as Navigate, g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-C6xQlhKH.mjs";
+import { t as Route } from "./_productId-B0eCj26f.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
-import { K as ArrowLeft, V as Check, _ as Plus, a as TriangleAlert, l as Sparkles, p as ShieldCheck, u as ShoppingCart, x as Minus } from "./_libs/lucide-react.mjs";
-import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-DYEnYuHn.mjs";
+import { S as Minus, U as Check, X as ArrowLeft, a as TriangleAlert, l as Sparkles, p as ShieldCheck, u as ShoppingCart, v as Plus } from "./_libs/lucide-react.mjs";
+import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-CbaHsHJj.mjs";
 import { t as useStock } from "./_ssr/useStock-DoU_V0f7.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-BGurB37i.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-BoP0PUn1.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {

@@ -6,47 +6,13 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
-import { G as ArrowRight, N as Clock, P as CircleCheck, _ as Plus, d as ShoppingBag, i as Truck, l as Sparkles, o as Trash2, t as X, x as Minus } from "../_libs/lucide-react.mjs";
+import { I as CircleCheck, P as Clock, S as Minus, Y as ArrowRight, d as ShoppingBag, i as Truck, l as Sparkles, o as Trash2, t as X, v as Plus } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DYEnYuHn.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CbaHsHJj.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
-var tiramisu_nutella_default = "/assets/tiramisu-nutella-Cq3EXNhL.jpg";
-var drink_coca_cola_default = "/assets/drink-coca-cola-D83foBG1.jpg";
-var drink_eau_plate_default = "/assets/drink-eau-plate-B76aUhfx.jpg";
-var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-CayWkPyq.jpg";
-var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
-var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
-var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
-var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B-7nVWlP.jpg";
-var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CRZGKMUK.jpg";
-var images = {
-	"sweet-chicken": bowl_sweet_chicken_default,
-	"scampis-royaux": bowl_scampis_default,
-	"saumon-wasabi": bowl_saumon_default,
-	"spicy-chicken": bowl_spicy_chicken_default,
-	"crousty-chicken-curry": bowl_crousty_curry_default,
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-BliNigHA.jpg",
-	"sur-mesure": bowl_saumon_default
-};
-function DishImage({ dishId, alt, className = "", priority = false }) {
-	const src = images[dishId];
-	if (!src) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
-		children: "Photo produit"
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-		src,
-		alt,
-		className: `h-full w-full object-cover ${className}`,
-		loading: priority ? "eager" : "lazy",
-		decoding: "async",
-		fetchPriority: priority ? "high" : "auto"
-	});
-}
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
 }
@@ -124,6 +90,40 @@ var ScrollBar = import_react.forwardRef(({ className, orientation = "vertical", 
 	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" })
 }));
 ScrollBar.displayName = ScrollAreaScrollbar.displayName;
+var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
+var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
+var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
+var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B-7nVWlP.jpg";
+var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CRZGKMUK.jpg";
+var images = {
+	"sweet-chicken": bowl_sweet_chicken_default,
+	"scampis-royaux": bowl_scampis_default,
+	"saumon-wasabi": bowl_saumon_default,
+	"spicy-chicken": bowl_spicy_chicken_default,
+	"crousty-chicken-curry": bowl_crousty_curry_default,
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-BliNigHA.jpg",
+	"sur-mesure": bowl_saumon_default
+};
+function DishImage({ dishId, alt, className = "", priority = false }) {
+	const src = images[dishId];
+	if (!src) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: `flex items-center justify-center rounded-2xl bg-[#eee8dc] text-[10px] font-bold uppercase tracking-[0.12em] text-[#7d8b83] ${className}`,
+		children: "Photo produit"
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src,
+		alt,
+		className: `h-full w-full object-cover ${className}`,
+		loading: priority ? "eager" : "lazy",
+		decoding: "async",
+		fetchPriority: priority ? "high" : "auto"
+	});
+}
+var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
+var tiramisu_nutella_default = "/assets/tiramisu-nutella-Cq3EXNhL.jpg";
+var drink_coca_cola_default = "/assets/drink-coca-cola-D83foBG1.jpg";
+var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-CayWkPyq.jpg";
+var drink_eau_plate_default = "/assets/drink-eau-plate-B76aUhfx.jpg";
 var CROSS_SELL_ITEMS = [
 	{
 		id: "tira-spec",

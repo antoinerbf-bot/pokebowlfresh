@@ -169,6 +169,19 @@ var Bell = createLucideIcon("bell", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var BookOpen = createLucideIcon("book-open", [["path", {
+	d: "M12 7v14",
+	key: "1akyts"
+}], ["path", {
+	d: "M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z",
+	key: "ruj8y"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var BriefcaseBusiness = createLucideIcon("briefcase-business", [
 	["path", {
 		d: "M12 12h.01",
@@ -189,6 +202,34 @@ var BriefcaseBusiness = createLucideIcon("briefcase-business", [
 		y: "6",
 		rx: "2",
 		key: "i6l2r4"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Calendar = createLucideIcon("calendar", [
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "4",
+		rx: "2",
+		key: "1hopcy"
+	}],
+	["path", {
+		d: "M3 10h18",
+		key: "8toen8"
 	}]
 ]);
 /**
@@ -300,6 +341,28 @@ var CircleCheck = createLucideIcon("circle-check", [["circle", {
 	d: "m9 12 2 2 4-4",
 	key: "dzmm74"
 }]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var CircleQuestionMark = createLucideIcon("circle-question-mark", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["path", {
+		d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
+		key: "1u773s"
+	}],
+	["path", {
+		d: "M12 17h.01",
+		key: "p32p05"
+	}]
+]);
 /**
 * @license lucide-react v0.575.0 - ISC
 *
@@ -624,6 +687,46 @@ var Search = createLucideIcon("search", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Share2 = createLucideIcon("share-2", [
+	["circle", {
+		cx: "18",
+		cy: "5",
+		r: "3",
+		key: "gq8acd"
+	}],
+	["circle", {
+		cx: "6",
+		cy: "12",
+		r: "3",
+		key: "w7nqdw"
+	}],
+	["circle", {
+		cx: "18",
+		cy: "19",
+		r: "3",
+		key: "1xt0gg"
+	}],
+	["line", {
+		x1: "8.59",
+		x2: "15.42",
+		y1: "13.51",
+		y2: "17.49",
+		key: "47mynk"
+	}],
+	["line", {
+		x1: "15.41",
+		x2: "8.59",
+		y1: "6.51",
+		y2: "10.49",
+		key: "1n3mei"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var ShieldCheck = createLucideIcon("shield-check", [["path", {
 	d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
 	key: "oel41y"
@@ -881,4 +984,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { ExternalLink as A, ChefHat as B, Menu as C, Heart as D, Instagram as E, CircleCheckBig as F, ArrowRight as G, BriefcaseBusiness as H, CircleAlert as I, ArrowLeft as K, ChevronRight as L, CookingPot as M, Clock as N, Funnel as O, CircleCheck as P, ChevronLeft as R, MessageCircle as S, LoaderCircle as T, Bell as U, Check as V, Award as W, Plus as _, TriangleAlert as a, Navigation as b, Star as c, ShoppingBag as d, Shield as f, Printer as g, RefreshCw as h, Truck as i, CreditCard as j, Flame as k, Sparkles as l, Search as m, VolumeX as n, Trash2 as o, ShieldCheck as p, Volume2 as r, Store as s, X as t, ShoppingCart as u, Phone as v, MapPin as w, Minus as x, PhoneCall as y, ChevronDown as z };
+export { Flame as A, ChevronLeft as B, MessageCircle as C, Instagram as D, LoaderCircle as E, CircleQuestionMark as F, BriefcaseBusiness as G, ChefHat as H, CircleCheck as I, Award as J, BookOpen as K, CircleCheckBig as L, CreditCard as M, CookingPot as N, Heart as O, Clock as P, CircleAlert as R, Minus as S, MapPin as T, Check as U, ChevronDown as V, Calendar as W, ArrowLeft as X, ArrowRight as Y, Printer as _, TriangleAlert as a, PhoneCall as b, Star as c, ShoppingBag as d, Shield as f, RefreshCw as g, Search as h, Truck as i, ExternalLink as j, Funnel as k, Sparkles as l, Share2 as m, VolumeX as n, Trash2 as o, ShieldCheck as p, Bell as q, Volume2 as r, Store as s, X as t, ShoppingCart as u, Plus as v, Menu as w, Navigation as x, Phone as y, ChevronRight as z };

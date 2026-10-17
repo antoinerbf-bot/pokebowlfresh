@@ -4,7 +4,7 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { N as Clock, P as CircleCheck, T as LoaderCircle, c as Star, j as CreditCard, s as Store } from "../_libs/lucide-react.mjs";
+import { E as LoaderCircle, I as CircleCheck, M as CreditCard, P as Clock, c as Star, s as Store } from "../_libs/lucide-react.mjs";
 import { t as getOrderStatus } from "./checkout-CoBgyNFK.mjs";
 import { t as Route } from "./order.success-CtdheaId.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/order.success-DsbqYD7g.js

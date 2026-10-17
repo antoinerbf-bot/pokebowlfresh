@@ -6,9 +6,9 @@ import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { K as ArrowLeft, V as Check, _ as Plus, d as ShoppingBag, l as Sparkles, x as Minus } from "../_libs/lucide-react.mjs";
-import { i as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-DYEnYuHn.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BTGyWWeO.js
+import { S as Minus, U as Check, X as ArrowLeft, d as ShoppingBag, l as Sparkles, v as Plus } from "../_libs/lucide-react.mjs";
+import { i as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-CbaHsHJj.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BdiLmToU.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;

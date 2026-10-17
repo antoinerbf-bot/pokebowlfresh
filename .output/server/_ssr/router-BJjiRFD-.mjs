@@ -4,26 +4,29 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, p as lazyRouteComponent, s as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$18 } from "../_productId-C6xQlhKH.mjs";
-import { A as ExternalLink, F as CircleCheckBig, M as CookingPot, b as Navigation, f as Shield, g as Printer, h as RefreshCw, i as Truck, m as Search, n as VolumeX, r as Volume2, v as Phone } from "../_libs/lucide-react.mjs";
+import { t as Route$19 } from "../_productId-B0eCj26f.mjs";
+import { L as CircleCheckBig, N as CookingPot, _ as Printer, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, n as VolumeX, r as Volume2, x as Navigation, y as Phone } from "../_libs/lucide-react.mjs";
 import { c as createServerFn } from "./createServerFn-CIHAFgYl.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-DDoAwjFL.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as Route$19 } from "../_token-C8uf-EcS.mjs";
+import { t as BLOG_ARTICLES } from "./blogArticles-C0u_CRFa.mjs";
+import { t as Route$20 } from "../_slug-DXItFcD8.mjs";
+import { t as Route$21 } from "../_token-C8uf-EcS.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as getBancontactProPayment, c as getMolliePayment, d as loadAndGetEnv, i as getBancontactProApiKey, o as getCheckedFiles, r as getAllBankKeyCandidates, s as getMollieApiKey } from "./mollie.server-DnSXWin3.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, r as getOrderByDeliveryToken, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-DZ5h0Ksp.mjs";
-import { t as Route$20 } from "./order.success-CtdheaId.mjs";
+import { t as Route$22 } from "./order.success-CtdheaId.mjs";
 import { t as EscPosBuilder } from "./escpos-B7c8JtfE.mjs";
+import { t as FAQ_ITEMS } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CdIdzjCn.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BJjiRFD-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-C7WeyOMO.css";
+var styles_default = "/assets/styles-BWnmSmFH.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -111,7 +114,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$17 = createRootRouteWithContext()({
+var Route$18 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -169,7 +172,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$17.useRouteContext();
+	const { queryClient } = Route$18.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -191,13 +194,13 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$6 = () => import("./routes-D0ajCjhz.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-D_pdyoi6.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "FastFoodRestaurant",
 	"name": "Poke N Bowl Visé",
 	"image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
-	"telephone": "+32490000000",
+	"telephone": "+32491281456",
 	"url": "https://pokenbowl.be",
 	"address": {
 		"@type": "PostalAddress",
@@ -251,7 +254,19 @@ var RESTAURANT_SCHEMA = {
 		}
 	]
 };
-var Route$16 = createFileRoute("/")({
+var FAQ_SCHEMA = {
+	"@context": "https://schema.org",
+	"@type": "FAQPage",
+	"mainEntity": FAQ_ITEMS.map((item) => ({
+		"@type": "Question",
+		"name": item.q,
+		"acceptedAnswer": {
+			"@type": "Answer",
+			"text": item.a
+		}
+	}))
+};
+var Route$17 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -260,29 +275,32 @@ var Route$16 = createFileRoute("/")({
 		scripts: [{
 			type: "application/ld+json",
 			children: JSON.stringify(RESTAURANT_SCHEMA)
+		}, {
+			type: "application/ld+json",
+			children: JSON.stringify(FAQ_SCHEMA)
 		}]
 	}),
-	component: lazyRouteComponent($$splitComponentImporter$6, "component")
+	component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
-var $$splitComponentImporter$5 = () => import("./checkout-YvXJ1ADG.mjs");
-var Route$15 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
-var $$splitComponentImporter$4 = () => import("./commander-DSvxCNUH.mjs");
-var Route$14 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./contact-BtgKvkc7.mjs");
-var Route$13 = createFileRoute("/contact")({
+var $$splitComponentImporter$6 = () => import("./checkout-YvXJ1ADG.mjs");
+var Route$16 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
+var $$splitComponentImporter$5 = () => import("./commander-D_YjzHlA.mjs");
+var Route$15 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
+var $$splitComponentImporter$4 = () => import("./contact-BtgKvkc7.mjs");
+var Route$14 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
+	component: lazyRouteComponent($$splitComponentImporter$4, "component")
+});
+var $$splitComponentImporter$3 = () => import("./recrutement-BOmGs-pP.mjs");
+var Route$13 = createFileRoute("/recrutement")({
+	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./recrutement-BOmGs-pP.mjs");
-var Route$12 = createFileRoute("/recrutement")({
-	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
-	component: lazyRouteComponent($$splitComponentImporter$2, "component")
-});
-var $$splitComponentImporter$1 = () => import("./sur-mesure-BTGyWWeO.mjs");
-var Route$11 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./stocks-DArWQbmx.mjs");
-var Route$10 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
-var Route$9 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var $$splitComponentImporter$2 = () => import("./sur-mesure-BdiLmToU.mjs");
+var Route$12 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
+var $$splitComponentImporter$1 = () => import("./stocks-DArWQbmx.mjs");
+var Route$11 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+var Route$10 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -316,7 +334,7 @@ var Route$9 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: {
 		return new Response("Error", { status: 500 });
 	}
 } } } });
-var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+var Route$9 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
 	loadAndGetEnv();
 	const candidates = getAllBankKeyCandidates();
 	const bancontactKey = getBancontactProApiKey();
@@ -418,7 +436,7 @@ var Route$8 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: a
 		}
 	});
 } } } });
-var Route$7 = createFileRoute("/api/create-test-order")({ server: { handlers: {
+var Route$8 = createFileRoute("/api/create-test-order")({ server: { handlers: {
 	GET: async () => createHandler(),
 	POST: async () => createHandler()
 } } });
@@ -495,7 +513,7 @@ async function createHandler() {
 		});
 	}
 }
-var Route$6 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$7 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -530,7 +548,7 @@ var Route$6 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POS
 * GET /api/orders
 * Liste les commandes persistées.
 */
-var Route$5 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
+var Route$6 = createFileRoute("/api/orders")({ server: { handlers: { GET: async ({ request }) => {
 	const expected = process.env.ADMIN_SECRET;
 	if (!expected || request.headers.get("x-admin-secret") !== expected) return new Response("Unauthorized", { status: 401 });
 	const orders = await listOrdersFromStore();
@@ -542,7 +560,7 @@ var Route$5 = createFileRoute("/api/orders")({ server: { handlers: { GET: async 
 		}
 	});
 } } } });
-var Route$4 = createFileRoute("/api/pos-orders")({ server: { handlers: {
+var Route$5 = createFileRoute("/api/pos-orders")({ server: { handlers: {
 	GET: async () => {
 		try {
 			const orders = await listOrdersFromStore(100);
@@ -593,7 +611,7 @@ var Route$4 = createFileRoute("/api/pos-orders")({ server: { handlers: {
 		}
 	}
 } } });
-var Route$3 = createFileRoute("/api/track-order")({ server: { handlers: {
+var Route$4 = createFileRoute("/api/track-order")({ server: { handlers: {
 	GET: async ({ request }) => {
 		try {
 			const token = (new URL(request.url).searchParams.get("token") || "").trim();
@@ -702,6 +720,62 @@ var Route$3 = createFileRoute("/api/track-order")({ server: { handlers: {
 		}
 	}
 } } });
+var $$splitComponentImporter = () => import("./blog-DUl8KWlK.mjs");
+var BLOG_SCHEMA = {
+	"@context": "https://schema.org",
+	"@type": "Blog",
+	"name": "Le Mag Poké · Poke N Bowl Visé",
+	"description": "Guides nutrition, astuces bien-manger et recettes autour du Poké Bowl frais et de la cuisine saine à Visé en Belgique.",
+	"url": "https://pokenbowl.be/blog",
+	"publisher": {
+		"@type": "Organization",
+		"name": "Poke N Bowl Visé",
+		"url": "https://pokenbowl.be"
+	},
+	"blogPost": BLOG_ARTICLES.map((article) => ({
+		"@type": "BlogPosting",
+		"headline": article.title,
+		"description": article.summary,
+		"datePublished": article.isoDate,
+		"url": `https://pokenbowl.be/blog/${article.slug}`,
+		"author": {
+			"@type": "Person",
+			"name": article.author.name
+		}
+	}))
+};
+var Route$3 = createFileRoute("/blog/")({
+	head: () => ({
+		meta: [
+			{ title: "Le Mag Poké · Articles, Guides & Nutrition | Poke N Bowl Visé" },
+			{
+				name: "description",
+				content: "Découvrez nos articles et guides exclusifs : composition d'un poké bowl équilibré, bienfaits du saumon et de l'avocat, comparatif chirashi vs poké, et livraison à Visé."
+			},
+			{
+				property: "og:title",
+				content: "Le Mag Poké · Poke N Bowl Visé"
+			},
+			{
+				property: "og:description",
+				content: "Astuces nutrition, recettes et actualités saines et gourmandes à Visé."
+			},
+			{
+				property: "og:type",
+				content: "website"
+			},
+			{
+				property: "og:url",
+				content: "https://pokenbowl.be/blog"
+			}
+		],
+		scripts: [{
+			type: "application/ld+json",
+			children: JSON.stringify(BLOG_SCHEMA)
+		}]
+	}),
+	component: lazyRouteComponent($$splitComponentImporter, "component")
+});
 var getPosOrders = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(createSsrRpc("6df01f8264c863e15506dc49e8b2d2a94b806dd823923c9fc73a10634cf60562"));
 var setPosOrderStatus = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
@@ -2160,85 +2234,95 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 		return new Response("Printer queue unavailable", { status: 500 });
 	}
 } } } });
-var IndexRoute = Route$16.update({
+var IndexRoute = Route$17.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var CheckoutRoute = Route$15.update({
+var CheckoutRoute = Route$16.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var CommanderRoute = Route$14.update({
+var CommanderRoute = Route$15.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ContactRoute = Route$13.update({
+var ContactRoute = Route$14.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var RecrutementRoute = Route$12.update({
+var RecrutementRoute = Route$13.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var SurMesureRoute = Route$11.update({
+var SurMesureRoute = Route$12.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var AdminStocksRoute = Route$10.update({
+var AdminStocksRoute = Route$11.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiBancontactWebhookRoute = Route$9.update({
+var ApiBancontactWebhookRoute = Route$10.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiBankStatusRoute = Route$8.update({
+var ApiBankStatusRoute = Route$9.update({
 	id: "/api/bank-status",
 	path: "/api/bank-status",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiCreateTestOrderRoute = Route$7.update({
+var ApiCreateTestOrderRoute = Route$8.update({
 	id: "/api/create-test-order",
 	path: "/api/create-test-order",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiMollieWebhookRoute = Route$6.update({
+var ApiMollieWebhookRoute = Route$7.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiOrdersRoute = Route$5.update({
+var ApiOrdersRoute = Route$6.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiPosOrdersRoute = Route$4.update({
+var ApiPosOrdersRoute = Route$5.update({
 	id: "/api/pos-orders",
 	path: "/api/pos-orders",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var ApiTrackOrderRoute = Route$3.update({
+var ApiTrackOrderRoute = Route$4.update({
 	id: "/api/track-order",
 	path: "/api/track-order",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
-var OrderSuccessRoute = Route$20.update({
+var BlogIndexRoute = Route$3.update({
+	id: "/blog/",
+	path: "/blog/",
+	getParentRoute: () => Route$18
+});
+var BlogSlugRoute = Route$20.update({
+	id: "/blog/$slug",
+	path: "/blog/$slug",
+	getParentRoute: () => Route$18
+});
+var OrderSuccessRoute = Route$22.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
 var PosIndexRoute = Route$2.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$17
+	getParentRoute: () => Route$18
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -2255,30 +2339,32 @@ var rootRouteChildren = {
 	ApiOrdersRoute,
 	ApiPosOrdersRoute,
 	ApiTrackOrderRoute,
+	BlogSlugRoute,
 	OrderSuccessRoute,
-	ProductProductIdRoute: Route$18.update({
+	ProductProductIdRoute: Route$19.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	}),
-	TrackTokenRoute: Route$19.update({
+	TrackTokenRoute: Route$21.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	}),
+	BlogIndexRoute,
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$17
+		getParentRoute: () => Route$18
 	})
 };
-var routeTree = Route$17._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$18._addFileChildren(rootRouteChildren)._addFileTypes();
 var getRouter = () => {
 	const queryClient = new QueryClient();
 	return createRouter({
