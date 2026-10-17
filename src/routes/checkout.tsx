@@ -118,13 +118,23 @@ function CheckoutPage() {
         to: "/order/success",
         search: { orderId: result.orderId, method: "on_site" },
       });
-    } catch (err) {
-      console.error(err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Une erreur est survenue. Réessaie ou choisis « Payer sur place ».",
-      );
+    } catch (err: unknown) {
+      console.error("[Checkout] Échec de création de commande:", err);
+
+      // TanStack Start peut envelopper les erreurs serveur dans data/cause.
+      // Lire les formes courantes évite de cacher la cause derrière un message générique.
+      const candidate = err as {
+        message?: unknown;
+        data?: { message?: unknown; error?: unknown };
+        cause?: { message?: unknown };
+      };
+      const message =
+        (typeof candidate?.data?.message === "string" && candidate.data.message) ||
+        (typeof candidate?.cause?.message === "string" && candidate.cause.message) ||
+        (typeof candidate?.message === "string" && candidate.message) ||
+        (typeof candidate?.data?.error === "string" && candidate.data.error) ||
+        "Le serveur n’a pas pu créer la commande. Vérifiez la connexion puis réessayez. Si le problème persiste, consultez les journaux d’erreurs du serveur.";
+      setError(message);
       setLoading(false);
     }
   };
