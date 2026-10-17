@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-BWnmSmFH.css";
+var styles_default = "/assets/styles-CPcJUmA6.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -11523,7 +11523,7 @@ createServerFn({ method: "POST" }).validator(objectType({
 	await requestOrderReprint(data.orderId);
 	return { success: true };
 });
-createServerFn({ method: "POST" }).validator(objectType({
+var getOrderReceipts = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
 	orderId: stringType().min(1),
 	origin: stringType().optional()
@@ -11552,7 +11552,7 @@ createServerFn({ method: "POST" }).validator(objectType({
 		deliveryReceiptB64: toBase64(deliveryBytes)
 	};
 });
-createServerFn({ method: "POST" }).validator(objectType({
+var ackPosPrint = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
 	orderId: stringType().min(1),
 	success: booleanType(),
@@ -11751,31 +11751,6 @@ function PosApplicationPage() {
 	const initialOrdersLoaded = (0, import_react.useRef)(false);
 	const autoPrintInFlight = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
-	const handleCreateTestOrder = async () => {
-		setCreatingTestOrder(true);
-		try {
-			const data = await (await fetch("/api/create-test-order", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json"
-				}
-			})).json();
-			if (!data.success || !data.order) {
-				alert("Erreur : " + (data.error ?? "Échec création"));
-				return;
-			}
-			playAlertSound();
-			const created = data.order;
-			setOrders((prev) => [created, ...prev.filter((o) => o.id !== created.id)]);
-			setSelectedOrder(created);
-			loadOrders().catch(() => {});
-		} catch (e) {
-			alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
-		} finally {
-			setCreatingTestOrder(false);
-		}
-	};
 	const playAlertSound = () => {
 		if (!config.soundEnabled) return;
 		try {
@@ -11816,15 +11791,23 @@ function PosApplicationPage() {
 				"awaiting_pickup",
 				"awaiting_delivery"
 			];
-			if ((initialOrdersLoaded.current ? newOrders.filter((o) => {
+			const newlyPrintable = initialOrdersLoaded.current ? newOrders.filter((o) => {
 				const previousStatus = knownOrderStatuses.current.get(o.id);
 				const becamePrintable = printableStatuses.includes(o.status) && (!previousStatus || !printableStatuses.includes(previousStatus));
 				const notAlreadyPrinted = o.printStatus !== "printed";
 				return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
-			}) : []).length > 0) playAlertSound();
+			}) : [];
+			if (newlyPrintable.length > 0) playAlertSound();
 			newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
 			initialOrdersLoaded.current = true;
 			setOrders(newOrders);
+			for (const order of newlyPrintable) {
+				if (autoPrintInFlight.current.has(order.id)) continue;
+				autoPrintInFlight.current.add(order.id);
+				handleExecutePrint(order, true).finally(() => {
+					autoPrintInFlight.current.delete(order.id);
+				});
+			}
 		} catch (e) {
 			console.error("[POS] Erreur globale loadOrders:", e);
 		} finally {
@@ -11838,6 +11821,67 @@ function PosApplicationPage() {
 			return () => clearInterval(timer);
 		}
 	}, [isUnlocked, pin]);
+	const handleExecutePrint = async (order, silent = false) => {
+		setPrintingOrderId(order.id);
+		try {
+			const origin = window.location.origin;
+			const receipts = await getOrderReceipts({ data: {
+				pin,
+				orderId: order.id,
+				origin
+			} });
+			let successCount = 0;
+			let errorMsg = "";
+			if (config.autoPrintKitchen && receipts.kitchenReceiptB64) {
+				const resKitchen = await sendReceiptToPrinter(receipts.kitchenReceiptB64, config);
+				if (resKitchen.success) successCount++;
+				else errorMsg += `[Cuisine] ${resKitchen.message} `;
+			}
+			if (config.autoPrintDelivery && receipts.deliveryReceiptB64) {
+				const resDelivery = await sendReceiptToPrinter(receipts.deliveryReceiptB64, config);
+				if (resDelivery.success) successCount++;
+				else errorMsg += `[Livreur] ${resDelivery.message} `;
+			}
+			const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
+			const isOk = totalExpected > 0 && successCount === totalExpected;
+			if (totalExpected === 0) errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
+			else if (successCount < totalExpected && !errorMsg) errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
+			await ackPosPrint({ data: {
+				pin,
+				orderId: order.id,
+				success: isOk,
+				error: isOk ? void 0 : errorMsg
+			} });
+			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+			if (isOk) {
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Commande ${order.id} : tous les tickets imprimés.`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				if (!silent) alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
+			} else {
+				const partial = successCount > 0 ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).` : "";
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Échec/partiel ${order.id} : ${errorMsg}`,
+					type: "err"
+				}, ...prev.slice(0, 30)]);
+				if (!silent) alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
+			}
+		} catch (err) {
+			console.error(err);
+			await ackPosPrint({ data: {
+				pin,
+				orderId: order.id,
+				success: false,
+				error: err?.message ?? "Erreur inattendue"
+			} });
+		} finally {
+			setPrintingOrderId(null);
+			loadOrders();
+		}
+	};
 	const handleManualReprint = async (orderId) => {
 		if (!(orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null))) {
 			alert("Commande introuvable.");
@@ -11883,150 +11927,6 @@ function PosApplicationPage() {
 		} catch (e) {
 			alert("Erreur de mise à jour du statut.");
 		}
-	};
-	const printThermalTicket = async (order, isTest = false) => {
-		if (!order && !isTest) return;
-		let qrData = "";
-		const token = order?.deliveryToken || order?.id;
-		if (token) {
-			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${token}`;
-			try {
-				qrData = await import_lib.toDataURL(trackUrl, {
-					errorCorrectionLevel: "H",
-					margin: 4,
-					width: 280,
-					color: {
-						dark: "#000000",
-						light: "#ffffff"
-					}
-				});
-			} catch (err) {
-				console.warn("QR Code local gen error", err);
-			}
-		}
-		setActivePrintOrder(order);
-		setPrintQrDataUrl(qrData);
-		const html = isTest ? `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Test Impression - Poke N Bowl</title>
-  <style>
-    @page { size: 80mm auto; margin: 0; }
-    @media print {
-      body { width: 72mm; margin: 0 auto; padding: 2mm 0; }
-      .no-print { display: none !important; }
-    }
-    body { font-family: 'Courier New', Courier, monospace; width: 72mm; margin: 0 auto; padding: 10px; font-size: 14px; text-align: center; color: #000; background: #fff; }
-    h1 { font-size: 19px; margin: 0 0 4px 0; font-weight: 900; }
-    hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
-    .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
-  </style>
-</head>
-<body>
-  <div class="no-print">
-    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER SUR VOTRE IMPRIMANTE</button>
-  </div>
-  <h1>POKE N BOWL VISE</h1>
-  <p>TEST IMPRIMANTE REUSSI</p>
-  <hr>
-  <p>Date : ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}</p>
-  <p>Epson TM-m30II Connectee !</p>
-  <hr>
-  <p>Pret pour les commandes.</p>
-  <br><br>.
-</body>
-</html>` : `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Ticket Commande ${order?.id}</title>
-  <style>
-    @page { size: 80mm auto; margin: 0; }
-    @media print {
-      body { width: 72mm; margin: 0 auto; padding: 2mm 0; }
-      .no-print { display: none !important; }
-    }
-    body { font-family: 'Courier New', Courier, monospace; width: 72mm; margin: 0 auto; padding: 8px; font-size: 13px; color: #000; background: #fff; line-height: 1.3; }
-    .center { text-align: center; }
-    h1 { font-size: 20px; margin: 0 0 2px 0; font-weight: 900; letter-spacing: 1px; }
-    h2 { font-size: 16px; margin: 4px 0; font-weight: 900; }
-    .bold { font-weight: bold; }
-    hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
-    .item { display: flex; justify-content: space-between; font-weight: bold; margin: 4px 0; }
-    .topping { font-size: 11px; padding-left: 10px; color: #222; }
-    .qr { margin-top: 10px; text-align: center; }
-    .qr img { width: 140px; height: 140px; display: block; margin: 4px auto; }
-    .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
-  </style>
-</head>
-<body>
-  <div class="no-print">
-    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER SUR VOTRE IMPRIMANTE</button>
-  </div>
-  <div class="center">
-    <h1>POKE N BOWL</h1>
-    <p>Rue Haute 38, 4600 Vise</p>
-    <p>Tel: 0491 28 14 56</p>
-    <hr>
-    <h2>${order?.customer.fulfillment === "delivery" ? "*** TICKET LIVRAISON ***" : "*** TICKET RETRAIT ***"}</h2>
-    <p class="bold">COMMANDE : ${order?.id}</p>
-    <p>Horaire : ${order?.customer.requestedTime}</p>
-  </div>
-  <hr>
-  <p><span class="bold">Client :</span> ${order?.customer.name}</p>
-  <p><span class="bold">Tel    :</span> ${order?.customer.phone}</p>
-  ${order?.customer.fulfillment === "delivery" ? `<p><span class="bold">Adresse:</span> ${order.customer.address || ""}</p>
-         <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>` : ""}
-  ${order?.customer.notes ? `<p class="bold">Note   : ${order.customer.notes}</p>` : ""}
-  <hr>
-  <p class="bold">ARTICLES :</p>
-  ${order?.items.map((it) => `
-    <div class="item">
-      <span>${it.quantity}x ${it.name}</span>
-      <span>${(it.price * it.quantity).toFixed(2)} E</span>
-    </div>
-    ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
-  `).join("")}
-  <hr>
-  ${order?.customer.deliveryFee ? `<div class="item"><span>Frais de livraison</span><span>${order.customer.deliveryFee.toFixed(2)} EUR</span></div>` : ""}
-  <div class="item" style="font-size: 16px; margin-top: 4px;">
-    <span>TOTAL :</span>
-    <span>${order?.total.toFixed(2)} EUR</span>
-  </div>
-  <div class="center bold" style="margin-top: 6px;">
-    ${order?.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"}
-  </div>
-  ${qrData ? `
-    <hr>
-    <div class="qr">
-      <p style="font-size: 11px; font-weight: bold; margin: 0 0 2px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
-      <img src="${qrData}" alt="QR Code GPS">
-      <p style="font-size: 10px; color: #333; margin: 2px 0 0 0;">Itinéraire 1-clic livreur</p>
-    </div>
-  ` : ""}
-  <div class="center" style="margin-top: 10px;">
-    <p>Merci pour votre commande !</p>
-  </div>
-  <br><br>.
-</body>
-</html>`;
-		try {
-			const printWindow = window.open("", "_blank", "width=420,height=700");
-			if (printWindow) {
-				printWindow.document.open();
-				printWindow.document.write(html);
-				printWindow.document.close();
-				printWindow.focus();
-				setTimeout(() => {
-					printWindow.print();
-				}, 300);
-				return;
-			}
-		} catch {}
-		setTimeout(() => {
-			window.print();
-		}, 150);
 	};
 	const handleTestPrint = async () => {
 		if (testingPrinter) return;
@@ -12434,13 +12334,6 @@ function PosApplicationPage() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-3",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: handleCreateTestOrder,
-								disabled: creatingTestOrder,
-								className: "flex items-center gap-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3.5 py-2 text-xs font-black hover:bg-amber-500/30 active:scale-95 transition disabled:opacity-50",
-								title: "Créer une fausse commande de livraison avec QR Code GPS (Waze & Google Maps)",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "h-4 w-4 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: creatingTestOrder ? "Création..." : "+ Test Livraison (QR GPS)" })]
-							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								onClick: () => {
 									const updated = {
@@ -12908,24 +12801,15 @@ function PosApplicationPage() {
 									})
 								]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-2 gap-3 pt-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => printThermalTicket(selectedOrder),
-									className: "rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
-									title: "Lancer l'impression directe du ticket thermique 80mm avec QR Code",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), "Imprimer Ticket Direct"]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "pt-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: () => handleManualReprint(selectedOrder.id),
-									className: "rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 active:scale-95 cursor-pointer",
-									title: `Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }),
-										"Imprimer Réseau (",
-										config.printerIp,
-										")"
-									]
-								})]
+									disabled: printingOrderId === selectedOrder.id,
+									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+									title: "Imprimer via le chemin réseau validé de l’Epson",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), printingOrderId === selectedOrder.id ? "Envoi à l’imprimante…" : "Imprimer le ticket + QR"]
+								})
 							})
 						]
 					})
