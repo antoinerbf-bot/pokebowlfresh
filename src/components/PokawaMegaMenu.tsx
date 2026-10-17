@@ -611,6 +611,23 @@ export function PokawaMegaMenu({
                 )}
               </div>
             </div>
+
+            {/* Barre de pied du méga-menu style Pokawa */}
+            <div className="border-t border-[#E2D6C5] bg-[#F7F2EB] px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-4 text-[#766358] font-bold text-[11px]">
+                <span>🌱 Saumon frais découpé du matin</span>
+                <span>🥢 Riz sushi artisanal maison</span>
+                <span>🥑 100% Frais minute</span>
+              </div>
+              <Link
+                to="/blog"
+                onClick={onClose}
+                className="inline-flex items-center gap-1.5 font-black uppercase tracking-wider text-[#ff705f] hover:text-[#2C1D16] transition text-[11px]"
+              >
+                <span>Découvrir Le Mag Poké & Nutrition</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
           </div>
         </motion.div>
       )}

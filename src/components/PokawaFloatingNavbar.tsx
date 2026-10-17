@@ -72,6 +72,20 @@ export function PokawaFloatingNavbar() {
           </div>
 
           <a
+            href="#composer"
+            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
+          >
+            <span>Sur-Mesure</span>
+          </a>
+
+          <Link
+            to="/blog"
+            className="text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
+          >
+            Le Mag
+          </Link>
+
+          <a
             href="#valeurs"
             className="text-[11px] font-black uppercase tracking-[0.14em] hover:text-[#ff705f] transition"
           >
@@ -240,6 +254,18 @@ export function PokawaFloatingNavbar() {
                 Sur-mesure
               </span>
             </a>
+
+            <Link
+              to="/blog"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between rounded-2xl bg-white p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm active:scale-98 transition"
+            >
+              <span className="flex items-center gap-2.5">
+                <span className="text-base">📖</span>
+                <span>Le Mag Poké · Articles</span>
+              </span>
+              <span className="text-[10px] font-bold text-[#ff705f]">Conseils & SEO →</span>
+            </Link>
 
             <a
               href="#valeurs"

@@ -22,13 +22,15 @@ import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
 import { SocialProofBanner } from "@/components/SocialProofBanner";
 import { MobileAppStickyBar } from "@/components/MobileAppStickyBar";
 import { PokawaCategoriesCarousel } from "@/components/PokawaCategoriesCarousel";
+import { PokawaMagSection } from "@/components/PokawaMagSection";
+import { FaqNutritionSection, FAQ_ITEMS } from "@/components/FaqNutritionSection";
 
 const RESTAURANT_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "FastFoodRestaurant",
   "name": "Poke N Bowl Visé",
   "image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
-  "telephone": "+32490000000",
+  "telephone": "+32491281456",
   "url": "https://pokenbowl.be",
   "address": {
     "@type": "PostalAddress",
@@ -66,6 +68,19 @@ const RESTAURANT_SCHEMA = {
   ]
 };
 
+const FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.a,
+    },
+  })),
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -80,6 +95,10 @@ export const Route = createFileRoute("/")({
       {
         type: "application/ld+json",
         children: JSON.stringify(RESTAURANT_SCHEMA),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(FAQ_SCHEMA),
       },
     ],
   }),
@@ -121,31 +140,35 @@ function Reveal({
 }
 
 function Ticker() {
-  const items = Array.from({ length: 8 }).map((_, i) => (
+  const items = [
+    { icon: "🌱", text: "Saumon atlantique découpé du matin" },
+    { icon: "🥢", text: "Riz à sushi assaisonné maison" },
+    { icon: "🥑", text: "Avocats Hass mûrs à point" },
+    { icon: "🍗", text: "Gamme Chaude Crousty Chicken 11 €" },
+    { icon: "📍", text: "Centre de Visé · Avenue du Pont 12" },
+    { icon: "🛵", text: "Click & Collect express en 15 min" },
+  ];
+
+  const renderedItems = items.map((item, i) => (
     <span
       key={i}
-      className="mx-6 inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.16em] sm:text-[11px]"
+      className="mx-6 inline-flex items-center gap-2.5 text-[11px] font-black uppercase tracking-[0.16em] text-[#FAF4EB]"
     >
-      Poke N Bowl
-      <span className="text-[#ff705f]">✦</span>
-      Fresh Food Visé
-      <span className="text-[#ff705f]">✦</span>
-      Fait Minute
-      <span className="text-[#ff705f]">✦</span>
-      Crousty Chicken
-      <span className="text-[#ff705f]">✦</span>
+      <span className="text-sm">{item.icon}</span>
+      <span>{item.text}</span>
+      <span className="text-[#ff705f] font-bold text-xs">/</span>
     </span>
   ));
 
   return (
-    <div className="overflow-hidden bg-[#2C1D16] py-3.5 text-[#EADCC9] border-y border-[#462E23] shadow-sm">
+    <div className="overflow-hidden bg-[#1C120C] py-3.5 text-[#EADCC9] border-y border-[#3A261D] shadow-inner">
       <motion.div
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-        className="flex w-max whitespace-nowrap"
+        transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
+        className="flex w-max whitespace-nowrap select-none"
       >
-        {items}
-        {items}
+        {renderedItems}
+        {renderedItems}
       </motion.div>
     </div>
   );
@@ -188,13 +211,18 @@ function Index() {
         {/* ════════════════════ 3.5 PREUVE SOCIALE & RASSURANCE LOCALE VISÉ ════════════════════ */}
         <SocialProofBanner />
 
-        {/* ════════════════════ 4. LA CARTE GOURMANDE INTERACTIVE & FLUIDE (POKÉS -> CROUSTY -> SUR-MESURE -> DESSERTS/BOISSONS) ════════════════════ */}
+        {/* ════════════════════ 4. LA CARTE GOURMANDE INTERACTIVE & FLUIDE ════════════════════ */}
         <FluidInteractiveMenu />
 
         {/* ════════════════════ 5. NOS ENGAGEMENTS QUALITÉ (STYLE POKAWA) ════════════════════ */}
         <section id="valeurs" className="scroll-mt-12 bg-[#FAF6F0]/80 py-14 sm:py-20 border-b border-[#E2D6C5]">
           <PokawaBrandValues />
         </section>
+
+        {/* ════════════════════ 6. LE MAG POKÉ · ARTICLES & CONSEILS NUTRITION (STYLE POKAWA) ════════════════════ */}
+        <Reveal>
+          <PokawaMagSection />
+        </Reveal>
 
         {/* ════════════════════ 7. LES AVANTAGES COMMANDE DIRECTE ════════════════════ */}
         <Reveal>
@@ -204,6 +232,11 @@ function Index() {
         {/* ════════════════════ 8. LE MUR INSTAGRAM & ACTU RÉSEAUX ════════════════════ */}
         <Reveal>
           <PokawaInstagramWall />
+        </Reveal>
+
+        {/* ════════════════════ 8.5 FOIRE AUX QUESTIONS & RASSURANCE (STYLE POKAWA) ════════════════════ */}
+        <Reveal>
+          <FaqNutritionSection />
         </Reveal>
 
         {/* ════════════════════ 9. BANNIÈRE RECRUTEMENT ════════════════════ */}
@@ -391,21 +424,126 @@ function Index() {
         </section>
       </main>
 
-      {/* ════════════════════ FOOTER ════════════════════ */}
-      <footer className="bg-[#1C120C] px-4 py-10 pb-24 text-[#EADCC9] sm:px-6 sm:pb-10 lg:px-8 border-t border-[#352117]">
-        <div className="mx-auto flex max-w-[1340px] flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <Link to="/" className="flex items-center gap-3.5 transition hover:opacity-95 hover:scale-[1.02] duration-200">
-            <BrandLogo size="md" />
-          </Link>
-          <div className="flex flex-wrap gap-5 text-[10px] font-black uppercase tracking-[0.14em] text-[#EADCC9]/60">
-            <a href="#carte" className="transition hover:text-white">{t("nav.menu")}</a>
-            <a href="#composer" className="transition hover:text-white">Sur-Mesure</a>
-            <Link to="/commander" className="transition hover:text-white">{t("nav.order")}</Link>
-            <Link to="/recrutement" className="transition hover:text-white">{t("footer.recruit")}</Link>
-            <Link to="/contact" className="transition hover:text-white">{t("nav.contact")}</Link>
+      {/* ════════════════════ FOOTER ÉDITORIAL STYLE POKAWA ════════════════════ */}
+      <footer className="bg-[#1C120C] pt-16 pb-28 sm:pb-16 text-[#EADCC9] px-4 sm:px-6 lg:px-8 border-t border-[#352117]">
+        <div className="mx-auto max-w-[1340px]">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 pb-12 border-b border-white/10">
+            {/* Col 1 : Marque & Rassurance */}
+            <div className="space-y-4">
+              <Link to="/" className="inline-block transition hover:opacity-95">
+                <BrandLogo size="md" />
+              </Link>
+              <p className="text-xs text-[#EADCC9]/70 leading-relaxed font-medium">
+                Le spécialiste du Poké Bowl frais et du Crousty Chicken chaud en Basse-Meuse. Ingrédients nobles, découpe minute et emballages éco-responsables.
+              </p>
+              <div className="inline-flex items-center gap-2 rounded-2xl bg-white/5 border border-white/10 px-3.5 py-2 text-xs font-bold text-[#FAF4EB]">
+                <span className="text-amber-400">★ 4.9 / 5</span>
+                <span className="text-[#EADCC9]/60">· +350 avis Google à Visé</span>
+              </div>
+            </div>
+
+            {/* Col 2 : Notre Carte */}
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ff705f] mb-4">
+                Notre Carte
+              </h4>
+              <ul className="space-y-2.5 text-xs font-semibold text-[#EADCC9]/80">
+                <li>
+                  <a href="#carte" className="hover:text-white transition">Pokés Signatures</a>
+                </li>
+                <li>
+                  <a href="#carte" className="hover:text-white transition">Gamme Chaude Crousty (11 €)</a>
+                </li>
+                <li>
+                  <Link to="/sur-mesure" className="hover:text-white transition">Atelier Sur-Mesure</Link>
+                </li>
+                <li>
+                  <a href="#carte" className="hover:text-white transition">Tiramisus Maison Spéculoos</a>
+                </li>
+                <li>
+                  <a href="#carte" className="hover:text-white transition">Boissons Fraîches</a>
+                </li>
+                <li>
+                  <Link to="/commander" className="hover:text-white text-[#ff705f] font-bold transition">Commander en ligne →</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 3 : Le Mag Poké (SEO & Guides) */}
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ff705f] mb-4">
+                Le Mag Poké & Nutrition
+              </h4>
+              <ul className="space-y-2.5 text-xs font-semibold text-[#EADCC9]/80">
+                <li>
+                  <Link to="/blog/$slug" params={{ slug: "un-repas-healthy-et-gourmand" }} className="hover:text-white transition line-clamp-1">
+                    Un repas healthy et gourmand
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog/$slug" params={{ slug: "guide-poke-bowl-vise-liege" }} className="hover:text-white transition line-clamp-1">
+                    Guide Poké Bowl Visé & Liège
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog/$slug" params={{ slug: "bienfaits-saumon-avocat-omega3" }} className="hover:text-white transition line-clamp-1">
+                    Bienfaits saumon & avocat
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog/$slug" params={{ slug: "poke-bowl-vs-chirashi-vs-salade" }} className="hover:text-white transition line-clamp-1">
+                    Poké Bowl vs Chirashi vs Salade
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog/$slug" params={{ slug: "crousty-chicken-gamme-chaude" }} className="hover:text-white transition line-clamp-1">
+                    Gamme Chaude Crousty Chicken
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog" className="hover:text-white text-[#ff705f] font-bold transition">
+                    Tous les articles du Mag →
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 4 : Infos Restaurant Visé */}
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ff705f] mb-4">
+                Restaurant Visé
+              </h4>
+              <div className="space-y-2.5 text-xs text-[#EADCC9]/80 font-medium">
+                <p className="font-bold text-white">Avenue du Pont 12, 4600 Visé</p>
+                <p>📞 0491 28 14 56</p>
+                <p className="text-[11px] leading-relaxed text-[#EADCC9]/60">
+                  Lun - Ven : 12h00 – 14h00 · 17h00 – 21h00<br />
+                  Samedi : 18h00 – 21h00<br />
+                  Dimanche : Fermé
+                </p>
+                <div className="pt-2">
+                  <a
+                    href={MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-[11px] font-bold text-white hover:bg-white/20 transition"
+                  >
+                    <span>Itinéraire Google Maps 📍</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#EADCC9]/40">
-            © {new Date().getFullYear()} Poke N Bowl Visé · Tous droits réservés
+
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#EADCC9]/50 font-medium">
+            <div>
+              © {new Date().getFullYear()} Poke N Bowl Visé · Poké bowls frais & Crousty Chicken. Tous droits réservés.
+            </div>
+            <div className="flex gap-4">
+              <Link to="/contact" className="hover:text-white transition">Contact</Link>
+              <Link to="/recrutement" className="hover:text-white transition">Recrutement</Link>
+              <Link to="/blog" className="hover:text-white transition">Blog & SEO</Link>
+            </div>
           </div>
         </div>
       </footer>

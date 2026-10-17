@@ -200,22 +200,13 @@ export function PokawaHeroExact() {
         </motion.div>
       </AnimatePresence>
 
-      {/* ════════ CALLOUT DISCRET EN HAUT À DROITE ════════ */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`callout-${slide.id}`}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          className="absolute top-20 sm:top-24 right-4 sm:right-8 z-20 hidden md:flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md px-3.5 py-1.5 border border-white/20 text-white shadow-lg pointer-events-none"
-        >
-          <span className="text-base">{slide.ingredientCallout.emoji}</span>
-          <span className="text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
-            {slide.ingredientCallout.text}
-          </span>
-        </motion.div>
-      </AnimatePresence>
+      {/* ════════ CALLOUT DE RÉPUTATION & FRAÎCHEUR LOCALE EN HAUT À DROITE ════════ */}
+      <div className="absolute top-20 sm:top-24 right-4 sm:right-8 z-20 hidden md:flex items-center gap-2.5 rounded-full bg-black/45 backdrop-blur-md px-4 py-1.5 border border-white/20 text-white shadow-lg pointer-events-none">
+        <span className="text-amber-400 font-black text-xs">★ 4.9 / 5</span>
+        <span className="text-[10px] font-bold text-[#EADCC9]/90 tracking-wide">
+          Google · Fait minute à Visé
+        </span>
+      </div>
 
       {/* ════════ TYPOGRAPHIE ÉPURÉE, FLUIDE ET LIMPIDE STYLE POKAWA (SANS GROSSE ÉCRITURE GÊNANTE) ════════ */}
       <div className="absolute inset-x-0 bottom-10 sm:bottom-14 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
@@ -232,11 +223,11 @@ export function PokawaHeroExact() {
               {/* Badge discret crème biscuit */}
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EBDCCB] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16] shadow-md border border-[#D9C5AD]">
-                  <Sparkles className="h-3 w-3 stroke-[2.5] text-[#ff705f]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#ff705f]" />
                   {slide.badge}
                 </span>
-                <span className="text-[11px] font-black text-white/80 drop-shadow">
-                  {slide.isCrousty ? "Gamme Chaude" : "Fait minute à Visé"}
+                <span className="text-[11px] font-bold text-white/90 drop-shadow">
+                  {slide.isCrousty ? "Gamme Chaude" : "Découpe minute"}
                 </span>
               </div>
 

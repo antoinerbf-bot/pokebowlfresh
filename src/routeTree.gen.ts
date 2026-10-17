@@ -23,6 +23,8 @@ import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhoo
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
 import { Route as ApiPosOrdersRouteImport } from './routes/api/pos-orders'
 import { Route as ApiTrackOrderRouteImport } from './routes/api/track-order'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
 import { Route as PosIndexRouteImport } from './routes/pos/index'
 import { Route as ProductProductIdRouteImport } from './routes/product/$productId'
@@ -100,6 +102,16 @@ const ApiTrackOrderRoute = ApiTrackOrderRouteImport.update({
   path: '/api/track-order',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
   id: '/order/success',
   path: '/order/success',
@@ -146,9 +158,11 @@ export interface FileRoutesByFullPath {
   '/api/orders': typeof ApiOrdersRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
   '/api/track-order': typeof ApiTrackOrderRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/order/success': typeof OrderSuccessRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/track/$token': typeof TrackTokenRoute
+  '/blog/': typeof BlogIndexRoute
   '/pos/': typeof PosIndexRoute
   '/api/printer/ack': typeof ApiPrinterAckRoute
   '/api/printer/queue': typeof ApiPrinterQueueRoute
@@ -168,9 +182,11 @@ export interface FileRoutesByTo {
   '/api/orders': typeof ApiOrdersRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
   '/api/track-order': typeof ApiTrackOrderRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/order/success': typeof OrderSuccessRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/track/$token': typeof TrackTokenRoute
+  '/blog': typeof BlogIndexRoute
   '/pos': typeof PosIndexRoute
   '/api/printer/ack': typeof ApiPrinterAckRoute
   '/api/printer/queue': typeof ApiPrinterQueueRoute
@@ -191,9 +207,11 @@ export interface FileRoutesById {
   '/api/orders': typeof ApiOrdersRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
   '/api/track-order': typeof ApiTrackOrderRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/order/success': typeof OrderSuccessRoute
   '/product/$productId': typeof ProductProductIdRoute
   '/track/$token': typeof TrackTokenRoute
+  '/blog/': typeof BlogIndexRoute
   '/pos/': typeof PosIndexRoute
   '/api/printer/ack': typeof ApiPrinterAckRoute
   '/api/printer/queue': typeof ApiPrinterQueueRoute
@@ -215,9 +233,11 @@ export interface FileRouteTypes {
     | '/api/orders'
     | '/api/pos-orders'
     | '/api/track-order'
+    | '/blog/$slug'
     | '/order/success'
     | '/product/$productId'
     | '/track/$token'
+    | '/blog/'
     | '/pos/'
     | '/api/printer/ack'
     | '/api/printer/queue'
@@ -237,9 +257,11 @@ export interface FileRouteTypes {
     | '/api/orders'
     | '/api/pos-orders'
     | '/api/track-order'
+    | '/blog/$slug'
     | '/order/success'
     | '/product/$productId'
     | '/track/$token'
+    | '/blog'
     | '/pos'
     | '/api/printer/ack'
     | '/api/printer/queue'
@@ -259,9 +281,11 @@ export interface FileRouteTypes {
     | '/api/orders'
     | '/api/pos-orders'
     | '/api/track-order'
+    | '/blog/$slug'
     | '/order/success'
     | '/product/$productId'
     | '/track/$token'
+    | '/blog/'
     | '/pos/'
     | '/api/printer/ack'
     | '/api/printer/queue'
@@ -282,9 +306,11 @@ export interface RootRouteChildren {
   ApiOrdersRoute: typeof ApiOrdersRoute
   ApiPosOrdersRoute: typeof ApiPosOrdersRoute
   ApiTrackOrderRoute: typeof ApiTrackOrderRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ProductProductIdRoute: typeof ProductProductIdRoute
   TrackTokenRoute: typeof TrackTokenRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   PosIndexRoute: typeof PosIndexRoute
   ApiPrinterAckRoute: typeof ApiPrinterAckRoute
   ApiPrinterQueueRoute: typeof ApiPrinterQueueRoute
@@ -390,6 +416,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTrackOrderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/order/success': {
       id: '/order/success'
       path: '/order/success'
@@ -450,9 +490,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiOrdersRoute: ApiOrdersRoute,
   ApiPosOrdersRoute: ApiPosOrdersRoute,
   ApiTrackOrderRoute: ApiTrackOrderRoute,
+  BlogSlugRoute: BlogSlugRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ProductProductIdRoute: ProductProductIdRoute,
   TrackTokenRoute: TrackTokenRoute,
+  BlogIndexRoute: BlogIndexRoute,
   PosIndexRoute: PosIndexRoute,
   ApiPrinterAckRoute: ApiPrinterAckRoute,
   ApiPrinterQueueRoute: ApiPrinterQueueRoute,
