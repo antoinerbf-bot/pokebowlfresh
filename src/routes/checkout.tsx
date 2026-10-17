@@ -108,6 +108,12 @@ function CheckoutPage() {
         },
       });
 
+      if (result.type === "error") {
+        setError(result.message);
+        setLoading(false);
+        return;
+      }
+
       if (result.type === "online") {
         window.location.href = result.redirectUrl;
         return;
