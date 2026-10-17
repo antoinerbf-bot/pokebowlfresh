@@ -315,7 +315,8 @@ export const submitCheckout = createServerFn({ method: "POST" })
           ? error.message
           : "Erreur serveur pendant la création de la commande. Consultez les journaux de l’application.",
       };
-    };
+    }
+  });
 
 export const getOrderStatus = createServerFn({ method: "GET" })
   .validator(z.object({ orderId: z.string().min(1) }))
