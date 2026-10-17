@@ -186,6 +186,7 @@ function computeSubtotal(items: OrderItem[]): number {
 export const submitCheckout = createServerFn({ method: "POST" })
   .validator(checkoutSchema)
   .handler(async ({ data }) => {
+    console.info("[Checkout] submitCheckout started", { fulfillment: data.customer.fulfillment, paymentMethod: data.paymentMethod, itemCount: data.items.length });
     const items = canonicalizeItems(data.items);
     const subtotal = computeSubtotal(items);
     if (subtotal <= 0) {
