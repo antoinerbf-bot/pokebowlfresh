@@ -6741,14 +6741,18 @@ async function listOrdersFromStore(limit = 200) {
 	if (!isPostgresConfigured()) return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
 	try {
 		await ensureSchema();
-		return (await getSql()`
+		const rows = await getSql()`
       SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
              customer_json, items_json, total, currency,
              print_status, printed_at, print_claimed_at, print_attempts, print_error
       FROM orders
       ORDER BY created_at DESC
       LIMIT ${limit}
-    `).map(rowToOrder);
+    `;
+		const merged = /* @__PURE__ */ new Map();
+		for (const row of rows.map(rowToOrder)) merged.set(row.id, row);
+		for (const order of memoryOrders.values()) if (!merged.has(order.id)) merged.set(order.id, order);
+		return Array.from(merged.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
 	} catch (err) {
 		console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
 		return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
@@ -7142,92 +7146,105 @@ function computeSubtotal(items) {
 	return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema).handler(async ({ data }) => {
-	const items = canonicalizeItems(data.items);
-	const subtotal = computeSubtotal(items);
-	if (subtotal <= 0) throw new Error("Panier invalide");
-	const deliveryZone = data.customer.fulfillment === "delivery" ? getDeliveryZone(data.customer.postalCode ?? "") : null;
-	if (data.customer.fulfillment === "delivery") {
-		if (data.paymentMethod === "on_site") throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
-		if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
-		if (subtotal < deliveryZone.minimumOrder) throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
-		if (!data.customer.address?.trim() || !data.customer.city?.trim()) throw new Error("Adresse de livraison incomplète.");
-	}
-	const deliveryFee = deliveryZone ? subtotal >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
-	const total = subtotal + deliveryFee;
-	const orderId = generateOrderId();
-	const order = {
-		id: orderId,
-		deliveryToken: crypto.randomUUID().replace(/-/g, ""),
-		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-		status: data.paymentMethod === "online" ? "pending_payment" : data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup",
-		paymentMethod: data.paymentMethod,
-		customer: {
-			name: data.customer.name.trim(),
-			phone: data.customer.phone.trim(),
-			email: data.customer.email?.trim() || void 0,
-			notes: data.customer.notes?.trim() || void 0,
+	try {
+		console.info("[Checkout] submitCheckout started", {
 			fulfillment: data.customer.fulfillment,
-			requestedTime: data.customer.requestedTime,
-			address: data.customer.address?.trim() || void 0,
-			postalCode: data.customer.postalCode?.trim().replace(/\s+/g, "") || void 0,
-			city: data.customer.city?.trim() || void 0,
-			deliveryFee
-		},
-		items,
-		total,
-		currency: "EUR"
-	};
-	if (data.paymentMethod === "on_site") {
-		await upsertOrder(order);
-		return {
-			type: "on_site",
-			orderId: order.id,
-			total: order.total,
-			redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
-		};
-	}
-	if (isMollieConfigured() && !isBancontactProConfigured()) {
-		const webhookUrl = `${data.origin}/api/mollie-webhook`;
-		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
-		const payment = await createMolliePayment({
-			amountValue: total.toFixed(2),
-			description: `Poke N Bowl ${orderId}`,
-			redirectUrl,
-			webhookUrl,
-			metadata: { orderId: order.id }
+			paymentMethod: data.paymentMethod,
+			itemCount: data.items.length
 		});
-		order.molliePaymentId = payment.id;
+		const items = canonicalizeItems(data.items);
+		const subtotal = computeSubtotal(items);
+		if (subtotal <= 0) throw new Error("Panier invalide");
+		const deliveryZone = data.customer.fulfillment === "delivery" ? getDeliveryZone(data.customer.postalCode ?? "") : null;
+		if (data.customer.fulfillment === "delivery") {
+			if (data.paymentMethod === "on_site") throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
+			if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
+			if (subtotal < deliveryZone.minimumOrder) throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+			if (!data.customer.address?.trim() || !data.customer.city?.trim()) throw new Error("Adresse de livraison incomplète.");
+		}
+		const deliveryFee = deliveryZone ? subtotal >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
+		const total = subtotal + deliveryFee;
+		const orderId = generateOrderId();
+		const order = {
+			id: orderId,
+			deliveryToken: crypto.randomUUID().replace(/-/g, ""),
+			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+			status: data.paymentMethod === "online" ? "pending_payment" : data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup",
+			paymentMethod: data.paymentMethod,
+			customer: {
+				name: data.customer.name.trim(),
+				phone: data.customer.phone.trim(),
+				email: data.customer.email?.trim() || void 0,
+				notes: data.customer.notes?.trim() || void 0,
+				fulfillment: data.customer.fulfillment,
+				requestedTime: data.customer.requestedTime,
+				address: data.customer.address?.trim() || void 0,
+				postalCode: data.customer.postalCode?.trim().replace(/\s+/g, "") || void 0,
+				city: data.customer.city?.trim() || void 0,
+				deliveryFee
+			},
+			items,
+			total,
+			currency: "EUR"
+		};
+		if (data.paymentMethod === "on_site") {
+			await upsertOrder(order);
+			return {
+				type: "on_site",
+				orderId: order.id,
+				total: order.total,
+				redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
+			};
+		}
+		if (isMollieConfigured() && !isBancontactProConfigured()) {
+			const webhookUrl = `${data.origin}/api/mollie-webhook`;
+			const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
+			const payment = await createMolliePayment({
+				amountValue: total.toFixed(2),
+				description: `Poke N Bowl ${orderId}`,
+				redirectUrl,
+				webhookUrl,
+				metadata: { orderId: order.id }
+			});
+			order.molliePaymentId = payment.id;
+			await upsertOrder(order);
+			const payUrl = payment._links?.checkout?.href;
+			if (!payUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
+			return {
+				type: "online",
+				orderId: order.id,
+				total: order.total,
+				molliePaymentId: payment.id,
+				redirectUrl: payUrl
+			};
+		}
+		const webhookUrl = `${data.origin}/api/bancontact-webhook`;
+		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
+		const payment = await createBancontactProPayment({
+			amountEur: total,
+			description: `Poke N Bowl ${orderId}`,
+			reference: order.id,
+			returnUrl: redirectUrl,
+			callbackUrl: webhookUrl
+		});
+		order.molliePaymentId = `bancontact:${payment.paymentId}`;
 		await upsertOrder(order);
-		const payUrl = payment._links?.checkout?.href;
-		if (!payUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
+		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
+		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
 		return {
 			type: "online",
 			orderId: order.id,
 			total: order.total,
-			molliePaymentId: payment.id,
+			molliePaymentId: payment.paymentId,
 			redirectUrl: payUrl
 		};
+	} catch (error) {
+		console.error("[Checkout] submitCheckout failed:", error);
+		return {
+			type: "error",
+			message: error instanceof Error && error.message ? error.message : "Erreur serveur pendant la création de la commande. Consultez les journaux de l’application."
+		};
 	}
-	const webhookUrl = `${data.origin}/api/bancontact-webhook`;
-	const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
-	const payment = await createBancontactProPayment({
-		amountEur: total,
-		description: `Poke N Bowl ${orderId}`,
-		reference: order.id,
-		returnUrl: redirectUrl,
-		callbackUrl: webhookUrl
-	});
-	order.molliePaymentId = `bancontact:${payment.paymentId}`;
-	await upsertOrder(order);
-	const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
-	if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
-	return {
-		type: "online",
-		orderId: order.id,
-		total: order.total,
-		molliePaymentId: payment.paymentId,
-		redirectUrl: payUrl
-	};
 });
 var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
 	let order = await getOrderFromStore(data.orderId);
@@ -7359,6 +7376,11 @@ function CheckoutPage() {
 				paymentMethod,
 				origin
 			} });
+			if (result.type === "error") {
+				setError(result.message);
+				setLoading(false);
+				return;
+			}
 			if (result.type === "online") {
 				window.location.href = result.redirectUrl;
 				return;
