@@ -321,7 +321,17 @@ export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
       ORDER BY created_at DESC
       LIMIT ${limit}
     `;
-    return rows.map(rowToOrder);
+    // PostgreSQL is the primary store, but include locally persisted orders too.
+    // This prevents an order saved locally from disappearing from the POS if the
+    // database insert failed or the DB is temporarily behind.
+    const merged = new Map<string, Order>();
+    for (const row of rows.map(rowToOrder)) merged.set(row.id, row);
+    for (const order of memoryOrders.values()) {
+      if (!merged.has(order.id)) merged.set(order.id, order);
+    }
+    return Array.from(merged.values())
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
   } catch (err) {
     console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
     return Array.from(memoryOrders.values())
