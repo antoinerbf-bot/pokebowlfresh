@@ -1213,7 +1213,6 @@ export function PosApplicationPage() {
                 {printingOrderId === selectedOrder.id ? "Envoi à l’imprimante…" : "Imprimer le ticket + QR"}
               </button>
             </div>
-            </div>
           </div>
         </div>
       )}
