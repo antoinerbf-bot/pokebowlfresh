@@ -1,5 +1,5 @@
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { G as BriefcaseBusiness, T as MapPin, X as ArrowLeft, b as PhoneCall } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/recrutement-BOmGs-pP.js
