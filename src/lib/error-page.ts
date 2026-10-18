@@ -1,4 +1,8 @@
-export function renderErrorPage(): string {
+export function renderErrorPage(error?: unknown): string {
+  const detail = error
+    ? String((error as any)?.stack || (error as any)?.message || error)
+    : "";
+
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -7,7 +11,7 @@ export function renderErrorPage(): string {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body { font: 15px/1.5 system-ui, -apple-system, sans-serif; background: #fafafa; color: #111; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 1.5rem; }
-      .card { max-width: 28rem; width: 100%; text-align: center; padding: 2rem; }
+      .card { max-width: 32rem; width: 100%; text-align: center; padding: 2rem; }
       h1 { font-size: 1.25rem; margin: 0 0 0.5rem; }
       p { color: #4b5563; margin: 0 0 1.5rem; }
       .actions { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
@@ -20,6 +24,7 @@ export function renderErrorPage(): string {
     <div class="card">
       <h1>This page didn't load</h1>
       <p>Something went wrong on our end. You can try refreshing or head back home.</p>
+      ${detail ? `<details style="margin-top:1.5rem;margin-bottom:1.5rem;text-align:left;font-size:11px;background:#f3f4f6;padding:0.75rem;border-radius:0.5rem;overflow:auto;max-height:16rem;"><summary style="cursor:pointer;font-weight:600;color:#374151;">Détails techniques (admin)</summary><pre style="margin-top:0.5rem;white-space:pre-wrap;color:#b91c1c;">${detail.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></details>` : ""}
       <div class="actions">
         <button class="primary" onclick="location.reload()">Try again</button>
         <a class="secondary" href="/">Go home</a>

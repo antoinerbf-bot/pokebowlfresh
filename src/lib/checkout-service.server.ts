@@ -22,6 +22,14 @@ import {
 import { allToppings, bowls, drinks, desserts } from "../lib/data";
 import { getDeliveryZone } from "../lib/delivery";
 
+export const orderItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  price: z.number().positive(),
+  quantity: z.number().int().positive(),
+  toppings: z.array(z.string()),
+});
+
 export const checkoutSchema = z.object({
   customer: z.object({
     name: z.string().min(2),

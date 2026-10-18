@@ -14,7 +14,7 @@ var errorMiddleware = createMiddleware().server(async ({ next, request }) => {
 			status: 500,
 			headers: { "content-type": "application/json; charset=utf-8" }
 		});
-		return new Response(renderErrorPage(), {
+		return new Response(renderErrorPage(error), {
 			status: 500,
 			headers: { "content-type": "text/html; charset=utf-8" }
 		});
