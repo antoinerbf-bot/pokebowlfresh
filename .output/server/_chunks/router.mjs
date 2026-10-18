@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-a5_8Lu6X.css";
+var styles_default = "/assets/styles-OM3KRJgh.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -12950,7 +12950,7 @@ function PosApplicationPage() {
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex flex-1 overflow-hidden",
+					className: "flex flex-1 min-h-0 overflow-hidden",
 					children: [
 						activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden",
@@ -13119,254 +13119,284 @@ function PosApplicationPage() {
 								})
 							})]
 						}),
-						activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex-1 p-8 max-w-2xl mx-auto overflow-y-auto space-y-6",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-2xl font-black",
-									children: "Configuration Matériel & POS"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-											className: "text-base font-black text-[#ff705f]",
-											children: "Mode d'Impression"
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "text-xs text-[#8ea39b]",
-											children: "Choisissez comment le POS envoie les tickets à votre imprimante :"
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "grid grid-cols-1 sm:grid-cols-2 gap-3",
+						activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex-1 min-h-0 w-full overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 pb-48",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "max-w-2xl mx-auto space-y-6",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "sticky top-0 z-30 flex items-center justify-between bg-[#0d1a16]/95 backdrop-blur-md py-3 px-4 -mx-4 border-b border-white/10 rounded-2xl shadow-xl",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+											className: "text-xl sm:text-2xl font-black text-white",
+											children: "Configuration Matériel & POS"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-[#8ea39b] mt-0.5",
+											children: "Imprimantes de caisse & réseau"
+										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 												type: "button",
-												onClick: () => {
-													const upd = {
-														...config,
-														printMode: "epos"
-													};
-													setConfig(upd);
-													savePrinterConfig(upd);
-												},
-												className: `p-4 rounded-xl border text-left transition cursor-pointer ${config.printMode !== "browser" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "flex items-center gap-2 font-black text-sm",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Réseau direct ePOS" })]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "text-[11px] mt-1.5 text-[#a5b4ae] leading-snug",
-													children: "Imprimante Epson connectée en Wi-Fi / Câble Ethernet à la box. Impression 100% silencieuse et automatique."
+												onClick: handleTestSystemPrint,
+												className: "rounded-xl bg-white/10 hover:bg-white/20 py-2 px-3 text-white font-bold text-xs transition border border-white/10 flex items-center gap-1.5",
+												title: "Imprimer un ticket de test 80mm",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "hidden sm:inline",
+													children: "Test Ticket"
 												})]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												type: "button",
 												onClick: () => {
-													const upd = {
-														...config,
-														printMode: "browser"
-													};
-													setConfig(upd);
-													savePrinterConfig(upd);
+													savePrinterConfig(config);
+													alert("✅ Configuration enregistrée avec succès !");
 												},
-												className: `p-4 rounded-xl border text-left transition cursor-pointer ${config.printMode === "browser" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "flex items-center gap-2 font-black text-sm",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Boîte Système (USB)" })]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "text-[11px] mt-1.5 text-[#a5b4ae] leading-snug",
-													children: "Imprimante reliée par câble USB à ce PC / Mac, ou utilisation de la fenêtre d'impression standard."
-												})]
+												className: "rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-2 px-4 text-white font-black text-xs transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-1.5",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "💾 Enregistrer" })
 											})]
-										})
-									]
-								}),
-								config.printMode !== "browser" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex items-center justify-between",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 												className: "text-base font-black text-[#ff705f]",
-												children: "Connexion Epson Réseau"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold",
-												children: "TM-m30II / TM-T20 / TM-T88"
-											})]
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "rounded-xl bg-amber-500/10 border border-amber-500/30 p-4 space-y-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center justify-between gap-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-xs font-black text-amber-300",
-													children: "🔒 Étape 1 : Autoriser l'imprimante dans Chrome"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-													href: `https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`,
-													target: "_blank",
-													rel: "noreferrer",
-													className: "inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shrink-0",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ouvrir l'autorisation" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
+												children: "Mode d'Impression Principal"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-xs text-[#8ea39b]",
+												children: "Choisissez comment le POS déclenche vos tickets de caisse :"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "grid grid-cols-1 sm:grid-cols-2 gap-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+													type: "button",
+													onClick: () => {
+														const upd = {
+															...config,
+															printMode: "browser"
+														};
+														setConfig(upd);
+														savePrinterConfig(upd);
+													},
+													className: `p-4 rounded-xl border text-left transition cursor-pointer ${config.printMode === "browser" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2 font-black text-sm",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ticket Direct / Boîte Système" })]
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-[11px] mt-1.5 text-[#a5b4ae] leading-snug",
+														children: "Format thermique 80mm avec QR Code. Utilise le pilote de l'imprimante (USB ou réseau Mac). Recommandé & infaillible."
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+													type: "button",
+													onClick: () => {
+														const upd = {
+															...config,
+															printMode: "epos"
+														};
+														setConfig(upd);
+														savePrinterConfig(upd);
+													},
+													className: `p-4 rounded-xl border text-left transition cursor-pointer ${config.printMode !== "browser" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-2 font-black text-sm",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Réseau direct ePOS XML" })]
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+														className: "text-[11px] mt-1.5 text-[#a5b4ae] leading-snug",
+														children: "Envoi silencieux par requête HTTP/HTTPS directe à l'adresse IP de l'Epson."
+													})]
 												})]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												className: "text-[11px] text-amber-200/90 leading-relaxed",
-												children: [
-													"Sur Google Chrome, les connexions locales HTTPS nécessitent d'autoriser une seule fois le certificat auto-signé de votre Epson. Cliquez sur ",
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "\"Ouvrir l'autorisation\"" }),
-													", puis cliquez sur ",
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "\"Paramètres avancés\"" }),
-													" puis ",
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "\"Continuer vers le site (non sécurisé)\"" }),
-													"."
-												]
-											})]
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "grid grid-cols-3 gap-3",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "col-span-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "text-base font-black text-[#ff705f]",
+													children: "Adresse Réseau de l'Imprimante"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold",
+													children: "Epson TM-m30II"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "rounded-xl bg-amber-500/10 border border-amber-500/30 p-4 space-y-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center justify-between gap-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-xs font-black text-amber-300",
+														children: "🔒 Étape Chrome : Autoriser le certificat local"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+														href: `https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`,
+														target: "_blank",
+														rel: "noreferrer",
+														className: "inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shrink-0",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ouvrir l'autorisation" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+													className: "text-[11px] text-amber-200/90 leading-relaxed",
+													children: [
+														"Cliquez sur ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "\"Ouvrir l'autorisation\"" }),
+														", puis dans l'avertissement Chrome cliquez sur ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "\"Paramètres avancés\"" }),
+														" puis ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "\"Continuer vers le site (non sécurisé)\"" }),
+														"."
+													]
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "grid grid-cols-3 gap-3",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "col-span-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+														className: "text-xs font-extrabold uppercase text-[#8ea39b]",
+														children: "Adresse IP de l'Epson"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+														type: "text",
+														value: config.printerIp,
+														onChange: (e) => setConfig({
+															...config,
+															printerIp: e.target.value
+														}),
+														className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
+														placeholder: "192.168.0.5"
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 													className: "text-xs font-extrabold uppercase text-[#8ea39b]",
-													children: "Adresse IP de l'Epson"
+													children: "Port ePOS"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-													type: "text",
-													value: config.printerIp,
+													type: "number",
+													value: config.printerPort,
 													onChange: (e) => setConfig({
 														...config,
-														printerIp: e.target.value
+														printerPort: Number(e.target.value)
 													}),
 													className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
-													placeholder: "192.168.0.5"
+													placeholder: "8043"
+												})] })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+														className: "text-white",
+														children: "💡 Trouver l'adresse IP réelle :"
+													}),
+													" Éteignez l'imprimante, maintenez ",
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "FEED" }),
+													" enfoncé et rallumez-la : elle imprime une bandelette avec son IP."
+												]
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-base font-black text-white",
+											children: "Tickets à générer"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "space-y-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+												className: "flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "checkbox",
+													checked: config.autoPrintKitchen,
+													onChange: (e) => {
+														const updated = {
+															...config,
+															autoPrintKitchen: e.target.checked
+														};
+														setConfig(updated);
+														savePrinterConfig(updated);
+													},
+													className: "h-4 w-4 rounded accent-[#ff705f]"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-sm font-bold text-white",
+													children: "Ticket Cuisine (Bon de préparation)"
 												})]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-												className: "text-xs font-extrabold uppercase text-[#8ea39b]",
-												children: "Port ePOS"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-												type: "number",
-												value: config.printerPort,
-												onChange: (e) => setConfig({
-													...config,
-													printerPort: Number(e.target.value)
-												}),
-												className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
-												placeholder: "8043"
-											})] })]
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5",
-											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-													className: "text-white",
-													children: "💡 Comment trouver l'adresse IP de votre Epson ?"
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
-												"Éteignez l'imprimante, maintenez le bouton ",
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "FEED" }),
-												" enfoncé puis appuyez sur l'interrupteur pour la rallumer. Relâchez le bouton : l'imprimante imprime automatiquement une bandelette indiquant son adresse IP sur votre réseau local."
-											]
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "pt-2 flex gap-3",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												onClick: () => {
-													savePrinterConfig(config);
-													alert("Configuration enregistrée.");
-												},
-												className: "flex-1 rounded-xl bg-[#ff705f] py-3 text-white font-black text-sm hover:bg-[#ff5a47] transition cursor-pointer",
-												children: "Enregistrer"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+												className: "flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "checkbox",
+													checked: config.autoPrintDelivery,
+													onChange: (e) => {
+														const updated = {
+															...config,
+															autoPrintDelivery: e.target.checked
+														};
+														setConfig(updated);
+														savePrinterConfig(updated);
+													},
+													className: "h-4 w-4 rounded accent-[#ff705f]"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-sm font-bold text-white",
+													children: "Ticket Livreur / Client (Avec QR Code GPS Waze)"
+												})]
+											})]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-base font-black text-white",
+											children: "Tests d'Impression"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "grid grid-cols-1 sm:grid-cols-2 gap-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												onClick: handleTestSystemPrint,
+												className: "flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 py-3.5 px-4 text-white font-black text-sm border border-white/10 transition cursor-pointer",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tester Ticket Démo (80mm)" })]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 												onClick: handleTestPrint,
 												disabled: testingPrinter,
-												className: "flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), testingPrinter ? "Test en cours…" : "Tester l'impression (Direct ePOS)"]
-											})]
-										})
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-											className: "text-base font-black text-white",
-											children: "Impression Système / USB"
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "text-xs text-[#8ea39b]",
-											children: "Déclenche l'impression instantanée via la boîte d'impression native (idéal pour imprimantes USB ou test rapide)."
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											onClick: handleTestSystemPrint,
-											className: "w-full flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 py-3 text-white font-black text-sm border border-white/10 transition cursor-pointer",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tester l'impression Système (Ticket démo)" })]
-										})
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "text-base font-black text-white",
-										children: "Tickets à générer automatiquement"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "space-y-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-											className: "flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-												type: "checkbox",
-												checked: config.autoPrintKitchen,
-												onChange: (e) => {
-													const updated = {
-														...config,
-														autoPrintKitchen: e.target.checked
-													};
-													setConfig(updated);
-													savePrinterConfig(updated);
-												},
-												className: "h-4 w-4 rounded accent-[#ff705f]"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-sm font-bold text-white",
-												children: "Ticket Cuisine (Bon de préparation)"
-											})]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-											className: "flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-												type: "checkbox",
-												checked: config.autoPrintDelivery,
-												onChange: (e) => {
-													const updated = {
-														...config,
-														autoPrintDelivery: e.target.checked
-													};
-													setConfig(updated);
-													savePrinterConfig(updated);
-												},
-												className: "h-4 w-4 rounded accent-[#ff705f]"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-sm font-bold text-white",
-												children: "Ticket Livreur / Client (Avec QR Code GPS)"
+												className: "flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3.5 px-4 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: testingPrinter ? "Test en cours…" : "Tester Réseau ePOS" })]
 											})]
 										})]
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "text-base font-black text-white",
-										children: "Journal d'impression direct"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "h-44 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl",
-										children: printLog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "text-[#6c7d76]",
-											children: "Aucune impression récente."
-										}) : printLog.map((log, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: log.type === "ok" ? "text-emerald-400" : "text-rose-400",
-											children: [
-												"[",
-												log.time,
-												"] ",
-												log.msg
-											]
-										}, idx))
-									})]
-								})
-							]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-base font-black text-white",
+											children: "Journal d'impression"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "h-36 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl",
+											children: printLog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-[#6c7d76]",
+												children: "Aucune impression récente."
+											}) : printLog.map((log, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: log.type === "ok" ? "text-emerald-400" : "text-rose-400",
+												children: [
+													"[",
+													log.time,
+													"] ",
+													log.msg
+												]
+											}, idx))
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-[#142822] border border-[#ff705f]/40 p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-xs text-[#8ea39b]",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+												className: "text-white block font-bold",
+												children: "Sauvegarde des réglages"
+											}), "Cliquez sur Enregistrer pour mémoriser ces réglages sur ce navigateur."]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => {
+												savePrinterConfig(config);
+												alert("✅ Configuration enregistrée avec succès !");
+											},
+											className: "rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-3 px-6 text-white font-black text-sm transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-2 shrink-0",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "💾 Enregistrer les Réglages" })
+										})]
+									})
+								]
+							})
 						})
 					]
 				}),
@@ -13543,10 +13573,10 @@ function PosApplicationPage() {
 								]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "pt-2 space-y-2",
+								className: "sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 space-y-2 rounded-b-3xl shadow-2xl",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: () => printThermalTicket(selectedOrder),
-									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
 									title: "Lancer l'impression directe du ticket thermique 80mm avec QR Code",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-5 h-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🖨️ Imprimer Ticket Caisse (Direct & QR)" })]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
