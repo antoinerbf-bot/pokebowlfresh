@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -526,7 +526,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$23 = createRootRouteWithContext()({
+var Route$24 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -584,7 +584,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$23.useRouteContext();
+	const { queryClient } = Route$24.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -5807,7 +5807,7 @@ var FAQ_SCHEMA = {
 		}
 	}))
 };
-var Route$22 = createFileRoute("/")({
+var Route$23 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -6441,7 +6441,7 @@ function getDeliveryZone(postalCode) {
 }
 //#endregion
 //#region src/routes/checkout.tsx
-var Route$21 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$22 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -7268,7 +7268,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$20 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$21 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#2C1D16] text-[#EADCC9]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -7788,7 +7788,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$19 = createFileRoute("/contact")({
+var Route$20 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -7929,7 +7929,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$18 = createFileRoute("/recrutement")({
+var Route$19 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -8046,7 +8046,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$17 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$18 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -8745,7 +8745,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$16 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$17 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -9520,7 +9520,7 @@ async function acknowledgePrint(orderId, success, errorMessage) {
 }
 //#endregion
 //#region src/routes/api/bancontact-webhook.ts
-var Route$15 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$16 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9616,7 +9616,7 @@ async function getMolliePayment(paymentId) {
 }
 //#endregion
 //#region src/routes/api/bank-status.ts
-var Route$14 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+var Route$15 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
 	loadAndGetEnv();
 	const candidates = getAllBankKeyCandidates();
 	const bancontactKey = getBancontactProApiKey();
@@ -9940,7 +9940,7 @@ async function processCheckout(data) {
 }
 //#endregion
 //#region src/routes/api/checkout.ts
-var Route$13 = createFileRoute("/api/checkout")({ server: { handlers: { POST: async ({ request }) => {
+var Route$14 = createFileRoute("/api/checkout")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const body = await request.json();
 		const parsed = checkoutSchema$1.safeParse(body);
@@ -9992,7 +9992,7 @@ var Route$13 = createFileRoute("/api/checkout")({ server: { handlers: { POST: as
 } } } });
 //#endregion
 //#region src/routes/api/create-test-order.ts
-var Route$12 = createFileRoute("/api/create-test-order")({ server: { handlers: {
+var Route$13 = createFileRoute("/api/create-test-order")({ server: { handlers: {
 	GET: async () => createHandler(),
 	POST: async () => createHandler()
 } } });
@@ -10071,7 +10071,7 @@ async function createHandler() {
 }
 //#endregion
 //#region src/routes/api/mollie-webhook.ts
-var Route$11 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$12 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -10100,6 +10100,96 @@ var Route$11 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { PO
 	} catch (e) {
 		console.error("[mollie-webhook]", e);
 		return new Response("Error", { status: 500 });
+	}
+} } } });
+//#endregion
+//#region src/routes/api/order-status.ts
+var Route$11 = createFileRoute("/api/order-status")({ server: { handlers: { GET: async ({ request }) => {
+	try {
+		const url = new URL(request.url);
+		const orderId = (url.searchParams.get("orderId") || url.searchParams.get("id") || "").trim();
+		if (!orderId) return new Response(JSON.stringify({
+			found: false,
+			error: "Identifiant de commande manquant."
+		}), {
+			status: 400,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+		let order = await getOrderFromStore(orderId);
+		if (order?.molliePaymentId && order.status === "pending_payment") if (order.molliePaymentId.startsWith("bancontact:")) {
+			const paymentId = order.molliePaymentId.slice(11);
+			try {
+				const payment = await getBancontactProPayment(paymentId);
+				if (payment.status === "SUCCEEDED") {
+					order = {
+						...order,
+						status: "paid"
+					};
+					await upsertOrder(order);
+				} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED" || payment.status === "VOIDED") {
+					order = {
+						...order,
+						status: payment.status === "EXPIRED" ? "expired" : "cancelled"
+					};
+					await upsertOrder(order);
+				}
+			} catch {}
+		} else try {
+			const payment = await getMolliePayment(order.molliePaymentId);
+			if (payment.status === "paid") {
+				order = {
+					...order,
+					status: "paid"
+				};
+				await upsertOrder(order);
+			} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
+				order = {
+					...order,
+					status: payment.status === "expired" ? "expired" : "cancelled"
+				};
+				await upsertOrder(order);
+			}
+		} catch {}
+		if (!order) return new Response(JSON.stringify({ found: false }), {
+			status: 200,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+		return new Response(JSON.stringify({
+			found: true,
+			order: {
+				id: order.id,
+				status: order.status,
+				paymentMethod: order.paymentMethod,
+				total: order.total,
+				customer: order.customer,
+				items: order.items,
+				createdAt: order.createdAt
+			}
+		}), {
+			status: 200,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+	} catch (error) {
+		console.error("[API order-status] Erreur:", error);
+		return new Response(JSON.stringify({
+			found: false,
+			error: error instanceof Error ? error.message : "Erreur interne"
+		}), {
+			status: 500,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
 	}
 } } } });
 //#endregion
@@ -10221,6 +10311,7 @@ var Route$8 = createFileRoute("/api/track-order")({ server: { handlers: {
 					items: (order.items || []).map((i) => ({
 						name: i.name,
 						quantity: i.quantity,
+						price: i.price,
 						toppings: i.toppings
 					}))
 				}
@@ -11193,18 +11284,66 @@ function OrderSuccessPage() {
 		let cancelled = false;
 		let attempts = 0;
 		const poll = async () => {
+			let fetchedOrder = null;
 			try {
-				const res = await getOrderStatus({ data: { orderId } });
-				if (!cancelled && res.found) {
-					setOrder(res.order);
-					if (res.order.status === "paid" || res.order.paymentMethod === "on_site") clearCart();
-					if (res.order.status !== "pending_payment") {
-						setLoading(false);
-						return;
-					}
+				const resRest = await fetch(`/api/order-status?orderId=${encodeURIComponent(orderId)}`, {
+					headers: { Accept: "application/json" },
+					cache: "no-store"
+				});
+				if (resRest.ok) {
+					const data = await resRest.json();
+					if (data.found && data.order) fetchedOrder = data.order;
 				}
+			} catch (err) {
+				console.warn("[OrderSuccess] Erreur REST /api/order-status:", err);
+			}
+			if (!fetchedOrder) try {
+				const resTrack = await fetch(`/api/track-order?token=${encodeURIComponent(orderId)}`, {
+					headers: { Accept: "application/json" },
+					cache: "no-store"
+				});
+				if (resTrack.ok) {
+					const data = await resTrack.json();
+					if (data.found && data.order) fetchedOrder = {
+						id: data.order.id,
+						status: data.order.status,
+						paymentMethod: data.order.paymentMethod,
+						total: data.order.total,
+						customer: {
+							name: data.order.customerName,
+							phone: data.order.customerPhone,
+							fulfillment: data.order.fulfillment,
+							requestedTime: data.order.requestedTime,
+							address: data.order.address,
+							postalCode: data.order.postalCode,
+							city: data.order.city,
+							deliveryFee: data.order.deliveryFee,
+							notes: data.order.notes
+						},
+						items: (data.order.items || []).map((it) => ({
+							name: it.name,
+							quantity: it.quantity,
+							price: it.price || 0,
+							toppings: it.toppings || []
+						}))
+					};
+				}
+			} catch (err) {
+				console.warn("[OrderSuccess] Erreur REST /api/track-order:", err);
+			}
+			if (!fetchedOrder) try {
+				const res = await getOrderStatus({ data: { orderId } });
+				if (res.found && res.order) fetchedOrder = res.order;
 			} catch (e) {
-				console.error(e);
+				console.error("[OrderSuccess] Erreur RPC getOrderStatus:", e);
+			}
+			if (!cancelled && fetchedOrder) {
+				setOrder(fetchedOrder);
+				if (fetchedOrder.status === "paid" || fetchedOrder.paymentMethod === "on_site") clearCart();
+				if (fetchedOrder.status !== "pending_payment") {
+					setLoading(false);
+					return;
+				}
 			}
 			if (!cancelled && attempts < 20) {
 				attempts += 1;
@@ -14174,100 +14313,105 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$22.update({
+var IndexRoute = Route$23.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var CheckoutRoute = Route$21.update({
+var CheckoutRoute = Route$22.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var CommanderRoute = Route$20.update({
+var CommanderRoute = Route$21.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var ContactRoute = Route$19.update({
+var ContactRoute = Route$20.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var RecrutementRoute = Route$18.update({
+var RecrutementRoute = Route$19.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var SurMesureRoute = Route$17.update({
+var SurMesureRoute = Route$18.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var AdminStocksRoute = Route$16.update({
+var AdminStocksRoute = Route$17.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var ApiBancontactWebhookRoute = Route$15.update({
+var ApiBancontactWebhookRoute = Route$16.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var ApiBankStatusRoute = Route$14.update({
+var ApiBankStatusRoute = Route$15.update({
 	id: "/api/bank-status",
 	path: "/api/bank-status",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var ApiCheckoutRoute = Route$13.update({
+var ApiCheckoutRoute = Route$14.update({
 	id: "/api/checkout",
 	path: "/api/checkout",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var ApiCreateTestOrderRoute = Route$12.update({
+var ApiCreateTestOrderRoute = Route$13.update({
 	id: "/api/create-test-order",
 	path: "/api/create-test-order",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
-var ApiMollieWebhookRoute = Route$11.update({
+var ApiMollieWebhookRoute = Route$12.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
+});
+var ApiOrderStatusRoute = Route$11.update({
+	id: "/api/order-status",
+	path: "/api/order-status",
+	getParentRoute: () => Route$24
 });
 var ApiOrdersRoute = Route$10.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var ApiPosOrdersRoute = Route$9.update({
 	id: "/api/pos-orders",
 	path: "/api/pos-orders",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var ApiTrackOrderRoute = Route$8.update({
 	id: "/api/track-order",
 	path: "/api/track-order",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var BlogIndexRoute = Route$7.update({
 	id: "/blog/",
 	path: "/blog/",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var BlogSlugRoute = Route$6.update({
 	id: "/blog/$slug",
 	path: "/blog/$slug",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$23
+	getParentRoute: () => Route$24
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -14282,6 +14426,7 @@ var rootRouteChildren = {
 	ApiCheckoutRoute,
 	ApiCreateTestOrderRoute,
 	ApiMollieWebhookRoute,
+	ApiOrderStatusRoute,
 	ApiOrdersRoute,
 	ApiPosOrdersRoute,
 	ApiTrackOrderRoute,
@@ -14290,27 +14435,27 @@ var rootRouteChildren = {
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$23
+		getParentRoute: () => Route$24
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$23
+		getParentRoute: () => Route$24
 	}),
 	BlogIndexRoute,
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$23
+		getParentRoute: () => Route$24
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$23
+		getParentRoute: () => Route$24
 	})
 };
-var routeTree = Route$23._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$24._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {

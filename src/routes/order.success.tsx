@@ -42,20 +42,85 @@ function OrderSuccessPage() {
 
     let attempts = 0;
     const poll = async () => {
+      let fetchedOrder: typeof order = null;
+
+      // 1. Appel direct REST ultra-fiable /api/order-status
       try {
-        const res = await getOrderStatus({ data: { orderId } });
-        if (!cancelled && res.found) {
-          setOrder(res.order);
-          if (res.order.status === "paid" || res.order.paymentMethod === "on_site") {
-            clearCart();
-          }
-          if (res.order.status !== "pending_payment") {
-            setLoading(false);
-            return;
+        const resRest = await fetch(`/api/order-status?orderId=${encodeURIComponent(orderId)}`, {
+          headers: { Accept: "application/json" },
+          cache: "no-store",
+        });
+        if (resRest.ok) {
+          const data = await resRest.json();
+          if (data.found && data.order) {
+            fetchedOrder = data.order;
           }
         }
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.warn("[OrderSuccess] Erreur REST /api/order-status:", err);
+      }
+
+      // 2. Fallback REST via /api/track-order
+      if (!fetchedOrder) {
+        try {
+          const resTrack = await fetch(`/api/track-order?token=${encodeURIComponent(orderId)}`, {
+            headers: { Accept: "application/json" },
+            cache: "no-store",
+          });
+          if (resTrack.ok) {
+            const data = await resTrack.json();
+            if (data.found && data.order) {
+              fetchedOrder = {
+                id: data.order.id,
+                status: data.order.status,
+                paymentMethod: data.order.paymentMethod,
+                total: data.order.total,
+                customer: {
+                  name: data.order.customerName,
+                  phone: data.order.customerPhone,
+                  fulfillment: data.order.fulfillment,
+                  requestedTime: data.order.requestedTime,
+                  address: data.order.address,
+                  postalCode: data.order.postalCode,
+                  city: data.order.city,
+                  deliveryFee: data.order.deliveryFee,
+                  notes: data.order.notes,
+                },
+                items: (data.order.items || []).map((it: any) => ({
+                  name: it.name,
+                  quantity: it.quantity,
+                  price: it.price || 0,
+                  toppings: it.toppings || [],
+                })),
+              };
+            }
+          }
+        } catch (err) {
+          console.warn("[OrderSuccess] Erreur REST /api/track-order:", err);
+        }
+      }
+
+      // 3. Fallback RPC createServerFn
+      if (!fetchedOrder) {
+        try {
+          const res = await getOrderStatus({ data: { orderId } });
+          if (res.found && res.order) {
+            fetchedOrder = res.order;
+          }
+        } catch (e) {
+          console.error("[OrderSuccess] Erreur RPC getOrderStatus:", e);
+        }
+      }
+
+      if (!cancelled && fetchedOrder) {
+        setOrder(fetchedOrder);
+        if (fetchedOrder.status === "paid" || fetchedOrder.paymentMethod === "on_site") {
+          clearCart();
+        }
+        if (fetchedOrder.status !== "pending_payment") {
+          setLoading(false);
+          return;
+        }
       }
 
       if (!cancelled && attempts < 20) {

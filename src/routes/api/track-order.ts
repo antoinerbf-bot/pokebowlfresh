@@ -59,6 +59,7 @@ export const Route = createFileRoute("/api/track-order")({
                 items: (order.items || []).map((i) => ({
                   name: i.name,
                   quantity: i.quantity,
+                  price: i.price,
                   toppings: i.toppings,
                 })),
               },

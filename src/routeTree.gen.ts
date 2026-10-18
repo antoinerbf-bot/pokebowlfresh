@@ -21,6 +21,7 @@ import { Route as ApiBankStatusRouteImport } from './routes/api/bank-status'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiCreateTestOrderRouteImport } from './routes/api/create-test-order'
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
+import { Route as ApiOrderStatusRouteImport } from './routes/api/order-status'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
 import { Route as ApiPosOrdersRouteImport } from './routes/api/pos-orders'
 import { Route as ApiTrackOrderRouteImport } from './routes/api/track-order'
@@ -93,6 +94,11 @@ const ApiMollieWebhookRoute = ApiMollieWebhookRouteImport.update({
   path: '/api/mollie-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOrderStatusRoute = ApiOrderStatusRouteImport.update({
+  id: '/api/order-status',
+  path: '/api/order-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOrdersRoute = ApiOrdersRouteImport.update({
   id: '/api/orders',
   path: '/api/orders',
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/create-test-order': typeof ApiCreateTestOrderRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
+  '/api/order-status': typeof ApiOrderStatusRoute
   '/api/orders': typeof ApiOrdersRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
   '/api/track-order': typeof ApiTrackOrderRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/create-test-order': typeof ApiCreateTestOrderRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
+  '/api/order-status': typeof ApiOrderStatusRoute
   '/api/orders': typeof ApiOrdersRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
   '/api/track-order': typeof ApiTrackOrderRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/create-test-order': typeof ApiCreateTestOrderRoute
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
+  '/api/order-status': typeof ApiOrderStatusRoute
   '/api/orders': typeof ApiOrdersRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
   '/api/track-order': typeof ApiTrackOrderRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/api/checkout'
     | '/api/create-test-order'
     | '/api/mollie-webhook'
+    | '/api/order-status'
     | '/api/orders'
     | '/api/pos-orders'
     | '/api/track-order'
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
     | '/api/checkout'
     | '/api/create-test-order'
     | '/api/mollie-webhook'
+    | '/api/order-status'
     | '/api/orders'
     | '/api/pos-orders'
     | '/api/track-order'
@@ -290,6 +301,7 @@ export interface FileRouteTypes {
     | '/api/checkout'
     | '/api/create-test-order'
     | '/api/mollie-webhook'
+    | '/api/order-status'
     | '/api/orders'
     | '/api/pos-orders'
     | '/api/track-order'
@@ -316,6 +328,7 @@ export interface RootRouteChildren {
   ApiCheckoutRoute: typeof ApiCheckoutRoute
   ApiCreateTestOrderRoute: typeof ApiCreateTestOrderRoute
   ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
+  ApiOrderStatusRoute: typeof ApiOrderStatusRoute
   ApiOrdersRoute: typeof ApiOrdersRoute
   ApiPosOrdersRoute: typeof ApiPosOrdersRoute
   ApiTrackOrderRoute: typeof ApiTrackOrderRoute
@@ -415,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMollieWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/order-status': {
+      id: '/api/order-status'
+      path: '/api/order-status'
+      fullPath: '/api/order-status'
+      preLoaderRoute: typeof ApiOrderStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/orders': {
       id: '/api/orders'
       path: '/api/orders'
@@ -508,6 +528,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCheckoutRoute: ApiCheckoutRoute,
   ApiCreateTestOrderRoute: ApiCreateTestOrderRoute,
   ApiMollieWebhookRoute: ApiMollieWebhookRoute,
+  ApiOrderStatusRoute: ApiOrderStatusRoute,
   ApiOrdersRoute: ApiOrdersRoute,
   ApiPosOrdersRoute: ApiPosOrdersRoute,
   ApiTrackOrderRoute: ApiTrackOrderRoute,
