@@ -83,11 +83,31 @@ function DeliveryTrackPage() {
     }
   };
 
+  const hasAddress = Boolean(order?.address && String(order.address).trim().length > 0);
+  const fullAddress = `${order?.address ?? ""}, ${order?.postalCode ?? ""} ${order?.city ?? ""}`.trim();
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
+  const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
+  const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
+
   useEffect(() => {
     fetchOrder();
     const interval = setInterval(fetchOrder, 10000);
     return () => clearInterval(interval);
   }, [token]);
+
+  // Redirection automatique optionnelle (si ?auto=waze ou ?auto=maps)
+  useEffect(() => {
+    if (typeof window !== "undefined" && order && fullAddress) {
+      const search = window.location.search;
+      const params = new URLSearchParams(search);
+      const auto = params.get("auto");
+      if (auto === "waze") {
+        window.location.href = wazeUrl;
+      } else if (auto === "maps") {
+        window.location.href = mapsUrl;
+      }
+    }
+  }, [order, fullAddress, wazeUrl, mapsUrl]);
 
   const handleStatusChange = async (newStatus: "delivering" | "completed") => {
     setUpdating(true);
@@ -150,26 +170,6 @@ function DeliveryTrackPage() {
       </div>
     );
   }
-
-  const hasAddress = Boolean(order.address && String(order.address).trim().length > 0);
-  const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
-  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
-  const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
-  const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
-
-  // Redirection automatique optionnelle (si ?auto=waze ou ?auto=maps)
-  useEffect(() => {
-    if (typeof window !== "undefined" && order && fullAddress) {
-      const search = window.location.search;
-      const params = new URLSearchParams(search);
-      const auto = params.get("auto");
-      if (auto === "waze") {
-        window.location.href = wazeUrl;
-      } else if (auto === "maps") {
-        window.location.href = mapsUrl;
-      }
-    }
-  }, [order, fullAddress, wazeUrl, mapsUrl]);
 
   return (
     <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
@@ -304,15 +304,15 @@ function DeliveryTrackPage() {
         {/* Contenu de la commande */}
         <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Articles ({order.items.length})</h2>
-            <span className="font-black text-sm">Total: {order.total.toFixed(2)} €</span>
+            <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Articles ({(order?.items || []).length})</h2>
+            <span className="font-black text-sm">Total: {Number(order?.total || 0).toFixed(2)} €</span>
           </div>
 
           <ul className="divide-y divide-black/5">
-            {order.items.map((item: any, idx: number) => (
+            {(order?.items || []).map((item: any, idx: number) => (
               <li key={idx} className="py-2.5">
                 <div className="flex justify-between font-bold text-sm">
-                  <span>{item.quantity}× {item.name}</span>
+                  <span>{item.quantity || 1}× {item.name}</span>
                 </div>
                 {item.toppings && item.toppings.length > 0 && (
                   <div className="mt-1 text-xs text-[#7a847e] pl-4 border-l-2 border-[#ff705f]/40 space-y-0.5">
