@@ -3,8 +3,8 @@ import { n as booleanType, o as objectType, r as enumType, s as stringType } fro
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, o as requestOrderReprint, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
 import { t as createServerRpc } from "./createServerRpc-CxD4EZ5P.mjs";
-import { n as buildDeliveryReceipt, r as buildKitchenReceipt } from "./escpos-B7c8JtfE.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-D8Wcryjp.js
+import { n as buildDeliveryReceipt, r as buildKitchenReceipt } from "./escpos-DM3KzaqQ.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-R7viazzQ.js
 function verifyPin(pin) {
 	const expectedPin = process.env.POS_PIN ?? "1234";
 	return !pin || pin === expectedPin || pin === "1234";

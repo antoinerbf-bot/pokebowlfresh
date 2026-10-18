@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/escpos-B7c8JtfE.js
+//#region node_modules/.nitro/vite/services/ssr/assets/escpos-DM3KzaqQ.js
 /**
 * Générateur de commandes binaires ESC/POS pour Epson TM-m30III
 * Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
@@ -185,5 +185,71 @@ function buildDeliveryReceipt(order, origin = "https://pokenbowl.be") {
 	b.feed(4).cut(true);
 	return b.toBytes();
 }
+/**
+* 3. TICKET COMMANDE COMPLET (OFFICIEL CUISINE & CLIENT)
+* Format unique et direct pour l'imprimante Epson ePOS :
+* Tout-en-un pour que la cuisine et le client aient toutes les infos
+* sans risquer de collision de connexion ou de coupure.
+*/
+function buildOrderReceipt(order, origin = "https://pokenbowl.be") {
+	const b = new EscPosBuilder();
+	b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE").doubleSize(false).line("Rue Haute 38, 4600 Vise").line("Tel: 04 222 00 00").line();
+	const isDelivery = order.customer.fulfillment === "delivery";
+	b.invert(true).bold(true).doubleSize(true).line(isDelivery ? " *** LIVRAISON *** " : " *** A EMPORTER *** ").doubleSize(false).line(` HEURE : ${order.customer.requestedTime || "DES QUE POSSIBLE"} `).invert(false).bold(false).line();
+	b.align("left").bold(true).doubleSize(true).line(`CMD : ${order.id}`).doubleSize(false).bold(false).line(`Date: ${new Date(order.createdAt).toLocaleDateString("fr-BE")} a ${new Date(order.createdAt).toLocaleTimeString("fr-BE", {
+		hour: "2-digit",
+		minute: "2-digit"
+	})}`).divider("-");
+	b.bold(true).line("CLIENT :").bold(false);
+	b.line(`Nom  : ${order.customer.name}`);
+	b.line(`Tel  : ${order.customer.phone}`);
+	if (isDelivery) {
+		b.divider("-");
+		b.bold(true).line("ADRESSE LIVRAISON :").bold(false);
+		b.line(truncate(order.customer.address ?? "Non precisee", 42));
+		b.line(`${order.customer.postalCode ?? ""} ${order.customer.city ?? ""}`.trim());
+	}
+	if (order.customer.notes) {
+		b.divider("-");
+		b.invert(true).bold(true).line(" ! REMARQUE / ALLERGIES ! ").invert(false).bold(false);
+		b.line(truncate(order.customer.notes, 42));
+	}
+	b.divider("=");
+	b.bold(true).line("ARTICLES COMMANDES :").bold(false);
+	b.line();
+	for (const item of order.items) {
+		const itemTotal = (item.price * item.quantity).toFixed(2) + " E";
+		const header = `${item.quantity}x ${item.name}`;
+		const dotsCount = Math.max(1, 42 - header.length - itemTotal.length);
+		b.bold(true).doubleSize(true);
+		b.line(`${header}${" ".repeat(dotsCount)}${itemTotal}`);
+		b.doubleSize(false).bold(false);
+		if (item.toppings && item.toppings.length > 0) for (const top of item.toppings) if (top.toLowerCase().startsWith("sans :") || top.toLowerCase().includes("allerg")) b.invert(true).bold(true).line(`  ! ${top} `).invert(false).bold(false);
+		else b.line(`  + ${truncate(top, 38)}`);
+		b.line();
+	}
+	b.divider("-");
+	if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
+		const feeStr = order.customer.deliveryFee.toFixed(2) + " E";
+		b.line(`Frais de livraison${" ".repeat(Math.max(1, 24 - feeStr.length))}${feeStr}`);
+	}
+	b.bold(true).doubleSize(true);
+	const totalStr = `TOTAL : ${order.total.toFixed(2)} EUR`;
+	b.line(totalStr);
+	b.doubleSize(false).bold(false);
+	b.line();
+	b.align("center").bold(true);
+	if (order.status === "paid") b.invert(true).line(" [ PAIEMENT VALIDE EN LIGNE ] ").invert(false);
+	else b.invert(true).line(` [ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ] `).invert(false);
+	b.bold(false).line();
+	if (isDelivery && (order.deliveryToken || order.id)) {
+		const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken || order.id}`;
+		b.divider("-");
+		b.align("center").bold(true).line("SCANNEZ POUR GPS LIVREUR").bold(false).line("Waze & Google Maps en 1-clic").line().qrCode(trackUrl, 5).line().align("left");
+	}
+	b.divider("=");
+	b.align("center").line("Merci pour votre commande !").line("www.pokenbowl.be").feed(4).cut(true);
+	return b.toBytes();
+}
 //#endregion
-export { buildDeliveryReceipt as n, buildKitchenReceipt as r, EscPosBuilder as t };
+export { buildOrderReceipt as i, buildDeliveryReceipt as n, buildKitchenReceipt as r, EscPosBuilder as t };

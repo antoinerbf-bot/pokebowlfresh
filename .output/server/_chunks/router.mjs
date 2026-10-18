@@ -11745,6 +11745,72 @@ function buildDeliveryReceipt(order, origin = "https://pokenbowl.be") {
 	b.feed(4).cut(true);
 	return b.toBytes();
 }
+/**
+* 3. TICKET COMMANDE COMPLET (OFFICIEL CUISINE & CLIENT)
+* Format unique et direct pour l'imprimante Epson ePOS :
+* Tout-en-un pour que la cuisine et le client aient toutes les infos
+* sans risquer de collision de connexion ou de coupure.
+*/
+function buildOrderReceipt(order, origin = "https://pokenbowl.be") {
+	const b = new EscPosBuilder();
+	b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE").doubleSize(false).line("Rue Haute 38, 4600 Vise").line("Tel: 04 222 00 00").line();
+	const isDelivery = order.customer.fulfillment === "delivery";
+	b.invert(true).bold(true).doubleSize(true).line(isDelivery ? " *** LIVRAISON *** " : " *** A EMPORTER *** ").doubleSize(false).line(` HEURE : ${order.customer.requestedTime || "DES QUE POSSIBLE"} `).invert(false).bold(false).line();
+	b.align("left").bold(true).doubleSize(true).line(`CMD : ${order.id}`).doubleSize(false).bold(false).line(`Date: ${new Date(order.createdAt).toLocaleDateString("fr-BE")} a ${new Date(order.createdAt).toLocaleTimeString("fr-BE", {
+		hour: "2-digit",
+		minute: "2-digit"
+	})}`).divider("-");
+	b.bold(true).line("CLIENT :").bold(false);
+	b.line(`Nom  : ${order.customer.name}`);
+	b.line(`Tel  : ${order.customer.phone}`);
+	if (isDelivery) {
+		b.divider("-");
+		b.bold(true).line("ADRESSE LIVRAISON :").bold(false);
+		b.line(truncate(order.customer.address ?? "Non precisee", 42));
+		b.line(`${order.customer.postalCode ?? ""} ${order.customer.city ?? ""}`.trim());
+	}
+	if (order.customer.notes) {
+		b.divider("-");
+		b.invert(true).bold(true).line(" ! REMARQUE / ALLERGIES ! ").invert(false).bold(false);
+		b.line(truncate(order.customer.notes, 42));
+	}
+	b.divider("=");
+	b.bold(true).line("ARTICLES COMMANDES :").bold(false);
+	b.line();
+	for (const item of order.items) {
+		const itemTotal = (item.price * item.quantity).toFixed(2) + " E";
+		const header = `${item.quantity}x ${item.name}`;
+		const dotsCount = Math.max(1, 42 - header.length - itemTotal.length);
+		b.bold(true).doubleSize(true);
+		b.line(`${header}${" ".repeat(dotsCount)}${itemTotal}`);
+		b.doubleSize(false).bold(false);
+		if (item.toppings && item.toppings.length > 0) for (const top of item.toppings) if (top.toLowerCase().startsWith("sans :") || top.toLowerCase().includes("allerg")) b.invert(true).bold(true).line(`  ! ${top} `).invert(false).bold(false);
+		else b.line(`  + ${truncate(top, 38)}`);
+		b.line();
+	}
+	b.divider("-");
+	if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
+		const feeStr = order.customer.deliveryFee.toFixed(2) + " E";
+		b.line(`Frais de livraison${" ".repeat(Math.max(1, 24 - feeStr.length))}${feeStr}`);
+	}
+	b.bold(true).doubleSize(true);
+	const totalStr = `TOTAL : ${order.total.toFixed(2)} EUR`;
+	b.line(totalStr);
+	b.doubleSize(false).bold(false);
+	b.line();
+	b.align("center").bold(true);
+	if (order.status === "paid") b.invert(true).line(" [ PAIEMENT VALIDE EN LIGNE ] ").invert(false);
+	else b.invert(true).line(` [ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ] `).invert(false);
+	b.bold(false).line();
+	if (isDelivery && (order.deliveryToken || order.id)) {
+		const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken || order.id}`;
+		b.divider("-");
+		b.align("center").bold(true).line("SCANNEZ POUR GPS LIVREUR").bold(false).line("Waze & Google Maps en 1-clic").line().qrCode(trackUrl, 5).line().align("left");
+	}
+	b.divider("=");
+	b.align("center").line("Merci pour votre commande !").line("www.pokenbowl.be").feed(4).cut(true);
+	return b.toBytes();
+}
 //#endregion
 //#region src/fn/pos.ts
 function verifyPin(pin) {
@@ -12018,8 +12084,25 @@ function PosApplicationPage() {
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	const [printBannerError, setPrintBannerError] = (0, import_react.useState)(null);
-	const knownOrderStatuses = (0, import_react.useRef)(/* @__PURE__ */ new Map());
-	const initialOrdersLoaded = (0, import_react.useRef)(false);
+	const getPrintedOrderIds = () => {
+		if (typeof window === "undefined") return /* @__PURE__ */ new Set();
+		try {
+			const raw = localStorage.getItem("pnb_printed_orders");
+			if (raw) return new Set(JSON.parse(raw));
+		} catch {}
+		return /* @__PURE__ */ new Set();
+	};
+	const markOrderAsPrintedLocally = (id) => {
+		if (typeof window === "undefined") return;
+		try {
+			const ids = getPrintedOrderIds();
+			ids.add(id);
+			const arr = Array.from(ids).slice(-200);
+			localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
+		} catch {}
+	};
+	(0, import_react.useRef)(/* @__PURE__ */ new Map());
+	(0, import_react.useRef)(false);
 	const autoPrintInFlight = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
 	const playAlertSound = () => {
@@ -12062,19 +12145,27 @@ function PosApplicationPage() {
 				"awaiting_pickup",
 				"awaiting_delivery"
 			];
-			const newlyPrintable = initialOrdersLoaded.current ? newOrders.filter((o) => {
-				const previousStatus = knownOrderStatuses.current.get(o.id);
-				const becamePrintable = printableStatuses.includes(o.status) && (!previousStatus || !printableStatuses.includes(previousStatus));
-				const notAlreadyPrinted = o.printStatus !== "printed";
-				return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
-			}) : [];
+			const printedIds = getPrintedOrderIds();
+			const nowMs = Date.now();
+			const thirtyMinutesMs = 18e5;
+			const newlyPrintable = newOrders.filter((o) => {
+				if (!printableStatuses.includes(o.status)) return false;
+				if (o.printStatus === "printed") return false;
+				if (printedIds.has(o.id)) return false;
+				if (autoPrintInFlight.current.has(o.id)) return false;
+				const createdAtMs = new Date(o.createdAt).getTime();
+				if (!(!isNaN(createdAtMs) && nowMs - createdAtMs < thirtyMinutesMs)) {
+					markOrderAsPrintedLocally(o.id);
+					return false;
+				}
+				return true;
+			});
 			if (newlyPrintable.length > 0) playAlertSound();
-			newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
-			initialOrdersLoaded.current = true;
 			setOrders(newOrders);
 			for (const order of newlyPrintable) {
 				if (autoPrintInFlight.current.has(order.id)) continue;
 				autoPrintInFlight.current.add(order.id);
+				markOrderAsPrintedLocally(order.id);
 				handleExecutePrint(order, true).finally(() => {
 					autoPrintInFlight.current.delete(order.id);
 				});
@@ -12095,8 +12186,25 @@ function PosApplicationPage() {
 	const handleExecutePrint = async (order, silent = false) => {
 		setPrintingOrderId(order.id);
 		try {
-			if (config.printMode === "browser") {
-				await printThermalTicket(order);
+			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+			let receiptB64 = "";
+			try {
+				receiptB64 = bytesToBase64(buildOrderReceipt(order, origin));
+			} catch (genErr) {
+				console.error("[POS] Erreur génération ESC/POS:", genErr);
+			}
+			if (!receiptB64) throw new Error("Erreur de génération des données binaires du ticket.");
+			const res = await sendReceiptToPrinter(receiptB64, config);
+			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+			if (res.success) {
+				markOrderAsPrintedLocally(order.id);
+				setPrintBannerError(null);
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Commande ${order.id} : ticket imprimé (${config.printerIp}).`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				if (!silent) alert(`✅ Ticket de la commande ${order.id} imprimé avec succès sur ${config.printerIp} !`);
 				try {
 					await fetch("/api/pos-orders", {
 						method: "POST",
@@ -12106,71 +12214,17 @@ function PosApplicationPage() {
 							printStatus: "printed"
 						})
 					});
-				} catch {}
-				setPrintLog((prev) => [{
-					time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-					msg: `Commande ${order.id} : envoyée à la boîte d'impression système.`,
-					type: "ok"
-				}, ...prev.slice(0, 30)]);
-				return;
-			}
-			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-			let kitchenReceiptB64 = "";
-			let deliveryReceiptB64 = "";
-			try {
-				kitchenReceiptB64 = bytesToBase64(buildKitchenReceipt(order));
-				deliveryReceiptB64 = bytesToBase64(buildDeliveryReceipt(order, origin));
-			} catch (genErr) {
-				console.error("[POS] Erreur génération ESC/POS:", genErr);
-			}
-			let successCount = 0;
-			let errorMsg = "";
-			if (config.autoPrintKitchen && kitchenReceiptB64) {
-				const resKitchen = await sendReceiptToPrinter(kitchenReceiptB64, config);
-				if (resKitchen.success) successCount++;
-				else errorMsg += `[Cuisine] ${resKitchen.message} `;
-			}
-			if (config.autoPrintDelivery && deliveryReceiptB64) {
-				const resDelivery = await sendReceiptToPrinter(deliveryReceiptB64, config);
-				if (resDelivery.success) successCount++;
-				else errorMsg += `[Livreur] ${resDelivery.message} `;
-			}
-			const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
-			const isOk = totalExpected > 0 && successCount === totalExpected;
-			if (totalExpected === 0) errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
-			else if (successCount < totalExpected && !errorMsg) errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
-			try {
-				await fetch("/api/pos-orders", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						orderId: order.id,
-						printStatus: isOk ? "printed" : "failed",
-						printError: isOk ? void 0 : errorMsg
-					})
-				});
-			} catch (ackErr) {
-				console.warn("[POS] Échec synchronisation ack print:", ackErr);
-			}
-			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
-			if (isOk) {
-				setPrintBannerError(null);
-				setPrintLog((prev) => [{
-					time: now,
-					msg: `Commande ${order.id} : tous les tickets imprimés.`,
-					type: "ok"
-				}, ...prev.slice(0, 30)]);
-				if (!silent) alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
+				} catch (ackErr) {
+					console.warn("[POS] Échec synchronisation ack print:", ackErr);
+				}
 			} else {
-				const partial = successCount > 0 ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).` : "";
 				setPrintLog((prev) => [{
 					time: now,
-					msg: `Échec/partiel ${order.id} : ${errorMsg}`,
+					msg: `Échec commande ${order.id} : ${res.message}`,
 					type: "err"
 				}, ...prev.slice(0, 30)]);
-				if (!silent) {
-					if (confirm(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n${errorMsg}${partial}\n\n👉 Voulez-vous imprimer ce ticket via la boîte d'impression de votre ordinateur (USB / Navigateur) ?`)) printThermalTicket(order);
-				} else setPrintBannerError(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour l'imprimer manuellement, ou vérifiez l'autorisation Chrome dans Paramètres.`);
+				if (!silent) alert(`⚠️ Échec de l'envoi à l'Epson (${config.printerIp}) :\n\n${res.message}`);
+				else setPrintBannerError(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour réimprimer.`);
 			}
 		} catch (err) {
 			console.error("[POS] Erreur handleExecutePrint:", err);
@@ -12185,8 +12239,7 @@ function PosApplicationPage() {
 			alert("Commande introuvable.");
 			return;
 		}
-		if (config.printMode === "browser") await printThermalTicket(targetOrder);
-		else await handleExecutePrint(targetOrder);
+		await handleExecutePrint(targetOrder, false);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
@@ -13450,20 +13503,15 @@ function PosApplicationPage() {
 									})
 								]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => handleExecutePrint(selectedOrder),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "pt-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => handleExecutePrint(selectedOrder, false),
 									disabled: printingOrderId === selectedOrder.id,
-									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
-									title: `Imprimer via le réseau ePOS (${config.printerIp})`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), printingOrderId === selectedOrder.id ? "Envoi ePOS…" : `Imprimer Réseau (${config.printerIp})`]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => printThermalTicket(selectedOrder),
-									className: "w-full rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 border border-white/10 active:scale-95 cursor-pointer",
-									title: "Ouvrir la boîte d'impression système (USB / Navigateur)",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Imprimer Direct (USB / Système)" })]
-								})]
+									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+									title: `Imprimer le ticket sur l'imprimante (${config.printerIp})`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-5 h-5" }), printingOrderId === selectedOrder.id ? "Envoi à l'imprimante…" : `🖨️ Imprimer le Ticket Commande (${config.printerIp})`]
+								})
 							})
 						]
 					})

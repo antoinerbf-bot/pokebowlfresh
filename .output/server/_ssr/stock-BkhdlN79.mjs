@@ -1,7 +1,7 @@
 import { l as createServerFn } from "./createServerFn-DDDJMFWM.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-CNELKyuA.mjs";
+import { t as createSsrRpc } from "./createSsrRpc-DJWmS5qJ.mjs";
 import { a as numberType, n as booleanType, o as objectType, s as stringType, t as arrayType } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/stock-C7z1L025.js
+//#region node_modules/.nitro/vite/services/ssr/assets/stock-BkhdlN79.js
 var getStock = createServerFn({ method: "GET" }).handler(createSsrRpc("511defe839a5e1102b8bb0c4bc905f516f731e66b5893bf673574b68a2cc798f"));
 var setStockItem = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().min(1),

@@ -4,25 +4,25 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-D9PoE_P1.mjs";
 import { t as CartProvider } from "./CartContext-BoTWTco9.mjs";
 import { C as useRouter, _ as lazyRouteComponent, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$21 } from "../_productId-DNvriyaI.mjs";
+import { t as Route$21 } from "../_productId-7TzK6art.mjs";
 import { L as CircleCheckBig, N as CookingPot, _ as Printer, a as TriangleAlert, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, n as VolumeX, r as Volume2, x as Navigation, y as Phone } from "../_libs/lucide-react.mjs";
 import { l as createServerFn } from "./createServerFn-DDDJMFWM.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-CNELKyuA.mjs";
+import { t as createSsrRpc } from "./createSsrRpc-DJWmS5qJ.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-C0u_CRFa.mjs";
 import { t as Route$22 } from "../_slug-DXItFcD8.mjs";
-import { t as Route$23 } from "../_token-BMRHvbbo.mjs";
+import { t as Route$23 } from "../_token-BKWgQWlU.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, r as getOrderByDeliveryToken, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
 import { a as getCheckedFiles, c as getMolliePayment, i as getBancontactProPayment, l as loadAndGetEnv, n as getAllBankKeyCandidates, r as getBancontactProApiKey, s as getMollieApiKey, t as checkoutSchema, u as processCheckout } from "./checkout-service.server-IJA-OeCd.mjs";
-import { t as Route$24 } from "./order.success-IeMp9GNd.mjs";
-import { n as buildDeliveryReceipt, r as buildKitchenReceipt, t as EscPosBuilder } from "./escpos-B7c8JtfE.mjs";
+import { t as Route$24 } from "./order.success-BR2UEEp7.mjs";
+import { i as buildOrderReceipt, t as EscPosBuilder } from "./escpos-DM3KzaqQ.mjs";
 import { t as FAQ_ITEMS } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Dke1OqZM.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CmJkscKA.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -284,7 +284,7 @@ var Route$19 = createFileRoute("/")({
 });
 var $$splitComponentImporter$6 = () => import("./checkout-CHFQKvm-.mjs");
 var Route$18 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
-var $$splitComponentImporter$5 = () => import("./commander-DrpawfqR.mjs");
+var $$splitComponentImporter$5 = () => import("./commander-D9kWKQ3R.mjs");
 var Route$17 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
 var $$splitComponentImporter$4 = () => import("./contact-BtgKvkc7.mjs");
 var Route$16 = createFileRoute("/contact")({
@@ -298,7 +298,7 @@ var Route$15 = createFileRoute("/recrutement")({
 });
 var $$splitComponentImporter$2 = () => import("./sur-mesure-BdiLmToU.mjs");
 var Route$14 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
-var $$splitComponentImporter$1 = () => import("./stocks-CWq0WvF5.mjs");
+var $$splitComponentImporter$1 = () => import("./stocks-C_vWILl5.mjs");
 var Route$13 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
 var Route$12 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
@@ -1087,8 +1087,25 @@ function PosApplicationPage() {
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	const [printBannerError, setPrintBannerError] = (0, import_react.useState)(null);
-	const knownOrderStatuses = (0, import_react.useRef)(/* @__PURE__ */ new Map());
-	const initialOrdersLoaded = (0, import_react.useRef)(false);
+	const getPrintedOrderIds = () => {
+		if (typeof window === "undefined") return /* @__PURE__ */ new Set();
+		try {
+			const raw = localStorage.getItem("pnb_printed_orders");
+			if (raw) return new Set(JSON.parse(raw));
+		} catch {}
+		return /* @__PURE__ */ new Set();
+	};
+	const markOrderAsPrintedLocally = (id) => {
+		if (typeof window === "undefined") return;
+		try {
+			const ids = getPrintedOrderIds();
+			ids.add(id);
+			const arr = Array.from(ids).slice(-200);
+			localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
+		} catch {}
+	};
+	(0, import_react.useRef)(/* @__PURE__ */ new Map());
+	(0, import_react.useRef)(false);
 	const autoPrintInFlight = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
 	const playAlertSound = () => {
@@ -1131,19 +1148,27 @@ function PosApplicationPage() {
 				"awaiting_pickup",
 				"awaiting_delivery"
 			];
-			const newlyPrintable = initialOrdersLoaded.current ? newOrders.filter((o) => {
-				const previousStatus = knownOrderStatuses.current.get(o.id);
-				const becamePrintable = printableStatuses.includes(o.status) && (!previousStatus || !printableStatuses.includes(previousStatus));
-				const notAlreadyPrinted = o.printStatus !== "printed";
-				return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
-			}) : [];
+			const printedIds = getPrintedOrderIds();
+			const nowMs = Date.now();
+			const thirtyMinutesMs = 18e5;
+			const newlyPrintable = newOrders.filter((o) => {
+				if (!printableStatuses.includes(o.status)) return false;
+				if (o.printStatus === "printed") return false;
+				if (printedIds.has(o.id)) return false;
+				if (autoPrintInFlight.current.has(o.id)) return false;
+				const createdAtMs = new Date(o.createdAt).getTime();
+				if (!(!isNaN(createdAtMs) && nowMs - createdAtMs < thirtyMinutesMs)) {
+					markOrderAsPrintedLocally(o.id);
+					return false;
+				}
+				return true;
+			});
 			if (newlyPrintable.length > 0) playAlertSound();
-			newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
-			initialOrdersLoaded.current = true;
 			setOrders(newOrders);
 			for (const order of newlyPrintable) {
 				if (autoPrintInFlight.current.has(order.id)) continue;
 				autoPrintInFlight.current.add(order.id);
+				markOrderAsPrintedLocally(order.id);
 				handleExecutePrint(order, true).finally(() => {
 					autoPrintInFlight.current.delete(order.id);
 				});
@@ -1164,8 +1189,25 @@ function PosApplicationPage() {
 	const handleExecutePrint = async (order, silent = false) => {
 		setPrintingOrderId(order.id);
 		try {
-			if (config.printMode === "browser") {
-				await printThermalTicket(order);
+			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+			let receiptB64 = "";
+			try {
+				receiptB64 = bytesToBase64(buildOrderReceipt(order, origin));
+			} catch (genErr) {
+				console.error("[POS] Erreur génération ESC/POS:", genErr);
+			}
+			if (!receiptB64) throw new Error("Erreur de génération des données binaires du ticket.");
+			const res = await sendReceiptToPrinter(receiptB64, config);
+			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+			if (res.success) {
+				markOrderAsPrintedLocally(order.id);
+				setPrintBannerError(null);
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Commande ${order.id} : ticket imprimé (${config.printerIp}).`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				if (!silent) alert(`✅ Ticket de la commande ${order.id} imprimé avec succès sur ${config.printerIp} !`);
 				try {
 					await fetch("/api/pos-orders", {
 						method: "POST",
@@ -1175,71 +1217,17 @@ function PosApplicationPage() {
 							printStatus: "printed"
 						})
 					});
-				} catch {}
-				setPrintLog((prev) => [{
-					time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-					msg: `Commande ${order.id} : envoyée à la boîte d'impression système.`,
-					type: "ok"
-				}, ...prev.slice(0, 30)]);
-				return;
-			}
-			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-			let kitchenReceiptB64 = "";
-			let deliveryReceiptB64 = "";
-			try {
-				kitchenReceiptB64 = bytesToBase64(buildKitchenReceipt(order));
-				deliveryReceiptB64 = bytesToBase64(buildDeliveryReceipt(order, origin));
-			} catch (genErr) {
-				console.error("[POS] Erreur génération ESC/POS:", genErr);
-			}
-			let successCount = 0;
-			let errorMsg = "";
-			if (config.autoPrintKitchen && kitchenReceiptB64) {
-				const resKitchen = await sendReceiptToPrinter(kitchenReceiptB64, config);
-				if (resKitchen.success) successCount++;
-				else errorMsg += `[Cuisine] ${resKitchen.message} `;
-			}
-			if (config.autoPrintDelivery && deliveryReceiptB64) {
-				const resDelivery = await sendReceiptToPrinter(deliveryReceiptB64, config);
-				if (resDelivery.success) successCount++;
-				else errorMsg += `[Livreur] ${resDelivery.message} `;
-			}
-			const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
-			const isOk = totalExpected > 0 && successCount === totalExpected;
-			if (totalExpected === 0) errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
-			else if (successCount < totalExpected && !errorMsg) errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
-			try {
-				await fetch("/api/pos-orders", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						orderId: order.id,
-						printStatus: isOk ? "printed" : "failed",
-						printError: isOk ? void 0 : errorMsg
-					})
-				});
-			} catch (ackErr) {
-				console.warn("[POS] Échec synchronisation ack print:", ackErr);
-			}
-			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
-			if (isOk) {
-				setPrintBannerError(null);
-				setPrintLog((prev) => [{
-					time: now,
-					msg: `Commande ${order.id} : tous les tickets imprimés.`,
-					type: "ok"
-				}, ...prev.slice(0, 30)]);
-				if (!silent) alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
+				} catch (ackErr) {
+					console.warn("[POS] Échec synchronisation ack print:", ackErr);
+				}
 			} else {
-				const partial = successCount > 0 ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).` : "";
 				setPrintLog((prev) => [{
 					time: now,
-					msg: `Échec/partiel ${order.id} : ${errorMsg}`,
+					msg: `Échec commande ${order.id} : ${res.message}`,
 					type: "err"
 				}, ...prev.slice(0, 30)]);
-				if (!silent) {
-					if (confirm(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n${errorMsg}${partial}\n\n👉 Voulez-vous imprimer ce ticket via la boîte d'impression de votre ordinateur (USB / Navigateur) ?`)) printThermalTicket(order);
-				} else setPrintBannerError(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour l'imprimer manuellement, ou vérifiez l'autorisation Chrome dans Paramètres.`);
+				if (!silent) alert(`⚠️ Échec de l'envoi à l'Epson (${config.printerIp}) :\n\n${res.message}`);
+				else setPrintBannerError(`⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour réimprimer.`);
 			}
 		} catch (err) {
 			console.error("[POS] Erreur handleExecutePrint:", err);
@@ -1254,8 +1242,7 @@ function PosApplicationPage() {
 			alert("Commande introuvable.");
 			return;
 		}
-		if (config.printMode === "browser") await printThermalTicket(targetOrder);
-		else await handleExecutePrint(targetOrder);
+		await handleExecutePrint(targetOrder, false);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
@@ -2519,20 +2506,15 @@ function PosApplicationPage() {
 									})
 								]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => handleExecutePrint(selectedOrder),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "pt-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => handleExecutePrint(selectedOrder, false),
 									disabled: printingOrderId === selectedOrder.id,
-									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
-									title: `Imprimer via le réseau ePOS (${config.printerIp})`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), printingOrderId === selectedOrder.id ? "Envoi ePOS…" : `Imprimer Réseau (${config.printerIp})`]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => printThermalTicket(selectedOrder),
-									className: "w-full rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 border border-white/10 active:scale-95 cursor-pointer",
-									title: "Ouvrir la boîte d'impression système (USB / Navigateur)",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Imprimer Direct (USB / Système)" })]
-								})]
+									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+									title: `Imprimer le ticket sur l'imprimante (${config.printerIp})`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-5 h-5" }), printingOrderId === selectedOrder.id ? "Envoi à l'imprimante…" : `🖨️ Imprimer le Ticket Commande (${config.printerIp})`]
+								})
 							})
 						]
 					})
