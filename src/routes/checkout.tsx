@@ -4,7 +4,7 @@ import { ArrowLeft, CreditCard, Store, Loader2, ShieldCheck, AlertCircle, CheckC
 import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import { useCart } from "../context/CartContext";
-import { submitCheckout } from "../fn/checkout";
+
 import type { FulfillmentMethod, PaymentMethod } from "../lib/orders";
 import { getDeliveryZone } from "../lib/delivery";
 
@@ -78,8 +78,11 @@ function CheckoutPage() {
 
     try {
       const origin = window.location.origin;
-      const result = await submitCheckout({
-        data: {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({
           customer: {
             name,
             phone,
@@ -105,18 +108,34 @@ function CheckoutPage() {
           })),
           paymentMethod,
           origin,
-        },
+        }),
       });
 
-      if (result.type === "error") {
-        setError(result.message);
+      const result = await response.json() as {
+        success?: boolean;
+        type?: "on_site" | "online";
+        orderId?: string;
+        total?: number;
+        redirectUrl?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !result.success) {
+        setError(result.error || `Le serveur a refusé la commande (HTTP ${response.status}).`);
         setLoading(false);
         return;
       }
 
       if (result.type === "online") {
+        if (!result.redirectUrl) {
+          throw new Error("Le prestataire de paiement n’a pas fourni de lien de paiement.");
+        }
         window.location.href = result.redirectUrl;
         return;
+      }
+
+      if (result.type !== "on_site" || !result.orderId) {
+        throw new Error("Le serveur n’a pas renvoyé de confirmation valide pour la commande.");
       }
 
       clearCart();
