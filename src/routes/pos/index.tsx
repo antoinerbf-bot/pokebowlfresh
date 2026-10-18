@@ -1409,7 +1409,7 @@ export function PosApplicationPage() {
             )}
 
             {/* Actions Modal */}
-            <div className="pt-2">
+            <div className="pt-2 space-y-2">
               <button
                 onClick={() => handleExecutePrint(selectedOrder, false)}
                 disabled={printingOrderId === selectedOrder.id}
@@ -1418,6 +1418,13 @@ export function PosApplicationPage() {
               >
                 <Printer className="w-5 h-5" />
                 {printingOrderId === selectedOrder.id ? "Envoi à l'imprimante…" : `🖨️ Imprimer le Ticket Commande (${config.printerIp})`}
+              </button>
+
+              <button
+                onClick={() => printThermalTicket(selectedOrder)}
+                className="w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2 px-3 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Option secours : Boîte d'impression système (USB / Navigateur)</span>
               </button>
             </div>
           </div>

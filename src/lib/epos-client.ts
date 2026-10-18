@@ -98,15 +98,9 @@ export async function sendReceiptToPrinter(
     `https://${config.printerIp}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
   ];
-
-  // Si la page n'est pas en HTTPS strict ou si c'est toléré, tenter aussi HTTP
-  if (!isHttps) {
-    candidateUrls.push(
-      `http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-      `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    );
-  }
 
   // Dédoublonner
   const targets = Array.from(new Set(candidateUrls));
@@ -122,14 +116,14 @@ export async function sendReceiptToPrinter(
           SOAPAction: '""',
         },
         body: xml,
-        signal: AbortSignal.timeout(2500), // Timeout de 2.5 secondes
+        signal: AbortSignal.timeout(5000), // Timeout de 5 secondes pour laisser le temps au TLS / Wi-Fi
       });
 
       if (res.ok) {
         return { success: true, message: `Ticket imprimé avec succès sur ${config.printerIp} !` };
       }
     } catch (e: any) {
-      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2.5s)" : (e?.message ?? String(e));
+      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (5s)" : (e?.message ?? String(e));
     }
   }
 
