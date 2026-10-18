@@ -183,9 +183,7 @@ function computeSubtotal(items: OrderItem[]): number {
   return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
-export const submitCheckout = createServerFn({ method: "POST" })
-  .validator(checkoutSchema)
-  .handler(async ({ data }) => {
+export async function processCheckout(data: z.infer<typeof checkoutSchema>) {
     try {
     console.info("[Checkout] submitCheckout started", { fulfillment: data.customer.fulfillment, paymentMethod: data.paymentMethod, itemCount: data.items.length });
     const items = canonicalizeItems(data.items);
@@ -316,8 +314,11 @@ export const submitCheckout = createServerFn({ method: "POST" })
           : "Erreur serveur pendant la création de la commande. Consultez les journaux de l’application.",
       };
     }
-  });
+}
 
+export const submitCheckout = createServerFn({ method: "POST" })
+  .validator(checkoutSchema)
+  .handler(async ({ data }) => processCheckout(data));
 export const getOrderStatus = createServerFn({ method: "GET" })
   .validator(z.object({ orderId: z.string().min(1) }))
   .handler(async ({ data }) => {
