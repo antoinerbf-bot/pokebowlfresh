@@ -371,17 +371,9 @@ export function PosApplicationPage() {
 
     let qrData = "";
     const token = order?.deliveryToken || order?.id;
-    const fullAddress = `${order?.customer?.address ?? ""}, ${order?.customer?.postalCode ?? ""} ${order?.customer?.city ?? ""}`.trim();
     if (token) {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      let trackUrl = `${origin}/track/${token}`;
-      if (config.qrTarget === "waze" && fullAddress.length > 2) {
-        trackUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
-      } else if (config.qrTarget === "maps" && fullAddress.length > 2) {
-        trackUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
-      } else if (config.qrTarget === "auto-waze") {
-        trackUrl = `${origin}/track/${token}?auto=waze`;
-      }
+      const trackUrl = `${origin}/track/${token}`;
       try {
         qrData = await QRCode.toDataURL(trackUrl, {
           errorCorrectionLevel: "H",
@@ -1247,83 +1239,6 @@ export function PosApplicationPage() {
                     />
                     <span className="text-sm font-bold text-white">Ticket Livreur / Client (Avec QR Code GPS Waze)</span>
                   </label>
-                </div>
-              </div>
-
-              {/* Action du QR Code GPS sur le ticket */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-black text-[#ff705f]">Redirection du QR Code Ticket</h3>
-                  <span className="rounded-full bg-[#ff705f]/20 text-[#ff705f] border border-[#ff705f]/30 px-2.5 py-0.5 text-[10px] font-bold">
-                    GPS & Navigation
-                  </span>
-                </div>
-                <p className="text-xs text-[#8ea39b]">
-                  Choisissez vers où le smartphone du livreur est redirigé en scannant le QR code du ticket :
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const upd = { ...config, qrTarget: "track" as const };
-                      setConfig(upd);
-                      savePrinterConfig(upd);
-                    }}
-                    className={`p-3.5 rounded-xl border text-left transition cursor-pointer ${
-                      (config.qrTarget ?? "track") === "track"
-                        ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
-                        : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5 font-black text-xs text-white">
-                      <span>📱 Page Livreur + GPS 1-Clic</span>
-                    </div>
-                    <p className="text-[10px] mt-1 text-[#a5b4ae] leading-snug">
-                      Recommandé : Page élégante avec gros boutons Waze & Google Maps en haut, appel direct et détails.
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const upd = { ...config, qrTarget: "waze" as const };
-                      setConfig(upd);
-                      savePrinterConfig(upd);
-                    }}
-                    className={`p-3.5 rounded-xl border text-left transition cursor-pointer ${
-                      config.qrTarget === "waze"
-                        ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
-                        : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5 font-black text-xs text-[#33ccff]">
-                      <span>🚗 Redirection Directe Waze</span>
-                    </div>
-                    <p className="text-[10px] mt-1 text-[#a5b4ae] leading-snug">
-                      Le QR code encode directement l'adresse client dans Waze. L'application Waze s'ouvre immédiatement !
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const upd = { ...config, qrTarget: "maps" as const };
-                      setConfig(upd);
-                      savePrinterConfig(upd);
-                    }}
-                    className={`p-3.5 rounded-xl border text-left transition cursor-pointer ${
-                      config.qrTarget === "maps"
-                        ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
-                        : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5 font-black text-xs text-[#4285F4]">
-                      <span>🗺️ Redirection Directe Maps</span>
-                    </div>
-                    <p className="text-[10px] mt-1 text-[#a5b4ae] leading-snug">
-                      Le QR code encode directement l'itinéraire Google Maps. L'app Google Maps s'ouvre immédiatement !
-                    </p>
-                  </button>
                 </div>
               </div>
 

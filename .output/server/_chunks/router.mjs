@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-C9AzDBmS.css";
+var styles_default = "/assets/styles-CIt7WMME.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -11984,8 +11984,7 @@ var DEFAULT_PRINTER_CONFIG = {
 	autoPrintKitchen: true,
 	autoPrintDelivery: true,
 	soundEnabled: true,
-	printMode: "epos",
-	qrTarget: "track"
+	printMode: "epos"
 };
 function loadPrinterConfig() {
 	if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
@@ -12325,13 +12324,8 @@ function PosApplicationPage() {
 		if (!order && !isTest) return;
 		let qrData = "";
 		const token = order?.deliveryToken || order?.id;
-		const fullAddress = `${order?.customer?.address ?? ""}, ${order?.customer?.postalCode ?? ""} ${order?.customer?.city ?? ""}`.trim();
 		if (token) {
-			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-			let trackUrl = `${origin}/track/${token}`;
-			if (config.qrTarget === "waze" && fullAddress.length > 2) trackUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
-			else if (config.qrTarget === "maps" && fullAddress.length > 2) trackUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
-			else if (config.qrTarget === "auto-waze") trackUrl = `${origin}/track/${token}?auto=waze`;
+			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${token}`;
 			try {
 				qrData = await import_lib.toDataURL(trackUrl, {
 					errorCorrectionLevel: "H",
@@ -13349,87 +13343,6 @@ function PosApplicationPage() {
 												})]
 											})]
 										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center justify-between",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-													className: "text-base font-black text-[#ff705f]",
-													children: "Redirection du QR Code Ticket"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "rounded-full bg-[#ff705f]/20 text-[#ff705f] border border-[#ff705f]/30 px-2.5 py-0.5 text-[10px] font-bold",
-													children: "GPS & Navigation"
-												})]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-xs text-[#8ea39b]",
-												children: "Choisissez vers où le smartphone du livreur est redirigé en scannant le QR code du ticket :"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "grid grid-cols-1 sm:grid-cols-3 gap-3",
-												children: [
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-														type: "button",
-														onClick: () => {
-															const upd = {
-																...config,
-																qrTarget: "track"
-															};
-															setConfig(upd);
-															savePrinterConfig(upd);
-														},
-														className: `p-3.5 rounded-xl border text-left transition cursor-pointer ${(config.qrTarget ?? "track") === "track" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-															className: "flex items-center gap-1.5 font-black text-xs text-white",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📱 Page Livreur + GPS 1-Clic" })
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-															className: "text-[10px] mt-1 text-[#a5b4ae] leading-snug",
-															children: "Recommandé : Page élégante avec gros boutons Waze & Google Maps en haut, appel direct et détails."
-														})]
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-														type: "button",
-														onClick: () => {
-															const upd = {
-																...config,
-																qrTarget: "waze"
-															};
-															setConfig(upd);
-															savePrinterConfig(upd);
-														},
-														className: `p-3.5 rounded-xl border text-left transition cursor-pointer ${config.qrTarget === "waze" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-															className: "flex items-center gap-1.5 font-black text-xs text-[#33ccff]",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🚗 Redirection Directe Waze" })
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-															className: "text-[10px] mt-1 text-[#a5b4ae] leading-snug",
-															children: "Le QR code encode directement l'adresse client dans Waze. L'application Waze s'ouvre immédiatement !"
-														})]
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-														type: "button",
-														onClick: () => {
-															const upd = {
-																...config,
-																qrTarget: "maps"
-															};
-															setConfig(upd);
-															savePrinterConfig(upd);
-														},
-														className: `p-3.5 rounded-xl border text-left transition cursor-pointer ${config.qrTarget === "maps" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-															className: "flex items-center gap-1.5 font-black text-xs text-[#4285F4]",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🗺️ Redirection Directe Maps" })
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-															className: "text-[10px] mt-1 text-[#a5b4ae] leading-snug",
-															children: "Le QR code encode directement l'itinéraire Google Maps. L'app Google Maps s'ouvre immédiatement !"
-														})]
-													})
-												]
-											})
-										]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
