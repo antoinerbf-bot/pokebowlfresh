@@ -35,7 +35,7 @@ import {
   sendReceiptToPrinter,
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
-import { EscPosBuilder, buildKitchenReceipt, buildDeliveryReceipt } from "../../lib/escpos";
+import { EscPosBuilder, buildKitchenReceipt, buildDeliveryReceipt, buildOrderReceipt } from "../../lib/escpos";
 import QRCode from "qrcode";
 
 function bytesToBase64(bytes: Uint8Array): string {
@@ -93,6 +93,26 @@ export function PosApplicationPage() {
   const [testingPrinter, setTestingPrinter] = useState(false);
   const [printLog, setPrintLog] = useState<{ time: string; msg: string; type: "ok" | "err" }[]>([]);
   const [printBannerError, setPrintBannerError] = useState<string | null>(null);
+
+  // Helper local storage pour se souvenir des commandes déjà imprimées
+  const getPrintedOrderIds = (): Set<string> => {
+    if (typeof window === "undefined") return new Set();
+    try {
+      const raw = localStorage.getItem("pnb_printed_orders");
+      if (raw) return new Set(JSON.parse(raw));
+    } catch {}
+    return new Set();
+  };
+
+  const markOrderAsPrintedLocally = (id: string) => {
+    if (typeof window === "undefined") return;
+    try {
+      const ids = getPrintedOrderIds();
+      ids.add(id);
+      const arr = Array.from(ids).slice(-200);
+      localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
+    } catch {}
+  };
 
   // Garder trace des IDs pour les nouvelles alertes
   const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
@@ -177,30 +197,38 @@ export function PosApplicationPage() {
         newOrders = res.orders;
       }
 
-      // Au premier chargement, mémoriser l'état existant sans réimprimer l'historique.
-      // Ensuite, imprimer automatiquement toute nouvelle commande payée ou passant à un état prêt.
+      // Détection automatique de toute commande non encore imprimée
       const printableStatuses: Order["status"][] = ["paid", "awaiting_pickup", "awaiting_delivery"];
-      const newlyPrintable = initialOrdersLoaded.current
-        ? newOrders.filter((o) => {
-            const previousStatus = knownOrderStatuses.current.get(o.id);
-            const becamePrintable = printableStatuses.includes(o.status) &&
-              (!previousStatus || !printableStatuses.includes(previousStatus));
-            const notAlreadyPrinted = o.printStatus !== "printed";
-            return becamePrintable && notAlreadyPrinted && !autoPrintInFlight.current.has(o.id);
-          })
-        : [];
+      const printedIds = getPrintedOrderIds();
+      const nowMs = Date.now();
+      const thirtyMinutesMs = 30 * 60 * 1000;
+
+      const newlyPrintable = newOrders.filter((o) => {
+        if (!printableStatuses.includes(o.status)) return false;
+        if (o.printStatus === "printed") return false;
+        if (printedIds.has(o.id)) return false;
+        if (autoPrintInFlight.current.has(o.id)) return false;
+
+        const createdAtMs = new Date(o.createdAt).getTime();
+        const isRecent = !isNaN(createdAtMs) && (nowMs - createdAtMs) < thirtyMinutesMs;
+        if (!isRecent) {
+          // Si commande trop ancienne (> 30 min), on l'enregistre comme connue pour ne pas gaspiller de papier
+          markOrderAsPrintedLocally(o.id);
+          return false;
+        }
+
+        return true;
+      });
 
       if (newlyPrintable.length > 0) playAlertSound();
 
-      newOrders.forEach((o) => knownOrderStatuses.current.set(o.id, o.status));
-      initialOrdersLoaded.current = true;
       setOrders(newOrders);
 
-      // Send real orders through the same validated Epson network path as the printer test.
-      // Lock the order ID before sending so the 4-second polling cannot create duplicates.
+      // Impression automatique sur l'imprimante Epson via la route direct ePOS
       for (const order of newlyPrintable) {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
+        markOrderAsPrintedLocally(order.id);
         void handleExecutePrint(order, true).finally(() => {
           autoPrintInFlight.current.delete(order.id);
         });
@@ -220,13 +248,39 @@ export function PosApplicationPage() {
     }
   }, [isUnlocked, pin]);
 
-  // Action d'impression (directe ePOS réseau ou système selon configuration)
+  // Action d'impression directe ePOS réseau (la route exclusive et définitive)
   const handleExecutePrint = async (order: Order, silent = false) => {
     setPrintingOrderId(order.id);
     try {
-      if (config.printMode === "browser") {
-        // Mode impression système / USB
-        await printThermalTicket(order);
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+      
+      // 1. Génération ESC/POS instantanée en mémoire client du ticket complet unifié
+      let receiptB64 = "";
+      try {
+        const bytes = buildOrderReceipt(order, origin);
+        receiptB64 = bytesToBase64(bytes);
+      } catch (genErr) {
+        console.error("[POS] Erreur génération ESC/POS:", genErr);
+      }
+
+      if (!receiptB64) {
+        throw new Error("Erreur de génération des données binaires du ticket.");
+      }
+
+      // 2. Envoi direct sur la route ePOS validée (identique au bouton de test réussi)
+      const res = await sendReceiptToPrinter(receiptB64, config);
+      const now = new Date().toLocaleTimeString();
+
+      if (res.success) {
+        markOrderAsPrintedLocally(order.id);
+        setPrintBannerError(null);
+        setPrintLog((prev) => [
+          { time: now, msg: `Commande ${order.id} : ticket imprimé (${config.printerIp}).`, type: "ok" },
+          ...prev.slice(0, 30),
+        ]);
+        if (!silent) alert(`✅ Ticket de la commande ${order.id} imprimé avec succès sur ${config.printerIp} !`);
+
+        // Synchronisation du statut d'impression vers l'API REST
         try {
           await fetch("/api/pos-orders", {
             method: "POST",
@@ -236,86 +290,19 @@ export function PosApplicationPage() {
               printStatus: "printed",
             }),
           });
-        } catch {}
+        } catch (ackErr) {
+          console.warn("[POS] Échec synchronisation ack print:", ackErr);
+        }
+      } else {
         setPrintLog((prev) => [
-          { time: new Date().toLocaleTimeString(), msg: `Commande ${order.id} : envoyée à la boîte d'impression système.`, type: "ok" },
+          { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
           ...prev.slice(0, 30),
         ]);
-        return;
-      }
-
-      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      
-      // 1. Génération ESC/POS instantanée en mémoire client (0 dépendance serveur RPC)
-      let kitchenReceiptB64 = "";
-      let deliveryReceiptB64 = "";
-      try {
-        kitchenReceiptB64 = bytesToBase64(buildKitchenReceipt(order));
-        deliveryReceiptB64 = bytesToBase64(buildDeliveryReceipt(order, origin));
-      } catch (genErr) {
-        console.error("[POS] Erreur génération ESC/POS:", genErr);
-      }
-
-      let successCount = 0;
-      let errorMsg = "";
-
-      // 1. Impression Ticket Cuisine
-      if (config.autoPrintKitchen && kitchenReceiptB64) {
-        const resKitchen = await sendReceiptToPrinter(kitchenReceiptB64, config);
-        if (resKitchen.success) successCount++;
-        else errorMsg += `[Cuisine] ${resKitchen.message} `;
-      }
-
-      // 2. Impression Ticket Livreur / Client
-      if (config.autoPrintDelivery && deliveryReceiptB64) {
-        const resDelivery = await sendReceiptToPrinter(deliveryReceiptB64, config);
-        if (resDelivery.success) successCount++;
-        else errorMsg += `[Livreur] ${resDelivery.message} `;
-      }
-
-      const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
-      const isOk = totalExpected > 0 && successCount === totalExpected;
-      if (totalExpected === 0) {
-        errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
-      } else if (successCount < totalExpected && !errorMsg) {
-        errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
-      }
-
-      // Synchronisation du statut d'impression vers l'API REST
-      try {
-        await fetch("/api/pos-orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orderId: order.id,
-            printStatus: isOk ? "printed" : "failed",
-            printError: isOk ? undefined : errorMsg,
-          }),
-        });
-      } catch (ackErr) {
-        console.warn("[POS] Échec synchronisation ack print:", ackErr);
-      }
-
-      const now = new Date().toLocaleTimeString();
-      if (isOk) {
-        setPrintBannerError(null);
-        setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} : tous les tickets imprimés.`, type: "ok" }, ...prev.slice(0, 30)]);
-        if (!silent) alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
-      } else {
-        const partial = successCount > 0
-          ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).`
-          : "";
-        setPrintLog((prev) => [{ time: now, msg: `Échec/partiel ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
         if (!silent) {
-          const doBrowser = confirm(
-            `⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n${errorMsg}${partial}\n\n👉 Voulez-vous imprimer ce ticket via la boîte d'impression de votre ordinateur (USB / Navigateur) ?`
-          );
-          if (doBrowser) {
-            void printThermalTicket(order);
-          }
+          alert(`⚠️ Échec de l'envoi à l'Epson (${config.printerIp}) :\n\n${res.message}`);
         } else {
           setPrintBannerError(
-            `⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour l'imprimer manuellement, ou vérifiez l'autorisation Chrome dans Paramètres.`
+            `⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour réimprimer.`
           );
         }
       }
@@ -333,11 +320,7 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    if (config.printMode === "browser") {
-      await printThermalTicket(targetOrder);
-    } else {
-      await handleExecutePrint(targetOrder);
-    }
+    await handleExecutePrint(targetOrder, false);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -1427,23 +1410,15 @@ export function PosApplicationPage() {
             )}
 
             {/* Actions Modal */}
-            <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="pt-2">
               <button
-                onClick={() => handleExecutePrint(selectedOrder)}
+                onClick={() => handleExecutePrint(selectedOrder, false)}
                 disabled={printingOrderId === selectedOrder.id}
-                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
-                title={`Imprimer via le réseau ePOS (${config.printerIp})`}
+                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                title={`Imprimer le ticket sur l'imprimante (${config.printerIp})`}
               >
-                <Printer className="w-4 h-4" />
-                {printingOrderId === selectedOrder.id ? "Envoi ePOS…" : `Imprimer Réseau (${config.printerIp})`}
-              </button>
-              <button
-                onClick={() => printThermalTicket(selectedOrder)}
-                className="w-full rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 border border-white/10 active:scale-95 cursor-pointer"
-                title="Ouvrir la boîte d'impression système (USB / Navigateur)"
-              >
-                <Printer className="w-4 h-4 text-emerald-400" />
-                <span>Imprimer Direct (USB / Système)</span>
+                <Printer className="w-5 h-5" />
+                {printingOrderId === selectedOrder.id ? "Envoi à l'imprimante…" : `🖨️ Imprimer le Ticket Commande (${config.printerIp})`}
               </button>
             </div>
           </div>
