@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -10280,6 +10280,41 @@ var Route$8 = createFileRoute("/api/track-order")({ server: { handlers: {
 					"Cache-Control": "no-store"
 				}
 			});
+			if (token.toUpperCase().startsWith("TEST")) return new Response(JSON.stringify({
+				found: true,
+				order: {
+					id: "TEST-TICKET",
+					deliveryToken: "TEST-TICKET",
+					createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+					status: "delivering",
+					fulfillment: "delivery",
+					requestedTime: "Dès que possible",
+					customerName: "Test Ticket Caisse (GPS)",
+					customerPhone: "0499 00 00 00",
+					notes: "Test GPS Waze & Google Maps 1-Clic",
+					address: "Rue Haute 38",
+					postalCode: "4600",
+					city: "Visé",
+					deliveryFee: 2,
+					total: 16,
+					paymentMethod: "on_site",
+					items: [{
+						name: "Poké Saumon Classic (Medium)",
+						quantity: 1,
+						price: 12.5
+					}, {
+						name: "Boisson Aloe Vera",
+						quantity: 1,
+						price: 3.5
+					}]
+				}
+			}), {
+				status: 200,
+				headers: {
+					"Content-Type": "application/json; charset=utf-8",
+					"Cache-Control": "no-store"
+				}
+			});
 			const order = await getOrderByDeliveryToken(token);
 			if (!order) return new Response(JSON.stringify({
 				found: false,
@@ -12166,7 +12201,11 @@ function PosApplicationPage() {
 			for (const order of newlyPrintable) {
 				if (autoPrintInFlight.current.has(order.id)) continue;
 				autoPrintInFlight.current.add(order.id);
-				handleExecutePrint(order, true).finally(() => {
+				if (config.printMode === "browser") printThermalTicket(order).finally(() => {
+					autoPrintInFlight.current.delete(order.id);
+					markOrderAsPrintedLocally(order.id);
+				});
+				else handleExecutePrint(order, true).finally(() => {
 					autoPrintInFlight.current.delete(order.id);
 				});
 			}
@@ -12239,7 +12278,7 @@ function PosApplicationPage() {
 			alert("Commande introuvable.");
 			return;
 		}
-		await handleExecutePrint(targetOrder, false);
+		await printThermalTicket(targetOrder);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
@@ -13506,15 +13545,16 @@ function PosApplicationPage() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "pt-2 space-y-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => printThermalTicket(selectedOrder),
+									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+									title: "Lancer l'impression directe du ticket thermique 80mm avec QR Code",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-5 h-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🖨️ Imprimer Ticket Caisse (Direct & QR)" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: () => handleExecutePrint(selectedOrder, false),
 									disabled: printingOrderId === selectedOrder.id,
-									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
-									title: `Imprimer le ticket sur l'imprimante (${config.printerIp})`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-5 h-5" }), printingOrderId === selectedOrder.id ? "Envoi à l'imprimante…" : `🖨️ Imprimer le Ticket Commande (${config.printerIp})`]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => printThermalTicket(selectedOrder),
-									className: "w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2 px-3 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Option secours : Boîte d'impression système (USB / Navigateur)" })
+									className: "w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2.5 px-3 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer",
+									title: `Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: printingOrderId === selectedOrder.id ? "Envoi ePOS en cours…" : `Option Réseau direct ePOS (${config.printerIp})` })]
 								})]
 							})
 						]
@@ -14410,6 +14450,37 @@ function DeliveryTrackPage() {
 	const [error, setError] = (0, import_react.useState)(null);
 	const fetchOrder = async () => {
 		try {
+			if (token.toUpperCase().startsWith("TEST")) {
+				setOrder({
+					id: "TEST-TICKET",
+					deliveryToken: "TEST-TICKET",
+					createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+					status: "delivering",
+					fulfillment: "delivery",
+					requestedTime: "Dès que possible",
+					customerName: "Test Ticket Caisse (GPS)",
+					customerPhone: "0499 00 00 00",
+					notes: "Test GPS Waze & Google Maps 1-Clic",
+					address: "Rue Haute 38",
+					postalCode: "4600",
+					city: "Visé",
+					deliveryFee: 2,
+					total: 16,
+					paymentMethod: "on_site",
+					items: [{
+						name: "Poké Saumon Classic (Medium)",
+						quantity: 1,
+						price: 12.5
+					}, {
+						name: "Boisson Aloe Vera",
+						quantity: 1,
+						price: 3.5
+					}]
+				});
+				setError(null);
+				setLoading(false);
+				return;
+			}
 			const raw = await fetch(`/api/track-order?token=${encodeURIComponent(token)}`, {
 				headers: { Accept: "application/json" },
 				cache: "no-store"

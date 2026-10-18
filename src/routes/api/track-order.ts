@@ -23,6 +23,43 @@ export const Route = createFileRoute("/api/track-order")({
             );
           }
 
+          // Support immédiat pour le ticket test imprimé
+          if (token.toUpperCase().startsWith("TEST")) {
+            return new Response(
+              JSON.stringify({
+                found: true,
+                order: {
+                  id: "TEST-TICKET",
+                  deliveryToken: "TEST-TICKET",
+                  createdAt: new Date().toISOString(),
+                  status: "delivering",
+                  fulfillment: "delivery",
+                  requestedTime: "Dès que possible",
+                  customerName: "Test Ticket Caisse (GPS)",
+                  customerPhone: "0499 00 00 00",
+                  notes: "Test GPS Waze & Google Maps 1-Clic",
+                  address: "Rue Haute 38",
+                  postalCode: "4600",
+                  city: "Visé",
+                  deliveryFee: 2.0,
+                  total: 16.0,
+                  paymentMethod: "on_site",
+                  items: [
+                    { name: "Poké Saumon Classic (Medium)", quantity: 1, price: 12.5 },
+                    { name: "Boisson Aloe Vera", quantity: 1, price: 3.5 },
+                  ],
+                },
+              }),
+              {
+                status: 200,
+                headers: {
+                  "Content-Type": "application/json; charset=utf-8",
+                  "Cache-Control": "no-store",
+                },
+              },
+            );
+          }
+
           const order = await getOrderByDeliveryToken(token);
           if (!order) {
             return new Response(

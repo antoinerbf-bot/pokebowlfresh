@@ -17,6 +17,33 @@ function DeliveryTrackPage() {
 
   const fetchOrder = async () => {
     try {
+      if (token.toUpperCase().startsWith("TEST")) {
+        setOrder({
+          id: "TEST-TICKET",
+          deliveryToken: "TEST-TICKET",
+          createdAt: new Date().toISOString(),
+          status: "delivering",
+          fulfillment: "delivery",
+          requestedTime: "Dès que possible",
+          customerName: "Test Ticket Caisse (GPS)",
+          customerPhone: "0499 00 00 00",
+          notes: "Test GPS Waze & Google Maps 1-Clic",
+          address: "Rue Haute 38",
+          postalCode: "4600",
+          city: "Visé",
+          deliveryFee: 2.0,
+          total: 16.0,
+          paymentMethod: "on_site",
+          items: [
+            { name: "Poké Saumon Classic (Medium)", quantity: 1, price: 12.5 },
+            { name: "Boisson Aloe Vera", quantity: 1, price: 3.5 },
+          ],
+        });
+        setError(null);
+        setLoading(false);
+        return;
+      }
+
       // 1. Appel direct ultra-rapide à l'API REST /api/track-order
       const raw = await fetch(`/api/track-order?token=${encodeURIComponent(token)}`, {
         headers: { Accept: "application/json" },

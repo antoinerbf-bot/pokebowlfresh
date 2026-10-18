@@ -224,13 +224,20 @@ export function PosApplicationPage() {
 
       setOrders(newOrders);
 
-      // Impression automatique sur l'imprimante Epson via la route direct ePOS
+      // Impression automatique sur l'imprimante
       for (const order of newlyPrintable) {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
-        void handleExecutePrint(order, true).finally(() => {
-          autoPrintInFlight.current.delete(order.id);
-        });
+        if (config.printMode === "browser") {
+          void printThermalTicket(order).finally(() => {
+            autoPrintInFlight.current.delete(order.id);
+            markOrderAsPrintedLocally(order.id);
+          });
+        } else {
+          void handleExecutePrint(order, true).finally(() => {
+            autoPrintInFlight.current.delete(order.id);
+          });
+        }
       }
     } catch (e) {
       console.error("[POS] Erreur globale loadOrders:", e);
@@ -319,7 +326,8 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    await handleExecutePrint(targetOrder, false);
+    // Lancer directement l'impression du ticket thermique éprouvée
+    await printThermalTicket(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -1411,20 +1419,22 @@ export function PosApplicationPage() {
             {/* Actions Modal */}
             <div className="pt-2 space-y-2">
               <button
-                onClick={() => handleExecutePrint(selectedOrder, false)}
-                disabled={printingOrderId === selectedOrder.id}
-                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
-                title={`Imprimer le ticket sur l'imprimante (${config.printerIp})`}
+                onClick={() => printThermalTicket(selectedOrder)}
+                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                title="Lancer l'impression directe du ticket thermique 80mm avec QR Code"
               >
                 <Printer className="w-5 h-5" />
-                {printingOrderId === selectedOrder.id ? "Envoi à l'imprimante…" : `🖨️ Imprimer le Ticket Commande (${config.printerIp})`}
+                <span>🖨️ Imprimer Ticket Caisse (Direct & QR)</span>
               </button>
 
               <button
-                onClick={() => printThermalTicket(selectedOrder)}
-                className="w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2 px-3 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+                onClick={() => handleExecutePrint(selectedOrder, false)}
+                disabled={printingOrderId === selectedOrder.id}
+                className="w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2.5 px-3 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+                title={`Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`}
               >
-                <span>Option secours : Boîte d'impression système (USB / Navigateur)</span>
+                <Printer className="w-4 h-4 text-[#ff705f]" />
+                <span>{printingOrderId === selectedOrder.id ? "Envoi ePOS en cours…" : `Option Réseau direct ePOS (${config.printerIp})`}</span>
               </button>
             </div>
           </div>
