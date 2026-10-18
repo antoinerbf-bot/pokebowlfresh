@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { checkoutSchema, processCheckout } from "../../fn/checkout";
+import { checkoutSchema, processCheckout } from "../../lib/checkout-service.server";
 
 export const Route = createFileRoute("/api/checkout")({
   server: {
