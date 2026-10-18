@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-OM3KRJgh.css";
+var styles_default = "/assets/styles-C9AzDBmS.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -11984,7 +11984,8 @@ var DEFAULT_PRINTER_CONFIG = {
 	autoPrintKitchen: true,
 	autoPrintDelivery: true,
 	soundEnabled: true,
-	printMode: "epos"
+	printMode: "epos",
+	qrTarget: "track"
 };
 function loadPrinterConfig() {
 	if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
@@ -12324,8 +12325,13 @@ function PosApplicationPage() {
 		if (!order && !isTest) return;
 		let qrData = "";
 		const token = order?.deliveryToken || order?.id;
+		const fullAddress = `${order?.customer?.address ?? ""}, ${order?.customer?.postalCode ?? ""} ${order?.customer?.city ?? ""}`.trim();
 		if (token) {
-			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${token}`;
+			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+			let trackUrl = `${origin}/track/${token}`;
+			if (config.qrTarget === "waze" && fullAddress.length > 2) trackUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
+			else if (config.qrTarget === "maps" && fullAddress.length > 2) trackUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
+			else if (config.qrTarget === "auto-waze") trackUrl = `${origin}/track/${token}?auto=waze`;
 			try {
 				qrData = await import_lib.toDataURL(trackUrl, {
 					errorCorrectionLevel: "H",
@@ -12516,14 +12522,20 @@ function PosApplicationPage() {
 	const handleTestSystemPrint = async () => {
 		const dummyOrder = {
 			id: "TEST-TICKET",
-			status: "paid",
+			deliveryToken: "TEST-TICKET",
+			status: "delivering",
 			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
 			updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
 			customer: {
-				name: "Test Ticket Caisse",
+				name: "Test Ticket Caisse (GPS)",
 				phone: "0499 00 00 00",
-				fulfillment: "takeaway",
-				requestedTime: "MAINTENANT",
+				fulfillment: "delivery",
+				address: "Rue Haute 38",
+				postalCode: "4600",
+				city: "Visé",
+				deliveryFee: 2,
+				notes: "Test GPS Waze & Google Maps 1-Clic",
+				requestedTime: "Dès que possible",
 				paymentMethod: "on_site"
 			},
 			items: [{
@@ -13337,6 +13349,87 @@ function PosApplicationPage() {
 												})]
 											})]
 										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "text-base font-black text-[#ff705f]",
+													children: "Redirection du QR Code Ticket"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "rounded-full bg-[#ff705f]/20 text-[#ff705f] border border-[#ff705f]/30 px-2.5 py-0.5 text-[10px] font-bold",
+													children: "GPS & Navigation"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-xs text-[#8ea39b]",
+												children: "Choisissez vers où le smartphone du livreur est redirigé en scannant le QR code du ticket :"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "grid grid-cols-1 sm:grid-cols-3 gap-3",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+														type: "button",
+														onClick: () => {
+															const upd = {
+																...config,
+																qrTarget: "track"
+															};
+															setConfig(upd);
+															savePrinterConfig(upd);
+														},
+														className: `p-3.5 rounded-xl border text-left transition cursor-pointer ${(config.qrTarget ?? "track") === "track" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex items-center gap-1.5 font-black text-xs text-white",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📱 Page Livreur + GPS 1-Clic" })
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+															className: "text-[10px] mt-1 text-[#a5b4ae] leading-snug",
+															children: "Recommandé : Page élégante avec gros boutons Waze & Google Maps en haut, appel direct et détails."
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+														type: "button",
+														onClick: () => {
+															const upd = {
+																...config,
+																qrTarget: "waze"
+															};
+															setConfig(upd);
+															savePrinterConfig(upd);
+														},
+														className: `p-3.5 rounded-xl border text-left transition cursor-pointer ${config.qrTarget === "waze" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex items-center gap-1.5 font-black text-xs text-[#33ccff]",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🚗 Redirection Directe Waze" })
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+															className: "text-[10px] mt-1 text-[#a5b4ae] leading-snug",
+															children: "Le QR code encode directement l'adresse client dans Waze. L'application Waze s'ouvre immédiatement !"
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+														type: "button",
+														onClick: () => {
+															const upd = {
+																...config,
+																qrTarget: "maps"
+															};
+															setConfig(upd);
+															savePrinterConfig(upd);
+														},
+														className: `p-3.5 rounded-xl border text-left transition cursor-pointer ${config.qrTarget === "maps" ? "bg-[#ff705f]/20 border-[#ff705f] text-white" : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"}`,
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: "flex items-center gap-1.5 font-black text-xs text-[#4285F4]",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🗺️ Redirection Directe Maps" })
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+															className: "text-[10px] mt-1 text-[#a5b4ae] leading-snug",
+															children: "Le QR code encode directement l'itinéraire Google Maps. L'app Google Maps s'ouvre immédiatement !"
+														})]
+													})
+												]
+											})
+										]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
@@ -14615,10 +14708,24 @@ function DeliveryTrackPage() {
 			})
 		]
 	});
+	const hasAddress = Boolean(order.address && String(order.address).trim().length > 0);
 	const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
-	const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+	const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
 	const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
 	const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
+	(0, import_react.useEffect)(() => {
+		if (typeof window !== "undefined" && order && fullAddress) {
+			const search = window.location.search;
+			const auto = new URLSearchParams(search).get("auto");
+			if (auto === "waze") window.location.href = wazeUrl;
+			else if (auto === "maps") window.location.href = mapsUrl;
+		}
+	}, [
+		order,
+		fullAddress,
+		wazeUrl,
+		mapsUrl
+	]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-screen bg-[#F6F1E9] text-[#17231f]",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
@@ -14633,6 +14740,90 @@ function DeliveryTrackPage() {
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
 			className: "mx-auto max-w-lg px-4 py-6 space-y-4",
 			children: [
+				hasAddress ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-3xl bg-gradient-to-br from-[#1b322a] to-[#0d1a16] p-5 shadow-2xl border border-white/10 text-white space-y-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "flex h-3 w-3 relative",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black uppercase tracking-wider text-emerald-400",
+									children: "Navigation GPS Livreur (1-Clic)"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[10px] font-mono bg-white/10 px-2.5 py-1 rounded-full text-emerald-300 font-bold",
+								children: "Itinéraire Direct"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-start gap-3 bg-black/40 p-4 rounded-2xl border border-white/5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-6 w-6 text-[#ff705f] shrink-0 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex-1",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-black text-xl leading-tight text-white",
+										children: order.address
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "text-sm font-bold text-[#EADCC9]",
+										children: [
+											order.postalCode,
+											" ",
+											order.city
+										]
+									}),
+									order.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "text-xs text-amber-300 mt-2 bg-amber-500/10 p-2 rounded-xl border border-amber-500/20 font-medium",
+										children: ["🔔 ", order.notes]
+									})
+								]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-3 pt-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: wazeUrl,
+								target: "_blank",
+								rel: "noopener noreferrer",
+								className: "flex items-center justify-center gap-2 rounded-2xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Lancer WAZE" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: mapsUrl,
+								target: "_blank",
+								rel: "noopener noreferrer",
+								className: "flex items-center justify-center gap-2 rounded-2xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Google Maps" })]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between pt-1 text-xs text-[#8ea39b]",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								href: appleMapsUrl,
+								target: "_blank",
+								rel: "noopener noreferrer",
+								className: "hover:text-white underline font-medium",
+								children: "Ou ouvrir avec Apple Plans"
+							}), order.customerPhone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: `tel:${order.customerPhone}`,
+								className: "inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Appeler ", order.customerName] })]
+							})]
+						})
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+						children: "Mode de réception"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 font-bold text-base",
+						children: "Retrait sur place (Poke N Bowl Visé)"
+					})]
+				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -14677,78 +14868,6 @@ function DeliveryTrackPage() {
 							className: "flex items-center gap-2 rounded-xl bg-[#25D366]/15 text-[#189947] hover:bg-[#25D366]/25 px-4 py-3 font-bold text-sm transition",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-4 w-4" }), "Appeler"]
 						})]
-					})]
-				}),
-				order.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center justify-between",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
-								children: "Adresse de Livraison"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-[11px] font-bold bg-[#ff705f]/15 text-[#ff705f] px-2.5 py-0.5 rounded-full",
-								children: "Navigation 1-Clic"
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-start gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-5 w-5 text-[#ff705f] shrink-0 mt-0.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "font-black text-lg leading-snug",
-								children: order.address
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								className: "text-sm font-bold text-[#7a847e]",
-								children: [
-									order.postalCode,
-									" ",
-									order.city
-								]
-							})] })]
-						}),
-						order.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-xl bg-[#fff9ea] border border-[#f3d996] p-3 text-xs text-[#735311]",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Instructions client :" }),
-								" ",
-								order.notes
-							]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-									href: mapsUrl,
-									target: "_blank",
-									rel: "noopener noreferrer",
-									className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Google Maps"]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-									href: wazeUrl,
-									target: "_blank",
-									rel: "noopener noreferrer",
-									className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-3.5 px-3 font-black text-sm shadow transition active:scale-95",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Waze"]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-									href: appleMapsUrl,
-									target: "_blank",
-									rel: "noopener noreferrer",
-									className: "flex items-center justify-center gap-2 rounded-xl bg-[#17231f] hover:bg-black text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-4 w-4" }), "Apple Plans"]
-								})
-							]
-						})
-					]
-				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-						className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
-						children: "Mode de réception"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-1 font-bold text-base",
-						children: "Retrait sur place (Poke N Bowl Visé)"
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {

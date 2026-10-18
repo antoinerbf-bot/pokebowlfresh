@@ -13,6 +13,7 @@ export interface PrinterConfig {
   autoPrintDelivery: boolean;
   soundEnabled: boolean;
   printMode?: "epos" | "browser"; // "epos" (Réseau direct) ou "browser" (Boîte d'impression navigateur / USB)
+  qrTarget?: "track" | "waze" | "maps" | "auto-waze"; // Destination du QR code sur le ticket
 }
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
@@ -23,6 +24,7 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintDelivery: true,
   soundEnabled: true,
   printMode: "epos",
+  qrTarget: "track",
 };
 
 export function loadPrinterConfig(): PrinterConfig {

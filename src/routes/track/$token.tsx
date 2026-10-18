@@ -151,10 +151,25 @@ function DeliveryTrackPage() {
     );
   }
 
+  const hasAddress = Boolean(order.address && String(order.address).trim().length > 0);
   const fullAddress = `${order.address ?? ""}, ${order.postalCode ?? ""} ${order.city ?? ""}`.trim();
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
   const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
   const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
+
+  // Redirection automatique optionnelle (si ?auto=waze ou ?auto=maps)
+  useEffect(() => {
+    if (typeof window !== "undefined" && order && fullAddress) {
+      const search = window.location.search;
+      const params = new URLSearchParams(search);
+      const auto = params.get("auto");
+      if (auto === "waze") {
+        window.location.href = wazeUrl;
+      } else if (auto === "maps") {
+        window.location.href = mapsUrl;
+      }
+    }
+  }, [order, fullAddress, wazeUrl, mapsUrl]);
 
   return (
     <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
@@ -169,6 +184,86 @@ function DeliveryTrackPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-6 space-y-4">
+        {/* ─── Navigation GPS Livreur - TOUJOURS EN PREMIER ─── */}
+        {hasAddress ? (
+          <section className="rounded-3xl bg-gradient-to-br from-[#1b322a] to-[#0d1a16] p-5 shadow-2xl border border-white/10 text-white space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="flex h-3 w-3 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-black uppercase tracking-wider text-emerald-400">
+                  Navigation GPS Livreur (1-Clic)
+                </span>
+              </div>
+              <span className="text-[10px] font-mono bg-white/10 px-2.5 py-1 rounded-full text-emerald-300 font-bold">
+                Itinéraire Direct
+              </span>
+            </div>
+
+            <div className="flex items-start gap-3 bg-black/40 p-4 rounded-2xl border border-white/5">
+              <MapPin className="h-6 w-6 text-[#ff705f] shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="font-black text-xl leading-tight text-white">{order.address}</p>
+                <p className="text-sm font-bold text-[#EADCC9]">{order.postalCode} {order.city}</p>
+                {order.notes && (
+                  <p className="text-xs text-amber-300 mt-2 bg-amber-500/10 p-2 rounded-xl border border-amber-500/20 font-medium">
+                    🔔 {order.notes}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Gros Boutons GPS 1-Clic Ultra Visibles */}
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <a
+                href={wazeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center"
+              >
+                <Navigation className="h-5 w-5" />
+                <span>Lancer WAZE</span>
+              </a>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center"
+              >
+                <Navigation className="h-5 w-5" />
+                <span>Google Maps</span>
+              </a>
+            </div>
+
+            <div className="flex items-center justify-between pt-1 text-xs text-[#8ea39b]">
+              <a
+                href={appleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white underline font-medium"
+              >
+                Ou ouvrir avec Apple Plans
+              </a>
+              {order.customerPhone && (
+                <a
+                  href={`tel:${order.customerPhone}`}
+                  className="inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Appeler {order.customerName}</span>
+                </a>
+              )}
+            </div>
+          </section>
+        ) : (
+          <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5">
+            <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Mode de réception</h2>
+            <p className="mt-1 font-bold text-base">Retrait sur place (Poke N Bowl Visé)</p>
+          </section>
+        )}
+
         {/* Statut actuel */}
         <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5">
           <div className="flex items-center justify-between">
@@ -205,66 +300,6 @@ function DeliveryTrackPage() {
             </a>
           </div>
         </section>
-
-        {/* Adresse de livraison & GPS */}
-        {order.fulfillment === "delivery" ? (
-          <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Adresse de Livraison</h2>
-              <span className="text-[11px] font-bold bg-[#ff705f]/15 text-[#ff705f] px-2.5 py-0.5 rounded-full">
-                Navigation 1-Clic
-              </span>
-            </div>
-            <div className="flex items-start gap-2">
-              <MapPin className="h-5 w-5 text-[#ff705f] shrink-0 mt-0.5" />
-              <div>
-                <p className="font-black text-lg leading-snug">{order.address}</p>
-                <p className="text-sm font-bold text-[#7a847e]">{order.postalCode} {order.city}</p>
-              </div>
-            </div>
-
-            {order.notes && (
-              <div className="rounded-xl bg-[#fff9ea] border border-[#f3d996] p-3 text-xs text-[#735311]">
-                <strong>Instructions client :</strong> {order.notes}
-              </div>
-            )}
-
-            <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-              <a
-                href={mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95"
-              >
-                <Navigation className="h-4 w-4" />
-                Google Maps
-              </a>
-              <a
-                href={wazeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-3.5 px-3 font-black text-sm shadow transition active:scale-95"
-              >
-                <Navigation className="h-4 w-4" />
-                Waze
-              </a>
-              <a
-                href={appleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-[#17231f] hover:bg-black text-white py-3.5 px-3 font-black text-sm shadow transition active:scale-95"
-              >
-                <Navigation className="h-4 w-4" />
-                Apple Plans
-              </a>
-            </div>
-          </section>
-        ) : (
-          <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5">
-            <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Mode de réception</h2>
-            <p className="mt-1 font-bold text-base">Retrait sur place (Poke N Bowl Visé)</p>
-          </section>
-        )}
 
         {/* Contenu de la commande */}
         <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3">
