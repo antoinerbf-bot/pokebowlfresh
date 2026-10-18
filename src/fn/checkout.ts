@@ -32,7 +32,7 @@ const orderItemSchema = z.object({
   toppings: z.array(z.string()),
 });
 
-const checkoutSchema = z.object({
+export const checkoutSchema = z.object({
   customer: z.object({
     name: z.string().min(2),
     phone: z.string().min(8),
