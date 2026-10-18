@@ -526,7 +526,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$22 = createRootRouteWithContext()({
+var Route$23 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -584,7 +584,7 @@ function RootShell({ children }) {
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$22.useRouteContext();
+	const { queryClient } = Route$23.useRouteContext();
 	const pathname = useRouterState({ select: (state) => state.location.pathname });
 	(0, import_react.useEffect)(() => {
 		window.history.scrollRestoration = "manual";
@@ -5807,7 +5807,7 @@ var FAQ_SCHEMA = {
 		}
 	}))
 };
-var Route$21 = createFileRoute("/")({
+var Route$22 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
 			name: "description",
@@ -6337,598 +6337,6 @@ function Index() {
 	});
 }
 //#endregion
-//#region src/lib/orders.ts
-function generateOrderId() {
-	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-}
-//#endregion
-//#region src/lib/env.server.ts
-function parseEnvFile(filePath) {
-	try {
-		if (!fs.existsSync(filePath)) return {};
-		const content = fs.readFileSync(filePath, "utf-8");
-		const result = {};
-		for (const rawLine of content.split("\n")) {
-			const line = rawLine.trim();
-			if (!line || line.startsWith("#")) continue;
-			const eqIdx = line.indexOf("=");
-			if (eqIdx === -1) continue;
-			const key = line.slice(0, eqIdx).trim();
-			let val = line.slice(eqIdx + 1).trim();
-			if (val.startsWith("\"") && val.endsWith("\"") || val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
-			result[key] = val;
-		}
-		return result;
-	} catch {
-		return {};
-	}
-}
-var loaded = false;
-var candidateFiles = [
-	path.resolve(process.cwd(), ".env"),
-	path.resolve(process.cwd(), ".env.local"),
-	"/home/puzo3938/pokenbowl.be/.env",
-	"/home/puzo3938/.env",
-	"/home/puzo3938/repositories/pokebowlfresh-git/.env",
-	"/home/puzo3938/repositories/pokebowlfresh-cpanel/.env"
-];
-function getCheckedFiles() {
-	return candidateFiles.map((f) => ({
-		file: f,
-		exists: fs.existsSync(f)
-	}));
-}
-function loadAndGetEnv() {
-	if (!loaded) {
-		for (const file of candidateFiles) {
-			const parsed = parseEnvFile(file);
-			for (const [k, v] of Object.entries(parsed)) if (!process.env[k]) process.env[k] = v;
-		}
-		loaded = true;
-	}
-	return process.env;
-}
-function getAllBankKeyCandidates() {
-	const env = loadAndGetEnv();
-	const bankPatterns = [
-		"BANCONTACT",
-		"PAYCONIQ",
-		"MOLLIE",
-		"STRIPE",
-		"PAYMENT",
-		"VIVA",
-		"WORLDLINE"
-	];
-	const found = [];
-	for (const [k, v] of Object.entries(env)) {
-		if (!v) continue;
-		const upper = k.toUpperCase();
-		if (bankPatterns.some((pattern) => upper.includes(pattern)) || upper === "API_KEY") {
-			const str = String(v).trim();
-			const masked = str.length > 8 ? `${str.slice(0, 4)}...${str.slice(-4)} (${str.length} chars)` : `**** (${str.length} chars)`;
-			found.push({
-				name: k,
-				source: "process.env",
-				maskedValue: masked,
-				value: str
-			});
-		}
-	}
-	return found;
-}
-//#endregion
-//#region src/lib/bancontact-pro.server.ts
-function getBancontactProApiKey() {
-	const env = loadAndGetEnv();
-	const candidate = env.BANCONTACT_PRO_API_KEY || env.PAYCONIQ_API_KEY || env.BANCONTACT_API_KEY || env.BANCONTACT_KEY || env.PAYCONIQ_KEY;
-	if (candidate && (candidate.startsWith("live_") || candidate.startsWith("test_"))) return;
-	return candidate?.trim();
-}
-function isBancontactProConfigured() {
-	return Boolean(getBancontactProApiKey());
-}
-function getAuthHeader(apiKey) {
-	const clean = apiKey.trim();
-	return clean.toLowerCase().startsWith("bearer ") ? clean : `Bearer ${clean}`;
-}
-var CANDIDATE_PROD_URLS = ["https://api.payconiq.com/v3", "https://merchant.api.bancontact.net/v3"];
-var CANDIDATE_PREPROD_URLS = [
-	"https://api.ext.payconiq.com/v3",
-	"https://api.preprod.payconiq.com/v3",
-	"https://merchant.api.preprod.bancontact.net/v3"
-];
-function getCandidateUrls() {
-	const env = (process.env.BANCONTACT_PRO_ENV || "production").toLowerCase();
-	return env === "preprod" || env === "test" ? CANDIDATE_PREPROD_URLS : CANDIDATE_PROD_URLS;
-}
-async function createBancontactProPayment(params) {
-	const apiKey = getBancontactProApiKey();
-	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.");
-	const amountCents = Math.round(params.amountEur * 100);
-	const urls = getCandidateUrls();
-	let lastErr = "";
-	for (const baseUrl of urls) try {
-		const res = await fetch(`${baseUrl}/payments`, {
-			method: "POST",
-			headers: {
-				Authorization: getAuthHeader(apiKey),
-				"Content-Type": "application/json",
-				Accept: "application/json"
-			},
-			body: JSON.stringify({
-				amount: amountCents,
-				currency: "EUR",
-				description: params.description,
-				reference: params.reference,
-				returnUrl: params.returnUrl,
-				callbackUrl: params.callbackUrl
-			})
-		});
-		if (res.ok) return await res.json();
-		lastErr = await res.text();
-	} catch (e) {
-		lastErr = e?.message ?? String(e);
-	}
-	throw new Error(`Bancontact Pro create payment failed: ${lastErr}`);
-}
-async function getBancontactProPayment(paymentId) {
-	const apiKey = getBancontactProApiKey();
-	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.");
-	const urls = getCandidateUrls();
-	let lastErr = "";
-	for (const baseUrl of urls) try {
-		const res = await fetch(`${baseUrl}/payments/${paymentId}`, { headers: {
-			Authorization: getAuthHeader(apiKey),
-			Accept: "application/json"
-		} });
-		if (res.ok) return await res.json();
-		lastErr = await res.text();
-	} catch (e) {
-		lastErr = e?.message ?? String(e);
-	}
-	throw new Error(`Bancontact Pro get payment failed: ${lastErr}`);
-}
-//#endregion
-//#region src/lib/mollie.server.ts
-/**
-* Server-only Mollie helpers.
-* Requires env: MOLLIE_API_KEY (test_… or live_…)
-*/
-var MOLLIE_API = "https://api.mollie.com/v2";
-function getMollieApiKey() {
-	const env = loadAndGetEnv();
-	const direct = env.MOLLIE_API_KEY || env.MOLLIE_KEY;
-	if (direct) return direct.trim();
-	const candidates = [
-		env.BANCONTACT_PRO_API_KEY,
-		env.PAYCONIQ_API_KEY,
-		env.BANCONTACT_API_KEY,
-		env.API_KEY
-	];
-	for (const c of candidates) if (c && (c.startsWith("live_") || c.startsWith("test_"))) return c.trim();
-}
-function isMollieConfigured() {
-	return Boolean(getMollieApiKey());
-}
-function getApiKey() {
-	const key = getMollieApiKey();
-	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
-	return key;
-}
-async function createMolliePayment(params) {
-	const res = await fetch(`${MOLLIE_API}/payments`, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${getApiKey()}`,
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({
-			amount: {
-				currency: "EUR",
-				value: params.amountValue
-			},
-			description: params.description,
-			redirectUrl: params.redirectUrl,
-			webhookUrl: params.webhookUrl,
-			metadata: params.metadata,
-			locale: params.locale ?? "fr_BE"
-		})
-	});
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Mollie create payment failed (${res.status}): ${errText}`);
-	}
-	return await res.json();
-}
-async function getMolliePayment(paymentId) {
-	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
-	if (!res.ok) {
-		const errText = await res.text();
-		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
-	}
-	return await res.json();
-}
-//#endregion
-//#region src/lib/order-store.ts
-function isPostgresConfigured() {
-	return Boolean(process.env.DATABASE_URL?.trim());
-}
-var memoryOrders = /* @__PURE__ */ new Map();
-var lastLoadedTime = 0;
-function getStoreCandidatePaths() {
-	const candidateDirs = [
-		process.env.ORDERS_DATA_DIR,
-		"/home/puzo3938/pokenbowl.be",
-		process.cwd(),
-		"/tmp"
-	].filter(Boolean);
-	const paths = [];
-	for (const dir of candidateDirs) try {
-		paths.push(path.join(dir, "pokenbowl-orders.json"));
-	} catch {}
-	return paths;
-}
-function loadLocalOrders(force = false) {
-	const now = Date.now();
-	if (!force && now - lastLoadedTime < 300 && memoryOrders.size > 0) return;
-	lastLoadedTime = now;
-	const candidates = getStoreCandidatePaths();
-	for (const filePath of candidates) try {
-		if (fs.existsSync(filePath)) {
-			const raw = fs.readFileSync(filePath, "utf-8");
-			if (raw && raw.trim().length > 2) {
-				const list = JSON.parse(raw);
-				if (Array.isArray(list)) {
-					for (const item of list) if (item?.id) {
-						const existing = memoryOrders.get(item.id);
-						if (!existing || item.status !== existing.status || item.deliveryToken || !existing.deliveryToken) memoryOrders.set(item.id, item);
-					}
-				}
-			}
-		}
-	} catch (err) {}
-}
-function saveLocalOrders() {
-	try {
-		const list = Array.from(memoryOrders.values());
-		const jsonStr = JSON.stringify(list, null, 2);
-		const candidates = getStoreCandidatePaths();
-		for (const filePath of candidates) try {
-			const dir = path.dirname(filePath);
-			if (fs.existsSync(dir)) fs.writeFileSync(filePath, jsonStr, "utf-8");
-		} catch {}
-		try {
-			fs.writeFileSync("/tmp/pokenbowl-orders.json", jsonStr, "utf-8");
-		} catch {}
-	} catch (err) {
-		console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
-	}
-}
-var schemaReady;
-function getSql() {
-	const url = process.env.DATABASE_URL;
-	if (!url) throw new Error("DATABASE_URL manquante. Connecte une base Postgres Neon au projet.");
-	return cs(url);
-}
-async function ensureSchema() {
-	if (!schemaReady) schemaReady = (async () => {
-		const sql = getSql();
-		await sql`
-        CREATE TABLE IF NOT EXISTS orders (
-          id TEXT PRIMARY KEY,
-          delivery_token TEXT,
-          created_at TIMESTAMPTZ NOT NULL,
-          status TEXT NOT NULL,
-          payment_method TEXT NOT NULL,
-          mollie_payment_id TEXT,
-          customer_json TEXT NOT NULL,
-          items_json TEXT NOT NULL,
-          total NUMERIC(12, 2) NOT NULL,
-          currency TEXT NOT NULL DEFAULT 'EUR',
-          print_status TEXT NOT NULL DEFAULT 'pending',
-          printed_at TIMESTAMPTZ,
-          print_attempts INTEGER NOT NULL DEFAULT 0,
-          print_claimed_at TIMESTAMPTZ,
-          print_error TEXT
-        )
-      `;
-		await sql`
-        ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT
-      `;
-		await sql`
-        CREATE INDEX IF NOT EXISTS orders_print_queue_idx
-        ON orders (print_status, status, created_at)
-      `;
-		await sql`
-        ALTER TABLE orders ADD COLUMN IF NOT EXISTS print_claimed_at TIMESTAMPTZ
-      `;
-		await sql`
-        CREATE INDEX IF NOT EXISTS orders_mollie_idx
-        ON orders (mollie_payment_id)
-      `;
-		await sql`
-        CREATE UNIQUE INDEX IF NOT EXISTS orders_delivery_token_idx
-        ON orders (delivery_token) WHERE delivery_token IS NOT NULL
-      `;
-	})().catch((error) => {
-		schemaReady = void 0;
-		throw error;
-	});
-	await schemaReady;
-}
-function rowToOrder(row) {
-	return {
-		id: row.id,
-		deliveryToken: row.delivery_token ?? void 0,
-		createdAt: row.created_at,
-		status: row.status,
-		paymentMethod: row.payment_method,
-		molliePaymentId: row.mollie_payment_id ?? void 0,
-		customer: JSON.parse(row.customer_json),
-		items: JSON.parse(row.items_json),
-		total: Number(row.total),
-		currency: row.currency,
-		printStatus: row.print_status,
-		printedAt: row.printed_at,
-		printAttempts: row.print_attempts,
-		printError: row.print_error
-	};
-}
-async function getOrderFromStore(id) {
-	const rawId = (id ?? "").trim();
-	if (!rawId) return void 0;
-	const cleanId = decodeURIComponent(rawId).trim();
-	const lowerId = cleanId.toLowerCase();
-	loadLocalOrders(true);
-	const localMatch = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => {
-		if (!o) return false;
-		const oId = (o.id ?? "").trim();
-		const dt = (o.deliveryToken ?? "").trim();
-		return oId === cleanId || oId.toLowerCase() === lowerId || dt === cleanId || dt.toLowerCase() === lowerId;
-	});
-	if (localMatch) return localMatch;
-	if (isPostgresConfigured()) try {
-		await ensureSchema();
-		const row = (await getSql()`
-        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-               customer_json, items_json, total, currency,
-               print_status, printed_at, print_claimed_at, print_attempts, print_error
-        FROM orders
-        WHERE id = ${cleanId}
-           OR delivery_token = ${cleanId}
-           OR LOWER(id) = ${lowerId}
-           OR LOWER(delivery_token) = ${lowerId}
-        LIMIT 1
-      `)[0];
-		if (row) return rowToOrder(row);
-	} catch (err) {
-		console.error("[OrderStore] Erreur getOrderFromStore Postgres:", err);
-	}
-}
-async function getOrderByDeliveryToken(token) {
-	const rawToken = (token ?? "").trim();
-	if (!rawToken) return void 0;
-	const cleanToken = decodeURIComponent(rawToken).trim();
-	const lowerToken = cleanToken.toLowerCase();
-	loadLocalOrders(true);
-	const localMatch = Array.from(memoryOrders.values()).find((o) => {
-		if (!o) return false;
-		const dt = (o.deliveryToken ?? "").trim();
-		const id = (o.id ?? "").trim();
-		return dt && (dt === cleanToken || dt.toLowerCase() === lowerToken) || id && (id === cleanToken || id.toLowerCase() === lowerToken);
-	});
-	if (localMatch) return localMatch;
-	if (isPostgresConfigured()) try {
-		await ensureSchema();
-		const row = (await getSql()`
-        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-               customer_json, items_json, total, currency,
-               print_status, printed_at, print_claimed_at, print_attempts, print_error
-        FROM orders
-        WHERE delivery_token = ${cleanToken}
-           OR id = ${cleanToken}
-           OR LOWER(delivery_token) = ${lowerToken}
-           OR LOWER(id) = ${lowerToken}
-        LIMIT 1
-      `)[0];
-		if (row) return rowToOrder(row);
-	} catch (err) {
-		console.error("[OrderStore] Erreur getOrderByDeliveryToken Postgres:", err);
-	}
-}
-async function listOrdersFromStore(limit = 200) {
-	loadLocalOrders(true);
-	if (!isPostgresConfigured()) return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
-	try {
-		await ensureSchema();
-		const rows = await getSql()`
-      SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-             customer_json, items_json, total, currency,
-             print_status, printed_at, print_claimed_at, print_attempts, print_error
-      FROM orders
-      ORDER BY created_at DESC
-      LIMIT ${limit}
-    `;
-		const merged = /* @__PURE__ */ new Map();
-		for (const row of rows.map(rowToOrder)) merged.set(row.id, row);
-		for (const order of memoryOrders.values()) if (!merged.has(order.id)) merged.set(order.id, order);
-		return Array.from(merged.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
-	} catch (err) {
-		console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
-		return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
-	}
-}
-async function upsertOrder(order) {
-	loadLocalOrders(true);
-	memoryOrders.set(order.id, { ...order });
-	saveLocalOrders();
-	if (!isPostgresConfigured()) return;
-	try {
-		await ensureSchema();
-		await getSql()`
-      INSERT INTO orders (
-        id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-        customer_json, items_json, total, currency
-      )
-      VALUES (
-        ${order.id},
-        ${order.deliveryToken ?? null},
-        ${order.createdAt},
-        ${order.status},
-        ${order.paymentMethod},
-        ${order.molliePaymentId ?? null},
-        ${JSON.stringify(order.customer)},
-        ${JSON.stringify(order.items)},
-        ${order.total},
-        ${order.currency}
-      )
-      ON CONFLICT (id) DO UPDATE SET
-        delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
-        status = EXCLUDED.status,
-        payment_method = EXCLUDED.payment_method,
-        mollie_payment_id = EXCLUDED.mollie_payment_id,
-        customer_json = EXCLUDED.customer_json,
-        items_json = EXCLUDED.items_json,
-        total = EXCLUDED.total,
-        currency = EXCLUDED.currency
-    `;
-	} catch (err) {
-		console.error("[OrderStore] Erreur upsertOrder Postgres:", err);
-	}
-}
-async function updateOrderStatus(orderId, status) {
-	const cleanId = (orderId ?? "").trim();
-	if (!cleanId) return;
-	const lowerId = cleanId.toLowerCase();
-	loadLocalOrders(true);
-	let order = memoryOrders.get(cleanId);
-	if (!order) order = Array.from(memoryOrders.values()).find((o) => o.id && o.id.toLowerCase() === lowerId || o.deliveryToken && o.deliveryToken.toLowerCase() === lowerId);
-	if (order) {
-		order.status = status;
-		memoryOrders.set(order.id, order);
-		saveLocalOrders();
-	}
-	if (isPostgresConfigured()) try {
-		await ensureSchema();
-		await getSql()`
-        UPDATE orders
-        SET status = ${status}
-        WHERE id = ${cleanId}
-           OR delivery_token = ${cleanId}
-           OR LOWER(id) = ${lowerId}
-           OR LOWER(delivery_token) = ${lowerId}
-      `;
-	} catch (err) {
-		console.error("[OrderStore] Erreur updateOrderStatus Postgres:", err);
-	}
-}
-async function requestOrderReprint(orderId) {
-	const cleanId = (orderId ?? "").trim();
-	if (!cleanId) return;
-	if (!isPostgresConfigured()) {
-		loadLocalOrders(true);
-		const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId);
-		if (order) {
-			order.printStatus = "pending";
-			order.printError = null;
-			saveLocalOrders();
-		}
-		return;
-	}
-	await ensureSchema();
-	await getSql()`
-    UPDATE orders
-    SET print_status = 'pending',
-        print_claimed_at = NULL,
-        print_error = NULL
-    WHERE id = ${cleanId}
-  `;
-}
-async function claimNextPrintJob() {
-	if (!isPostgresConfigured()) {
-		loadLocalOrders(true);
-		const eligible = [
-			"paid",
-			"awaiting_pickup",
-			"awaiting_delivery",
-			"preparing",
-			"ready",
-			"delivering"
-		];
-		const next = Array.from(memoryOrders.values()).filter((o) => eligible.includes(o.status) && (o.printStatus === "pending" || !o.printStatus)).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())[0];
-		if (next) {
-			next.printStatus = "printing";
-			next.printAttempts = (next.printAttempts || 0) + 1;
-			saveLocalOrders();
-		}
-		return next;
-	}
-	await ensureSchema();
-	const row = (await getSql()`
-    UPDATE orders
-    SET
-      print_status = 'printing',
-      print_claimed_at = NOW(),
-      print_attempts = print_attempts + 1,
-      print_error = NULL
-    WHERE id = (
-      SELECT id
-      FROM orders
-      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery', 'preparing', 'ready', 'delivering')
-        AND (
-          print_status = 'pending'
-          OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
-        )
-      ORDER BY created_at ASC
-      LIMIT 1
-      FOR UPDATE SKIP LOCKED
-    )
-    RETURNING id, delivery_token, created_at, status, payment_method, mollie_payment_id,
-              customer_json, items_json, total, currency,
-              print_status, printed_at, print_claimed_at, print_attempts, print_error
-  `)[0];
-	return row ? rowToOrder(row) : void 0;
-}
-async function acknowledgePrint(orderId, success, errorMessage) {
-	const cleanId = (orderId ?? "").trim();
-	if (!cleanId) return;
-	if (!isPostgresConfigured()) {
-		loadLocalOrders(true);
-		const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId);
-		if (order) {
-			if (success) {
-				order.printStatus = "printed";
-				order.printedAt = (/* @__PURE__ */ new Date()).toISOString();
-				order.printError = null;
-			} else {
-				order.printStatus = "failed";
-				order.printError = errorMessage ?? "Échec imprimante";
-			}
-			saveLocalOrders();
-		}
-		return;
-	}
-	await ensureSchema();
-	const sql = getSql();
-	if (success) {
-		await sql`
-      UPDATE orders
-      SET print_status = 'printed',
-          printed_at = NOW(),
-          print_claimed_at = NULL,
-          print_error = NULL
-      WHERE id = ${orderId}
-    `;
-		return;
-	}
-	await sql`
-    UPDATE orders
-    SET print_status = 'failed',
-        print_error = ${errorMessage ?? "Printer agent failed"}
-    WHERE id = ${orderId}
-  `;
-}
-//#endregion
 //#region src/lib/delivery.ts
 var deliveryZones = [
 	{
@@ -7032,273 +6440,8 @@ function getDeliveryZone(postalCode) {
 	return deliveryZones.find((zone) => zone.postalCode === normalized) ?? null;
 }
 //#endregion
-//#region src/fn/checkout.ts
-var orderItemSchema = objectType({
-	id: stringType(),
-	name: stringType(),
-	price: numberType().positive(),
-	quantity: numberType().int().positive(),
-	toppings: arrayType(stringType())
-});
-var checkoutSchema = objectType({
-	customer: objectType({
-		name: stringType().min(2),
-		phone: stringType().min(8),
-		email: stringType().email().optional().or(literalType("")),
-		notes: stringType().max(500).optional(),
-		fulfillment: enumType(["delivery", "pickup"]),
-		requestedTime: stringType().min(1),
-		address: stringType().max(300).optional(),
-		postalCode: stringType().max(10).optional(),
-		city: stringType().max(100).optional()
-	}),
-	items: arrayType(orderItemSchema).min(1),
-	paymentMethod: enumType(["online", "on_site"]),
-	origin: stringType().url()
-});
-function canonicalizeItems(items) {
-	const catalog = new Map([
-		...bowls.map((item) => [item.id, item.price]),
-		["sur-mesure", 10],
-		...drinks.map((item) => [item.id, item.price]),
-		...desserts.map((item) => [item.id, item.price])
-	]);
-	return items.map((item) => {
-		if (item.id === "sur-mesure") {
-			let unitPrice = 10;
-			const opts = item.toppings ?? [];
-			if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) unitPrice += 3;
-			if (opts.some((t) => /saumon/i.test(t))) unitPrice += 1;
-			const mixInsLine = opts.find((t) => /^Mix-ins?\s*:/i.test(t));
-			if (mixInsLine) {
-				const rawMixIns = mixInsLine.replace(/^Mix-ins?\s*:\s*/i, "").replace(/\s*\(\+[\d.,]+€\)\s*$/, "").split(",").map((s) => s.trim()).filter((s) => s.length > 0);
-				const extraMixIns = Math.max(0, rawMixIns.length - 5);
-				unitPrice += extraMixIns * .5;
-			}
-			const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
-			if (toppingLine) {
-				const rawContent = toppingLine.replace(/^Toppings?\s*:\s*/i, "").replace(/\s*\(\+[\d.,]+€\)\s*$/, "");
-				let totalToppingUnits = 0;
-				if (!/aucun/i.test(rawContent)) {
-					const parts = rawContent.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
-					for (const part of parts) {
-						const match = part.match(/\(x(\d+)\)/i) || part.match(/x(\d+)/i);
-						const count = match ? parseInt(match[1], 10) : 1;
-						totalToppingUnits += isNaN(count) ? 1 : count;
-					}
-				}
-				const extraToppings = Math.max(0, totalToppingUnits - 2);
-				unitPrice += extraToppings * .5;
-			} else {
-				const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
-				let totalToppingUnits = 0;
-				for (const t of individualToppings) {
-					const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
-					const count = match ? parseInt(match[1], 10) : 1;
-					totalToppingUnits += isNaN(count) ? 1 : count;
-				}
-				const extraToppings = Math.max(0, totalToppingUnits - 2);
-				unitPrice += extraToppings * .5;
-			}
-			return {
-				...item,
-				name: "Poke Bowl sur mesure",
-				price: unitPrice,
-				toppings: opts
-			};
-		}
-		const bowl = bowls.find((b) => b.id === item.id || item.id === `${b.id}-moyen` || item.id === `${b.id}-grand` || item.id.startsWith(b.id));
-		if (bowl) {
-			let unitPrice = bowl.price;
-			const opts = item.toppings ?? [];
-			if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) unitPrice += 3;
-			const toppingEntries = opts.filter((t) => /^Topping/i.test(t));
-			let totalSignatureToppings = 0;
-			for (const t of toppingEntries) {
-				const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
-				const count = match ? parseInt(match[1], 10) : 1;
-				totalSignatureToppings += isNaN(count) ? 1 : count;
-			}
-			unitPrice += totalSignatureToppings * .5;
-			const extraSauces = opts.filter((t) => /sauce extra/i.test(t));
-			unitPrice += extraSauces.length * 1;
-			return {
-				...item,
-				name: bowl.name,
-				price: unitPrice,
-				toppings: opts
-			};
-		}
-		if (item.id === "tira-nutella") throw new Error("Le Tiramisu Nutella est actuellement victime de son succès (sold out).");
-		const canonicalPrice = catalog.get(item.id);
-		if (canonicalPrice == null) throw new Error("Article invalide");
-		const drink = drinks.find((d) => d.id === item.id);
-		const dessert = desserts.find((d) => d.id === item.id);
-		return {
-			...item,
-			name: drink?.name ?? dessert?.name ?? item.name,
-			price: canonicalPrice,
-			toppings: []
-		};
-	});
-}
-function computeSubtotal(items) {
-	return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-}
-var submitCheckout = createServerFn({ method: "POST" }).validator(checkoutSchema).handler(async ({ data }) => {
-	try {
-		console.info("[Checkout] submitCheckout started", {
-			fulfillment: data.customer.fulfillment,
-			paymentMethod: data.paymentMethod,
-			itemCount: data.items.length
-		});
-		const items = canonicalizeItems(data.items);
-		const subtotal = computeSubtotal(items);
-		if (subtotal <= 0) throw new Error("Panier invalide");
-		const deliveryZone = data.customer.fulfillment === "delivery" ? getDeliveryZone(data.customer.postalCode ?? "") : null;
-		if (data.customer.fulfillment === "delivery") {
-			if (data.paymentMethod === "on_site") throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
-			if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
-			if (subtotal < deliveryZone.minimumOrder) throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
-			if (!data.customer.address?.trim() || !data.customer.city?.trim()) throw new Error("Adresse de livraison incomplète.");
-		}
-		const deliveryFee = deliveryZone ? subtotal >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
-		const total = subtotal + deliveryFee;
-		const orderId = generateOrderId();
-		const order = {
-			id: orderId,
-			deliveryToken: crypto.randomUUID().replace(/-/g, ""),
-			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-			status: data.paymentMethod === "online" ? "pending_payment" : data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup",
-			paymentMethod: data.paymentMethod,
-			customer: {
-				name: data.customer.name.trim(),
-				phone: data.customer.phone.trim(),
-				email: data.customer.email?.trim() || void 0,
-				notes: data.customer.notes?.trim() || void 0,
-				fulfillment: data.customer.fulfillment,
-				requestedTime: data.customer.requestedTime,
-				address: data.customer.address?.trim() || void 0,
-				postalCode: data.customer.postalCode?.trim().replace(/\s+/g, "") || void 0,
-				city: data.customer.city?.trim() || void 0,
-				deliveryFee
-			},
-			items,
-			total,
-			currency: "EUR"
-		};
-		if (data.paymentMethod === "on_site") {
-			await upsertOrder(order);
-			return {
-				type: "on_site",
-				orderId: order.id,
-				total: order.total,
-				redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
-			};
-		}
-		if (isMollieConfigured() && !isBancontactProConfigured()) {
-			const webhookUrl = `${data.origin}/api/mollie-webhook`;
-			const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
-			const payment = await createMolliePayment({
-				amountValue: total.toFixed(2),
-				description: `Poke N Bowl ${orderId}`,
-				redirectUrl,
-				webhookUrl,
-				metadata: { orderId: order.id }
-			});
-			order.molliePaymentId = payment.id;
-			await upsertOrder(order);
-			const payUrl = payment._links?.checkout?.href;
-			if (!payUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
-			return {
-				type: "online",
-				orderId: order.id,
-				total: order.total,
-				molliePaymentId: payment.id,
-				redirectUrl: payUrl
-			};
-		}
-		const webhookUrl = `${data.origin}/api/bancontact-webhook`;
-		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
-		const payment = await createBancontactProPayment({
-			amountEur: total,
-			description: `Poke N Bowl ${orderId}`,
-			reference: order.id,
-			returnUrl: redirectUrl,
-			callbackUrl: webhookUrl
-		});
-		order.molliePaymentId = `bancontact:${payment.paymentId}`;
-		await upsertOrder(order);
-		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
-		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
-		return {
-			type: "online",
-			orderId: order.id,
-			total: order.total,
-			molliePaymentId: payment.paymentId,
-			redirectUrl: payUrl
-		};
-	} catch (error) {
-		console.error("[Checkout] submitCheckout failed:", error);
-		return {
-			type: "error",
-			message: error instanceof Error && error.message ? error.message : "Erreur serveur pendant la création de la commande. Consultez les journaux de l’application."
-		};
-	}
-});
-var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
-	let order = await getOrderFromStore(data.orderId);
-	if (order?.molliePaymentId && order.status === "pending_payment") if (order.molliePaymentId.startsWith("bancontact:")) {
-		const paymentId = order.molliePaymentId.slice(11);
-		try {
-			const payment = await getBancontactProPayment(paymentId);
-			if (payment.status === "SUCCEEDED") {
-				order = {
-					...order,
-					status: "paid"
-				};
-				await upsertOrder(order);
-			} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED" || payment.status === "VOIDED") {
-				order = {
-					...order,
-					status: payment.status === "EXPIRED" ? "expired" : "cancelled"
-				};
-				await upsertOrder(order);
-			}
-		} catch {}
-	} else try {
-		const payment = await getMolliePayment(order.molliePaymentId);
-		if (payment.status === "paid") {
-			order = {
-				...order,
-				status: "paid"
-			};
-			await upsertOrder(order);
-		} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
-			order = {
-				...order,
-				status: payment.status === "expired" ? "expired" : "cancelled"
-			};
-			await upsertOrder(order);
-		}
-	} catch {}
-	if (!order) return { found: false };
-	return {
-		found: true,
-		order: {
-			id: order.id,
-			status: order.status,
-			paymentMethod: order.paymentMethod,
-			total: order.total,
-			customer: order.customer,
-			items: order.items,
-			createdAt: order.createdAt
-		}
-	};
-});
-//#endregion
 //#region src/routes/checkout.tsx
-var Route$20 = createFileRoute("/checkout")({ component: CheckoutPage });
+var Route$21 = createFileRoute("/checkout")({ component: CheckoutPage });
 function CheckoutPage() {
 	const { items, total, clearCart } = useCart();
 	const navigate = useNavigate();
@@ -7354,37 +6497,48 @@ function CheckoutPage() {
 		setLoading(true);
 		try {
 			const origin = window.location.origin;
-			const result = await submitCheckout({ data: {
-				customer: {
-					name,
-					phone,
-					email: email || "",
-					notes: notes || void 0,
-					fulfillment,
-					requestedTime,
-					address: address || void 0,
-					postalCode: postalCode || void 0,
-					city: city || void 0
+			const response = await fetch("/api/checkout", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json"
 				},
-				items: items.map((item) => ({
-					id: item.id,
-					name: item.name,
-					price: item.price,
-					quantity: item.quantity,
-					toppings: [...item.toppings, ...item.removedIngredients && item.removedIngredients.length > 0 ? [`Sans : ${item.removedIngredients.join(", ")}`] : []]
-				})),
-				paymentMethod,
-				origin
-			} });
-			if (result.type === "error") {
-				setError(result.message);
+				cache: "no-store",
+				body: JSON.stringify({
+					customer: {
+						name,
+						phone,
+						email: email || "",
+						notes: notes || void 0,
+						fulfillment,
+						requestedTime,
+						address: address || void 0,
+						postalCode: postalCode || void 0,
+						city: city || void 0
+					},
+					items: items.map((item) => ({
+						id: item.id,
+						name: item.name,
+						price: item.price,
+						quantity: item.quantity,
+						toppings: [...item.toppings, ...item.removedIngredients && item.removedIngredients.length > 0 ? [`Sans : ${item.removedIngredients.join(", ")}`] : []]
+					})),
+					paymentMethod,
+					origin
+				})
+			});
+			const result = await response.json();
+			if (!response.ok || !result.success) {
+				setError(result.error || `Le serveur a refusé la commande (HTTP ${response.status}).`);
 				setLoading(false);
 				return;
 			}
 			if (result.type === "online") {
+				if (!result.redirectUrl) throw new Error("Le prestataire de paiement n’a pas fourni de lien de paiement.");
 				window.location.href = result.redirectUrl;
 				return;
 			}
+			if (result.type !== "on_site" || !result.orderId) throw new Error("Le serveur n’a pas renvoyé de confirmation valide pour la commande.");
 			clearCart();
 			navigate({
 				to: "/order/success",
@@ -8114,7 +7268,7 @@ var DRINK_IMAGES = {
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
-var Route$19 = createFileRoute("/commander")({ component: CommanderPage });
+var Route$20 = createFileRoute("/commander")({ component: CommanderPage });
 var TAG_STYLES$1 = {
 	signature: "bg-[#2C1D16] text-[#EADCC9]",
 	bestseller: "bg-[#ff705f] text-white",
@@ -8634,7 +7788,7 @@ function BowlCard({ bowl, ok, tagStyle, soldOut }) {
 }
 //#endregion
 //#region src/routes/contact.tsx
-var Route$18 = createFileRoute("/contact")({
+var Route$19 = createFileRoute("/contact")({
 	head: () => ({ meta: [{ title: "Nous contacter — Poke N Bowl Visé" }] }),
 	component: ContactPage
 });
@@ -8775,7 +7929,7 @@ function ContactPage() {
 }
 //#endregion
 //#region src/routes/recrutement.tsx
-var Route$17 = createFileRoute("/recrutement")({
+var Route$18 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: RecruitmentPage
 });
@@ -8892,7 +8046,7 @@ function RecruitmentPage() {
 }
 //#endregion
 //#region src/routes/sur-mesure.tsx
-var Route$16 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
+var Route$17 = createFileRoute("/sur-mesure")({ component: SurMesurePage });
 var BASE_PRICE = 10;
 var INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
@@ -9591,7 +8745,7 @@ function SurMesurePage() {
 }
 //#endregion
 //#region src/routes/admin/stocks.tsx
-var Route$15 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
+var Route$16 = createFileRoute("/admin/stocks")({ component: AdminStocksPage });
 var PIN_KEY = "pnb_stock_pin";
 function AdminStocksPage() {
 	const [pin, setPin] = (0, import_react.useState)("");
@@ -9838,8 +8992,535 @@ function AdminStocksPage() {
 	});
 }
 //#endregion
+//#region src/lib/env.server.ts
+function parseEnvFile(filePath) {
+	try {
+		if (!fs.existsSync(filePath)) return {};
+		const content = fs.readFileSync(filePath, "utf-8");
+		const result = {};
+		for (const rawLine of content.split("\n")) {
+			const line = rawLine.trim();
+			if (!line || line.startsWith("#")) continue;
+			const eqIdx = line.indexOf("=");
+			if (eqIdx === -1) continue;
+			const key = line.slice(0, eqIdx).trim();
+			let val = line.slice(eqIdx + 1).trim();
+			if (val.startsWith("\"") && val.endsWith("\"") || val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+			result[key] = val;
+		}
+		return result;
+	} catch {
+		return {};
+	}
+}
+var loaded = false;
+var candidateFiles = [
+	path.resolve(process.cwd(), ".env"),
+	path.resolve(process.cwd(), ".env.local"),
+	"/home/puzo3938/pokenbowl.be/.env",
+	"/home/puzo3938/.env",
+	"/home/puzo3938/repositories/pokebowlfresh-git/.env",
+	"/home/puzo3938/repositories/pokebowlfresh-cpanel/.env"
+];
+function getCheckedFiles() {
+	return candidateFiles.map((f) => ({
+		file: f,
+		exists: fs.existsSync(f)
+	}));
+}
+function loadAndGetEnv() {
+	if (!loaded) {
+		for (const file of candidateFiles) {
+			const parsed = parseEnvFile(file);
+			for (const [k, v] of Object.entries(parsed)) if (!process.env[k]) process.env[k] = v;
+		}
+		loaded = true;
+	}
+	return process.env;
+}
+function getAllBankKeyCandidates() {
+	const env = loadAndGetEnv();
+	const bankPatterns = [
+		"BANCONTACT",
+		"PAYCONIQ",
+		"MOLLIE",
+		"STRIPE",
+		"PAYMENT",
+		"VIVA",
+		"WORLDLINE"
+	];
+	const found = [];
+	for (const [k, v] of Object.entries(env)) {
+		if (!v) continue;
+		const upper = k.toUpperCase();
+		if (bankPatterns.some((pattern) => upper.includes(pattern)) || upper === "API_KEY") {
+			const str = String(v).trim();
+			const masked = str.length > 8 ? `${str.slice(0, 4)}...${str.slice(-4)} (${str.length} chars)` : `**** (${str.length} chars)`;
+			found.push({
+				name: k,
+				source: "process.env",
+				maskedValue: masked,
+				value: str
+			});
+		}
+	}
+	return found;
+}
+//#endregion
+//#region src/lib/bancontact-pro.server.ts
+function getBancontactProApiKey() {
+	const env = loadAndGetEnv();
+	const candidate = env.BANCONTACT_PRO_API_KEY || env.PAYCONIQ_API_KEY || env.BANCONTACT_API_KEY || env.BANCONTACT_KEY || env.PAYCONIQ_KEY;
+	if (candidate && (candidate.startsWith("live_") || candidate.startsWith("test_"))) return;
+	return candidate?.trim();
+}
+function isBancontactProConfigured() {
+	return Boolean(getBancontactProApiKey());
+}
+function getAuthHeader(apiKey) {
+	const clean = apiKey.trim();
+	return clean.toLowerCase().startsWith("bearer ") ? clean : `Bearer ${clean}`;
+}
+var CANDIDATE_PROD_URLS = ["https://api.payconiq.com/v3", "https://merchant.api.bancontact.net/v3"];
+var CANDIDATE_PREPROD_URLS = [
+	"https://api.ext.payconiq.com/v3",
+	"https://api.preprod.payconiq.com/v3",
+	"https://merchant.api.preprod.bancontact.net/v3"
+];
+function getCandidateUrls() {
+	const env = (process.env.BANCONTACT_PRO_ENV || "production").toLowerCase();
+	return env === "preprod" || env === "test" ? CANDIDATE_PREPROD_URLS : CANDIDATE_PROD_URLS;
+}
+async function createBancontactProPayment(params) {
+	const apiKey = getBancontactProApiKey();
+	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.");
+	const amountCents = Math.round(params.amountEur * 100);
+	const urls = getCandidateUrls();
+	let lastErr = "";
+	for (const baseUrl of urls) try {
+		const res = await fetch(`${baseUrl}/payments`, {
+			method: "POST",
+			headers: {
+				Authorization: getAuthHeader(apiKey),
+				"Content-Type": "application/json",
+				Accept: "application/json"
+			},
+			body: JSON.stringify({
+				amount: amountCents,
+				currency: "EUR",
+				description: params.description,
+				reference: params.reference,
+				returnUrl: params.returnUrl,
+				callbackUrl: params.callbackUrl
+			})
+		});
+		if (res.ok) return await res.json();
+		lastErr = await res.text();
+	} catch (e) {
+		lastErr = e?.message ?? String(e);
+	}
+	throw new Error(`Bancontact Pro create payment failed: ${lastErr}`);
+}
+async function getBancontactProPayment(paymentId) {
+	const apiKey = getBancontactProApiKey();
+	if (!apiKey) throw new Error("BANCONTACT_PRO_API_KEY manquante. Renseigne la variable BANCONTACT_PRO_API_KEY sur cPanel ou dans le fichier .env.");
+	const urls = getCandidateUrls();
+	let lastErr = "";
+	for (const baseUrl of urls) try {
+		const res = await fetch(`${baseUrl}/payments/${paymentId}`, { headers: {
+			Authorization: getAuthHeader(apiKey),
+			Accept: "application/json"
+		} });
+		if (res.ok) return await res.json();
+		lastErr = await res.text();
+	} catch (e) {
+		lastErr = e?.message ?? String(e);
+	}
+	throw new Error(`Bancontact Pro get payment failed: ${lastErr}`);
+}
+//#endregion
+//#region src/lib/order-store.ts
+function isPostgresConfigured() {
+	return Boolean(process.env.DATABASE_URL?.trim());
+}
+var memoryOrders = /* @__PURE__ */ new Map();
+var lastLoadedTime = 0;
+function getStoreCandidatePaths() {
+	const candidateDirs = [
+		process.env.ORDERS_DATA_DIR,
+		"/home/puzo3938/pokenbowl.be",
+		process.cwd(),
+		"/tmp"
+	].filter(Boolean);
+	const paths = [];
+	for (const dir of candidateDirs) try {
+		paths.push(path.join(dir, "pokenbowl-orders.json"));
+	} catch {}
+	return paths;
+}
+function loadLocalOrders(force = false) {
+	const now = Date.now();
+	if (!force && now - lastLoadedTime < 300 && memoryOrders.size > 0) return;
+	lastLoadedTime = now;
+	const candidates = getStoreCandidatePaths();
+	for (const filePath of candidates) try {
+		if (fs.existsSync(filePath)) {
+			const raw = fs.readFileSync(filePath, "utf-8");
+			if (raw && raw.trim().length > 2) {
+				const list = JSON.parse(raw);
+				if (Array.isArray(list)) {
+					for (const item of list) if (item?.id) {
+						const existing = memoryOrders.get(item.id);
+						if (!existing || item.status !== existing.status || item.deliveryToken || !existing.deliveryToken) memoryOrders.set(item.id, item);
+					}
+				}
+			}
+		}
+	} catch (err) {}
+}
+function saveLocalOrders() {
+	try {
+		const list = Array.from(memoryOrders.values());
+		const jsonStr = JSON.stringify(list, null, 2);
+		const candidates = getStoreCandidatePaths();
+		for (const filePath of candidates) try {
+			const dir = path.dirname(filePath);
+			if (fs.existsSync(dir)) fs.writeFileSync(filePath, jsonStr, "utf-8");
+		} catch {}
+		try {
+			fs.writeFileSync("/tmp/pokenbowl-orders.json", jsonStr, "utf-8");
+		} catch {}
+	} catch (err) {
+		console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
+	}
+}
+var schemaReady;
+function getSql() {
+	const url = process.env.DATABASE_URL;
+	if (!url) throw new Error("DATABASE_URL manquante. Connecte une base Postgres Neon au projet.");
+	return cs(url);
+}
+async function ensureSchema() {
+	if (!schemaReady) schemaReady = (async () => {
+		const sql = getSql();
+		await sql`
+        CREATE TABLE IF NOT EXISTS orders (
+          id TEXT PRIMARY KEY,
+          delivery_token TEXT,
+          created_at TIMESTAMPTZ NOT NULL,
+          status TEXT NOT NULL,
+          payment_method TEXT NOT NULL,
+          mollie_payment_id TEXT,
+          customer_json TEXT NOT NULL,
+          items_json TEXT NOT NULL,
+          total NUMERIC(12, 2) NOT NULL,
+          currency TEXT NOT NULL DEFAULT 'EUR',
+          print_status TEXT NOT NULL DEFAULT 'pending',
+          printed_at TIMESTAMPTZ,
+          print_attempts INTEGER NOT NULL DEFAULT 0,
+          print_claimed_at TIMESTAMPTZ,
+          print_error TEXT
+        )
+      `;
+		await sql`
+        ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT
+      `;
+		await sql`
+        CREATE INDEX IF NOT EXISTS orders_print_queue_idx
+        ON orders (print_status, status, created_at)
+      `;
+		await sql`
+        ALTER TABLE orders ADD COLUMN IF NOT EXISTS print_claimed_at TIMESTAMPTZ
+      `;
+		await sql`
+        CREATE INDEX IF NOT EXISTS orders_mollie_idx
+        ON orders (mollie_payment_id)
+      `;
+		await sql`
+        CREATE UNIQUE INDEX IF NOT EXISTS orders_delivery_token_idx
+        ON orders (delivery_token) WHERE delivery_token IS NOT NULL
+      `;
+	})().catch((error) => {
+		schemaReady = void 0;
+		throw error;
+	});
+	await schemaReady;
+}
+function rowToOrder(row) {
+	return {
+		id: row.id,
+		deliveryToken: row.delivery_token ?? void 0,
+		createdAt: row.created_at,
+		status: row.status,
+		paymentMethod: row.payment_method,
+		molliePaymentId: row.mollie_payment_id ?? void 0,
+		customer: JSON.parse(row.customer_json),
+		items: JSON.parse(row.items_json),
+		total: Number(row.total),
+		currency: row.currency,
+		printStatus: row.print_status,
+		printedAt: row.printed_at,
+		printAttempts: row.print_attempts,
+		printError: row.print_error
+	};
+}
+async function getOrderFromStore(id) {
+	const rawId = (id ?? "").trim();
+	if (!rawId) return void 0;
+	const cleanId = decodeURIComponent(rawId).trim();
+	const lowerId = cleanId.toLowerCase();
+	loadLocalOrders(true);
+	const localMatch = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => {
+		if (!o) return false;
+		const oId = (o.id ?? "").trim();
+		const dt = (o.deliveryToken ?? "").trim();
+		return oId === cleanId || oId.toLowerCase() === lowerId || dt === cleanId || dt.toLowerCase() === lowerId;
+	});
+	if (localMatch) return localMatch;
+	if (isPostgresConfigured()) try {
+		await ensureSchema();
+		const row = (await getSql()`
+        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+               customer_json, items_json, total, currency,
+               print_status, printed_at, print_claimed_at, print_attempts, print_error
+        FROM orders
+        WHERE id = ${cleanId}
+           OR delivery_token = ${cleanId}
+           OR LOWER(id) = ${lowerId}
+           OR LOWER(delivery_token) = ${lowerId}
+        LIMIT 1
+      `)[0];
+		if (row) return rowToOrder(row);
+	} catch (err) {
+		console.error("[OrderStore] Erreur getOrderFromStore Postgres:", err);
+	}
+}
+async function getOrderByDeliveryToken(token) {
+	const rawToken = (token ?? "").trim();
+	if (!rawToken) return void 0;
+	const cleanToken = decodeURIComponent(rawToken).trim();
+	const lowerToken = cleanToken.toLowerCase();
+	loadLocalOrders(true);
+	const localMatch = Array.from(memoryOrders.values()).find((o) => {
+		if (!o) return false;
+		const dt = (o.deliveryToken ?? "").trim();
+		const id = (o.id ?? "").trim();
+		return dt && (dt === cleanToken || dt.toLowerCase() === lowerToken) || id && (id === cleanToken || id.toLowerCase() === lowerToken);
+	});
+	if (localMatch) return localMatch;
+	if (isPostgresConfigured()) try {
+		await ensureSchema();
+		const row = (await getSql()`
+        SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+               customer_json, items_json, total, currency,
+               print_status, printed_at, print_claimed_at, print_attempts, print_error
+        FROM orders
+        WHERE delivery_token = ${cleanToken}
+           OR id = ${cleanToken}
+           OR LOWER(delivery_token) = ${lowerToken}
+           OR LOWER(id) = ${lowerToken}
+        LIMIT 1
+      `)[0];
+		if (row) return rowToOrder(row);
+	} catch (err) {
+		console.error("[OrderStore] Erreur getOrderByDeliveryToken Postgres:", err);
+	}
+}
+async function listOrdersFromStore(limit = 200) {
+	loadLocalOrders(true);
+	if (!isPostgresConfigured()) return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+	try {
+		await ensureSchema();
+		const rows = await getSql()`
+      SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+             customer_json, items_json, total, currency,
+             print_status, printed_at, print_claimed_at, print_attempts, print_error
+      FROM orders
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `;
+		const merged = /* @__PURE__ */ new Map();
+		for (const row of rows.map(rowToOrder)) merged.set(row.id, row);
+		for (const order of memoryOrders.values()) if (!merged.has(order.id)) merged.set(order.id, order);
+		return Array.from(merged.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+	} catch (err) {
+		console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
+		return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+	}
+}
+async function upsertOrder(order) {
+	loadLocalOrders(true);
+	memoryOrders.set(order.id, { ...order });
+	saveLocalOrders();
+	if (!isPostgresConfigured()) return;
+	try {
+		await ensureSchema();
+		await getSql()`
+      INSERT INTO orders (
+        id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+        customer_json, items_json, total, currency
+      )
+      VALUES (
+        ${order.id},
+        ${order.deliveryToken ?? null},
+        ${order.createdAt},
+        ${order.status},
+        ${order.paymentMethod},
+        ${order.molliePaymentId ?? null},
+        ${JSON.stringify(order.customer)},
+        ${JSON.stringify(order.items)},
+        ${order.total},
+        ${order.currency}
+      )
+      ON CONFLICT (id) DO UPDATE SET
+        delivery_token = COALESCE(EXCLUDED.delivery_token, orders.delivery_token),
+        status = EXCLUDED.status,
+        payment_method = EXCLUDED.payment_method,
+        mollie_payment_id = EXCLUDED.mollie_payment_id,
+        customer_json = EXCLUDED.customer_json,
+        items_json = EXCLUDED.items_json,
+        total = EXCLUDED.total,
+        currency = EXCLUDED.currency
+    `;
+	} catch (err) {
+		console.error("[OrderStore] Erreur upsertOrder Postgres:", err);
+	}
+}
+async function updateOrderStatus(orderId, status) {
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return;
+	const lowerId = cleanId.toLowerCase();
+	loadLocalOrders(true);
+	let order = memoryOrders.get(cleanId);
+	if (!order) order = Array.from(memoryOrders.values()).find((o) => o.id && o.id.toLowerCase() === lowerId || o.deliveryToken && o.deliveryToken.toLowerCase() === lowerId);
+	if (order) {
+		order.status = status;
+		memoryOrders.set(order.id, order);
+		saveLocalOrders();
+	}
+	if (isPostgresConfigured()) try {
+		await ensureSchema();
+		await getSql()`
+        UPDATE orders
+        SET status = ${status}
+        WHERE id = ${cleanId}
+           OR delivery_token = ${cleanId}
+           OR LOWER(id) = ${lowerId}
+           OR LOWER(delivery_token) = ${lowerId}
+      `;
+	} catch (err) {
+		console.error("[OrderStore] Erreur updateOrderStatus Postgres:", err);
+	}
+}
+async function requestOrderReprint(orderId) {
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return;
+	if (!isPostgresConfigured()) {
+		loadLocalOrders(true);
+		const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId);
+		if (order) {
+			order.printStatus = "pending";
+			order.printError = null;
+			saveLocalOrders();
+		}
+		return;
+	}
+	await ensureSchema();
+	await getSql()`
+    UPDATE orders
+    SET print_status = 'pending',
+        print_claimed_at = NULL,
+        print_error = NULL
+    WHERE id = ${cleanId}
+  `;
+}
+async function claimNextPrintJob() {
+	if (!isPostgresConfigured()) {
+		loadLocalOrders(true);
+		const eligible = [
+			"paid",
+			"awaiting_pickup",
+			"awaiting_delivery",
+			"preparing",
+			"ready",
+			"delivering"
+		];
+		const next = Array.from(memoryOrders.values()).filter((o) => eligible.includes(o.status) && (o.printStatus === "pending" || !o.printStatus)).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())[0];
+		if (next) {
+			next.printStatus = "printing";
+			next.printAttempts = (next.printAttempts || 0) + 1;
+			saveLocalOrders();
+		}
+		return next;
+	}
+	await ensureSchema();
+	const row = (await getSql()`
+    UPDATE orders
+    SET
+      print_status = 'printing',
+      print_claimed_at = NOW(),
+      print_attempts = print_attempts + 1,
+      print_error = NULL
+    WHERE id = (
+      SELECT id
+      FROM orders
+      WHERE status IN ('paid', 'awaiting_pickup', 'awaiting_delivery', 'preparing', 'ready', 'delivering')
+        AND (
+          print_status = 'pending'
+          OR (print_status = 'printing' AND print_claimed_at < NOW() - INTERVAL '2 minutes')
+        )
+      ORDER BY created_at ASC
+      LIMIT 1
+      FOR UPDATE SKIP LOCKED
+    )
+    RETURNING id, delivery_token, created_at, status, payment_method, mollie_payment_id,
+              customer_json, items_json, total, currency,
+              print_status, printed_at, print_claimed_at, print_attempts, print_error
+  `)[0];
+	return row ? rowToOrder(row) : void 0;
+}
+async function acknowledgePrint(orderId, success, errorMessage) {
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return;
+	if (!isPostgresConfigured()) {
+		loadLocalOrders(true);
+		const order = memoryOrders.get(cleanId) || Array.from(memoryOrders.values()).find((o) => o.id.toLowerCase() === cleanId.toLowerCase() || o.deliveryToken === cleanId);
+		if (order) {
+			if (success) {
+				order.printStatus = "printed";
+				order.printedAt = (/* @__PURE__ */ new Date()).toISOString();
+				order.printError = null;
+			} else {
+				order.printStatus = "failed";
+				order.printError = errorMessage ?? "Échec imprimante";
+			}
+			saveLocalOrders();
+		}
+		return;
+	}
+	await ensureSchema();
+	const sql = getSql();
+	if (success) {
+		await sql`
+      UPDATE orders
+      SET print_status = 'printed',
+          printed_at = NOW(),
+          print_claimed_at = NULL,
+          print_error = NULL
+      WHERE id = ${orderId}
+    `;
+		return;
+	}
+	await sql`
+    UPDATE orders
+    SET print_status = 'failed',
+        print_error = ${errorMessage ?? "Printer agent failed"}
+    WHERE id = ${orderId}
+  `;
+}
+//#endregion
 //#region src/routes/api/bancontact-webhook.ts
-var Route$14 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
+var Route$15 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: { POST: async ({ request }) => {
 	try {
 		const contentType = request.headers.get("content-type") ?? "";
 		let paymentId = null;
@@ -9874,8 +9555,68 @@ var Route$14 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: 
 	}
 } } } });
 //#endregion
+//#region src/lib/mollie.server.ts
+/**
+* Server-only Mollie helpers.
+* Requires env: MOLLIE_API_KEY (test_… or live_…)
+*/
+var MOLLIE_API = "https://api.mollie.com/v2";
+function getMollieApiKey() {
+	const env = loadAndGetEnv();
+	const direct = env.MOLLIE_API_KEY || env.MOLLIE_KEY;
+	if (direct) return direct.trim();
+	const candidates = [
+		env.BANCONTACT_PRO_API_KEY,
+		env.PAYCONIQ_API_KEY,
+		env.BANCONTACT_API_KEY,
+		env.API_KEY
+	];
+	for (const c of candidates) if (c && (c.startsWith("live_") || c.startsWith("test_"))) return c.trim();
+}
+function isMollieConfigured() {
+	return Boolean(getMollieApiKey());
+}
+function getApiKey() {
+	const key = getMollieApiKey();
+	if (!key) throw new Error("MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.");
+	return key;
+}
+async function createMolliePayment(params) {
+	const res = await fetch(`${MOLLIE_API}/payments`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${getApiKey()}`,
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			amount: {
+				currency: "EUR",
+				value: params.amountValue
+			},
+			description: params.description,
+			redirectUrl: params.redirectUrl,
+			webhookUrl: params.webhookUrl,
+			metadata: params.metadata,
+			locale: params.locale ?? "fr_BE"
+		})
+	});
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie create payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
+async function getMolliePayment(paymentId) {
+	const res = await fetch(`${MOLLIE_API}/payments/${paymentId}`, { headers: { Authorization: `Bearer ${getApiKey()}` } });
+	if (!res.ok) {
+		const errText = await res.text();
+		throw new Error(`Mollie get payment failed (${res.status}): ${errText}`);
+	}
+	return await res.json();
+}
+//#endregion
 //#region src/routes/api/bank-status.ts
-var Route$13 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
+var Route$14 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: async () => {
 	loadAndGetEnv();
 	const candidates = getAllBankKeyCandidates();
 	const bancontactKey = getBancontactProApiKey();
@@ -9976,6 +9717,271 @@ var Route$13 = createFileRoute("/api/bank-status")({ server: { handlers: { GET: 
 			"Cache-Control": "no-store, max-age=0"
 		}
 	});
+} } } });
+//#endregion
+//#region src/lib/orders.ts
+function generateOrderId() {
+	return `PNB-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+}
+//#endregion
+//#region src/lib/checkout-service.server.ts
+var checkoutSchema$1 = objectType({
+	customer: objectType({
+		name: stringType().min(2),
+		phone: stringType().min(8),
+		email: stringType().email().optional().or(literalType("")),
+		notes: stringType().max(500).optional(),
+		fulfillment: enumType(["delivery", "pickup"]),
+		requestedTime: stringType().min(1),
+		address: stringType().max(300).optional(),
+		postalCode: stringType().max(10).optional(),
+		city: stringType().max(100).optional()
+	}),
+	items: arrayType(orderItemSchema).min(1),
+	paymentMethod: enumType(["online", "on_site"]),
+	origin: stringType().url()
+});
+function canonicalizeItems(items) {
+	const catalog = new Map([
+		...bowls.map((item) => [item.id, item.price]),
+		["sur-mesure", 10],
+		...drinks.map((item) => [item.id, item.price]),
+		...desserts.map((item) => [item.id, item.price])
+	]);
+	return items.map((item) => {
+		if (item.id === "sur-mesure") {
+			let unitPrice = 10;
+			const opts = item.toppings ?? [];
+			if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) unitPrice += 3;
+			if (opts.some((t) => /saumon/i.test(t))) unitPrice += 1;
+			const mixInsLine = opts.find((t) => /^Mix-ins?\s*:/i.test(t));
+			if (mixInsLine) {
+				const rawMixIns = mixInsLine.replace(/^Mix-ins?\s*:\s*/i, "").replace(/\s*\(\+[\d.,]+€\)\s*$/, "").split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+				const extraMixIns = Math.max(0, rawMixIns.length - 5);
+				unitPrice += extraMixIns * .5;
+			}
+			const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
+			if (toppingLine) {
+				const rawContent = toppingLine.replace(/^Toppings?\s*:\s*/i, "").replace(/\s*\(\+[\d.,]+€\)\s*$/, "");
+				let totalToppingUnits = 0;
+				if (!/aucun/i.test(rawContent)) {
+					const parts = rawContent.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+					for (const part of parts) {
+						const match = part.match(/\(x(\d+)\)/i) || part.match(/x(\d+)/i);
+						const count = match ? parseInt(match[1], 10) : 1;
+						totalToppingUnits += isNaN(count) ? 1 : count;
+					}
+				}
+				const extraToppings = Math.max(0, totalToppingUnits - 2);
+				unitPrice += extraToppings * .5;
+			} else {
+				const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
+				let totalToppingUnits = 0;
+				for (const t of individualToppings) {
+					const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
+					const count = match ? parseInt(match[1], 10) : 1;
+					totalToppingUnits += isNaN(count) ? 1 : count;
+				}
+				const extraToppings = Math.max(0, totalToppingUnits - 2);
+				unitPrice += extraToppings * .5;
+			}
+			return {
+				...item,
+				name: "Poke Bowl sur mesure",
+				price: unitPrice,
+				toppings: opts
+			};
+		}
+		const bowl = bowls.find((b) => b.id === item.id || item.id === `${b.id}-moyen` || item.id === `${b.id}-grand` || item.id.startsWith(b.id));
+		if (bowl) {
+			let unitPrice = bowl.price;
+			const opts = item.toppings ?? [];
+			if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) unitPrice += 3;
+			const toppingEntries = opts.filter((t) => /^Topping/i.test(t));
+			let totalSignatureToppings = 0;
+			for (const t of toppingEntries) {
+				const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
+				const count = match ? parseInt(match[1], 10) : 1;
+				totalSignatureToppings += isNaN(count) ? 1 : count;
+			}
+			unitPrice += totalSignatureToppings * .5;
+			const extraSauces = opts.filter((t) => /sauce extra/i.test(t));
+			unitPrice += extraSauces.length * 1;
+			return {
+				...item,
+				name: bowl.name,
+				price: unitPrice,
+				toppings: opts
+			};
+		}
+		if (item.id === "tira-nutella") throw new Error("Le Tiramisu Nutella est actuellement victime de son succès (sold out).");
+		const canonicalPrice = catalog.get(item.id);
+		if (canonicalPrice == null) throw new Error("Article invalide");
+		const drink = drinks.find((d) => d.id === item.id);
+		const dessert = desserts.find((d) => d.id === item.id);
+		return {
+			...item,
+			name: drink?.name ?? dessert?.name ?? item.name,
+			price: canonicalPrice,
+			toppings: []
+		};
+	});
+}
+function computeSubtotal(items) {
+	return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+async function processCheckout(data) {
+	try {
+		console.info("[Checkout] submitCheckout started", {
+			fulfillment: data.customer.fulfillment,
+			paymentMethod: data.paymentMethod,
+			itemCount: data.items.length
+		});
+		const items = canonicalizeItems(data.items);
+		const subtotal = computeSubtotal(items);
+		if (subtotal <= 0) throw new Error("Panier invalide");
+		const deliveryZone = data.customer.fulfillment === "delivery" ? getDeliveryZone(data.customer.postalCode ?? "") : null;
+		if (data.customer.fulfillment === "delivery") {
+			if (data.paymentMethod === "on_site") throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
+			if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
+			if (subtotal < deliveryZone.minimumOrder) throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);
+			if (!data.customer.address?.trim() || !data.customer.city?.trim()) throw new Error("Adresse de livraison incomplète.");
+		}
+		const deliveryFee = deliveryZone ? subtotal >= 50 ? 0 : deliveryZone.feeUnder50 : 0;
+		const total = subtotal + deliveryFee;
+		const orderId = generateOrderId();
+		const order = {
+			id: orderId,
+			deliveryToken: crypto.randomUUID().replace(/-/g, ""),
+			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+			status: data.paymentMethod === "online" ? "pending_payment" : data.customer.fulfillment === "delivery" ? "awaiting_delivery" : "awaiting_pickup",
+			paymentMethod: data.paymentMethod,
+			customer: {
+				name: data.customer.name.trim(),
+				phone: data.customer.phone.trim(),
+				email: data.customer.email?.trim() || void 0,
+				notes: data.customer.notes?.trim() || void 0,
+				fulfillment: data.customer.fulfillment,
+				requestedTime: data.customer.requestedTime,
+				address: data.customer.address?.trim() || void 0,
+				postalCode: data.customer.postalCode?.trim().replace(/\s+/g, "") || void 0,
+				city: data.customer.city?.trim() || void 0,
+				deliveryFee
+			},
+			items,
+			total,
+			currency: "EUR"
+		};
+		if (data.paymentMethod === "on_site") {
+			await upsertOrder(order);
+			return {
+				type: "on_site",
+				orderId: order.id,
+				total: order.total,
+				redirectUrl: `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=on_site`
+			};
+		}
+		if (isMollieConfigured() && !isBancontactProConfigured()) {
+			const webhookUrl = `${data.origin}/api/mollie-webhook`;
+			const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
+			const payment = await createMolliePayment({
+				amountValue: total.toFixed(2),
+				description: `Poke N Bowl ${orderId}`,
+				redirectUrl,
+				webhookUrl,
+				metadata: { orderId: order.id }
+			});
+			order.molliePaymentId = payment.id;
+			await upsertOrder(order);
+			const payUrl = payment._links?.checkout?.href;
+			if (!payUrl) throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
+			return {
+				type: "online",
+				orderId: order.id,
+				total: order.total,
+				molliePaymentId: payment.id,
+				redirectUrl: payUrl
+			};
+		}
+		const webhookUrl = `${data.origin}/api/bancontact-webhook`;
+		const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
+		const payment = await createBancontactProPayment({
+			amountEur: total,
+			description: `Poke N Bowl ${orderId}`,
+			reference: order.id,
+			returnUrl: redirectUrl,
+			callbackUrl: webhookUrl
+		});
+		order.molliePaymentId = `bancontact:${payment.paymentId}`;
+		await upsertOrder(order);
+		const payUrl = payment._links?.checkout?.href || payment._links?.deeplink?.href || payment._links?.qrcode?.href;
+		if (!payUrl) throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
+		return {
+			type: "online",
+			orderId: order.id,
+			total: order.total,
+			molliePaymentId: payment.paymentId,
+			redirectUrl: payUrl
+		};
+	} catch (error) {
+		console.error("[Checkout] submitCheckout failed:", error);
+		return {
+			type: "error",
+			message: error instanceof Error && error.message ? error.message : "Erreur serveur pendant la création de la commande. Consultez les journaux de l’application."
+		};
+	}
+}
+//#endregion
+//#region src/routes/api/checkout.ts
+var Route$13 = createFileRoute("/api/checkout")({ server: { handlers: { POST: async ({ request }) => {
+	try {
+		const body = await request.json();
+		const parsed = checkoutSchema$1.safeParse(body);
+		if (!parsed.success) return new Response(JSON.stringify({
+			success: false,
+			error: "Les informations de commande sont incomplètes ou invalides.",
+			details: parsed.error.flatten()
+		}), {
+			status: 400,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+		const result = await processCheckout(parsed.data);
+		if (result.type === "error") return new Response(JSON.stringify({
+			success: false,
+			error: result.message
+		}), {
+			status: 400,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+		return new Response(JSON.stringify({
+			success: true,
+			...result
+		}), {
+			status: 200,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+	} catch (error) {
+		console.error("[API Checkout] Échec création commande:", error);
+		return new Response(JSON.stringify({
+			success: false,
+			error: error instanceof Error ? error.message : "Erreur serveur pendant la création de commande."
+		}), {
+			status: 500,
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Cache-Control": "no-store"
+			}
+		});
+	}
 } } } });
 //#endregion
 //#region src/routes/api/create-test-order.ts
@@ -11082,6 +11088,82 @@ function BlogArticlePage() {
 		]
 	});
 }
+//#endregion
+//#region src/fn/checkout.ts
+var orderItemSchema$1 = objectType({
+	id: stringType(),
+	name: stringType(),
+	price: numberType().positive(),
+	quantity: numberType().int().positive(),
+	toppings: arrayType(stringType())
+});
+var checkoutSchema = objectType({
+	customer: objectType({
+		name: stringType().min(2),
+		phone: stringType().min(8),
+		email: stringType().email().optional().or(literalType("")),
+		notes: stringType().max(500).optional(),
+		fulfillment: enumType(["delivery", "pickup"]),
+		requestedTime: stringType().min(1),
+		address: stringType().max(300).optional(),
+		postalCode: stringType().max(10).optional(),
+		city: stringType().max(100).optional()
+	}),
+	items: arrayType(orderItemSchema$1).min(1),
+	paymentMethod: enumType(["online", "on_site"]),
+	origin: stringType().url()
+});
+createServerFn({ method: "POST" }).validator(checkoutSchema).handler(async ({ data }) => processCheckout(data));
+var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ orderId: stringType().min(1) })).handler(async ({ data }) => {
+	let order = await getOrderFromStore(data.orderId);
+	if (order?.molliePaymentId && order.status === "pending_payment") if (order.molliePaymentId.startsWith("bancontact:")) {
+		const paymentId = order.molliePaymentId.slice(11);
+		try {
+			const payment = await getBancontactProPayment(paymentId);
+			if (payment.status === "SUCCEEDED") {
+				order = {
+					...order,
+					status: "paid"
+				};
+				await upsertOrder(order);
+			} else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED" || payment.status === "VOIDED") {
+				order = {
+					...order,
+					status: payment.status === "EXPIRED" ? "expired" : "cancelled"
+				};
+				await upsertOrder(order);
+			}
+		} catch {}
+	} else try {
+		const payment = await getMolliePayment(order.molliePaymentId);
+		if (payment.status === "paid") {
+			order = {
+				...order,
+				status: "paid"
+			};
+			await upsertOrder(order);
+		} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {
+			order = {
+				...order,
+				status: payment.status === "expired" ? "expired" : "cancelled"
+			};
+			await upsertOrder(order);
+		}
+	} catch {}
+	if (!order) return { found: false };
+	return {
+		found: true,
+		order: {
+			id: order.id,
+			status: order.status,
+			paymentMethod: order.paymentMethod,
+			total: order.total,
+			customer: order.customer,
+			items: order.items,
+			createdAt: order.createdAt
+		}
+	};
+});
 //#endregion
 //#region src/routes/order.success.tsx
 var Route$5 = createFileRoute("/order/success")({
@@ -14085,95 +14167,100 @@ var Route = createFileRoute("/api/printer/queue")({ server: { handlers: { GET: a
 } } } });
 //#endregion
 //#region src/routeTree.gen.ts
-var IndexRoute = Route$21.update({
+var IndexRoute = Route$22.update({
 	id: "/",
 	path: "/",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var CheckoutRoute = Route$20.update({
+var CheckoutRoute = Route$21.update({
 	id: "/checkout",
 	path: "/checkout",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var CommanderRoute = Route$19.update({
+var CommanderRoute = Route$20.update({
 	id: "/commander",
 	path: "/commander",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var ContactRoute = Route$18.update({
+var ContactRoute = Route$19.update({
 	id: "/contact",
 	path: "/contact",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var RecrutementRoute = Route$17.update({
+var RecrutementRoute = Route$18.update({
 	id: "/recrutement",
 	path: "/recrutement",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var SurMesureRoute = Route$16.update({
+var SurMesureRoute = Route$17.update({
 	id: "/sur-mesure",
 	path: "/sur-mesure",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var AdminStocksRoute = Route$15.update({
+var AdminStocksRoute = Route$16.update({
 	id: "/admin/stocks",
 	path: "/admin/stocks",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var ApiBancontactWebhookRoute = Route$14.update({
+var ApiBancontactWebhookRoute = Route$15.update({
 	id: "/api/bancontact-webhook",
 	path: "/api/bancontact-webhook",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
-var ApiBankStatusRoute = Route$13.update({
+var ApiBankStatusRoute = Route$14.update({
 	id: "/api/bank-status",
 	path: "/api/bank-status",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
+});
+var ApiCheckoutRoute = Route$13.update({
+	id: "/api/checkout",
+	path: "/api/checkout",
+	getParentRoute: () => Route$23
 });
 var ApiCreateTestOrderRoute = Route$12.update({
 	id: "/api/create-test-order",
 	path: "/api/create-test-order",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var ApiMollieWebhookRoute = Route$11.update({
 	id: "/api/mollie-webhook",
 	path: "/api/mollie-webhook",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var ApiOrdersRoute = Route$10.update({
 	id: "/api/orders",
 	path: "/api/orders",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var ApiPosOrdersRoute = Route$9.update({
 	id: "/api/pos-orders",
 	path: "/api/pos-orders",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var ApiTrackOrderRoute = Route$8.update({
 	id: "/api/track-order",
 	path: "/api/track-order",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var BlogIndexRoute = Route$7.update({
 	id: "/blog/",
 	path: "/blog/",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var BlogSlugRoute = Route$6.update({
 	id: "/blog/$slug",
 	path: "/blog/$slug",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var OrderSuccessRoute = Route$5.update({
 	id: "/order/success",
 	path: "/order/success",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var PosIndexRoute = Route$4.update({
 	id: "/pos/",
 	path: "/pos/",
-	getParentRoute: () => Route$22
+	getParentRoute: () => Route$23
 });
 var rootRouteChildren = {
 	IndexRoute,
@@ -14185,6 +14272,7 @@ var rootRouteChildren = {
 	AdminStocksRoute,
 	ApiBancontactWebhookRoute,
 	ApiBankStatusRoute,
+	ApiCheckoutRoute,
 	ApiCreateTestOrderRoute,
 	ApiMollieWebhookRoute,
 	ApiOrdersRoute,
@@ -14195,27 +14283,27 @@ var rootRouteChildren = {
 	ProductProductIdRoute: Route$3.update({
 		id: "/product/$productId",
 		path: "/product/$productId",
-		getParentRoute: () => Route$22
+		getParentRoute: () => Route$23
 	}),
 	TrackTokenRoute: Route$2.update({
 		id: "/track/$token",
 		path: "/track/$token",
-		getParentRoute: () => Route$22
+		getParentRoute: () => Route$23
 	}),
 	BlogIndexRoute,
 	PosIndexRoute,
 	ApiPrinterAckRoute: Route$1.update({
 		id: "/api/printer/ack",
 		path: "/api/printer/ack",
-		getParentRoute: () => Route$22
+		getParentRoute: () => Route$23
 	}),
 	ApiPrinterQueueRoute: Route.update({
 		id: "/api/printer/queue",
 		path: "/api/printer/queue",
-		getParentRoute: () => Route$22
+		getParentRoute: () => Route$23
 	})
 };
-var routeTree = Route$22._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$23._addFileChildren(rootRouteChildren)._addFileTypes();
 //#endregion
 //#region src/router.tsx
 var getRouter = () => {
