@@ -131,15 +131,24 @@ function CheckoutPage() {
       // Lire les formes courantes évite de cacher la cause derrière un message générique.
       const candidate = err as {
         message?: unknown;
-        data?: { message?: unknown; error?: unknown };
-        cause?: { message?: unknown };
+        data?: { message?: unknown; error?: unknown; code?: unknown; validationErrors?: unknown };
+        cause?: { message?: unknown; name?: unknown };
+        name?: unknown;
+        stack?: unknown;
       };
-      const message =
+      const nestedMessage =
         (typeof candidate?.data?.message === "string" && candidate.data.message) ||
         (typeof candidate?.cause?.message === "string" && candidate.cause.message) ||
         (typeof candidate?.message === "string" && candidate.message) ||
-        (typeof candidate?.data?.error === "string" && candidate.data.error) ||
-        "Le serveur n’a pas pu créer la commande. Vérifiez la connexion puis réessayez. Si le problème persiste, consultez les journaux d’erreurs du serveur.";
+        (typeof candidate?.data?.error === "string" && candidate.data.error);
+      const diagnostic = [
+        typeof candidate?.name === "string" ? candidate.name : "",
+        typeof candidate?.data?.code === "string" ? candidate.data.code : "",
+        typeof candidate?.data?.validationErrors === "string" ? candidate.data.validationErrors : "",
+      ].filter(Boolean).join(" — ");
+      const message = nestedMessage || (diagnostic
+        ? `Échec de validation/serveur : ${diagnostic}`
+        : "Échec de communication avec le serveur pendant la création de commande. Le détail est enregistré dans la console du navigateur.");
       setError(message);
       setLoading(false);
     }
