@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
-import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { K as BookOpen, P as Clock, X as ArrowLeft, Y as ArrowRight, d as ShoppingBag, h as Search, l as Sparkles } from "../_libs/lucide-react.mjs";
 import { t as CartDrawer } from "./CartDrawer-CbaHsHJj.mjs";

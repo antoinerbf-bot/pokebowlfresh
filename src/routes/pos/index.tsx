@@ -201,7 +201,7 @@ export function PosApplicationPage() {
       const printableStatuses: Order["status"][] = ["paid", "awaiting_pickup", "awaiting_delivery"];
       const printedIds = getPrintedOrderIds();
       const nowMs = Date.now();
-      const thirtyMinutesMs = 30 * 60 * 1000;
+      const fourHoursMs = 4 * 60 * 60 * 1000;
 
       const newlyPrintable = newOrders.filter((o) => {
         if (!printableStatuses.includes(o.status)) return false;
@@ -209,10 +209,10 @@ export function PosApplicationPage() {
         if (printedIds.has(o.id)) return false;
         if (autoPrintInFlight.current.has(o.id)) return false;
 
+        // Éviter de réimprimer les commandes de services précédents (> 4h)
         const createdAtMs = new Date(o.createdAt).getTime();
-        const isRecent = !isNaN(createdAtMs) && (nowMs - createdAtMs) < thirtyMinutesMs;
+        const isRecent = !isNaN(createdAtMs) && (nowMs - createdAtMs) < fourHoursMs;
         if (!isRecent) {
-          // Si commande trop ancienne (> 30 min), on l'enregistre comme connue pour ne pas gaspiller de papier
           markOrderAsPrintedLocally(o.id);
           return false;
         }
@@ -228,7 +228,6 @@ export function PosApplicationPage() {
       for (const order of newlyPrintable) {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
-        markOrderAsPrintedLocally(order.id);
         void handleExecutePrint(order, true).finally(() => {
           autoPrintInFlight.current.delete(order.id);
         });
