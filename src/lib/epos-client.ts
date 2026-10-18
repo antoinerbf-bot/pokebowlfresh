@@ -12,6 +12,7 @@ export interface PrinterConfig {
   autoPrintKitchen: boolean;
   autoPrintDelivery: boolean;
   soundEnabled: boolean;
+  printMode?: "epos" | "browser"; // "epos" (Réseau direct) ou "browser" (Boîte d'impression navigateur / USB)
 }
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
@@ -21,6 +22,7 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,
+  printMode: "epos",
 };
 
 export function loadPrinterConfig(): PrinterConfig {
@@ -88,13 +90,26 @@ export async function sendReceiptToPrinter(
   </s:Body>
 </s:Envelope>`;
 
-  // Tenter les ports standards ePOS de l'Epson : HTTPS 8043 (sécurisé TM-m30II), HTTPS 443, puis HTTP 80/8008
-  const targets = [
+  // Tenter les ports standards ePOS de l'Epson en commençant par le port configuré
+  const port = config.printerPort || 8043;
+  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+
+  const candidateUrls: string[] = [
+    `https://${config.printerIp}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
   ];
+
+  // Si la page n'est pas en HTTPS strict ou si c'est toléré, tenter aussi HTTP
+  if (!isHttps) {
+    candidateUrls.push(
+      `http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+      `http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    );
+  }
+
+  // Dédoublonner
+  const targets = Array.from(new Set(candidateUrls));
 
   let lastErr = "";
   for (const url of targets) {
@@ -107,20 +122,25 @@ export async function sendReceiptToPrinter(
           SOAPAction: '""',
         },
         body: xml,
-        signal: AbortSignal.timeout(2000), // Timeout strict de 2 secondes max
+        signal: AbortSignal.timeout(2500), // Timeout de 2.5 secondes
       });
 
       if (res.ok) {
         return { success: true, message: `Ticket imprimé avec succès sur ${config.printerIp} !` };
       }
     } catch (e: any) {
-      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2s)" : (e?.message ?? String(e));
+      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2.5s)" : (e?.message ?? String(e));
     }
   }
 
+  const isCertOrNetwork = lastErr.includes("Failed to fetch") || lastErr.includes("NetworkError");
+  const detail = isCertOrNetwork
+    ? `Certificat non approuvé dans Chrome ou IP (${config.printerIp}) injoignable.`
+    : lastErr;
+
   return {
     success: false,
-    message: `Impossible d'envoyer à l'Epson ${config.printerIp} : ${lastErr}.`,
+    message: `Impossible d'envoyer à l'Epson ${config.printerIp} : ${detail}`,
   };
 }
 

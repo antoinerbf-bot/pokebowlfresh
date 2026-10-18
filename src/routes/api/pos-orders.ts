@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { listOrdersFromStore, updateOrderStatus } from "../../lib/order-store";
+import { listOrdersFromStore, updateOrderStatus, acknowledgePrint } from "../../lib/order-store";
 
 export const Route = createFileRoute("/api/pos-orders")({
   server: {
@@ -27,14 +27,22 @@ export const Route = createFileRoute("/api/pos-orders")({
       POST: async ({ request }) => {
         try {
           const body = await request.json();
-          const { orderId, status } = body;
-          if (!orderId || !status) {
+          const { orderId, status, printStatus, printError } = body;
+          if (!orderId) {
             return new Response(
-              JSON.stringify({ success: false, error: "orderId ou status manquant" }),
+              JSON.stringify({ success: false, error: "orderId manquant" }),
               { status: 400, headers: { "Content-Type": "application/json" } },
             );
           }
-          await updateOrderStatus(orderId, status);
+
+          if (status) {
+            await updateOrderStatus(orderId, status);
+          }
+
+          if (printStatus) {
+            await acknowledgePrint(orderId, printStatus === "printed", printError);
+          }
+
           return new Response(JSON.stringify({ success: true }), {
             status: 200,
             headers: { "Content-Type": "application/json" },

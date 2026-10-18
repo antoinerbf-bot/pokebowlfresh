@@ -35,8 +35,17 @@ import {
   sendReceiptToPrinter,
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
-import { EscPosBuilder } from "../../lib/escpos";
+import { EscPosBuilder, buildKitchenReceipt, buildDeliveryReceipt } from "../../lib/escpos";
 import QRCode from "qrcode";
+
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
 
 export const Route = createFileRoute("/pos/")({
   component: PosApplicationPage,
@@ -83,6 +92,7 @@ export function PosApplicationPage() {
   const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
   const [testingPrinter, setTestingPrinter] = useState(false);
   const [printLog, setPrintLog] = useState<{ time: string; msg: string; type: "ok" | "err" }[]>([]);
+  const [printBannerError, setPrintBannerError] = useState<string | null>(null);
 
   // Garder trace des IDs pour les nouvelles alertes
   const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
@@ -210,33 +220,60 @@ export function PosApplicationPage() {
     }
   }, [isUnlocked, pin]);
 
-  // Action d'impression réseau directe ePOS (si demandée explicitement)
+  // Action d'impression (directe ePOS réseau ou système selon configuration)
   const handleExecutePrint = async (order: Order, silent = false) => {
     setPrintingOrderId(order.id);
     try {
-      const origin = window.location.origin;
-      const receipts = await getOrderReceipts({ data: { pin, orderId: order.id, origin } });
+      if (config.printMode === "browser") {
+        // Mode impression système / USB
+        await printThermalTicket(order);
+        try {
+          await fetch("/api/pos-orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: order.id,
+              printStatus: "printed",
+            }),
+          });
+        } catch {}
+        setPrintLog((prev) => [
+          { time: new Date().toLocaleTimeString(), msg: `Commande ${order.id} : envoyée à la boîte d'impression système.`, type: "ok" },
+          ...prev.slice(0, 30),
+        ]);
+        return;
+      }
+
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+      
+      // 1. Génération ESC/POS instantanée en mémoire client (0 dépendance serveur RPC)
+      let kitchenReceiptB64 = "";
+      let deliveryReceiptB64 = "";
+      try {
+        kitchenReceiptB64 = bytesToBase64(buildKitchenReceipt(order));
+        deliveryReceiptB64 = bytesToBase64(buildDeliveryReceipt(order, origin));
+      } catch (genErr) {
+        console.error("[POS] Erreur génération ESC/POS:", genErr);
+      }
 
       let successCount = 0;
       let errorMsg = "";
 
       // 1. Impression Ticket Cuisine
-      if (config.autoPrintKitchen && receipts.kitchenReceiptB64) {
-        const resKitchen = await sendReceiptToPrinter(receipts.kitchenReceiptB64, config);
+      if (config.autoPrintKitchen && kitchenReceiptB64) {
+        const resKitchen = await sendReceiptToPrinter(kitchenReceiptB64, config);
         if (resKitchen.success) successCount++;
         else errorMsg += `[Cuisine] ${resKitchen.message} `;
       }
 
       // 2. Impression Ticket Livreur / Client
-      if (config.autoPrintDelivery && receipts.deliveryReceiptB64) {
-        const resDelivery = await sendReceiptToPrinter(receipts.deliveryReceiptB64, config);
+      if (config.autoPrintDelivery && deliveryReceiptB64) {
+        const resDelivery = await sendReceiptToPrinter(deliveryReceiptB64, config);
         if (resDelivery.success) successCount++;
         else errorMsg += `[Livreur] ${resDelivery.message} `;
       }
 
       const totalExpected = (config.autoPrintKitchen ? 1 : 0) + (config.autoPrintDelivery ? 1 : 0);
-      // Une impression n'est réussie que si TOUS les tickets activés sont sortis.
-      // Ne jamais marquer la commande comme imprimée si aucun ticket n'était activé.
       const isOk = totalExpected > 0 && successCount === totalExpected;
       if (totalExpected === 0) {
         errorMsg = "Aucun ticket activé : activez Cuisine et/ou Livraison dans les paramètres.";
@@ -244,17 +281,24 @@ export function PosApplicationPage() {
         errorMsg = "Au moins un ticket n'a pas été confirmé par l'imprimante.";
       }
 
-      await ackPosPrint({
-        data: {
-          pin,
-          orderId: order.id,
-          success: isOk,
-          error: isOk ? undefined : errorMsg,
-        },
-      });
+      // Synchronisation du statut d'impression vers l'API REST
+      try {
+        await fetch("/api/pos-orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: order.id,
+            printStatus: isOk ? "printed" : "failed",
+            printError: isOk ? undefined : errorMsg,
+          }),
+        });
+      } catch (ackErr) {
+        console.warn("[POS] Échec synchronisation ack print:", ackErr);
+      }
 
       const now = new Date().toLocaleTimeString();
       if (isOk) {
+        setPrintBannerError(null);
         setPrintLog((prev) => [{ time: now, msg: `Commande ${order.id} : tous les tickets imprimés.`, type: "ok" }, ...prev.slice(0, 30)]);
         if (!silent) alert(`✅ Tous les tickets activés ont été envoyés à l'imprimante (${config.printerIp}).`);
       } else {
@@ -262,18 +306,21 @@ export function PosApplicationPage() {
           ? `\n\n⚠️ Impression partielle : ${successCount}/${totalExpected} ticket(s) confirmé(s).`
           : "";
         setPrintLog((prev) => [{ time: now, msg: `Échec/partiel ${order.id} : ${errorMsg}`, type: "err" }, ...prev.slice(0, 30)]);
-        if (!silent) alert(`⚠️ Impression non complète sur ${config.printerIp}.\n\n${errorMsg}${partial}\n\nVérifie le journal avant de relancer pour éviter les doublons.`);
+        if (!silent) {
+          const doBrowser = confirm(
+            `⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu.\n\n${errorMsg}${partial}\n\n👉 Voulez-vous imprimer ce ticket via la boîte d'impression de votre ordinateur (USB / Navigateur) ?`
+          );
+          if (doBrowser) {
+            void printThermalTicket(order);
+          }
+        } else {
+          setPrintBannerError(
+            `⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour l'imprimer manuellement, ou vérifiez l'autorisation Chrome dans Paramètres.`
+          );
+        }
       }
     } catch (err: any) {
-      console.error(err);
-      await ackPosPrint({
-        data: {
-          pin,
-          orderId: order.id,
-          success: false,
-          error: err?.message ?? "Erreur inattendue",
-        },
-      });
+      console.error("[POS] Erreur handleExecutePrint:", err);
     } finally {
       setPrintingOrderId(null);
       loadOrders();
@@ -286,7 +333,11 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    // Réimpression via ePOS réseau (évite la boîte de dialogue Chrome qui cherche une imprimante).\n    // Le ticket est régénéré côté serveur avec le QR de suivi actuel.\n    await handleExecutePrint(targetOrder);
+    if (config.printMode === "browser") {
+      await printThermalTicket(targetOrder);
+    } else {
+      await handleExecutePrint(targetOrder);
+    }
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -543,6 +594,29 @@ export function PosApplicationPage() {
     }
   };
 
+  // Test d'impression via la boîte d'impression système (USB / Navigateur)
+  const handleTestSystemPrint = async () => {
+    const dummyOrder: Order = {
+      id: "TEST-TICKET",
+      status: "paid",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      customer: {
+        name: "Test Ticket Caisse",
+        phone: "0499 00 00 00",
+        fulfillment: "takeaway",
+        requestedTime: "MAINTENANT",
+        paymentMethod: "on_site",
+      },
+      items: [
+        { name: "Poké Saumon Classic (Medium)", quantity: 1, price: 12.50, toppings: ["Avocat", "Edamame", "Sauce Ponzu"] },
+        { name: "Boisson Aloe Vera", quantity: 1, price: 3.50 },
+      ],
+      total: 16.00,
+      pinValidated: true,
+    };
+    await printThermalTicket(dummyOrder);
+  };
 
   // Écran PIN
   if (!isUnlocked) {
@@ -822,6 +896,30 @@ export function PosApplicationPage() {
         </div>
       </header>
 
+      {/* ─── Bannière Alerte Impression Réseau ───────────────────────────── */}
+      {printBannerError && (
+        <div className="flex items-center justify-between bg-amber-500/20 border-b border-amber-500/40 px-5 py-2.5 text-xs text-amber-200">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+            <span>{printBannerError}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveTab("settings")}
+              className="underline font-bold text-amber-300 hover:text-white"
+            >
+              Paramètres & Déblocage Chrome
+            </button>
+            <button
+              onClick={() => setPrintBannerError(null)}
+              className="rounded-lg bg-amber-500/30 px-2 py-1 text-[10px] font-bold text-amber-100 hover:bg-amber-500/50"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ─── Contenu Principal ────────────────────────────────────────────── */}
       <div className="flex flex-1 overflow-hidden">
         {activeTab === "kanban" && (
@@ -976,59 +1074,186 @@ export function PosApplicationPage() {
           <div className="flex-1 p-8 max-w-2xl mx-auto overflow-y-auto space-y-6">
             <h2 className="text-2xl font-black">Configuration Matériel & POS</h2>
 
+            {/* Choix du mode d'impression */}
             <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-              <h3 className="text-base font-black text-[#ff705f]">Imprimante Réseau (Epson TM-m30II)</h3>
-              <div>
-                <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP</label>
-                <input
-                  type="text"
-                  value={config.printerIp}
-                  onChange={(e) => setConfig({ ...config, printerIp: e.target.value })}
-                  className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
-                  placeholder="192.168.1.100"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Port TCP ESC/POS</label>
-                <input
-                  type="number"
-                  value={config.printerPort}
-                  onChange={(e) => setConfig({ ...config, printerPort: Number(e.target.value) })}
-                  className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
-                  placeholder="9100"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-extrabold uppercase text-[#8ea39b]">URL Print Bridge Local (Optionnel)</label>
-                <input
-                  type="text"
-                  value={config.bridgeUrl ?? ""}
-                  onChange={(e) => setConfig({ ...config, bridgeUrl: e.target.value })}
-                  className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
-                  placeholder="http://localhost:3001"
-                />
-              </div>
-
-              <div className="pt-2 flex gap-4">
+              <h3 className="text-base font-black text-[#ff705f]">Mode d'Impression</h3>
+              <p className="text-xs text-[#8ea39b]">
+                Choisissez comment le POS envoie les tickets à votre imprimante :
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
+                  type="button"
                   onClick={() => {
-                    savePrinterConfig(config);
-                    alert("Configuration enregistrée.");
+                    const upd = { ...config, printMode: "epos" as const };
+                    setConfig(upd);
+                    savePrinterConfig(upd);
                   }}
-                  className="flex-1 rounded-xl bg-[#ff705f] py-3 text-white font-black text-sm"
+                  className={`p-4 rounded-xl border text-left transition cursor-pointer ${
+                    config.printMode !== "browser"
+                      ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
+                      : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
+                  }`}
                 >
-                  Enregistrer
+                  <div className="flex items-center gap-2 font-black text-sm">
+                    <Printer className="w-4 h-4 text-[#ff705f]" />
+                    <span>Réseau direct ePOS</span>
+                  </div>
+                  <p className="text-[11px] mt-1.5 text-[#a5b4ae] leading-snug">
+                    Imprimante Epson connectée en Wi-Fi / Câble Ethernet à la box. Impression 100% silencieuse et automatique.
+                  </p>
                 </button>
+
                 <button
-                  onClick={handleTestPrint}
-                  disabled={testingPrinter}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60"
+                  type="button"
+                  onClick={() => {
+                    const upd = { ...config, printMode: "browser" as const };
+                    setConfig(upd);
+                    savePrinterConfig(upd);
+                  }}
+                  className={`p-4 rounded-xl border text-left transition cursor-pointer ${
+                    config.printMode === "browser"
+                      ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
+                      : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
+                  }`}
                 >
-                  <Printer className="w-4 h-4" />
-                  {testingPrinter ? "Test en cours…" : "Tester l'impression (Direct ePOS)"}
+                  <div className="flex items-center gap-2 font-black text-sm">
+                    <Printer className="w-4 h-4 text-emerald-400" />
+                    <span>Boîte Système (USB)</span>
+                  </div>
+                  <p className="text-[11px] mt-1.5 text-[#a5b4ae] leading-snug">
+                    Imprimante reliée par câble USB à ce PC / Mac, ou utilisation de la fenêtre d'impression standard.
+                  </p>
                 </button>
+              </div>
+            </div>
+
+            {/* Paramètres Réseau ePOS */}
+            {config.printMode !== "browser" && (
+              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-black text-[#ff705f]">Connexion Epson Réseau</h3>
+                  <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold">
+                    TM-m30II / TM-T20 / TM-T88
+                  </span>
+                </div>
+
+                {/* Étape cruciale : Autoriser Chrome */}
+                <div className="rounded-xl bg-amber-500/10 border border-amber-500/30 p-4 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-black text-amber-300">
+                      🔒 Étape 1 : Autoriser l'imprimante dans Chrome
+                    </span>
+                    <a
+                      href={`https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shrink-0"
+                    >
+                      <span>Ouvrir l'autorisation</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                  <p className="text-[11px] text-amber-200/90 leading-relaxed">
+                    Sur Google Chrome, les connexions locales HTTPS nécessitent d'autoriser une seule fois le certificat auto-signé de votre Epson. Cliquez sur <strong>"Ouvrir l'autorisation"</strong>, puis cliquez sur <strong>"Paramètres avancés"</strong> puis <strong>"Continuer vers le site (non sécurisé)"</strong>.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="col-span-2">
+                    <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP de l'Epson</label>
+                    <input
+                      type="text"
+                      value={config.printerIp}
+                      onChange={(e) => setConfig({ ...config, printerIp: e.target.value })}
+                      className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
+                      placeholder="192.168.0.5"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Port ePOS</label>
+                    <input
+                      type="number"
+                      value={config.printerPort}
+                      onChange={(e) => setConfig({ ...config, printerPort: Number(e.target.value) })}
+                      className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
+                      placeholder="8043"
+                    />
+                  </div>
+                </div>
+
+                {/* Comment trouver l'IP */}
+                <div className="rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5">
+                  <strong className="text-white">💡 Comment trouver l'adresse IP de votre Epson ?</strong><br />
+                  Éteignez l'imprimante, maintenez le bouton <strong>FEED</strong> enfoncé puis appuyez sur l'interrupteur pour la rallumer. Relâchez le bouton : l'imprimante imprime automatiquement une bandelette indiquant son adresse IP sur votre réseau local.
+                </div>
+
+                <div className="pt-2 flex gap-3">
+                  <button
+                    onClick={() => {
+                      savePrinterConfig(config);
+                      alert("Configuration enregistrée.");
+                    }}
+                    className="flex-1 rounded-xl bg-[#ff705f] py-3 text-white font-black text-sm hover:bg-[#ff5a47] transition cursor-pointer"
+                  >
+                    Enregistrer
+                  </button>
+                  <button
+                    onClick={handleTestPrint}
+                    disabled={testingPrinter}
+                    className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60"
+                  >
+                    <Printer className="w-4 h-4" />
+                    {testingPrinter ? "Test en cours…" : "Tester l'impression (Direct ePOS)"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Test Mode Système */}
+            <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+              <h3 className="text-base font-black text-white">Impression Système / USB</h3>
+              <p className="text-xs text-[#8ea39b]">
+                Déclenche l'impression instantanée via la boîte d'impression native (idéal pour imprimantes USB ou test rapide).
+              </p>
+              <button
+                onClick={handleTestSystemPrint}
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 py-3 text-white font-black text-sm border border-white/10 transition cursor-pointer"
+              >
+                <Printer className="w-4 h-4 text-emerald-400" />
+                <span>Tester l'impression Système (Ticket démo)</span>
+              </button>
+            </div>
+
+            {/* Toggles des tickets */}
+            <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+              <h3 className="text-base font-black text-white">Tickets à générer automatiquement</h3>
+              <div className="space-y-2">
+                <label className="flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition">
+                  <input
+                    type="checkbox"
+                    checked={config.autoPrintKitchen}
+                    onChange={(e) => {
+                      const updated = { ...config, autoPrintKitchen: e.target.checked };
+                      setConfig(updated);
+                      savePrinterConfig(updated);
+                    }}
+                    className="h-4 w-4 rounded accent-[#ff705f]"
+                  />
+                  <span className="text-sm font-bold text-white">Ticket Cuisine (Bon de préparation)</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition">
+                  <input
+                    type="checkbox"
+                    checked={config.autoPrintDelivery}
+                    onChange={(e) => {
+                      const updated = { ...config, autoPrintDelivery: e.target.checked };
+                      setConfig(updated);
+                      savePrinterConfig(updated);
+                    }}
+                    className="h-4 w-4 rounded accent-[#ff705f]"
+                  />
+                  <span className="text-sm font-bold text-white">Ticket Livreur / Client (Avec QR Code GPS)</span>
+                </label>
               </div>
             </div>
 
@@ -1202,15 +1427,23 @@ export function PosApplicationPage() {
             )}
 
             {/* Actions Modal */}
-            <div className="pt-2">
+            <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
-                onClick={() => handleManualReprint(selectedOrder.id)}
+                onClick={() => handleExecutePrint(selectedOrder)}
                 disabled={printingOrderId === selectedOrder.id}
-                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
-                title="Imprimer via le chemin réseau validé de l’Epson"
+                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                title={`Imprimer via le réseau ePOS (${config.printerIp})`}
               >
                 <Printer className="w-4 h-4" />
-                {printingOrderId === selectedOrder.id ? "Envoi à l’imprimante…" : "Imprimer le ticket + QR"}
+                {printingOrderId === selectedOrder.id ? "Envoi ePOS…" : `Imprimer Réseau (${config.printerIp})`}
+              </button>
+              <button
+                onClick={() => printThermalTicket(selectedOrder)}
+                className="w-full rounded-2xl bg-white/10 hover:bg-white/20 text-white py-3.5 px-3 text-xs font-black transition flex items-center justify-center gap-2 border border-white/10 active:scale-95 cursor-pointer"
+                title="Ouvrir la boîte d'impression système (USB / Navigateur)"
+              >
+                <Printer className="w-4 h-4 text-emerald-400" />
+                <span>Imprimer Direct (USB / Système)</span>
               </button>
             </div>
           </div>
