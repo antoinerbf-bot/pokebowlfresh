@@ -1,2 +1,1 @@
-// TanStack Start / Nitro server entry.
-export { default } from "./src/server";
+import "./.output/server/index.mjs";
