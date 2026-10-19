@@ -84,8 +84,16 @@ export function PosApplicationPage() {
   const [config, setConfig] = useState<PrinterConfig>(loadPrinterConfig);
   const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
   const [testingPrinter, setTestingPrinter] = useState(false);
-  const [printLog, setPrintLog] = useState<{ time: string; msg: string; type: "ok" | "err" }[]>([]);
   const [printBannerError, setPrintBannerError] = useState<string | null>(null);
+
+  // Auto-nettoyage et migration immédiate du port vers 8043 (élimine définitivement 9100)
+  useEffect(() => {
+    if (config.printerPort !== 8043) {
+      const fixed = { ...config, printerPort: 8043, printMode: "epos" as const };
+      setConfig(fixed);
+      savePrinterConfig(fixed);
+    }
+  }, [config.printerPort]);
 
   // Helper local storage pour se souvenir des commandes déjà imprimées
   const getPrintedOrderIds = (): Set<string> => {
@@ -547,110 +555,6 @@ export function PosApplicationPage() {
 
   return (
     <>
-      <style>{`
-        @media print {
-          @page {
-            size: 80mm auto;
-            margin: 0mm;
-          }
-          html, body {
-            background: #ffffff !important;
-            color: #000000 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            height: auto !important;
-            overflow: visible !important;
-          }
-          .pos-screen-ui {
-            display: none !important;
-          }
-          #thermal-print-area {
-            display: block !important;
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 72mm !important;
-            margin: 0 auto !important;
-            padding: 2mm 1mm !important;
-            background: #ffffff !important;
-            color: #000000 !important;
-          }
-        }
-      `}</style>
-
-      {/* Ticket Thermique Imprimable (visible uniquement lors du print) */}
-      <div id="thermal-print-area" className="hidden print:block text-black bg-white">
-        {activePrintOrder && (
-          <div style={{ width: "72mm", margin: "0 auto", padding: "4mm 0", fontFamily: "'Courier New', Courier, monospace", fontSize: "12px", lineHeight: "1.3" }}>
-            <div style={{ textAlign: "center" }}>
-              <h1 style={{ fontSize: "18px", fontWeight: "900", margin: "0 0 2px 0" }}>POKE N BOWL</h1>
-              <p style={{ margin: "1px 0" }}>Rue Haute 38, 4600 Vise</p>
-              <p style={{ margin: "1px 0" }}>Tel: 0491 28 14 56</p>
-              <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
-              <h2 style={{ fontSize: "15px", fontWeight: "900", margin: "4px 0" }}>
-                {activePrintOrder.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** RETRAIT ***"}
-              </h2>
-              <p style={{ fontWeight: "bold" }}>COMMANDE : {activePrintOrder.id}</p>
-              <p>Horaire : {activePrintOrder.customer.requestedTime}</p>
-            </div>
-            <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
-            <p><strong>Client :</strong> {activePrintOrder.customer.name}</p>
-            <p><strong>Tel    :</strong> {activePrintOrder.customer.phone}</p>
-            {activePrintOrder.customer.fulfillment === "delivery" && (
-              <>
-                <p><strong>Adresse:</strong> {activePrintOrder.customer.address}</p>
-                <p>{activePrintOrder.customer.postalCode} {activePrintOrder.customer.city}</p>
-              </>
-            )}
-            {activePrintOrder.customer.notes && (
-              <p style={{ fontWeight: "bold" }}>Note   : {activePrintOrder.customer.notes}</p>
-            )}
-            <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
-            <p style={{ fontWeight: "bold" }}>ARTICLES :</p>
-            {activePrintOrder.items.map((it, idx) => (
-              <div key={idx} style={{ margin: "3px 0" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
-                  <span>{it.quantity}x {it.name}</span>
-                  <span>{(it.price * it.quantity).toFixed(2)} E</span>
-                </div>
-                {(it.toppings || []).map((top, tidx) => (
-                  <div key={tidx} style={{ paddingLeft: "10px", fontSize: "11px", color: "#333" }}>+ {top}</div>
-                ))}
-              </div>
-            ))}
-            <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
-            {activePrintOrder.customer.deliveryFee ? (
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Frais de livraison</span>
-                <span>{activePrintOrder.customer.deliveryFee.toFixed(2)} EUR</span>
-              </div>
-            ) : null}
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "15px", fontWeight: "900", marginTop: "4px" }}>
-              <span>TOTAL :</span>
-              <span>{activePrintOrder.total.toFixed(2)} EUR</span>
-            </div>
-            <div style={{ textAlign: "center", fontWeight: "bold", marginTop: "6px" }}>
-              {activePrintOrder.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"}
-            </div>
-            {printQrDataUrl && (
-              <>
-                <div style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "10px", fontWeight: "bold", margin: "0 0 2px 0" }}>SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
-                  <img src={printQrDataUrl} alt="QR Code GPS" style={{ width: "140px", height: "140px", display: "block", margin: "4px auto" }} />
-                  <p style={{ fontSize: "9px", color: "#333", margin: "2px 0 0 0" }}>Itinéraire 1-clic livreur</p>
-                </div>
-              </>
-            )}
-            <div style={{ textAlign: "center", marginTop: "8px" }}>
-              <p>Merci pour votre commande !</p>
-            </div>
-            <br /><br />.
-          </div>
-        )}
-      </div>
-
       <div className="pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
         {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
         <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]">
@@ -735,7 +639,7 @@ export function PosApplicationPage() {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href={`https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`}
+                href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shadow"
@@ -958,13 +862,13 @@ export function PosApplicationPage() {
                         <p><strong>3.</strong> Revenez ici : l'impression sera alors 100% automatique et instantanée !</p>
                       </div>
                       <a
-                        href={`https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`}
+                        href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black px-4 py-3 rounded-xl text-xs font-black transition shadow-lg shrink-0 cursor-pointer active:scale-95"
+                        className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black px-5 py-3.5 rounded-xl text-xs font-black transition shadow-lg shrink-0 cursor-pointer active:scale-95"
                       >
                         <ExternalLink className="w-4 h-4" />
-                        <span>Ouvrir l'autorisation Chrome</span>
+                        <span>🔒 1. Ouvrir l'autorisation Chrome</span>
                       </a>
                     </div>
                   </div>
@@ -996,26 +900,24 @@ export function PosApplicationPage() {
                     </p>
                   )}
 
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="col-span-2">
-                      <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP de l'Epson</label>
+                  <div>
+                    <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP locale de l'Epson TM-m30II</label>
+                    <div className="mt-1.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                       <input
                         type="text"
                         value={config.printerIp}
-                        onChange={(e) => setConfig({ ...config, printerIp: e.target.value })}
-                        className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
+                        onChange={(e) => {
+                          const updated = { ...config, printerIp: e.target.value.trim(), printerPort: 8043 };
+                          setConfig(updated);
+                          savePrinterConfig(updated);
+                        }}
+                        className="flex-1 rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold text-base"
                         placeholder="192.168.0.5"
                       />
-                    </div>
-                    <div>
-                      <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Port ePOS</label>
-                      <input
-                        type="number"
-                        value={config.printerPort}
-                        onChange={(e) => setConfig({ ...config, printerPort: Number(e.target.value) })}
-                        className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
-                        placeholder="8043"
-                      />
+                      <div className="rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-xs text-[#8ea39b] font-mono shrink-0 flex items-center gap-2">
+                        <span>Port ePOS :</span>
+                        <span className="text-emerald-400 font-bold">8043 (HTTPS Direct)</span>
+                      </div>
                     </div>
                   </div>
 

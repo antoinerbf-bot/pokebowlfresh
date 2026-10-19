@@ -31,7 +31,20 @@ export function loadPrinterConfig(): PrinterConfig {
     const raw = localStorage.getItem("pnb_printer_config");
     if (raw) {
       const parsed = JSON.parse(raw);
-      return { ...DEFAULT_PRINTER_CONFIG, ...parsed, printMode: parsed.printMode || "epos" };
+      // Forcer impérativement port 8043 si 9100 ou port non supporté par ePOS
+      const safePort = (parsed.printerPort && [8043, 80, 8008, 443].includes(Number(parsed.printerPort)))
+        ? Number(parsed.printerPort)
+        : 8043;
+      const cleanConfig: PrinterConfig = {
+        ...DEFAULT_PRINTER_CONFIG,
+        ...parsed,
+        printerPort: safePort,
+        printMode: "epos",
+      };
+      if (parsed.printerPort === 9100 || !parsed.printerPort) {
+        localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
+      }
+      return cleanConfig;
     }
   } catch {}
   return DEFAULT_PRINTER_CONFIG;
@@ -39,7 +52,11 @@ export function loadPrinterConfig(): PrinterConfig {
 
 export function savePrinterConfig(config: PrinterConfig): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem("pnb_printer_config", JSON.stringify(config));
+  const safePort = (config.printerPort && [8043, 80, 8008, 443].includes(Number(config.printerPort)))
+    ? Number(config.printerPort)
+    : 8043;
+  const cleanConfig: PrinterConfig = { ...config, printerPort: safePort, printMode: "epos" };
+  localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
 }
 
 /**
@@ -337,14 +354,18 @@ export async function sendReceiptToPrinter(
   const soapEnvelope = buildEposSoapEnvelope(xmlContent);
 
   const ip = config.printerIp.trim();
-  const port = config.printerPort || 8043;
+  const safePort = (config.printerPort && [8043, 80, 8008, 443].includes(Number(config.printerPort)))
+    ? Number(config.printerPort)
+    : 8043;
 
-  // Ordre de priorité des URL candidates selon le port configuré
+  // Ordre de priorité des URL candidates selon le standard ePOS Epson
+  // Ne JAMAIS appeler le port 9100 en HTTP (9100 est un port socket brut qui imprimerait les headers)
   const candidateUrls: string[] = [
-    `https://${ip}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${ip}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
     `http://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
   ];

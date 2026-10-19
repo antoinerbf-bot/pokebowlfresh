@@ -21,11 +21,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-3AiW0JOa.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-j8I6aKIb.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-q78HFqUp.css";
+var styles_default = "/assets/styles-WGDkfrjR.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -997,18 +997,38 @@ function loadPrinterConfig() {
 		const raw = localStorage.getItem("pnb_printer_config");
 		if (raw) {
 			const parsed = JSON.parse(raw);
-			return {
+			const safePort = parsed.printerPort && [
+				8043,
+				80,
+				8008,
+				443
+			].includes(Number(parsed.printerPort)) ? Number(parsed.printerPort) : 8043;
+			const cleanConfig = {
 				...DEFAULT_PRINTER_CONFIG,
 				...parsed,
-				printMode: parsed.printMode || "epos"
+				printerPort: safePort,
+				printMode: "epos"
 			};
+			if (parsed.printerPort === 9100 || !parsed.printerPort) localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
+			return cleanConfig;
 		}
 	} catch {}
 	return DEFAULT_PRINTER_CONFIG;
 }
 function savePrinterConfig(config) {
 	if (typeof window === "undefined") return;
-	localStorage.setItem("pnb_printer_config", JSON.stringify(config));
+	const safePort = config.printerPort && [
+		8043,
+		80,
+		8008,
+		443
+	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
+	const cleanConfig = {
+		...config,
+		printerPort: safePort,
+		printMode: "epos"
+	};
+	localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
 }
 /**
 * Nettoyage thermique ASCII sans accents pour éviter tout blocage ou bug de code page Epson
@@ -1229,12 +1249,17 @@ async function sendReceiptToPrinter(payload, config) {
 	};
 	const soapEnvelope = buildEposSoapEnvelope(xmlContent);
 	const ip = config.printerIp.trim();
-	const port = config.printerPort || 8043;
 	const candidateUrls = [
-		`https://${ip}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:${config.printerPort && [
+			8043,
+			80,
+			8008,
+			443
+		].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
 		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
 		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
 		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
 		`http://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
 	];
@@ -1340,8 +1365,18 @@ function PosApplicationPage() {
 	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
-	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	const [printBannerError, setPrintBannerError] = (0, import_react.useState)(null);
+	(0, import_react.useEffect)(() => {
+		if (config.printerPort !== 8043) {
+			const fixed = {
+				...config,
+				printerPort: 8043,
+				printMode: "epos"
+			};
+			setConfig(fixed);
+			savePrinterConfig(fixed);
+		}
+	}, [config.printerPort]);
 	const getPrintedOrderIds = () => {
 		if (typeof window === "undefined") return /* @__PURE__ */ new Set();
 		try {
@@ -1753,978 +1788,757 @@ function PosApplicationPage() {
 	const readyOrdersList = orders.filter((o) => o.status === "ready");
 	const deliveringOrdersList = orders.filter((o) => o.status === "delivering");
 	orders.filter((o) => o.status === "completed" || o.status === "cancelled");
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `
-        @media print {
-          @page {
-            size: 80mm auto;
-            margin: 0mm;
-          }
-          html, body {
-            background: #ffffff !important;
-            color: #000000 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            height: auto !important;
-            overflow: visible !important;
-          }
-          .pos-screen-ui {
-            display: none !important;
-          }
-          #thermal-print-area {
-            display: block !important;
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 72mm !important;
-            margin: 0 auto !important;
-            padding: 2mm 1mm !important;
-            background: #ffffff !important;
-            color: #000000 !important;
-          }
-        }
-      ` }),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			id: "thermal-print-area",
-			className: "hidden print:block text-black bg-white",
-			children: activePrintOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				style: {
-					width: "72mm",
-					margin: "0 auto",
-					padding: "4mm 0",
-					fontFamily: "'Courier New', Courier, monospace",
-					fontSize: "12px",
-					lineHeight: "1.3"
-				},
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						style: { textAlign: "center" },
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-								style: {
-									fontSize: "18px",
-									fontWeight: "900",
-									margin: "0 0 2px 0"
-								},
-								children: "POKE N BOWL"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								style: { margin: "1px 0" },
-								children: "Rue Haute 38, 4600 Vise"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								style: { margin: "1px 0" },
-								children: "Tel: 0491 28 14 56"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-								borderTop: "1px dashed #000",
-								margin: "6px 0"
-							} }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								style: {
-									fontSize: "15px",
-									fontWeight: "900",
-									margin: "4px 0"
-								},
-								children: activePrintOrder.customer.fulfillment === "delivery" ? "*** LIVRAISON ***" : "*** RETRAIT ***"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								style: { fontWeight: "bold" },
-								children: ["COMMANDE : ", activePrintOrder.id]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: ["Horaire : ", activePrintOrder.customer.requestedTime] })
-						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-						borderTop: "1px dashed #000",
-						margin: "6px 0"
-					} }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Client :" }),
-						" ",
-						activePrintOrder.customer.name
-					] }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Tel    :" }),
-						" ",
-						activePrintOrder.customer.phone
-					] }),
-					activePrintOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Adresse:" }),
-						" ",
-						activePrintOrder.customer.address
-					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-						activePrintOrder.customer.postalCode,
-						" ",
-						activePrintOrder.customer.city
-					] })] }),
-					activePrintOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-						style: { fontWeight: "bold" },
-						children: ["Note   : ", activePrintOrder.customer.notes]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-						borderTop: "1px dashed #000",
-						margin: "6px 0"
-					} }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						style: { fontWeight: "bold" },
-						children: "ARTICLES :"
-					}),
-					activePrintOrder.items.map((it, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						style: { margin: "3px 0" },
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							style: {
-								display: "flex",
-								justifyContent: "space-between",
-								fontWeight: "bold"
-							},
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-								it.quantity,
-								"x ",
-								it.name
-							] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [(it.price * it.quantity).toFixed(2), " E"] })]
-						}), (it.toppings || []).map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							style: {
-								paddingLeft: "10px",
-								fontSize: "11px",
-								color: "#333"
-							},
-							children: ["+ ", top]
-						}, tidx))]
-					}, idx)),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-						borderTop: "1px dashed #000",
-						margin: "6px 0"
-					} }),
-					activePrintOrder.customer.deliveryFee ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						style: {
-							display: "flex",
-							justifyContent: "space-between"
-						},
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Frais de livraison" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [activePrintOrder.customer.deliveryFee.toFixed(2), " EUR"] })]
-					}) : null,
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						style: {
-							display: "flex",
-							justifyContent: "space-between",
-							fontSize: "15px",
-							fontWeight: "900",
-							marginTop: "4px"
-						},
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "TOTAL :" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [activePrintOrder.total.toFixed(2), " EUR"] })]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						style: {
-							textAlign: "center",
-							fontWeight: "bold",
-							marginTop: "6px"
-						},
-						children: activePrintOrder.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"
-					}),
-					printQrDataUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-						borderTop: "1px dashed #000",
-						margin: "6px 0"
-					} }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						style: { textAlign: "center" },
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								style: {
-									fontSize: "10px",
-									fontWeight: "bold",
-									margin: "0 0 2px 0"
-								},
-								children: "SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-								src: printQrDataUrl,
-								alt: "QR Code GPS",
-								style: {
-									width: "140px",
-									height: "140px",
-									display: "block",
-									margin: "4px auto"
-								}
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								style: {
-									fontSize: "9px",
-									color: "#333",
-									margin: "2px 0 0 0"
-								},
-								children: "Itinéraire 1-clic livreur"
-							})
-						]
-					})] }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						style: {
-							textAlign: "center",
-							marginTop: "8px"
-						},
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Merci pour votre commande !" })
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
-					"."
-				]
-			})
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-					className: "flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "flex h-3 w-3 relative",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" })]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-lg font-black tracking-wider text-white",
-								children: "POKENBOWL POS"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-							className: "flex rounded-xl bg-black/30 p-1",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => setActiveTab("kanban"),
-									className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-									children: [
-										"Commandes en direct (",
-										newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
-										")"
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => setActiveTab("history"),
-									className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "history" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-									children: "Historique"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => setActiveTab("settings"),
-									className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-									children: "Imprimante & Paramètres"
-								})
-							]
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-3",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => {
-									const updated = {
-										...config,
-										soundEnabled: !config.soundEnabled
-									};
-									setConfig(updated);
-									savePrinterConfig(updated);
-								},
-								className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"}`,
-								title: "Activer/Désactiver son",
-								children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-5 w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-5 w-5" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: loadOrders,
-								className: "rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition",
-								title: "Rafraîchir",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-5 w-5 ${loading ? "animate-spin" : ""}` })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`,
-								target: "_blank",
-								rel: "noreferrer",
-								className: "flex items-center gap-2 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-1.5 text-xs font-bold border border-white/10 transition cursor-pointer",
-								title: "Cliquez pour autoriser l'imprimante dans Chrome (permet l'impression 100% automatique)",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[#98aba3]",
-									children: config.printerIp
-								})]
-							})
-						]
-					})]
-				}),
-				printBannerError && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex flex-wrap items-center justify-between gap-3 bg-amber-500/20 border-b border-amber-500/40 px-5 py-3 text-xs text-amber-200",
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				className: "flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 shrink-0 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "font-semibold",
-							children: printBannerError
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex h-3 w-3 relative",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-lg font-black tracking-wider text-white",
+							children: "POKENBOWL POS"
 						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-2",
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+						className: "flex rounded-xl bg-black/30 p-1",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: `https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`,
-								target: "_blank",
-								rel: "noreferrer",
-								className: "inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shadow",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🔒 1. Autoriser Chrome" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
-							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: handleTestPrint,
-								disabled: testingPrinter,
-								className: "inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-black transition",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "2. Réessayer" })]
+								onClick: () => setActiveTab("kanban"),
+								className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
+								children: [
+									"Commandes en direct (",
+									newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
+									")"
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => setActiveTab("history"),
+								className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "history" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
+								children: "Historique"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								onClick: () => setActiveTab("settings"),
-								className: "underline text-xs text-amber-300 hover:text-white px-2 py-1 font-bold",
-								children: "Réglages"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => setPrintBannerError(null),
-								className: "rounded-lg bg-black/30 px-2 py-1 text-[10px] font-bold text-amber-200 hover:bg-black/50",
-								children: "✕"
+								className: `rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
+								children: "Imprimante & Paramètres"
 							})
 						]
 					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex flex-1 min-h-0 overflow-hidden",
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-3",
 					children: [
-						activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => {
+								const updated = {
+									...config,
+									soundEnabled: !config.soundEnabled
+								};
+								setConfig(updated);
+								savePrinterConfig(updated);
+							},
+							className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"}`,
+							title: "Activer/Désactiver son",
+							children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-5 w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-5 w-5" })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: loadOrders,
+							className: "rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition",
+							title: "Rafraîchir",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-5 w-5 ${loading ? "animate-spin" : ""}` })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`,
+							target: "_blank",
+							rel: "noreferrer",
+							className: "flex items-center gap-2 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-1.5 text-xs font-bold border border-white/10 transition cursor-pointer",
+							title: "Cliquez pour autoriser l'imprimante dans Chrome (permet l'impression 100% automatique)",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[#98aba3]",
+								children: config.printerIp
+							})]
+						})
+					]
+				})]
+			}),
+			printBannerError && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-wrap items-center justify-between gap-3 bg-amber-500/20 border-b border-amber-500/40 px-5 py-3 text-xs text-amber-200",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 shrink-0 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "font-semibold",
+						children: printBannerError
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`,
+							target: "_blank",
+							rel: "noreferrer",
+							className: "inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shadow",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🔒 1. Autoriser Chrome" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: handleTestPrint,
+							disabled: testingPrinter,
+							className: "inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-black transition",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "2. Réessayer" })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setActiveTab("settings"),
+							className: "underline text-xs text-amber-300 hover:text-white px-2 py-1 font-bold",
+							children: "Réglages"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setPrintBannerError(null),
+							className: "rounded-lg bg-black/30 px-2 py-1 text-[10px] font-bold text-amber-200 hover:bg-black/50",
+							children: "✕"
+						})
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-1 min-h-0 overflow-hidden",
+				children: [
+					activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "Nouvelles",
+								badgeCount: newOrdersList.length,
+								color: "bg-[#ff705f]",
+								orders: newOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
+								nextLabel: "Préparer",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-4 h-4" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "En Cuisine",
+								badgeCount: preparingOrdersList.length,
+								color: "bg-[#f59e0b]",
+								orders: preparingOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => handleUpdateStatus(id, "ready"),
+								nextLabel: "Prête",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-4 h-4" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "Prêtes / Comptoir",
+								badgeCount: readyOrdersList.length,
+								color: "bg-[#10b981]",
+								orders: readyOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => {
+									if (orders.find((o) => o.id === id)?.customer.fulfillment === "delivery") handleUpdateStatus(id, "delivering");
+									else handleUpdateStatus(id, "completed");
+								},
+								nextLabel: "Départ Livr. / Remis",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-4 h-4" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+								title: "En Livraison",
+								badgeCount: deliveringOrdersList.length,
+								color: "bg-[#3b82f6]",
+								orders: deliveringOrdersList,
+								onSelect: setSelectedOrder,
+								onReprint: handleManualReprint,
+								onNextStatus: (id) => handleUpdateStatus(id, "completed"),
+								nextLabel: "Livrée",
+								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-4 h-4" })
+							})
+						]
+					}),
+					activeTab === "history" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex-1 p-6 overflow-y-auto space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-4 bg-white/5 p-4 rounded-2xl",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "h-5 w-5 text-[#7a847e]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "text",
+								placeholder: "Rechercher par n° de commande, client, téléphone...",
+								value: searchQuery,
+								onChange: (e) => setSearchQuery(e.target.value),
+								className: "bg-transparent flex-1 text-white placeholder-[#7a847e] outline-none font-bold"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "rounded-2xl border border-white/10 overflow-hidden",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+								className: "w-full text-left text-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
+									className: "bg-black/30 text-xs uppercase text-[#8ea39b] font-black",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "N° Commande"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Date / Heure"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Client"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Mode"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Total"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Statut"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4",
+											children: "Impression"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+											className: "p-4 text-right",
+											children: "Actions"
+										})
+									] })
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
+									className: "divide-y divide-white/5 font-semibold",
+									children: orders.filter((o) => o.id.toLowerCase().includes(searchQuery.toLowerCase()) || o.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) || o.customer.phone.includes(searchQuery)).map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+										className: "hover:bg-white/5 transition",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4 font-mono font-bold text-white",
+												children: o.id
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+												className: "p-4 text-[#8ea39b]",
+												children: [
+													new Date(o.createdAt).toLocaleDateString("fr-BE"),
+													" ",
+													new Date(o.createdAt).toLocaleTimeString("fr-BE", {
+														hour: "2-digit",
+														minute: "2-digit"
+													})
+												]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: o.customer.name
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: o.customer.fulfillment === "delivery" ? "Livraison" : "Retrait"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+												className: "p-4 font-bold text-white",
+												children: [o.total.toFixed(2), " €"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "rounded-full bg-white/10 px-3 py-1 text-xs font-black",
+													children: o.status
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+												className: "p-4",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: `rounded-full px-2.5 py-1 text-xs font-black ${o.printStatus === "printed" ? "bg-emerald-500/20 text-emerald-300" : o.printStatus === "failed" ? "bg-red-500/20 text-red-300" : "bg-amber-500/20 text-amber-300"}`,
+													children: o.printStatus ?? "pending"
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+												className: "p-4 text-right space-x-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													onClick: () => setSelectedOrder(o),
+													className: "rounded-xl bg-white/10 px-3 py-1.5 text-xs font-black hover:bg-white/20",
+													children: "Détail"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													onClick: () => handleManualReprint(o.id),
+													className: "rounded-xl bg-[#ff705f] px-3 py-1.5 text-xs font-black text-white hover:bg-[#ff5a47]",
+													children: "Réimprimer"
+												})]
+											})
+										]
+									}, o.id))
+								})]
+							})
+						})]
+					}),
+					activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex-1 min-h-0 w-full overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 pb-48",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "max-w-2xl mx-auto space-y-6",
 							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "Nouvelles",
-									badgeCount: newOrdersList.length,
-									color: "bg-[#ff705f]",
-									orders: newOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
-									nextLabel: "Préparer",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-4 h-4" })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "sticky top-0 z-30 flex items-center justify-between bg-[#0d1a16]/95 backdrop-blur-md py-3 px-4 -mx-4 border-b border-white/10 rounded-2xl shadow-xl",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										className: "text-xl sm:text-2xl font-black text-white",
+										children: "Imprimante Epson TM-m30II"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-[#8ea39b] mt-0.5",
+										children: "Impression thermique directe 80mm & QR Code GPS"
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "flex items-center gap-2",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold",
+											children: "Direct ePOS XML"
+										})
+									})]
 								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "En Cuisine",
-									badgeCount: preparingOrdersList.length,
-									color: "bg-[#f59e0b]",
-									orders: preparingOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: (id) => handleUpdateStatus(id, "ready"),
-									nextLabel: "Prête",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-4 h-4" })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 p-6 space-y-4 shadow-lg shadow-amber-500/5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "flex items-start justify-between gap-3",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center gap-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "bg-amber-500 text-black font-black text-xs px-2 py-0.5 rounded-md",
+												children: "ÉTAPE 1"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+												className: "text-base font-black text-amber-200",
+												children: "Autoriser la connexion locale dans Chrome"
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-amber-200/90 mt-1.5 leading-relaxed",
+											children: "Pour que votre tablette puisse communiquer directement avec l'imprimante Epson sans faire apparaître la fenêtre système Android, Chrome doit accepter le certificat de sécurité local :"
+										})] })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "bg-black/30 p-4 rounded-xl space-y-3 border border-amber-500/20",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "text-xs text-[#dcdedc] space-y-1",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "1." }), " Cliquez sur le bouton bleu ci-contre :"] }),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "2." }),
+														" Sur l'écran Chrome, cliquez sur ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("em", { children: "\"Paramètres avancés\"" }),
+														" puis ",
+														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
+															"\"Continuer vers ",
+															config.printerIp,
+															" (non sécurisé)\""
+														] }),
+														"."
+													] }),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "3." }), " Revenez ici : l'impression sera alors 100% automatique et instantanée !"] })
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`,
+												target: "_blank",
+												rel: "noreferrer",
+												className: "inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black px-5 py-3.5 rounded-xl text-xs font-black transition shadow-lg shrink-0 cursor-pointer active:scale-95",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🔒 1. Ouvrir l'autorisation Chrome" })]
+											})]
+										})
+									})]
 								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "Prêtes / Comptoir",
-									badgeCount: readyOrdersList.length,
-									color: "bg-[#10b981]",
-									orders: readyOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: (id) => {
-										if (orders.find((o) => o.id === id)?.customer.fulfillment === "delivery") handleUpdateStatus(id, "delivering");
-										else handleUpdateStatus(id, "completed");
-									},
-									nextLabel: "Départ Livr. / Remis",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-4 h-4" })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex items-center justify-between",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md",
+													children: "ÉTAPE 2"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "text-base font-black text-white",
+													children: "Adresse Réseau de l'Imprimante"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: handleScanPrinter,
+												disabled: scanningIp,
+												className: "rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white px-3 py-1.5 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `w-3.5 h-3.5 ${scanningIp ? "animate-spin text-[#ff705f]" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: scanningIp ? "Recherche..." : "🔍 Détecter l'IP" })]
+											})]
+										}),
+										scanStatus && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs font-mono p-2.5 rounded-xl bg-black/40 text-emerald-300 border border-emerald-500/20",
+											children: scanStatus
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-xs font-extrabold uppercase text-[#8ea39b]",
+											children: "Adresse IP locale de l'Epson TM-m30II"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mt-1.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "text",
+												value: config.printerIp,
+												onChange: (e) => {
+													const updated = {
+														...config,
+														printerIp: e.target.value.trim(),
+														printerPort: 8043
+													};
+													setConfig(updated);
+													savePrinterConfig(updated);
+												},
+												className: "flex-1 rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold text-base",
+												placeholder: "192.168.0.5"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-xs text-[#8ea39b] font-mono shrink-0 flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Port ePOS :" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-emerald-400 font-bold",
+													children: "8043 (HTTPS Direct)"
+												})]
+											})]
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+													className: "text-white",
+													children: "💡 Astuce pour vérifier l'IP :"
+												}),
+												" Éteignez l'imprimante Epson, maintenez le bouton ",
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "FEED" }),
+												" enfoncé et rallumez-la : elle imprime une bandelette avec son adresse IP exacte."
+											]
+										})
+									]
 								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "En Livraison",
-									badgeCount: deliveringOrdersList.length,
-									color: "bg-[#3b82f6]",
-									orders: deliveringOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: (id) => handleUpdateStatus(id, "completed"),
-									nextLabel: "Livrée",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-4 h-4" })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md",
+											children: "ÉTAPE 3"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-base font-black text-white",
+											children: "Tickets à générer automatiquement"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "space-y-2 pt-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "checkbox",
+												checked: config.autoPrintKitchen,
+												onChange: (e) => {
+													const updated = {
+														...config,
+														autoPrintKitchen: e.target.checked
+													};
+													setConfig(updated);
+													savePrinterConfig(updated);
+												},
+												className: "h-4 w-4 rounded accent-[#ff705f]"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-sm font-bold text-white block",
+												children: "Ticket Cuisine (Bon de préparation)"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-[#8ea39b]",
+												children: "Articles, suppléments, remarques et allergies"
+											})] })]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "checkbox",
+												checked: config.autoPrintDelivery,
+												onChange: (e) => {
+													const updated = {
+														...config,
+														autoPrintDelivery: e.target.checked
+													};
+													setConfig(updated);
+													savePrinterConfig(updated);
+												},
+												className: "h-4 w-4 rounded accent-[#ff705f]"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-sm font-bold text-white block",
+												children: "Ticket Livreur / Client (Avec QR Code GPS)"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-xs text-[#8ea39b]",
+												children: "Adresse de livraison, téléphone et QR Code 1-clic Waze/Google Maps"
+											})] })]
+										})]
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "flex items-center justify-between",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-emerald-500/20 text-emerald-300 font-black text-xs px-2 py-0.5 rounded-md",
+													children: "TESTS"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: "text-base font-black text-white",
+													children: "Tester l'impression réelle"
+												})]
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+											className: "text-xs text-[#8ea39b] leading-relaxed",
+											children: [
+												"Testez la communication en direct sur l'Epson (",
+												config.printerIp,
+												") ou simulez une commande complète :"
+											]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "grid sm:grid-cols-2 gap-3 pt-1",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												type: "button",
+												onClick: handleTestPrint,
+												disabled: testingPrinter,
+												className: "flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-4 h-4 ${testingPrinter ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🖨️ Imprimer un Ticket de Test Epson" })]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: handleCreateTestOrder,
+												disabled: creatingTestOrder,
+												className: "flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧪 Simuler une Commande Complète (GPS)" })
+											})]
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-base font-black text-white",
+										children: "Journal d'impression en direct"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "h-36 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl border border-white/5",
+										children: printLog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-[#6c7d76]",
+											children: "Aucune impression récente."
+										}) : printLog.map((log, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: log.type === "ok" ? "text-emerald-400" : "text-rose-400",
+											children: [
+												"[",
+												log.time,
+												"] ",
+												log.msg
+											]
+										}, idx))
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-[#142822] border border-[#ff705f]/40 p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-xs text-[#8ea39b]",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+											className: "text-white block font-bold",
+											children: "Mémoriser les réglages"
+										}), "Enregistre l'adresse IP et les préférences sur cette tablette."]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => {
+											savePrinterConfig(config);
+											alert("✅ Configuration enregistrée avec succès !");
+										},
+										className: "rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-3 px-6 text-white font-black text-sm transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-2 shrink-0",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "💾 Enregistrer les Réglages" })
+									})]
+								})
+							]
+						})
+					})
+				]
+			}),
+			selectedOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between border-b border-white/10 pb-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-mono text-xl font-black",
+								children: selectedOrder.id
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs text-[#8ea39b] mt-0.5",
+								children: ["Créée à ", new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")]
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => setSelectedOrder(null),
+								className: "rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20",
+								children: "✕"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-2xl bg-black/30 p-4 space-y-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex justify-between items-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-base font-black",
+										children: selectedOrder.customer.name
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: `tel:${selectedOrder.customer.phone}`,
+										className: "flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 transition px-3 py-1.5 rounded-xl",
+										title: "Appeler le numéro du client",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Client : ", selectedOrder.customer.phone] })]
+									})]
+								}),
+								selectedOrder.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-xs text-[#8ea39b] pt-1 border-t border-white/5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-bold text-white",
+										children: selectedOrder.customer.address
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+										selectedOrder.customer.postalCode,
+										" ",
+										selectedOrder.customer.city
+									] })]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs text-[#EADCC9] font-bold",
+									children: "Retrait sur place"
+								}),
+								selectedOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Note :" }),
+										" ",
+										selectedOrder.customer.notes
+									]
 								})
 							]
 						}),
-						activeTab === "history" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex-1 p-6 overflow-y-auto space-y-4",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-4 bg-white/5 p-4 rounded-2xl",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "h-5 w-5 text-[#7a847e]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-									type: "text",
-									placeholder: "Rechercher par n° de commande, client, téléphone...",
-									value: searchQuery,
-									onChange: (e) => setSearchQuery(e.target.value),
-									className: "bg-transparent flex-1 text-white placeholder-[#7a847e] outline-none font-bold"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "rounded-2xl border border-white/10 overflow-hidden",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
-									className: "w-full text-left text-sm",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", {
-										className: "bg-black/30 text-xs uppercase text-[#8ea39b] font-black",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "N° Commande"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "Date / Heure"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "Client"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "Mode"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "Total"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "Statut"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4",
-												children: "Impression"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-												className: "p-4 text-right",
-												children: "Actions"
-											})
-										] })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
-										className: "divide-y divide-white/5 font-semibold",
-										children: orders.filter((o) => o.id.toLowerCase().includes(searchQuery.toLowerCase()) || o.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) || o.customer.phone.includes(searchQuery)).map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
-											className: "hover:bg-white/5 transition",
-											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-													className: "p-4 font-mono font-bold text-white",
-													children: o.id
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
-													className: "p-4 text-[#8ea39b]",
-													children: [
-														new Date(o.createdAt).toLocaleDateString("fr-BE"),
-														" ",
-														new Date(o.createdAt).toLocaleTimeString("fr-BE", {
-															hour: "2-digit",
-															minute: "2-digit"
-														})
-													]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-													className: "p-4",
-													children: o.customer.name
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-													className: "p-4",
-													children: o.customer.fulfillment === "delivery" ? "Livraison" : "Retrait"
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
-													className: "p-4 font-bold text-white",
-													children: [o.total.toFixed(2), " €"]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-													className: "p-4",
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "rounded-full bg-white/10 px-3 py-1 text-xs font-black",
-														children: o.status
-													})
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-													className: "p-4",
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: `rounded-full px-2.5 py-1 text-xs font-black ${o.printStatus === "printed" ? "bg-emerald-500/20 text-emerald-300" : o.printStatus === "failed" ? "bg-red-500/20 text-red-300" : "bg-amber-500/20 text-amber-300"}`,
-														children: o.printStatus ?? "pending"
-													})
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
-													className: "p-4 text-right space-x-2",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-														onClick: () => setSelectedOrder(o),
-														className: "rounded-xl bg-white/10 px-3 py-1.5 text-xs font-black hover:bg-white/20",
-														children: "Détail"
-													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-														onClick: () => handleManualReprint(o.id),
-														className: "rounded-xl bg-[#ff705f] px-3 py-1.5 text-xs font-black text-white hover:bg-[#ff5a47]",
-														children: "Réimprimer"
-													})]
-												})
-											]
-										}, o.id))
-									})]
-								})
-							})]
-						}),
-						activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "flex-1 min-h-0 w-full overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 pb-48",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "max-w-2xl mx-auto space-y-6",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "sticky top-0 z-30 flex items-center justify-between bg-[#0d1a16]/95 backdrop-blur-md py-3 px-4 -mx-4 border-b border-white/10 rounded-2xl shadow-xl",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-											className: "text-xl sm:text-2xl font-black text-white",
-											children: "Imprimante Epson TM-m30II"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "text-xs text-[#8ea39b] mt-0.5",
-											children: "Impression thermique directe 80mm & QR Code GPS"
-										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "flex items-center gap-2",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold",
-												children: "Direct ePOS XML"
-											})
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 p-6 space-y-4 shadow-lg shadow-amber-500/5",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "flex items-start justify-between gap-3",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center gap-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "bg-amber-500 text-black font-black text-xs px-2 py-0.5 rounded-md",
-													children: "ÉTAPE 1"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-													className: "text-base font-black text-amber-200",
-													children: "Autoriser la connexion locale dans Chrome"
-												})]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-xs text-amber-200/90 mt-1.5 leading-relaxed",
-												children: "Pour que votre tablette puisse communiquer directement avec l'imprimante Epson sans faire apparaître la fenêtre système Android, Chrome doit accepter le certificat de sécurité local :"
-											})] })
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "bg-black/30 p-4 rounded-xl space-y-3 border border-amber-500/20",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "text-xs text-[#dcdedc] space-y-1",
-													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "1." }), " Cliquez sur le bouton bleu ci-contre :"] }),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "2." }),
-															" Sur l'écran Chrome, cliquez sur ",
-															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("em", { children: "\"Paramètres avancés\"" }),
-															" puis ",
-															/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("em", { children: [
-																"\"Continuer vers ",
-																config.printerIp,
-																" (non sécurisé)\""
-															] }),
-															"."
-														] }),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "3." }), " Revenez ici : l'impression sera alors 100% automatique et instantanée !"] })
-													]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-													href: `https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`,
-													target: "_blank",
-													rel: "noreferrer",
-													className: "inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black px-4 py-3 rounded-xl text-xs font-black transition shadow-lg shrink-0 cursor-pointer active:scale-95",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ouvrir l'autorisation Chrome" })]
-												})]
-											})
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center justify-between",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "flex items-center gap-2",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md",
-														children: "ÉTAPE 2"
-													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-														className: "text-base font-black text-white",
-														children: "Adresse Réseau de l'Imprimante"
-													})]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-													type: "button",
-													onClick: handleScanPrinter,
-													disabled: scanningIp,
-													className: "rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white px-3 py-1.5 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `w-3.5 h-3.5 ${scanningIp ? "animate-spin text-[#ff705f]" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: scanningIp ? "Recherche..." : "🔍 Détecter l'IP" })]
-												})]
-											}),
-											scanStatus && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-xs font-mono p-2.5 rounded-xl bg-black/40 text-emerald-300 border border-emerald-500/20",
-												children: scanStatus
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "grid grid-cols-3 gap-3",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "col-span-2",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-														className: "text-xs font-extrabold uppercase text-[#8ea39b]",
-														children: "Adresse IP de l'Epson"
-													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-														type: "text",
-														value: config.printerIp,
-														onChange: (e) => setConfig({
-															...config,
-															printerIp: e.target.value
-														}),
-														className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
-														placeholder: "192.168.0.5"
-													})]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-													className: "text-xs font-extrabold uppercase text-[#8ea39b]",
-													children: "Port ePOS"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-													type: "number",
-													value: config.printerPort,
-													onChange: (e) => setConfig({
-														...config,
-														printerPort: Number(e.target.value)
-													}),
-													className: "mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold",
-													placeholder: "8043"
-												})] })]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5",
-												children: [
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-														className: "text-white",
-														children: "💡 Astuce pour vérifier l'IP :"
-													}),
-													" Éteignez l'imprimante Epson, maintenez le bouton ",
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "FEED" }),
-													" enfoncé et rallumez-la : elle imprime une bandelette avec son adresse IP exacte."
-												]
-											})
-										]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs font-black uppercase text-[#8ea39b]",
+									children: "Articles commandés"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+									className: "divide-y divide-white/5 bg-black/20 rounded-2xl p-3",
+									children: selectedOrder.items.map((it, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+										className: "py-2 first:pt-0 last:pb-0",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex items-center gap-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md",
-												children: "ÉTAPE 3"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-												className: "text-base font-black text-white",
-												children: "Tickets à générer automatiquement"
-											})]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "space-y-2 pt-1",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-												className: "flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-													type: "checkbox",
-													checked: config.autoPrintKitchen,
-													onChange: (e) => {
-														const updated = {
-															...config,
-															autoPrintKitchen: e.target.checked
-														};
-														setConfig(updated);
-														savePrinterConfig(updated);
-													},
-													className: "h-4 w-4 rounded accent-[#ff705f]"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-sm font-bold text-white block",
-													children: "Ticket Cuisine (Bon de préparation)"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-xs text-[#8ea39b]",
-													children: "Articles, suppléments, remarques et allergies"
-												})] })]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-												className: "flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-													type: "checkbox",
-													checked: config.autoPrintDelivery,
-													onChange: (e) => {
-														const updated = {
-															...config,
-															autoPrintDelivery: e.target.checked
-														};
-														setConfig(updated);
-														savePrinterConfig(updated);
-													},
-													className: "h-4 w-4 rounded accent-[#ff705f]"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-sm font-bold text-white block",
-													children: "Ticket Livreur / Client (Avec QR Code GPS)"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-xs text-[#8ea39b]",
-													children: "Adresse de livraison, téléphone et QR Code 1-clic Waze/Google Maps"
-												})] })]
-											})]
+											className: "flex justify-between font-bold text-sm",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+												it.quantity,
+												"× ",
+												it.name
+											] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [(it.price * it.quantity).toFixed(2), " €"] })]
+										}), it.toppings && it.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50",
+											children: it.toppings.map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: top }, tidx))
 										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
+									}, idx))
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex justify-between items-center pt-2 px-2 font-black text-base",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [selectedOrder.total.toFixed(2), " €"] })]
+								})
+							]
+						}),
+						selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center justify-between",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs font-black uppercase text-emerald-400",
+										children: "GPS & Navigation Livreur"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold",
+										children: "1-Clic"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
+										target: "_blank",
+										rel: "noreferrer",
+										className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+										href: `https://waze.com/ul?q=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
+										target: "_blank",
+										rel: "noreferrer",
+										className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze"]
+									})]
+								}),
+								(selectedOrder.deliveryToken || selectedOrder.id) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "bg-white p-2.5 rounded-xl shadow-lg shrink-0",
+										children: modalQrDataUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											src: modalQrDataUrl,
+											alt: "QR Code GPS Livreur",
+											className: "w-36 h-36 block",
+											style: { imageRendering: "pixelated" }
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-36 h-36 flex items-center justify-center text-black text-xs font-bold",
+											children: "Génération..."
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-xs space-y-2 flex-1",
 										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "flex items-center justify-between",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "flex items-center gap-2",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "bg-emerald-500/20 text-emerald-300 font-black text-xs px-2 py-0.5 rounded-md",
-														children: "TESTS"
-													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-														className: "text-base font-black text-white",
-														children: "Tester l'impression réelle"
-													})]
-												})
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "font-black text-white text-sm",
+												children: "QR Code GPS Haute Précision"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												className: "text-xs text-[#8ea39b] leading-relaxed",
+												className: "text-[#8ea39b] text-xs leading-relaxed",
 												children: [
-													"Testez la communication en direct sur l'Epson (",
-													config.printerIp,
-													") ou simulez une commande complète :"
+													"Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS ",
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Waze" }),
+													" ou ",
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Google Maps" }),
+													" vers :"
 												]
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "grid sm:grid-cols-2 gap-3 pt-1",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-													type: "button",
-													onClick: handleTestPrint,
-													disabled: testingPrinter,
-													className: "flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer",
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-4 h-4 ${testingPrinter ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🖨️ Imprimer un Ticket de Test Epson" })]
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-													type: "button",
-													onClick: handleCreateTestOrder,
-													disabled: creatingTestOrder,
-													className: "flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer",
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧪 Simuler une Commande Complète (GPS)" })
-												})]
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+												className: "text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10",
+												children: [
+													"📍 ",
+													selectedOrder.customer.address,
+													", ",
+													selectedOrder.customer.postalCode,
+													" ",
+													selectedOrder.customer.city
+												]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "pt-1 flex gap-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+													href: `/track/${selectedOrder.deliveryToken || selectedOrder.id}`,
+													target: "_blank",
+													rel: "noreferrer",
+													className: "inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📱 Ouvrir la navigation livreur" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
+												})
 											})
 										]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-											className: "text-base font-black text-white",
-											children: "Journal d'impression en direct"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "h-36 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl border border-white/5",
-											children: printLog.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-[#6c7d76]",
-												children: "Aucune impression récente."
-											}) : printLog.map((log, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: log.type === "ok" ? "text-emerald-400" : "text-rose-400",
-												children: [
-													"[",
-													log.time,
-													"] ",
-													log.msg
-												]
-											}, idx))
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-[#142822] border border-[#ff705f]/40 p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "text-xs text-[#8ea39b]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-												className: "text-white block font-bold",
-												children: "Mémoriser les réglages"
-											}), "Enregistre l'adresse IP et les préférences sur cette tablette."]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: () => {
-												savePrinterConfig(config);
-												alert("✅ Configuration enregistrée avec succès !");
-											},
-											className: "rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-3 px-6 text-white font-black text-sm transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-2 shrink-0",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "💾 Enregistrer les Réglages" })
-										})]
-									})
-								]
+									})]
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => handleManualReprint(selectedOrder.id),
+								disabled: printingOrderId === selectedOrder.id,
+								className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+								title: "Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: printingOrderId === selectedOrder.id ? "Impression sur l'Epson..." : "🖨️ Imprimer Ticket Caisse (80mm)" })]
 							})
 						})
 					]
-				}),
-				selectedOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between border-b border-white/10 pb-4",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "font-mono text-xl font-black",
-									children: selectedOrder.id
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									className: "text-xs text-[#8ea39b] mt-0.5",
-									children: ["Créée à ", new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")]
-								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => setSelectedOrder(null),
-									className: "rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20",
-									children: "✕"
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "rounded-2xl bg-black/30 p-4 space-y-2",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex justify-between items-center",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-base font-black",
-											children: selectedOrder.customer.name
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-											href: `tel:${selectedOrder.customer.phone}`,
-											className: "flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 transition px-3 py-1.5 rounded-xl",
-											title: "Appeler le numéro du client",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Client : ", selectedOrder.customer.phone] })]
-										})]
-									}),
-									selectedOrder.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "text-xs text-[#8ea39b] pt-1 border-t border-white/5",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: "font-bold text-white",
-											children: selectedOrder.customer.address
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-											selectedOrder.customer.postalCode,
-											" ",
-											selectedOrder.customer.city
-										] })]
-									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-xs text-[#EADCC9] font-bold",
-										children: "Retrait sur place"
-									}),
-									selectedOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Note :" }),
-											" ",
-											selectedOrder.customer.notes
-										]
-									})
-								]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "space-y-2",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-xs font-black uppercase text-[#8ea39b]",
-										children: "Articles commandés"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-										className: "divide-y divide-white/5 bg-black/20 rounded-2xl p-3",
-										children: selectedOrder.items.map((it, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
-											className: "py-2 first:pt-0 last:pb-0",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex justify-between font-bold text-sm",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-													it.quantity,
-													"× ",
-													it.name
-												] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [(it.price * it.quantity).toFixed(2), " €"] })]
-											}), it.toppings && it.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50",
-												children: it.toppings.map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: top }, tidx))
-											})]
-										}, idx))
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex justify-between items-center pt-2 px-2 font-black text-base",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [selectedOrder.total.toFixed(2), " €"] })]
-									})
-								]
-							}),
-							selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center justify-between",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-xs font-black uppercase text-emerald-400",
-											children: "GPS & Navigation Livreur"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold",
-											children: "1-Clic"
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "grid grid-cols-2 gap-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-											href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
-											target: "_blank",
-											rel: "noreferrer",
-											className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps"]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-											href: `https://waze.com/ul?q=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
-											target: "_blank",
-											rel: "noreferrer",
-											className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze"]
-										})]
-									}),
-									(selectedOrder.deliveryToken || selectedOrder.id) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "bg-white p-2.5 rounded-xl shadow-lg shrink-0",
-											children: modalQrDataUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-												src: modalQrDataUrl,
-												alt: "QR Code GPS Livreur",
-												className: "w-36 h-36 block",
-												style: { imageRendering: "pixelated" }
-											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "w-36 h-36 flex items-center justify-center text-black text-xs font-bold",
-												children: "Génération..."
-											})
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "text-xs space-y-2 flex-1",
-											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-													className: "font-black text-white text-sm",
-													children: "QR Code GPS Haute Précision"
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-													className: "text-[#8ea39b] text-xs leading-relaxed",
-													children: [
-														"Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS ",
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Waze" }),
-														" ou ",
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Google Maps" }),
-														" vers :"
-													]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-													className: "text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10",
-													children: [
-														"📍 ",
-														selectedOrder.customer.address,
-														", ",
-														selectedOrder.customer.postalCode,
-														" ",
-														selectedOrder.customer.city
-													]
-												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: "pt-1 flex gap-2",
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-														href: `/track/${selectedOrder.deliveryToken || selectedOrder.id}`,
-														target: "_blank",
-														rel: "noreferrer",
-														className: "inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📱 Ouvrir la navigation livreur" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-3.5 h-3.5" })]
-													})
-												})
-											]
-										})]
-									})
-								]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => handleManualReprint(selectedOrder.id),
-									disabled: printingOrderId === selectedOrder.id,
-									className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
-									title: "Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: printingOrderId === selectedOrder.id ? "Impression sur l'Epson..." : "🖨️ Imprimer Ticket Caisse (80mm)" })]
-								})
-							})
-						]
-					})
 				})
-			]
-		})
-	] });
+			})
+		]
+	}) });
 }
 function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, onNextStatus, nextLabel, nextIcon }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

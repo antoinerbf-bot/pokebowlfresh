@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
+    "prebuild": "rm -f server.js app.js",
     "build": "vite build",
     "postbuild": "node -e \"import('fs').then(fs => { fs.writeFileSync('app.js', 'import(\\\"./.output/server/index.mjs\\\");\\n'); fs.writeFileSync('server.js', 'import(\\\"./.output/server/index.mjs\\\");\\n'); const dirs = ['.output/server', '.vercel/output/functions/__server.func']; for (const d of dirs) { if (fs.existsSync(d)) { const files = fs.readdirSync(d); const target = files.find(f => f.startsWith('_tanstack-start-manifest_v-') && f.endsWith('.mjs')); if (target) { fs.writeFileSync(d + '/_tanstack-start-manifest_v.mjs', 'export * from \\\"./' + target + '\\\";\\n'); console.log('Successfully linked start manifest in ' + d + ' ->', target); } } } })\"",
     "build:dev": "vite build --mode development",
