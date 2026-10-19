@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CHcNG3kZ.css";
+var styles_default = "/assets/styles-V_VO0YJl.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -2661,103 +2661,109 @@ function PokawaFloatingNavbar() {
 		onMouseLeave: handleMouseLeave,
 		className: "absolute inset-x-0 top-3 sm:top-5 z-50 px-3 sm:px-6 lg:px-8 pointer-events-none",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "w-full max-w-[1540px] mx-auto flex items-center justify-between pointer-events-auto relative",
+			className: "w-full flex items-center justify-between pointer-events-auto relative gap-2 sm:gap-4",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "hidden lg:flex items-center gap-2.5 xl:gap-4 rounded-full bg-[#FAF4EB]/95 px-3.5 py-1.5 xl:px-5 xl:py-2 shadow-2xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-							href: "#composer",
-							className: "flex items-center gap-1 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Composer", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "hidden xl:inline",
-								children: " son Bowl"
-							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: "h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5]" })]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							onMouseEnter: handleMouseEnter,
-							className: "relative",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: "#carte",
-								className: `flex items-center gap-1 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] transition ${isMegaMenuOpen ? "text-[#ff705f]" : "hover:text-[#ff705f]"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Notre Carte" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: `h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5] transition-transform duration-200 ${isMegaMenuOpen ? "rotate-180 text-[#ff705f]" : ""}` })]
-							})
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							to: "/blog",
-							className: "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition",
-							children: "Le Mag"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-							href: "#valeurs",
-							className: "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] hover:text-[#ff705f] transition",
-							children: "Engagements"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-							href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
-							target: "_blank",
-							rel: "noreferrer",
-							title: "Restaurant Poke N Bowl à Visé, Avenue du Pont 12",
-							className: "flex h-6 w-6 xl:h-7 xl:w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] shadow-md hover:bg-[#8D522A] hover:scale-110 transition",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-3 w-3 xl:h-3.5 xl:w-3.5 fill-current" })
-						})
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-					to: "/",
-					className: "flex flex-col items-center group transition hover:scale-105 duration-200 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 z-20 pointer-events-auto",
-					"aria-label": "Poke N Bowl Visé",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-1.5 sm:gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "hidden lg:flex flex-1 justify-start items-center min-w-0",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2 xl:gap-3.5 rounded-full bg-[#FAF4EB]/95 px-3.5 py-1.5 xl:px-4.5 xl:py-2 shadow-xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
-								children: "POKE"
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								href: "#composer",
+								className: "flex items-center gap-1 text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] text-[#2C1D16] hover:text-[#ff705f] transition shrink-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Composer" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: "h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5]" })]
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-6 w-6 sm:h-7 sm:w-7 lg:h-7.5 lg:w-7.5 xl:h-8.5 xl:w-8.5 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-xs lg:text-sm font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30",
-								children: "N"
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								onMouseEnter: handleMouseEnter,
+								className: "relative shrink-0",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+									href: "#carte",
+									className: `flex items-center gap-1 text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] transition ${isMegaMenuOpen ? "text-[#ff705f]" : "hover:text-[#ff705f]"}`,
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Notre Carte" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: `h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5] transition-transform duration-200 ${isMegaMenuOpen ? "rotate-180 text-[#ff705f]" : ""}` })]
+								})
 							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
-								children: "BOWL"
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/blog",
+								className: "text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] text-[#2C1D16] hover:text-[#ff705f] transition shrink-0",
+								children: "Le Mag"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								href: "#valeurs",
+								className: "text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] hover:text-[#ff705f] transition shrink-0",
+								children: "Engagements"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
+								href: "https://maps.app.goo.gl/TkddDsG9pwYb62558",
+								target: "_blank",
+								rel: "noreferrer",
+								title: "Restaurant Poke N Bowl à Visé, Avenue du Pont 12",
+								className: "flex h-6 w-6 xl:h-7 xl:w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] shadow-md hover:bg-[#8D522A] hover:scale-110 transition shrink-0",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { className: "h-3 w-3 xl:h-3.5 xl:w-3.5 fill-current" })
 							})
 						]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5",
-						children: "VISÉ · BELGIQUE"
-					})]
+					})
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "hidden lg:flex items-center gap-2 xl:gap-3 rounded-full bg-[#FAF4EB]/95 px-3 py-1.5 xl:px-4 xl:py-2 shadow-2xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							to: "/recrutement",
-							className: "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] hover:text-[#ff705f] transition",
-							children: "Recrutement"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							to: "/contact",
-							className: "text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] hover:text-[#ff705f] transition",
-							children: "Contact"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotificationBellMenu, {}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-							type: "button",
-							onClick: () => setIsCartOpen(true),
-							"aria-label": "Panier",
-							className: "relative flex h-7 w-7 xl:h-8 xl:w-8 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 transition",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-3.5 w-3.5 xl:h-4 xl:w-4 text-[#2C1D16]" }), cartCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white shadow",
-								children: cartCount
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-							to: "/commander",
-							className: "inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-1.5 xl:px-5 xl:py-2 text-[10px] xl:text-xs font-black uppercase tracking-[0.12em] text-[#FAF4EB] shadow-lg transition hover:bg-[#482F22] hover:scale-105 active:scale-95",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commander" })
-						})
-					]
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex shrink-0 justify-center items-center px-1 sm:px-3 xl:px-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+						to: "/",
+						className: "flex flex-col items-center group transition hover:scale-105 duration-200 pointer-events-auto",
+						"aria-label": "Poke N Bowl Visé",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-1.5 sm:gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
+									children: "POKE"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "flex h-6 w-6 sm:h-7 sm:w-7 lg:h-7.5 lg:w-7.5 xl:h-8.5 xl:w-8.5 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-xs lg:text-sm font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30",
+									children: "N"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
+									children: "BOWL"
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5",
+							children: "VISÉ · BELGIQUE"
+						})]
+					})
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "hidden lg:flex flex-1 justify-end items-center min-w-0",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-2 xl:gap-3 rounded-full bg-[#FAF4EB]/95 px-3 py-1.5 xl:px-4 xl:py-2 shadow-xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/recrutement",
+								className: "text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] hover:text-[#ff705f] transition shrink-0",
+								children: "Recrutement"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/contact",
+								className: "text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] hover:text-[#ff705f] transition shrink-0",
+								children: "Contact"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotificationBellMenu, {}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => setIsCartOpen(true),
+								"aria-label": "Panier",
+								className: "relative flex h-7 w-7 xl:h-8 xl:w-8 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 transition shrink-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, { className: "h-3.5 w-3.5 xl:h-4 xl:w-4 text-[#2C1D16]" }), cartCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white shadow",
+									children: cartCount
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+								to: "/commander",
+								className: "inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-1.5 xl:px-5 xl:py-2 text-[10.5px] xl:text-xs font-black uppercase tracking-[0.12em] text-[#FAF4EB] shadow-lg transition hover:bg-[#482F22] hover:scale-105 active:scale-95 shrink-0",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commander" })
+							})
+						]
+					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex lg:hidden items-center gap-2",
