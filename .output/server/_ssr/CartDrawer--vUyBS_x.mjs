@@ -1,12 +1,12 @@
-import { i as __toESM } from "../_runtime.mjs";
+import { r as __toESM } from "../_runtime.mjs";
 import { r as bowls } from "./data-Bi2irjzU.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useTranslation } from "./I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
-import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { I as CircleCheck, P as Clock, S as Minus, Y as ArrowRight, d as ShoppingBag, i as Truck, l as Sparkles, o as Trash2, t as X, v as Plus } from "../_libs/lucide-react.mjs";
+import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { I as CircleCheck, P as Clock, S as Minus, Y as ArrowRight, d as ShoppingBag, i as Truck, l as Sparkles, o as Trash2, t as X, v as Plus } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";

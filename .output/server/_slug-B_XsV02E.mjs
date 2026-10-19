@@ -1,9 +1,9 @@
-import { i as __toESM } from "./_runtime.mjs";
+import { r as __toESM } from "./_runtime.mjs";
 import { r as bowls } from "./_ssr/data-Bi2irjzU.mjs";
 import { n as require_react } from "./_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
-import { b as Link } from "./_libs/@tanstack/react-router+[...].mjs";
+import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { P as Clock, U as Check, W as Calendar, X as ArrowLeft, d as ShoppingBag, m as Share2, v as Plus, z as ChevronRight } from "./_libs/lucide-react.mjs";
 import { t as CartDrawer } from "./_ssr/CartDrawer--vUyBS_x.mjs";

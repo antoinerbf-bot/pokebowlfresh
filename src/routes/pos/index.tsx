@@ -35,19 +35,10 @@ import {
   sendReceiptToPrinter,
   buildEposXmlTest,
   buildEposXmlOrder,
+  scanForPrinterIp,
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
-import { EscPosBuilder, buildKitchenReceipt, buildDeliveryReceipt, buildOrderReceipt } from "../../lib/escpos";
 import QRCode from "qrcode";
-
-function bytesToBase64(bytes: Uint8Array): string {
-  let binary = "";
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-}
 
 export const Route = createFileRoute("/pos/")({
   component: PosApplicationPage,
@@ -80,7 +71,7 @@ export function PosApplicationPage() {
         color: { dark: "#000000", light: "#ffffff" },
       })
         .then(setModalQrDataUrl)
-        .catch(() => {});
+        .catch(() => { });
     } else {
       setModalQrDataUrl("");
     }
@@ -102,7 +93,7 @@ export function PosApplicationPage() {
     try {
       const raw = localStorage.getItem("pnb_printed_orders");
       if (raw) return new Set(JSON.parse(raw));
-    } catch {}
+    } catch { }
     return new Set();
   };
 
@@ -113,7 +104,7 @@ export function PosApplicationPage() {
       ids.add(id);
       const arr = Array.from(ids).slice(-200);
       localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
-    } catch {}
+    } catch { }
   };
 
   // Garder trace des IDs pour les nouvelles alertes
@@ -143,7 +134,7 @@ export function PosApplicationPage() {
       setOrders((prev) => [created, ...prev.filter((o) => o.id !== created.id)]);
       setSelectedOrder(created);
       // Synchronisation en arrière-plan sans bloquer
-      loadOrders().catch(() => {});
+      loadOrders().catch(() => { });
     } catch (e: any) {
       alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
     } finally {
@@ -263,7 +254,6 @@ export function PosApplicationPage() {
             console.error("[POS Auto-print] Erreur :", err);
           } finally {
             autoPrintInFlight.current.delete(order.id);
-            markOrderAsPrintedLocally(order.id);
           }
         })();
       }
@@ -288,21 +278,12 @@ export function PosApplicationPage() {
     let result = { success: false, message: "Erreur inconnue" };
     try {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      
-      // 1. Génération XML ePOS native (support QR matériel, mise en page thermique propre)
+
+      // 1. Génération XML ePOS native avec mise en page thermique 80mm et QR Code GPS
       const xml = buildEposXmlOrder(order, origin);
 
-      // Génération ESC/POS binaire en secours pour le Print Bridge si configuré
-      let receiptB64 = "";
-      try {
-        const bytes = buildOrderReceipt(order, origin);
-        receiptB64 = bytesToBase64(bytes);
-      } catch (genErr) {
-        console.error("[POS] Erreur génération ESC/POS:", genErr);
-      }
-
-      // 2. Envoi direct sur la route ePOS validée
-      const res = await sendReceiptToPrinter({ xml, base64: receiptB64 }, config);
+      // 2. Envoi direct à l'Epson TM-m30II (aucun pop-up, aucun fallback PDF)
+      const res = await sendReceiptToPrinter(xml, config);
       result = res;
       const now = new Date().toLocaleTimeString();
 
@@ -310,10 +291,10 @@ export function PosApplicationPage() {
         markOrderAsPrintedLocally(order.id);
         setPrintBannerError(null);
         setPrintLog((prev) => [
-          { time: now, msg: `Commande ${order.id} : ticket imprimé directement (${config.printerIp}).`, type: "ok" },
+          { time: now, msg: `Commande ${order.id} : ticket officiel imprimé sur ${config.printerIp}.`, type: "ok" },
           ...prev.slice(0, 30),
         ]);
-        if (!silent) alert(`✅ Ticket de la commande ${order.id} imprimé avec succès sur ${config.printerIp} !`);
+        if (!silent) alert(`✅ Ticket de caisse commande ${order.id} imprimé avec succès sur l'Epson (${config.printerIp}) !`);
 
         // Synchronisation du statut d'impression vers l'API REST
         try {
@@ -330,15 +311,14 @@ export function PosApplicationPage() {
         }
       } else {
         setPrintLog((prev) => [
-          { time: now, msg: `Échec direct commande ${order.id} : ${res.message}`, type: "err" },
+          { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
           ...prev.slice(0, 30),
         ]);
+        setPrintBannerError(
+          `⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Cliquez sur "Autoriser Chrome" ou vérifiez l'adresse IP.`
+        );
         if (!silent) {
-          alert(`⚠️ Échec direct Epson (${config.printerIp}) :\n\n${res.message}\n\nOuverture de la fenêtre d'impression...`);
-        } else {
-          setPrintBannerError(
-            `⚠️ L'imprimante directe (${config.printerIp}) n'a pas répondu. Vérifiez l'autorisation Chrome ou cliquez sur l'imprimante pour imprimer.`
-          );
+          alert(`⚠️ Impossible d'imprimer sur l'Epson (${config.printerIp}) :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "Autoriser Chrome" dans l'onglet Paramètres et que l'imprimante est allumée.`);
         }
       }
     } catch (err: any) {
@@ -356,12 +336,8 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    // 1. Essai automatique direct sur l'imprimante (non silencieux pour donner un retour à l'utilisateur)
-    const res = await handleExecutePrint(targetOrder, false);
-    if (!res.success) {
-      // 2. Secours : ouverture de la boîte d'impression système
-      await printThermalTicket(targetOrder);
-    }
+    // Impression directe sur l'imprimante Epson
+    await handleExecutePrint(targetOrder, false);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -382,11 +358,11 @@ export function PosApplicationPage() {
             if (selectedOrder && selectedOrder.id === orderId) {
               setSelectedOrder((prev) => (prev ? { ...prev, status } : null));
             }
-            loadOrders().catch(() => {});
+            loadOrders().catch(() => { });
             return;
           }
         }
-      } catch {}
+      } catch { }
 
       // 2. Fallback serverFn
       await setPosOrderStatus({ data: { pin, orderId, status } });
@@ -399,219 +375,64 @@ export function PosApplicationPage() {
     }
   };
 
-  // Impression thermique directe (Format 80mm - In-page + popup autonome)
-  const printThermalTicket = async (order: Order | null, isTest = false) => {
-    if (!order && !isTest) return;
+  // État de recherche réseau d'imprimante
+  const [scanningIp, setScanningIp] = useState(false);
+  const [scanStatus, setScanStatus] = useState<string | null>(null);
 
-    let qrData = "";
-    const token = order?.deliveryToken || order?.id;
-    if (token) {
-      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      const trackUrl = `${origin}/track/${token}`;
-      try {
-        qrData = await QRCode.toDataURL(trackUrl, {
-          errorCorrectionLevel: "H",
-          margin: 4,
-          width: 280,
-          color: { dark: "#000000", light: "#ffffff" },
-        });
-      } catch (err) {
-        console.warn("QR Code local gen error", err);
-      }
-    }
-
-    // 1. Mettre à jour l'état in-page pour l'impression instantanée
-    setActivePrintOrder(order);
-    setPrintQrDataUrl(qrData);
-
-    const html = isTest
-      ? `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Test Impression - Poke N Bowl</title>
-  <style>
-    @page { size: 80mm auto; margin: 0; }
-    @media print {
-      body { width: 72mm; margin: 0 auto; padding: 2mm 0; }
-      .no-print { display: none !important; }
-    }
-    body { font-family: 'Courier New', Courier, monospace; width: 72mm; margin: 0 auto; padding: 10px; font-size: 14px; text-align: center; color: #000; background: #fff; }
-    h1 { font-size: 19px; margin: 0 0 4px 0; font-weight: 900; }
-    hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
-    .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
-  </style>
-</head>
-<body>
-  <div class="no-print">
-    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER SUR VOTRE IMPRIMANTE</button>
-  </div>
-  <h1>POKE N BOWL VISE</h1>
-  <p>TEST IMPRIMANTE REUSSI</p>
-  <hr>
-  <p>Date : ${new Date().toLocaleTimeString("fr-BE")}</p>
-  <p>Epson TM-m30II Connectee !</p>
-  <hr>
-  <p>Pret pour les commandes.</p>
-  <br><br>.
-</body>
-</html>`
-      : `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Ticket Commande ${order?.id}</title>
-  <style>
-    @page { size: 80mm auto; margin: 0; }
-    @media print {
-      body { width: 72mm; margin: 0 auto; padding: 2mm 0; }
-      .no-print { display: none !important; }
-    }
-    body { font-family: 'Courier New', Courier, monospace; width: 72mm; margin: 0 auto; padding: 8px; font-size: 13px; color: #000; background: #fff; line-height: 1.3; }
-    .center { text-align: center; }
-    h1 { font-size: 20px; margin: 0 0 2px 0; font-weight: 900; letter-spacing: 1px; }
-    h2 { font-size: 16px; margin: 4px 0; font-weight: 900; }
-    .bold { font-weight: bold; }
-    hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
-    .item { display: flex; justify-content: space-between; font-weight: bold; margin: 4px 0; }
-    .topping { font-size: 11px; padding-left: 10px; color: #222; }
-    .qr { margin-top: 10px; text-align: center; }
-    .qr img { width: 140px; height: 140px; display: block; margin: 4px auto; }
-    .print-btn { width: 100%; background: #ff705f; color: #fff; font-weight: 900; padding: 14px; border: none; border-radius: 12px; font-size: 16px; cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(255,112,95,0.4); }
-  </style>
-</head>
-<body>
-  <div class="no-print" style="margin-bottom: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-    <button class="print-btn" onclick="window.print()">🖨️ IMPRIMER SUR VOTRE IMPRIMANTE EPSON</button>
-    <div style="background: #fff3cd; color: #856404; padding: 10px 12px; border-radius: 8px; font-size: 12px; text-align: left; line-height: 1.4; border: 1px solid #ffeeba;">
-      ⚠️ <strong>Attention :</strong> Si Chrome vous propose d'<em>« Enregistrer »</em>, changez simplement le champ <strong>Destination</strong> en haut à droite vers votre <strong>imprimante Epson (TM-m30II)</strong>. Le bouton deviendra alors <strong>« Imprimer »</strong>.
-    </div>
-  </div>
-  <div class="center">
-    <h1>POKE N BOWL</h1>
-    <p>Rue Haute 38, 4600 Vise</p>
-    <p>Tel: 0491 28 14 56</p>
-    <hr>
-    <h2>${order?.customer.fulfillment === "delivery" ? "*** TICKET LIVRAISON ***" : "*** TICKET RETRAIT ***"}</h2>
-    <p class="bold">COMMANDE : ${order?.id}</p>
-    <p>Horaire : ${order?.customer.requestedTime}</p>
-  </div>
-  <hr>
-  <p><span class="bold">Client :</span> ${order?.customer.name}</p>
-  <p><span class="bold">Tel    :</span> ${order?.customer.phone}</p>
-  ${
-    order?.customer.fulfillment === "delivery"
-      ? `<p><span class="bold">Adresse:</span> ${order.customer.address || ""}</p>
-         <p>${order.customer.postalCode || ""} ${order.customer.city || ""}</p>`
-      : ""
-  }
-  ${order?.customer.notes ? `<p class="bold">Note   : ${order.customer.notes}</p>` : ""}
-  <hr>
-  <p class="bold">ARTICLES :</p>
-  ${
-    order?.items
-      .map(
-        (it) => `
-    <div class="item">
-      <span>${it.quantity}x ${it.name}</span>
-      <span>${(it.price * it.quantity).toFixed(2)} E</span>
-    </div>
-    ${(it.toppings || []).map((t) => `<div class="topping">+ ${t}</div>`).join("")}
-  `,
-      )
-      .join("")
-  }
-  <hr>
-  ${
-    order?.customer.deliveryFee
-      ? `<div class="item"><span>Frais de livraison</span><span>${order.customer.deliveryFee.toFixed(2)} EUR</span></div>`
-      : ""
-  }
-  <div class="item" style="font-size: 16px; margin-top: 4px;">
-    <span>TOTAL :</span>
-    <span>${order?.total.toFixed(2)} EUR</span>
-  </div>
-  <div class="center bold" style="margin-top: 6px;">
-    ${order?.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : "[ PAIEMENT SUR PLACE ]"}
-  </div>
-  ${
-    qrData
-      ? `
-    <hr>
-    <div class="qr">
-      <p style="font-size: 11px; font-weight: bold; margin: 0 0 2px 0;">SCANNEZ POUR GPS (WAZE & GOOGLE MAPS)</p>
-      <img src="${qrData}" alt="QR Code GPS">
-      <p style="font-size: 10px; color: #333; margin: 2px 0 0 0;">Itinéraire 1-clic livreur</p>
-    </div>
-  `
-      : ""
-  }
-  <div class="center" style="margin-top: 10px;">
-    <p>Merci pour votre commande !</p>
-  </div>
-  <br><br>.
-</body>
-</html>`;
-
-    // 2. Déclencher window.print()
+  const handleScanPrinter = async () => {
+    if (scanningIp) return;
+    setScanningIp(true);
+    setScanStatus("Recherche de l'imprimante Epson en cours sur le réseau...");
     try {
-      const printWindow = window.open("", "_blank", "width=420,height=700");
-      if (printWindow) {
-        printWindow.document.open();
-        printWindow.document.write(html);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => {
-          printWindow.print();
-        }, 300);
-        return;
+      const foundIp = await scanForPrinterIp((testedIp) => {
+        setScanStatus(`Test de ${testedIp}...`);
+      });
+      if (foundIp) {
+        const updated = { ...config, printerIp: foundIp };
+        setConfig(updated);
+        savePrinterConfig(updated);
+        setScanStatus(`✅ Epson détectée à l'adresse ${foundIp} !`);
+        alert(`✅ Imprimante Epson trouvée à l'adresse ${foundIp} !\n\nL'adresse IP a été mise à jour dans la configuration.`);
+      } else {
+        setScanStatus("Aucune Epson détectée sur les adresses habituelles.");
+        alert("Aucune imprimante détectée automatiquement.\n\n💡 Pour vérifier son IP exacte : éteignez l'imprimante, maintenez le bouton FEED enfoncé et rallumez-la : elle imprime une bandelette avec son IP !");
       }
-    } catch {}
-
-    // 3. Fallback : Impression directe dans la page
-    setTimeout(() => {
-      window.print();
-    }, 150);
+    } catch (e: any) {
+      setScanStatus(`Erreur : ${e?.message}`);
+    } finally {
+      setScanningIp(false);
+    }
   };
 
-  // Test d'impression direct
+  // Test d'impression direct sur l'Epson (envoi propre de ticket ePOS avec QR code)
   const handleTestPrint = async () => {
     if (testingPrinter) return;
     setTestingPrinter(true);
-    setPrintLog((prev) => [{ time: new Date().toLocaleTimeString(), msg: "Test lancé : connexion à l’imprimante…", type: "err" }, ...prev.slice(0, 30)]);
+    setPrintLog((prev) => [
+      { time: new Date().toLocaleTimeString(), msg: `Test ePOS vers ${config.printerIp}...`, type: "ok" },
+      ...prev.slice(0, 30),
+    ]);
     try {
       const xml = buildEposXmlTest(config.printerIp);
-
-      let b64 = "";
-      try {
-        const b = new EscPosBuilder();
-        b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
-        b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
-        b.divider("=");
-        b.line(`Date: ${new Date().toLocaleTimeString("fr-BE")}`);
-        b.line(`IP: ${config.printerIp}`);
-        b.line("Epson TM-m30II Connectee !");
-        b.divider("=");
-        b.line("Pret pour les commandes.");
-        b.feed(4).cut(true);
-        b64 = b.toBase64();
-      } catch {}
-
-      const res = await sendReceiptToPrinter({ xml, base64: b64 }, config);
+      const res = await sendReceiptToPrinter(xml, config);
       const now = new Date().toLocaleTimeString();
 
       if (res.success) {
+        setPrintBannerError(null);
         setPrintLog((prev) => [
           { time: now, msg: `Test ePOS direct REUSSI sur ${config.printerIp} !`, type: "ok" },
           ...prev.slice(0, 30),
         ]);
-        alert("Succes ! Le ticket de test sort sur l'imprimante.");
+        alert(`✅ Succès ! Le ticket de test est sorti sur votre imprimante Epson (${config.printerIp}).`);
       } else {
+        setPrintBannerError(`⚠️ Imprimante (${config.printerIp}) inaccessible : ${res.message}`);
         setPrintLog((prev) => [
           { time: now, msg: `Échec du test : ${res.message}`, type: "err" },
           ...prev.slice(0, 30),
         ]);
-        alert(`Échec de l'impression directe : ${res.message}\n\nVérifie l'adresse IP et la connexion réseau de l'imprimante.`);
+        alert(
+          `⚠️ Échec de l'impression sur ${config.printerIp} :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "1. Ouvrir l'autorisation Chrome" ci-dessous pour approuver le certificat local, et que l'imprimante est allumée.`
+        );
       }
     } catch (e: any) {
       console.error("Erreur test imprimante", e);
@@ -620,40 +441,10 @@ export function PosApplicationPage() {
         { time: new Date().toLocaleTimeString(), msg: `Erreur du test : ${message}`, type: "err" },
         ...prev.slice(0, 30),
       ]);
-      alert(`Le test d'impression a rencontré une erreur : ${message}`);
+      alert(`Erreur test imprimante : ${message}`);
     } finally {
       setTestingPrinter(false);
     }
-  };
-
-  // Test d'impression via la boîte d'impression système (USB / Navigateur)
-  const handleTestSystemPrint = async () => {
-    const dummyOrder: Order = {
-      id: "TEST-TICKET",
-      deliveryToken: "TEST-TICKET",
-      status: "delivering",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      customer: {
-        name: "Client Démo",
-        phone: "0495 12 34 56",
-        fulfillment: "delivery",
-        address: "Rue Haute 38",
-        postalCode: "4600",
-        city: "Visé",
-        deliveryFee: 2.00,
-        notes: "Test QR Code & Ticket Caisse",
-        requestedTime: "Dès que possible",
-        paymentMethod: "on_site",
-      },
-      items: [
-        { name: "Poké Saumon Classic (Medium)", quantity: 1, price: 12.50, toppings: ["Avocat", "Edamame", "Sauce Ponzu"] },
-        { name: "Boisson Aloe Vera", quantity: 1, price: 3.50 },
-      ],
-      total: 16.00,
-      pinValidated: true,
-    };
-    await printThermalTicket(dummyOrder);
   };
 
   // Écran PIN
@@ -673,9 +464,8 @@ export function PosApplicationPage() {
             {[0, 1, 2, 3].map((i) => (
               <div
                 key={i}
-                className={`w-4 h-4 rounded-full transition-all ${
-                  pinInput.length > i ? "bg-[#ff705f] scale-110" : "bg-black/10"
-                }`}
+                className={`w-4 h-4 rounded-full transition-all ${pinInput.length > i ? "bg-[#ff705f] scale-110" : "bg-black/10"
+                  }`}
               />
             ))}
           </div>
@@ -864,680 +654,661 @@ export function PosApplicationPage() {
       <div className="pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
         {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
         <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="flex h-3 w-3 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-            </span>
-            <span className="text-lg font-black tracking-wider text-white">POKENBOWL POS</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="flex h-3 w-3 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <span className="text-lg font-black tracking-wider text-white">POKENBOWL POS</span>
+            </div>
+
+            <nav className="flex rounded-xl bg-black/30 p-1">
+              <button
+                onClick={() => setActiveTab("kanban")}
+                className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+                  }`}
+              >
+                Commandes en direct ({newOrdersList.length + preparingOrdersList.length + readyOrdersList.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("history")}
+                className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "history" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+                  }`}
+              >
+                Historique
+              </button>
+              <button
+                onClick={() => setActiveTab("settings")}
+                className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+                  }`}
+              >
+                Imprimante & Paramètres
+              </button>
+            </nav>
           </div>
 
-          <nav className="flex rounded-xl bg-black/30 p-1">
-            <button
-              onClick={() => setActiveTab("kanban")}
-              className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${
-                activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
-              }`}
-            >
-              Commandes en direct ({newOrdersList.length + preparingOrdersList.length + readyOrdersList.length})
-            </button>
-            <button
-              onClick={() => setActiveTab("history")}
-              className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${
-                activeTab === "history" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
-              }`}
-            >
-              Historique
-            </button>
-            <button
-              onClick={() => setActiveTab("settings")}
-              className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${
-                activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
-              }`}
-            >
-              Imprimante & Paramètres
-            </button>
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {/* Toggle Son */}
-          <button
-            onClick={() => {
-              const updated = { ...config, soundEnabled: !config.soundEnabled };
-              setConfig(updated);
-              savePrinterConfig(updated);
-            }}
-            className={`rounded-xl p-2.5 transition ${
-              config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
-            }`}
-            title="Activer/Désactiver son"
-          >
-            {config.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-          </button>
-
-          {/* Rafraîchissement manuel */}
-          <button
-            onClick={loadOrders}
-            className="rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition"
-            title="Rafraîchir"
-          >
-            <RefreshCw className={`h-5 w-5 ${loading ? "animate-spin" : ""}`} />
-          </button>
-
-          {/* Statut Imprimante & Lien d'autorisation direct */}
-          <a
-            href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-1.5 text-xs font-bold border border-white/10 transition cursor-pointer"
-            title="Cliquez pour autoriser l'imprimante dans Chrome (permet l'impression 100% automatique)"
-          >
-            <Printer className="h-4 w-4 text-[#ff705f]" />
-            <span className="text-[#98aba3]">{config.printerIp}</span>
-          </a>
-        </div>
-      </header>
-
-      {/* ─── Bannière Alerte Impression Réseau ───────────────────────────── */}
-      {printBannerError && (
-        <div className="flex items-center justify-between bg-amber-500/20 border-b border-amber-500/40 px-5 py-2.5 text-xs text-amber-200">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
-            <span>{printBannerError}</span>
-          </div>
           <div className="flex items-center gap-3">
+            {/* Toggle Son */}
             <button
-              onClick={() => setActiveTab("settings")}
-              className="underline font-bold text-amber-300 hover:text-white"
-            >
-              Paramètres & Déblocage Chrome
-            </button>
-            <button
-              onClick={() => setPrintBannerError(null)}
-              className="rounded-lg bg-amber-500/30 px-2 py-1 text-[10px] font-bold text-amber-100 hover:bg-amber-500/50"
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Contenu Principal ────────────────────────────────────────────── */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        {activeTab === "kanban" && (
-          <div className="grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden">
-            {/* Colonne 1 : NOUVELLES */}
-            <KanbanColumn
-              title="Nouvelles"
-              badgeCount={newOrdersList.length}
-              color="bg-[#ff705f]"
-              orders={newOrdersList}
-              onSelect={setSelectedOrder}
-              onReprint={handleManualReprint}
-              onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
-              nextLabel="Préparer"
-              nextIcon={<CookingPot className="w-4 h-4" />}
-            />
-
-            {/* Colonne 2 : EN PRÉPARATION */}
-            <KanbanColumn
-              title="En Cuisine"
-              badgeCount={preparingOrdersList.length}
-              color="bg-[#f59e0b]"
-              orders={preparingOrdersList}
-              onSelect={setSelectedOrder}
-              onReprint={handleManualReprint}
-              onNextStatus={(id) => handleUpdateStatus(id, "ready")}
-              nextLabel="Prête"
-              nextIcon={<CheckCircle className="w-4 h-4" />}
-            />
-
-            {/* Colonne 3 : PRÊTES */}
-            <KanbanColumn
-              title="Prêtes / Comptoir"
-              badgeCount={readyOrdersList.length}
-              color="bg-[#10b981]"
-              orders={readyOrdersList}
-              onSelect={setSelectedOrder}
-              onReprint={handleManualReprint}
-              onNextStatus={(id) => {
-                const target = orders.find((o) => o.id === id);
-                if (target?.customer.fulfillment === "delivery") {
-                  handleUpdateStatus(id, "delivering");
-                } else {
-                  handleUpdateStatus(id, "completed");
-                }
+              onClick={() => {
+                const updated = { ...config, soundEnabled: !config.soundEnabled };
+                setConfig(updated);
+                savePrinterConfig(updated);
               }}
-              nextLabel="Départ Livr. / Remis"
-              nextIcon={<Truck className="w-4 h-4" />}
-            />
+              className={`rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
+                }`}
+              title="Activer/Désactiver son"
+            >
+              {config.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+            </button>
 
-            {/* Colonne 4 : EN LIVRAISON */}
-            <KanbanColumn
-              title="En Livraison"
-              badgeCount={deliveringOrdersList.length}
-              color="bg-[#3b82f6]"
-              orders={deliveringOrdersList}
-              onSelect={setSelectedOrder}
-              onReprint={handleManualReprint}
-              onNextStatus={(id) => handleUpdateStatus(id, "completed")}
-              nextLabel="Livrée"
-              nextIcon={<CheckCircle className="w-4 h-4" />}
-            />
+            {/* Rafraîchissement manuel */}
+            <button
+              onClick={loadOrders}
+              className="rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition"
+              title="Rafraîchir"
+            >
+              <RefreshCw className={`h-5 w-5 ${loading ? "animate-spin" : ""}`} />
+            </button>
+
+            {/* Statut Imprimante & Lien d'autorisation direct */}
+            <a
+              href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-1.5 text-xs font-bold border border-white/10 transition cursor-pointer"
+              title="Cliquez pour autoriser l'imprimante dans Chrome (permet l'impression 100% automatique)"
+            >
+              <Printer className="h-4 w-4 text-[#ff705f]" />
+              <span className="text-[#98aba3]">{config.printerIp}</span>
+            </a>
+          </div>
+        </header>
+
+        {/* ─── Bannière Alerte Impression Réseau ───────────────────────────── */}
+        {printBannerError && (
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-amber-500/20 border-b border-amber-500/40 px-5 py-3 text-xs text-amber-200">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+              <span className="font-semibold">{printBannerError}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <a
+                href={`https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shadow"
+              >
+                <span>🔒 1. Autoriser Chrome</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <button
+                onClick={handleTestPrint}
+                disabled={testingPrinter}
+                className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-black transition"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>2. Réessayer</span>
+              </button>
+              <button
+                onClick={() => setActiveTab("settings")}
+                className="underline text-xs text-amber-300 hover:text-white px-2 py-1 font-bold"
+              >
+                Réglages
+              </button>
+              <button
+                onClick={() => setPrintBannerError(null)}
+                className="rounded-lg bg-black/30 px-2 py-1 text-[10px] font-bold text-amber-200 hover:bg-black/50"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         )}
 
-        {activeTab === "history" && (
-          <div className="flex-1 p-6 overflow-y-auto space-y-4">
-            <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
-              <Search className="h-5 w-5 text-[#7a847e]" />
-              <input
-                type="text"
-                placeholder="Rechercher par n° de commande, client, téléphone..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent flex-1 text-white placeholder-[#7a847e] outline-none font-bold"
+        {/* ─── Contenu Principal ────────────────────────────────────────────── */}
+        <div className="flex flex-1 min-h-0 overflow-hidden">
+          {activeTab === "kanban" && (
+            <div className="grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden">
+              {/* Colonne 1 : NOUVELLES */}
+              <KanbanColumn
+                title="Nouvelles"
+                badgeCount={newOrdersList.length}
+                color="bg-[#ff705f]"
+                orders={newOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
+                nextLabel="Préparer"
+                nextIcon={<CookingPot className="w-4 h-4" />}
+              />
+
+              {/* Colonne 2 : EN PRÉPARATION */}
+              <KanbanColumn
+                title="En Cuisine"
+                badgeCount={preparingOrdersList.length}
+                color="bg-[#f59e0b]"
+                orders={preparingOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => handleUpdateStatus(id, "ready")}
+                nextLabel="Prête"
+                nextIcon={<CheckCircle className="w-4 h-4" />}
+              />
+
+              {/* Colonne 3 : PRÊTES */}
+              <KanbanColumn
+                title="Prêtes / Comptoir"
+                badgeCount={readyOrdersList.length}
+                color="bg-[#10b981]"
+                orders={readyOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => {
+                  const target = orders.find((o) => o.id === id);
+                  if (target?.customer.fulfillment === "delivery") {
+                    handleUpdateStatus(id, "delivering");
+                  } else {
+                    handleUpdateStatus(id, "completed");
+                  }
+                }}
+                nextLabel="Départ Livr. / Remis"
+                nextIcon={<Truck className="w-4 h-4" />}
+              />
+
+              {/* Colonne 4 : EN LIVRAISON */}
+              <KanbanColumn
+                title="En Livraison"
+                badgeCount={deliveringOrdersList.length}
+                color="bg-[#3b82f6]"
+                orders={deliveringOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => handleUpdateStatus(id, "completed")}
+                nextLabel="Livrée"
+                nextIcon={<CheckCircle className="w-4 h-4" />}
               />
             </div>
+          )}
 
-            <div className="rounded-2xl border border-white/10 overflow-hidden">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-black/30 text-xs uppercase text-[#8ea39b] font-black">
-                  <tr>
-                    <th className="p-4">N° Commande</th>
-                    <th className="p-4">Date / Heure</th>
-                    <th className="p-4">Client</th>
-                    <th className="p-4">Mode</th>
-                    <th className="p-4">Total</th>
-                    <th className="p-4">Statut</th>
-                    <th className="p-4">Impression</th>
-                    <th className="p-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5 font-semibold">
-                  {orders
-                    .filter(
-                      (o) =>
-                        o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        o.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        o.customer.phone.includes(searchQuery),
-                    )
-                    .map((o) => (
-                      <tr key={o.id} className="hover:bg-white/5 transition">
-                        <td className="p-4 font-mono font-bold text-white">{o.id}</td>
-                        <td className="p-4 text-[#8ea39b]">
-                          {new Date(o.createdAt).toLocaleDateString("fr-BE")}{" "}
-                          {new Date(o.createdAt).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}
-                        </td>
-                        <td className="p-4">{o.customer.name}</td>
-                        <td className="p-4">{o.customer.fulfillment === "delivery" ? "Livraison" : "Retrait"}</td>
-                        <td className="p-4 font-bold text-white">{o.total.toFixed(2)} €</td>
-                        <td className="p-4">
-                          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black">
-                            {o.status}
-                          </span>
-                        </td>
-                        <td className="p-4">
-                          <span
-                            className={`rounded-full px-2.5 py-1 text-xs font-black ${
-                              o.printStatus === "printed"
-                                ? "bg-emerald-500/20 text-emerald-300"
-                                : o.printStatus === "failed"
-                                ? "bg-red-500/20 text-red-300"
-                                : "bg-amber-500/20 text-amber-300"
-                            }`}
-                          >
-                            {o.printStatus ?? "pending"}
-                          </span>
-                        </td>
-                        <td className="p-4 text-right space-x-2">
-                          <button
-                            onClick={() => setSelectedOrder(o)}
-                            className="rounded-xl bg-white/10 px-3 py-1.5 text-xs font-black hover:bg-white/20"
-                          >
-                            Détail
-                          </button>
-                          <button
-                            onClick={() => handleManualReprint(o.id)}
-                            className="rounded-xl bg-[#ff705f] px-3 py-1.5 text-xs font-black text-white hover:bg-[#ff5a47]"
-                          >
-                            Réimprimer
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+          {activeTab === "history" && (
+            <div className="flex-1 p-6 overflow-y-auto space-y-4">
+              <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                <Search className="h-5 w-5 text-[#7a847e]" />
+                <input
+                  type="text"
+                  placeholder="Rechercher par n° de commande, client, téléphone..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent flex-1 text-white placeholder-[#7a847e] outline-none font-bold"
+                />
+              </div>
+
+              <div className="rounded-2xl border border-white/10 overflow-hidden">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-black/30 text-xs uppercase text-[#8ea39b] font-black">
+                    <tr>
+                      <th className="p-4">N° Commande</th>
+                      <th className="p-4">Date / Heure</th>
+                      <th className="p-4">Client</th>
+                      <th className="p-4">Mode</th>
+                      <th className="p-4">Total</th>
+                      <th className="p-4">Statut</th>
+                      <th className="p-4">Impression</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 font-semibold">
+                    {orders
+                      .filter(
+                        (o) =>
+                          o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          o.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          o.customer.phone.includes(searchQuery),
+                      )
+                      .map((o) => (
+                        <tr key={o.id} className="hover:bg-white/5 transition">
+                          <td className="p-4 font-mono font-bold text-white">{o.id}</td>
+                          <td className="p-4 text-[#8ea39b]">
+                            {new Date(o.createdAt).toLocaleDateString("fr-BE")}{" "}
+                            {new Date(o.createdAt).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}
+                          </td>
+                          <td className="p-4">{o.customer.name}</td>
+                          <td className="p-4">{o.customer.fulfillment === "delivery" ? "Livraison" : "Retrait"}</td>
+                          <td className="p-4 font-bold text-white">{o.total.toFixed(2)} €</td>
+                          <td className="p-4">
+                            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black">
+                              {o.status}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span
+                              className={`rounded-full px-2.5 py-1 text-xs font-black ${o.printStatus === "printed"
+                                  ? "bg-emerald-500/20 text-emerald-300"
+                                  : o.printStatus === "failed"
+                                    ? "bg-red-500/20 text-red-300"
+                                    : "bg-amber-500/20 text-amber-300"
+                                }`}
+                            >
+                              {o.printStatus ?? "pending"}
+                            </span>
+                          </td>
+                          <td className="p-4 text-right space-x-2">
+                            <button
+                              onClick={() => setSelectedOrder(o)}
+                              className="rounded-xl bg-white/10 px-3 py-1.5 text-xs font-black hover:bg-white/20"
+                            >
+                              Détail
+                            </button>
+                            <button
+                              onClick={() => handleManualReprint(o.id)}
+                              className="rounded-xl bg-[#ff705f] px-3 py-1.5 text-xs font-black text-white hover:bg-[#ff5a47]"
+                            >
+                              Réimprimer
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === "settings" && (
-          <div className="flex-1 min-h-0 w-full overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 pb-48">
-            <div className="max-w-2xl mx-auto space-y-6">
-              {/* En-tête Sticky toujours visible avec boutons d'actions directs */}
-              <div className="sticky top-0 z-30 flex items-center justify-between bg-[#0d1a16]/95 backdrop-blur-md py-3 px-4 -mx-4 border-b border-white/10 rounded-2xl shadow-xl">
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-white">Configuration Matériel & POS</h2>
-                  <p className="text-xs text-[#8ea39b] mt-0.5">Imprimantes de caisse & réseau</p>
+          {activeTab === "settings" && (
+            <div className="flex-1 min-h-0 w-full overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 pb-48">
+              <div className="max-w-2xl mx-auto space-y-6">
+                {/* En-tête de Configuration */}
+                <div className="sticky top-0 z-30 flex items-center justify-between bg-[#0d1a16]/95 backdrop-blur-md py-3 px-4 -mx-4 border-b border-white/10 rounded-2xl shadow-xl">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white">Imprimante Epson TM-m30II</h2>
+                    <p className="text-xs text-[#8ea39b] mt-0.5">Impression thermique directe 80mm &amp; QR Code GPS</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold">
+                      Direct ePOS XML
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
+
+                {/* Étape 1 : Autorisation Chrome (Cruciale au premier lancement) */}
+                <div className="rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 p-6 space-y-4 shadow-lg shadow-amber-500/5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-amber-500 text-black font-black text-xs px-2 py-0.5 rounded-md">
+                          ÉTAPE 1
+                        </span>
+                        <h3 className="text-base font-black text-amber-200">
+                          Autoriser la connexion locale dans Chrome
+                        </h3>
+                      </div>
+                      <p className="text-xs text-amber-200/90 mt-1.5 leading-relaxed">
+                        Pour que votre tablette puisse communiquer directement avec l'imprimante Epson sans faire apparaître la fenêtre système Android, Chrome doit accepter le certificat de sécurité local :
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-black/30 p-4 rounded-xl space-y-3 border border-amber-500/20">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                      <div className="text-xs text-[#dcdedc] space-y-1">
+                        <p><strong>1.</strong> Cliquez sur le bouton bleu ci-contre :</p>
+                        <p><strong>2.</strong> Sur l'écran Chrome, cliquez sur <em>"Paramètres avancés"</em> puis <em>"Continuer vers {config.printerIp} (non sécurisé)"</em>.</p>
+                        <p><strong>3.</strong> Revenez ici : l'impression sera alors 100% automatique et instantanée !</p>
+                      </div>
+                      <a
+                        href={`https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black px-4 py-3 rounded-xl text-xs font-black transition shadow-lg shrink-0 cursor-pointer active:scale-95"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Ouvrir l'autorisation Chrome</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Étape 2 : Adresse IP & Détection */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md">
+                        ÉTAPE 2
+                      </span>
+                      <h3 className="text-base font-black text-white">Adresse Réseau de l'Imprimante</h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleScanPrinter}
+                      disabled={scanningIp}
+                      className="rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white px-3 py-1.5 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${scanningIp ? "animate-spin text-[#ff705f]" : ""}`} />
+                      <span>{scanningIp ? "Recherche..." : "🔍 Détecter l'IP"}</span>
+                    </button>
+                  </div>
+
+                  {scanStatus && (
+                    <p className="text-xs font-mono p-2.5 rounded-xl bg-black/40 text-emerald-300 border border-emerald-500/20">
+                      {scanStatus}
+                    </p>
+                  )}
+
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="col-span-2">
+                      <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP de l'Epson</label>
+                      <input
+                        type="text"
+                        value={config.printerIp}
+                        onChange={(e) => setConfig({ ...config, printerIp: e.target.value })}
+                        className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
+                        placeholder="192.168.0.5"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Port ePOS</label>
+                      <input
+                        type="number"
+                        value={config.printerPort}
+                        onChange={(e) => setConfig({ ...config, printerPort: Number(e.target.value) })}
+                        className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
+                        placeholder="8043"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5">
+                    <strong className="text-white">💡 Astuce pour vérifier l'IP :</strong> Éteignez l'imprimante Epson, maintenez le bouton <strong>FEED</strong> enfoncé et rallumez-la : elle imprime une bandelette avec son adresse IP exacte.
+                  </div>
+                </div>
+
+                {/* Étape 3 : Tickets à générer */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md">
+                      ÉTAPE 3
+                    </span>
+                    <h3 className="text-base font-black text-white">Tickets à générer automatiquement</h3>
+                  </div>
+                  <div className="space-y-2 pt-1">
+                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition">
+                      <input
+                        type="checkbox"
+                        checked={config.autoPrintKitchen}
+                        onChange={(e) => {
+                          const updated = { ...config, autoPrintKitchen: e.target.checked };
+                          setConfig(updated);
+                          savePrinterConfig(updated);
+                        }}
+                        className="h-4 w-4 rounded accent-[#ff705f]"
+                      />
+                      <div>
+                        <span className="text-sm font-bold text-white block">Ticket Cuisine (Bon de préparation)</span>
+                        <span className="text-xs text-[#8ea39b]">Articles, suppléments, remarques et allergies</span>
+                      </div>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition">
+                      <input
+                        type="checkbox"
+                        checked={config.autoPrintDelivery}
+                        onChange={(e) => {
+                          const updated = { ...config, autoPrintDelivery: e.target.checked };
+                          setConfig(updated);
+                          savePrinterConfig(updated);
+                        }}
+                        className="h-4 w-4 rounded accent-[#ff705f]"
+                      />
+                      <div>
+                        <span className="text-sm font-bold text-white block">Ticket Livreur / Client (Avec QR Code GPS)</span>
+                        <span className="text-xs text-[#8ea39b]">Adresse de livraison, téléphone et QR Code 1-clic Waze/Google Maps</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Étape 4 : Tests & Diagnostics Matériel */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-emerald-500/20 text-emerald-300 font-black text-xs px-2 py-0.5 rounded-md">
+                        TESTS
+                      </span>
+                      <h3 className="text-base font-black text-white">Tester l'impression réelle</h3>
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#8ea39b] leading-relaxed">
+                    Testez la communication en direct sur l'Epson ({config.printerIp}) ou simulez une commande complète :
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={handleTestPrint}
+                      disabled={testingPrinter}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
+                    >
+                      <Printer className={`w-4 h-4 ${testingPrinter ? "animate-spin" : ""}`} />
+                      <span>🖨️ Imprimer un Ticket de Test Epson</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCreateTestOrder}
+                      disabled={creatingTestOrder}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer"
+                    >
+                      <span>🧪 Simuler une Commande Complète (GPS)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Logs d'impression */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                  <h3 className="text-base font-black text-white">Journal d'impression en direct</h3>
+                  <div className="h-36 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl border border-white/5">
+                    {printLog.length === 0 ? (
+                      <p className="text-[#6c7d76]">Aucune impression récente.</p>
+                    ) : (
+                      printLog.map((log, idx) => (
+                        <div key={idx} className={log.type === "ok" ? "text-emerald-400" : "text-rose-400"}>
+                          [{log.time}] {log.msg}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Sauvegarde des réglages */}
+                <div className="rounded-2xl bg-[#142822] border border-[#ff705f]/40 p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+                  <div className="text-xs text-[#8ea39b]">
+                    <strong className="text-white block font-bold">Mémoriser les réglages</strong>
+                    Enregistre l'adresse IP et les préférences sur cette tablette.
+                  </div>
                   <button
-                    type="button"
-                    onClick={handleTestSystemPrint}
-                    className="rounded-xl bg-white/10 hover:bg-white/20 py-2 px-3 text-white font-bold text-xs transition border border-white/10 flex items-center gap-1.5"
-                    title="Imprimer un ticket de test 80mm"
-                  >
-                    <Printer className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="hidden sm:inline">Test Ticket</span>
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => {
                       savePrinterConfig(config);
                       alert("✅ Configuration enregistrée avec succès !");
                     }}
-                    className="rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-2 px-4 text-white font-black text-xs transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-1.5"
+                    className="rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-3 px-6 text-white font-black text-sm transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
                   >
-                    <span>💾 Enregistrer</span>
+                    <span>💾 Enregistrer les Réglages</span>
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+        </div>
 
-              {/* Choix du mode d'impression */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-                <h3 className="text-base font-black text-[#ff705f]">Mode d'Impression Principal</h3>
-                <p className="text-xs text-[#8ea39b]">
-                  Choisissez comment le POS déclenche vos tickets de caisse :
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const upd = { ...config, printMode: "browser" as const };
-                      setConfig(upd);
-                      savePrinterConfig(upd);
-                    }}
-                    className={`p-4 rounded-xl border text-left transition cursor-pointer ${
-                      config.printMode === "browser"
-                        ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
-                        : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 font-black text-sm">
-                      <Printer className="w-4 h-4 text-emerald-400" />
-                      <span>Ticket Direct / Boîte Système</span>
-                    </div>
-                    <p className="text-[11px] mt-1.5 text-[#a5b4ae] leading-snug">
-                      Format thermique 80mm avec QR Code. Utilise le pilote de l'imprimante (USB ou réseau Mac). Recommandé & infaillible.
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const upd = { ...config, printMode: "epos" as const };
-                      setConfig(upd);
-                      savePrinterConfig(upd);
-                    }}
-                    className={`p-4 rounded-xl border text-left transition cursor-pointer ${
-                      config.printMode !== "browser"
-                        ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
-                        : "bg-black/30 border-white/10 text-[#8ea39b] hover:border-white/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 font-black text-sm">
-                      <Printer className="w-4 h-4 text-[#ff705f]" />
-                      <span>Réseau direct ePOS XML</span>
-                    </div>
-                    <p className="text-[11px] mt-1.5 text-[#a5b4ae] leading-snug">
-                      Envoi silencieux par requête HTTP/HTTPS directe à l'adresse IP de l'Epson.
-                    </p>
-                  </button>
-                </div>
-              </div>
-
-              {/* Paramètres Réseau ePOS */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-black text-[#ff705f]">Adresse Réseau de l'Imprimante</h3>
-                  <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold">
-                    Epson TM-m30II
-                  </span>
-                </div>
-
-                {/* Étape cruciale : Autoriser Chrome */}
-                <div className="rounded-xl bg-amber-500/10 border border-amber-500/30 p-4 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-black text-amber-300">
-                      🔒 Étape Chrome : Autoriser le certificat local
-                    </span>
-                    <a
-                      href={`https://${config.printerIp}:${config.printerPort || 8043}/cgi-bin/epos/service.cgi`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shrink-0"
-                    >
-                      <span>Ouvrir l'autorisation</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                  <p className="text-[11px] text-amber-200/90 leading-relaxed">
-                    Cliquez sur <strong>"Ouvrir l'autorisation"</strong>, puis dans l'avertissement Chrome cliquez sur <strong>"Paramètres avancés"</strong> puis <strong>"Continuer vers le site (non sécurisé)"</strong>.
+        {/* ─── Modal Détail Commande ────────────────────────────────────────── */}
+        {selectedOrder && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <span className="font-mono text-xl font-black">{selectedOrder.id}</span>
+                  <p className="text-xs text-[#8ea39b] mt-0.5">
+                    Créée à {new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")}
                   </p>
                 </div>
+                <button
+                  onClick={() => setSelectedOrder(null)}
+                  className="rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20"
+                >
+                  ✕
+                </button>
+              </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="col-span-2">
-                    <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP de l'Epson</label>
-                    <input
-                      type="text"
-                      value={config.printerIp}
-                      onChange={(e) => setConfig({ ...config, printerIp: e.target.value })}
-                      className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
-                      placeholder="192.168.0.5"
-                    />
+              {/* Infos Client */}
+              <div className="rounded-2xl bg-black/30 p-4 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-base font-black">{selectedOrder.customer.name}</span>
+                  <a
+                    href={`tel:${selectedOrder.customer.phone}`}
+                    className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 transition px-3 py-1.5 rounded-xl"
+                    title="Appeler le numéro du client"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
+                    <span>Client : {selectedOrder.customer.phone}</span>
+                  </a>
+                </div>
+                {selectedOrder.customer.fulfillment === "delivery" ? (
+                  <div className="text-xs text-[#8ea39b] pt-1 border-t border-white/5">
+                    <p className="font-bold text-white">{selectedOrder.customer.address}</p>
+                    <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
                   </div>
-                  <div>
-                    <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Port ePOS</label>
-                    <input
-                      type="number"
-                      value={config.printerPort}
-                      onChange={(e) => setConfig({ ...config, printerPort: Number(e.target.value) })}
-                      className="mt-1 w-full rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold"
-                      placeholder="8043"
-                    />
+                ) : (
+                  <p className="text-xs text-[#EADCC9] font-bold">Retrait sur place</p>
+                )}
+                {selectedOrder.customer.notes && (
+                  <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">
+                    <strong>Note :</strong> {selectedOrder.customer.notes}
                   </div>
-                </div>
-
-                <div className="rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5">
-                  <strong className="text-white">💡 Trouver l'adresse IP réelle :</strong> Éteignez l'imprimante, maintenez <strong>FEED</strong> enfoncé et rallumez-la : elle imprime une bandelette avec son IP.
-                </div>
+                )}
               </div>
 
-              {/* Toggles des tickets */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
-                <h3 className="text-base font-black text-white">Tickets à générer</h3>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition">
-                    <input
-                      type="checkbox"
-                      checked={config.autoPrintKitchen}
-                      onChange={(e) => {
-                        const updated = { ...config, autoPrintKitchen: e.target.checked };
-                        setConfig(updated);
-                        savePrinterConfig(updated);
-                      }}
-                      className="h-4 w-4 rounded accent-[#ff705f]"
-                    />
-                    <span className="text-sm font-bold text-white">Ticket Cuisine (Bon de préparation)</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer p-2.5 rounded-xl bg-black/20 hover:bg-black/30 transition">
-                    <input
-                      type="checkbox"
-                      checked={config.autoPrintDelivery}
-                      onChange={(e) => {
-                        const updated = { ...config, autoPrintDelivery: e.target.checked };
-                        setConfig(updated);
-                        savePrinterConfig(updated);
-                      }}
-                      className="h-4 w-4 rounded accent-[#ff705f]"
-                    />
-                    <span className="text-sm font-bold text-white">Ticket Livreur / Client (Avec QR Code GPS Waze)</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Test d'impression */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-black text-white">Tests & Diagnostics Matériel</h3>
-                  <span className="text-xs bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-lg">
-                    Recommandé : ePOS Direct
-                  </span>
-                </div>
-                <p className="text-xs text-[#8ea39b] leading-relaxed">
-                  Testez la communication directe avec votre Epson TM-m30II ({config.printerIp}) sans ouvrir de fenêtre Android, ou simulez une commande complète avec ticket et QR code GPS livreur.
-                </p>
-                <div className="grid sm:grid-cols-2 gap-3 pt-1">
-                  <button
-                    type="button"
-                    onClick={handleTestPrint}
-                    disabled={testingPrinter}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
-                  >
-                    <Printer className={`w-4 h-4 ${testingPrinter ? "animate-spin" : ""}`} />
-                    <span>🖨️ Tester Direct ePOS ({config.printerIp})</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleCreateTestOrder}
-                    disabled={creatingTestOrder}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer"
-                  >
-                    <span>🧪 Simuler Commande Test (Livraison + GPS)</span>
-                  </button>
-                </div>
-                <div className="pt-2 text-center">
-                  <button
-                    type="button"
-                    onClick={handleTestSystemPrint}
-                    className="text-xs text-[#8ea39b] hover:text-white underline cursor-pointer"
-                  >
-                    Tester la boîte d'impression navigateur / PDF (Secours)
-                  </button>
-                </div>
-              </div>
-
-              {/* Logs d'impression */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
-                <h3 className="text-base font-black text-white">Journal d'impression</h3>
-                <div className="h-36 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl">
-                  {printLog.length === 0 ? (
-                    <p className="text-[#6c7d76]">Aucune impression récente.</p>
-                  ) : (
-                    printLog.map((log, idx) => (
-                      <div key={idx} className={log.type === "ok" ? "text-emerald-400" : "text-rose-400"}>
-                        [{log.time}] {log.msg}
+              {/* Articles */}
+              <div className="space-y-2">
+                <span className="text-xs font-black uppercase text-[#8ea39b]">Articles commandés</span>
+                <ul className="divide-y divide-white/5 bg-black/20 rounded-2xl p-3">
+                  {selectedOrder.items.map((it, idx) => (
+                    <li key={idx} className="py-2 first:pt-0 last:pb-0">
+                      <div className="flex justify-between font-bold text-sm">
+                        <span>{it.quantity}× {it.name}</span>
+                        <span>{(it.price * it.quantity).toFixed(2)} €</span>
                       </div>
-                    ))
+                      {it.toppings && it.toppings.length > 0 && (
+                        <div className="pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50">
+                          {it.toppings.map((top, tidx) => (
+                            <p key={tidx}>{top}</p>
+                          ))}
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex justify-between items-center pt-2 px-2 font-black text-base">
+                  <span>Total</span>
+                  <span>{selectedOrder.total.toFixed(2)} €</span>
+                </div>
+              </div>
+
+              {/* Section GPS & Livreur pour les commandes en livraison */}
+              {selectedOrder.customer.fulfillment === "delivery" && (
+                <div className="rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black uppercase text-emerald-400">
+                      GPS & Navigation Livreur
+                    </span>
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
+                      1-Clic
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      Google Maps
+                    </a>
+                    <a
+                      href={`https://waze.com/ul?q=${encodeURIComponent(
+                        `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      Waze
+                    </a>
+                  </div>
+
+                  {(selectedOrder.deliveryToken || selectedOrder.id) && (
+                    <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl">
+                      <div className="bg-white p-2.5 rounded-xl shadow-lg shrink-0">
+                        {modalQrDataUrl ? (
+                          <img
+                            src={modalQrDataUrl}
+                            alt="QR Code GPS Livreur"
+                            className="w-36 h-36 block"
+                            style={{ imageRendering: "pixelated" }}
+                          />
+                        ) : (
+                          <div className="w-36 h-36 flex items-center justify-center text-black text-xs font-bold">
+                            Génération...
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-xs space-y-2 flex-1">
+                        <p className="font-black text-white text-sm">QR Code GPS Haute Précision</p>
+                        <p className="text-[#8ea39b] text-xs leading-relaxed">
+                          Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS <strong>Waze</strong> ou <strong>Google Maps</strong> vers :
+                        </p>
+                        <p className="text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10">
+                          📍 {selectedOrder.customer.address}, {selectedOrder.customer.postalCode} {selectedOrder.customer.city}
+                        </p>
+                        <div className="pt-1 flex gap-2">
+                          <a
+                            href={`/track/${selectedOrder.deliveryToken || selectedOrder.id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition"
+                          >
+                            <span>📱 Ouvrir la navigation livreur</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
-              </div>
+              )}
 
-              {/* Barre d'action permanente en bas pour ne jamais être coupée */}
-              <div className="rounded-2xl bg-[#142822] border border-[#ff705f]/40 p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl">
-                <div className="text-xs text-[#8ea39b]">
-                  <strong className="text-white block font-bold">Sauvegarde des réglages</strong>
-                  Cliquez sur Enregistrer pour mémoriser ces réglages sur ce navigateur.
-                </div>
+              {/* Action Impression Unique & Directe */}
+              <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
                 <button
-                  onClick={() => {
-                    savePrinterConfig(config);
-                    alert("✅ Configuration enregistrée avec succès !");
-                  }}
-                  className="rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-3 px-6 text-white font-black text-sm transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
+                  onClick={() => handleManualReprint(selectedOrder.id)}
+                  disabled={printingOrderId === selectedOrder.id}
+                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                  title="Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II"
                 >
-                  <span>💾 Enregistrer les Réglages</span>
+                  <Printer className={`w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}`} />
+                  <span>
+                    {printingOrderId === selectedOrder.id
+                      ? "Impression sur l'Epson..."
+                      : "🖨️ Imprimer Ticket Caisse (80mm)"}
+                  </span>
                 </button>
               </div>
             </div>
           </div>
         )}
-      </div>
-
-      {/* ─── Modal Détail Commande ────────────────────────────────────────── */}
-      {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div>
-                <span className="font-mono text-xl font-black">{selectedOrder.id}</span>
-                <p className="text-xs text-[#8ea39b] mt-0.5">
-                  Créée à {new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedOrder(null)}
-                className="rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Infos Client */}
-            <div className="rounded-2xl bg-black/30 p-4 space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-base font-black">{selectedOrder.customer.name}</span>
-                <a
-                  href={`tel:${selectedOrder.customer.phone}`}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 transition px-3 py-1.5 rounded-xl"
-                  title="Appeler le numéro du client"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
-                  <span>Client : {selectedOrder.customer.phone}</span>
-                </a>
-              </div>
-              {selectedOrder.customer.fulfillment === "delivery" ? (
-                <div className="text-xs text-[#8ea39b] pt-1 border-t border-white/5">
-                  <p className="font-bold text-white">{selectedOrder.customer.address}</p>
-                  <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
-                </div>
-              ) : (
-                <p className="text-xs text-[#EADCC9] font-bold">Retrait sur place</p>
-              )}
-              {selectedOrder.customer.notes && (
-                <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">
-                  <strong>Note :</strong> {selectedOrder.customer.notes}
-                </div>
-              )}
-            </div>
-
-            {/* Articles */}
-            <div className="space-y-2">
-              <span className="text-xs font-black uppercase text-[#8ea39b]">Articles commandés</span>
-              <ul className="divide-y divide-white/5 bg-black/20 rounded-2xl p-3">
-                {selectedOrder.items.map((it, idx) => (
-                  <li key={idx} className="py-2 first:pt-0 last:pb-0">
-                    <div className="flex justify-between font-bold text-sm">
-                      <span>{it.quantity}× {it.name}</span>
-                      <span>{(it.price * it.quantity).toFixed(2)} €</span>
-                    </div>
-                    {it.toppings && it.toppings.length > 0 && (
-                      <div className="pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50">
-                        {it.toppings.map((top, tidx) => (
-                          <p key={tidx}>{top}</p>
-                        ))}
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              <div className="flex justify-between items-center pt-2 px-2 font-black text-base">
-                <span>Total</span>
-                <span>{selectedOrder.total.toFixed(2)} €</span>
-              </div>
-            </div>
-
-            {/* Section GPS & Livreur pour les commandes en livraison */}
-            {selectedOrder.customer.fulfillment === "delivery" && (
-              <div className="rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase text-emerald-400">
-                    GPS & Navigation Livreur
-                  </span>
-                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
-                    1-Clic
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95"
-                  >
-                    <Navigation className="w-3.5 h-3.5" />
-                    Google Maps
-                  </a>
-                  <a
-                    href={`https://waze.com/ul?q=${encodeURIComponent(
-                      `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95"
-                  >
-                    <Navigation className="w-3.5 h-3.5" />
-                    Waze
-                  </a>
-                </div>
-
-                {(selectedOrder.deliveryToken || selectedOrder.id) && (
-                  <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl">
-                    <div className="bg-white p-2.5 rounded-xl shadow-lg shrink-0">
-                      {modalQrDataUrl ? (
-                        <img
-                          src={modalQrDataUrl}
-                          alt="QR Code GPS Livreur"
-                          className="w-36 h-36 block"
-                          style={{ imageRendering: "pixelated" }}
-                        />
-                      ) : (
-                        <div className="w-36 h-36 flex items-center justify-center text-black text-xs font-bold">
-                          Génération...
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-xs space-y-2 flex-1">
-                      <p className="font-black text-white text-sm">QR Code GPS Haute Précision</p>
-                      <p className="text-[#8ea39b] text-xs leading-relaxed">
-                        Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS <strong>Waze</strong> ou <strong>Google Maps</strong> vers :
-                      </p>
-                      <p className="text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10">
-                        📍 {selectedOrder.customer.address}, {selectedOrder.customer.postalCode} {selectedOrder.customer.city}
-                      </p>
-                      <div className="pt-1 flex gap-2">
-                        <a
-                          href={`/track/${selectedOrder.deliveryToken || selectedOrder.id}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition"
-                        >
-                          <span>📱 Ouvrir la navigation livreur</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Action Impression Unique & Directe */}
-            <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
-              <button
-                onClick={() => handleManualReprint(selectedOrder.id)}
-                disabled={printingOrderId === selectedOrder.id}
-                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
-                title="Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II"
-              >
-                <Printer className={`w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}`} />
-                <span>
-                  {printingOrderId === selectedOrder.id
-                    ? "Impression sur l'Epson..."
-                    : "🖨️ Imprimer Ticket Caisse (80mm)"}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       </div>
     </>
   );
