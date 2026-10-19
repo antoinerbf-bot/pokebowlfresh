@@ -25,9 +25,9 @@ function DeliveryTrackPage() {
           status: "delivering",
           fulfillment: "delivery",
           requestedTime: "Dès que possible",
-          customerName: "Test Ticket Caisse (GPS)",
-          customerPhone: "0499 00 00 00",
-          notes: "Test GPS Waze & Google Maps 1-Clic",
+          customerName: "Jean Dupont (Client Exemple)",
+          customerPhone: "0499 12 34 56",
+          notes: "Bâtiment B, interphone 12",
           address: "Rue Haute 38",
           postalCode: "4600",
           city: "Visé",
@@ -246,15 +246,9 @@ function DeliveryTrackPage() {
               >
                 Ou ouvrir avec Apple Plans
               </a>
-              {order.customerPhone && (
-                <a
-                  href={`tel:${order.customerPhone}`}
-                  className="inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline"
-                >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>Appeler {order.customerName}</span>
-                </a>
-              )}
+              <span className="text-[11px] text-[#8ea39b]/80">
+                Ouvre le GPS du smartphone
+              </span>
             </div>
           </section>
         ) : (
@@ -283,21 +277,26 @@ function DeliveryTrackPage() {
           </div>
         </section>
 
-        {/* Coordonnées Client & Appel */}
+        {/* Coordonnées Client & Appel Direct Livreur */}
         <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3">
-          <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Client</h2>
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-lg font-black">{order.customerName}</p>
-              <p className="text-sm font-semibold text-[#7a847e]">{order.customerPhone}</p>
+            <h2 className="text-xs uppercase tracking-wider font-extrabold text-[#7a847e]">Client à livrer</h2>
+            <span className="text-[11px] text-[#7a847e] font-medium">Contact direct</span>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-lg font-black truncate">{order.customerName || "Client"}</p>
+              <p className="text-sm font-semibold text-[#7a847e]">{order.customerPhone || "Numéro non renseigné"}</p>
             </div>
-            <a
-              href={`tel:${order.customerPhone}`}
-              className="flex items-center gap-2 rounded-xl bg-[#25D366]/15 text-[#189947] hover:bg-[#25D366]/25 px-4 py-3 font-bold text-sm transition"
-            >
-              <Phone className="h-4 w-4" />
-              Appeler
-            </a>
+            {order.customerPhone && (
+              <a
+                href={`tel:${order.customerPhone}`}
+                className="flex items-center gap-2 rounded-xl bg-[#25D366] text-white hover:bg-[#20ba59] px-4 py-3 font-bold text-sm shadow-md transition active:scale-95 shrink-0"
+              >
+                <Phone className="h-4 w-4" />
+                <span>Appeler le client</span>
+              </a>
+            )}
           </div>
         </section>
 

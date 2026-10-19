@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CIt7WMME.css";
+var styles_default = "/assets/styles-CiJQh5N0.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -14494,9 +14494,9 @@ function DeliveryTrackPage() {
 					status: "delivering",
 					fulfillment: "delivery",
 					requestedTime: "Dès que possible",
-					customerName: "Test Ticket Caisse (GPS)",
-					customerPhone: "0499 00 00 00",
-					notes: "Test GPS Waze & Google Maps 1-Clic",
+					customerName: "Jean Dupont (Client Exemple)",
+					customerPhone: "0499 12 34 56",
+					notes: "Bâtiment B, interphone 12",
 					address: "Rue Haute 38",
 					postalCode: "4600",
 					city: "Visé",
@@ -14720,10 +14720,9 @@ function DeliveryTrackPage() {
 								rel: "noopener noreferrer",
 								className: "hover:text-white underline font-medium",
 								children: "Ou ouvrir avec Apple Plans"
-							}), order.customerPhone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: `tel:${order.customerPhone}`,
-								className: "inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Appeler ", order.customerName] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] text-[#8ea39b]/80",
+								children: "Ouvre le GPS du smartphone"
 							})]
 						})
 					]
@@ -14765,21 +14764,30 @@ function DeliveryTrackPage() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 					className: "rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-						className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
-						children: "Client"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center justify-between",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-lg font-black",
-							children: order.customerName
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-sm font-semibold text-[#7a847e]",
-							children: order.customerPhone
-						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "text-xs uppercase tracking-wider font-extrabold text-[#7a847e]",
+							children: "Client à livrer"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[11px] text-[#7a847e] font-medium",
+							children: "Contact direct"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "min-w-0",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-lg font-black truncate",
+								children: order.customerName || "Client"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm font-semibold text-[#7a847e]",
+								children: order.customerPhone || "Numéro non renseigné"
+							})]
+						}), order.customerPhone && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 							href: `tel:${order.customerPhone}`,
-							className: "flex items-center gap-2 rounded-xl bg-[#25D366]/15 text-[#189947] hover:bg-[#25D366]/25 px-4 py-3 font-bold text-sm transition",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-4 w-4" }), "Appeler"]
+							className: "flex items-center gap-2 rounded-xl bg-[#25D366] text-white hover:bg-[#20ba59] px-4 py-3 font-bold text-sm shadow-md transition active:scale-95 shrink-0",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "h-4 w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Appeler le client" })]
 						})]
 					})]
 				}),
