@@ -151,24 +151,46 @@ export function PosApplicationPage() {
     }
   };
 
-  // Bip d'alerte Web Audio API (aucun fichier MP3 externe requis)
+  // Carillon d'alerte cuisine puissant (Web Audio API natif, 3 bips carillon restaurant)
   const playAlertSound = () => {
     if (!config.soundEnabled) return;
     try {
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-      osc.frequency.setValueAtTime(880.0, audioCtx.currentTime + 0.15); // A5
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.45);
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === "suspended") {
+        void ctx.resume();
+      }
+
+      const playChime = (startTime: number, freq1: number, freq2: number) => {
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = "triangle";
+        osc2.type = "sine";
+        osc1.frequency.setValueAtTime(freq1, startTime);
+        osc2.frequency.setValueAtTime(freq2, startTime + 0.12);
+
+        gain.gain.setValueAtTime(0.85, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(startTime);
+        osc1.stop(startTime + 0.15);
+        osc2.start(startTime + 0.12);
+        osc2.stop(startTime + 0.38);
+      };
+
+      const now = ctx.currentTime;
+      playChime(now, 784, 1046.5);        // Ding-Dong 1
+      playChime(now + 0.42, 784, 1046.5); // Ding-Dong 2
+      playChime(now + 0.84, 784, 1046.5); // Ding-Dong 3
     } catch (e) {
-      console.warn("Audio non disponible", e);
+      console.warn("[POS] Audio non disponible:", e);
     }
   };
 
