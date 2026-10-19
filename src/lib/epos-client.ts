@@ -22,14 +22,18 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,
-  printMode: "epos",
+  printMode: "browser",
 };
 
 export function loadPrinterConfig(): PrinterConfig {
   if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
   try {
     const raw = localStorage.getItem("pnb_printer_config");
-    if (raw) return { ...DEFAULT_PRINTER_CONFIG, ...JSON.parse(raw) };
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Forcer le mode navigateur/système par défaut (qui passe par le pilote direct Epson Android/Mac)
+      return { ...DEFAULT_PRINTER_CONFIG, ...parsed, printMode: parsed.printMode || "browser" };
+    }
   } catch {}
   return DEFAULT_PRINTER_CONFIG;
 }

@@ -226,20 +226,14 @@ export function PosApplicationPage() {
 
       setOrders(newOrders);
 
-      // Impression automatique sur l'imprimante
+      // Impression automatique sur l'imprimante (Route unique & fiable : pilote Epson direct)
       for (const order of newlyPrintable) {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
-        if (config.printMode === "browser") {
-          void printThermalTicket(order).finally(() => {
-            autoPrintInFlight.current.delete(order.id);
-            markOrderAsPrintedLocally(order.id);
-          });
-        } else {
-          void handleExecutePrint(order, true).finally(() => {
-            autoPrintInFlight.current.delete(order.id);
-          });
-        }
+        void printThermalTicket(order).finally(() => {
+          autoPrintInFlight.current.delete(order.id);
+          markOrderAsPrintedLocally(order.id);
+        });
       }
     } catch (e) {
       console.error("[POS] Erreur globale loadOrders:", e);
@@ -599,14 +593,14 @@ export function PosApplicationPage() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       customer: {
-        name: "Test Ticket Caisse (GPS)",
-        phone: "0499 00 00 00",
+        name: "Client Démo",
+        phone: "0495 12 34 56",
         fulfillment: "delivery",
         address: "Rue Haute 38",
         postalCode: "4600",
         city: "Visé",
         deliveryFee: 2.00,
-        notes: "Test GPS Waze & Google Maps 1-Clic",
+        notes: "Test QR Code & Ticket Caisse",
         requestedTime: "Dès que possible",
         paymentMethod: "on_site",
       },
@@ -1248,27 +1242,20 @@ export function PosApplicationPage() {
                 </div>
               </div>
 
-              {/* Tests d'impression */}
-              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-                <h3 className="text-base font-black text-white">Tests d'Impression</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button
-                    onClick={handleTestSystemPrint}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 py-3.5 px-4 text-white font-black text-sm border border-white/10 transition cursor-pointer"
-                  >
-                    <Printer className="w-4 h-4 text-emerald-400" />
-                    <span>Tester Ticket Démo (80mm)</span>
-                  </button>
-
-                  <button
-                    onClick={handleTestPrint}
-                    disabled={testingPrinter}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 py-3.5 px-4 text-white font-black text-sm shadow-lg shadow-emerald-900/30 transition-all cursor-pointer disabled:opacity-60"
-                  >
-                    <Printer className="w-4 h-4" />
-                    <span>{testingPrinter ? "Test en cours…" : "Tester Réseau ePOS"}</span>
-                  </button>
-                </div>
+              {/* Test d'impression */}
+              <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                <h3 className="text-base font-black text-white">Test d'Impression Ticket Démo</h3>
+                <p className="text-xs text-[#8ea39b]">
+                  Génère et imprime immédiatement le ticket de caisse 80mm avec QR Code via l'imprimante Epson connectée.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleTestSystemPrint}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] active:scale-95 py-3.5 px-4 text-white font-black text-sm shadow-lg shadow-[#ff705f]/25 transition cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>🖨️ Tester l'impression Ticket Caisse (80mm)</span>
+                </button>
               </div>
 
               {/* Logs d'impression */}
@@ -1458,25 +1445,15 @@ export function PosApplicationPage() {
               </div>
             )}
 
-            {/* Actions Modal - Toujours visibles en bas du modal */}
-            <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 space-y-2 rounded-b-3xl shadow-2xl">
+            {/* Action Impression Unique & Directe */}
+            <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
               <button
                 onClick={() => printThermalTicket(selectedOrder)}
-                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
                 title="Lancer l'impression directe du ticket thermique 80mm avec QR Code"
               >
                 <Printer className="w-5 h-5" />
-                <span>🖨️ Imprimer Ticket Caisse (Direct & QR)</span>
-              </button>
-
-              <button
-                onClick={() => handleExecutePrint(selectedOrder, false)}
-                disabled={printingOrderId === selectedOrder.id}
-                className="w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2.5 px-3 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
-                title={`Envoyer le flux ePOS directement à l'adresse IP réseau (${config.printerIp})`}
-              >
-                <Printer className="w-4 h-4 text-[#ff705f]" />
-                <span>{printingOrderId === selectedOrder.id ? "Envoi ePOS en cours…" : `Option Réseau direct ePOS (${config.printerIp})`}</span>
+                <span>🖨️ Imprimer Ticket Caisse (80mm)</span>
               </button>
             </div>
           </div>
