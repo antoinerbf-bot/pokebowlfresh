@@ -226,14 +226,25 @@ export function PosApplicationPage() {
 
       setOrders(newOrders);
 
-      // Impression automatique sur l'imprimante (Route unique & fiable : pilote Epson direct)
+      // Impression automatique sur l'imprimante dès qu'une commande tombe sur le site
       for (const order of newlyPrintable) {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
-        void printThermalTicket(order).finally(() => {
-          autoPrintInFlight.current.delete(order.id);
-          markOrderAsPrintedLocally(order.id);
-        });
+        (async () => {
+          try {
+            // 1. Tente l'envoi silencieux direct à l'Epson TM-m30II (aucun pop-up)
+            const res = await handleExecutePrint(order, true);
+            if (!res.success) {
+              // 2. Fallback secours si l'imprimante réseau directe n'a pas répondu
+              await printThermalTicket(order);
+            }
+          } catch {
+            await printThermalTicket(order);
+          } finally {
+            autoPrintInFlight.current.delete(order.id);
+            markOrderAsPrintedLocally(order.id);
+          }
+        })();
       }
     } catch (e) {
       console.error("[POS] Erreur globale loadOrders:", e);
@@ -250,9 +261,10 @@ export function PosApplicationPage() {
     }
   }, [isUnlocked, pin]);
 
-  // Action d'impression directe ePOS réseau (la route exclusive et définitive)
-  const handleExecutePrint = async (order: Order, silent = false) => {
+  // Action d'impression directe ePOS réseau (impression silencieuse sans pop-up)
+  const handleExecutePrint = async (order: Order, silent = false): Promise<{ success: boolean; message: string }> => {
     setPrintingOrderId(order.id);
+    let result = { success: false, message: "Erreur inconnue" };
     try {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
       
@@ -270,13 +282,14 @@ export function PosApplicationPage() {
 
       // 2. Envoi direct sur la route ePOS validée
       const res = await sendReceiptToPrinter({ xml, base64: receiptB64 }, config);
+      result = res;
       const now = new Date().toLocaleTimeString();
 
       if (res.success) {
         markOrderAsPrintedLocally(order.id);
         setPrintBannerError(null);
         setPrintLog((prev) => [
-          { time: now, msg: `Commande ${order.id} : ticket imprimé (${config.printerIp}).`, type: "ok" },
+          { time: now, msg: `Commande ${order.id} : ticket imprimé directement (${config.printerIp}).`, type: "ok" },
           ...prev.slice(0, 30),
         ]);
         if (!silent) alert(`✅ Ticket de la commande ${order.id} imprimé avec succès sur ${config.printerIp} !`);
@@ -296,23 +309,24 @@ export function PosApplicationPage() {
         }
       } else {
         setPrintLog((prev) => [
-          { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
+          { time: now, msg: `Échec direct commande ${order.id} : ${res.message}`, type: "err" },
           ...prev.slice(0, 30),
         ]);
         if (!silent) {
-          alert(`⚠️ Échec de l'envoi à l'Epson (${config.printerIp}) :\n\n${res.message}`);
+          alert(`⚠️ Échec direct Epson (${config.printerIp}) :\n\n${res.message}\n\nOuverture de la fenêtre d'impression...`);
         } else {
           setPrintBannerError(
-            `⚠️ L'imprimante réseau (${config.printerIp}) n'a pas répondu pour la commande ${order.id}. Cliquez sur la commande pour réimprimer.`
+            `⚠️ L'imprimante directe (${config.printerIp}) n'a pas répondu. Vérifiez l'autorisation Chrome ou cliquez sur l'imprimante pour imprimer.`
           );
         }
       }
     } catch (err: any) {
       console.error("[POS] Erreur handleExecutePrint:", err);
+      result = { success: false, message: err?.message || String(err) };
     } finally {
       setPrintingOrderId(null);
-      loadOrders();
     }
+    return result;
   };
 
   const handleManualReprint = async (orderId: string) => {
@@ -321,8 +335,12 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    // Lancer directement l'impression du ticket thermique éprouvée
-    await printThermalTicket(targetOrder);
+    // 1. Essai automatique direct silencieux sur l'imprimante
+    const res = await handleExecutePrint(targetOrder, true);
+    if (!res.success) {
+      // 2. Secours : ouverture de la boîte d'impression système
+      await printThermalTicket(targetOrder);
+    }
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -442,8 +460,11 @@ export function PosApplicationPage() {
   </style>
 </head>
 <body>
-  <div class="no-print">
-    <button class="print-btn" onclick="window.print()">🖨️ CLIQUEZ ICI POUR IMPRIMER SUR VOTRE IMPRIMANTE</button>
+  <div class="no-print" style="margin-bottom: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <button class="print-btn" onclick="window.print()">🖨️ IMPRIMER SUR VOTRE IMPRIMANTE EPSON</button>
+    <div style="background: #fff3cd; color: #856404; padding: 10px 12px; border-radius: 8px; font-size: 12px; text-align: left; line-height: 1.4; border: 1px solid #ffeeba;">
+      ⚠️ <strong>Attention :</strong> Si Chrome vous propose d'<em>« Enregistrer »</em>, changez simplement le champ <strong>Destination</strong> en haut à droite vers votre <strong>imprimante Epson (TM-m30II)</strong>. Le bouton deviendra alors <strong>« Imprimer »</strong>.
+    </div>
   </div>
   <div class="center">
     <h1>POKE N BOWL</h1>
@@ -884,11 +905,17 @@ export function PosApplicationPage() {
             <RefreshCw className={`h-5 w-5 ${loading ? "animate-spin" : ""}`} />
           </button>
 
-          {/* Statut Imprimante */}
-          <div className="flex items-center gap-2 rounded-xl bg-black/40 px-3 py-1.5 text-xs font-bold border border-white/5">
+          {/* Statut Imprimante & Lien d'autorisation direct */}
+          <a
+            href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-1.5 text-xs font-bold border border-white/10 transition cursor-pointer"
+            title="Cliquez pour autoriser l'imprimante dans Chrome (permet l'impression 100% automatique)"
+          >
             <Printer className="h-4 w-4 text-[#ff705f]" />
             <span className="text-[#98aba3]">{config.printerIp}</span>
-          </div>
+          </a>
         </div>
       </header>
 
