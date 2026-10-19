@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -11997,11 +11997,137 @@ function savePrinterConfig(config) {
 	localStorage.setItem("pnb_printer_config", JSON.stringify(config));
 }
 /**
-* Envoie un flux de données binaires à l'imprimante :
-* Tente d'abord le Print Bridge si configuré, sinon ePOS-Print direct.
+* Nettoyage et échappement sécurisé des caractères pour le XML ePOS
 */
-async function sendReceiptToPrinter(base64Data, config) {
-	if (config.bridgeUrl) try {
+function escapeXml(str = "") {
+	return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+/**
+* Enveloppe SOAP standard pour ePOS-Print
+*/
+function buildEposSoapEnvelope(innerXml) {
+	if (innerXml.includes("<s:Envelope") || innerXml.includes("<soap:Envelope")) return innerXml;
+	return `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    ${innerXml.trim()}
+  </s:Body>
+</s:Envelope>`;
+}
+/**
+* Générateur XML ePOS natif pour le ticket de test (Bouton vert)
+*/
+function buildEposXmlTest(printerIp) {
+	const now = /* @__PURE__ */ new Date();
+	const timeStr = now.toLocaleTimeString("fr-BE");
+	return `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>
+  <text align="center" em="true">TEST IMPRIMANTE REUSSI&#10;</text>
+  <text align="center">==========================================&#10;</text>
+  <text align="center">Date : ${escapeXml(now.toLocaleDateString("fr-BE"))} a ${escapeXml(timeStr)}&#10;</text>
+  <text align="center">IP Imprimante : ${escapeXml(printerIp)}&#10;</text>
+  <text align="center" em="true">Epson TM-m30II Connectee !&#10;</text>
+  <text align="center">==========================================&#10;</text>
+  <text align="center">Pret pour la prise de commandes.&#10;&#10;</text>
+  <text align="center" em="true">SCANNEZ POUR TESTER&#10;</text>
+  <symbol type="qrcode_model_2" level="level_m" width="5">https://pokenbowl.be</symbol>
+  <feed line="4" />
+  <cut type="feed" />
+</epos-print>`;
+}
+/**
+* Générateur XML ePOS natif pour le ticket de commande officiel (Cuisine & Livreur)
+*/
+function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
+	const isDelivery = order.customer.fulfillment === "delivery";
+	const dateObj = new Date(order.createdAt);
+	const dateStr = dateObj.toLocaleDateString("fr-BE");
+	const timeStr = dateObj.toLocaleTimeString("fr-BE", {
+		hour: "2-digit",
+		minute: "2-digit"
+	});
+	let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
+	xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
+	xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
+	xml += `  <text align="center">Tel: 04 222 00 00&#10;&#10;</text>\n`;
+	xml += `  <text align="center" reverse="true" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
+	xml += `  <text align="center" reverse="true"> HEURE : ${escapeXml(order.customer.requestedTime || "DES QUE POSSIBLE")} &#10;</text>\n`;
+	xml += `  <text>&#10;</text>\n`;
+	xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(order.id)}&#10;</text>\n`;
+	xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
+	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
+	xml += `  <text align="left">Nom  : ${escapeXml(order.customer.name)}&#10;</text>\n`;
+	xml += `  <text align="left">Tel  : ${escapeXml(order.customer.phone)}&#10;</text>\n`;
+	if (isDelivery) {
+		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+		xml += `  <text align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
+		xml += `  <text align="left">${escapeXml(order.customer.address || "Non precisee")}&#10;</text>\n`;
+		const cityLine = `${order.customer.postalCode || ""} ${order.customer.city || ""}`.trim();
+		if (cityLine) xml += `  <text align="left">${escapeXml(cityLine)}&#10;</text>\n`;
+	}
+	if (order.customer.notes) {
+		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+		xml += `  <text align="left" reverse="true" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
+		xml += `  <text align="left">${escapeXml(order.customer.notes)}&#10;</text>\n`;
+	}
+	xml += `  <text align="left">==========================================&#10;</text>\n`;
+	xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
+	for (const item of order.items) {
+		const itemTotal = (item.price * item.quantity).toFixed(2) + " EUR";
+		const header = `${item.quantity}x ${item.name}`;
+		const spaces = Math.max(1, 42 - header.length - itemTotal.length);
+		const line = header + " ".repeat(spaces) + itemTotal;
+		xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
+		if (item.toppings && item.toppings.length > 0) for (const top of item.toppings) if (top.toLowerCase().startsWith("sans :") || top.toLowerCase().includes("allerg")) xml += `  <text align="left" reverse="true" em="true">  ! ${escapeXml(top)} &#10;</text>\n`;
+		else xml += `  <text align="left">  + ${escapeXml(top)}&#10;</text>\n`;
+		xml += `  <text>&#10;</text>\n`;
+	}
+	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+	if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
+		const feeStr = order.customer.deliveryFee.toFixed(2) + " EUR";
+		const feeLine = "Frais de livraison";
+		const spaces = Math.max(1, 24 - feeStr.length);
+		const line = feeLine + " ".repeat(spaces) + feeStr;
+		xml += `  <text align="left">${escapeXml(line)}&#10;</text>\n`;
+	}
+	xml += `  <text align="left" em="true" dw="true" dh="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
+	xml += `  <text>&#10;</text>\n`;
+	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
+	xml += `  <text align="center" reverse="true" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
+	xml += `  <text>&#10;</text>\n`;
+	if (isDelivery && (order.deliveryToken || order.id)) {
+		const trackToken = order.deliveryToken || order.id;
+		const trackUrl = `${origin.replace(/\/$/, "")}/track/${trackToken}`;
+		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
+		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(trackUrl)}</symbol>\n`;
+		xml += `  <text>&#10;</text>\n`;
+	}
+	xml += `  <text align="center">==========================================&#10;</text>\n`;
+	xml += `  <text align="center">Merci pour votre commande !&#10;</text>\n`;
+	xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
+	xml += `  <feed line="4" />\n`;
+	xml += `  <cut type="feed" />\n`;
+	xml += `</epos-print>`;
+	return xml;
+}
+/**
+* Envoie un flux d'impression à l'imprimante Epson :
+* Priorité 1 : Print Bridge si configuré
+* Priorité 2 : ePOS-Print XML direct (HTTP/HTTPS SOAP sur port 8043 ou 8008)
+*/
+async function sendReceiptToPrinter(payload, config) {
+	let xmlContent = "";
+	let base64Data = "";
+	if (typeof payload === "string") if (payload.trim().startsWith("<")) xmlContent = payload.trim();
+	else base64Data = payload;
+	else if (payload && typeof payload === "object") {
+		xmlContent = payload.xml?.trim() || "";
+		base64Data = payload.base64?.trim() || "";
+	}
+	if (config.bridgeUrl && base64Data) try {
 		const bridgeEndpoint = `${config.bridgeUrl.replace(/\/$/, "")}/print`;
 		if ((await fetch(bridgeEndpoint, {
 			method: "POST",
@@ -12016,53 +12142,55 @@ async function sendReceiptToPrinter(base64Data, config) {
 			message: "Imprimé avec succès via Print Bridge."
 		};
 	} catch (err) {
-		console.warn("Print Bridge injoignable, essai ePOS-Print...", err);
+		console.warn("Print Bridge injoignable, essai ePOS-Print direct...", err);
 	}
-	let commandHex = "";
-	try {
-		const binary = atob(base64Data);
-		for (let i = 0; i < binary.length; i++) commandHex += binary.charCodeAt(i).toString(16).padStart(2, "0");
-	} catch {
-		return {
-			success: false,
-			message: "Données du ticket invalides (Base64)."
-		};
-	}
-	const xml = `<?xml version="1.0" encoding="utf-8"?>
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Body>
-    <epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-      <command>${commandHex}</command>
-    </epos-print>
-  </s:Body>
-</s:Envelope>`;
+	if (!xmlContent) return {
+		success: false,
+		message: "Données du ticket invalides : flux ePOS XML manquant."
+	};
+	const soapEnvelope = buildEposSoapEnvelope(xmlContent);
+	const ip = config.printerIp.trim();
 	const port = config.printerPort || 8043;
-	typeof window !== "undefined" && window.location.protocol;
 	const candidateUrls = [
-		`https://${config.printerIp}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${config.printerIp}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${config.printerIp}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
+		`https://${ip}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:${port}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
 	];
 	const targets = Array.from(new Set(candidateUrls));
 	let lastErr = "";
 	for (const url of targets) try {
-		if ((await fetch(url, {
+		console.log(`[ePOS] Envoi requête vers ${url}...`);
+		const res = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "text/xml; charset=utf-8",
 				"If-Modified-Since": "Thu, 01 Jan 1970 00:00:00 GMT",
 				SOAPAction: "\"\""
 			},
-			body: xml,
-			signal: AbortSignal.timeout(5e3)
-		})).ok) return {
+			body: soapEnvelope,
+			signal: AbortSignal.timeout(8e3)
+		});
+		const resText = await res.text();
+		console.log(`[ePOS] Réponse reçue de ${url} (status ${res.status}):`, resText);
+		if (resText.includes("success=\"true\"")) return {
 			success: true,
-			message: `Ticket imprimé avec succès sur ${config.printerIp} !`
+			message: `Ticket imprimé avec succès sur ${ip} !`
 		};
+		if (res.ok && resText.includes("<response")) {
+			const codeMatch = resText.match(/code="([^"]*)"/);
+			const code = codeMatch ? codeMatch[1] : "";
+			if (!code || code === "None" || code === "SUCCESS") return {
+				success: true,
+				message: `Ticket imprimé avec succès sur ${ip} !`
+			};
+			lastErr = `Code imprimante: ${code}`;
+		} else if (!res.ok) lastErr = `HTTP ${res.status} ${res.statusText || ""}`.trim();
 	} catch (e) {
-		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (5s)" : e?.message ?? String(e);
+		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (8s)" : e?.message ?? String(e);
+		console.warn(`[ePOS] Échec sur ${url}:`, lastErr);
 	}
 	const detail = lastErr.includes("Failed to fetch") || lastErr.includes("NetworkError") ? `Certificat non approuvé dans Chrome ou IP (${config.printerIp}) injoignable.` : lastErr;
 	return {
@@ -12221,14 +12349,17 @@ function PosApplicationPage() {
 		setPrintingOrderId(order.id);
 		try {
 			const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+			const xml = buildEposXmlOrder(order, origin);
 			let receiptB64 = "";
 			try {
 				receiptB64 = bytesToBase64(buildOrderReceipt(order, origin));
 			} catch (genErr) {
 				console.error("[POS] Erreur génération ESC/POS:", genErr);
 			}
-			if (!receiptB64) throw new Error("Erreur de génération des données binaires du ticket.");
-			const res = await sendReceiptToPrinter(receiptB64, config);
+			const res = await sendReceiptToPrinter({
+				xml,
+				base64: receiptB64
+			}, config);
 			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
 			if (res.success) {
 				markOrderAsPrintedLocally(order.id);
@@ -12468,17 +12599,25 @@ function PosApplicationPage() {
 			type: "err"
 		}, ...prev.slice(0, 30)]);
 		try {
-			const b = new EscPosBuilder();
-			b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
-			b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
-			b.divider("=");
-			b.line(`Date: ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}`);
-			b.line(`IP: ${config.printerIp}`);
-			b.line("Epson TM-m30II Connectee !");
-			b.divider("=");
-			b.line("Pret pour les commandes.");
-			b.feed(4).cut(true);
-			const res = await sendReceiptToPrinter(b.toBase64(), config);
+			const xml = buildEposXmlTest(config.printerIp);
+			let b64 = "";
+			try {
+				const b = new EscPosBuilder();
+				b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
+				b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
+				b.divider("=");
+				b.line(`Date: ${(/* @__PURE__ */ new Date()).toLocaleTimeString("fr-BE")}`);
+				b.line(`IP: ${config.printerIp}`);
+				b.line("Epson TM-m30II Connectee !");
+				b.divider("=");
+				b.line("Pret pour les commandes.");
+				b.feed(4).cut(true);
+				b64 = b.toBase64();
+			} catch {}
+			const res = await sendReceiptToPrinter({
+				xml,
+				base64: b64
+			}, config);
 			const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
 			if (res.success) {
 				setPrintLog((prev) => [{

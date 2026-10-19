@@ -33,6 +33,8 @@ import {
   loadPrinterConfig,
   savePrinterConfig,
   sendReceiptToPrinter,
+  buildEposXmlTest,
+  buildEposXmlOrder,
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
 import { EscPosBuilder, buildKitchenReceipt, buildDeliveryReceipt, buildOrderReceipt } from "../../lib/escpos";
@@ -260,7 +262,10 @@ export function PosApplicationPage() {
     try {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
       
-      // 1. Génération ESC/POS instantanée en mémoire client du ticket complet unifié
+      // 1. Génération XML ePOS native (support QR matériel, mise en page thermique propre)
+      const xml = buildEposXmlOrder(order, origin);
+
+      // Génération ESC/POS binaire en secours pour le Print Bridge si configuré
       let receiptB64 = "";
       try {
         const bytes = buildOrderReceipt(order, origin);
@@ -269,12 +274,8 @@ export function PosApplicationPage() {
         console.error("[POS] Erreur génération ESC/POS:", genErr);
       }
 
-      if (!receiptB64) {
-        throw new Error("Erreur de génération des données binaires du ticket.");
-      }
-
-      // 2. Envoi direct sur la route ePOS validée (identique au bouton de test réussi)
-      const res = await sendReceiptToPrinter(receiptB64, config);
+      // 2. Envoi direct sur la route ePOS validée
+      const res = await sendReceiptToPrinter({ xml, base64: receiptB64 }, config);
       const now = new Date().toLocaleTimeString();
 
       if (res.success) {
@@ -543,19 +544,24 @@ export function PosApplicationPage() {
     setTestingPrinter(true);
     setPrintLog((prev) => [{ time: new Date().toLocaleTimeString(), msg: "Test lancé : connexion à l’imprimante…", type: "err" }, ...prev.slice(0, 30)]);
     try {
-      const b = new EscPosBuilder();
-      b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
-      b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
-      b.divider("=");
-      b.line(`Date: ${new Date().toLocaleTimeString("fr-BE")}`);
-      b.line(`IP: ${config.printerIp}`);
-      b.line("Epson TM-m30II Connectee !");
-      b.divider("=");
-      b.line("Pret pour les commandes.");
-      b.feed(4).cut(true);
+      const xml = buildEposXmlTest(config.printerIp);
 
-      const b64 = b.toBase64();
-      const res = await sendReceiptToPrinter(b64, config);
+      let b64 = "";
+      try {
+        const b = new EscPosBuilder();
+        b.align("center").bold(true).doubleSize(true).line("POKE N BOWL VISE");
+        b.doubleSize(false).bold(false).line("TEST IMPRIMANTE REUSSI");
+        b.divider("=");
+        b.line(`Date: ${new Date().toLocaleTimeString("fr-BE")}`);
+        b.line(`IP: ${config.printerIp}`);
+        b.line("Epson TM-m30II Connectee !");
+        b.divider("=");
+        b.line("Pret pour les commandes.");
+        b.feed(4).cut(true);
+        b64 = b.toBase64();
+      } catch {}
+
+      const res = await sendReceiptToPrinter({ xml, base64: b64 }, config);
       const now = new Date().toLocaleTimeString();
 
       if (res.success) {
