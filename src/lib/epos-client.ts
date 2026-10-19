@@ -12,7 +12,7 @@ export interface PrinterConfig {
   autoPrintKitchen: boolean;
   autoPrintDelivery: boolean;
   soundEnabled: boolean;
-  printMode?: "epos" | "browser"; // "epos" (Réseau direct) ou "browser" (Boîte d'impression navigateur / USB)
+  printMode?: "epos" | "browser"; // "epos" (Réseau direct silencieux) ou "browser" (Boîte d'impression navigateur / USB)
 }
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
@@ -22,7 +22,7 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,
-  printMode: "browser",
+  printMode: "epos",
 };
 
 export function loadPrinterConfig(): PrinterConfig {
@@ -31,8 +31,7 @@ export function loadPrinterConfig(): PrinterConfig {
     const raw = localStorage.getItem("pnb_printer_config");
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Forcer le mode navigateur/système par défaut (qui passe par le pilote direct Epson Android/Mac)
-      return { ...DEFAULT_PRINTER_CONFIG, ...parsed, printMode: parsed.printMode || "browser" };
+      return { ...DEFAULT_PRINTER_CONFIG, ...parsed, printMode: parsed.printMode || "epos" };
     }
   } catch {}
   return DEFAULT_PRINTER_CONFIG;
@@ -41,6 +40,22 @@ export function loadPrinterConfig(): PrinterConfig {
 export function savePrinterConfig(config: PrinterConfig): void {
   if (typeof window === "undefined") return;
   localStorage.setItem("pnb_printer_config", JSON.stringify(config));
+}
+
+/**
+ * Nettoyage thermique ASCII sans accents pour éviter tout blocage ou bug de code page Epson
+ */
+export function cleanThermalText(str: string = ""): string {
+  if (!str) return "";
+  return String(str)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // é -> e, à -> a, etc.
+    .replace(/€/g, "EUR")
+    .replace(/[’‘`]/g, "'")
+    .replace(/[–—]/g, "-")
+    .replace(/œ/g, "oe")
+    .replace(/æ/g, "ae")
+    .replace(/[^\x20-\x7E\n\r]/g, ""); // garde uniquement l'ASCII imprimable
 }
 
 /**
@@ -101,6 +116,13 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   const dateStr = dateObj.toLocaleDateString("fr-BE");
   const timeStr = dateObj.toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" });
 
+  const safeCustomerName = cleanThermalText(order.customer.name);
+  const safeCustomerPhone = cleanThermalText(order.customer.phone);
+  const safeAddress = cleanThermalText(order.customer.address || "Non precisee");
+  const safeCity = cleanThermalText(`${order.customer.postalCode || ""} ${order.customer.city || ""}`.trim());
+  const safeNotes = cleanThermalText(order.customer.notes || "");
+  const safeRequestedTime = cleanThermalText(order.customer.requestedTime || "DES QUE POSSIBLE");
+
   let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
 
   // En-tête restaurant
@@ -110,31 +132,30 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   // Bannière Type
   xml += `  <text align="center" reverse="true" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
-  xml += `  <text align="center" reverse="true"> HEURE : ${escapeXml(order.customer.requestedTime || "DES QUE POSSIBLE")} &#10;</text>\n`;
+  xml += `  <text align="center" reverse="true"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
   // Détails commande & client
-  xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(order.id)}&#10;</text>\n`;
+  xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
   xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
   xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
   xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
-  xml += `  <text align="left">Nom  : ${escapeXml(order.customer.name)}&#10;</text>\n`;
-  xml += `  <text align="left">Tel  : ${escapeXml(order.customer.phone)}&#10;</text>\n`;
+  xml += `  <text align="left">Nom  : ${escapeXml(safeCustomerName)}&#10;</text>\n`;
+  xml += `  <text align="left">Tel  : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
 
   if (isDelivery) {
     xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
     xml += `  <text align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
-    xml += `  <text align="left">${escapeXml(order.customer.address || "Non precisee")}&#10;</text>\n`;
-    const cityLine = `${order.customer.postalCode || ""} ${order.customer.city || ""}`.trim();
-    if (cityLine) {
-      xml += `  <text align="left">${escapeXml(cityLine)}&#10;</text>\n`;
+    xml += `  <text align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
+    if (safeCity) {
+      xml += `  <text align="left">${escapeXml(safeCity)}&#10;</text>\n`;
     }
   }
 
-  if (order.customer.notes) {
+  if (safeNotes) {
     xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
     xml += `  <text align="left" reverse="true" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
-    xml += `  <text align="left">${escapeXml(order.customer.notes)}&#10;</text>\n`;
+    xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
   }
 
   // Articles
@@ -143,7 +164,8 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   for (const item of order.items) {
     const itemTotal = (item.price * item.quantity).toFixed(2) + " EUR";
-    const header = `${item.quantity}x ${item.name}`;
+    const safeItemName = cleanThermalText(item.name);
+    const header = `${item.quantity}x ${safeItemName}`;
     const spaces = Math.max(1, 42 - header.length - itemTotal.length);
     const line = header + " ".repeat(spaces) + itemTotal;
 
@@ -151,10 +173,11 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
     if (item.toppings && item.toppings.length > 0) {
       for (const top of item.toppings) {
-        if (top.toLowerCase().startsWith("sans :") || top.toLowerCase().includes("allerg")) {
-          xml += `  <text align="left" reverse="true" em="true">  ! ${escapeXml(top)} &#10;</text>\n`;
+        const safeTop = cleanThermalText(top);
+        if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
+          xml += `  <text align="left" reverse="true" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
         } else {
-          xml += `  <text align="left">  + ${escapeXml(top)}&#10;</text>\n`;
+          xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
         }
       }
     }
@@ -186,7 +209,8 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   // QR Code GPS livreur
   if (isDelivery && (order.deliveryToken || order.id)) {
     const trackToken = order.deliveryToken || order.id;
-    const trackUrl = `${origin.replace(/\/$/, "")}/track/${trackToken}`;
+    const cleanOrigin = origin.replace(/\/$/, "");
+    const trackUrl = `${cleanOrigin}/track/${trackToken}`;
     xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
     xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
     xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;

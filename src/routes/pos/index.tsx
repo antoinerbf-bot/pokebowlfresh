@@ -254,14 +254,13 @@ export function PosApplicationPage() {
         autoPrintInFlight.current.add(order.id);
         (async () => {
           try {
-            // 1. Tente l'envoi silencieux direct à l'Epson TM-m30II (aucun pop-up)
+            // Envoi silencieux direct à l'Epson TM-m30II (aucun pop-up)
             const res = await handleExecutePrint(order, true);
             if (!res.success) {
-              // 2. Fallback secours si l'imprimante réseau directe n'a pas répondu
-              await printThermalTicket(order);
+              console.warn("[POS Auto-print] ePOS direct non disponible pour", order.id, res.message);
             }
-          } catch {
-            await printThermalTicket(order);
+          } catch (err) {
+            console.error("[POS Auto-print] Erreur :", err);
           } finally {
             autoPrintInFlight.current.delete(order.id);
             markOrderAsPrintedLocally(order.id);
@@ -357,8 +356,8 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    // 1. Essai automatique direct silencieux sur l'imprimante
-    const res = await handleExecutePrint(targetOrder, true);
+    // 1. Essai automatique direct sur l'imprimante (non silencieux pour donner un retour à l'utilisateur)
+    const res = await handleExecutePrint(targetOrder, false);
     if (!res.success) {
       // 2. Secours : ouverture de la boîte d'impression système
       await printThermalTicket(targetOrder);
@@ -1293,18 +1292,43 @@ export function PosApplicationPage() {
 
               {/* Test d'impression */}
               <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
-                <h3 className="text-base font-black text-white">Test d'Impression Ticket Démo</h3>
-                <p className="text-xs text-[#8ea39b]">
-                  Génère et imprime immédiatement le ticket de caisse 80mm avec QR Code via l'imprimante Epson connectée.
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-black text-white">Tests & Diagnostics Matériel</h3>
+                  <span className="text-xs bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-lg">
+                    Recommandé : ePOS Direct
+                  </span>
+                </div>
+                <p className="text-xs text-[#8ea39b] leading-relaxed">
+                  Testez la communication directe avec votre Epson TM-m30II ({config.printerIp}) sans ouvrir de fenêtre Android, ou simulez une commande complète avec ticket et QR code GPS livreur.
                 </p>
-                <button
-                  type="button"
-                  onClick={handleTestSystemPrint}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] active:scale-95 py-3.5 px-4 text-white font-black text-sm shadow-lg shadow-[#ff705f]/25 transition cursor-pointer"
-                >
-                  <Printer className="w-4 h-4" />
-                  <span>🖨️ Tester l'impression Ticket Caisse (80mm)</span>
-                </button>
+                <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleTestPrint}
+                    disabled={testingPrinter}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
+                  >
+                    <Printer className={`w-4 h-4 ${testingPrinter ? "animate-spin" : ""}`} />
+                    <span>🖨️ Tester Direct ePOS ({config.printerIp})</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCreateTestOrder}
+                    disabled={creatingTestOrder}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer"
+                  >
+                    <span>🧪 Simuler Commande Test (Livraison + GPS)</span>
+                  </button>
+                </div>
+                <div className="pt-2 text-center">
+                  <button
+                    type="button"
+                    onClick={handleTestSystemPrint}
+                    className="text-xs text-[#8ea39b] hover:text-white underline cursor-pointer"
+                  >
+                    Tester la boîte d'impression navigateur / PDF (Secours)
+                  </button>
+                </div>
               </div>
 
               {/* Logs d'impression */}
@@ -1369,10 +1393,11 @@ export function PosApplicationPage() {
                 <span className="text-base font-black">{selectedOrder.customer.name}</span>
                 <a
                   href={`tel:${selectedOrder.customer.phone}`}
-                  className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 px-3 py-1.5 rounded-xl"
+                  className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 transition px-3 py-1.5 rounded-xl"
+                  title="Appeler le numéro du client"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
-                  {selectedOrder.customer.phone}
+                  <span>Client : {selectedOrder.customer.phone}</span>
                 </a>
               </div>
               {selectedOrder.customer.fulfillment === "delivery" ? (
@@ -1484,7 +1509,7 @@ export function PosApplicationPage() {
                           rel="noreferrer"
                           className="inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition"
                         >
-                          <span>📱 Tester la page livreur en direct</span>
+                          <span>📱 Ouvrir la navigation livreur</span>
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       </div>
@@ -1497,12 +1522,17 @@ export function PosApplicationPage() {
             {/* Action Impression Unique & Directe */}
             <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
               <button
-                onClick={() => printThermalTicket(selectedOrder)}
-                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
-                title="Lancer l'impression directe du ticket thermique 80mm avec QR Code"
+                onClick={() => handleManualReprint(selectedOrder.id)}
+                disabled={printingOrderId === selectedOrder.id}
+                className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                title="Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II"
               >
-                <Printer className="w-5 h-5" />
-                <span>🖨️ Imprimer Ticket Caisse (80mm)</span>
+                <Printer className={`w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}`} />
+                <span>
+                  {printingOrderId === selectedOrder.id
+                    ? "Impression sur l'Epson..."
+                    : "🖨️ Imprimer Ticket Caisse (80mm)"}
+                </span>
               </button>
             </div>
           </div>

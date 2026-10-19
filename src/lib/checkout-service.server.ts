@@ -195,9 +195,6 @@ export async function processCheckout(data: z.infer<typeof checkoutSchema>) {
       : null;
 
     if (data.customer.fulfillment === "delivery") {
-      if (data.paymentMethod === "on_site") {
-        throw new Error("Le paiement sur place n'est pas disponible pour la livraison à domicile. Veuillez régler en ligne.");
-      }
       if (!deliveryZone) throw new Error("Cette zone de livraison n'est pas desservie.");
       if (subtotal < deliveryZone.minimumOrder) {
         throw new Error(`Commande minimum de € ${deliveryZone.minimumOrder.toFixed(2)} pour ce code postal.`);

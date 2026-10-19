@@ -356,67 +356,47 @@ function CheckoutPage() {
             <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
               <h2 className="text-lg font-black">Paiement</h2>
 
-              {fulfillment === "delivery" ? (
-                <div className="mt-4 space-y-3">
-                  <div className="rounded-2xl border-2 border-[#ff705f] bg-[#fff5f3] p-4 text-left">
-                    <div className="flex items-center justify-between w-full">
-                      <CreditCard className="h-5 w-5 text-[#ff705f]" />
-                      <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
-                        Bancontact & En ligne
-                      </span>
-                    </div>
-                    <span className="mt-1 block text-sm font-black text-[#17231f]">Paiement en ligne sécurisé</span>
-                    <span className="text-xs text-[#7a847e]">
-                      Application bancaire belge, Payconiq (QR code) ou Carte bancaire
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("online")}
+                  className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition cursor-pointer ${
+                    paymentMethod === "online"
+                      ? "border-[#ff705f] bg-[#fff5f3]"
+                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <CreditCard className="h-5 w-5 text-[#ff705f]" />
+                    <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
+                      Bancontact
                     </span>
                   </div>
-
-                  <div className="flex items-center gap-2 rounded-xl bg-[#F6F1E9] p-3 text-xs text-[#766358] border border-black/5">
-                    <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span>
-                      <strong>Paiement en ligne requis pour la livraison à domicile.</strong> (Le paiement sur place est réservé au retrait au restaurant).
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("online")}
-                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
-                      paymentMethod === "online"
-                        ? "border-[#ff705f] bg-[#fff5f3]"
-                        : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <CreditCard className="h-5 w-5 text-[#ff705f]" />
-                      <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
-                        Bancontact
-                      </span>
-                    </div>
-                    <span className="text-sm font-black">Bancontact & En ligne</span>
-                    <span className="text-xs text-[#7a847e]">
-                      Bancontact Pro, Payconiq, Carte bancaire
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("on_site")}
-                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition ${
-                      paymentMethod === "on_site"
-                        ? "border-[#ff705f] bg-[#fff5f3]"
-                        : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
-                    }`}
-                  >
-                    <Store className="h-5 w-5 text-[#ff705f]" />
-                    <span className="text-sm font-black">Payer sur place</span>
-                    <span className="text-xs text-[#7a847e]">
-                      Espèces ou Bancontact au comptoir lors du retrait
-                    </span>
-                  </button>
-                </div>
-              )}
+                  <span className="text-sm font-black">Bancontact & En ligne</span>
+                  <span className="text-xs text-[#7a847e]">
+                    Bancontact Pro, Payconiq (QR code) ou Carte bancaire
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("on_site")}
+                  className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition cursor-pointer ${
+                    paymentMethod === "on_site"
+                      ? "border-[#ff705f] bg-[#fff5f3]"
+                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                  }`}
+                >
+                  <Store className="h-5 w-5 text-[#ff705f]" />
+                  <span className="text-sm font-black">
+                    {fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"}
+                  </span>
+                  <span className="text-xs text-[#7a847e]">
+                    {fulfillment === "delivery"
+                      ? "Espèces ou Bancontact mobile lors de la livraison"
+                      : "Espèces ou Bancontact au comptoir lors du retrait"}
+                  </span>
+                </button>
+              </div>
             </section>
 
             {error && (
