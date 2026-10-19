@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { X, ArrowRight, Flame } from "lucide-react";
+import { X, ArrowRight, Flame, Sparkles } from "lucide-react";
 import { DishImage } from "./DishImage";
 
 interface ToastNotification {
   id: string;
   tag: string;
-  tagColor: string;
   title: string;
   desc: string;
   dishId: string;
@@ -20,9 +19,8 @@ const NOTIFICATIONS: ToastNotification[] = [
   {
     id: "crousty-curry",
     tag: "Spécialité Chaude",
-    tagColor: "bg-[#8b5510]/80 text-[#ffe2a8] border border-[#ffaa33]/30",
     title: "Crousty Chicken Curry",
-    desc: "Poulet croustillant doré, curry maison & oignons frits. Boisson 33cl incluse !",
+    desc: "Poulet croustillant doré, curry maison doux & oignons frits. Boisson 33cl incluse !",
     dishId: "crousty-chicken-curry",
     price: "11,00 €",
     badgeEmoji: "🍗",
@@ -31,9 +29,8 @@ const NOTIFICATIONS: ToastNotification[] = [
   {
     id: "crousty-blanche",
     tag: "Nouveau au Menu",
-    tagColor: "bg-white/10 text-[#F6F1E9] border border-white/20",
     title: "Crousty Sauce Blanche",
-    desc: "Bouchées croustillantes dorées, sauce blanche onctueuse & oignons frits.",
+    desc: "Bouchées croustillantes dorées, sauce blanche onctueuse & oignons frits. Boisson 33cl incluse !",
     dishId: "crousty-chicken-sauce-blanche",
     price: "11,00 €",
     badgeEmoji: "🤍",
@@ -41,8 +38,7 @@ const NOTIFICATIONS: ToastNotification[] = [
   },
   {
     id: "etudiant-deal",
-    tag: "Formule Étudiant",
-    tagColor: "bg-[#ff705f]/20 text-[#ffb0a3] border border-[#ff705f]/40",
+    tag: "Formule Populaire",
     title: "Menu Crousty + Boisson 11 €",
     desc: "1 Crousty Chicken chaud au choix + boisson 33cl fraîche incluse (Coca, Ice-Tea...).",
     dishId: "crousty-chicken-curry",
@@ -58,32 +54,32 @@ export function CroustyNotificationToast() {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  // 1. Première apparition rapide après 1.8s au chargement
   useEffect(() => {
-    // Initial appearance after 4 seconds
     const initialTimer = setTimeout(() => {
       if (!isDismissed) setIsVisible(true);
-    }, 4000);
+    }, 1800);
 
     return () => clearTimeout(initialTimer);
   }, [isDismissed]);
 
+  // 2. Rythme fluide d'apparition / disparition (reste 6.5s, pause de 3.2s, puis plat suivant)
   useEffect(() => {
     if (!isVisible || isHovered) return;
 
-    // Auto-hide after 7 seconds
     const hideTimer = setTimeout(() => {
       setIsVisible(false);
 
-      // Re-appear with next notification after 10 seconds
+      // Réapparaît avec le plat suivant après une courte pause de 3.2 secondes
       const nextTimer = setTimeout(() => {
         if (!isDismissed) {
           setCurrentIndex((prev) => (prev + 1) % NOTIFICATIONS.length);
           setIsVisible(true);
         }
-      }, 10000);
+      }, 3200);
 
       return () => clearTimeout(nextTimer);
-    }, 7000);
+    }, 6500);
 
     return () => clearTimeout(hideTimer);
   }, [isVisible, isHovered, isDismissed]);
@@ -93,136 +89,111 @@ export function CroustyNotificationToast() {
   const handleDismiss = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsVisible(false);
-    // Don't show again for 60s if manually closed
+    // Pause de 45 secondes si l'utilisateur ferme manuellement
     setIsDismissed(true);
-    setTimeout(() => setIsDismissed(false), 60000);
+    setTimeout(() => setIsDismissed(false), 45000);
   };
 
   return (
-    /* Positionné à DROITE sur PC (sm:right-6 sm:bottom-6 sm:left-auto), discret et compact sur mobile */
-    <div className="fixed bottom-4 right-3 z-40 max-w-[calc(100vw-24px)] pointer-events-none sm:bottom-6 sm:right-6 sm:max-w-[340px]">
+    <div className="fixed bottom-20 right-3 z-40 max-w-[calc(100vw-24px)] pointer-events-none sm:bottom-6 sm:right-6 sm:max-w-[370px]">
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={{ opacity: 0, x: 40, scale: 0.92 }}
+            initial={{ opacity: 0, x: 70, scale: 0.94 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 30, scale: 0.92 }}
-            transition={{ type: "spring", damping: 26, stiffness: 300 }}
+            exit={{ opacity: 0, x: 50, scale: 0.94 }}
+            transition={{ type: "spring", damping: 24, stiffness: 280 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            /* Fond transparent / glassmorphism sombre chaleureux (pas de blanc opaque !) */
-            className="pointer-events-auto relative overflow-hidden rounded-2xl border border-white/15 bg-[#231711]/85 p-3 sm:p-4 text-white shadow-[0_20px_50px_-10px_rgba(0,0,0,0.5)] backdrop-blur-xl transition hover:border-[#ff705f]/40 hover:bg-[#231711]/92"
+            /* Carte gourmande avec bordure chaude et contraste lumineux très visible */
+            className="pointer-events-auto relative overflow-hidden rounded-3xl border-2 border-[#ff705f]/50 bg-[#1e120b]/95 p-3.5 sm:p-4 text-white shadow-[0_22px_55px_rgba(0,0,0,0.8),0_0_35px_rgba(255,112,95,0.28)] backdrop-blur-2xl transition hover:border-[#ff705f] hover:shadow-[0_25px_65px_rgba(0,0,0,0.9),0_0_45px_rgba(255,112,95,0.4)]"
           >
-            {/* Lueur d'ambiance chaude et discrète */}
-            <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-[#ff705f]/20 blur-xl pointer-events-none" />
+            {/* Lueur d'ambiance chaude et diffuse */}
+            <div className="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#ff705f]/30 blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-[#ffaa44]/20 blur-xl pointer-events-none" />
 
-            {/* Bouton fermeture discret */}
+            {/* Bouton fermeture élégant */}
             <button
               type="button"
               onClick={handleDismiss}
               aria-label="Fermer la notification"
-              className="absolute top-2.5 right-2.5 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition"
+              className="absolute top-2.5 right-2.5 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white/80 hover:bg-white/25 hover:text-white transition cursor-pointer"
             >
-              <X className="h-3 w-3" />
+              <X className="h-3.5 w-3.5" />
             </button>
 
-            {/* ── Version Mobile Compacte (Non intrusive, pas de gros bloc en plein milieu) ── */}
-            <div className="flex sm:hidden items-center gap-2.5 pr-6">
+            {/* En-tête : Badge Spécialité Chaude + Prix */}
+            <div className="flex items-center gap-2 mb-2 pr-6">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ff705f]/25 text-[#ffb4a6] border border-[#ff705f]/50 px-2.5 py-0.5 text-[9.5px] font-black uppercase tracking-wider">
+                <Flame className="h-3 w-3 text-[#ff705f] animate-pulse" />
+                <span>{activeNotif.tag}</span>
+              </span>
+              <span className="inline-flex items-center rounded-full bg-[#3a2012] border border-[#ffaa44]/40 px-2 py-0.5 text-[10.5px] font-black text-[#ffb055]">
+                {activeNotif.price}
+              </span>
+            </div>
+
+            {/* Contenu principal : Image appétissante + Titre + CTA */}
+            <div className="flex items-start gap-3">
+              {/* Photo du Crousty Chicken */}
               <Link
                 to="/product/$productId"
                 params={{ productId: activeNotif.productId }}
                 onClick={() => setIsVisible(false)}
-                className="flex items-center gap-2.5 flex-1 min-w-0"
+                className="group relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-2xl bg-black/40 border-2 border-[#ff705f]/30 shadow-md"
               >
-                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-black/20 border border-white/10 shadow-sm">
-                  <DishImage
-                    dishId={activeNotif.dishId}
-                    alt={activeNotif.title}
-                    className="h-full w-full object-cover"
-                  />
-                  <span className="absolute -bottom-1 -right-1 text-[10px]">
-                    {activeNotif.badgeEmoji}
-                  </span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-black text-white truncate">
-                      {activeNotif.title}
-                    </span>
-                    <span className="text-[10px] font-extrabold text-[#ff9f43]">
-                      {activeNotif.price}
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-[#D9C5AD] flex items-center gap-1">
-                    <span>Boisson 33cl incluse</span>
-                    <span className="text-[#ff705f] font-bold">→ Voir</span>
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            {/* ── Version Desktop Complète & Épurée ── */}
-            <div className="hidden sm:flex items-start gap-3 pr-4">
-              {/* Vignette Plat */}
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-black/30 border border-white/10 shadow-sm">
                 <DishImage
                   dishId={activeNotif.dishId}
                   alt={activeNotif.title}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <span className="absolute bottom-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#231711] text-[9px] border border-white/20">
+                <span className="absolute bottom-1 right-1 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-[#1e120b] text-[10px] sm:text-xs border border-white/20 shadow">
                   {activeNotif.badgeEmoji}
                 </span>
-              </div>
+              </Link>
 
-              {/* Texte & Prix */}
+              {/* Texte descriptif et bouton */}
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8.5px] font-black uppercase tracking-wider ${activeNotif.tagColor}`}
-                  >
-                    <Flame className="h-2.5 w-2.5 text-[#ff705f]" />
-                    {activeNotif.tag}
-                  </span>
-                  <span className="text-[10px] font-extrabold text-[#ffb088]">
-                    {activeNotif.price}
-                  </span>
-                </div>
+                <Link
+                  to="/product/$productId"
+                  params={{ productId: activeNotif.productId }}
+                  onClick={() => setIsVisible(false)}
+                  className="block group"
+                >
+                  <h4 className="text-xs sm:text-sm font-black text-white group-hover:text-[#ff705f] transition leading-tight">
+                    {activeNotif.title}
+                  </h4>
+                  <p className="mt-1 text-[10.5px] sm:text-[11px] leading-snug text-[#EADCC9] line-clamp-2">
+                    {activeNotif.desc}
+                  </p>
+                </Link>
 
-                <h4 className="mt-1 text-xs font-black text-[#F6F1E9] leading-snug">
-                  {activeNotif.title}
-                </h4>
-
-                <p className="mt-0.5 text-[10.5px] leading-relaxed text-[#D9C5AD]/85 line-clamp-2">
-                  {activeNotif.desc}
-                </p>
-
-                {/* Bouton d'action */}
-                <div className="mt-2 flex items-center justify-between">
+                {/* Bouton d'action et précision boisson */}
+                <div className="mt-2.5 flex items-center justify-between gap-2">
                   <Link
                     to="/product/$productId"
                     params={{ productId: activeNotif.productId }}
                     onClick={() => setIsVisible(false)}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-[#ff705f] px-3 py-1 text-[9.5px] font-black uppercase tracking-wider text-white shadow-sm transition hover:bg-[#ff5542] hover:scale-105"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#ff705f] to-[#ff523d] hover:from-[#ff5a47] hover:to-[#ff3d26] px-3.5 py-1.5 text-[10px] sm:text-[10.5px] font-black uppercase tracking-wider text-white shadow-md shadow-[#ff705f]/30 transition hover:scale-105 active:scale-95"
                   >
                     <span>Commander ({activeNotif.price})</span>
-                    <ArrowRight className="h-2.5 w-2.5" />
+                    <ArrowRight className="h-3 w-3" />
                   </Link>
 
-                  <span className="text-[9px] font-semibold text-[#D9C5AD]/70">
-                    Boisson incluse
+                  <span className="text-[9px] sm:text-[9.5px] font-bold text-[#EADCC9]/80 hidden sm:inline">
+                    🥤 Boisson 33cl incluse
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Barre de progression fluide */}
-            <div className="mt-2 h-0.5 w-full overflow-hidden rounded-full bg-white/10">
+            {/* Barre de progression fluide lumineuse */}
+            <div className="mt-2.5 h-1 w-full overflow-hidden rounded-full bg-white/10">
               <motion.div
                 initial={{ width: "100%" }}
                 animate={{ width: isHovered ? "100%" : "0%" }}
-                transition={{ duration: 7, ease: "linear" }}
-                className="h-full bg-[#ff705f]"
+                transition={{ duration: 6.5, ease: "linear" }}
+                className="h-full bg-gradient-to-r from-[#ff705f] via-[#ffaa44] to-[#ff705f]"
               />
             </div>
           </motion.div>

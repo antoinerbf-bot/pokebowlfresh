@@ -40,15 +40,15 @@ export function PokawaFloatingNavbar() {
       onMouseLeave={handleMouseLeave}
       className="absolute inset-x-0 top-3 sm:top-5 z-50 px-3 sm:px-6 lg:px-8 pointer-events-none"
     >
-      <div className="mx-auto max-w-[1400px] flex items-center justify-between pointer-events-auto relative">
-        {/* ── CAPSULE GAUCHE (STYLE POKAWA) ── */}
-        <div className="hidden lg:flex items-center gap-5 rounded-full bg-[#FAF4EB]/95 px-6 py-2.5 shadow-2xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16]">
+      <div className="w-full max-w-[1540px] mx-auto flex items-center justify-between pointer-events-auto relative">
+        {/* ── CAPSULE GAUCHE COMPACTE (STYLE POKAWA) ── */}
+        <div className="hidden lg:flex items-center gap-2.5 xl:gap-4 rounded-full bg-[#FAF4EB]/95 px-3.5 py-1.5 xl:px-5 xl:py-2 shadow-2xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0">
           <a
             href="#composer"
-            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
+            className="flex items-center gap-1 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
           >
-            <span>Composer son Bowl</span>
-            <ChevronDown className="h-3 w-3 stroke-[2.5]" />
+            <span>Composer<span className="hidden xl:inline"> son Bowl</span></span>
+            <ChevronDown className="h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5]" />
           </a>
 
           {/* Trigger Mega-Menu survol "Notre Carte" */}
@@ -58,13 +58,13 @@ export function PokawaFloatingNavbar() {
           >
             <a
               href="#carte"
-              className={`flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] transition ${
+              className={`flex items-center gap-1 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] transition ${
                 isMegaMenuOpen ? "text-[#ff705f]" : "hover:text-[#ff705f]"
               }`}
             >
               <span>Notre Carte</span>
               <ChevronDown
-                className={`h-3 w-3 stroke-[2.5] transition-transform duration-200 ${
+                className={`h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5] transition-transform duration-200 ${
                   isMegaMenuOpen ? "rotate-180 text-[#ff705f]" : ""
                 }`}
               />
@@ -73,14 +73,14 @@ export function PokawaFloatingNavbar() {
 
           <Link
             to="/blog"
-            className="text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
+            className="text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
           >
             Le Mag
           </Link>
 
           <a
             href="#valeurs"
-            className="text-[11px] font-black uppercase tracking-[0.14em] hover:text-[#ff705f] transition"
+            className="text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] hover:text-[#ff705f] transition"
           >
             Engagements
           </a>
@@ -91,46 +91,46 @@ export function PokawaFloatingNavbar() {
             target="_blank"
             rel="noreferrer"
             title="Restaurant Poke N Bowl à Visé, Avenue du Pont 12"
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] shadow-md hover:bg-[#8D522A] hover:scale-110 transition"
+            className="flex h-6 w-6 xl:h-7 xl:w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] shadow-md hover:bg-[#8D522A] hover:scale-110 transition"
           >
-            <MapPin className="h-3.5 w-3.5 fill-current" />
+            <MapPin className="h-3 w-3 xl:h-3.5 xl:w-3.5 fill-current" />
           </a>
         </div>
 
-        {/* ── LOGO CENTRAL POKÉ N BOWL (IMPOSANT & PARFAITEMENT CENTRÉ) ── */}
+        {/* ── LOGO CENTRAL POKÉ N BOWL (IMPOSANT, NOBLE & PARFAITEMENT DÉGAGÉ AU CENTRE) ── */}
         <Link
           to="/"
-          className="flex flex-col items-center group transition hover:scale-105 duration-200 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 z-10"
+          className="flex flex-col items-center group transition hover:scale-105 duration-200 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 z-20 pointer-events-auto"
           aria-label="Poke N Bowl Visé"
         >
-          <div className="flex items-center gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]">
-            <span className="text-2xl sm:text-3xl lg:text-[28px] xl:text-[32px] font-black uppercase tracking-[0.22em] text-white">
+          <div className="flex items-center gap-1.5 sm:gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]">
+            <span className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white">
               POKE
             </span>
-            <span className="flex h-7 w-7 sm:h-8 sm:w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-sm lg:text-base font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30">
+            <span className="flex h-6 w-6 sm:h-7 sm:w-7 lg:h-7.5 lg:w-7.5 xl:h-8.5 xl:w-8.5 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-xs lg:text-sm font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30">
               N
             </span>
-            <span className="text-2xl sm:text-3xl lg:text-[28px] xl:text-[32px] font-black uppercase tracking-[0.22em] text-white">
+            <span className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white">
               BOWL
             </span>
           </div>
-          <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5">
+          <span className="text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5">
             VISÉ · BELGIQUE
           </span>
         </Link>
 
-        {/* ── CAPSULE DROITE (STYLE POKAWA) ── */}
-        <div className="hidden lg:flex items-center gap-4 rounded-full bg-[#FAF4EB]/95 px-5 py-2 shadow-2xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16]">
+        {/* ── CAPSULE DROITE (POSITIONNÉE VRAIMENT À DROITE) ── */}
+        <div className="hidden lg:flex items-center gap-2 xl:gap-3 rounded-full bg-[#FAF4EB]/95 px-3 py-1.5 xl:px-4 xl:py-2 shadow-2xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0">
           <Link
             to="/recrutement"
-            className="text-[11px] font-black uppercase tracking-[0.14em] hover:text-[#ff705f] transition"
+            className="text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] hover:text-[#ff705f] transition"
           >
             Recrutement
           </Link>
 
           <Link
             to="/contact"
-            className="text-[11px] font-black uppercase tracking-[0.14em] hover:text-[#ff705f] transition"
+            className="text-[10px] xl:text-[11px] font-black uppercase tracking-[0.08em] xl:tracking-[0.14em] hover:text-[#ff705f] transition"
           >
             Contact
           </Link>
@@ -143,9 +143,9 @@ export function PokawaFloatingNavbar() {
             type="button"
             onClick={() => setIsCartOpen(true)}
             aria-label="Panier"
-            className="relative flex h-8 w-8 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 transition"
+            className="relative flex h-7 w-7 xl:h-8 xl:w-8 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 transition"
           >
-            <ShoppingBag className="h-4 w-4 text-[#2C1D16]" />
+            <ShoppingBag className="h-3.5 w-3.5 xl:h-4 xl:w-4 text-[#2C1D16]" />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white shadow">
                 {cartCount}
@@ -156,7 +156,7 @@ export function PokawaFloatingNavbar() {
           {/* Bouton COMMANDER Chocolat & Crème */}
           <Link
             to="/commander"
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16] px-5 py-2.5 text-xs font-black uppercase tracking-[0.14em] text-[#FAF4EB] shadow-lg transition hover:bg-[#482F22] hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-1.5 xl:px-5 xl:py-2 text-[10px] xl:text-xs font-black uppercase tracking-[0.12em] text-[#FAF4EB] shadow-lg transition hover:bg-[#482F22] hover:scale-105 active:scale-95"
           >
             <span>Commander</span>
           </Link>
