@@ -89,7 +89,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { name: "description", content: article.summary },
         { property: "og:title", content: article.title },
         { property: "og:description", content: article.summary },
-        { property: "og:image", content: `https://pokenbowl.be${article.image}` },
+        { property: "og:image", content: article.image.startsWith("http") ? article.image : `https://pokenbowl.be${article.image.startsWith("/") ? "" : "/"}${article.image}` },
         { property: "og:type", content: "article" },
         { property: "og:url", content: `https://pokenbowl.be/blog/${article.slug}` },
         { name: "keywords", content: article.seoKeywords.join(", ") },

@@ -2,9 +2,9 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as createServerFn } from "../_libs/@tanstack/react-start+[...].mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as useRouter, S as useNavigate, X as notFound, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, x as Navigate, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { P as notFound, _ as Navigate, c as HeadContent, d as createRouter, f as Outlet, g as Link, h as createRootRouteWithContext, l as useRouterState, m as createFileRoute, s as Scripts, v as useNavigate, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as DialogPortal, r as DialogContent, s as DialogTitle, t as Dialog } from "../_libs/@radix-ui/react-dialog+[...].mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, E as LoaderCircle, F as CircleQuestionMark, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, L as CircleCheckBig, M as CreditCard, N as CookingPot, O as Heart, P as Clock, R as CircleAlert, S as Minus, T as MapPin, U as Check, V as ChevronDown, W as Calendar, X as ArrowLeft, Y as ArrowRight, _ as Printer, a as TriangleAlert, b as PhoneCall, c as Star, d as ShoppingBag, f as Shield, g as RefreshCw, h as Search, i as Truck, j as ExternalLink, k as Funnel, l as Sparkles, m as Share2, n as VolumeX, o as Trash2, p as ShieldCheck, q as Bell, r as Volume2, s as Store, t as X, u as ShoppingCart, v as Plus, w as Menu, x as Navigation, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
@@ -21,7 +21,7 @@ import path from "node:path";
 var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 //#endregion
 //#region src/styles.css?url
-var styles_default = "/assets/styles-CiJQh5N0.css";
+var styles_default = "/assets/styles-_4ZtNunm.css";
 //#endregion
 //#region src/lib/lovable-error-reporting.ts
 function reportLovableError(error, context = {}) {
@@ -751,7 +751,7 @@ var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B-7nVWlP.jpg";
 //#endregion
 //#region src/assets/bowl-crousty-curry.jpg
-var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-CRZGKMUK.jpg";
+var bowl_crousty_curry_default = "/assets/hero-crousty-wide-DQZ1PYgR.jpg";
 //#endregion
 //#region src/components/DishImage.tsx
 var images = {
@@ -760,7 +760,7 @@ var images = {
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
 	"crousty-chicken-curry": bowl_crousty_curry_default,
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-BliNigHA.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-FPJS5FmA.jpg",
 	"sur-mesure": bowl_saumon_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
@@ -2715,11 +2715,6 @@ function PokawaFloatingNavbar() {
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Notre Carte" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { className: `h-3 w-3 stroke-[2.5] transition-transform duration-200 ${isMegaMenuOpen ? "rotate-180 text-[#ff705f]" : ""}` })]
 							})
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-							href: "#composer",
-							className: "flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sur-Mesure" })
-						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 							to: "/blog",
 							className: "text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition",
@@ -2742,26 +2737,26 @@ function PokawaFloatingNavbar() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: "/",
-					className: "flex flex-col items-center group transition hover:scale-105 duration-200",
+					className: "flex flex-col items-center group transition hover:scale-105 duration-200 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 z-10",
 					"aria-label": "Poke N Bowl Visé",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-1.5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)]",
+						className: "flex items-center gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-xl sm:text-2xl font-black uppercase tracking-[0.2em] text-white",
+								className: "text-2xl sm:text-3xl lg:text-[28px] xl:text-[32px] font-black uppercase tracking-[0.22em] text-white",
 								children: "POKE"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#EADCC9] text-xs font-black text-[#2C1D16] shadow-md",
+								className: "flex h-7 w-7 sm:h-8 sm:w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-sm lg:text-base font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30",
 								children: "N"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-xl sm:text-2xl font-black uppercase tracking-[0.2em] text-white",
+								className: "text-2xl sm:text-3xl lg:text-[28px] xl:text-[32px] font-black uppercase tracking-[0.22em] text-white",
 								children: "BOWL"
 							})
 						]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[8px] font-black uppercase tracking-[0.35em] text-[#EADCC9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mt-0.5",
+						className: "text-[8px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5",
 						children: "VISÉ · BELGIQUE"
 					})]
 				}),
@@ -2879,7 +2874,7 @@ function PokawaFloatingNavbar() {
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Composer son Bowl" })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "text-[10px] bg-[#2C1D16] text-white px-2 py-0.5 rounded-full font-black",
-							children: "Sur-mesure"
+							children: "Personnalisé"
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
@@ -2965,7 +2960,7 @@ var SLIDES = [
 	},
 	{
 		id: "crousty-chicken-curry",
-		image: "/assets/hero-crousty-wide-la3QJkVJ.jpg",
+		image: "/assets/hero-crousty-wide-DQZ1PYgR.jpg",
 		titleLine1: "CROUSTY CHICKEN",
 		titleLine2: "CURRY DORÉ",
 		dishName: "Crousty Chicken Curry",
@@ -5338,7 +5333,7 @@ var BLOG_ARTICLES = [
 			name: "L'équipe Poke N Bowl",
 			role: "Artisans Fraîcheur à Visé"
 		},
-		image: "/assets/hero-saumon-clean-wide.jpg",
+		image: "/assets/art-repas-healthy-eKaeVqbF.jpg",
 		summary: "Découvrez les clés nutritionnelles d'un poké bowl équilibré : le bon ratio entre glucides complexes, protéines nobles de saumon, acides gras essentiels d'avocat et légumes croquants découpés minute.",
 		seoKeywords: [
 			"repas healthy et gourmand",
@@ -5391,7 +5386,7 @@ var BLOG_ARTICLES = [
 			name: "Antoine Rousseau",
 			role: "Fondateur & Chef Poke N Bowl"
 		},
-		image: "/assets/hero-crousty-wide.jpg",
+		image: "/assets/art-guide-vise-TJFaJ8ss.jpg",
 		summary: "Tout savoir sur Poke N Bowl à Visé : horaires d'ouverture, formule étudiante 11€ avec boisson, options sans gluten, retrait sans file d'attente et livraison rapide en région liégeoise.",
 		seoKeywords: [
 			"poké bowl visé",
@@ -5442,7 +5437,7 @@ var BLOG_ARTICLES = [
 			name: "L'équipe Poke N Bowl",
 			role: "Artisans Fraîcheur à Visé"
 		},
-		image: "/assets/hero-sweet-wide.jpg",
+		image: "/assets/art-saumon-avocat-B6OD39KW.jpg",
 		summary: "Zoom sur les vertus exceptionnelles du saumon sashimi et de l'avocat : acides gras polyinsaturés, magnésium, potassium et vitamines du complexe B pour booster votre vitalité.",
 		seoKeywords: [
 			"bienfaits saumon avocat",
@@ -5491,7 +5486,7 @@ var BLOG_ARTICLES = [
 			name: "L'équipe Poke N Bowl",
 			role: "Artisans Fraîcheur à Visé"
 		},
-		image: "/assets/hero-scampis-wide.jpg",
+		image: "/assets/art-poke-vs-chirashi-ANfUYMoL.jpg",
 		summary: "Comprendre les nuances entre le poké bowl traditionnel de Hawaï, le chirashi ancestral japonais et la salade composée. Comparatif calories, saveurs et rassasiement.",
 		seoKeywords: [
 			"chirashi vs poke bowl",
@@ -5536,7 +5531,7 @@ var BLOG_ARTICLES = [
 			name: "Antoine Rousseau",
 			role: "Fondateur & Chef"
 		},
-		image: "/assets/hero-spicy-wide.jpg",
+		image: "/assets/art-crousty-chaud-D6T5g5zZ.jpg",
 		summary: "Pourquoi la gamme Crousty Chicken chaude de Poke N Bowl Visé est devenue le plat incontournable de l'automne et de l'hiver. Morceaux de poulet croustillants, sauce curry, oignons frits et boisson offerte.",
 		seoKeywords: [
 			"crousty chicken visé",
@@ -10877,7 +10872,7 @@ var Route$6 = createFileRoute("/blog/$slug")({
 				},
 				{
 					property: "og:image",
-					content: `https://pokenbowl.be${article.image}`
+					content: article.image.startsWith("http") ? article.image : `https://pokenbowl.be${article.image.startsWith("/") ? "" : "/"}${article.image}`
 				},
 				{
 					property: "og:type",

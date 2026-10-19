@@ -71,13 +71,6 @@ export function PokawaFloatingNavbar() {
             </a>
           </div>
 
-          <a
-            href="#composer"
-            className="flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
-          >
-            <span>Sur-Mesure</span>
-          </a>
-
           <Link
             to="/blog"
             className="text-[11px] font-black uppercase tracking-[0.14em] text-[#2C1D16] hover:text-[#ff705f] transition"
@@ -104,24 +97,24 @@ export function PokawaFloatingNavbar() {
           </a>
         </div>
 
-        {/* ── LOGO CENTRAL POKÉ N BOWL (BLANC GÉOMÉTRIQUE STYLE POKAWA) ── */}
+        {/* ── LOGO CENTRAL POKÉ N BOWL (IMPOSANT & PARFAITEMENT CENTRÉ) ── */}
         <Link
           to="/"
-          className="flex flex-col items-center group transition hover:scale-105 duration-200"
+          className="flex flex-col items-center group transition hover:scale-105 duration-200 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:top-1/2 lg:-translate-y-1/2 z-10"
           aria-label="Poke N Bowl Visé"
         >
-          <div className="flex items-center gap-1.5 drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)]">
-            <span className="text-xl sm:text-2xl font-black uppercase tracking-[0.2em] text-white">
+          <div className="flex items-center gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]">
+            <span className="text-2xl sm:text-3xl lg:text-[28px] xl:text-[32px] font-black uppercase tracking-[0.22em] text-white">
               POKE
             </span>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#EADCC9] text-xs font-black text-[#2C1D16] shadow-md">
+            <span className="flex h-7 w-7 sm:h-8 sm:w-8 lg:h-9 lg:w-9 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-sm lg:text-base font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30">
               N
             </span>
-            <span className="text-xl sm:text-2xl font-black uppercase tracking-[0.2em] text-white">
+            <span className="text-2xl sm:text-3xl lg:text-[28px] xl:text-[32px] font-black uppercase tracking-[0.22em] text-white">
               BOWL
             </span>
           </div>
-          <span className="text-[8px] font-black uppercase tracking-[0.35em] text-[#EADCC9] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mt-0.5">
+          <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5">
             VISÉ · BELGIQUE
           </span>
         </Link>
@@ -251,7 +244,7 @@ export function PokawaFloatingNavbar() {
                 <span>Composer son Bowl</span>
               </span>
               <span className="text-[10px] bg-[#2C1D16] text-white px-2 py-0.5 rounded-full font-black">
-                Sur-mesure
+                Personnalisé
               </span>
             </a>
 

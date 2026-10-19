@@ -1,3 +1,9 @@
+import imgRepasHealthy from "@/assets/blog/art-repas-healthy.jpg";
+import imgGuideVise from "@/assets/blog/art-guide-vise.jpg";
+import imgSaumonAvocat from "@/assets/blog/art-saumon-avocat.jpg";
+import imgPokeChirashi from "@/assets/blog/art-poke-vs-chirashi.jpg";
+import imgCroustyChaud from "@/assets/blog/art-crousty-chaud.jpg";
+
 export interface BlogArticle {
   slug: string;
   title: string;
@@ -35,7 +41,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       name: "L'équipe Poke N Bowl",
       role: "Artisans Fraîcheur à Visé",
     },
-    image: "/assets/hero-saumon-clean-wide.jpg",
+    image: imgRepasHealthy,
     summary: "Découvrez les clés nutritionnelles d'un poké bowl équilibré : le bon ratio entre glucides complexes, protéines nobles de saumon, acides gras essentiels d'avocat et légumes croquants découpés minute.",
     seoKeywords: [
       "repas healthy et gourmand",
@@ -88,7 +94,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       name: "Antoine Rousseau",
       role: "Fondateur & Chef Poke N Bowl",
     },
-    image: "/assets/hero-crousty-wide.jpg",
+    image: imgGuideVise,
     summary: "Tout savoir sur Poke N Bowl à Visé : horaires d'ouverture, formule étudiante 11€ avec boisson, options sans gluten, retrait sans file d'attente et livraison rapide en région liégeoise.",
     seoKeywords: [
       "poké bowl visé",
@@ -139,7 +145,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       name: "L'équipe Poke N Bowl",
       role: "Artisans Fraîcheur à Visé",
     },
-    image: "/assets/hero-sweet-wide.jpg",
+    image: imgSaumonAvocat,
     summary: "Zoom sur les vertus exceptionnelles du saumon sashimi et de l'avocat : acides gras polyinsaturés, magnésium, potassium et vitamines du complexe B pour booster votre vitalité.",
     seoKeywords: [
       "bienfaits saumon avocat",
@@ -188,7 +194,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       name: "L'équipe Poke N Bowl",
       role: "Artisans Fraîcheur à Visé",
     },
-    image: "/assets/hero-scampis-wide.jpg",
+    image: imgPokeChirashi,
     summary: "Comprendre les nuances entre le poké bowl traditionnel de Hawaï, le chirashi ancestral japonais et la salade composée. Comparatif calories, saveurs et rassasiement.",
     seoKeywords: [
       "chirashi vs poke bowl",
@@ -233,7 +239,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       name: "Antoine Rousseau",
       role: "Fondateur & Chef",
     },
-    image: "/assets/hero-spicy-wide.jpg",
+    image: imgCroustyChaud,
     summary: "Pourquoi la gamme Crousty Chicken chaude de Poke N Bowl Visé est devenue le plat incontournable de l'automne et de l'hiver. Morceaux de poulet croustillants, sauce curry, oignons frits et boisson offerte.",
     seoKeywords: [
       "crousty chicken visé",
