@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BKFtPVEN.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DHh9DnoZ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1154,13 +1154,12 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
 	xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
-	{
+	if (isDelivery) {
 		const trackToken = order.deliveryToken || order.id;
-		const cleanOrigin = origin.replace(/\/$/, "");
-		const qrUrl = isDelivery ? `${cleanOrigin}/track/${trackToken}` : cleanOrigin;
+		const qrUrl = `${origin.replace(/\/$/, "")}/track/${trackToken}`;
 		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text align="center" em="true">${isDelivery ? "SCANNEZ POUR GPS LIVREUR" : "SCANNEZ POUR LE SITE WEB"}&#10;</text>\n`;
-		xml += `  <text align="center">${isDelivery ? "Waze &amp; Google Maps en 1-clic" : "Menu et informations du restaurant"}&#10;&#10;</text>\n`;
+		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
+		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
 		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
 		xml += `  <text>&#10;</text>\n`;
 	}
@@ -1491,9 +1490,17 @@ function PosApplicationPage() {
 				if (autoPrintInFlight.current.has(order.id)) continue;
 				autoPrintInFlight.current.add(order.id);
 				(async () => {
+					markOrderAsPrintedLocally(order.id);
 					try {
 						const res = await handleExecutePrint(order, true);
-						if (!res.success) console.warn("[POS Auto-print] ePOS direct non disponible pour", order.id, res.message);
+						if (!res.success) {
+							console.warn("[POS Auto-print] Échec ou réponse ambiguë pour", order.id, res.message);
+							setPrintLog((prev) => [{
+								time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
+								msg: `Impression automatique à vérifier pour ${order.id} : ${res.message}. Réimpression manuelle disponible.`,
+								type: "err"
+							}, ...prev.slice(0, 30)]);
+						}
 					} catch (err) {
 						console.error("[POS Auto-print] Erreur :", err);
 					} finally {
