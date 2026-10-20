@@ -86,6 +86,8 @@ export function PosApplicationPage() {
   const [testingPrinter, setTestingPrinter] = useState(false);
   const [printBannerError, setPrintBannerError] = useState<string | null>(null);
   const [printLog, setPrintLog] = useState<Array<{ time: string; msg: string; type: "ok" | "err" }>>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const alertedOrderIds = useRef<Set<string>>(new Set());
 
   // Auto-nettoyage et migration immédiate du port vers 8043 (élimine définitivement 9100)
   useEffect(() => {
@@ -154,16 +156,28 @@ export function PosApplicationPage() {
     }
   };
 
-  // Carillon d'alerte cuisine puissant (Web Audio API natif, 3 bips carillon restaurant)
-  const playAlertSound = () => {
-    if (!config.soundEnabled) return;
+  // Préparer le son depuis un clic utilisateur : Chrome/Android bloque sinon l'audio automatique.
+  const enableSoundAndTest = async () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) throw new Error("Web Audio API indisponible");
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+      if (audioContextRef.current.state === "suspended") await audioContextRef.current.resume();
+      setConfig((current) => { const next = { ...current, soundEnabled: true }; savePrinterConfig(next); return next; });
+      playAlertSound(true);
+      alert("Son activé. Laissez cette page ouverte sur la caisse pour recevoir les alertes.");
+    } catch (e: any) { alert("Impossible d’activer le son : " + (e?.message ?? String(e))); }
+  };
+
+  // Carillon cuisine : trois bips, sur un contexte audio réutilisable.
+  const playAlertSound = (force = false) => {
+    if (!config.soundEnabled && !force) return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      if (ctx.state === "suspended") {
-        void ctx.resume();
-      }
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+      const ctx = audioContextRef.current;
+      if (ctx.state === "suspended") void ctx.resume();
 
       const playChime = (startTime: number, freq1: number, freq2: number) => {
         const osc1 = ctx.createOscillator();
@@ -188,6 +202,7 @@ export function PosApplicationPage() {
         osc2.stop(startTime + 0.38);
       };
 
+      if (!force && !config.soundEnabled) return;
       const now = ctx.currentTime;
       playChime(now, 784, 1046.5);        // Ding-Dong 1
       playChime(now + 0.42, 784, 1046.5); // Ding-Dong 2
@@ -249,7 +264,11 @@ export function PosApplicationPage() {
         return true;
       });
 
-      if (newlyPrintable.length > 0) playAlertSound();
+      const freshAlerts = newlyPrintable.filter((o) => !alertedOrderIds.current.has(o.id));
+      if (freshAlerts.length > 0) {
+        freshAlerts.forEach((o) => alertedOrderIds.current.add(o.id));
+        playAlertSound();
+      }
 
       setOrders(newOrders);
 
@@ -294,6 +313,23 @@ export function PosApplicationPage() {
       return () => clearInterval(timer);
     }
   }, [isUnlocked, pin]);
+
+  // Impression navigateur de secours : noir sur blanc, ticket 80 mm et QR en pied de ticket.
+  // Chrome exige une validation dans sa fenêtre d'impression ; l'impression silencieuse dépend de la configuration système.
+  const printBrowserTicket = async (order: Order): Promise<boolean> => {
+    const popup = window.open("", "_blank", "width=420,height=760");
+    if (!popup) { alert("Chrome a bloqué la fenêtre d’impression. Autorisez les fenêtres pop-up pour ce site puis réessayez."); return false; }
+    try {
+      const esc = (value: unknown) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      const qrTarget = `${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`;
+      const qr = await QRCode.toDataURL(qrTarget, { errorCorrectionLevel: "H", margin: 2, width: 240, color: { dark: "#000000", light: "#ffffff" } });
+      const items = order.items.map((item) => `<div class="item"><span>${item.quantity} × ${esc(item.name)}${item.toppings?.length ? `<small>${item.toppings.map(esc).join(" · ")}</small>` : ""}</span><b>${(item.price * item.quantity).toFixed(2)} €</b></div>`).join("");
+      popup.document.open();
+      popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.35 Arial,sans-serif;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;margin:0 0 4px}p{margin:3px 0}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;gap:5px;margin:5px 0;break-inside:avoid}.item small{display:block;font-size:10px}.total{font-size:16px;font-weight:bold}.qr{display:block;width:38mm;height:38mm;margin:6px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE")}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();</script></body></html>`);
+      popup.document.close();
+      return true;
+    } catch (e) { popup.close(); alert("Erreur de préparation du ticket : " + String(e)); return false; }
+  };
 
   // Action d'impression directe ePOS réseau (impression silencieuse sans pop-up)
   const handleExecutePrint = async (order: Order, silent = false): Promise<{ success: boolean; message: string }> => {
@@ -359,8 +395,9 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    // Impression directe sur l'imprimante Epson
-    await handleExecutePrint(targetOrder, false);
+    // ePOS direct d'abord ; en cas d'échec, proposer l'impression navigateur.
+    const result = await handleExecutePrint(targetOrder, false);
+    if (!result.success && window.confirm("L’impression directe ePOS a échoué. Voulez-vous ouvrir le ticket via l’impression Chrome ?")) await printBrowserTicket(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -611,13 +648,14 @@ export function PosApplicationPage() {
             {/* Toggle Son */}
             <button
               onClick={() => {
-                const updated = { ...config, soundEnabled: !config.soundEnabled };
+                if (!config.soundEnabled) { void enableSoundAndTest(); return; }
+                const updated = { ...config, soundEnabled: false };
                 setConfig(updated);
                 savePrinterConfig(updated);
               }}
               className={`rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
                 }`}
-              title="Activer/Désactiver son"
+              title={config.soundEnabled ? "Désactiver le son" : "Activer le son et autoriser l'audio"}
             >
               {config.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
             </button>
@@ -954,7 +992,7 @@ export function PosApplicationPage() {
                     <p className="text-xs text-[#8ea39b] leading-relaxed">
                       Le ticket regroupe les informations de préparation et du client : commande, heure demandée,
                       coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement.
-                      Un QR code de suivi GPS est imprimé uniquement sur les tickets de livraison. Aucun QR code n’est ajouté aux tickets de retrait.
+                      Un QR code de suivi est imprimé en bas de chaque ticket, y compris les retraits.
                     </p>
                     <p className="text-xs text-emerald-300 font-bold">
                       L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée.
@@ -984,6 +1022,14 @@ export function PosApplicationPage() {
                     >
                       <Printer className={`w-4 h-4 ${testingPrinter ? "animate-spin" : ""}`} />
                       <span>🖨️ Imprimer un Ticket de Test Epson</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { const now = new Date().toISOString(); const demo: Order = { id: "TEST-TICKET-" + Date.now().toString().slice(-6), createdAt: now, status: "paid", paymentMethod: "online", currency: "EUR", deliveryToken: "test", customer: { name: "CLIENT TEST (NE PAS LIVRER)", phone: "0000000000", fulfillment: "pickup", requestedTime: "TEST UNIQUEMENT", notes: "Ticket de test — aucune vraie commande", deliveryFee: 0 }, items: [{ id: "test-poke", name: "Poké de test", price: 1, quantity: 1, toppings: ["Avocat", "Sésame"] }], total: 1 }; void printBrowserTicket(demo); }}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-sky-600 hover:bg-sky-500 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
+                    >
+                      <Printer className="w-4 h-4" />
+                      <span>Ticket test navigateur (sans commande réelle)</span>
                     </button>
                     <button
                       type="button"
