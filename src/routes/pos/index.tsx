@@ -927,47 +927,24 @@ export function PosApplicationPage() {
                   </div>
                 </div>
 
-                {/* Étape 3 : Tickets à générer */}
+                {/* Étape 3 : Ticket complet automatique */}
                 <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
                   <div className="flex items-center gap-2">
                     <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md">
                       ÉTAPE 3
                     </span>
-                    <h3 className="text-base font-black text-white">Tickets à générer automatiquement</h3>
+                    <h3 className="text-base font-black text-white">Ticket complet automatique</h3>
                   </div>
-                  <div className="space-y-2 pt-1">
-                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition">
-                      <input
-                        type="checkbox"
-                        checked={config.autoPrintKitchen}
-                        onChange={(e) => {
-                          const updated = { ...config, autoPrintKitchen: e.target.checked };
-                          setConfig(updated);
-                          savePrinterConfig(updated);
-                        }}
-                        className="h-4 w-4 rounded accent-[#ff705f]"
-                      />
-                      <div>
-                        <span className="text-sm font-bold text-white block">Ticket Cuisine (Bon de préparation)</span>
-                        <span className="text-xs text-[#8ea39b]">Articles, suppléments, remarques et allergies</span>
-                      </div>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition">
-                      <input
-                        type="checkbox"
-                        checked={config.autoPrintDelivery}
-                        onChange={(e) => {
-                          const updated = { ...config, autoPrintDelivery: e.target.checked };
-                          setConfig(updated);
-                          savePrinterConfig(updated);
-                        }}
-                        className="h-4 w-4 rounded accent-[#ff705f]"
-                      />
-                      <div>
-                        <span className="text-sm font-bold text-white block">Ticket Livreur / Client (Avec QR Code GPS)</span>
-                        <span className="text-xs text-[#8ea39b]">Adresse de livraison, téléphone et QR Code 1-clic Waze/Google Maps</span>
-                      </div>
-                    </label>
+                  <div className="rounded-xl bg-black/20 p-4 space-y-2">
+                    <p className="text-sm font-bold text-white">Un seul ticket complet par nouvelle commande</p>
+                    <p className="text-xs text-[#8ea39b] leading-relaxed">
+                      Le ticket regroupe les informations de préparation et du client : commande, heure demandée,
+                      coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement.
+                      Un QR code est imprimé en bas de chaque ticket : suivi GPS pour les livraisons, site du restaurant pour les retraits.
+                    </p>
+                    <p className="text-xs text-emerald-300 font-bold">
+                      L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée.
+                    </p>
                   </div>
                 </div>
 
