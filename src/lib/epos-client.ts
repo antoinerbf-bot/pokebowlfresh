@@ -231,15 +231,16 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   xml += `  <text align="center" reverse="true" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
-  // QR Code GPS livreur
-  if (isDelivery && (order.deliveryToken || order.id)) {
+  // QR code unique sur TOUS les tickets : suivi de commande / navigation livreur.
+  {
     const trackToken = order.deliveryToken || order.id;
     const cleanOrigin = origin.replace(/\/$/, "");
     const trackUrl = `${cleanOrigin}/track/${trackToken}`;
     xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-    xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
-    xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(trackUrl)}</symbol>\n`;
+    xml += `  <text align="center" em="true" dw="true">SCANEZ POUR ${isDelivery ? "SUIVRE LE LIVREUR" : "SUIVRE VOTRE COMMANDE"}&#10;</text>\n`;
+    xml += `  <text align="center"> ${isDelivery ? "GPS : Waze / Google Maps" : "Informations de commande"} &#10;&#10;</text>\n`;
+    xml += `  <symbol type="qrcode_model_2" level="level_h" width="6">${escapeXml(trackUrl)}</symbol>\n`;
+    xml += `  <text align="center">${escapeXml(trackUrl)}&#10;</text>\n`;
     xml += `  <text>&#10;</text>\n`;
   }
 
