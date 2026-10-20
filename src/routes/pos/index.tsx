@@ -948,7 +948,7 @@ export function PosApplicationPage() {
                     <p className="text-xs text-[#8ea39b] leading-relaxed">
                       Le ticket regroupe les informations de préparation et du client : commande, heure demandée,
                       coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement.
-                      Un QR code est imprimé en bas de chaque ticket : suivi GPS pour les livraisons, site du restaurant pour les retraits.
+                      Un QR code de suivi GPS est imprimé uniquement sur les tickets de livraison. Aucun QR code n’est ajouté aux tickets de retrait.
                     </p>
                     <p className="text-xs text-emerald-300 font-bold">
                       L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée.
