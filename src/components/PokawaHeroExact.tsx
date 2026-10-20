@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 // Photos culinaires plein écran ultra haute définition 1080p (Poke N Bowl Visé)
 import heroSaumonWide from "@/assets/hero-saumon-clean-wide.jpg";
 import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
-import heroCroustyWide from "@/assets/crousty-chicken-original.jpeg";
+const heroCroustyWide = "https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/79221efe-dce7-468f-90c2-7c735c713ca8.jpg";
 import heroScampisWide from "@/assets/hero-scampis-wide.jpg";
 import heroSpicyWide from "@/assets/hero-spicy-wide.jpg";
 
