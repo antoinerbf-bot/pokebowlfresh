@@ -5,7 +5,8 @@ import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis      from "@/assets/bowl-scampis.jpg";
 import bowlSaumon       from "@/assets/bowl-saumon.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
-import bowlCroustyCurry from "@/assets/crousty-chicken-original.jpeg";
+const bowlCroustyCurry = "https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/79221efe-dce7-468f-90c2-7c735c713ca8.jpg";
+import bowlCroustyBlanche from "@/assets/crousty-chicken-original.jpeg";
 
 const images: Record<string, string> = {
   "sweet-chicken":                 bowlSweetChicken,
@@ -13,7 +14,7 @@ const images: Record<string, string> = {
   "saumon-wasabi":                 bowlSaumon,
   "spicy-chicken":                 bowlSpicyChicken,
   "crousty-chicken-curry":         bowlCroustyCurry,
-  "crousty-chicken-sauce-blanche": bowlCroustyCurry,
+  "crousty-chicken-sauce-blanche": bowlCroustyBlanche,
   "sur-mesure":                    bowlSaumon,
 };
 
