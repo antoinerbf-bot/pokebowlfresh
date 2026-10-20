@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Uj3abs-f.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-IWtMNuIc.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1389,6 +1389,7 @@ function PosApplicationPage() {
 	(0, import_react.useRef)(/* @__PURE__ */ new Map());
 	(0, import_react.useRef)(false);
 	const autoPrintInFlight = (0, import_react.useRef)(/* @__PURE__ */ new Set());
+	const autoPrintRetryAfter = (0, import_react.useRef)(/* @__PURE__ */ new Map());
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
 	const handleCreateTestOrder = async () => {
 		setCreatingTestOrder(true);
@@ -1477,6 +1478,8 @@ function PosApplicationPage() {
 				if (o.printStatus === "printed") return false;
 				if (printedIds.has(o.id)) return false;
 				if (autoPrintInFlight.current.has(o.id)) return false;
+				const retryAfter = autoPrintRetryAfter.current.get(o.id) ?? 0;
+				if (nowMs < retryAfter) return false;
 				const createdAtMs = new Date(o.createdAt).getTime();
 				if (!(!isNaN(createdAtMs) && nowMs - createdAtMs < fourHoursMs)) {
 					markOrderAsPrintedLocally(o.id);
@@ -1490,18 +1493,19 @@ function PosApplicationPage() {
 				if (autoPrintInFlight.current.has(order.id)) continue;
 				autoPrintInFlight.current.add(order.id);
 				(async () => {
-					markOrderAsPrintedLocally(order.id);
 					try {
 						const res = await handleExecutePrint(order, true);
 						if (!res.success) {
-							console.warn("[POS Auto-print] Échec ou réponse ambiguë pour", order.id, res.message);
+							autoPrintRetryAfter.current.set(order.id, Date.now() + 6e4);
+							console.warn("[POS Auto-print] Échec pour", order.id, res.message);
 							setPrintLog((prev) => [{
 								time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-								msg: `Impression automatique à vérifier pour ${order.id} : ${res.message}. Réimpression manuelle disponible.`,
+								msg: `Échec impression automatique pour ${order.id} : ${res.message}. Nouvelle tentative dans 1 minute ; réimpression manuelle disponible.`,
 								type: "err"
 							}, ...prev.slice(0, 30)]);
-						}
+						} else autoPrintRetryAfter.current.delete(order.id);
 					} catch (err) {
+						autoPrintRetryAfter.current.set(order.id, Date.now() + 6e4);
 						console.error("[POS Auto-print] Erreur :", err);
 					} finally {
 						autoPrintInFlight.current.delete(order.id);
