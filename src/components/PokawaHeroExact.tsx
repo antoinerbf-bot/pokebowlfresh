@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 // Photos culinaires plein écran ultra haute définition 1080p (Poke N Bowl Visé)
 import heroSaumonWide from "@/assets/hero-saumon-clean-wide.jpg";
 import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
-import heroCroustyWide from "@/assets/hero-crousty-wide.jpg";
+import heroCroustyWide from "@/assets/crousty-chicken-original.jpeg";
 import heroScampisWide from "@/assets/hero-scampis-wide.jpg";
 import heroSpicyWide from "@/assets/hero-spicy-wide.jpg";
 
@@ -191,7 +191,7 @@ export function PokawaHeroExact() {
           <img
             src={slide.image}
             alt={`Bol ${slide.dishName} — Poké N Bowl Visé`}
-            className="h-full w-full object-cover object-center filter brightness-100 contrast-102"
+            className={`h-full w-full ${slide.isCrousty ? "object-contain bg-white" : "object-cover"} object-center filter brightness-100 contrast-102`}
           />
 
           {/* DÉGRADÉS LÉGERS & ÉPURÉS QUI METTENT EN VALEUR LA PHOTO DU PLAT SANS L'OBSTRUER */}

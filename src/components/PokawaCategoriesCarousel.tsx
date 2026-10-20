@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
-import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";
+import bowlCrousty from "@/assets/crousty-chicken-original.jpeg";
 import bowlSweet from "@/assets/bowl-sweet-chicken.jpg";
 import tiramisuImg from "@/assets/tiramisu-speculoos.jpg";
 import drinkImg from "@/assets/drink-coca-cola.jpg";
@@ -144,7 +144,7 @@ export function PokawaCategoriesCarousel() {
                 <img
                   src={cat.image}
                   alt={cat.title}
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-108"
+                  className={`h-full w-full ${cat.id === "crousty" ? "object-contain bg-white" : "object-cover"} transition duration-700 group-hover:scale-108`}
                 />
 
                 {/* Voile dégradé bas */}
