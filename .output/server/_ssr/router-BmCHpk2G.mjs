@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-5Gymzjav.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BmCHpk2G.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1154,13 +1154,15 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
 	xml += `  <text align="center" reverse="true" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
-	if (isDelivery && (order.deliveryToken || order.id)) {
+	{
+		const cleanOrigin = origin.replace(/\/$/, "");
 		const trackToken = order.deliveryToken || order.id;
-		const trackUrl = `${origin.replace(/\/$/, "")}/track/${trackToken}`;
+		const qrUrl = isDelivery ? `${cleanOrigin}/track/${trackToken}` : cleanOrigin;
 		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
-		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(trackUrl)}</symbol>\n`;
+		xml += `  <text align="center" em="true" dw="true">SCANEZ POUR ${isDelivery ? "SUIVRE LE LIVREUR" : "RETROUVER NOTRE SITE"}&#10;</text>\n`;
+		xml += `  <text align="center"> ${isDelivery ? "GPS : Waze / Google Maps" : "Menu et informations du restaurant"} &#10;&#10;</text>\n`;
+		xml += `  <symbol type="qrcode_model_2" level="level_h" width="6">${escapeXml(qrUrl)}</symbol>\n`;
+		xml += `  <text align="center">${escapeXml(qrUrl)}&#10;</text>\n`;
 		xml += `  <text>&#10;</text>\n`;
 	}
 	xml += `  <text align="center">==========================================&#10;</text>\n`;
@@ -1366,6 +1368,7 @@ function PosApplicationPage() {
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printBannerError, setPrintBannerError] = (0, import_react.useState)(null);
+	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	(0, import_react.useEffect)(() => {
 		if (config.printerPort !== 8043) {
 			const fixed = {
