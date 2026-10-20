@@ -6,7 +6,7 @@ import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { E as LoaderCircle, L as CircleCheckBig, M as CreditCard, R as CircleAlert, X as ArrowLeft, s as Store } from "../_libs/lucide-react.mjs";
 import { o as getDeliveryZone } from "./checkout-service.server-CGx1EGbk.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-reXc3OH_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-m2FG8zM2.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -94,7 +94,18 @@ function CheckoutPage() {
 					origin
 				})
 			});
-			const result = await response.json();
+			const responseText = await response.text();
+			let result;
+			try {
+				result = JSON.parse(responseText);
+			} catch {
+				console.error("[Checkout] Réponse non JSON de /api/checkout:", {
+					status: response.status,
+					contentType: response.headers.get("content-type"),
+					bodyPreview: responseText.slice(0, 500)
+				});
+				throw new Error(`Le serveur de commande a renvoyé une réponse inattendue (HTTP ${response.status}). Aucune confirmation fiable n’a été reçue. Vérifiez les commandes dans le POS avant de réessayer.`);
+			}
 			if (!response.ok || !result.success) {
 				setError(result.error || `Le serveur a refusé la commande (HTTP ${response.status}).`);
 				setLoading(false);
