@@ -21,11 +21,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CZSJXu7R.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BJVRKPa3.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-WGDkfrjR.css";
+var styles_default = "/assets/styles-DhJ82U4n.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -1154,13 +1154,14 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
 	xml += `  <text align="center" reverse="true" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
-	if (isDelivery && (order.deliveryToken || order.id)) {
+	{
 		const trackToken = order.deliveryToken || order.id;
-		const trackUrl = `${origin.replace(/\/$/, "")}/track/${trackToken}`;
+		const cleanOrigin = origin.replace(/\/$/, "");
+		const qrUrl = isDelivery ? `${cleanOrigin}/track/${trackToken}` : cleanOrigin;
 		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
-		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(trackUrl)}</symbol>\n`;
+		xml += `  <text align="center" em="true">${isDelivery ? "SCANNEZ POUR GPS LIVREUR" : "SCANNEZ POUR LE SITE WEB"}&#10;</text>\n`;
+		xml += `  <text align="center">${isDelivery ? "Waze &amp; Google Maps en 1-clic" : "Menu et informations du restaurant"}&#10;&#10;</text>\n`;
+		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
 		xml += `  <text>&#10;</text>\n`;
 	}
 	xml += `  <text align="center">==========================================&#10;</text>\n`;
@@ -2218,53 +2219,24 @@ function PosApplicationPage() {
 											children: "ÉTAPE 3"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 											className: "text-base font-black text-white",
-											children: "Tickets à générer automatiquement"
+											children: "Ticket complet automatique"
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "space-y-2 pt-1",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-											className: "flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-												type: "checkbox",
-												checked: config.autoPrintKitchen,
-												onChange: (e) => {
-													const updated = {
-														...config,
-														autoPrintKitchen: e.target.checked
-													};
-													setConfig(updated);
-													savePrinterConfig(updated);
-												},
-												className: "h-4 w-4 rounded accent-[#ff705f]"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-sm font-bold text-white block",
-												children: "Ticket Cuisine (Bon de préparation)"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs text-[#8ea39b]",
-												children: "Articles, suppléments, remarques et allergies"
-											})] })]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-											className: "flex items-center gap-3 cursor-pointer p-3 rounded-xl bg-black/20 hover:bg-black/30 transition",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-												type: "checkbox",
-												checked: config.autoPrintDelivery,
-												onChange: (e) => {
-													const updated = {
-														...config,
-														autoPrintDelivery: e.target.checked
-													};
-													setConfig(updated);
-													savePrinterConfig(updated);
-												},
-												className: "h-4 w-4 rounded accent-[#ff705f]"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-sm font-bold text-white block",
-												children: "Ticket Livreur / Client (Avec QR Code GPS)"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs text-[#8ea39b]",
-												children: "Adresse de livraison, téléphone et QR Code 1-clic Waze/Google Maps"
-											})] })]
-										})]
+										className: "rounded-xl bg-black/20 p-4 space-y-2",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-sm font-bold text-white",
+												children: "Un seul ticket complet par nouvelle commande"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-xs text-[#8ea39b] leading-relaxed",
+												children: "Le ticket regroupe les informations de préparation et du client : commande, heure demandée, coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement. Un QR code est imprimé en bas de chaque ticket : suivi GPS pour les livraisons, site du restaurant pour les retraits."
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-xs text-emerald-300 font-bold",
+												children: "L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée."
+											})
+										]
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
