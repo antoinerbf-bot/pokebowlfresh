@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CzLHwq_5.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-kLIFKtEE.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -2228,7 +2228,7 @@ function PosApplicationPage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-xs text-[#8ea39b] leading-relaxed",
-												children: "Le ticket regroupe les informations de préparation et du client : commande, heure demandée, coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement. Un QR code est imprimé en bas de chaque ticket : suivi GPS pour les livraisons, site du restaurant pour les retraits."
+												children: "Le ticket regroupe les informations de préparation et du client : commande, heure demandée, coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement. Un QR code de suivi GPS est imprimé uniquement sur les tickets de livraison. Aucun QR code n’est ajouté aux tickets de retrait."
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-xs text-emerald-300 font-bold",
