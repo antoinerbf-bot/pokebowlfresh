@@ -415,10 +415,10 @@ export function FluidInteractiveMenu() {
                 <span className="text-2xl">🥤</span>
                 <div>
                   <span className="block text-[10px] font-black uppercase tracking-wider text-[#ea580c]">
-                    Formule Étudiant Complète
+                    Formule Étudiant · midi uniquement
                   </span>
                   <span className="text-lg font-black text-[#7c2d12]">
-                    11,00 € <span className="text-xs font-bold text-[#9a3412]">(Boisson 33cl incluse)</span>
+                    11,00 € <span className="text-xs font-bold text-[#9a3412]">(boisson 33 cl incluse · midi uniquement)</span>
                   </span>
                 </div>
               </div>
