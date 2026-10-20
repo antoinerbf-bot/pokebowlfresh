@@ -274,9 +274,9 @@ export const bowls: Bowl[] = [
     desc: "Petits morceaux de poulet croustillant dorés, sauce blanche onctueuse maison nappée généreusement, oignons frits croustillants et riz à sushi chaud. Formule étudiant à 11 € avec boisson 33 cl, disponible uniquement le midi.",
     defaultBase: "Riz à sushi",
     defaultSauce: "Sauce blanche",
-    tag: "Formule 11€",
+    tag: "Formule étudiant · midi uniquement",
     tagColor: "bestseller",
-    menuNote: "Formule 11€ avec boisson 33cl incluse au choix. Petits morceaux de poulet croustillants et dorés.",
+    menuNote: "Formule étudiant à 11 € avec boisson 33 cl incluse au choix, uniquement le midi. Supplément de légumes ou fruits frais : 1 €.",
     ingredients: [
       { name: "Riz à sushi",                      emoji: "🍚", removable: true, isBase: true },
       { name: "Petits morceaux de poulet croustillant", emoji: "🍗", removable: true, isProtein: true },
