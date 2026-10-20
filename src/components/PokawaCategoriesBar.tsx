@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Flame, Cookie, GlassWater, Utensils } from "lucide-react";
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
-import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
+const bowlCroustyCurry = "https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/79221efe-dce7-468f-90c2-7c735c713ca8.jpg";
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
 import heroPoke from "@/assets/hero-poke.jpg";
 
@@ -42,7 +42,7 @@ const CATEGORIES: CategoryItem[] = [
   {
     id: "crousty",
     title: "Crousty Chicken",
-    subtitle: "Formule étudiant 11€",
+    subtitle: "Formule étudiant 11 € · midi uniquement",
     badge: "Gamme Chaude 🔥",
     badgeColor: "bg-[#8b5510] text-white",
     image: bowlCroustyCurry,
