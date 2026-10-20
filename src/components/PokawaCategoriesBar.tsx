@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Flame, Cookie, GlassWater, Utensils } from "lucide-react";
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
-import bowlCroustyCurry from "@/assets/crousty-chicken-original.jpeg";
+import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
 import heroPoke from "@/assets/hero-poke.jpg";
 
@@ -163,7 +163,7 @@ export function PokawaCategoriesBar() {
                 <img
                   src={cat.image}
                   alt={cat.title}
-                  className={`h-full w-full ${cat.id === "crousty" ? "object-contain bg-white" : "object-cover"} transition-transform duration-700 group-hover:scale-108`}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-108"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />

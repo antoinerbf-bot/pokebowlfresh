@@ -21,10 +21,10 @@ import { useCart } from "@/context/CartContext";
 // Photos culinaires professionnelles générées pour Poke N Bowl Visé
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
-import bowlCroustyCurry from "@/assets/crousty-chicken-original.jpeg";
+import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
-import bowlCroustyBlanche from "@/assets/crousty-chicken-original.jpeg";
+import bowlCroustyBlanche from "@/assets/bowl-crousty-blanche.jpg";
 
 interface SlideData {
   id: string;
@@ -287,7 +287,7 @@ export function HeroCinematicBackground() {
               alt={currentSlide.name}
               animate={{ scale: [1, 1.06] }}
               transition={{ duration: 9, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
-              className={`h-full w-full ${currentSlide.id.startsWith("crousty") ? "object-contain bg-white" : "object-cover"} object-center filter saturate-[1.12] contrast-[1.06]`}
+              className="h-full w-full object-cover object-center filter saturate-[1.12] contrast-[1.06]"
             />
 
             {/* Overlays d'ambiance et lisibilité maximale style Pokawa */}
@@ -552,7 +552,7 @@ export function HeroCinematicBackground() {
                   <img
                     src={currentSlide.image}
                     alt={currentSlide.name}
-                    className={`h-full w-full ${currentSlide.id.startsWith("crousty") ? "object-contain bg-white" : "object-cover"} transition duration-700 group-hover:scale-108`}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-108"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 

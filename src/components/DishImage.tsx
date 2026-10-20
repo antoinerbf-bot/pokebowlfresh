@@ -1,14 +1,11 @@
 import React from "react";
 
-// ─── Nouvelles photos culinaires professionnelles ──────────────────────────────
+// Photos produits — le fichier crousty-chicken-original.jpeg est l’image originale fournie.
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis      from "@/assets/bowl-scampis.jpg";
 import bowlSaumon       from "@/assets/bowl-saumon.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import bowlCroustyCurry from "@/assets/crousty-chicken-original.jpeg";
-import bowlCroustyBlanche from "@/assets/crousty-chicken-original.jpeg";
-
-const croustyOriginal = bowlCroustyCurry;
 
 const images: Record<string, string> = {
   "sweet-chicken":                 bowlSweetChicken,
@@ -16,7 +13,7 @@ const images: Record<string, string> = {
   "saumon-wasabi":                 bowlSaumon,
   "spicy-chicken":                 bowlSpicyChicken,
   "crousty-chicken-curry":         bowlCroustyCurry,
-  "crousty-chicken-sauce-blanche": bowlCroustyBlanche,
+  "crousty-chicken-sauce-blanche": bowlCroustyCurry,
   "sur-mesure":                    bowlSaumon,
 };
 
@@ -43,11 +40,13 @@ export function DishImage({
     );
   }
 
+  const isCrousty = dishId === "crousty-chicken-curry" || dishId === "crousty-chicken-sauce-blanche";
+
   return (
     <img
       src={src}
       alt={alt}
-      className={`h-full w-full ${src === croustyOriginal ? "object-contain bg-white" : "object-cover"} ${className}`}
+      className={`h-full w-full ${isCrousty ? "object-contain bg-white" : "object-cover"} ${className}`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       fetchPriority={priority ? "high" : "auto"}
