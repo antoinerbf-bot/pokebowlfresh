@@ -253,11 +253,19 @@ export function PosApplicationPage() {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
         (async () => {
+          // Marquer la tentative AVANT l'envoi : si l'Epson imprime mais que sa réponse réseau
+          // se perd, le prochain rafraîchissement automatique ne doit pas sortir un doublon.
+          // En cas d'échec réel, l'équipe peut utiliser le bouton d'impression pour réimprimer.
+          markOrderAsPrintedLocally(order.id);
           try {
             // Envoi silencieux direct à l'Epson TM-m30II (aucun pop-up)
             const res = await handleExecutePrint(order, true);
             if (!res.success) {
-              console.warn("[POS Auto-print] ePOS direct non disponible pour", order.id, res.message);
+              console.warn("[POS Auto-print] Échec ou réponse ambiguë pour", order.id, res.message);
+              setPrintLog((prev) => [
+                { time: new Date().toLocaleTimeString(), msg: `Impression automatique à vérifier pour ${order.id} : ${res.message}. Réimpression manuelle disponible.`, type: "err" },
+                ...prev.slice(0, 30),
+              ]);
             }
           } catch (err) {
             console.error("[POS Auto-print] Erreur :", err);
