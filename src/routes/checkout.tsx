@@ -111,7 +111,8 @@ function CheckoutPage() {
         }),
       });
 
-      const result = await response.json() as {
+      const responseText = await response.text();
+      let result: {
         success?: boolean;
         type?: "on_site" | "online";
         orderId?: string;
@@ -119,6 +120,19 @@ function CheckoutPage() {
         redirectUrl?: string;
         error?: string;
       };
+
+      try {
+        result = JSON.parse(responseText);
+      } catch {
+        console.error("[Checkout] Réponse non JSON de /api/checkout:", {
+          status: response.status,
+          contentType: response.headers.get("content-type"),
+          bodyPreview: responseText.slice(0, 500),
+        });
+        throw new Error(
+          `Le serveur de commande a renvoyé une réponse inattendue (HTTP ${response.status}). Aucune confirmation fiable n’a été reçue. Vérifiez les commandes dans le POS avant de réessayer.`
+        );
+      }
 
       if (!response.ok || !result.success) {
         setError(result.error || `Le serveur a refusé la commande (HTTP ${response.status}).`);
