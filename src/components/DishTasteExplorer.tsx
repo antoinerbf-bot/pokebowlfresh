@@ -5,7 +5,7 @@ import { Sparkles, ArrowRight, Heart, Award, Flame, Utensils } from "lucide-reac
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
-import bowlCroustyCurry from "@/assets/crousty-chicken-original.jpeg";
+const bowlCroustyCurry = "https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/79221efe-dce7-468f-90c2-7c735c713ca8.jpg";
 
 const INGREDIENTS_SHOWCASE = [
   {
@@ -35,7 +35,7 @@ const INGREDIENTS_SHOWCASE = [
     title: "Le Fameux Crousty Chicken",
     subtitle: "Panure dorée croustillante minute",
     desc: "Notre recette secrète de poulet mariné et pané ultra croustillant, nappé de sauce curry chaude onctueuse ou sauce blanche.",
-    badge: "Spécialité Chaude · Formule 11€",
+    badge: "Formule étudiant 11 € · midi uniquement",
     badgeColor: "#f59e0b",
     image: bowlCroustyCurry,
     linkDish: "crousty-chicken-curry",
