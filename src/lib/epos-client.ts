@@ -118,7 +118,7 @@ export function buildEposXmlTest(printerIp: string): string {
   <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>
   <text align="center">Rue Haute 38, 4600 Vise&#10;</text>
   <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>
-  <text align="center" reverse="true" em="true" dw="true" dh="true"> *** TEST IMPRESSION *** &#10;</text>
+  <text align="center" em="true" dw="true" dh="true"> *** TEST IMPRESSION *** &#10;</text>
   <text align="center">==========================================&#10;</text>
   <text align="center">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>
   <text align="center">IP Imprimante : ${escapeXml(printerIp)}&#10;</text>
@@ -156,8 +156,8 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
 
   // Bannière Type
-  xml += `  <text align="center" reverse="true" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
-  xml += `  <text align="center" reverse="true"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
+  xml += `  <text align="center" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
+  xml += `  <text align="center"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
   // Détails commande & client
@@ -179,7 +179,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   if (safeNotes) {
     xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text align="left" reverse="true" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
+    xml += `  <text align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
     xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
   }
 
@@ -200,7 +200,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
       for (const top of item.toppings) {
         const safeTop = cleanThermalText(top);
         if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
-          xml += `  <text align="left" reverse="true" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
+          xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
         } else {
           xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
         }
@@ -228,7 +228,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   const payLabel = isPaid
     ? "[ PAIEMENT VALIDE EN LIGNE ]"
     : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
-  xml += `  <text align="center" reverse="true" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
+  xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
   // QR code en bas de TOUS les tickets :
@@ -359,19 +359,13 @@ export async function sendReceiptToPrinter(
     ? Number(config.printerPort)
     : 8043;
 
-  // Ordre de priorité des URL candidates selon le standard ePOS Epson
-  // Ne JAMAIS appeler le port 9100 en HTTP (9100 est un port socket brut qui imprimerait les headers)
-  const candidateUrls: string[] = [
+  // Une seule tentative d'impression vers l'endpoint ePOS configuré.
+  // Ne pas essayer d'autres ports après un délai ou une réponse ambiguë :
+  // l'imprimante peut avoir imprimé le ticket même si la réponse s'est perdue,
+  // et les tentatives alternatives provoqueraient des doublons.
+  const targets = [
     `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
   ];
-
-  const targets = Array.from(new Set(candidateUrls));
 
   let lastErr = "";
   for (const url of targets) {
