@@ -648,13 +648,14 @@ export function PosApplicationPage() {
             {/* Toggle Son */}
             <button
               onClick={() => {
-                const updated = { ...config, soundEnabled: !config.soundEnabled };
+                if (!config.soundEnabled) { void enableSoundAndTest(); return; }
+                const updated = { ...config, soundEnabled: false };
                 setConfig(updated);
                 savePrinterConfig(updated);
               }}
               className={`rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
                 }`}
-              title="Activer/Désactiver son"
+              title={config.soundEnabled ? "Désactiver le son" : "Activer le son et autoriser l'audio"}
             >
               {config.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
             </button>
