@@ -21,11 +21,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-IWtMNuIc.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DC9K7nbb.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-znSZekbb.css";
+var styles_default = "/assets/styles-mri7SqZI.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -1154,12 +1154,13 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
 	xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
-	if (isDelivery) {
+	{
 		const trackToken = order.deliveryToken || order.id;
-		const qrUrl = `${origin.replace(/\/$/, "")}/track/${trackToken}`;
+		const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
 		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+		xml += `  <text align="center" em="true">${isDelivery ? "SCANNEZ POUR GPS LIVREUR" : "SCANNEZ POUR SUIVRE LA COMMANDE"}&#10;</text>\n`;
+		if (isDelivery) xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+		else xml += `  <text align="center">Suivi de commande Poke N Bowl&#10;&#10;</text>\n`;
 		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
 		xml += `  <text>&#10;</text>\n`;
 	}
@@ -1358,6 +1359,8 @@ function PosApplicationPage() {
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printBannerError, setPrintBannerError] = (0, import_react.useState)(null);
 	const [printLog, setPrintLog] = (0, import_react.useState)([]);
+	const audioContextRef = (0, import_react.useRef)(null);
+	const alertedOrderIds = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	(0, import_react.useEffect)(() => {
 		if (config.printerPort !== 8043) {
 			const fixed = {
@@ -1416,12 +1419,33 @@ function PosApplicationPage() {
 			setCreatingTestOrder(false);
 		}
 	};
-	const playAlertSound = () => {
-		if (!config.soundEnabled) return;
+	const enableSoundAndTest = async () => {
+		try {
+			const AudioCtx = window.AudioContext || window.webkitAudioContext;
+			if (!AudioCtx) throw new Error("Web Audio API indisponible");
+			if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+			if (audioContextRef.current.state === "suspended") await audioContextRef.current.resume();
+			setConfig((current) => {
+				const next = {
+					...current,
+					soundEnabled: true
+				};
+				savePrinterConfig(next);
+				return next;
+			});
+			playAlertSound(true);
+			alert("Son activé. Laissez cette page ouverte sur la caisse pour recevoir les alertes.");
+		} catch (e) {
+			alert("Impossible d’activer le son : " + (e?.message ?? String(e)));
+		}
+	};
+	const playAlertSound = (force = false) => {
+		if (!config.soundEnabled && !force) return;
 		try {
 			const AudioCtx = window.AudioContext || window.webkitAudioContext;
 			if (!AudioCtx) return;
-			const ctx = new AudioCtx();
+			if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+			const ctx = audioContextRef.current;
 			if (ctx.state === "suspended") ctx.resume();
 			const playChime = (startTime, freq1, freq2) => {
 				const osc1 = ctx.createOscillator();
@@ -1441,6 +1465,7 @@ function PosApplicationPage() {
 				osc2.start(startTime + .12);
 				osc2.stop(startTime + .38);
 			};
+			if (!force && !config.soundEnabled) return;
 			const now = ctx.currentTime;
 			playChime(now, 784, 1046.5);
 			playChime(now + .42, 784, 1046.5);
@@ -1487,7 +1512,11 @@ function PosApplicationPage() {
 				}
 				return true;
 			});
-			if (newlyPrintable.length > 0) playAlertSound();
+			const freshAlerts = newlyPrintable.filter((o) => !alertedOrderIds.current.has(o.id));
+			if (freshAlerts.length > 0) {
+				freshAlerts.forEach((o) => alertedOrderIds.current.add(o.id));
+				playAlertSound();
+			}
 			setOrders(newOrders);
 			for (const order of newlyPrintable) {
 				if (autoPrintInFlight.current.has(order.id)) continue;
@@ -1525,6 +1554,35 @@ function PosApplicationPage() {
 			return () => clearInterval(timer);
 		}
 	}, [isUnlocked, pin]);
+	const printBrowserTicket = async (order) => {
+		const popup = window.open("", "_blank", "width=420,height=760");
+		if (!popup) {
+			alert("Chrome a bloqué la fenêtre d’impression. Autorisez les fenêtres pop-up pour ce site puis réessayez.");
+			return false;
+		}
+		try {
+			const esc = (value) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+			const qrTarget = `${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`;
+			const qr = await import_lib.toDataURL(qrTarget, {
+				errorCorrectionLevel: "H",
+				margin: 2,
+				width: 240,
+				color: {
+					dark: "#000000",
+					light: "#ffffff"
+				}
+			});
+			const items = order.items.map((item) => `<div class="item"><span>${item.quantity} × ${esc(item.name)}${item.toppings?.length ? `<small>${item.toppings.map(esc).join(" · ")}</small>` : ""}</span><b>${(item.price * item.quantity).toFixed(2)} €</b></div>`).join("");
+			popup.document.open();
+			popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.35 Arial,sans-serif;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;margin:0 0 4px}p{margin:3px 0}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;gap:5px;margin:5px 0;break-inside:avoid}.item small{display:block;font-size:10px}.total{font-size:16px;font-weight:bold}.qr{display:block;width:38mm;height:38mm;margin:6px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE")}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();<\/script></body></html>`);
+			popup.document.close();
+			return true;
+		} catch (e) {
+			popup.close();
+			alert("Erreur de préparation du ticket : " + String(e));
+			return false;
+		}
+	};
 	const handleExecutePrint = async (order, silent = false) => {
 		setPrintingOrderId(order.id);
 		let result = {
@@ -1582,7 +1640,7 @@ function PosApplicationPage() {
 			alert("Commande introuvable.");
 			return;
 		}
-		await handleExecutePrint(targetOrder, false);
+		if (!(await handleExecutePrint(targetOrder, false)).success && window.confirm("L’impression directe ePOS a échoué. Voulez-vous ouvrir le ticket via l’impression Chrome ?")) await printBrowserTicket(targetOrder);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
@@ -1837,15 +1895,19 @@ function PosApplicationPage() {
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => {
+								if (!config.soundEnabled) {
+									enableSoundAndTest();
+									return;
+								}
 								const updated = {
 									...config,
-									soundEnabled: !config.soundEnabled
+									soundEnabled: false
 								};
 								setConfig(updated);
 								savePrinterConfig(updated);
 							},
 							className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"}`,
-							title: "Activer/Désactiver son",
+							title: config.soundEnabled ? "Désactiver le son" : "Activer le son et autoriser l'audio",
 							children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-5 w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-5 w-5" })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -2232,7 +2294,7 @@ function PosApplicationPage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-xs text-[#8ea39b] leading-relaxed",
-												children: "Le ticket regroupe les informations de préparation et du client : commande, heure demandée, coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement. Un QR code de suivi GPS est imprimé uniquement sur les tickets de livraison. Aucun QR code n’est ajouté aux tickets de retrait."
+												children: "Le ticket regroupe les informations de préparation et du client : commande, heure demandée, coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement. Un QR code de suivi est imprimé en bas de chaque ticket, y compris les retraits."
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-xs text-emerald-300 font-bold",
@@ -2267,19 +2329,55 @@ function PosApplicationPage() {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "grid sm:grid-cols-2 gap-3 pt-1",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-												type: "button",
-												onClick: handleTestPrint,
-												disabled: testingPrinter,
-												className: "flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-4 h-4 ${testingPrinter ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🖨️ Imprimer un Ticket de Test Epson" })]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												type: "button",
-												onClick: handleCreateTestOrder,
-												disabled: creatingTestOrder,
-												className: "flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧪 Simuler une Commande Complète (GPS)" })
-											})]
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+													type: "button",
+													onClick: handleTestPrint,
+													disabled: testingPrinter,
+													className: "flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-4 h-4 ${testingPrinter ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🖨️ Imprimer un Ticket de Test Epson" })]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+													type: "button",
+													onClick: () => {
+														const now = (/* @__PURE__ */ new Date()).toISOString();
+														const demo = {
+															id: "TEST-TICKET-" + Date.now().toString().slice(-6),
+															createdAt: now,
+															status: "paid",
+															paymentMethod: "online",
+															currency: "EUR",
+															deliveryToken: "test",
+															customer: {
+																name: "CLIENT TEST (NE PAS LIVRER)",
+																phone: "0000000000",
+																fulfillment: "pickup",
+																requestedTime: "TEST UNIQUEMENT",
+																notes: "Ticket de test — aucune vraie commande",
+																deliveryFee: 0
+															},
+															items: [{
+																id: "test-poke",
+																name: "Poké de test",
+																price: 1,
+																quantity: 1,
+																toppings: ["Avocat", "Sésame"]
+															}],
+															total: 1
+														};
+														printBrowserTicket(demo);
+													},
+													className: "flex items-center justify-center gap-2 rounded-xl bg-sky-600 hover:bg-sky-500 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ticket test navigateur (sans commande réelle)" })]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													type: "button",
+													onClick: handleCreateTestOrder,
+													disabled: creatingTestOrder,
+													className: "flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🧪 Simuler une Commande Complète (GPS)" })
+												})
+											]
 										})
 									]
 								}),
