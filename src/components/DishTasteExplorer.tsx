@@ -39,7 +39,7 @@ const INGREDIENTS_SHOWCASE = [
     badgeColor: "#f59e0b",
     image: bowlCroustyCurry,
     linkDish: "crousty-chicken-curry",
-    stats: "Boisson 33cl offerte incluse",
+    stats: "Boisson 33 cl incluse · suppléments frais +1 €",
   },
   {
     id: "scampis",
