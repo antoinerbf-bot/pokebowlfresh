@@ -36,7 +36,7 @@ export function PokawaBrandValues() {
       tagColor: "bg-[#ea580c] text-white",
       title: "Crousty Chicken",
       desc: "Petits morceaux de poulet croustillant dorés, oignons frits et sauces chaudes maison curry ou blanche généreuses.",
-      perk: "Formule étudiant 11 € avec boisson",
+      perk: "Formule étudiant 11 € avec boisson · midi uniquement",
       image: bowlCrousty,
     },
     {
