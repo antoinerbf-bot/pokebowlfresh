@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BJVRKPa3.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BKFtPVEN.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1071,7 +1071,7 @@ function buildEposXmlTest(printerIp) {
   <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>
   <text align="center">Rue Haute 38, 4600 Vise&#10;</text>
   <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>
-  <text align="center" reverse="true" em="true" dw="true" dh="true"> *** TEST IMPRESSION *** &#10;</text>
+  <text align="center" em="true" dw="true" dh="true"> *** TEST IMPRESSION *** &#10;</text>
   <text align="center">==========================================&#10;</text>
   <text align="center">Date : ${escapeXml(now.toLocaleDateString("fr-BE"))} a ${escapeXml(timeStr)}&#10;</text>
   <text align="center">IP Imprimante : ${escapeXml(printerIp)}&#10;</text>
@@ -1105,8 +1105,8 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
 	xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
 	xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
-	xml += `  <text align="center" reverse="true" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
-	xml += `  <text align="center" reverse="true"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
+	xml += `  <text align="center" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
+	xml += `  <text align="center"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
 	xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
 	xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
@@ -1122,7 +1122,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	}
 	if (safeNotes) {
 		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text align="left" reverse="true" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
+		xml += `  <text align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
 		xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
 	}
 	xml += `  <text align="left">==========================================&#10;</text>\n`;
@@ -1136,7 +1136,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 		xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
 		if (item.toppings && item.toppings.length > 0) for (const top of item.toppings) {
 			const safeTop = cleanThermalText(top);
-			if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) xml += `  <text align="left" reverse="true" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
+			if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
 			else xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
 		}
 		xml += `  <text>&#10;</text>\n`;
@@ -1152,7 +1152,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	xml += `  <text align="left" em="true" dw="true" dh="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
-	xml += `  <text align="center" reverse="true" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
+	xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
 	{
 		const trackToken = order.deliveryToken || order.id;
@@ -1250,21 +1250,12 @@ async function sendReceiptToPrinter(payload, config) {
 	};
 	const soapEnvelope = buildEposSoapEnvelope(xmlContent);
 	const ip = config.printerIp.trim();
-	const candidateUrls = [
-		`https://${ip}:${config.printerPort && [
-			8043,
-			80,
-			8008,
-			443
-		].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
-	];
-	const targets = Array.from(new Set(candidateUrls));
+	const targets = [`https://${ip}:${config.printerPort && [
+		8043,
+		80,
+		8008,
+		443
+	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`];
 	let lastErr = "";
 	for (const url of targets) try {
 		console.log(`[ePOS] Envoi requête vers ${url}...`);
