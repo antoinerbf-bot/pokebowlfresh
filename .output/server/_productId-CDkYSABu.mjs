@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-D9PoE_P1.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { b as Link, x as Navigate } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-BZ_KWAvj.mjs";
+import { t as Route } from "./_productId-C97FkIL7.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { S as Minus, U as Check, X as ArrowLeft, a as TriangleAlert, l as Sparkles, p as ShieldCheck, u as ShoppingCart, v as Plus } from "./_libs/lucide-react.mjs";
-import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer--vUyBS_x.mjs";
+import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-YpqWsLe8.mjs";
 import { t as useStock } from "./_ssr/useStock-BX9qrzn0.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-DVI3VWl8.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-CDkYSABu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {

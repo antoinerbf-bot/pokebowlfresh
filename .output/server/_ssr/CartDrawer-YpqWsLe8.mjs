@@ -10,7 +10,7 @@ import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as Dial
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer--vUyBS_x.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-YpqWsLe8.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -94,14 +94,14 @@ var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 var bowl_scampis_default = "/assets/bowl-scampis-DlEe1YXf.jpg";
 var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B-7nVWlP.jpg";
-var bowl_crousty_curry_default = "/assets/hero-crousty-wide-DQZ1PYgR.jpg";
+var crousty_chicken_original_default = "/assets/crousty-chicken-original-DY7GQyvB.jpeg";
 var images = {
 	"sweet-chicken": bowl_sweet_chicken_default,
 	"scampis-royaux": bowl_scampis_default,
 	"saumon-wasabi": bowl_saumon_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
-	"crousty-chicken-curry": bowl_crousty_curry_default,
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-FPJS5FmA.jpg",
+	"crousty-chicken-curry": crousty_chicken_original_default,
+	"crousty-chicken-sauce-blanche": crousty_chicken_original_default,
 	"sur-mesure": bowl_saumon_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
@@ -113,7 +113,7 @@ function DishImage({ dishId, alt, className = "", priority = false }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 		src,
 		alt,
-		className: `h-full w-full object-cover ${className}`,
+		className: `h-full w-full ${dishId === "crousty-chicken-curry" || dishId === "crousty-chicken-sauce-blanche" ? "object-contain bg-white" : "object-cover"} ${className}`,
 		loading: priority ? "eager" : "lazy",
 		decoding: "async",
 		fetchPriority: priority ? "high" : "auto"
@@ -416,4 +416,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_scampis_default as a, drink_coca_cola_default as c, tiramisu_nutella_default as d, tiramisu_speculoos_default as f, bowl_saumon_default as i, drink_eau_gazeuse_default as l, DishImage as n, bowl_spicy_chicken_default as o, bowl_crousty_curry_default as r, bowl_sweet_chicken_default as s, CartDrawer as t, drink_eau_plate_default as u };
+export { bowl_spicy_chicken_default as a, drink_coca_cola_default as c, tiramisu_nutella_default as d, tiramisu_speculoos_default as f, bowl_scampis_default as i, drink_eau_gazeuse_default as l, DishImage as n, bowl_sweet_chicken_default as o, bowl_saumon_default as r, crousty_chicken_original_default as s, CartDrawer as t, drink_eau_plate_default as u };
