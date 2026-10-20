@@ -171,7 +171,7 @@ export function PosApplicationPage() {
 
   // Carillon cuisine : trois bips, sur un contexte audio réutilisable.
   const playAlertSound = (force = false) => {
-    if (!config.soundEnabled) return;
+    if (!config.soundEnabled && !force) return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (!AudioCtx) return;
