@@ -241,7 +241,7 @@ function CommanderPage() {
             <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
-                  <Sparkles className="h-3 w-3" /> Formule Étudiant 11€
+                  <Sparkles className="h-3 w-3" /> Formule Étudiant 11 € · midi uniquement
                 </div>
                 <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
                   Crousty Chicken
