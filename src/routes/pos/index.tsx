@@ -120,6 +120,9 @@ export function PosApplicationPage() {
   const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
   const initialOrdersLoaded = useRef(false);
   const autoPrintInFlight = useRef<Set<string>>(new Set());
+  // Évite de relancer une impression en boucle toutes les 4 s après un échec réseau.
+  // La commande reste éligible à une nouvelle tentative après 60 s.
+  const autoPrintRetryAfter = useRef<Map<string, number>>(new Map());
   const [creatingTestOrder, setCreatingTestOrder] = useState(false);
 
   const handleCreateTestOrder = async () => {
@@ -232,6 +235,8 @@ export function PosApplicationPage() {
         if (o.printStatus === "printed") return false;
         if (printedIds.has(o.id)) return false;
         if (autoPrintInFlight.current.has(o.id)) return false;
+        const retryAfter = autoPrintRetryAfter.current.get(o.id) ?? 0;
+        if (nowMs < retryAfter) return false;
 
         // Éviter de réimprimer les commandes de services précédents (> 4h)
         const createdAtMs = new Date(o.createdAt).getTime();
@@ -253,21 +258,22 @@ export function PosApplicationPage() {
         if (autoPrintInFlight.current.has(order.id)) continue;
         autoPrintInFlight.current.add(order.id);
         (async () => {
-          // Marquer la tentative AVANT l'envoi : si l'Epson imprime mais que sa réponse réseau
-          // se perd, le prochain rafraîchissement automatique ne doit pas sortir un doublon.
-          // En cas d'échec réel, l'équipe peut utiliser le bouton d'impression pour réimprimer.
-          markOrderAsPrintedLocally(order.id);
           try {
-            // Envoi silencieux direct à l'Epson TM-m30II (aucun pop-up)
+            // Ne marquer "imprimée" qu'après confirmation positive de l'Epson.
+            // En cas d'échec, on garde la commande éligible et on limite les retries à 1/minute.
             const res = await handleExecutePrint(order, true);
             if (!res.success) {
-              console.warn("[POS Auto-print] Échec ou réponse ambiguë pour", order.id, res.message);
+              autoPrintRetryAfter.current.set(order.id, Date.now() + 60_000);
+              console.warn("[POS Auto-print] Échec pour", order.id, res.message);
               setPrintLog((prev) => [
-                { time: new Date().toLocaleTimeString(), msg: `Impression automatique à vérifier pour ${order.id} : ${res.message}. Réimpression manuelle disponible.`, type: "err" },
+                { time: new Date().toLocaleTimeString(), msg: `Échec impression automatique pour ${order.id} : ${res.message}. Nouvelle tentative dans 1 minute ; réimpression manuelle disponible.`, type: "err" },
                 ...prev.slice(0, 30),
               ]);
+            } else {
+              autoPrintRetryAfter.current.delete(order.id);
             }
           } catch (err) {
+            autoPrintRetryAfter.current.set(order.id, Date.now() + 60_000);
             console.error("[POS Auto-print] Erreur :", err);
           } finally {
             autoPrintInFlight.current.delete(order.id);
