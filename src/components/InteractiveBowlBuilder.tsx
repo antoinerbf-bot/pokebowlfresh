@@ -81,12 +81,12 @@ export function InteractiveBowlBuilder() {
   const { addItem, setIsCartOpen } = useCart();
 
   // Calcul du prix :
-  // Moyen: 10€, Grand: 13€. Saumon: +1€. Extra mix-ins au-delà de 5: +0.50€ chaque.
+  // Moyen: 10€, Grand: 13€. Saumon: +1€. Supplément de légumes ou fruits frais au-delà de 5 : +1,00 € chacun.
   // Toppings : 1 inclus dans la formule, illimité à +0.50€ par topping supplémentaire.
   const basePrice = size === "grand" ? 13.0 : 10.0;
   const proteinExtra = proteine.extra;
   const extraMixinsCount = Math.max(0, selectedMixins.length - 5);
-  const extraMixinsPrice = extraMixinsCount * 0.5;
+  const extraMixinsPrice = extraMixinsCount * 1.0;
   const extraToppingsCount = Math.max(0, selectedToppings.length - 1);
   const extraToppingsPrice = extraToppingsCount * 0.5;
   const totalPrice = basePrice + proteinExtra + extraMixinsPrice + extraToppingsPrice;
