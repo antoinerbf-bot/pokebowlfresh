@@ -85,6 +85,7 @@ export function PosApplicationPage() {
   const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
   const [testingPrinter, setTestingPrinter] = useState(false);
   const [printBannerError, setPrintBannerError] = useState<string | null>(null);
+  const [printLog, setPrintLog] = useState<Array<{ time: string; msg: string; type: "ok" | "err" }>>([]);
 
   // Auto-nettoyage et migration immédiate du port vers 8043 (élimine définitivement 9100)
   useEffect(() => {
