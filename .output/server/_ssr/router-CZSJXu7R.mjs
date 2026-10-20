@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-5Gymzjav.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CZSJXu7R.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1366,6 +1366,7 @@ function PosApplicationPage() {
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
 	const [printBannerError, setPrintBannerError] = (0, import_react.useState)(null);
+	const [printLog, setPrintLog] = (0, import_react.useState)([]);
 	(0, import_react.useEffect)(() => {
 		if (config.printerPort !== 8043) {
 			const fixed = {
