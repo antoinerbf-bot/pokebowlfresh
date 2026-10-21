@@ -359,13 +359,17 @@ export async function sendReceiptToPrinter(
     ? Number(config.printerPort)
     : 8043;
 
-  // Une seule tentative d'impression vers l'endpoint ePOS configuré.
-  // Ne pas essayer d'autres ports après un délai ou une réponse ambiguë :
-  // l'imprimante peut avoir imprimé le ticket même si la réponse s'est perdue,
-  // et les tentatives alternatives provoqueraient des doublons.
-  const targets = [
+  // Compatibilité avec les variantes ePOS Epson : tenter une autre URL uniquement
+  // si la connexion échoue avant toute réponse. Dès qu'un serveur répond ou qu'un
+  // délai expire, arrêter : une seconde requête pourrait imprimer un doublon.
+  const targets = Array.from(new Set([
     `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-  ];
+    `https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+  ]));
 
   let lastErr = "";
   for (const url of targets) {
@@ -374,12 +378,12 @@ export async function sendReceiptToPrinter(
       const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 4000);
       console.log(`[ePOS] Réponse reçue de ${url} (status ${status}):`, resText);
 
-      // Succès confirmé par le firmware Epson
+      // Toute réponse HTTP signifie qu'un endpoint a été atteint : ne pas envoyer
+      // le même ticket à un autre endpoint, même si la réponse est une erreur.
       if (resText.includes('success="true"')) {
         return { success: true, message: `Ticket imprimé avec succès sur ${ip} !` };
       }
 
-      // Réponse SOAP ou XML contenant un statut
       if (ok && resText.includes("<response")) {
         const codeMatch = resText.match(/code="([^"]*)"/);
         const code = codeMatch ? codeMatch[1] : "";
@@ -387,12 +391,17 @@ export async function sendReceiptToPrinter(
           return { success: true, message: `Ticket imprimé avec succès sur ${ip} !` };
         }
         lastErr = `Code imprimante: ${code}`;
-      } else if (!ok) {
-        lastErr = `HTTP ${status}`.trim();
+      } else {
+        lastErr = `Réponse HTTP ${status} sans confirmation ePOS`;
       }
+      break;
     } catch (e: any) {
       lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : (e?.message ?? String(e));
-      console.warn(`[ePOS] Échec sur ${url}:`, lastErr);
+      console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
+      // Un timeout est ambigu : l'imprimante peut avoir reçu le ticket.
+      // Ne jamais réessayer après un timeout pour éviter les doublons.
+      if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
+      // Erreur de connexion/certificat avant réponse : essayer l'endpoint suivant.
     }
   }
 
