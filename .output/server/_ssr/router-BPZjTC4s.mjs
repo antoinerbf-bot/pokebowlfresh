@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DC9K7nbb.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BPZjTC4s.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1250,12 +1250,20 @@ async function sendReceiptToPrinter(payload, config) {
 	};
 	const soapEnvelope = buildEposSoapEnvelope(xmlContent);
 	const ip = config.printerIp.trim();
-	const targets = [`https://${ip}:${config.printerPort && [
+	const safePort = config.printerPort && [
 		8043,
 		80,
 		8008,
 		443
-	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`];
+	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
+	const targets = Array.from(/* @__PURE__ */ new Set([
+		`https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
+	]));
 	let lastErr = "";
 	for (const url of targets) try {
 		console.log(`[ePOS] Envoi requête vers ${url}...`);
@@ -1273,10 +1281,12 @@ async function sendReceiptToPrinter(payload, config) {
 				message: `Ticket imprimé avec succès sur ${ip} !`
 			};
 			lastErr = `Code imprimante: ${code}`;
-		} else if (!ok) lastErr = `HTTP ${status}`.trim();
+		} else lastErr = `Réponse HTTP ${status} sans confirmation ePOS`;
+		break;
 	} catch (e) {
 		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : e?.message ?? String(e);
-		console.warn(`[ePOS] Échec sur ${url}:`, lastErr);
+		console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
+		if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
 	}
 	return {
 		success: false,
@@ -1525,11 +1535,11 @@ function PosApplicationPage() {
 					try {
 						const res = await handleExecutePrint(order, true);
 						if (!res.success) {
-							autoPrintRetryAfter.current.set(order.id, Date.now() + 6e4);
-							console.warn("[POS Auto-print] Échec pour", order.id, res.message);
+							autoPrintRetryAfter.current.set(order.id, Date.now() + fourHoursMs);
+							console.warn("[POS Auto-print] Échec non confirmé pour", order.id, res.message);
 							setPrintLog((prev) => [{
 								time: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-								msg: `Échec impression automatique pour ${order.id} : ${res.message}. Nouvelle tentative dans 1 minute ; réimpression manuelle disponible.`,
+								msg: `Impression de ${order.id} non confirmée : ${res.message}. Pas de nouvelle tentative automatique pour éviter un doublon ; vérifiez le ticket puis utilisez la réimpression manuelle si nécessaire.`,
 								type: "err"
 							}, ...prev.slice(0, 30)]);
 						} else autoPrintRetryAfter.current.delete(order.id);
