@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BPZjTC4s.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Hh4azs5K.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1066,14 +1066,14 @@ function buildEposSoapEnvelope(innerXml) {
 */
 function buildEposXmlTest(printerIp) {
 	const now = /* @__PURE__ */ new Date();
-	const timeStr = now.toLocaleTimeString("fr-BE");
+	const timeStr = now.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels" });
 	return `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
   <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>
   <text align="center">Rue Haute 38, 4600 Vise&#10;</text>
   <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>
   <text align="center" em="true" dw="true" dh="true"> *** TEST IMPRESSION *** &#10;</text>
   <text align="center">==========================================&#10;</text>
-  <text align="center">Date : ${escapeXml(now.toLocaleDateString("fr-BE"))} a ${escapeXml(timeStr)}&#10;</text>
+  <text align="center">Date : ${escapeXml(now.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" }))} a ${escapeXml(timeStr)}&#10;</text>
   <text align="center">IP Imprimante : ${escapeXml(printerIp)}&#10;</text>
   <text align="center" em="true">Epson TM-m30II Connectee !&#10;</text>
   <text align="center">==========================================&#10;</text>
@@ -1090,8 +1090,9 @@ function buildEposXmlTest(printerIp) {
 function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const isDelivery = order.customer.fulfillment === "delivery";
 	const dateObj = new Date(order.createdAt);
-	const dateStr = dateObj.toLocaleDateString("fr-BE");
+	const dateStr = dateObj.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" });
 	const timeStr = dateObj.toLocaleTimeString("fr-BE", {
+		timeZone: "Europe/Brussels",
 		hour: "2-digit",
 		minute: "2-digit"
 	});
@@ -1399,8 +1400,8 @@ function PosApplicationPage() {
 			localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
 		} catch {}
 	};
-	(0, import_react.useRef)(/* @__PURE__ */ new Map());
-	(0, import_react.useRef)(false);
+	const knownOrderStatuses = (0, import_react.useRef)(/* @__PURE__ */ new Map());
+	const initialOrdersLoaded = (0, import_react.useRef)(false);
 	const autoPrintInFlight = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const autoPrintRetryAfter = (0, import_react.useRef)(/* @__PURE__ */ new Map());
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
@@ -1522,11 +1523,13 @@ function PosApplicationPage() {
 				}
 				return true;
 			});
-			const freshAlerts = newlyPrintable.filter((o) => !alertedOrderIds.current.has(o.id));
-			if (freshAlerts.length > 0) {
-				freshAlerts.forEach((o) => alertedOrderIds.current.add(o.id));
+			const newlyArrivedOrders = newOrders.filter((o) => !knownOrderStatuses.current.has(o.id));
+			if (initialOrdersLoaded.current && newlyArrivedOrders.length > 0) {
+				newlyArrivedOrders.forEach((o) => alertedOrderIds.current.add(o.id));
 				playAlertSound();
 			}
+			for (const order of newOrders) knownOrderStatuses.current.set(order.id, order.status);
+			initialOrdersLoaded.current = true;
 			setOrders(newOrders);
 			for (const order of newlyPrintable) {
 				if (autoPrintInFlight.current.has(order.id)) continue;
@@ -1584,7 +1587,7 @@ function PosApplicationPage() {
 			});
 			const items = order.items.map((item) => `<div class="item"><span>${item.quantity} × ${esc(item.name)}${item.toppings?.length ? `<small>${item.toppings.map(esc).join(" · ")}</small>` : ""}</span><b>${(item.price * item.quantity).toFixed(2)} €</b></div>`).join("");
 			popup.document.open();
-			popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.35 Arial,sans-serif;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;margin:0 0 4px}p{margin:3px 0}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;gap:5px;margin:5px 0;break-inside:avoid}.item small{display:block;font-size:10px}.total{font-size:16px;font-weight:bold}.qr{display:block;width:38mm;height:38mm;margin:6px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE")}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();<\/script></body></html>`);
+			popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.35 Arial,sans-serif;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;margin:0 0 4px}p{margin:3px 0}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;gap:5px;margin:5px 0;break-inside:avoid}.item small{display:block;font-size:10px}.total{font-size:16px;font-weight:bold}.qr{display:block;width:38mm;height:38mm;margin:6px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();<\/script></body></html>`);
 			popup.document.close();
 			return true;
 		} catch (e) {
