@@ -111,8 +111,8 @@ export function buildEposSoapEnvelope(innerXml: string): string {
  */
 export function buildEposXmlTest(printerIp: string): string {
   const now = new Date();
-  const timeStr = now.toLocaleTimeString("fr-BE");
-  const dateStr = now.toLocaleDateString("fr-BE");
+  const timeStr = now.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels" });
+  const dateStr = now.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" });
 
   return `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
   <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>
@@ -138,8 +138,8 @@ export function buildEposXmlTest(printerIp: string): string {
 export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be"): string {
   const isDelivery = order.customer.fulfillment === "delivery";
   const dateObj = new Date(order.createdAt);
-  const dateStr = dateObj.toLocaleDateString("fr-BE");
-  const timeStr = dateObj.toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" });
+  const dateStr = dateObj.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" });
+  const timeStr = dateObj.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" });
 
   const safeCustomerName = cleanThermalText(order.customer.name);
   const safeCustomerPhone = cleanThermalText(order.customer.phone);
