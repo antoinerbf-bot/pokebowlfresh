@@ -278,14 +278,15 @@ export function PosApplicationPage() {
         autoPrintInFlight.current.add(order.id);
         (async () => {
           try {
-            // Ne marquer "imprimée" qu'après confirmation positive de l'Epson.
-            // En cas d'échec, on garde la commande éligible et on limite les retries à 1/minute.
+            // Après une tentative non confirmée, ne pas relancer automatiquement :
+            // l'imprimante peut avoir reçu le ticket même si Chrome n'a pas reçu l'accusé.
+            // Cela évite les doublons ; une réimpression reste disponible manuellement.
             const res = await handleExecutePrint(order, true);
             if (!res.success) {
-              autoPrintRetryAfter.current.set(order.id, Date.now() + 60_000);
-              console.warn("[POS Auto-print] Échec pour", order.id, res.message);
+              autoPrintRetryAfter.current.set(order.id, Date.now() + fourHoursMs);
+              console.warn("[POS Auto-print] Échec non confirmé pour", order.id, res.message);
               setPrintLog((prev) => [
-                { time: new Date().toLocaleTimeString(), msg: `Échec impression automatique pour ${order.id} : ${res.message}. Nouvelle tentative dans 1 minute ; réimpression manuelle disponible.`, type: "err" },
+                { time: new Date().toLocaleTimeString(), msg: `Impression de ${order.id} non confirmée : ${res.message}. Pas de nouvelle tentative automatique pour éviter un doublon ; vérifiez le ticket puis utilisez la réimpression manuelle si nécessaire.`, type: "err" },
                 ...prev.slice(0, 30),
               ]);
             } else {
