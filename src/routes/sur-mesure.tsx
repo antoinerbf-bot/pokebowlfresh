@@ -79,11 +79,14 @@ function SurMesurePage() {
     });
   };
 
-  // Pricing calculations (5 mix-ins inclus, 2 toppings inclus, Grand = 13€ soit +3€)
+  // Pricing calculations (5 mix-ins inclus, feta en supplément à 1 €, 2 toppings inclus)
   const sizeExtra = selectedSize === "grand" ? 3.00 : 0;
   const proteinExtra = selectedProtein?.extraPrice ?? 0;
-  const extraMixInsCount = Math.max(0, selectedMixIns.length - INCLUDED_MIX_INS);
-  const mixInsExtra = extraMixInsCount * 0.50;
+  const hasFeta = selectedMixIns.some((mixIn) => mixIn.trim().toLowerCase() === "feta");
+  const pricedMixInsCount = selectedMixIns.filter((mixIn) => mixIn.trim().toLowerCase() !== "feta").length;
+  const extraMixInsCount = Math.max(0, pricedMixInsCount - INCLUDED_MIX_INS);
+  const fetaExtra = hasFeta ? 1.00 : 0;
+  const mixInsExtra = extraMixInsCount * 0.50 + fetaExtra;
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingsCount - 2);
   const toppingsExtra = extraToppingsCount * 0.50;
@@ -115,7 +118,7 @@ function SurMesurePage() {
     const options = [
       `Taille : ${selectedSize === "grand" ? "Grand (+3.00€)" : "Moyen (Standard)"}`,
       `Base : ${selectedBase.name}`,
-      `Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
+      `Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${(extraMixInsCount * 0.50).toFixed(2)}€)` : ""}${hasFeta ? " · Feta (+1.00€)" : ""}`,
       `Protéine : ${selectedProtein.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
       `Sauce : ${selectedSauce.name}`,
       ...(toppingsFormatted.length > 0
