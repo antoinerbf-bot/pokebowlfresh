@@ -48,7 +48,7 @@ export const detailedMixIns: CustomIngredientOption[] = [
   { id: "patates-douces", name: "Patates douces",  emoji: "🍠", extraPrice: 1.00 },
   { id: "avocat",         name: "Avocat",          emoji: "🥑", extraPrice: 1.00 },
   { id: "carottes",       name: "Carottes",        emoji: "🥕", extraPrice: 1.00 },
-  { id: "feta",           name: "Feta",            emoji: "🧀" },
+  { id: "feta",           name: "Feta",            emoji: "🧀", extraPrice: 1.00 },
   { id: "salade-algues",  name: "Salade d'algues", emoji: "🌿", extraPrice: 1.00 },
   { id: "mangue",         name: "Mangue",          emoji: "🥭", extraPrice: 1.00 },
   { id: "oignons",        name: "Oignons",         emoji: "🧅", extraPrice: 1.00 },
