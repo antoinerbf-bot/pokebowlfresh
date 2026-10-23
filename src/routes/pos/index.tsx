@@ -330,7 +330,19 @@ export function PosApplicationPage() {
       const esc = (value: unknown) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
       const qrTarget = `${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`;
       const qr = await QRCode.toDataURL(qrTarget, { errorCorrectionLevel: "H", margin: 2, width: 240, color: { dark: "#000000", light: "#ffffff" } });
-      const items = order.items.map((item) => `<div class="item"><span>${item.quantity} × ${esc(item.name)}${item.toppings?.length ? `<small>${item.toppings.map(esc).join(" · ")}</small>` : ""}</span><b>${(item.price * item.quantity).toFixed(2)} €</b></div>`).join("");
+      const grouped = new Map<string, { item: Order["items"][number]; quantity: number }>();
+      for (const item of order.items) {
+        const key = JSON.stringify([item.name.trim().toLowerCase(), item.price, item.toppings.map((t) => t.trim().toLowerCase())]);
+        const previous = grouped.get(key);
+        if (previous) previous.quantity += item.quantity;
+        else grouped.set(key, { item, quantity: item.quantity });
+      }
+      const items = Array.from(grouped.values()).map(({ item, quantity }) => {
+        const toppingsHtml = (item.toppings || []).map((top) => /^feta$/i.test(top.trim())
+          ? `<small>+ ${esc(top)} — 1,00 €</small>`
+          : `<small>${esc(top)}</small>`).join("");
+        return `<div class="item"><span>${quantity} × ${esc(item.name)}${toppingsHtml ? `<small>${toppingsHtml}</small>` : ""}</span><b>${(item.price * quantity).toFixed(2)} €</b></div>`;
+      }).join("");
       popup.document.open();
       popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.35 Arial,sans-serif;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;margin:0 0 4px}p{margin:3px 0}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;gap:5px;margin:5px 0;break-inside:avoid}.item small{display:block;font-size:10px}.total{font-size:16px;font-weight:bold}.qr{display:block;width:38mm;height:38mm;margin:6px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();</script></body></html>`);
       popup.document.close();
