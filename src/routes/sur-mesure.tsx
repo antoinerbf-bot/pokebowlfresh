@@ -398,6 +398,11 @@ function SurMesurePage() {
                         <span className="block truncate text-xs font-bold text-[#17231f]">
                           {mixIn.name}
                         </span>
+                        {mixIn.id === "feta" && (
+                          <span className="block text-[10px] font-extrabold text-[#ff705f]">
+                            +1,00 € / portion
+                          </span>
+                        )}
                         {isExtra && (
                           <span className="text-[10px] font-bold text-[#ff705f]">
                             +0,50 €
