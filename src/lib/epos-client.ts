@@ -150,8 +150,9 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
 
-  // En-tête restaurant
+  // En-tête restaurant avec repère halal monochrome adapté à l'impression thermique
   xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
+  xml += `  <text align="center" em="true">[ HALAL ]&#10;</text>\n`;
   xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
   xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
 
@@ -187,23 +188,35 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   xml += `  <text align="left">==========================================&#10;</text>\n`;
   xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
 
+  // Regrouper les articles strictement identiques pour ne pas répéter leurs détails.
+  const groupedItems = new Map<string, { item: typeof order.items[number]; quantity: number }>();
   for (const item of order.items) {
-    const itemTotal = (item.price * item.quantity).toFixed(2) + " EUR";
+    const key = JSON.stringify([item.name.trim().toLowerCase(), item.price, item.toppings.map((t) => t.trim().toLowerCase())]);
+    const existing = groupedItems.get(key);
+    if (existing) existing.quantity += item.quantity;
+    else groupedItems.set(key, { item, quantity: item.quantity });
+  }
+
+  for (const { item, quantity } of groupedItems.values()) {
+    const itemTotal = (item.price * quantity).toFixed(2) + " EUR";
     const safeItemName = cleanThermalText(item.name);
-    const header = `${item.quantity}x ${safeItemName}`;
+    const header = `${quantity}x ${safeItemName}`;
     const spaces = Math.max(1, 42 - header.length - itemTotal.length);
     const line = header + " ".repeat(spaces) + itemTotal;
 
     xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
 
-    if (item.toppings && item.toppings.length > 0) {
-      for (const top of item.toppings) {
-        const safeTop = cleanThermalText(top);
-        if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
-          xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
-        } else {
-          xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
-        }
+    // Les ingrédients et suppléments ne sont détaillés qu'une seule fois par plat.
+    for (const top of item.toppings || []) {
+      const safeTop = cleanThermalText(top);
+      if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
+        xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
+      } else if (/^feta$/i.test(safeTop.trim())) {
+        const label = "  + Feta";
+        const price = "1.00 EUR";
+        xml += `  <text align="left">${escapeXml(label)}${" ".repeat(Math.max(1, 42 - label.length - price.length))}${price}&#10;</text>\n`;
+      } else {
+        xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
       }
     }
     xml += `  <text>&#10;</text>\n`;
