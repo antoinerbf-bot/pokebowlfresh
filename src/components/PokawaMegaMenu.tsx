@@ -35,7 +35,7 @@ const CATEGORIES: MegaCategory[] = [
   {
     id: "pokes",
     label: "Pokés Signatures",
-    badge: "Bols en Bambou",
+    badge: "Recettes fraîches",
     icon: "🥗",
     sub: "Dès 10 € · Saumon & Poulet frais",
   },
@@ -282,7 +282,7 @@ export function PokawaMegaMenu({
                           Poké Bowls Signatures
                         </h4>
                         <p className="text-[11px] text-[#7a847e]">
-                          Servis en bols sculptés en bambou naturel · Saumon découpé minute
+                          Préparés à la commande · Saumon découpé minute
                         </p>
                       </div>
                       <span className="text-xs font-black text-[#ff705f]">

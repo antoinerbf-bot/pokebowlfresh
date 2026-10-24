@@ -120,6 +120,9 @@ export function PokawaFloatingNavbar() {
             <span className="text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5">
               VISÉ · BELGIQUE
             </span>
+            <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-[#EADCC9]/70 bg-[#123D2A] px-2.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.16em] text-white shadow-md">
+              ☾ HALAL
+            </span>
           </Link>
         </div>
 

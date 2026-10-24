@@ -58,7 +58,7 @@ export function FluidInteractiveMenu() {
   const [selectedSizes, setSelectedSizes] = React.useState<Record<string, "moyen" | "grand">>({});
   const [recentlyAddedId, setRecentlyAddedId] = React.useState<string | null>(null);
 
-  // 1. Poké Bowls Signatures (Servis en bols sculptés en bois / bambou naturel)
+  // 1. Poké Bowls Signatures
   const pokeItems = React.useMemo<DishItem[]>(() => {
     return bowls
       .filter((b) => !b.id.startsWith("crousty-"))
@@ -78,7 +78,7 @@ export function FluidInteractiveMenu() {
           dishId: b.id,
           ingredients: b.ingredients,
           tasteTag,
-          packagingNote: "Bol en bambou naturel · Fait minute",
+          packagingNote: "Préparé minute à la commande",
         };
       });
   }, []);
@@ -239,7 +239,7 @@ export function FluidInteractiveMenu() {
             Une carte claire, <span className="text-[#ff705f]">organisée & gourmande.</span>
           </h2>
           <p className="mt-2 text-sm sm:text-base text-[#766358] max-w-2xl font-medium">
-            Pokés servis dans de véritables bols en bambou naturel, Crousty Chicken chaud en boîte kraft avec boisson, desserts du jour et rafraîchissements givrés.
+            Pokés préparés à la commande, Crousty Chicken chaud en boîte kraft avec boisson, desserts maison et rafraîchissements givrés.
           </p>
         </div>
 
@@ -354,7 +354,7 @@ export function FluidInteractiveMenu() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════════════════════
-          CATÉGORIE 1 : NOS POKÉ BOWLS SIGNATURES (Bols en bambou naturel)
+          CATÉGORIE 1 : NOS POKÉ BOWLS SIGNATURES
          ═══════════════════════════════════════════════════════════════════════════ */}
       {(activeSection === "all" || activeSection === "pokes") && filteredPokes.length > 0 && (
         <div className="mt-12 pt-4">
@@ -362,7 +362,7 @@ export function FluidInteractiveMenu() {
             <div>
               <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16]/5 px-3 py-1 text-[11px] font-extrabold text-[#2C1D16]">
                 <span>🥗</span>
-                <span>Bols en Bois / Bambou Sculpté</span>
+                <span>☾ HALAL · Pokés frais préparés à la commande</span>
               </div>
               <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 Nos Poké Bowls Signatures
@@ -628,7 +628,7 @@ function DishCard({
             </p>
           ) : item.category === "poke" ? (
             <p className="mt-0.5 text-xs font-bold text-[#059669]">
-              🥣 Servi en bol bambou sculpté · Riz japonais vinaigré
+              🥣 Riz japonais vinaigré · Préparé minute
             </p>
           ) : null}
 
