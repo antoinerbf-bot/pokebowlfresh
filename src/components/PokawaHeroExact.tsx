@@ -208,18 +208,6 @@ export function PokawaHeroExact() {
         </span>
       </div>
 
-      {/* Badge HALAL visible sur la page d'accueil */}
-      <div
-        aria-label="Halal"
-        className="absolute top-24 left-4 sm:top-28 sm:left-8 z-20 inline-flex items-center gap-2 rounded-full border border-[#EADCC9]/80 bg-[#123D2A]/95 px-3.5 py-2 text-white shadow-xl backdrop-blur-md"
-      >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[#EADCC9] text-[#EADCC9] text-lg leading-none">☾</span>
-        <span className="flex flex-col leading-tight">
-          <span className="text-[12px] font-black uppercase tracking-[0.16em]">Halal</span>
-          <span className="text-[8px] font-semibold uppercase tracking-[0.1em] text-[#EADCC9]">Poke N Bowl</span>
-        </span>
-      </div>
-
       {/* ════════ TYPOGRAPHIE ÉPURÉE, FLUIDE ET LIMPIDE STYLE POKAWA (SANS GROSSE ÉCRITURE GÊNANTE) ════════ */}
       <div className="absolute inset-x-0 bottom-10 sm:bottom-14 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
         <div className="mx-auto max-w-[1400px] flex flex-col items-start pointer-events-auto">
