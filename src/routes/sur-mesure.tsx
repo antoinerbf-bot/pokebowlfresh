@@ -359,7 +359,7 @@ function SurMesurePage() {
                 >
                   {selectedMixIns.length <= INCLUDED_MIX_INS
                     ? `${selectedMixIns.length} / ${INCLUDED_MIX_INS} inclus`
-                    : `${selectedMixIns.length} choisis (${INCLUDED_MIX_INS} inclus + ${extraMixInsCount} extra à +0,50€)`}
+                    : `${selectedMixIns.length} choisis (${INCLUDED_MIX_INS} inclus hors feta + ${extraMixInsCount} extra à +0,50€)`}
                 </div>
               </div>
 
@@ -367,7 +367,7 @@ function SurMesurePage() {
                 <span>
                   {selectedMixIns.length < INCLUDED_MIX_INS
                     ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :`
-                    : `5 mix-ins inclus · Choisissez-en autant que vous voulez (+0,50 € par ingrédient supplémentaire) :`}
+                    : `5 mix-ins inclus hors feta · feta à +1,00 € ; ingrédients supplémentaires à +0,50 € :`}
                 </span>
                 {extraMixInsCount > 0 && (
                   <span className="rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[10px] font-extrabold text-[#ff705f]">
@@ -608,7 +608,7 @@ function SurMesurePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                 <span className="absolute top-2.5 left-2.5 rounded-full bg-[#2C1D16]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase text-[#EADCC9] border border-white/20 shadow">
-                  Bol Bambou Débordant 🌿
+                  Bowl sur-mesure 🌿
                 </span>
                 <span className="absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white text-xs font-black drop-shadow">
                   <span>{selectedProtein ? `${selectedProtein.emoji} ${selectedProtein.name}` : "Protéine au choix"}</span>
