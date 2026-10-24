@@ -362,7 +362,7 @@ export function FluidInteractiveMenu() {
             <div>
               <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16]/5 px-3 py-1 text-[11px] font-extrabold text-[#2C1D16]">
                 <span>🥗</span>
-                <span>Pokés frais · Préparés à la commande</span>
+                <span>☾ HALAL · Pokés frais préparés à la commande</span>
               </div>
               <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 Nos Poké Bowls Signatures
