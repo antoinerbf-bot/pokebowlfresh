@@ -12,7 +12,7 @@ import { t as BLOG_ARTICLES } from "./blogArticles-BE30Y8r4.mjs";
 import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Nl0koLVf.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DG97W5IV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -1303,23 +1303,6 @@ function PokawaHeroExact() {
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 					className: "text-[10px] font-bold text-[#EADCC9]/90 tracking-wide",
 					children: "Google · Fait minute à Visé"
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				"aria-label": "Halal",
-				className: "absolute top-24 left-4 sm:top-28 sm:left-8 z-20 inline-flex items-center gap-2 rounded-full border border-[#EADCC9]/80 bg-[#123D2A]/95 px-3.5 py-2 text-white shadow-xl backdrop-blur-md",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					className: "flex h-7 w-7 items-center justify-center rounded-full border border-[#EADCC9] text-[#EADCC9] text-lg leading-none",
-					children: "☾"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					className: "flex flex-col leading-tight",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[12px] font-black uppercase tracking-[0.16em]",
-						children: "Halal"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[8px] font-semibold uppercase tracking-[0.1em] text-[#EADCC9]",
-						children: "Poke N Bowl"
-					})]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
