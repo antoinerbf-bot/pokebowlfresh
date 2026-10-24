@@ -755,7 +755,7 @@ function ProductPage() {
                     </div>
                     {selectedMixins.length > 0 && (
                       <span className="rounded-full bg-[#059669] px-3 py-1 text-xs font-black text-white shadow-sm">
-                        {selectedMixins.length} légume{selectedMixins.length > 1 ? "s" : ""} (+{(selectedMixins.length * 0.5).toFixed(2)}€)
+                        {selectedMixins.length} supplément{selectedMixins.length > 1 ? "s" : ""} (+{mixinsExtraPrice.toFixed(2)}€)
                       </span>
                     )}
                   </div>
