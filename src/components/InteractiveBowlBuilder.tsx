@@ -81,15 +81,18 @@ export function InteractiveBowlBuilder() {
   const { addItem, setIsCartOpen } = useCart();
 
   // Calcul du prix :
-  // Moyen: 10€, Grand: 13€. Saumon: +1€. Supplément de légumes ou fruits frais au-delà de 5 : +1,00 € chacun.
-  // Toppings : 1 inclus dans la formule, illimité à +0.50€ par topping supplémentaire.
+  // Moyen: 10€, Grand: 13€. Saumon: +1€. Feta: supplément fixe de +1,00 €.
+  // Cinq mix-ins hors feta sont inclus ; chaque mix-in supplémentaire coûte 1,00 €.
+  // Toppings : 1 inclus, puis +0,50 € par topping supplémentaire.
   const basePrice = size === "grand" ? 13.0 : 10.0;
   const proteinExtra = proteine.extra;
-  const extraMixinsCount = Math.max(0, selectedMixins.length - 5);
+  const pricedMixinsCount = selectedMixins.filter((id) => id !== "feta").length;
+  const extraMixinsCount = Math.max(0, pricedMixinsCount - 5);
   const extraMixinsPrice = extraMixinsCount * 1.0;
+  const fetaExtra = selectedMixins.includes("feta") ? 1.0 : 0;
   const extraToppingsCount = Math.max(0, selectedToppings.length - 1);
   const extraToppingsPrice = extraToppingsCount * 0.5;
-  const totalPrice = basePrice + proteinExtra + extraMixinsPrice + extraToppingsPrice;
+  const totalPrice = basePrice + proteinExtra + extraMixinsPrice + fetaExtra + extraToppingsPrice;
 
   const proteinImages: Record<string, string> = {
     poulet: bowlSweetChicken,
@@ -137,7 +140,7 @@ export function InteractiveBowlBuilder() {
         `Taille : ${size === "grand" ? "Grand (13€)" : "Moyen (10€)"}`,
         `Base : ${base.name}`,
         `Protéine : ${proteine.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
-        `Mix-ins : ${mixinNames.join(", ")}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
+        `Mix-ins : ${mixinNames.join(", ")}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}${fetaExtra > 0 ? " · Feta (+1.00€)" : ""}`,
         `Sauce : ${sauce.name}`,
         `Toppings : ${toppingNames.join(", ")}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`,
       ],
@@ -174,7 +177,7 @@ export function InteractiveBowlBuilder() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-sm">
               <ChefHat className="h-3.5 w-3.5" />
-              <span>Atelier Créatif · Bol en Bambou Naturel</span>
+              <span>Atelier Créatif · Bowl sur-mesure</span>
             </div>
             <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
               Composez votre bowl <span className="text-[#ff705f]">sur-mesure.</span>
@@ -380,11 +383,11 @@ export function InteractiveBowlBuilder() {
                       <span>🥑</span> Choisissez vos mix-ins frais (5 inclus)
                     </h3>
                     <span className="text-[11px] font-bold text-[#ff705f]">
-                      {selectedMixins.length} sélectionné(s) {extraMixinsCount > 0 ? `(+${extraMixinsPrice.toFixed(2)} €)` : ""}
+                      {selectedMixins.length} sélectionné(s) {(extraMixinsCount > 0 || fetaExtra > 0) ? `(+${(extraMixinsPrice + fetaExtra).toFixed(2)} €)` : ""}
                     </span>
                   </div>
                   <p className="text-xs text-[#7d8b83]">
-                    5 mix-ins sont inclus dans votre bol. Vous pouvez en ajouter autant que vous voulez (+0.50 € par mix-in supplémentaire).
+                    5 mix-ins hors feta sont inclus. La feta coûte +1,00 € ; chaque autre mix-in supplémentaire coûte +1,00 €.
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
                     {MIXINS.map((m) => {
@@ -402,6 +405,7 @@ export function InteractiveBowlBuilder() {
                         >
                           <span className="text-lg">{m.emoji}</span>
                           <span className="text-xs truncate">{m.name}</span>
+                          {m.id === "feta" && <span className="ml-auto text-[10px] font-black text-[#ff705f]">+1,00 €</span>}
                           {isSelected && <Check className="ml-auto h-3.5 w-3.5 text-[#059669]" />}
                         </button>
                       );
@@ -521,7 +525,7 @@ export function InteractiveBowlBuilder() {
                   <div>
                     <h4 className="text-base font-black text-[#2C1D16]">Votre Recette en Direct</h4>
                     <span className="text-[10px] font-bold text-[#059669]">
-                      Bol en bambou naturel · Format {size === "grand" ? "Grand" : "Moyen"}
+                      Bowl sur-mesure · Format {size === "grand" ? "Grand" : "Moyen"}
                     </span>
                   </div>
                 </div>
