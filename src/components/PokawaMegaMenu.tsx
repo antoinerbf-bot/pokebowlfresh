@@ -148,9 +148,9 @@ export function PokawaMegaMenu({
     },
     {
       id: "ice-tea",
-      name: "Ice-Tea Pêche 33cl",
+      name: "Lipton Ice Tea Original Sparkling 33cl",
       price: 2.0,
-      desc: "Lipton pêche pétillant.",
+      desc: "Lipton Ice Tea Original pétillant.",
       image: drinkIceTea,
     },
     {

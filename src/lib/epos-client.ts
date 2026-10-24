@@ -152,7 +152,6 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   // En-tête restaurant avec repère halal monochrome adapté à l'impression thermique
   xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
-  xml += `  <text align="center" em="true">[ HALAL ]&#10;</text>\n`;
   xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
   xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
 
