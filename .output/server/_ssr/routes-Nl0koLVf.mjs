@@ -12,7 +12,7 @@ import { t as BLOG_ARTICLES } from "./blogArticles-BE30Y8r4.mjs";
 import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DmiKSk_O.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Nl0koLVf.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -341,7 +341,7 @@ var CATEGORIES$1 = [
 	{
 		id: "pokes",
 		label: "Pokés Signatures",
-		badge: "Bols en Bambou",
+		badge: "Recettes fraîches",
 		icon: "🥗",
 		sub: "Dès 10 € · Saumon & Poulet frais"
 	},
@@ -571,7 +571,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 									children: "Poké Bowls Signatures"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-[11px] text-[#7a847e]",
-									children: "Servis en bols sculptés en bambou naturel · Saumon découpé minute"
+									children: "Préparés à la commande · Saumon découpé minute"
 								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-xs font-black text-[#ff705f]",
 									children: "Format Moyen dès 10 €"
@@ -936,26 +936,33 @@ function PokawaFloatingNavbar() {
 						to: "/",
 						className: "flex flex-col items-center group transition hover:scale-105 duration-200 pointer-events-auto",
 						"aria-label": "Poke N Bowl Visé",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-1.5 sm:gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
-									children: "POKE"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "flex h-6 w-6 sm:h-7 sm:w-7 lg:h-7.5 lg:w-7.5 xl:h-8.5 xl:w-8.5 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-xs lg:text-sm font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30",
-									children: "N"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
-									children: "BOWL"
-								})
-							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5",
-							children: "VISÉ · BELGIQUE"
-						})]
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-1.5 sm:gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
+										children: "POKE"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "flex h-6 w-6 sm:h-7 sm:w-7 lg:h-7.5 lg:w-7.5 xl:h-8.5 xl:w-8.5 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-xs lg:text-sm font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30",
+										children: "N"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white",
+										children: "BOWL"
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5",
+								children: "VISÉ · BELGIQUE"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "mt-1 inline-flex items-center gap-1 rounded-full border border-[#EADCC9]/70 bg-[#123D2A] px-2.5 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.16em] text-white shadow-md",
+								children: "☾ HALAL"
+							})
+						]
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -1621,11 +1628,13 @@ function InteractiveBowlBuilder() {
 	const { addItem, setIsCartOpen } = useCart();
 	const basePrice = size === "grand" ? 13 : 10;
 	const proteinExtra = proteine.extra;
-	const extraMixinsCount = Math.max(0, selectedMixins.length - 5);
+	const pricedMixinsCount = selectedMixins.filter((id) => id !== "feta").length;
+	const extraMixinsCount = Math.max(0, pricedMixinsCount - 5);
 	const extraMixinsPrice = extraMixinsCount * 1;
+	const fetaExtra = selectedMixins.includes("feta") ? 1 : 0;
 	const extraToppingsCount = Math.max(0, selectedToppings.length - 1);
 	const extraToppingsPrice = extraToppingsCount * .5;
-	const totalPrice = basePrice + proteinExtra + extraMixinsPrice + extraToppingsPrice;
+	const totalPrice = basePrice + proteinExtra + extraMixinsPrice + fetaExtra + extraToppingsPrice;
 	const activeBowlImage = {
 		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
 		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
@@ -1655,7 +1664,7 @@ function InteractiveBowlBuilder() {
 				`Taille : ${size === "grand" ? "Grand (13€)" : "Moyen (10€)"}`,
 				`Base : ${base.name}`,
 				`Protéine : ${proteine.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
-				`Mix-ins : ${mixinNames.join(", ")}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
+				`Mix-ins : ${mixinNames.join(", ")}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}${fetaExtra > 0 ? " · Feta (+1.00€)" : ""}`,
 				`Sauce : ${sauce.name}`,
 				`Toppings : ${toppingNames.join(", ")}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`
 			],
@@ -1695,7 +1704,7 @@ function InteractiveBowlBuilder() {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-sm",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Atelier Créatif · Bol en Bambou Naturel" })]
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Atelier Créatif · Bowl sur-mesure" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 								className: "mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]",
@@ -1914,13 +1923,13 @@ function InteractiveBowlBuilder() {
 												children: [
 													selectedMixins.length,
 													" sélectionné(s) ",
-													extraMixinsCount > 0 ? `(+${extraMixinsPrice.toFixed(2)} €)` : ""
+													extraMixinsCount > 0 || fetaExtra > 0 ? `(+${(extraMixinsPrice + fetaExtra).toFixed(2)} €)` : ""
 												]
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-xs text-[#7d8b83]",
-											children: "5 mix-ins sont inclus dans votre bol. Vous pouvez en ajouter autant que vous voulez (+0.50 € par mix-in supplémentaire)."
+											children: "5 mix-ins hors feta sont inclus. La feta coûte +1,00 € ; chaque autre mix-in supplémentaire coûte +1,00 €."
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2",
@@ -1938,6 +1947,10 @@ function InteractiveBowlBuilder() {
 														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: "text-xs truncate",
 															children: m.name
+														}),
+														m.id === "feta" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "ml-auto text-[10px] font-black text-[#ff705f]",
+															children: "+1,00 €"
 														}),
 														isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "ml-auto h-3.5 w-3.5 text-[#059669]" })
 													]
@@ -2057,7 +2070,7 @@ function InteractiveBowlBuilder() {
 										children: "Votre Recette en Direct"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 										className: "text-[10px] font-bold text-[#059669]",
-										children: ["Bol en bambou naturel · Format ", size === "grand" ? "Grand" : "Moyen"]
+										children: ["Bowl sur-mesure · Format ", size === "grand" ? "Grand" : "Moyen"]
 									})] })]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "text-right",
@@ -2081,7 +2094,7 @@ function InteractiveBowlBuilder() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "absolute top-2.5 left-2.5 rounded-full bg-[#2C1D16]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] border border-white/20 shadow",
-										children: "Bol Bambou Débordant 🌿"
+										children: "Bowl sur-mesure 🌿"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "absolute bottom-2.5 inset-x-2.5 flex items-center justify-between text-white",
@@ -2212,7 +2225,7 @@ function InteractiveBowlBuilder() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mt-5 rounded-2xl bg-[#F3ECE1] p-3 text-[11px] text-[#5a6760] flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#ff705f] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bol en bambou véritable, 100% recyclable & réutilisable." })]
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-4 w-4 text-[#ff705f] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ingrédients frais assemblés à la commande, selon vos envies." })]
 							})
 						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "mt-6 pt-4 border-t border-black/5",
@@ -2260,7 +2273,7 @@ function FluidInteractiveMenu() {
 				dishId: b.id,
 				ingredients: b.ingredients,
 				tasteTag,
-				packagingNote: "Bol en bambou naturel · Fait minute"
+				packagingNote: "Préparé minute à la commande"
 			};
 		});
 	}, []);
@@ -2393,7 +2406,7 @@ function FluidInteractiveMenu() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-2 text-sm sm:text-base text-[#766358] max-w-2xl font-medium",
-						children: "Pokés servis dans de véritables bols en bambou naturel, Crousty Chicken chaud en boîte kraft avec boisson, desserts du jour et rafraîchissements givrés."
+						children: "Pokés préparés à la commande, Crousty Chicken chaud en boîte kraft avec boisson, desserts maison et rafraîchissements givrés."
 					})
 				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "relative w-full md:w-80",
@@ -2544,7 +2557,7 @@ function FluidInteractiveMenu() {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16]/5 px-3 py-1 text-[11px] font-extrabold text-[#2C1D16]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🥗" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Bols en Bois / Bambou Sculpté" })]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🥗" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "☾ HALAL · Pokés frais préparés à la commande" })]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 							className: "mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]",
@@ -2740,7 +2753,7 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 					children: "🥤 Formule chaude : Canette 33cl offerte au choix"
 				}) : item.category === "poke" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-0.5 text-xs font-bold text-[#059669]",
-					children: "🥣 Servi en bol bambou sculpté · Riz japonais vinaigré"
+					children: "🥣 Riz japonais vinaigré · Préparé minute"
 				}) : null,
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xs leading-relaxed text-[#766358] line-clamp-2",

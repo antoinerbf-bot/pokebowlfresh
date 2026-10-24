@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-CD-g1ikl.mjs";
 import { n as useCart } from "./_ssr/CartContext-BoTWTco9.mjs";
 import { b as Link, x as Navigate } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId--WzUSY34.mjs";
+import { t as Route } from "./_productId-CQrnGTgU.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { S as Minus, U as Check, X as ArrowLeft, a as TriangleAlert, l as Sparkles, p as ShieldCheck, u as ShoppingCart, v as Plus } from "./_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-BV1Z6l17.mjs";
 import { t as useStock } from "./_ssr/useStock-MhCPVl3-.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-BQ3gsENS.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-4FWMCAAb.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {
@@ -165,7 +165,7 @@ function ProductPage() {
 	const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 	const sizeExtra = !isCrousty && selectedSize === "grand" ? 3 : 0;
 	const extraProteinPrice = isCrousty ? extraChicken ? 2.5 : 0 : extraProtein ? 2.5 : 0;
-	const mixinsExtraPrice = selectedMixins.length * .5;
+	const mixinsExtraPrice = selectedMixins.reduce((sum, name) => sum + (name.trim().toLowerCase() === "feta" ? 1 : .5), 0);
 	const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
 	const toppingsExtraPrice = totalToppingsCount * .5;
 	const extraSaucePrice = extraSauce ? 1 : 0;
@@ -327,12 +327,15 @@ function ProductPage() {
 						className: "flex flex-col gap-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "flex items-center gap-2",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-wrap items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]",
 										children: isCrousty ? "Crousty Chicken Chaud" : "Poké Bowl Signature"
-									})
+									}), !isCrousty && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "inline-flex items-center gap-1 rounded-full border border-[#b9d7c3] bg-[#123D2A] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm",
+										children: "☾ HALAL"
+									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 									className: "mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#2C1D16]",
@@ -412,7 +415,7 @@ function ProductPage() {
 												children: "1. Format & Taille"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[10px] font-bold text-[#a09a92]",
-												children: "Bol bambou"
+												children: "Format personnalisable"
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -615,15 +618,15 @@ function ProductPage() {
 											children: "Suppléments Légumes & Fruits Frais"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-[11px] text-[#7a847e]",
-											children: "À volonté · choisis autant de légumes que tu veux (+0.50€ chaque)"
+											children: "Mix-ins à +0,50 € chacun ; feta à +1,00 € la portion."
 										})] }), selectedMixins.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "rounded-full bg-[#059669] px-3 py-1 text-xs font-black text-white shadow-sm",
 											children: [
 												selectedMixins.length,
-												" légume",
+												" supplément",
 												selectedMixins.length > 1 ? "s" : "",
 												" (+",
-												(selectedMixins.length * .5).toFixed(2),
+												mixinsExtraPrice.toFixed(2),
 												"€)"
 											]
 										})]
@@ -645,9 +648,13 @@ function ProductPage() {
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: "block text-xs truncate",
 															children: mix.name
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 															className: "text-[10px] text-[#059669] font-bold",
-															children: "+0.50 €"
+															children: [
+																"+",
+																mix.name.trim().toLowerCase() === "feta" ? "1.00" : "0.50",
+																" €"
+															]
 														})]
 													}),
 													isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-4 w-4 text-[#059669] shrink-0" })
