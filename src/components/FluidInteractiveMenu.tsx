@@ -362,7 +362,7 @@ export function FluidInteractiveMenu() {
             <div>
               <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16]/5 px-3 py-1 text-[11px] font-extrabold text-[#2C1D16]">
                 <span>🥗</span>
-                <span>☾ HALAL · Pokés frais préparés à la commande</span>
+                <span>Pokés frais préparés à la commande</span>
               </div>
               <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
                 Nos Poké Bowls Signatures
@@ -621,6 +621,17 @@ function DishCard({
           <h4 className="text-lg sm:text-xl font-black text-[#2C1D16] leading-snug">
             {item.name}
           </h4>
+          {(item.category === "crousty" || (item.category === "poke" && /chicken|poulet/i.test(item.name))) && (
+            <div className="mt-2 flex items-center gap-2" aria-label="Viande halal">
+              <img
+                src="https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/efbca9e0-f26f-466b-afba-f29e3cdc80ad.jpg"
+                alt="Halal"
+                loading="lazy"
+                className="h-9 w-9 shrink-0 rounded-full object-contain"
+              />
+              <span className="text-[10px] font-semibold text-[#47725A]">Viande halal</span>
+            </div>
+          )}
 
           {item.isCombo ? (
             <p className="mt-0.5 text-xs font-extrabold text-[#ea580c]">
