@@ -225,7 +225,7 @@ function ProductPage() {
   // Suppléments demandés par le client
   const [extraChicken, setExtraChicken] = React.useState(false); // Crousty : supplément poulet croustillant (+2.50 €)
   const [extraProtein, setExtraProtein] = React.useState<string | null>(null); // Poké : supplément protéine (+2.50 €)
-  const [selectedMixins, setSelectedMixins] = React.useState<string[]>([]); // Légumes / Fruits (+0.50 € chaque, illimité)
+  const [selectedMixins, setSelectedMixins] = React.useState<string[]>([]); // Mix-ins : +0,50 € chacun ; feta : +1,00 €
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({}); // Toppings (+0.50 € chaque portion, illimité)
   const [extraSauce, setExtraSauce] = React.useState<string | null>(null); // 2ème pot de sauce (+1.00 €)
   const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
@@ -238,7 +238,7 @@ function ProductPage() {
   // Crousty chicken a UNE SEULE TAILLE (pas de grand format +3€).
   const sizeExtra = !isCrousty && selectedSize === "grand" ? 3.00 : 0;
   const extraProteinPrice = (isCrousty ? (extraChicken ? 2.50 : 0) : (extraProtein ? 2.50 : 0));
-  const mixinsExtraPrice = selectedMixins.length * 0.50;
+  const mixinsExtraPrice = selectedMixins.reduce((sum, name) => sum + (name.trim().toLowerCase() === "feta" ? 1.00 : 0.50), 0);
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const toppingsExtraPrice = totalToppingsCount * 0.50;
   const extraSaucePrice = extraSauce ? 1.00 : 0;
@@ -447,10 +447,11 @@ function ProductPage() {
           {/* ── Right Column: Interactive Customization ────────────── */}
           <div className="flex flex-col gap-6">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#ff705f]">
                   {isCrousty ? "Crousty Chicken Chaud" : "Poké Bowl Signature"}
                 </span>
+                {!isCrousty && <span className="inline-flex items-center gap-1 rounded-full border border-[#b9d7c3] bg-[#123D2A] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">☾ HALAL</span>}
               </div>
               <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl text-[#2C1D16]">
                 {product.name}
@@ -533,7 +534,7 @@ function ProductPage() {
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#17231f]">
                         1. Format & Taille
                       </h2>
-                      <span className="text-[10px] font-bold text-[#a09a92]">Bol bambou</span>
+                      <span className="text-[10px] font-bold text-[#a09a92]">Format personnalisable</span>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       {bowlSizes.map((size) => (
@@ -749,7 +750,7 @@ function ProductPage() {
                         Suppléments Légumes & Fruits Frais
                       </h2>
                       <p className="text-[11px] text-[#7a847e]">
-                        À volonté · choisis autant de légumes que tu veux (+0.50€ chaque)
+                        Mix-ins à +0,50 € chacun ; feta à +1,00 € la portion.
                       </p>
                     </div>
                     {selectedMixins.length > 0 && (
@@ -776,7 +777,7 @@ function ProductPage() {
                           <span className="text-xl">{mix.emoji}</span>
                           <div className="flex-1 min-w-0">
                             <span className="block text-xs truncate">{mix.name}</span>
-                            <span className="text-[10px] text-[#059669] font-bold">+0.50 €</span>
+                            <span className="text-[10px] text-[#059669] font-bold">+{mix.name.trim().toLowerCase() === "feta" ? "1.00" : "0.50"} €</span>
                           </div>
                           {isSelected && <Check className="h-4 w-4 text-[#059669] shrink-0" />}
                         </button>
