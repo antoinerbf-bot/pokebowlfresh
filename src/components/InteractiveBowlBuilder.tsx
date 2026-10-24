@@ -540,7 +540,7 @@ export function InteractiveBowlBuilder() {
                 </div>
               </div>
 
-              {/* Aperçu visuel gourmand et appétissant du bol en bambou */}
+              {/* Aperçu visuel du bowl composé */}
               <div className="relative my-4 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-black/10 bg-[#F3ECE1] shadow-md group">
                 <img
                   src={activeBowlImage}
@@ -549,9 +549,9 @@ export function InteractiveBowlBuilder() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
                 
-                {/* Badge bol bambou */}
+                {/* Badge bowl sur-mesure */}
                 <div className="absolute top-2.5 left-2.5 rounded-full bg-[#2C1D16]/90 backdrop-blur-md px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] border border-white/20 shadow">
-                  Bol Bambou Débordant 🌿
+                  Bowl sur-mesure 🌿
                 </div>
 
                 {/* Protéine & Format */}
@@ -641,7 +641,7 @@ export function InteractiveBowlBuilder() {
               {/* Tag Authenticité */}
               <div className="mt-5 rounded-2xl bg-[#F3ECE1] p-3 text-[11px] text-[#5a6760] flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-[#ff705f] shrink-0" />
-                <span>Bol en bambou véritable, 100% recyclable & réutilisable.</span>
+                <span>Ingrédients frais assemblés à la commande, selon vos envies.</span>
               </div>
             </div>
 
