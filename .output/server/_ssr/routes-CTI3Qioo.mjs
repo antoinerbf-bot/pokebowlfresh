@@ -9,10 +9,10 @@ import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Bell, K as BookOpen, O as Heart, P as Clock, T as MapPin, U as Check, V as ChevronDown, X as ArrowRight, Y as Award, c as Star, d as ShoppingBag, h as Search, j as ExternalLink, k as Funnel, l as Sparkles, p as ShieldCheck, t as X, v as Plus, w as Menu, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { a as bowl_spicy_chicken_default, c as drink_coca_cola_default, d as tiramisu_nutella_default, f as tiramisu_speculoos_default, i as bowl_scampis_default, l as drink_eau_gazeuse_default, n as DishImage, o as bowl_sweet_chicken_default, r as bowl_saumon_default, s as crousty_chicken_original_default, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-CCWI9y1V.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
-import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
+import { n as drink_fanta_orange_default, r as tiramisu_oreo_default, t as drink_coca_zero_default } from "./drink-fanta-orange-DggJO5Uo.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DbLEmpLR.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CTI3Qioo.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -354,10 +354,10 @@ var CATEGORIES$1 = [
 	},
 	{
 		id: "composer",
-		label: "Atelier Sur-Mesure",
-		badge: "100% Personnalisé",
+		label: "Composer son Bowl",
+		badge: "À votre goût",
 		icon: "🥣",
-		sub: "Base + Protéine + 5 Mix-ins"
+		sub: "Choisissez vos ingrédients"
 	},
 	{
 		id: "desserts",
@@ -438,7 +438,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 			name: "Lipton Ice Tea Original Sparkling 33cl",
 			price: 2,
 			desc: "Lipton Ice Tea Original pétillant.",
-			image: drink_ice_tea_default
+			image: "https://assets.unileversolutions.com/v1/90804290.png"
 		},
 		{
 			id: "eau-gaz",
@@ -510,57 +510,42 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 					className: "grid grid-cols-1 md:grid-cols-[280px_1fr] min-h-[380px]",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "border-r border-black/5 p-4 space-y-1 bg-[#f9f3e9]/60",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "block px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#7a847e]",
-								children: "Catégories"
-							}),
-							CATEGORIES$1.map((cat) => {
-								const isActive = activeCat === cat.id;
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onMouseEnter: () => setActiveCat(cat.id),
-									onClick: () => {
-										setActiveCat(cat.id);
-										const el = document.getElementById(cat.id === "composer" ? "composer" : "carte");
-										if (el) el.scrollIntoView({ behavior: "smooth" });
-										onClose();
-									},
-									className: `group w-full flex items-center justify-between rounded-2xl p-3 text-left transition duration-200 ${isActive ? "bg-[#2C1D16] text-white shadow-md scale-[1.02]" : "hover:bg-black/5 text-[#2C1D16]"}`,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center gap-3",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-2xl group-hover:scale-110 transition-transform",
-											children: cat.icon
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "flex items-center gap-1.5",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black uppercase tracking-wide",
-												children: cat.label
-											})
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-											className: `text-[10px] font-medium ${isActive ? "text-white/70" : "text-[#7a847e]"}`,
-											children: cat.sub
-										})] })]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: `rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${isActive ? "bg-[#2C1D16] text-[#EADCC9]" : "bg-black/5 text-[#7a847e]"}`,
-										children: cat.badge
-									})]
-								}, cat.id);
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "pt-3 border-t border-black/5 px-2",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-									href: "#composer",
-									onClick: onClose,
-									className: "flex items-center justify-between rounded-xl bg-[#EADCC9] border border-[#D9C5AD] p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm hover:scale-[1.02] transition",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[#7a847e]",
+							children: "Catégories"
+						}), CATEGORIES$1.map((cat) => {
+							const isActive = activeCat === cat.id;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onMouseEnter: () => setActiveCat(cat.id),
+								onClick: () => {
+									setActiveCat(cat.id);
+									const el = document.getElementById(cat.id === "composer" ? "composer" : "carte");
+									if (el) el.scrollIntoView({ behavior: "smooth" });
+									onClose();
+								},
+								className: `group w-full flex items-center justify-between rounded-2xl p-3 text-left transition duration-200 ${isActive ? "bg-[#2C1D16] text-white shadow-[0_8px_20px_-10px_rgba(44,29,22,0.65)] ring-1 ring-[#EADCC9]/70" : "border border-transparent hover:border-[#E2D6C5] hover:bg-white/80 text-[#2C1D16]"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-2xl group-hover:scale-110 transition-transform",
+										children: cat.icon
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "flex items-center gap-1.5",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3.5 w-3.5 text-[#ff705f]" }), "Composer son Bowl"]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "h-3.5 w-3.5" })]
-								})
-							})
-						]
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black uppercase tracking-wide",
+											children: cat.label
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: `text-[10px] font-medium ${isActive ? "text-white/70" : "text-[#7a847e]"}`,
+										children: cat.sub
+									})] })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: `rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${isActive ? "bg-[#EADCC9] text-[#2C1D16]" : "bg-[#EEE7DD] text-[#766358]"}`,
+									children: cat.badge
+								})]
+							}, cat.id);
+						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "p-5 overflow-y-auto max-h-[460px]",
 						children: [
@@ -2300,7 +2285,7 @@ function FluidInteractiveMenu() {
 			coca: drink_coca_cola_default,
 			"coca-zero": drink_coca_zero_default,
 			fanta: drink_fanta_orange_default,
-			"ice-tea": drink_ice_tea_default,
+			"ice-tea": "https://assets.unileversolutions.com/v1/90804290.png",
 			"eau-plate": drink_eau_plate_default,
 			"eau-gaz": drink_eau_gazeuse_default
 		};

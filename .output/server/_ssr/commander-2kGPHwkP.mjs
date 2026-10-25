@@ -9,7 +9,7 @@ import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { X as ArrowRight, Z as ArrowLeft, d as ShoppingBag, l as Sparkles } from "../_libs/lucide-react.mjs";
 import { c as drink_coca_cola_default, d as tiramisu_nutella_default, f as tiramisu_speculoos_default, l as drink_eau_gazeuse_default, n as DishImage, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-CCWI9y1V.mjs";
 import { t as useStock } from "./useStock-CxZNcIOA.mjs";
-import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
+import { n as drink_fanta_orange_default, r as tiramisu_oreo_default, t as drink_coca_zero_default } from "./drink-fanta-orange-DggJO5Uo.mjs";
 require_react();
 var import_jsx_runtime = require_jsx_runtime();
 var DESSERT_IMAGES = {
@@ -21,7 +21,7 @@ var DRINK_IMAGES = {
 	coca: drink_coca_cola_default,
 	"coca-zero": drink_coca_zero_default,
 	fanta: drink_fanta_orange_default,
-	"ice-tea": drink_ice_tea_default,
+	"ice-tea": "https://assets.unileversolutions.com/v1/90804290.png",
 	"eau-plate": drink_eau_plate_default,
 	"eau-gaz": drink_eau_gazeuse_default
 };
