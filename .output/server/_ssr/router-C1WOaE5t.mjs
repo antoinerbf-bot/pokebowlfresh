@@ -9,8 +9,8 @@ import { L as CircleCheckBig, N as CookingPot, _ as Printer, a as TriangleAlert,
 import { l as createServerFn } from "./createServerFn-DDDJMFWM.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-C35oReHE.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as BLOG_ARTICLES } from "./blogArticles-BE30Y8r4.mjs";
-import { t as Route$22 } from "../_slug-DvugYpHS.mjs";
+import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
+import { t as Route$22 } from "../_slug-CR2wSTvI.mjs";
 import { t as Route$23 } from "../_token-BeiZxmMR.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, r as getOrderByDeliveryToken, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-j23d1txz.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-C1WOaE5t.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -193,7 +193,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$7 = () => import("./routes-L3bmBF9H.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-DbLEmpLR.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "FastFoodRestaurant",
@@ -282,7 +282,7 @@ var Route$19 = createFileRoute("/")({
 });
 var $$splitComponentImporter$6 = () => import("./checkout-DwtH0DtX.mjs");
 var Route$18 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
-var $$splitComponentImporter$5 = () => import("./commander-BZS_M3un.mjs");
+var $$splitComponentImporter$5 = () => import("./commander-BLwDsTvJ.mjs");
 var Route$17 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
 var $$splitComponentImporter$4 = () => import("./contact-BtgKvkc7.mjs");
 var Route$16 = createFileRoute("/contact")({
@@ -294,7 +294,7 @@ var Route$15 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./sur-mesure-DlghlHF_.mjs");
+var $$splitComponentImporter$2 = () => import("./sur-mesure-BViowfOZ.mjs");
 var Route$14 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 var $$splitComponentImporter$1 = () => import("./stocks-CxBEMTrw.mjs");
 var Route$13 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
@@ -893,7 +893,7 @@ var Route$4 = createFileRoute("/api/track-order")({ server: { handlers: {
 		}
 	}
 } } });
-var $$splitComponentImporter = () => import("./blog-D8Q0donB.mjs");
+var $$splitComponentImporter = () => import("./blog-ad7y7For.mjs");
 var BLOG_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "Blog",

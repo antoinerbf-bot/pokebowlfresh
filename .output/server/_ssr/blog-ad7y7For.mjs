@@ -6,8 +6,8 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { K as BookOpen, P as Clock, X as ArrowLeft, Y as ArrowRight, d as ShoppingBag, h as Search, l as Sparkles } from "../_libs/lucide-react.mjs";
 import { t as CartDrawer } from "./CartDrawer-CCWI9y1V.mjs";
-import { t as BLOG_ARTICLES } from "./blogArticles-BE30Y8r4.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/blog-D8Q0donB.js
+import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/blog-ad7y7For.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function BlogHubPage() {

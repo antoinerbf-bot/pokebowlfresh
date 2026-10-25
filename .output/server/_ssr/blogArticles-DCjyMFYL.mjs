@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/blogArticles-BE30Y8r4.js
+//#region node_modules/.nitro/vite/services/ssr/assets/blogArticles-DCjyMFYL.js
 var BLOG_ARTICLES = [
 	{
 		slug: "un-repas-healthy-et-gourmand",
@@ -98,7 +98,7 @@ var BLOG_ARTICLES = [
       <h2>La formule Crousty Chicken à 11 € : le carton du midi</h2>
       <p>Tous les appétits ne sont pas tournés vers le poisson cru, surtout lors des journées d'automne ou d'hiver. Notre gamme <strong>Crousty Chicken</strong> propose de délicieux morceaux de poulet pané ultra-croustillants, nappés au choix d'une sauce curry dorée ou d'une sauce blanche onctueuse, servis sur riz chaud avec des oignons frits.</p>
       
-      <p>Avec sa boisson 33cl fraîche comprise pour seulement 11,00 €, c'est la formule préférée des lycéens, étudiants et actifs visétois en quête de réconfort et de générosité.</p>
+      <p>La formule étudiante est proposée à 11,00 € avec une boisson de 33 cl incluse, exclusivement aux étudiants et uniquement le midi.</p>
 
       <h2>Où nous trouver et comment venir ?</h2>
       <p>Notre restaurant vous accueille du <strong>Lundi au Vendredi de 12h à 14h et de 17h à 21h</strong>, ainsi que le <strong>Samedi soir de 18h à 21h</strong>. De nombreuses places de stationnement en zone bleue ou parking public sont disponibles le long de l'Avenue du Pont et sur la Place Reine Astrid.</p>
@@ -240,8 +240,8 @@ var BLOG_ARTICLES = [
         <li><strong>Le topping croquant :</strong> Une pluie d'oignons frits croustillants et une touche d'edamames ou de sésame pour parfaire la bouchée.</li>
       </ul>
 
-      <h2>Une formule complète à 11 € avec boisson comprise</h2>
-      <p>Pour rester accessible à tous les budgets, notre formule Crousty Chicken inclut d'office une canette 33cl bien fraîche au choix (Coca-Cola, Fanta, Ice Tea ou eau minérale). Une vraie pause déjeuner chaude, rapide et rassasiante en plein cœur de Visé !</p>
+      <h2>La formule étudiante à 11 € avec boisson (uniquement le midi)</h2>
+      <p>Réservée aux étudiants et proposée uniquement le midi, la formule Crousty Chicken à 11 € comprend une boisson de 33 cl au choix (Coca-Cola, Fanta, Ice Tea ou eau minérale).</p>
     `
 	}
 ];

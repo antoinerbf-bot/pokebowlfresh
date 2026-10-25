@@ -170,7 +170,7 @@ function CommanderPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "mt-1 max-w-lg text-xs leading-relaxed text-white/75 sm:text-sm",
-										children: "Compose ton bowl idéal selon tes envies : 1 base, 5 mix-ins frais, 1 protéine, 1 sauce et tes toppings croustillants."
+										children: "Compose ton bowl idéal : 1 base, 5 légumes et ingrédients, 1 protéine, 1 sauce et 2 toppings croustillants."
 									})
 								] })]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -238,7 +238,7 @@ function CommanderPage() {
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "inline-flex items-center gap-2 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), " Formule Étudiant 11 € · midi uniquement"]
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3" }), " Formule réservée aux étudiants · 11 € avec boisson · midi uniquement"]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl",

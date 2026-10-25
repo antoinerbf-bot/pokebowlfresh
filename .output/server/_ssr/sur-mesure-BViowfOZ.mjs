@@ -8,7 +8,7 @@ import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { S as Minus, U as Check, X as ArrowLeft, d as ShoppingBag, l as Sparkles, v as Plus } from "../_libs/lucide-react.mjs";
 import { r as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-CCWI9y1V.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-DlghlHF_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BViowfOZ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -75,7 +75,7 @@ function SurMesurePage() {
 	const isValid = isBaseReady && isMixInsReady && isProteinReady && isSauceReady;
 	const getMissingReason = () => {
 		if (!isBaseReady) return "Étape 1 : Choisis une base";
-		if (selectedMixIns.length === 0) return "Étape 2 : Choisis tes mix-ins (5 inclus dans le prix)";
+		if (selectedMixIns.length === 0) return "Étape 2 : Sélectionne tes 5 légumes et ingrédients";
 		if (!isProteinReady) return "Étape 3 : Choisis une protéine";
 		if (!isSauceReady) return "Étape 4 : Choisis une sauce";
 		return null;
@@ -186,7 +186,7 @@ function SurMesurePage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "mt-2 text-sm leading-relaxed text-white/70 sm:text-base",
-										children: "Compose ton bol personnalisé en 5 étapes exactement comme sur le ticket du restaurant : 1 base, 5 mix-ins frais, 1 protéine, 1 sauce onctueuse et tes toppings croustillants !"
+										children: "Compose ton bol personnalisé en 5 étapes exactement comme sur le ticket du restaurant : 1 base, 5 légumes et ingrédients, 1 protéine, 1 sauce et 2 toppings croustillants."
 									})
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -199,7 +199,7 @@ function SurMesurePage() {
 									children: "10.00 €"
 								})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-xs font-semibold text-white/60",
-									children: "Base + 5 mix-ins + protéine + sauce"
+									children: "Base + 5 ingrédients + protéine + sauce + 2 toppings"
 								})]
 							})]
 						})
@@ -326,12 +326,12 @@ function SurMesurePage() {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "mb-4 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-[#7a847e]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: selectedMixIns.length < INCLUDED_MIX_INS ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :` : `5 mix-ins inclus hors feta · feta à +1,00 € ; ingrédients supplémentaires à +0,50 € :` }), extraMixInsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: selectedMixIns.length < INCLUDED_MIX_INS ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :` : `Choisis 5 ingrédients inclus (feta à +1,00 € ; ingrédients supplémentaires à +0,50 €) :` }), extraMixInsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[10px] font-extrabold text-[#ff705f]",
 												children: [
 													"+",
 													mixInsExtra.toFixed(2),
-													" € de suppléments mix-ins"
+													" € d’ingrédients supplémentaires"
 												]
 											})]
 										}),
@@ -610,7 +610,7 @@ function SurMesurePage() {
 												className: "pt-2 flex justify-between gap-2",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "font-semibold text-[#7a847e]",
-													children: "Mix-ins :"
+													children: "Légumes et ingrédients :"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "font-bold text-[#17231f] text-right",
 													children: selectedMixIns.length > 0 ? `${selectedMixIns.join(", ")} (${Math.min(INCLUDED_MIX_INS, selectedMixIns.length)} inclus${extraMixInsCount > 0 ? ` + ${extraMixInsCount} extra (+${mixInsExtra.toFixed(2)}€)` : ""})` : "0 sélectionné"

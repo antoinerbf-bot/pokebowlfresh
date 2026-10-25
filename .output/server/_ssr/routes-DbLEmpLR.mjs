@@ -8,11 +8,11 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, O as Heart, P as Clock, T as MapPin, U as Check, V as ChevronDown, Y as ArrowRight, c as Star, d as ShoppingBag, h as Search, j as ExternalLink, k as Funnel, l as Sparkles, p as ShieldCheck, q as Bell, t as X, v as Plus, w as Menu, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { a as bowl_spicy_chicken_default, c as drink_coca_cola_default, d as tiramisu_nutella_default, f as tiramisu_speculoos_default, i as bowl_scampis_default, l as drink_eau_gazeuse_default, n as DishImage, o as bowl_sweet_chicken_default, r as bowl_saumon_default, s as crousty_chicken_original_default, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-CCWI9y1V.mjs";
-import { t as BLOG_ARTICLES } from "./blogArticles-BE30Y8r4.mjs";
+import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
 import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-L3bmBF9H.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DbLEmpLR.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
