@@ -11,7 +11,6 @@ import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
 import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
 import drinkCocaZero from "@/assets/drink-coca-zero.jpg";
 import drinkFantaOrange from "@/assets/drink-fanta-orange.jpg";
-import drinkIceTea from "@/assets/drink-ice-tea.jpg";
 import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
 import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
 
@@ -25,7 +24,7 @@ const DRINK_IMAGES: Record<string, string> = {
   coca: drinkCocaCola,
   "coca-zero": drinkCocaZero,
   fanta: drinkFantaOrange,
-  "ice-tea": drinkIceTea,
+  "ice-tea": "https://assets.unileversolutions.com/v1/90804290.png",
   "eau-plate": drinkEauPlate,
   "eau-gaz": drinkEauGazeuse,
 };
