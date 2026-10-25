@@ -4,9 +4,9 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { E as LoaderCircle, L as CircleCheckBig, M as CreditCard, R as CircleAlert, Z as ArrowLeft, d as ShoppingBag, q as Bike, s as Store } from "../_libs/lucide-react.mjs";
+import { E as LoaderCircle, L as CircleCheckBig, M as CreditCard, R as CircleAlert, X as ArrowLeft, s as Store } from "../_libs/lucide-react.mjs";
 import { o as getDeliveryZone } from "./checkout-service.server-SoMS7gWd.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DEQ7uOhI.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-yYexQavp.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -189,9 +189,35 @@ function CheckoutPage() {
 										"aria-pressed": fulfillment === "delivery",
 										onClick: () => handleFulfillmentChange("delivery"),
 										className: `flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${fulfillment === "delivery" ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20" : "bg-transparent text-[#7C879A] hover:bg-white/70"}`,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bike, {
-											className: "h-9 w-9 stroke-[2.5]",
-											"aria-hidden": "true"
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+											viewBox: "0 0 48 48",
+											className: "h-9 w-9",
+											fill: "none",
+											stroke: "currentColor",
+											strokeWidth: "3.2",
+											strokeLinecap: "round",
+											strokeLinejoin: "round",
+											"aria-hidden": "true",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+													cx: "10",
+													cy: "34",
+													r: "7"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+													cx: "37",
+													cy: "34",
+													r: "7"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+													cx: "24",
+													cy: "7",
+													r: "3.5",
+													fill: "currentColor",
+													stroke: "none"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M22 13l-6 8 9 5 5-7 5 1M16 21l-6 13m9-13 8 13h10M23 13l7 5" })
+											]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-sm font-extrabold",
 											children: "Livraison"
@@ -201,9 +227,12 @@ function CheckoutPage() {
 										"aria-pressed": fulfillment === "pickup",
 										onClick: () => handleFulfillmentChange("pickup"),
 										className: `flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${fulfillment === "pickup" ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20" : "bg-transparent text-[#7C879A] hover:bg-white/70"}`,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, {
-											className: "h-8 w-8 stroke-[2.2]",
-											"aria-hidden": "true"
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											viewBox: "0 0 40 40",
+											className: "h-8 w-8",
+											fill: "currentColor",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 11V8a8 8 0 0 1 16 0v3h4a2 2 0 0 1 2 2l2 22a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2l2-22a2 2 0 0 1 2-2h4zm4 0h8V8a4 4 0 0 0-8 0v3z" })
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-sm font-extrabold",
 											children: "Emporter"

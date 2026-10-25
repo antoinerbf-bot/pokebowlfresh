@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-CD-g1ikl.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Bell, K as BookOpen, O as Heart, P as Clock, T as MapPin, U as Check, V as ChevronDown, X as ArrowRight, Y as Award, c as Star, d as ShoppingBag, h as Search, j as ExternalLink, k as Funnel, l as Sparkles, p as ShieldCheck, t as X, v as Plus, w as Menu, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
+import { A as Flame, B as ChevronLeft, C as MessageCircle, D as Instagram, G as BriefcaseBusiness, H as ChefHat, I as CircleCheck, J as Award, K as BookOpen, O as Heart, P as Clock, T as MapPin, U as Check, V as ChevronDown, Y as ArrowRight, c as Star, d as ShoppingBag, h as Search, j as ExternalLink, k as Funnel, l as Sparkles, p as ShieldCheck, q as Bell, t as X, v as Plus, w as Menu, y as Phone, z as ChevronRight } from "../_libs/lucide-react.mjs";
 import { a as bowl_spicy_chicken_default, c as drink_coca_cola_default, d as tiramisu_nutella_default, f as tiramisu_speculoos_default, i as bowl_scampis_default, l as drink_eau_gazeuse_default, n as DishImage, o as bowl_sweet_chicken_default, r as bowl_saumon_default, s as crousty_chicken_original_default, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-mRmW0_pA.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
 import { n as drink_fanta_orange_default, r as tiramisu_oreo_default, t as drink_coca_zero_default } from "./drink-fanta-orange-DggJO5Uo.mjs";
