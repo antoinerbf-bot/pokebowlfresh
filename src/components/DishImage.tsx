@@ -5,7 +5,7 @@ import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis      from "@/assets/bowl-scampis.jpg";
 import bowlSaumon       from "@/assets/bowl-saumon.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
-const bowlCroustyCurry = "https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/79221efe-dce7-468f-90c2-7c735c713ca8.jpg";
+import bowlCroustyCurry from "@/assets/crousty-chicken-original.jpeg";
 import bowlCroustyBlanche from "@/assets/crousty-chicken-original.jpeg";
 
 const images: Record<string, string> = {
@@ -47,7 +47,7 @@ export function DishImage({
     <img
       src={src}
       alt={alt}
-      className={`h-full w-full ${isCrousty ? "object-contain bg-white" : "object-cover"} ${className}`}
+      className={`h-full w-full ${isCrousty ? "object-contain bg-white" : "object-cover"} ${isCrousty ? className.replace(/\\bobject-cover\\b/g, "object-contain") : className}`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       fetchPriority={priority ? "high" : "auto"}
