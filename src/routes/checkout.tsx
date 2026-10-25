@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, CreditCard, Store, Loader2, ShieldCheck, AlertCircle, CheckCircle } from "lucide-react";
+import { ArrowLeft, Bike, CreditCard, ShoppingBag, Store, Loader2, ShieldCheck, AlertCircle, CheckCircle } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { BrandLogo } from "@/components/BrandLogo";
 import { useCart } from "../context/CartContext";
@@ -218,30 +218,32 @@ function CheckoutPage() {
           <div className="space-y-6">
             <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
               <h2 className="text-lg font-black">Mode de réception</h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="mt-4 grid grid-cols-2 gap-3 rounded-[22px] bg-[#F5F3EF] p-2">
                 <button
                   type="button"
+                  aria-pressed={fulfillment === "delivery"}
                   onClick={() => handleFulfillmentChange("delivery")}
-                  className={`rounded-2xl border-2 p-4 text-left transition ${
+                  className={`flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${
                     fulfillment === "delivery"
-                      ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                      ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20"
+                      : "bg-transparent text-[#7C879A] hover:bg-white/70"
                   }`}
                 >
-                  <span className="text-sm font-black">🛵 Livraison</span>
-                  <span className="mt-1 block text-xs text-[#7a847e]">À domicile selon ton code postal</span>
+                  <Bike className="h-9 w-9 stroke-[2.5]" aria-hidden="true" />
+                  <span className="text-sm font-extrabold">Livraison</span>
                 </button>
                 <button
                   type="button"
+                  aria-pressed={fulfillment === "pickup"}
                   onClick={() => handleFulfillmentChange("pickup")}
-                  className={`rounded-2xl border-2 p-4 text-left transition ${
+                  className={`flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${
                     fulfillment === "pickup"
-                      ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                      ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20"
+                      : "bg-transparent text-[#7C879A] hover:bg-white/70"
                   }`}
                 >
-                  <span className="text-sm font-black">🛍️ Retrait sur place</span>
-                  <span className="mt-1 block text-xs text-[#7a847e]">Poke N Bowl Visé (Sans minimum)</span>
+                  <ShoppingBag className="h-8 w-8 stroke-[2.2]" aria-hidden="true" />
+                  <span className="text-sm font-extrabold">Emporter</span>
                 </button>
               </div>
             </section>
