@@ -47,7 +47,7 @@ export function DishImage({
     <img
       src={src}
       alt={alt}
-      className={`h-full w-full ${isCrousty ? "object-contain bg-white" : "object-cover"} ${isCrousty ? className.replace(/\\bobject-cover\\b/g, "object-contain") : className}`}
+      className={`h-full w-full ${isCrousty ? "object-contain bg-white" : "object-cover"} ${isCrousty ? className.split(" ").filter((token) => token !== "object-cover").join(" ") : className}`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       fetchPriority={priority ? "high" : "auto"}
