@@ -176,7 +176,7 @@ export function FluidInteractiveMenu() {
       basePrice: finalPrice,
       price: finalPrice,
       quantity: 1,
-      toppings: [],
+      toppings: item.isCombo ? ["Boisson 33cl incluse"] : [],
       removedIngredients: [],
       image: item.image,
     });
