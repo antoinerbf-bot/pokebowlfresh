@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-y-3NRSrt.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DVfE65-P.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1168,13 +1168,12 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
 	xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
-	{
+	if (isDelivery) {
 		const trackToken = order.deliveryToken || order.id;
 		const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
 		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text align="center" em="true">${isDelivery ? "SCANNEZ POUR GPS LIVREUR" : "SCANNEZ POUR SUIVRE LA COMMANDE"}&#10;</text>\n`;
-		if (isDelivery) xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
-		else xml += `  <text align="center">Suivi de commande Poke N Bowl&#10;&#10;</text>\n`;
+		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
+		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
 		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
 		xml += `  <text>&#10;</text>\n`;
 	}
@@ -1362,9 +1361,9 @@ function PosApplicationPage() {
 	const [printQrDataUrl, setPrintQrDataUrl] = (0, import_react.useState)("");
 	const [modalQrDataUrl, setModalQrDataUrl] = (0, import_react.useState)("");
 	(0, import_react.useEffect)(() => {
-		const token = selectedOrder?.deliveryToken || selectedOrder?.id;
+		const token = selectedOrder?.customer.fulfillment === "delivery" ? selectedOrder.deliveryToken || selectedOrder.id : null;
 		if (token) {
-			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${token}`;
+			const trackUrl = `${typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be"}/track/${encodeURIComponent(token)}`;
 			import_lib.toDataURL(trackUrl, {
 				errorCorrectionLevel: "H",
 				margin: 4,
@@ -1373,7 +1372,7 @@ function PosApplicationPage() {
 					dark: "#000000",
 					light: "#ffffff"
 				}
-			}).then(setModalQrDataUrl).catch(() => {});
+			}).then(setModalQrDataUrl).catch(() => setModalQrDataUrl(""));
 		} else setModalQrDataUrl("");
 	}, [selectedOrder]);
 	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
@@ -1588,8 +1587,7 @@ function PosApplicationPage() {
 		}
 		try {
 			const esc = (value) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-			const qrTarget = `${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`;
-			const qr = await import_lib.toDataURL(qrTarget, {
+			const qr = order.customer.fulfillment === "delivery" ? await import_lib.toDataURL(`${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`, {
 				errorCorrectionLevel: "H",
 				margin: 2,
 				width: 240,
@@ -1597,7 +1595,7 @@ function PosApplicationPage() {
 					dark: "#000000",
 					light: "#ffffff"
 				}
-			});
+			}) : "";
 			const grouped = /* @__PURE__ */ new Map();
 			for (const item of order.items) {
 				const key = JSON.stringify([
@@ -1617,7 +1615,7 @@ function PosApplicationPage() {
 				return `<div class="item"><div class="item-main"><div class="item-name">${quantity} × ${esc(item.name)}</div>${toppingsHtml ? `<div class="details">${toppingsHtml}</div>` : ""}</div><b class="item-price">${(item.price * quantity).toFixed(2)} €</b></div>`;
 			}).join("");
 			popup.document.open();
-			popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.3 "Courier New",monospace;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;letter-spacing:.4px;margin:0 0 3px}h2{font-size:14px;margin:5px 0;text-transform:uppercase}p{margin:3px 0;overflow-wrap:anywhere}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;align-items:flex-start;gap:4px;margin:5px 0;break-inside:avoid}.item-main{min-width:0;flex:1}.item-name{font-weight:700;overflow-wrap:anywhere}.item-price{white-space:nowrap;font-weight:700}.details{margin:3px 0 0 5px;font-size:10px;line-height:1.35}.detail{overflow-wrap:anywhere}.receipt-badge{display:inline-block;border:1px solid #000;padding:2px 8px;font-size:11px;letter-spacing:1px}.total{font-size:16px;font-weight:bold;border-top:1px dashed #000;padding-top:6px}.qr{display:block;width:28mm;height:28mm;margin:5px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();<\/script></body></html>`);
+			popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.3 "Courier New",monospace;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;letter-spacing:.4px;margin:0 0 3px}h2{font-size:14px;margin:5px 0;text-transform:uppercase}p{margin:3px 0;overflow-wrap:anywhere}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;align-items:flex-start;gap:4px;margin:5px 0;break-inside:avoid}.item-main{min-width:0;flex:1}.item-name{font-weight:700;overflow-wrap:anywhere}.item-price{white-space:nowrap;font-weight:700}.details{margin:3px 0 0 5px;font-size:10px;line-height:1.35}.detail{overflow-wrap:anywhere}.receipt-badge{display:inline-block;border:1px solid #000;padding:2px 8px;font-size:11px;letter-spacing:1px}.total{font-size:16px;font-weight:bold;border-top:1px dashed #000;padding-top:6px}.qr{display:block;width:28mm;height:28mm;margin:5px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div>${order.customer.fulfillment === "delivery" ? `<p class="center"><b>SCANNEZ POUR GPS LIVREUR</b></p><img class="qr" src="${qr}" alt="QR de géolocalisation livraison"><p class="center">Waze &amp; Google Maps en 1-clic</p><div class="line"></div>` : ""}<p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();<\/script></body></html>`);
 			popup.document.close();
 			return true;
 		} catch (e) {
