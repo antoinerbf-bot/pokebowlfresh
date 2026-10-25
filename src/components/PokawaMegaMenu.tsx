@@ -285,7 +285,7 @@ export function PokawaMegaMenu({
                             <DishImage
                               dishId={poke.id}
                               alt={poke.name}
-                              className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
+                              className={`h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-108"}`}
                             />
                             <span className="absolute top-1.5 right-1.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2 py-0.5 text-[10px] font-black text-[#2C1D16] shadow">
                               {poke.price.toFixed(2)} €
