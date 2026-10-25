@@ -218,8 +218,8 @@ export function PokawaMegaMenu({
                       }}
                       className={`group w-full flex items-center justify-between rounded-2xl p-3 text-left transition duration-200 ${
                         isActive
-                          ? "bg-[#2C1D16] text-white shadow-md scale-[1.02]"
-                          : "hover:bg-black/5 text-[#2C1D16]"
+                          ? "bg-[#2C1D16] text-white shadow-[0_8px_20px_-10px_rgba(44,29,22,0.65)] ring-1 ring-[#EADCC9]/70"
+                          : "border border-transparent hover:border-[#E2D6C5] hover:bg-white/80 text-[#2C1D16]"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -245,8 +245,8 @@ export function PokawaMegaMenu({
                       <span
                         className={`rounded-full px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${
                           isActive
-                            ? "bg-[#2C1D16] text-[#EADCC9]"
-                            : "bg-black/5 text-[#7a847e]"
+                            ? "bg-[#EADCC9] text-[#2C1D16]"
+                            : "bg-[#EEE7DD] text-[#766358]"
                         }`}
                       >
                         {cat.badge}
