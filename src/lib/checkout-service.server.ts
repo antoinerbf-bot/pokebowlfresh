@@ -80,7 +80,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
           .replace(/\s*\(\+[\d.,]+€\)\s*$/, "")
           .split(",")
           .map((s) => s.trim())
-          .filter((s) => s.length > 0);
+          .filter((s) => s.length > 0 && !/^feta$/i.test(s));
         const extraMixIns = Math.max(0, rawMixIns.length - 5);
         unitPrice += extraMixIns * 1.00;
       }
