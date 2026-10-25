@@ -117,9 +117,18 @@ export function PokawaFloatingNavbar() {
                 BOWL
               </span>
             </div>
-            <span className="text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5">
-              VISÉ · BELGIQUE
-            </span>
+            <div className="mt-0.5 flex items-center justify-center gap-2">
+              <span className="text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                VISÉ · BELGIQUE
+              </span>
+              <span
+                aria-label="Halal"
+                title="Halal"
+                className="rounded-full border border-[#EADCC9]/35 bg-[#2C1D16]/30 px-1.5 py-0.5 text-[6px] sm:text-[6.5px] font-medium uppercase tracking-[0.12em] text-[#EADCC9]/75"
+              >
+                Halal
+              </span>
+            </div>
           </Link>
         </div>
 
