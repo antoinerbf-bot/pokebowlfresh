@@ -565,7 +565,7 @@ function DishCard({
             <img
               src={item.image}
               alt={item.name}
-              className={`h-full w-full object-cover transition duration-700 group-hover:scale-108 ${
+              className={`h-full w-full ${item.id === "ice-tea" ? "object-contain p-3" : "object-cover"} transition duration-700 ${item.id === "ice-tea" ? "" : "group-hover:scale-108"} ${
                 item.soldOut ? "grayscale contrast-75" : ""
               }`}
             />
