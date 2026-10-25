@@ -110,7 +110,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
           const count = match ? parseInt(match[1], 10) : 1;
           totalToppingUnits += isNaN(count) ? 1 : count;
         }
-        const extraToppings = Math.max(0, totalToppingUnits - 2);
+        const extraToppings = Math.max(0, totalToppingUnits - 1);
         unitPrice += extraToppings * 0.50;
       }
 
