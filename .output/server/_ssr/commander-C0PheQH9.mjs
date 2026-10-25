@@ -431,7 +431,7 @@ function CommanderPage() {
 											children: [imgSrc ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 												src: imgSrc,
 												alt: drink.name,
-												className: `h-full w-full object-cover transition duration-500 group-hover:scale-105 ${!ok ? "grayscale contrast-75" : ""}`
+												className: `h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-105"} ${!ok ? "grayscale contrast-75" : ""}`
 											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 												className: "flex h-full w-full items-center justify-center text-3xl",
 												children: "🥤"

@@ -12,7 +12,7 @@ import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
 import { n as drink_fanta_orange_default, r as tiramisu_oreo_default, t as drink_coca_zero_default } from "./drink-fanta-orange-DggJO5Uo.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CTI3Qioo.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-B9QRX2pt.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -572,7 +572,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 													dishId: poke.id,
 													alt: poke.name,
-													className: "h-full w-full object-cover transition duration-500 group-hover:scale-108"
+													className: `h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-108"}`
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "absolute top-1.5 right-1.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2 py-0.5 text-[10px] font-black text-[#2C1D16] shadow",
@@ -2677,7 +2677,7 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 				}) : item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 					src: item.image,
 					alt: item.name,
-					className: `h-full w-full object-cover transition duration-700 group-hover:scale-108 ${item.soldOut ? "grayscale contrast-75" : ""}`
+					className: `h-full w-full ${item.id === "ice-tea" ? "object-contain p-3" : "object-cover"} transition duration-700 ${item.id === "ice-tea" ? "" : "group-hover:scale-108"} ${item.soldOut ? "grayscale contrast-75" : ""}`
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex h-full w-full items-center justify-center bg-[#f4f0e6] text-4xl",
 					children: item.badge
