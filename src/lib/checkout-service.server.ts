@@ -72,7 +72,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += 1.00;
       }
 
-      // Mix-ins (5 inclus, +0.50€ chacun au-delà)
+      // Mix-ins (5 inclus, +1.00€ chacun au-delà — aligné sur le composeur)
       const mixInsLine = opts.find((t) => /^Mix-ins?\s*:/i.test(t));
       if (mixInsLine) {
         const rawMixIns = mixInsLine
@@ -82,10 +82,10 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
           .map((s) => s.trim())
           .filter((s) => s.length > 0);
         const extraMixIns = Math.max(0, rawMixIns.length - 5);
-        unitPrice += extraMixIns * 0.50;
+        unitPrice += extraMixIns * 1.00;
       }
 
-      // Toppings (2 inclus, +0.50€ chacun au-delà)
+      // Toppings (1 inclus, +0.50€ chacun au-delà — aligné sur le composeur)
       const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
       if (toppingLine) {
         const rawContent = toppingLine
@@ -100,7 +100,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
             totalToppingUnits += isNaN(count) ? 1 : count;
           }
         }
-        const extraToppings = Math.max(0, totalToppingUnits - 2);
+        const extraToppings = Math.max(0, totalToppingUnits - 1);
         unitPrice += extraToppings * 0.50;
       } else {
         const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
