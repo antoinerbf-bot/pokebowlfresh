@@ -12,7 +12,7 @@ import { t as BLOG_ARTICLES } from "./blogArticles-BE30Y8r4.mjs";
 import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-D1T_Zv_V.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-L3bmBF9H.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -952,9 +952,17 @@ function PokawaFloatingNavbar() {
 									children: "BOWL"
 								})
 							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] mt-0.5",
-							children: "VISÉ · BELGIQUE"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-0.5 flex items-center justify-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]",
+								children: "VISÉ · BELGIQUE"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								"aria-label": "Halal",
+								title: "Halal",
+								className: "rounded-full border border-[#EADCC9]/35 bg-[#2C1D16]/30 px-1.5 py-0.5 text-[6px] sm:text-[6.5px] font-medium uppercase tracking-[0.12em] text-[#EADCC9]/75",
+								children: "Halal"
+							})]
 						})]
 					})
 				}),
