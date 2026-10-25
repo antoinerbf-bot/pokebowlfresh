@@ -106,7 +106,7 @@ function SurMesurePage() {
 
   const getMissingReason = () => {
     if (!isBaseReady) return "Étape 1 : Choisis une base";
-    if (selectedMixIns.length === 0) return "Étape 2 : Choisis tes mix-ins (5 inclus dans le prix)";
+    if (selectedMixIns.length === 0) return "Étape 2 : Sélectionne tes 5 légumes et ingrédients";
     if (!isProteinReady) return "Étape 3 : Choisis une protéine";
     if (!isSauceReady) return "Étape 4 : Choisis une sauce";
     return null;
@@ -223,7 +223,7 @@ function SurMesurePage() {
               </h1>
               <p className="mt-2 text-sm leading-relaxed text-white/70 sm:text-base">
                 Compose ton bol personnalisé en 5 étapes exactement comme sur le ticket du restaurant :
-                1 base, 5 mix-ins frais, 1 protéine, 1 sauce onctueuse et tes toppings croustillants !
+                1 base, 5 légumes et ingrédients, 1 protéine, 1 sauce et 2 toppings croustillants.
               </p>
             </div>
             <div className="flex items-center gap-4 rounded-2xl bg-white/[0.07] p-5 backdrop-blur-md sm:flex-col sm:items-start">
@@ -232,7 +232,7 @@ function SurMesurePage() {
                 <p className="text-3xl font-black text-[#ff705f] sm:text-4xl">10.00 €</p>
               </div>
               <span className="text-xs font-semibold text-white/60">
-                Base + 5 mix-ins + protéine + sauce
+                Base + 5 ingrédients + protéine + sauce + 2 toppings
               </span>
             </div>
           </div>
@@ -367,11 +367,11 @@ function SurMesurePage() {
                 <span>
                   {selectedMixIns.length < INCLUDED_MIX_INS
                     ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :`
-                    : `5 mix-ins inclus hors feta · feta à +1,00 € ; ingrédients supplémentaires à +0,50 € :`}
+                    : `Choisis 5 ingrédients inclus (feta à +1,00 € ; ingrédients supplémentaires à +0,50 €) :`}
                 </span>
                 {extraMixInsCount > 0 && (
                   <span className="rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[10px] font-extrabold text-[#ff705f]">
-                    +{mixInsExtra.toFixed(2)} € de suppléments mix-ins
+                    +{mixInsExtra.toFixed(2)} € d’ingrédients supplémentaires
                   </span>
                 )}
               </div>
@@ -637,7 +637,7 @@ function SurMesurePage() {
                 </div>
 
                 <div className="pt-2 flex justify-between gap-2">
-                  <span className="font-semibold text-[#7a847e]">Mix-ins :</span>
+                  <span className="font-semibold text-[#7a847e]">Légumes et ingrédients :</span>
                   <span className="font-bold text-[#17231f] text-right">
                     {selectedMixIns.length > 0
                       ? `${selectedMixIns.join(", ")} (${Math.min(INCLUDED_MIX_INS, selectedMixIns.length)} inclus${extraMixInsCount > 0 ? ` + ${extraMixInsCount} extra (+${mixInsExtra.toFixed(2)}€)` : ""})`
