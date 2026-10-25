@@ -20,7 +20,6 @@ import tiramisuNutella from "@/assets/tiramisu-nutella.jpg";
 import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
 import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
 import drinkCocaZero from "@/assets/drink-coca-zero.jpg";
-import drinkIceTea from "@/assets/drink-ice-tea.jpg";
 import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
 
 interface MegaCategory {
@@ -151,7 +150,7 @@ export function PokawaMegaMenu({
       name: "Lipton Ice Tea Original Sparkling 33cl",
       price: 2.0,
       desc: "Lipton Ice Tea Original pétillant.",
-      image: drinkIceTea,
+      image: "https://assets.unileversolutions.com/v1/90804290.png",
     },
     {
       id: "eau-gaz",
