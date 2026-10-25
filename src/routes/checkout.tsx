@@ -229,7 +229,12 @@ function CheckoutPage() {
                       : "bg-transparent text-[#7C879A] hover:bg-white/70"
                   }`}
                 >
-                  <Bike className="h-9 w-9 stroke-[2.5]" aria-hidden="true" />
+                  <svg viewBox="0 0 48 48" className="h-9 w-9" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="10" cy="34" r="7" />
+                    <circle cx="37" cy="34" r="7" />
+                    <circle cx="24" cy="7" r="3.5" fill="currentColor" stroke="none" />
+                    <path d="M22 13l-6 8 9 5 5-7 5 1M16 21l-6 13m9-13 8 13h10M23 13l7 5" />
+                  </svg>
                   <span className="text-sm font-extrabold">Livraison</span>
                 </button>
                 <button
@@ -242,7 +247,9 @@ function CheckoutPage() {
                       : "bg-transparent text-[#7C879A] hover:bg-white/70"
                   }`}
                 >
-                  <ShoppingBag className="h-8 w-8 stroke-[2.2]" aria-hidden="true" />
+                  <svg viewBox="0 0 40 40" className="h-8 w-8" fill="currentColor" aria-hidden="true">
+                    <path d="M12 11V8a8 8 0 0 1 16 0v3h4a2 2 0 0 1 2 2l2 22a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2l2-22a2 2 0 0 1 2-2h4zm4 0h8V8a4 4 0 0 0-8 0v3z" />
+                  </svg>
                   <span className="text-sm font-extrabold">Emporter</span>
                 </button>
               </div>
