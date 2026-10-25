@@ -82,7 +82,7 @@ export function FluidInteractiveMenu() {
       });
   }, []);
 
-  // 2. Crousty Chicken (Servis en bol kraft takeaway chaud avec boisson 33cl incluse)
+  // 2. Crousty Chicken (barquette carrée takeaway, boisson 33 cl incluse)
   const croustyItems = React.useMemo<DishItem[]>(() => {
     return bowls
       .filter((b) => b.id.startsWith("crousty-"))
@@ -97,7 +97,7 @@ export function FluidInteractiveMenu() {
         ingredients: b.ingredients,
         tasteTag: "crispy",
         isCombo: true,
-        packagingNote: "Packaging Kraft Takeaway chaud · Boisson 33cl incluse",
+        packagingNote: "Barquette carrée takeaway · Boisson 33 cl incluse",
       }));
   }, []);
 
@@ -238,7 +238,7 @@ export function FluidInteractiveMenu() {
             Une carte claire, <span className="text-[#ff705f]">organisée & gourmande.</span>
           </h2>
           <p className="mt-2 text-sm sm:text-base text-[#766358] max-w-2xl font-medium">
-            Pokés préparés à la commande, Crousty Chicken chaud en boîte kraft avec boisson, desserts maison et rafraîchissements givrés.
+            Pokés préparés à la commande, Crousty Chicken chaud en barquette carrée avec boisson, desserts maison et rafraîchissements givrés.
           </p>
         </div>
 
@@ -387,7 +387,7 @@ export function FluidInteractiveMenu() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════════════════════
-          CATÉGORIE 2 : CROUSTY CHICKEN (Packaging Kraft Takeaway Chaud)
+          CATÉGORIE 2 : CROUSTY CHICKEN (Barquette carrée takeaway)
          ═══════════════════════════════════════════════════════════════════════════ */}
       {(activeSection === "all" || activeSection === "crousty") && filteredCrousty.length > 0 && (
         <div className="mt-16 pt-8 border-t border-black/5">
