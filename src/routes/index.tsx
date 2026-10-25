@@ -44,7 +44,7 @@ const RESTAURANT_SCHEMA = {
     "latitude": 50.7333,
     "longitude": 5.6942
   },
-  "servesCuisine": ["Poké bowl", "Fast casual", "Asian", "Halal"],
+  "servesCuisine": ["Poké bowl", "Fast casual", "Asian"],
   "priceRange": "€€",
   "openingHoursSpecification": [
     {
