@@ -48,10 +48,10 @@ const CATEGORIES: MegaCategory[] = [
   },
   {
     id: "composer",
-    label: "Atelier Sur-Mesure",
-    badge: "100% Personnalisé",
+    label: "Composer son Bowl",
+    badge: "À votre goût",
     icon: "🥣",
-    sub: "Base + Protéine + 5 Mix-ins",
+    sub: "Choisissez vos ingrédients",
   },
   {
     id: "desserts",
@@ -255,20 +255,6 @@ export function PokawaMegaMenu({
                   );
                 })}
 
-                {/* Raccourci bas de colonne */}
-                <div className="pt-3 border-t border-black/5 px-2">
-                  <a
-                    href="#composer"
-                    onClick={onClose}
-                    className="flex items-center justify-between rounded-xl bg-[#EADCC9] border border-[#D9C5AD] p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm hover:scale-[1.02] transition"
-                  >
-                    <span className="flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
-                      Composer son Bowl
-                    </span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </a>
-                </div>
               </div>
 
               {/* Colonne droite : Preview instantanée des plats de la catégorie survolée */}
