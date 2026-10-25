@@ -178,7 +178,7 @@ function CommanderPage() {
                   </div>
                   <h3 className="mt-1 text-2xl font-black sm:text-3xl">Poke (n) Bowl sur mesure</h3>
                   <p className="mt-1 max-w-lg text-xs leading-relaxed text-white/75 sm:text-sm">
-                    Compose ton bowl idéal selon tes envies : 1 base, 5 mix-ins frais, 1 protéine, 1 sauce et tes toppings croustillants.
+                    Compose ton bowl idéal : 1 base, 5 légumes et ingrédients, 1 protéine, 1 sauce et 2 toppings croustillants.
                   </p>
                 </div>
               </div>
@@ -241,7 +241,7 @@ function CommanderPage() {
             <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
-                  <Sparkles className="h-3 w-3" /> Formule Étudiant 11 € · midi uniquement
+                  <Sparkles className="h-3 w-3" /> Formule réservée aux étudiants · 11 € avec boisson · midi uniquement
                 </div>
                 <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
                   Crousty Chicken
