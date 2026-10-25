@@ -21,11 +21,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DZTdlW3a.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CbVQdp0M.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-CbbBJYsQ.css";
+var styles_default = "/assets/styles-CXpZlBmA.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -193,7 +193,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }) })
 	});
 }
-var $$splitComponentImporter$7 = () => import("./routes-DqAkNmrw.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-D1T_Zv_V.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "FastFoodRestaurant",
@@ -216,8 +216,7 @@ var RESTAURANT_SCHEMA = {
 	"servesCuisine": [
 		"Poké bowl",
 		"Fast casual",
-		"Asian",
-		"Halal"
+		"Asian"
 	],
 	"priceRange": "€€",
 	"openingHoursSpecification": [
