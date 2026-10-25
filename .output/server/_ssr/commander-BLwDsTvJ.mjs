@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-CD-g1ikl.mjs";
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { X as ArrowLeft, Y as ArrowRight, d as ShoppingBag, l as Sparkles } from "../_libs/lucide-react.mjs";
+import { X as ArrowRight, Z as ArrowLeft, d as ShoppingBag, l as Sparkles } from "../_libs/lucide-react.mjs";
 import { c as drink_coca_cola_default, d as tiramisu_nutella_default, f as tiramisu_speculoos_default, l as drink_eau_gazeuse_default, n as DishImage, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-CCWI9y1V.mjs";
 import { t as useStock } from "./useStock-CxZNcIOA.mjs";
 import { i as tiramisu_oreo_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-D8ISS0Pg.mjs";

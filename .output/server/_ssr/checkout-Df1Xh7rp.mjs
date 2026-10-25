@@ -4,9 +4,9 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { E as LoaderCircle, L as CircleCheckBig, M as CreditCard, R as CircleAlert, X as ArrowLeft, s as Store } from "../_libs/lucide-react.mjs";
+import { E as LoaderCircle, L as CircleCheckBig, M as CreditCard, R as CircleAlert, Z as ArrowLeft, d as ShoppingBag, q as Bike, s as Store } from "../_libs/lucide-react.mjs";
 import { o as getDeliveryZone } from "./checkout-service.server-DMx10A7O.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DwtH0DtX.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-Df1Xh7rp.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -183,28 +183,30 @@ function CheckoutPage() {
 									className: "text-lg font-black",
 									children: "Mode de réception"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "mt-4 grid gap-3 sm:grid-cols-2",
+									className: "mt-4 grid grid-cols-2 gap-3 rounded-[22px] bg-[#F5F3EF] p-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
+										"aria-pressed": fulfillment === "delivery",
 										onClick: () => handleFulfillmentChange("delivery"),
-										className: `rounded-2xl border-2 p-4 text-left transition ${fulfillment === "delivery" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9] hover:border-black/20"}`,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-sm font-black",
-											children: "🛵 Livraison"
+										className: `flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${fulfillment === "delivery" ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20" : "bg-transparent text-[#7C879A] hover:bg-white/70"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bike, {
+											className: "h-9 w-9 stroke-[2.5]",
+											"aria-hidden": "true"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "mt-1 block text-xs text-[#7a847e]",
-											children: "À domicile selon ton code postal"
+											className: "text-sm font-extrabold",
+											children: "Livraison"
 										})]
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										type: "button",
+										"aria-pressed": fulfillment === "pickup",
 										onClick: () => handleFulfillmentChange("pickup"),
-										className: `rounded-2xl border-2 p-4 text-left transition ${fulfillment === "pickup" ? "border-[#ff705f] bg-[#fff5f3]" : "border-black/10 bg-[#F6F1E9] hover:border-black/20"}`,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-sm font-black",
-											children: "🛍️ Retrait sur place"
+										className: `flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${fulfillment === "pickup" ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20" : "bg-transparent text-[#7C879A] hover:bg-white/70"}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingBag, {
+											className: "h-8 w-8 stroke-[2.2]",
+											"aria-hidden": "true"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "mt-1 block text-xs text-[#7a847e]",
-											children: "Poke N Bowl Visé (Sans minimum)"
+											className: "text-sm font-extrabold",
+											children: "Emporter"
 										})]
 									})]
 								})]

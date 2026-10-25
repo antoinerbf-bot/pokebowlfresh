@@ -4,7 +4,7 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { n as useCart } from "./CartContext-BoTWTco9.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { K as BookOpen, P as Clock, X as ArrowLeft, Y as ArrowRight, d as ShoppingBag, h as Search, l as Sparkles } from "../_libs/lucide-react.mjs";
+import { K as BookOpen, P as Clock, X as ArrowRight, Z as ArrowLeft, d as ShoppingBag, h as Search, l as Sparkles } from "../_libs/lucide-react.mjs";
 import { t as CartDrawer } from "./CartDrawer-CCWI9y1V.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/blog-ad7y7For.js
