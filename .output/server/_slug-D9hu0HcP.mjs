@@ -3,7 +3,7 @@ import { r as bowls } from "./_ssr/data-DIH_xR9M.mjs";
 import { n as require_react } from "./_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.mjs";
 import { n as useCart } from "./_ssr/CartContext-C3Z6ywuE.mjs";
-import { g as Link } from "./_libs/@tanstack/react-router+[...].mjs";
+import { b as Link } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { G as Check, I as Clock, K as Calendar, Q as ArrowLeft, V as ChevronRight, b as Plus, f as ShoppingBag, h as Share2 } from "./_libs/lucide-react.mjs";
 import { t as CartDrawer } from "./_ssr/CartDrawer-hGbcsPMj.mjs";

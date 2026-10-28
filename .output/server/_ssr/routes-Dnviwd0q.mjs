@@ -4,7 +4,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useTranslation } from "./I18nContext-CD-g1ikl.mjs";
 import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
-import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Heart, D as MapPin, E as Menu, G as Check, H as ChevronLeft, I as Clock, J as BookOpen, M as Flame, N as ExternalLink, R as CircleCheck, T as MessageCircle, U as ChevronDown, V as ChevronRight, W as ChefHat, X as Award, Y as Bell, Z as ArrowRight, _ as RotateCcw, b as Plus, f as ShoppingBag, g as Search, j as Funnel, k as Instagram, l as Star, m as ShieldCheck, q as BriefcaseBusiness, t as X, u as Sparkles, w as Minus, x as Phone } from "../_libs/lucide-react.mjs";
 import { a as bowl_scampis_default, c as drink_coca_cola_default, d as tiramisu_oreo_default, f as tiramisu_speculoos_default, i as bowl_saumon_default, l as drink_eau_gazeuse_default, n as DishImage, o as bowl_spicy_chicken_default, r as bowl_crousty_curry_default, s as bowl_sweet_chicken_default, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-hGbcsPMj.mjs";
