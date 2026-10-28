@@ -1,0 +1,1 @@
+var e=`/assets/tiramisu-nutella-Cq3EXNhL.jpg`,t=`/assets/drink-coca-zero-eyT1b9_N.jpg`,n=`/assets/drink-fanta-orange-PDmbpAsA.jpg`,r=`/assets/drink-ice-tea-CZgyxPov.jpg`;export{e as i,n,t as r,r as t};
