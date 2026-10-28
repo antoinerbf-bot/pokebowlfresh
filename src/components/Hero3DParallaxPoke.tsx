@@ -52,11 +52,11 @@ const HERO_DISHES: HeroDish[] = [
     glowColor: "rgba(215, 255, 69, 0.22)",
     tasteProfile: "Doux, fruité & umami caramélisé",
     description:
-      "Morceaux tendres de poulet mariné doré, mangue mûre juteuse, avocat crémeux, maïs croquant, feta et nappage teriyaki brillant sur riz à sushi.",
-    freshCuts: ["Poulet doré mariné", "Avocat Hass mûr", "Mangue juteuse", "Feta émiettée", "Sauce Teriyaki"],
+      "Morceaux tendres de poulet mariné, mangue mûre juteuse, avocat crémeux, maïs croquant, feta et nappage teriyaki brillant sur riz.",
+    freshCuts: ["Poulet mariné", "Avocat mûr", "Mangue juteuse", "Feta émiettée", "Sauce Teriyaki"],
     floatingIngredients: [
-      { name: "Poulet Mariné Doré", emoji: "🍗", x: "-8%", y: "14%", depth: 45 },
-      { name: "Avocat Hass Crémeux", emoji: "🥑", x: "82%", y: "18%", depth: 55 },
+      { name: "Poulet mariné", emoji: "🍗", x: "-8%", y: "14%", depth: 45 },
+      { name: "Avocat Crémeux", emoji: "🥑", x: "82%", y: "18%", depth: 55 },
       { name: "Mangue Mûre Juteuse", emoji: "🥭", x: "-6%", y: "70%", depth: 38 },
       { name: "Oignons Croustillants", emoji: "🧅", x: "80%", y: "68%", depth: 48 },
       { name: "Graines Sésame Toastées", emoji: "🌱", x: "42%", y: "88%", depth: 30 },
@@ -67,16 +67,16 @@ const HERO_DISHES: HeroDish[] = [
     name: "Saumon Wasabi",
     price: 11.0,
     grandPrice: 14.0,
-    tag: "Coup de Cœur Sashimi ✦",
+    tag: "Coup de Cœur ✦",
     tagColor: "#ff705f",
     glowColor: "rgba(255, 112, 95, 0.25)",
     tasteProfile: "Ultra-frais, fondant avec un kick wasabi maîtrisé",
     description:
-      "Épais dés de saumon atlantique sashimi frais coupés chaque matin, avocat, salade d'algues wakame, mangue, edamame et notre mayo wasabi onctueuse.",
-    freshCuts: ["Saumon Atlantique frais", "Salade Wakame", "Avocat fondant", "Edamame vapeur", "Mayo Wasabi"],
+      "Épais dés de saumon frais coupés chaque matin, avocat, salade d'algues wakame, mangue, edamame et notre mayo wasabi onctueuse.",
+    freshCuts: ["Saumon frais", "Salade Wakame", "Avocat fondant", "Edamame vapeur", "Mayo Wasabi"],
     floatingIngredients: [
-      { name: "Saumon Sashimi Frais", emoji: "🐟", x: "-8%", y: "14%", depth: 55 },
-      { name: "Avocat Hass Découpé", emoji: "🥑", x: "82%", y: "18%", depth: 40 },
+      { name: "Saumon", emoji: "🐟", x: "-8%", y: "14%", depth: 55 },
+      { name: "Avocat", emoji: "🥑", x: "82%", y: "18%", depth: 40 },
       { name: "Salade Wakame Iodée", emoji: "🌿", x: "-6%", y: "70%", depth: 50 },
       { name: "Edamame Croquant", emoji: "🫘", x: "80%", y: "68%", depth: 35 },
       { name: "Mayo Wasabi Veloutée", emoji: "🟢", x: "42%", y: "88%", depth: 45 },
@@ -430,7 +430,7 @@ export function Hero3DParallaxPoke() {
               </h1>
 
               <p className="mt-4 max-w-xl text-base sm:text-lg leading-relaxed text-white/80">
-                Oubliez les bowls fades remplis de riz. Chez <strong className="text-white">Poke N Bowl Visé</strong>, chaque recette déborde d'ingrédients nobles coupés le matin même : saumon atlantique sashimi, scampis grillés saisis, poulet doré caramélisé et riz à sushi fondant.
+                Oubliez les bowls fades remplis de riz. Chez <strong className="text-white">Poke N Bowl Visé</strong>, chaque recette déborde d'ingrédients coupés le matin même : saumon frais, scampis grillés saisis, poulet mariné caramélisé et riz fondant.
               </p>
             </motion.div>
 

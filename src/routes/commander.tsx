@@ -79,11 +79,11 @@ function CommanderPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
+    <div className="min-h-screen bg-[#EFE6D8] text-[#2C1D16]">
       <CartDrawer />
 
       {/* ── Header ─────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#F6F1E9]/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-[#DECBB3] bg-[#EFE6D8]/95 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8">
           <Link to="/" className="flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
             <BrandLogo size="md" />
@@ -220,14 +220,14 @@ function CommanderPage() {
                   key={bowl.id}
                   to="/product/$productId"
                   params={{ productId: bowl.id }}
-                  className="group block overflow-hidden rounded-[28px] bg-white shadow-card transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                  className="group block overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] shadow-card transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
                 >
                   <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                 </Link>
               ) : (
                 <div
                   key={bowl.id}
-                  className="block cursor-not-allowed overflow-hidden rounded-[28px] bg-white opacity-55 shadow-card"
+                  className="block cursor-not-allowed overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] opacity-55 shadow-card"
                 >
                   <BowlCard bowl={bowl} ok={false} tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                 </div>
@@ -239,14 +239,14 @@ function CommanderPage() {
           <div className="mt-16 sm:mt-20">
             <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
-                  <Sparkles className="h-3 w-3" /> Formule réservée aux étudiants · 11 € avec boisson · midi uniquement
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">
+                  <Sparkles className="h-3 w-3" /> ☀️ Formule Étudiant 11 € avec canette 33 cl · UNIQUEMENT LE MIDI
                 </div>
                 <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
-                  Crousty Chicken
+                  Crousty Chicken (Barquette Rectangulaire)
                 </h2>
-                <p className="mt-1 text-xs sm:text-sm text-[#7a847e]">
-                  Petits morceaux de poulet croustillant dorés · Riz chaud · Boisson 33cl fraîche incluse
+                <p className="mt-1 text-xs sm:text-sm text-[#6E5A49]">
+                  Morceaux de poulet croustillant dorés · Riz chaud · Canette 33cl fraîche incluse dans la formule étudiant du midi
                 </p>
               </div>
             </div>
@@ -261,14 +261,14 @@ function CommanderPage() {
                     key={bowl.id}
                     to="/product/$productId"
                     params={{ productId: bowl.id }}
-                    className="group block overflow-hidden rounded-[28px] bg-white shadow-card ring-2 ring-[#ff705f]/30 ring-offset-2 ring-offset-[#F6F1E9] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                    className="group block overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] shadow-card ring-2 ring-[#ff705f]/30 ring-offset-2 ring-offset-[#EFE6D8] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
                   >
                     <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                   </Link>
                 ) : (
                   <div
                     key={bowl.id}
-                    className="block cursor-not-allowed overflow-hidden rounded-[28px] bg-white opacity-55 shadow-card"
+                    className="block cursor-not-allowed overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] opacity-55 shadow-card"
                   >
                     <BowlCard bowl={bowl} ok={false} tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                   </div>
@@ -323,8 +323,8 @@ function CommanderPage() {
           {/* ── Boissons + Desserts avec vraies photos ─────────────────── */}
           <div className="mt-8 space-y-8">
             {/* Desserts Maison */}
-            <div className="overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-black/5">
+            <div className="overflow-hidden rounded-[28px] bg-[#FAF5EE] border border-[#DECBB3] shadow-card p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#DECBB3]">
                 <div>
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
                     <span>🧁</span> Douceurs Artisanales
@@ -389,10 +389,10 @@ function CommanderPage() {
             </div>
 
             {/* Boissons Fraîches */}
-            <div className="overflow-hidden rounded-[28px] bg-white border border-black/5 shadow-card p-6 sm:p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-black/5">
+            <div className="overflow-hidden rounded-[28px] bg-[#FAF5EE] border border-[#DECBB3] shadow-card p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#DECBB3]">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#0284c7]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#0284c7]">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     <span>🧊</span> Servies Glacées
                   </div>
                   <h2 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">

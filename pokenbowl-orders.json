@@ -2338,5 +2338,482 @@
     "printStatus": "printed",
     "printedAt": "2026-10-28T11:20:48.836Z",
     "printError": null
+  },
+  {
+    "id": "PNB-20261028-6KYT",
+    "deliveryToken": "8b83ca041b8643f8a1f32d04be0e01c7",
+    "createdAt": "2026-10-28T11:56:38.271Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-moyen",
+        "name": "Sweet Chicken (Moyen)",
+        "price": 10,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Moyen",
+          "Boisson 33cl incluse : Coca-Cola (33 cl)"
+        ]
+      }
+    ],
+    "total": 10,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-WM4X",
+    "deliveryToken": "de359df9e6ca4aa69fd2a7ab139829fe",
+    "createdAt": "2026-10-28T11:56:38.303Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "saumon-wasabi-grand",
+        "name": "Saumon Wasabi (Grand)",
+        "price": 14,
+        "quantity": 1,
+        "toppings": [
+          "Format Grand",
+          "Boisson 33cl incluse : Coca-Cola (33 cl)"
+        ]
+      }
+    ],
+    "total": 14,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-O6F0",
+    "deliveryToken": "ca1edfbd6922457f92005479dcdfde93",
+    "createdAt": "2026-10-28T11:56:38.331Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-grand",
+        "name": "Sweet Chicken (Grand)",
+        "price": 24,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Grand (+3.00€)",
+          "Supplément Protéine (+6.00€) : Poulet mariné (x3)",
+          "Légume / Mix-in (+2.00€) : Avocat (x2)",
+          "Légume / Mix-in (+1.00€) : Feta",
+          "Topping (+0.50€) : Oignons frits (x2)",
+          "Sauce extra (+1€) : Spicy-Mayo",
+          "SANS : Maïs"
+        ]
+      }
+    ],
+    "total": 24,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-BHOP",
+    "deliveryToken": "1828fcdf315c4920869af671abbdb6da",
+    "createdAt": "2026-10-28T11:56:38.358Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "crousty-chicken-curry",
+        "name": "Crousty Chicken Curry",
+        "price": 16,
+        "quantity": 1,
+        "toppings": [
+          "Supplément Protéine (+4.00€) : Poulet croustillant (x2)",
+          "Sauce supplémentaire (+1.00€) : Teriyaki"
+        ]
+      }
+    ],
+    "total": 16,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-XORD",
+    "deliveryToken": "9aa1655d072045369750bb766ba1ba61",
+    "createdAt": "2026-10-28T11:56:38.385Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sur-mesure",
+        "name": "Poke Bowl sur mesure (Grand)",
+        "price": 21.5,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Grand (+3.00€)",
+          "Protéine : Saumon (+1.00€)",
+          "Supplément Protéine (+4.00€) : Poulet mariné (x2)",
+          "Mix-ins : Avocat, Mangue, Edamame, Concombres, Carottes, Feta · Feta (+1.00€)",
+          "Toppings : Oignons frits, Sésame (+0.50€)",
+          "Sauce extra (+1€) : Teriyaki"
+        ]
+      }
+    ],
+    "total": 21.5,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-KZWH",
+    "deliveryToken": "c65946eb2f634c009cd5b2d53727f73c",
+    "createdAt": "2026-10-28T11:57:16.527Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-moyen",
+        "name": "Sweet Chicken (Moyen)",
+        "price": 10,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Moyen",
+          "Boisson 33cl incluse : Coca-Cola (33 cl)"
+        ]
+      }
+    ],
+    "total": 10,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-IPA4",
+    "deliveryToken": "8d908abc4d174802b9736d4a13621e85",
+    "createdAt": "2026-10-28T11:57:16.554Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "saumon-wasabi-grand",
+        "name": "Saumon Wasabi (Grand)",
+        "price": 14,
+        "quantity": 1,
+        "toppings": [
+          "Format Grand",
+          "Boisson 33cl incluse : Coca-Cola (33 cl)"
+        ]
+      }
+    ],
+    "total": 14,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-NQZK",
+    "deliveryToken": "912f4cf85be3427ea0d254add3291817",
+    "createdAt": "2026-10-28T11:57:16.586Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-grand",
+        "name": "Sweet Chicken (Grand)",
+        "price": 24,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Grand (+3.00€)",
+          "Supplément Protéine (+6.00€) : Poulet mariné (x3)",
+          "Légume / Mix-in (+2.00€) : Avocat (x2)",
+          "Légume / Mix-in (+1.00€) : Feta",
+          "Topping (+0.50€) : Oignons frits (x2)",
+          "Sauce extra (+1€) : Spicy-Mayo",
+          "SANS : Maïs"
+        ]
+      }
+    ],
+    "total": 24,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-U7NA",
+    "deliveryToken": "b1bb89c17b8040a6b2fe8999a39c367d",
+    "createdAt": "2026-10-28T11:57:16.611Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "crousty-chicken-curry",
+        "name": "Crousty Chicken Curry",
+        "price": 16,
+        "quantity": 1,
+        "toppings": [
+          "Supplément Protéine (+4.00€) : Poulet croustillant (x2)",
+          "Sauce supplémentaire (+1.00€) : Teriyaki"
+        ]
+      }
+    ],
+    "total": 16,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-GI4Z",
+    "deliveryToken": "a8b056ea44434667aa04f7217cb6f9c1",
+    "createdAt": "2026-10-28T11:57:16.640Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sur-mesure",
+        "name": "Poke Bowl sur mesure (Grand)",
+        "price": 20.5,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Grand (+3.00€)",
+          "Protéine : Saumon (+1.00€)",
+          "Supplément Protéine (+4.00€) : Poulet mariné (x2)",
+          "Mix-ins : Avocat, Mangue, Edamame, Concombres, Carottes, Feta · Feta (+1.00€)",
+          "Toppings : Oignons frits, Sésame (+0.50€)",
+          "Sauce extra (+1€) : Teriyaki"
+        ]
+      }
+    ],
+    "total": 20.5,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-6IFF",
+    "deliveryToken": "36643bd1bdf84e9fa3e29c9ed89ab177",
+    "createdAt": "2026-10-28T11:57:16.668Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sur-mesure",
+        "name": "Poke Bowl sur mesure",
+        "price": 14.5,
+        "quantity": 1,
+        "toppings": [
+          "Taille : Moyen",
+          "Protéine : Poulet mariné",
+          "Supplément Protéine (+2.00€) : Scampis",
+          "Mix-ins : Avocat (x3), Mangue, Edamame, Concombres, Carottes",
+          "Toppings : Oignons frits, Cacahuètes"
+        ]
+      }
+    ],
+    "total": 14.5,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-3NZU",
+    "deliveryToken": "d1d058ce8f714a8eac4244f224b0caa5",
+    "createdAt": "2026-10-28T11:57:16.695Z",
+    "status": "awaiting_pickup",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "pickup",
+      "requestedTime": "Dès que possible",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "coca",
+        "name": "Coca-Cola (33 cl)",
+        "price": 2,
+        "quantity": 1,
+        "toppings": []
+      },
+      {
+        "id": "fanta",
+        "name": "Fanta Orange (33 cl)",
+        "price": 2,
+        "quantity": 1,
+        "toppings": []
+      },
+      {
+        "id": "tira-oreo",
+        "name": "Tiramisu Oreo",
+        "price": 4,
+        "quantity": 1,
+        "toppings": []
+      },
+      {
+        "id": "tira-spec",
+        "name": "Tiramisu Spéculoos",
+        "price": 4,
+        "quantity": 1,
+        "toppings": []
+      }
+    ],
+    "total": 12,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-837S",
+    "deliveryToken": "10a59393048948109023269b2312e2ab",
+    "createdAt": "2026-10-28T11:57:16.722Z",
+    "status": "awaiting_delivery",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "delivery",
+      "requestedTime": "Dès que possible",
+      "address": "Place Reine Astrid 7",
+      "postalCode": "4600",
+      "city": "Visé",
+      "deliveryFee": 2
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-moyen",
+        "name": "Sweet Chicken (Moyen)",
+        "price": 10,
+        "quantity": 2,
+        "toppings": []
+      }
+    ],
+    "total": 22,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-FMY9",
+    "deliveryToken": "866aa28192324280a90c071aa6e70a89",
+    "createdAt": "2026-10-28T11:57:16.748Z",
+    "status": "awaiting_delivery",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "delivery",
+      "requestedTime": "Dès que possible",
+      "address": "Rue Général Thys 10",
+      "postalCode": "4607",
+      "city": "Dalhem",
+      "deliveryFee": 3
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-moyen",
+        "name": "Sweet Chicken (Moyen)",
+        "price": 10,
+        "quantity": 3,
+        "toppings": []
+      }
+    ],
+    "total": 33,
+    "currency": "EUR"
+  },
+  {
+    "id": "PNB-20261028-065Q",
+    "deliveryToken": "89d806317c0b41e1b209c20fa834694b",
+    "createdAt": "2026-10-28T11:57:16.776Z",
+    "status": "completed",
+    "paymentMethod": "on_site",
+    "customer": {
+      "name": "Test Audit QA",
+      "phone": "0491281456",
+      "email": "qa@pokenbowl.be",
+      "fulfillment": "delivery",
+      "requestedTime": "Dès que possible",
+      "address": "Rue Royale 15",
+      "postalCode": "4690",
+      "city": "Bassenge",
+      "deliveryFee": 0
+    },
+    "items": [
+      {
+        "id": "sweet-chicken-moyen",
+        "name": "Sweet Chicken (Moyen)",
+        "price": 10,
+        "quantity": 5,
+        "toppings": []
+      }
+    ],
+    "total": 50,
+    "currency": "EUR",
+    "printStatus": "printed",
+    "printedAt": "2026-10-28T11:57:16.825Z",
+    "printError": null
   }
 ]

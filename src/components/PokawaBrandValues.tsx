@@ -24,9 +24,9 @@ export function PokawaBrandValues() {
       emoji: "🍚",
       tag: "Authenticité",
       tagColor: "bg-[#ff705f] text-white",
-      title: "Riz à Sushi Artisanal",
-      desc: "Cuit à point et assaisonné avec notre vinaigre de riz signature selon la véritable tradition. Fini le riz fade et sec !",
-      perk: "Assaisonnement équilibré",
+      title: "Riz Savoureux",
+      desc: "Cuit à point chaque jour pour accompagner nos pokés frais et nos barquettes chaudes Crousty Chicken.",
+      perk: "Cuisson maîtrisée",
       image: bowlSweet,
     },
     {
@@ -35,8 +35,8 @@ export function PokawaBrandValues() {
       tag: "Gamme Chaude",
       tagColor: "bg-[#ea580c] text-white",
       title: "Crousty Chicken",
-      desc: "Petits morceaux de poulet croustillant dorés, oignons frits et sauces chaudes maison curry ou blanche généreuses.",
-      perk: "Formule étudiant 11 € avec boisson · midi uniquement",
+      desc: "Servi en barquette rectangulaire avec morceaux de poulet croustillant dorés, oignons frits et sauce curry ou blanche sur riz chaud.",
+      perk: "Formule Étudiant 11 € avec canette · Uniquement le midi",
       image: bowlCrousty,
     },
     {

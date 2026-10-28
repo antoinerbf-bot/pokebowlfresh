@@ -10,7 +10,7 @@ import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 const INGREDIENTS_SHOWCASE = [
   {
     id: "saumon",
-    title: "Le Saumon Atlantique Sashimi",
+    title: "Le Saumon Frais",
     subtitle: "Pêche responsable · Zéro congélation",
     desc: "Découpé au couteau chaque matin en gros cubes fondants. Une texture soyeuse et beurrée qui sublime nos bowls signature.",
     badge: "100% Frais Découpé Minute",
@@ -21,7 +21,7 @@ const INGREDIENTS_SHOWCASE = [
   },
   {
     id: "avocat",
-    title: "L'Avocat Hass Ultra-Fondant",
+    title: "L'Avocat Fondant",
     subtitle: "Sélectionné à maturité parfaite",
     desc: "Un avocat crémeux tranché minute en éventail ou écrasé en guacamole maison. Aucun avocat dur ou sans saveur.",
     badge: "Maturité Contrôlée",
@@ -33,13 +33,13 @@ const INGREDIENTS_SHOWCASE = [
   {
     id: "crousty",
     title: "Le Fameux Crousty Chicken",
-    subtitle: "Panure dorée croustillante minute",
-    desc: "Notre recette secrète de poulet mariné et pané ultra croustillant, nappé de sauce curry chaude onctueuse ou sauce blanche.",
-    badge: "Formule étudiant 11 € · midi uniquement",
+    subtitle: "Barquette rectangulaire · Poulet croustillant minute",
+    desc: "Morceaux de poulet croustillant dorés sur riz chaud, nappés de sauce curry chaude onctueuse ou sauce blanche et d'oignons frits.",
+    badge: "Formule Étudiant 11 € · Uniquement le midi",
     badgeColor: "#f59e0b",
     image: bowlCroustyCurry,
     linkDish: "crousty-chicken-curry",
-    stats: "Boisson 33 cl incluse · suppléments frais +1 €",
+    stats: "Canette 33 cl incluse le midi · suppléments dès +1 €",
   },
   {
     id: "scampis",

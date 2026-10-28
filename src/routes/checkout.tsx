@@ -43,11 +43,11 @@ function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F6F1E9] flex flex-col items-center justify-center px-5">
-        <p className="text-lg font-bold text-[#17231f]">Votre panier est vide.</p>
+      <div className="min-h-screen bg-[#EFE6D8] flex flex-col items-center justify-center px-5">
+        <p className="text-lg font-bold text-[#2C1D16]">Votre panier est vide.</p>
         <Link
           to="/commander"
-          className="mt-6 rounded-full bg-[#ff705f] px-6 py-3 text-sm font-black text-white"
+          className="mt-6 rounded-full bg-[#ff705f] px-6 py-3 text-sm font-black text-white shadow-md hover:bg-[#ff5a47]"
         >
           Voir la carte
         </Link>
@@ -188,15 +188,15 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F1E9] text-[#17231f]">
-      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#F6F1E9]/90 backdrop-blur-xl">
+    <div className="min-h-screen bg-[#EFE6D8] text-[#2C1D16]">
+      <header className="sticky top-0 z-50 border-b border-[#DECBB3] bg-[#EFE6D8]/95 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-[900px] items-center justify-between px-5 py-3 sm:px-8">
           <Link to="/" className="flex items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
             <BrandLogo size="md" />
           </Link>
           <Link
             to="/commander"
-            className="inline-flex items-center gap-2 text-xs font-bold text-[#7a847e] hover:text-[#17231f]"
+            className="inline-flex items-center gap-2 text-xs font-bold text-[#7A6857] hover:text-[#2C1D16]"
           >
             <ArrowLeft className="h-4 w-4" /> Retour
           </Link>
@@ -207,29 +207,29 @@ function CheckoutPage() {
         <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#ff705f]">
           Finaliser
         </p>
-        <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl">
+        <h1 className="mt-2 text-4xl font-black tracking-tight sm:text-5xl text-[#2C1D16]">
           Ta commande.
         </h1>
-        <p className="mt-3 max-w-xl text-sm text-[#758079]">
+        <p className="mt-3 max-w-xl text-sm text-[#6E5A49]">
           Renseigne tes coordonnées, ton adresse de livraison et le mode de paiement.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-10 grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-6">
-            <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
-              <h2 className="text-lg font-black">Mode de réception</h2>
-              <div className="mt-4 grid grid-cols-2 gap-3 rounded-[22px] bg-[#F5F3EF] p-2">
+            <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]">
+              <h2 className="text-lg font-black text-[#2C1D16]">Mode de réception</h2>
+              <div className="mt-4 grid grid-cols-2 gap-3 rounded-[22px] border border-[#DECBB3] bg-[#EFE6D8] p-2">
                 <button
                   type="button"
                   aria-pressed={fulfillment === "delivery"}
                   onClick={() => handleFulfillmentChange("delivery")}
                   className={`flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${
                     fulfillment === "delivery"
-                      ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20"
-                      : "bg-transparent text-[#7C879A] hover:bg-white/70"
+                      ? "bg-[#2C1D16] text-[#EADCC9] ring-2 ring-[#ff705f] shadow-md shadow-[#2C1D16]/25"
+                      : "bg-[#FAF5EE]/70 text-[#7A6857] hover:bg-[#FAF5EE] hover:text-[#2C1D16]"
                   }`}
                 >
-                  <svg viewBox="0 0 48 48" className="h-9 w-9" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" className={`h-9 w-9 ${fulfillment === "delivery" ? "text-[#ff705f]" : "text-current"}`} fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <circle cx="10" cy="34" r="7" />
                     <circle cx="37" cy="34" r="7" />
                     <circle cx="24" cy="7" r="3.5" fill="currentColor" stroke="none" />
@@ -243,19 +243,19 @@ function CheckoutPage() {
                   onClick={() => handleFulfillmentChange("pickup")}
                   className={`flex min-h-[112px] flex-col items-center justify-center gap-2 rounded-2xl px-3 py-4 text-center transition-all duration-200 ${
                     fulfillment === "pickup"
-                      ? "bg-[#1747A8] text-white shadow-md shadow-[#1747A8]/20"
-                      : "bg-transparent text-[#7C879A] hover:bg-white/70"
+                      ? "bg-[#2C1D16] text-[#EADCC9] ring-2 ring-[#ff705f] shadow-md shadow-[#2C1D16]/25"
+                      : "bg-[#FAF5EE]/70 text-[#7A6857] hover:bg-[#FAF5EE] hover:text-[#2C1D16]"
                   }`}
                 >
-                  <svg viewBox="0 0 40 40" className="h-8 w-8" fill="currentColor" aria-hidden="true">
+                  <svg viewBox="0 0 40 40" className={`h-8 w-8 ${fulfillment === "pickup" ? "text-[#ff705f]" : "text-current"}`} fill="currentColor" aria-hidden="true">
                     <path d="M12 11V8a8 8 0 0 1 16 0v3h4a2 2 0 0 1 2 2l2 22a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2l2-22a2 2 0 0 1 2-2h4zm4 0h8V8a4 4 0 0 0-8 0v3z" />
                   </svg>
-                  <span className="text-sm font-extrabold">Emporter</span>
+                  <span className="text-sm font-extrabold">À emporter</span>
                 </button>
               </div>
             </section>
 
-            <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
+            <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]">
               <h2 className="text-lg font-black">Coordonnées</h2>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <label className="block sm:col-span-2">
@@ -376,8 +376,8 @@ function CheckoutPage() {
               </div>
             </section>
 
-            <section className="rounded-[24px] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(0,0,0,.35)]">
-              <h2 className="text-lg font-black">Paiement</h2>
+            <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]">
+              <h2 className="text-lg font-black text-[#2C1D16]">Paiement</h2>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <button
@@ -385,18 +385,18 @@ function CheckoutPage() {
                   onClick={() => setPaymentMethod("online")}
                   className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition cursor-pointer ${
                     paymentMethod === "online"
-                      ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                      ? "border-[#ff705f] bg-[#FFF4F1]"
+                      : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#2C1D16]/30"
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
                     <CreditCard className="h-5 w-5 text-[#ff705f]" />
-                    <span className="inline-flex items-center rounded-md bg-[#004B87]/10 px-2 py-0.5 text-[11px] font-black text-[#004B87]">
+                    <span className="inline-flex items-center rounded-md bg-[#2C1D16] px-2 py-0.5 text-[11px] font-black text-[#EADCC9]">
                       Bancontact
                     </span>
                   </div>
                   <span className="text-sm font-black">Bancontact & En ligne</span>
-                  <span className="text-xs text-[#7a847e]">
+                  <span className="text-xs text-[#7A6857]">
                     Bancontact Pro, Payconiq (QR code) ou Carte bancaire
                   </span>
                 </button>
@@ -405,15 +405,15 @@ function CheckoutPage() {
                   onClick={() => setPaymentMethod("on_site")}
                   className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 text-left transition cursor-pointer ${
                     paymentMethod === "on_site"
-                      ? "border-[#ff705f] bg-[#fff5f3]"
-                      : "border-black/10 bg-[#F6F1E9] hover:border-black/20"
+                      ? "border-[#ff705f] bg-[#FFF4F1]"
+                      : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#2C1D16]/30"
                   }`}
                 >
                   <Store className="h-5 w-5 text-[#ff705f]" />
                   <span className="text-sm font-black">
                     {fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"}
                   </span>
-                  <span className="text-xs text-[#7a847e]">
+                  <span className="text-xs text-[#7A6857]">
                     {fulfillment === "delivery"
                       ? "Espèces ou Bancontact mobile lors de la livraison"
                       : "Espèces ou Bancontact au comptoir lors du retrait"}

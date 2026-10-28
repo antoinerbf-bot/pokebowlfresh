@@ -41,9 +41,9 @@ const CATEGORIES: MegaCategory[] = [
   {
     id: "crousty",
     label: "Crousty Chicken",
-    badge: "Formule 11 €",
+    badge: "Formule Midi 11 €",
     icon: "🍗",
-    sub: "Chaud · Boisson 33cl offerte",
+    sub: "Barquette chaude · Canette incluse le midi",
   },
   {
     id: "composer",
@@ -193,7 +193,7 @@ export function PokawaMegaMenu({
                 <a
                   href="#carte"
                   onClick={onClose}
-                  className="font-black uppercase tracking-wider text-[#2431eb] hover:underline"
+                  className="font-black uppercase tracking-wider text-[#ff705f] hover:underline"
                 >
                   Voir toute la carte →
                 </a>
@@ -361,11 +361,11 @@ export function PokawaMegaMenu({
                           </h4>
                         </div>
                         <p className="text-[11px] text-[#9a3412]">
-                          Petits morceaux de poulet croustillant dorés · Boisson 33cl incluse
+                          Barquette rectangulaire de poulet croustillant · Canette 33cl incluse (Formule Étudiant midi uniquement)
                         </p>
                       </div>
                       <span className="rounded-full bg-[#ea580c] px-3 py-1 text-[11px] font-black text-white shadow-sm">
-                        Formule 11,00 € Complète
+                        Formule Midi 11,00 €
                       </span>
                     </div>
 
@@ -385,7 +385,7 @@ export function PokawaMegaMenu({
                               11.00 €
                             </span>
                             <span className="absolute bottom-2 left-2 rounded-md bg-black/70 px-2 py-0.5 text-[9px] font-bold text-white">
-                              🥤 Canette 33cl Offerte
+                              🎓 Canette 33cl (Formule Midi uniquement)
                             </span>
                           </div>
 
@@ -442,7 +442,7 @@ export function PokawaMegaMenu({
                         Compose Ton Poké de A à Z
                       </h4>
                       <p className="mt-1 text-xs text-white/80 max-w-md">
-                        Choisis ta base (Riz sushi, quinoa ou jeunes pousses), ta protéine fraîche (Saumon noble, poulet rôti, scampis grillés, falafels), 5 mix-ins croquants parmi plus de 15 ingrédients du jour, ta sauce signature et tes toppings croustillants !
+                        Choisis ta base (Riz, pâtes, salade...), ta protéine fraîche (Saumon, poulet mariné, scampis), 5 légumes frais inclus (+1 € par supplément), protéines supplémentaires (+2 €) et tes toppings croustillants !
                       </p>
                     </div>
 
@@ -614,7 +614,7 @@ export function PokawaMegaMenu({
             <div className="border-t border-[#E2D6C5] bg-[#F7F2EB] px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-4 text-[#766358] font-bold text-[11px]">
                 <span>🌱 Saumon frais découpé du matin</span>
-                <span>🥢 Riz sushi artisanal maison</span>
+                <span>🥢 Riz préparé maison</span>
                 <span>🥑 100% Frais minute</span>
               </div>
               <Link

@@ -18,9 +18,9 @@ interface ToastNotification {
 const NOTIFICATIONS: ToastNotification[] = [
   {
     id: "crousty-curry",
-    tag: "Spécialité Chaude",
+    tag: "Formule Midi 11 €",
     title: "Crousty Chicken Curry",
-    desc: "Poulet croustillant doré, curry maison doux & oignons frits. Boisson 33cl incluse !",
+    desc: "Barquette rectangulaire de poulet croustillant doré, sauce curry maison & oignons frits. Canette 33cl incluse uniquement le midi !",
     dishId: "crousty-chicken-curry",
     price: "11,00 €",
     badgeEmoji: "🍗",
@@ -28,9 +28,9 @@ const NOTIFICATIONS: ToastNotification[] = [
   },
   {
     id: "crousty-blanche",
-    tag: "Nouveau au Menu",
+    tag: "Formule Midi 11 €",
     title: "Crousty Sauce Blanche",
-    desc: "Bouchées croustillantes dorées, sauce blanche onctueuse & oignons frits. Boisson 33cl incluse !",
+    desc: "Barquette rectangulaire de morceaux croustillants dorés, sauce blanche onctueuse & oignons frits. Canette 33cl incluse uniquement le midi !",
     dishId: "crousty-chicken-sauce-blanche",
     price: "11,00 €",
     badgeEmoji: "🤍",
@@ -38,9 +38,9 @@ const NOTIFICATIONS: ToastNotification[] = [
   },
   {
     id: "etudiant-deal",
-    tag: "Formule Populaire",
-    title: "Menu Crousty + Boisson 11 €",
-    desc: "1 Crousty Chicken chaud au choix + boisson 33cl fraîche incluse (Coca, Ice-Tea...).",
+    tag: "Formule Étudiant · Midi uniquement",
+    title: "Crousty + Canette 11 € (Le Midi)",
+    desc: "1 Crousty Chicken chaud au choix + canette 33cl fraîche incluse : offre étudiant valable uniquement le midi.",
     dishId: "crousty-chicken-curry",
     price: "11,00 €",
     badgeEmoji: "🎓",
@@ -181,7 +181,7 @@ export function CroustyNotificationToast() {
                   </Link>
 
                   <span className="text-[9px] sm:text-[9.5px] font-bold text-[#EADCC9]/80 hidden sm:inline">
-                    🥤 Boisson 33cl incluse
+                    🎓 Midi uniquement (canette incluse)
                   </span>
                 </div>
               </div>

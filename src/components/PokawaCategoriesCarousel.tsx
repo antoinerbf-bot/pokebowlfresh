@@ -26,16 +26,16 @@ const CATEGORIES: CategoryCard[] = [
     badgeColor: "bg-[#2C1D16] text-[#EADCC9]",
     image: bowlSaumon,
     targetId: "carte",
-    desc: "Saumon atlantique minute, poulet doré & scampis royaux",
+    desc: "Saumon minute, poulet mariné & scampis royaux",
   },
   {
     id: "crousty",
     title: "Crousty Chicken",
-    badge: "Formule 11 € · Boisson Offerte",
+    badge: "Formule 11 € · Midi uniquement",
     badgeColor: "bg-[#ea580c] text-white",
     image: bowlCrousty,
     targetId: "carte",
-    desc: "Crousty chicken chaud nappé de sauce curry ou blanche",
+    desc: "Barquette rectangulaire chaude · Canette 33cl incluse le midi",
   },
   {
     id: "composer",
@@ -44,7 +44,7 @@ const CATEGORIES: CategoryCard[] = [
     badgeColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
     image: bowlSweet,
     targetId: "composer",
-    desc: "Composez votre recette de A à Z avec 5 mix-ins frais",
+    desc: "Composez votre recette de A à Z avec 5 légumes frais inclus",
   },
   {
     id: "desserts",
@@ -59,7 +59,7 @@ const CATEGORIES: CategoryCard[] = [
     id: "boissons",
     title: "Boissons Fraîches",
     badge: "2,00 € · Extra Frais",
-    badgeColor: "bg-[#0284c7] text-white",
+    badgeColor: "bg-[#2C1D16] text-[#EADCC9]",
     image: drinkImg,
     targetId: "carte",
     desc: "Canettes 33cl servies givrées & eaux minérales SPA",
@@ -86,7 +86,7 @@ export function PokawaCategoriesCarousel() {
   return (
     <section
       aria-label="Catégories gourmandes Poke N Bowl Visé"
-      className="py-14 sm:py-20 lg:py-24 bg-[#F5EFEB] border-b border-[#E2D6C5] overflow-hidden"
+      className="py-14 sm:py-20 lg:py-24 bg-[#E9DDC8] border-b border-[#DECBB3] overflow-hidden"
     >
       <div className="mx-auto max-w-[1340px] px-4 sm:px-6 lg:px-8">
         {/* En-tête style Pokawa : "Vivez sainement, soyez gourmands" */}

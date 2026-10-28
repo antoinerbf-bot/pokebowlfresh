@@ -82,7 +82,7 @@ export function FluidInteractiveMenu() {
       });
   }, []);
 
-  // 2. Crousty Chicken (barquette carrée takeaway, boisson 33 cl incluse)
+  // 2. Crousty Chicken (barquette rectangulaire takeaway, formule étudiant midi avec canette 33 cl)
   const croustyItems = React.useMemo<DishItem[]>(() => {
     return bowls
       .filter((b) => b.id.startsWith("crousty-"))
@@ -92,12 +92,12 @@ export function FluidInteractiveMenu() {
         category: "crousty",
         price: b.price,
         desc: b.desc,
-        badge: "Formule 11 € · Boisson Offerte 🥤",
+        badge: "Formule Étudiant 11 € · Midi uniquement 🥤",
         dishId: b.id,
         ingredients: b.ingredients,
         tasteTag: "crispy",
         isCombo: true,
-        packagingNote: "Barquette carrée takeaway · Boisson 33 cl incluse",
+        packagingNote: "Barquette rectangulaire · Canette 33 cl incluse le midi",
       }));
   }, []);
 
@@ -245,7 +245,7 @@ export function FluidInteractiveMenu() {
             Une carte claire, <span className="text-[#ff705f]">organisée & gourmande.</span>
           </h2>
           <p className="mt-2 text-sm sm:text-base text-[#766358] max-w-2xl font-medium">
-            Pokés préparés à la commande, Crousty Chicken chaud en barquette carrée avec boisson, desserts maison et rafraîchissements givrés.
+            Pokés préparés à la commande, Crousty Chicken chaud en barquette rectangulaire (Formule Étudiant à 11 € avec canette 33 cl uniquement le midi), desserts maison et rafraîchissements givrés.
           </p>
         </div>
 
@@ -398,29 +398,29 @@ export function FluidInteractiveMenu() {
          ═══════════════════════════════════════════════════════════════════════════ */}
       {(activeSection === "all" || activeSection === "crousty") && filteredCrousty.length > 0 && (
         <div className="mt-16 pt-8 border-t border-black/5">
-          <div className="rounded-[32px] bg-gradient-to-br from-[#fff7ed] to-[#ffedd5] border border-[#fed7aa] p-6 sm:p-8 mb-6 shadow-sm">
+          <div className="rounded-[32px] bg-gradient-to-br from-[#FFF4E4] to-[#FFE7CA] border-2 border-[#F59E0B]/40 p-6 sm:p-8 mb-6 shadow-sm">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-sm">
                   <Flame className="h-3.5 w-3.5 fill-white" />
-                  Crousty Chicken · Chaud & Croustillant
+                  Crousty Chicken · Barquette Rectangulaire Chaude
                 </div>
                 <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#7c2d12]">
                   Crousty Chicken
                 </h3>
                 <p className="mt-1 text-xs sm:text-sm text-[#9a3412] max-w-2xl font-medium">
-                  Petits morceaux de poulet croustillant dorés, généreusement nappés de sauce maison onctueuse (curry ou blanche) et oignons frits croustillants sur riz chaud.
+                  Morceaux de poulet croustillant dorés servis dans une barquette rectangulaire sur riz chaud, généreusement nappés de sauce maison onctueuse (curry ou sauce blanche) et d'oignons frits.
                 </p>
               </div>
 
-              <div className="shrink-0 flex items-center gap-3 rounded-2xl bg-white p-3.5 border border-[#fed7aa] shadow-card">
-                <span className="text-2xl">🥤</span>
+              <div className="shrink-0 flex items-center gap-3 rounded-2xl bg-[#FFFDF9] p-4 border-2 border-[#ea580c]/30 shadow-card">
+                <span className="text-2xl">🎓</span>
                 <div>
                   <span className="block text-[10px] font-black uppercase tracking-wider text-[#ea580c]">
-                    Formule Étudiant · midi uniquement
+                    ☀️ Formule Étudiant · UNIQUEMENT LE MIDI
                   </span>
                   <span className="text-lg font-black text-[#7c2d12]">
-                    11,00 € <span className="text-xs font-bold text-[#9a3412]">(boisson 33 cl incluse · midi uniquement)</span>
+                    11,00 € <span className="text-xs font-bold text-[#9a3412]">(avec canette 33 cl incluse · le midi uniquement)</span>
                   </span>
                 </div>
               </div>
@@ -497,7 +497,7 @@ export function FluidInteractiveMenu() {
         <div className="mt-16 pt-8 border-t border-[#E2D6C5]">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 pb-4 border-b border-[#E2D6C5]">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#0284c7]/15 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0284c7]">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16] px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#EADCC9]">
                 <span>🧊</span>
                 <span>Servies Très Fraîches</span>
               </div>
@@ -626,11 +626,11 @@ function DishCard({
 
           {item.isCombo ? (
             <p className="mt-0.5 text-xs font-extrabold text-[#ea580c]">
-              🥤 Formule chaude : Canette 33cl offerte au choix
+              🎓 Formule Étudiant 11 € avec canette 33cl · Uniquement le midi
             </p>
           ) : item.category === "poke" ? (
             <p className="mt-0.5 text-xs font-bold text-[#059669]">
-              🥣 Riz japonais vinaigré · Préparé minute
+              🥣 Riz · Préparé minute
             </p>
           ) : null}
 

@@ -88,7 +88,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon sashimi minute, Crousty Chicken chaud et desserts maison. Commande en ligne ou sur place !",
+          "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon découpé minute, Crousty Chicken chaud (Formule Étudiant 11 € le midi) et desserts maison. Commande en ligne ou sur place !",
       },
     ],
     scripts: [
@@ -141,10 +141,10 @@ function Reveal({
 
 function Ticker() {
   const items = [
-    { icon: "🌱", text: "Saumon atlantique découpé du matin" },
-    { icon: "🥢", text: "Riz à sushi assaisonné maison" },
-    { icon: "🥑", text: "Avocats Hass mûrs à point" },
-    { icon: "🍗", text: "Gamme Chaude Crousty Chicken 11 €" },
+    { icon: "🌱", text: "Saumon frais découpé du matin" },
+    { icon: "🥢", text: "Riz préparé maison" },
+    { icon: "🥑", text: "Avocats mûrs à point" },
+    { icon: "🍗", text: "Formule Étudiant Crousty 11 € avec canette (Midi uniquement)" },
     { icon: "📍", text: "Centre de Visé · Avenue du Pont 12" },
     { icon: "🛵", text: "Click & Collect express en 15 min" },
   ];
@@ -178,7 +178,7 @@ function Index() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-[#F6F1E9] text-[#2C1D16]">
+    <div className="min-h-screen overflow-x-clip bg-[#EFE6D8] text-[#2C1D16]">
       <CartDrawer />
 
       {/* ════════════════════ 1. NAVBAR FLOTTANTE EXACTE POKAWA ════════════════════ */}
@@ -201,7 +201,7 @@ function Index() {
         <FluidInteractiveMenu />
 
         {/* ════════════════════ 5. NOS ENGAGEMENTS QUALITÉ (STYLE POKAWA) ════════════════════ */}
-        <section id="valeurs" className="scroll-mt-12 bg-[#FAF6F0]/80 py-14 sm:py-20 border-b border-[#E2D6C5]">
+        <section id="valeurs" className="scroll-mt-12 bg-[#E9DDC8] py-14 sm:py-20 border-b border-[#DECBB3]">
           <PokawaBrandValues />
         </section>
 
