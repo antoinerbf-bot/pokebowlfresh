@@ -230,7 +230,7 @@ export function PokawaFloatingNavbar() {
             >
               <span className="flex items-center gap-2.5">
                 <span className="text-base">🥗</span>
-                <span>Pokés & Chirashis</span>
+                <span>Pokés</span>
               </span>
               <span className="text-[10px] font-bold text-[#ff705f]">Dès 10 € →</span>
             </a>
