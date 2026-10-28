@@ -4,7 +4,7 @@ import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useTranslation } from "./I18nContext-CD-g1ikl.mjs";
 import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
-import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
+import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { S as Minus, U as Check, X as ArrowLeft, d as ShoppingBag, l as Sparkles, v as Plus } from "../_libs/lucide-react.mjs";
 import { r as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-DX47_DCM.mjs";
