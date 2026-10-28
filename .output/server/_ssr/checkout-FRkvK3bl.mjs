@@ -2,7 +2,7 @@ import { r as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
-import { g as Link, v as useNavigate } from "../_libs/@tanstack/react-router+[...].mjs";
+import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { B as CircleAlert, O as LoaderCircle, P as CreditCard, Q as ArrowLeft, c as Store, z as CircleCheckBig } from "../_libs/lucide-react.mjs";
 import { o as getDeliveryZone } from "./checkout-service.server-DldUjiRD.mjs";
