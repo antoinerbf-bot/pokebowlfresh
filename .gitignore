@@ -10,7 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-# .output tracked for O2Switch deployment
+# Build output for O2Switch deployment
+.output/
+
 .vinxi
 .tanstack/**
 .nitro
