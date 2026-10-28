@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 150" width="640" height="150">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f0d"/>
+      <stop offset="100%" stop-color="#111815"/>
+    </linearGradient>
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#ffffff" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <!-- Sleek black pill badge with subtle glass border -->
+  <rect width="640" height="150" rx="36" fill="url(#bgGrad)"/>
+  <rect width="638" height="148" x="1" y="1" rx="35" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1.5"/>
+  
+  <!-- Brand text and icon -->
+  <g font-family="'Century Gothic', 'Montserrat', 'Outfit', -apple-system, sans-serif" font-weight="800" filter="url(#subtleGlow)">
+    <text x="75" y="93" font-size="52" fill="#ffffff" letter-spacing="4">POKE</text>
+    <circle cx="320" cy="75" r="42" stroke="#ffffff" stroke-width="4.5" fill="none"/>
+    <text x="320" y="92" font-size="46" fill="#ffffff" text-anchor="middle" font-weight="900">N</text>
+    <text x="390" y="93" font-size="52" fill="#ffffff" letter-spacing="4">BOWL</text>
+  </g>
+</svg>

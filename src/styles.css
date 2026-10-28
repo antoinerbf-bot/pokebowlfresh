@@ -1,0 +1,491 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — POKE N BOWL
+   Palette : sable chaud · terre brûlée · corail vif · vert lime
+   Typographie : Outfit (display) · Plus Jakarta Sans (body)
+   ════════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  /* ── Typographies ─────────────────────────────────────────── */
+  --font-display: "Outfit", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Palette sémantique ───────────────────────────────────── */
+  --color-coral:           var(--coral);
+  --color-coral-light:     var(--coral-light);
+  --color-coral-foreground:var(--coral-foreground);
+  --color-lime:            var(--lime);
+  --color-lime-dark:       var(--lime-dark);
+  --color-sand:            var(--sand);
+  --color-sand-dark:       var(--sand-dark);
+  --color-warm:            var(--warm);
+  --color-earth:           var(--earth);
+  --color-deep:            var(--deep);
+  --color-deep-mid:        var(--deep-mid);
+  --color-deep-foreground: var(--deep-foreground);
+
+  /* ── Shadcn / Radix UI tokens ─────────────────────────────── */
+  --color-background:               var(--background);
+  --color-foreground:               var(--foreground);
+  --color-card:                     var(--card);
+  --color-card-foreground:          var(--card-foreground);
+  --color-popover:                  var(--popover);
+  --color-popover-foreground:       var(--popover-foreground);
+  --color-primary:                  var(--primary);
+  --color-primary-foreground:       var(--primary-foreground);
+  --color-secondary:                var(--secondary);
+  --color-secondary-foreground:     var(--secondary-foreground);
+  --color-muted:                    var(--muted);
+  --color-muted-foreground:         var(--muted-foreground);
+  --color-accent:                   var(--accent);
+  --color-accent-foreground:        var(--accent-foreground);
+  --color-destructive:              var(--destructive);
+  --color-destructive-foreground:   var(--destructive-foreground);
+  --color-border:                   var(--border);
+  --color-input:                    var(--input);
+  --color-ring:                     var(--ring);
+  --color-ring-offset-background:   var(--background);
+  --color-chart-1:                  var(--chart-1);
+  --color-chart-2:                  var(--chart-2);
+  --color-chart-3:                  var(--chart-3);
+  --color-chart-4:                  var(--chart-4);
+  --color-chart-5:                  var(--chart-5);
+  --color-sidebar:                  var(--sidebar);
+  --color-sidebar-foreground:       var(--sidebar-foreground);
+  --color-sidebar-primary:          var(--sidebar-primary);
+  --color-sidebar-primary-foreground:var(--sidebar-primary-foreground);
+  --color-sidebar-accent:           var(--sidebar-accent);
+  --color-sidebar-accent-foreground:var(--sidebar-accent-foreground);
+  --color-sidebar-border:           var(--sidebar-border);
+  --color-sidebar-ring:             var(--sidebar-ring);
+
+  /* ── Border radius ────────────────────────────────────────── */
+  --radius-sm:  calc(var(--radius) - 4px);
+  --radius-md:  calc(var(--radius) - 2px);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   :ROOT — Couleurs mode clair
+   ════════════════════════════════════════════════════════════════════ */
+:root {
+  --radius: 1rem;
+
+  /* Palette Poke N Bowl — Marron Beige Crème Artisanale */
+  --coral:           oklch(0.70 0.185 30);      /* orange-corail chaleureux */
+  --coral-light:     oklch(0.82 0.13 30);
+  --coral-foreground:oklch(1 0 0);
+  --lime:            oklch(0.89 0.05 76);       /* beige biscuit signature #E4D4BF */
+  --lime-dark:       oklch(0.82 0.07 70);       /* beige doré #D4BF9E */
+  --sand:            oklch(0.92 0.038 78);      /* sable beige chaud */
+  --sand-dark:       oklch(0.86 0.05 74);
+  --warm:            oklch(0.93 0.035 76);      /* crème chaude vanille */
+  --earth:           oklch(0.46 0.10 50);       /* marron châtaigne #874F29 */
+  --deep:            oklch(0.24 0.035 48);      /* marron espresso profond #321F17 */
+  --deep-mid:        oklch(0.32 0.045 48);      /* marron chocolat */
+  --deep-foreground: oklch(0.96 0.02 78);
+
+  /* Radix UI / Shadcn tokens */
+  --background:      oklch(0.935 0.032 76);     /* fond sable biscuit chaud #EFE6D8 */
+  --foreground:      oklch(0.24 0.035 48);      /* texte marron cacao */
+  --card:            oklch(0.972 0.018 78);     /* carte crème sable #FAF5EE */
+  --card-foreground: oklch(0.24 0.035 48);
+  --popover:         oklch(0.972 0.018 78);
+  --popover-foreground: oklch(0.24 0.035 48);
+  --primary:         oklch(0.24 0.035 48);      /* primaire marron cacao */
+  --primary-foreground: oklch(0.96 0.02 78);
+  --secondary:       oklch(0.89 0.042 74);      /* secondaire beige doré */
+  --secondary-foreground: oklch(0.28 0.045 48);
+  --muted:           oklch(0.90 0.03 76);
+  --muted-foreground:oklch(0.46 0.035 50);
+  --accent:          oklch(0.68 0.16 48);       /* ambre caramel */
+  --accent-foreground: oklch(1 0 0);
+  --destructive:     oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border:          oklch(0.84 0.038 74);      /* bordure lin chaud #DECBB3 */
+  --input:           oklch(0.84 0.038 74);
+  --ring:            oklch(0.46 0.10 50);
+
+  /* Shadows */
+  --shadow-soft: 0 16px 38px -20px oklch(0.185 0.045 168 / 0.38);
+  --shadow-lift: 0 28px 55px -25px oklch(0.185 0.045 168 / 0.52);
+  --shadow-card: 0 8px 24px -12px oklch(0.185 0.045 168 / 0.22);
+  --shadow-glow-coral: 0 0 40px oklch(0.70 0.185 30 / 0.35);
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(
+    145deg,
+    oklch(0.12 0.04 168) 0%,
+    oklch(0.185 0.055 165) 55%,
+    oklch(0.22 0.065 158) 100%
+  );
+  --gradient-sand: linear-gradient(135deg, oklch(0.978 0.012 88) 0%, oklch(0.92 0.042 85) 100%);
+  --gradient-warm: linear-gradient(180deg, oklch(0.955 0.038 86) 0%, oklch(0.90 0.055 80) 100%);
+
+  /* Charts */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  /* Sidebar */
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   @layer base — Reset & typographie globale
+   ════════════════════════════════════════════════════════════════════ */
+@layer base {
+  *, *::before, *::after {
+    border-color: var(--color-border);
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    overscroll-behavior-x: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html, body, #root {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100%;
+    overflow-x: clip;
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(255, 112, 95, 0.07) 0%, transparent 45%),
+      radial-gradient(circle at 88% 72%, rgba(212, 163, 115, 0.12) 0%, transparent 50%);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.012em;
+    line-height: 1.26;
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  p, a, button, span, label {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  p {
+    text-wrap: pretty;
+    line-height: 1.7;
+  }
+
+  button, a {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (max-width: 767px) {
+    h1, h2, h3, h4 {
+      letter-spacing: -0.012em;
+      line-height: 1.24;
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   UTILITIES — Design system components
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Ombres ───────────────────────────────────────────────────────── */
+@utility shadow-soft  { box-shadow: var(--shadow-soft); }
+@utility shadow-lift  { box-shadow: var(--shadow-lift); }
+@utility shadow-card  { box-shadow: var(--shadow-card); }
+@utility shadow-glow-coral { box-shadow: var(--shadow-glow-coral); }
+
+/* ── Surfaces ─────────────────────────────────────────────────────── */
+@utility surface-hero { background-image: var(--gradient-hero); }
+@utility surface-sand { background-image: var(--gradient-sand); }
+@utility surface-warm { background-image: var(--gradient-warm); }
+
+/* ── Typographie ──────────────────────────────────────────────────── */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* ── Card produit avec effet 3D ───────────────────────────────────── */
+@utility card-dish {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-3xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.38s ease;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+
+  &:hover {
+    transform: translateY(-8px) rotateX(1.5deg);
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+/* ── Badge tag ────────────────────────────────────────────────────── */
+@utility badge-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Bouton primaire ──────────────────────────────────────────────── */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-coral);
+  color: var(--color-coral-foreground);
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.875rem 2rem;
+  box-shadow: 0 16px 40px -14px oklch(0.70 0.185 30 / 0.65);
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
+  will-change: transform;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 22px 50px -16px oklch(0.70 0.185 30 / 0.75);
+    filter: brightness(1.06);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* ── Topping chip ─────────────────────────────────────────────────── */
+@utility topping-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  background: white;
+  padding: 0.625rem 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.18s ease;
+  min-height: 4rem;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover:not(:disabled) {
+    border-color: oklch(0.70 0.185 30 / 0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -8px oklch(0.70 0.185 30 / 0.3);
+  }
+}
+
+/* ─── Parallax helper ─────────────────────────────────────────────── */
+.parallax-slow   { will-change: transform; }
+.parallax-medium { will-change: transform; }
+.parallax-fast   { will-change: transform; }
+
+/* ─── Hero image ──────────────────────────────────────────────────── */
+.hero-video {
+  object-position: 50% 48%;
+  transform: scale(1.015);
+  filter: saturate(1.08) contrast(1.04);
+}
+
+@media (max-width: 767px) {
+  .hero-video {
+    object-position: 52% 42%;
+    transform: scale(1.06);
+  }
+}
+
+/* ─── Ingredient pill states ──────────────────────────────────────── */
+.ingredient-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  border: 1.5px solid oklch(0.88 0.025 88);
+  background-color: white;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    opacity 0.18s ease,
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.ingredient-pill:hover:not(.ingredient-pill--locked) {
+  border-color: oklch(0.70 0.185 30 / 0.5);
+  transform: scale(1.03);
+}
+
+.ingredient-pill--removed {
+  background-color: oklch(0.95 0.018 30 / 0.35);
+  border-color: oklch(0.70 0.185 30 / 0.4);
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+.ingredient-pill--locked {
+  border-style: dashed;
+  border-color: oklch(0.85 0.02 88);
+  background-color: oklch(0.96 0.008 88);
+  color: oklch(0.6 0.02 88);
+  cursor: default;
+}
+
+/* ─── Smooth reveal animation ─────────────────────────────────────── */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reveal-scale {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+/* Classe utilitaire pour apply reveal */
+.animate-reveal-up    { animation: reveal-up    0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-reveal-scale { animation: reveal-scale 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.animate-float        { animation: float 4s ease-in-out infinite; }
+.animate-pop          { animation: pop 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.animate-ticker       { animation: ticker 28s linear infinite; }
+
+/* ─── Respect prefers-reduced-motion ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-float,
+  .animate-ticker {
+    animation: none !important;
+  }
+
+  .card-dish:hover {
+    transform: translateY(-4px) !important;
+  }
+}
+
+/* ─── Focus visible accessible ───────────────────────────────────── */
+:focus-visible {
+  outline: 2.5px solid var(--color-coral);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+
+/* Responsive safety fixes: prevent headings and controls from clipping on narrow screens. */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+button, a, [role="button"] {
+  min-width: 0;
+}
+
+img, video, svg {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  h1, h2, h3, h4, h5, h6 {
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
+
+  input, select, textarea, button {
+    max-width: 100%;
+  }
+}

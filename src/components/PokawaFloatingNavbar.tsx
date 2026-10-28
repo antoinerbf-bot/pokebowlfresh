@@ -1,0 +1,307 @@
+import React from "react";
+import { Link } from "@tanstack/react-router";
+import {
+  MapPin,
+  ShoppingBag,
+  Menu,
+  X,
+  ChevronDown,
+  ArrowRight,
+  Phone,
+} from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { NotificationBellMenu } from "@/components/NotificationBellMenu";
+import { useTranslation } from "@/context/I18nContext";
+
+import { PokawaMegaMenu } from "@/components/PokawaMegaMenu";
+
+export function PokawaFloatingNavbar() {
+  const { items, setIsCartOpen } = useCart();
+  const { language, setLanguage } = useTranslation();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = React.useState(false);
+  const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsMegaMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsMegaMenuOpen(false);
+    }, 220);
+  };
+
+  return (
+    <header
+      onMouseLeave={handleMouseLeave}
+      className="absolute inset-x-0 top-3 sm:top-5 z-50 px-3 sm:px-6 lg:px-8 pointer-events-none"
+    >
+      <div className="w-full flex items-center justify-between pointer-events-auto relative gap-2 sm:gap-4">
+        {/* ── COLONNE GAUCHE (DESKTOP) : CAPSULE COMPACTE ── */}
+        <div className="hidden lg:flex flex-1 justify-start items-center min-w-0">
+          <div className="flex items-center gap-2 xl:gap-3.5 rounded-full bg-[#FAF4EB]/95 px-3.5 py-1.5 xl:px-4.5 xl:py-2 shadow-xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0">
+            <a
+              href="#composer"
+              className="flex items-center gap-1 text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] text-[#2C1D16] hover:text-[#ff705f] transition shrink-0"
+            >
+              <span>Composer</span>
+              <ChevronDown className="h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5]" />
+            </a>
+
+            {/* Trigger Mega-Menu survol "Notre Carte" */}
+            <div
+              onMouseEnter={handleMouseEnter}
+              className="relative shrink-0"
+            >
+              <a
+                href="#carte"
+                className={`flex items-center gap-1 text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] transition ${
+                  isMegaMenuOpen ? "text-[#ff705f]" : "hover:text-[#ff705f]"
+                }`}
+              >
+                <span>Notre Carte</span>
+                <ChevronDown
+                  className={`h-2.5 w-2.5 xl:h-3 xl:w-3 stroke-[2.5] transition-transform duration-200 ${
+                    isMegaMenuOpen ? "rotate-180 text-[#ff705f]" : ""
+                  }`}
+                />
+              </a>
+            </div>
+
+            <Link
+              to="/blog"
+              className="text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] text-[#2C1D16] hover:text-[#ff705f] transition shrink-0"
+            >
+              Le Mag
+            </Link>
+
+            <a
+              href="#valeurs"
+              className="text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] hover:text-[#ff705f] transition shrink-0"
+            >
+              Engagements
+            </a>
+
+            {/* Bouton Localisation Visé style Pokawa (bouton chocolat avec pin beige) */}
+            <a
+              href="https://maps.app.goo.gl/TkddDsG9pwYb62558"
+              target="_blank"
+              rel="noreferrer"
+              title="Restaurant Poke N Bowl à Visé, Avenue du Pont 12"
+              className="flex h-6 w-6 xl:h-7 xl:w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] shadow-md hover:bg-[#8D522A] hover:scale-110 transition shrink-0"
+            >
+              <MapPin className="h-3 w-3 xl:h-3.5 xl:w-3.5 fill-current" />
+            </a>
+          </div>
+        </div>
+
+        {/* ── COLONNE CENTRALE : LOGO ROYAL POKÉ N BOWL (ESPACE PROTÉGÉ, ZÉRO CHEVAUCHEMENT) ── */}
+        <div className="flex shrink-0 justify-center items-center px-1 sm:px-3 xl:px-6">
+          <Link
+            to="/"
+            className="flex flex-col items-center group transition hover:scale-105 duration-200 pointer-events-auto"
+            aria-label="Poke N Bowl Visé"
+          >
+            <div className="flex items-center gap-1.5 sm:gap-2 drop-shadow-[0_4px_22px_rgba(0,0,0,0.85)]">
+              <span className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white">
+                POKE
+              </span>
+              <span className="flex h-6 w-6 sm:h-7 sm:w-7 lg:h-7.5 lg:w-7.5 xl:h-8.5 xl:w-8.5 items-center justify-center rounded-full bg-[#EADCC9] text-xs sm:text-xs lg:text-sm font-black text-[#2C1D16] shadow-xl ring-2 ring-white/30">
+                N
+              </span>
+              <span className="text-xl sm:text-2xl lg:text-2xl xl:text-[28px] font-black uppercase tracking-[0.2em] text-white">
+                BOWL
+              </span>
+            </div>
+            <div className="mt-0.5 flex items-center justify-center gap-2">
+              <span className="text-[7.5px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-black uppercase tracking-[0.42em] text-[#EADCC9] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                VISÉ · BELGIQUE
+              </span>
+              <span
+                aria-label="Halal"
+                title="Halal"
+                className="rounded-full border border-[#EADCC9]/35 bg-[#2C1D16]/30 px-1.5 py-0.5 text-[6px] sm:text-[6.5px] font-medium uppercase tracking-[0.12em] text-[#EADCC9]/75"
+              >
+                Halal
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        {/* ── COLONNE DROITE (DESKTOP) : CAPSULE ANCRÉE À DROITE ── */}
+        <div className="hidden lg:flex flex-1 justify-end items-center min-w-0">
+          <div className="flex items-center gap-2 xl:gap-3 rounded-full bg-[#FAF4EB]/95 px-3 py-1.5 xl:px-4 xl:py-2 shadow-xl border border-[#E2D6C5] backdrop-blur-md text-[#2C1D16] shrink-0">
+            <Link
+              to="/recrutement"
+              className="text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] hover:text-[#ff705f] transition shrink-0"
+            >
+              Recrutement
+            </Link>
+
+            <Link
+              to="/contact"
+              className="text-[10.5px] xl:text-[11.5px] font-black uppercase tracking-[0.08em] xl:tracking-[0.12em] hover:text-[#ff705f] transition shrink-0"
+            >
+              Contact
+            </Link>
+
+            {/* Cloche de notifications Pokawa */}
+            <NotificationBellMenu />
+
+            {/* Bouton Panier */}
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              aria-label="Panier"
+              className="relative flex h-7 w-7 xl:h-8 xl:w-8 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 transition shrink-0"
+            >
+              <ShoppingBag className="h-3.5 w-3.5 xl:h-4 xl:w-4 text-[#2C1D16]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white shadow">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Bouton COMMANDER Chocolat & Crème */}
+            <Link
+              to="/commander"
+              className="inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-1.5 xl:px-5 xl:py-2 text-[10.5px] xl:text-xs font-black uppercase tracking-[0.12em] text-[#FAF4EB] shadow-lg transition hover:bg-[#482F22] hover:scale-105 active:scale-95 shrink-0"
+            >
+              <span>Commander</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* ── ACTIONS MOBILE (BURGER & COMMANDER) ── */}
+        <div className="flex lg:hidden items-center gap-2">
+          <Link
+            to="/commander"
+            className="inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-2 text-[10px] font-black uppercase tracking-wider text-[#FAF4EB] shadow-lg"
+          >
+            Commander
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setIsCartOpen(true)}
+            aria-label="Panier"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full bg-[#fff8ee] shadow-lg text-[#2C1D16]"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black text-white">
+                {cartCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            aria-label="Menu"
+            onClick={() => setMobileMenuOpen((o) => !o)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#fff8ee] shadow-lg text-[#2C1D16]"
+          >
+            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
+
+        {/* ── MEGA-MENU POKAWA SURVOL NOTRE CARTE ── */}
+        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <PokawaMegaMenu
+            isOpen={isMegaMenuOpen}
+            onClose={() => setIsMegaMenuOpen(false)}
+          />
+        </div>
+      </div>
+
+      {/* ── DROPDOWN MOBILE STYLE POKAWA ── */}
+      {mobileMenuOpen && (
+        <div className="mx-auto mt-2 max-w-sm rounded-[28px] bg-[#fff8ee] p-4 shadow-2xl border border-white/80 pointer-events-auto lg:hidden">
+          <div className="grid gap-2 text-left">
+            <a
+              href="#carte"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between rounded-2xl bg-white p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm active:scale-98 transition"
+            >
+              <span className="flex items-center gap-2.5">
+                <span className="text-base">🥗</span>
+                <span>Pokés</span>
+              </span>
+              <span className="text-[10px] font-bold text-[#ff705f]">Dès 10 € →</span>
+            </a>
+
+            <a
+              href="#carte"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between rounded-2xl bg-white p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm active:scale-98 transition"
+            >
+              <span className="flex items-center gap-2.5">
+                <span className="text-base">🍗</span>
+                <span>Crousty Chicken</span>
+              </span>
+              <span className="rounded-full bg-[#ea580c] text-white px-2 py-0.5 text-[9px] font-black">
+                Formule 11 €
+              </span>
+            </a>
+
+            <a
+              href="#composer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between rounded-2xl bg-[#EADCC9] border border-[#D9C5AD] p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm active:scale-98 transition"
+            >
+              <span className="flex items-center gap-2.5">
+                <span className="text-base">🥣</span>
+                <span>Composer son Bowl</span>
+              </span>
+              <span className="text-[10px] bg-[#2C1D16] text-white px-2 py-0.5 rounded-full font-black">
+                Personnalisé
+              </span>
+            </a>
+
+            <Link
+              to="/blog"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between rounded-2xl bg-white p-3 text-xs font-black uppercase tracking-wider text-[#2C1D16] shadow-sm active:scale-98 transition"
+            >
+              <span className="flex items-center gap-2.5">
+                <span className="text-base">📖</span>
+                <span>Le Mag Poké · Articles</span>
+              </span>
+              <span className="text-[10px] font-bold text-[#ff705f]">Conseils & SEO →</span>
+            </Link>
+
+            <a
+              href="#valeurs"
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#2C1D16] hover:bg-black/5"
+            >
+              Nos Engagements & Qualité
+            </a>
+
+            <div className="flex gap-2 pt-2 border-t border-black/5">
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 text-center rounded-xl border border-black/10 py-2.5 text-xs font-bold uppercase text-[#2C1D16]"
+              >
+                Contact
+              </Link>
+              <Link
+                to="/recrutement"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 text-center rounded-xl bg-[#ff705f] py-2.5 text-xs font-black uppercase text-white shadow-sm"
+              >
+                Recrutement
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}

@@ -1,0 +1,572 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowLeft, ArrowRight, ShoppingBag, UtensilsCrossed, Sparkles } from "lucide-react";
+import * as React from "react";
+import logo from "@/assets/logo.png";
+import { BrandLogo } from "@/components/BrandLogo";
+import dessert from "@/assets/dessert.jpg";
+import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
+import tiramisuNutella from "@/assets/tiramisu-nutella.jpg";
+import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
+
+import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
+import drinkCocaZero from "@/assets/drink-coca-zero.jpg";
+import drinkFantaOrange from "@/assets/drink-fanta-orange.jpg";
+import drinkIceTea from "@/assets/drink-ice-tea.jpg";
+import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
+import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
+
+const DESSERT_IMAGES: Record<string, string> = {
+  "tira-spec": tiramisuSpeculoos,
+  "tira-nutella": tiramisuNutella,
+  "tira-oreo": tiramisuOreo,
+};
+
+const DRINK_IMAGES: Record<string, string> = {
+  coca: drinkCocaCola,
+  "coca-zero": drinkCocaZero,
+  fanta: drinkFantaOrange,
+  "ice-tea": drinkIceTea,
+  "eau-plate": drinkEauPlate,
+  "eau-gaz": drinkEauGazeuse,
+};
+import {
+  bowls,
+  drinks,
+  desserts,
+  customBases,
+  customMixIns,
+  customProteins,
+  customSauces,
+  toppings,
+} from "../lib/data";
+import { DishImage } from "../components/DishImage";
+import { useCart } from "../context/CartContext";
+import { CartDrawer } from "../components/CartDrawer";
+import { useStock } from "../hooks/useStock";
+import { useTranslation } from "../context/I18nContext";
+
+export const Route = createFileRoute("/commander")({ component: CommanderPage });
+
+/* ─── Tag badge styles ───────────────────────────────────────────── */
+const TAG_STYLES: Record<string, string> = {
+  signature:  "bg-[#2C1D16] text-[#EADCC9]",
+  bestseller: "bg-[#ff705f] text-white",
+  premium:    "bg-[#7c4f1a] text-[#ffe9c2]",
+  spicy:      "bg-[#c0350f] text-white",
+  new:        "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
+};
+
+function CommanderPage() {
+  const { t, language, setLanguage } = useTranslation();
+  const { addItem, setIsCartOpen, items } = useCart();
+  const { available } = useStock();
+  const count = items.reduce((sum, item) => sum + item.quantity, 0);
+  const pokeBowls = bowls.filter((b) => !b.id.startsWith("crousty-"));
+  const croustyBowls = bowls.filter((b) => b.id.startsWith("crousty-"));
+
+  const quickAdd = (item: { id: string; name: string; price: number; image?: string }) => {
+    if (!available(item.id)) return;
+    addItem({
+      id: item.id,
+      name: item.name,
+      basePrice: item.price,
+      price: item.price,
+      quantity: 1,
+      toppings: [],
+      removedIngredients: [],
+      image: item.image || dessert,
+    });
+    setIsCartOpen(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#EFE6D8] text-[#2C1D16]">
+      <CartDrawer />
+
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 border-b border-[#DECBB3] bg-[#EFE6D8]/95 backdrop-blur-xl">
+        <nav className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-3 sm:px-8">
+          <Link to="/" className="flex min-w-0 items-center transition hover:opacity-95 hover:scale-[1.02] duration-200" aria-label="Poke N Bowl — Accueil">
+            <BrandLogo size="md" />
+          </Link>
+          <div className="flex items-center gap-2">
+            <div className="hidden rounded-full border border-black/10 bg-white p-1 sm:flex">
+              {(["fr", "en", "nl"] as const).map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => setLanguage(lang)}
+                  className={`rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${
+                    language === lang ? "bg-[#2C1D16] text-white" : "text-[#7a847e] hover:text-[#17231f]"
+                  }`}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
+            <Link
+              to="/"
+              className="hidden rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider text-[#17231f] hover:text-[#ff705f] sm:flex"
+            >
+              {t("nav.home")}
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="relative rounded-full bg-[#2C1D16] p-3 text-white transition hover:bg-[#ff705f]"
+              aria-label={t("cart.title")}
+            >
+              <ShoppingBag className="h-4 w-4" />
+              {count > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff705f] text-[9px] font-black">
+                  {count}
+                </span>
+              )}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        {/* ── Hero section ─────────────────────────────────────── */}
+        <section className="relative overflow-hidden bg-[#2C1D16] px-5 py-14 text-white sm:px-8 sm:py-20 lg:py-24">
+          {/* Déco background */}
+          <div className="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-white/5 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 left-1/4 h-60 w-60 rounded-full bg-[#ff705f]/8 blur-3xl" />
+
+          <div className="mx-auto max-w-[1200px]">
+            <Link
+              to="/"
+              className="mb-6 inline-flex items-center gap-2 text-xs font-bold text-white/45 transition hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" /> {t("cmd.back")}
+            </Link>
+
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+              <div className="flex items-center gap-3">
+                <BrandLogo size="md" />
+              </div>
+
+              <div className="flex-1">
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#EADCC9]">
+                  {t("cmd.eyebrow")}
+                </p>
+                <h1 className="mt-2 text-[clamp(2rem,8vw,4rem)] font-black leading-[1.06] tracking-[-0.025em]">
+                  <span className="block">{t("cmd.title1")}</span>
+                  <span className="block text-white/35">{t("cmd.title2")}</span>
+                </h1>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Bowls grid ───────────────────────────────────────── */}
+        <section className="mx-auto max-w-[1400px] px-5 py-12 sm:px-8 sm:py-16 lg:py-20">
+          {/* ── Banner Poke Bowl Sur Mesure (cohérent avec le composeur : 4 étapes) ── */}
+          <div className="relative mb-10 overflow-hidden rounded-[28px] border border-[#4A3328] bg-gradient-to-br from-[#2C1D16] via-[#3A251B] to-[#2C1D16] p-6 text-white shadow-lift sm:p-8">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#ff705f]/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-[#C87D4B]/15 blur-3xl" />
+
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-start gap-5">
+                <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-2 border-[#EADCC9]/25 shadow-md sm:h-32 sm:w-32">
+                  <DishImage dishId="scampis-royaux" alt="Poke Bowl sur mesure" className="h-full w-full object-cover" />
+                  <span className="absolute bottom-1.5 left-1.5 rounded-full bg-[#2C1D16]/90 px-2 py-0.5 text-[9px] font-black uppercase text-[#EADCC9]">
+                    4 étapes
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#2C1D16]">
+                    <Sparkles className="h-3 w-3 text-[#ff705f]" /> Créativité illimitée
+                  </div>
+                  <h3 className="mt-1.5 text-2xl font-black sm:text-3xl">
+                    Compose ton Poké <span className="text-[#ff705f]">de A à Z</span>
+                  </h3>
+                  <p className="mt-1 max-w-xl text-xs leading-relaxed text-[#EADCC9]/80 sm:text-sm">
+                    1 base, 1 protéine, 5 légumes inclus, 1 sauce offerte et 1 topping croustillant.
+                    Suppléments à volonté : protéine +2 €, légume +1 €, sauce +0,50 €, topping +0,50 €.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {[
+                      { icon: "🍚", label: "1. Format & Base" },
+                      { icon: "🐟", label: "2. Protéine" },
+                      { icon: "🥑", label: "3. 5 Légumes" },
+                      { icon: "🍯", label: "4. Sauce & Crunch" },
+                    ].map((s) => (
+                      <span
+                        key={s.label}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.07] px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white"
+                      >
+                        <span className="text-sm">{s.icon}</span> {s.label}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-[#EADCC9]/60">Dès</span>
+                  <span className="text-2xl font-black text-[#ff705f]">10,00 €</span>
+                </div>
+                <Link
+                  to="/sur-mesure"
+                  className="btn-primary inline-flex shrink-0 items-center gap-2 whitespace-nowrap px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-md transition hover:scale-105 active:scale-95"
+                >
+                  Composer mon bowl <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-8 flex items-end justify-between gap-5">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#ff705f]">
+                {t("cmd.bowls_eyebrow")}
+              </p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
+                {t("cmd.bowls_title")}
+              </h2>
+            </div>
+            <p className="hidden max-w-[200px] text-right text-sm text-[#7a847e] sm:block">
+              {t("cmd.bowls_hint")}
+            </p>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            {pokeBowls.map((bowl) => {
+              const ok = available(bowl.id);
+              const tagStyle = TAG_STYLES[bowl.tagColor ?? "signature"] ?? "bg-[#2C1D16] text-white";
+
+              return ok ? (
+                <Link
+                  key={bowl.id}
+                  to="/product/$productId"
+                  params={{ productId: bowl.id }}
+                  className="group block overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] shadow-card transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                >
+                  <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
+                </Link>
+              ) : (
+                <div
+                  key={bowl.id}
+                  className="block cursor-not-allowed overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] opacity-55 shadow-card"
+                >
+                  <BowlCard bowl={bowl} ok={false} tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* ── Section Crousty Chicken ────────────────── */}
+          <div className="mt-16 sm:mt-20">
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">
+                  <Sparkles className="h-3 w-3" /> ☀️ Formule Étudiant 11 € avec canette 33 cl · UNIQUEMENT LE MIDI
+                </div>
+                <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
+                  Crousty Chicken (Barquette Rectangulaire)
+                </h2>
+                <p className="mt-1 text-xs sm:text-sm text-[#6E5A49]">
+                  Morceaux de poulet croustillant dorés · Riz chaud · Canette 33cl fraîche incluse dans la formule étudiant du midi
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
+              {croustyBowls.map((bowl) => {
+                const ok = available(bowl.id);
+                const tagStyle = TAG_STYLES[bowl.tagColor ?? "bestseller"] ?? "bg-[#ff705f] text-white";
+
+                return ok ? (
+                  <Link
+                    key={bowl.id}
+                    to="/product/$productId"
+                    params={{ productId: bowl.id }}
+                    className="group block overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] shadow-card ring-2 ring-[#ff705f]/30 ring-offset-2 ring-offset-[#EFE6D8] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                  >
+                    <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
+                  </Link>
+                ) : (
+                  <div
+                    key={bowl.id}
+                    className="block cursor-not-allowed overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] opacity-55 shadow-card"
+                  >
+                    <BowlCard bowl={bowl} ok={false} tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Personnalisation rapide ───────────────────────── */}
+          <div className="mt-14 overflow-hidden rounded-[28px] bg-[#2C1D16] sm:mt-16 lg:mt-20">
+            <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-5 w-5 shrink-0 text-[#ff705f]" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#EADCC9]">
+                    {t("cmd.customization_title")}
+                  </p>
+                  <p className="mt-0.5 text-sm text-white/55">{t("cmd.customization_note")}</p>
+                </div>
+              </div>
+              <Link
+                to="/sur-mesure"
+                className="btn-primary inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap px-4 py-2 text-xs font-black uppercase"
+              >
+                Composer mon bowl <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+            <div className="grid gap-3 p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-5">
+              {[
+                { label: t("cmd.bases"),    items: customBases,    emoji: "🍚" },
+                { label: t("cmd.mixins"),   items: customMixIns,   emoji: "🥗" },
+                { label: t("cmd.protein"),  items: customProteins, emoji: "🍗" },
+                { label: t("cmd.sauces"),   items: customSauces,   emoji: "🍶" },
+                { label: t("cmd.toppings"), items: toppings.map((t) => `${t.emoji} ${t.name}`), emoji: "✨" },
+              ].map(({ label, items, emoji }) => (
+                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                  <h3 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#EADCC9]">
+                    <span>{emoji}</span> {label}
+                  </h3>
+                  <div className="mt-3 space-y-1.5">
+                    {items.map((value) => (
+                      <p key={value} className="text-[11px] leading-4 text-white/65">
+                        {value}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Boissons + Desserts avec vraies photos ─────────────────── */}
+          <div className="mt-8 space-y-8">
+            {/* Desserts Maison */}
+            <div className="overflow-hidden rounded-[28px] bg-[#FAF5EE] border border-[#DECBB3] shadow-card p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#DECBB3]">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#ff705f]/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
+                    <span>🧁</span> Douceurs Artisanales
+                  </div>
+                  <h2 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
+                    {t("cmd.desserts")}
+                  </h2>
+                </div>
+                <span className="text-xs font-black text-[#2C1D16] bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1.5 rounded-full">
+                  4,00 € la pièce
+                </span>
+              </div>
+
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {desserts.map((d) => {
+                  const ok = available(d.id);
+                  const imgSrc = DESSERT_IMAGES[d.id] || dessert;
+                  return (
+                    <div
+                      key={d.id}
+                      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-[#faf8f4] p-3 transition hover:shadow-md"
+                    >
+                      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[#eee8dc]">
+                        <img
+                          src={imgSrc}
+                          alt={d.name}
+                          className={`h-full w-full object-cover transition duration-500 group-hover:scale-105 ${
+                            !ok ? "grayscale contrast-75" : ""
+                          }`}
+                        />
+                        <span className="absolute top-2 right-2 rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-xs font-black text-[#EADCC9] shadow">
+                          4.00 €
+                        </span>
+                        {!ok && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                            <span className="rounded-full bg-red-600 px-3 py-1 text-[10px] font-black uppercase text-white">
+                              {t("cmd.sold_out")}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-3 flex items-center justify-between gap-2">
+                        <span className="text-sm font-black text-[#2C1D16]">{d.name}</span>
+                        <button
+                          type="button"
+                          disabled={!ok}
+                          onClick={() => quickAdd({ id: d.id, name: d.name, price: d.price, image: imgSrc })}
+                          className={`rounded-xl px-3.5 py-2 text-xs font-black transition ${
+                            ok
+                              ? "bg-[#2C1D16] text-white hover:bg-[#ff705f] hover:text-white"
+                              : "bg-black/10 text-black/30 cursor-not-allowed"
+                          }`}
+                        >
+                          {ok ? "Ajouter" : "Épuisé"}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Boissons Fraîches */}
+            <div className="overflow-hidden rounded-[28px] bg-[#FAF5EE] border border-[#DECBB3] shadow-card p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#DECBB3]">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#2C1D16] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
+                    <span>🧊</span> Servies Glacées
+                  </div>
+                  <h2 className="mt-2 text-2xl sm:text-3xl font-black text-[#2C1D16]">
+                    {t("cmd.drinks")}
+                  </h2>
+                </div>
+                <span className="text-xs font-black text-[#2C1D16] bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1.5 rounded-full">
+                  2,00 € la canette / bouteille
+                </span>
+              </div>
+
+              <div className="mt-6 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+                {drinks.map((drink) => {
+                  const ok = available(drink.id);
+                  const imgSrc = DRINK_IMAGES[drink.id];
+                  return (
+                    <div
+                      key={drink.id}
+                      className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-[#faf8f4] p-3 transition hover:shadow-md"
+                    >
+                      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-gradient-to-b from-[#F3EADC] to-[#E6D7C3]">
+                        {imgSrc ? (
+                          <img
+                            src={imgSrc}
+                            alt={drink.name}
+                            loading="lazy"
+                            className={`h-full w-full object-cover object-center transition duration-500 group-hover:scale-105 ${
+                              !ok ? "grayscale contrast-75" : ""
+                            }`}
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-3xl">🥤</div>
+                        )}
+                        <span className="absolute bottom-1.5 right-1.5 rounded-full bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] shadow">
+                          2.00 €
+                        </span>
+                      </div>
+
+                      <div className="mt-2.5">
+                        <span className="block text-xs font-black text-[#2C1D16] truncate">
+                          {drink.name}
+                        </span>
+                        <button
+                          type="button"
+                          disabled={!ok}
+                          onClick={() => quickAdd({ id: drink.id, name: drink.name, price: drink.price, image: imgSrc })}
+                          className={`mt-2 flex w-full items-center justify-center rounded-xl py-1.5 text-[11px] font-black transition ${
+                            ok
+                              ? "bg-[#2C1D16] text-white hover:bg-[#ff705f] hover:text-white"
+                              : "bg-black/10 text-black/30 cursor-not-allowed"
+                          }`}
+                        >
+                          {ok ? "Ajouter" : "Épuisé"}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* ── Mobile sticky cart bar ──────────────────────────────── */}
+      {count > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/5 bg-white/95 p-3 backdrop-blur-xl sm:hidden">
+          <button
+            type="button"
+            onClick={() => setIsCartOpen(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#ff705f] py-3.5 text-sm font-black text-white shadow-glow-coral"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            {t("cart.title")} ({count}) →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── BowlCard ────────────────────────────────────────────────────── */
+function BowlCard({
+  bowl,
+  ok,
+  tagStyle,
+  soldOut,
+}: {
+  bowl: (typeof bowls)[number];
+  ok: boolean;
+  tagStyle: string;
+  soldOut: string;
+}) {
+  return (
+    <>
+      {/* Photo */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#ece8dc]">
+        <DishImage
+          dishId={bowl.id}
+          alt={bowl.name}
+          className={`h-full w-full object-cover transition duration-700 ${
+            ok ? "group-hover:scale-[1.06]" : "grayscale"
+          }`}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+        {/* Tag */}
+        <span className={`badge-tag absolute left-3 top-3 shadow-card sm:left-4 sm:top-4 ${tagStyle}`}>
+          {ok ? bowl.tag : soldOut}
+        </span>
+
+        {/* Prix */}
+        <span className="absolute bottom-3 right-3 rounded-full bg-white/95 backdrop-blur-sm border border-black/5 px-3 py-1.5 text-sm font-black text-[#2C1D16] shadow-md sm:bottom-4 sm:right-4">
+          € {bowl.price.toFixed(2)}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className="p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="min-w-0 flex-1 break-words text-[17px] font-black leading-[1.22] sm:text-xl">
+            {bowl.name}
+          </h3>
+          {ok && (
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5f4ee] transition-colors duration-300 group-hover:bg-[#ff705f] group-hover:text-white">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          )}
+        </div>
+        <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#68756f]">{bowl.desc}</p>
+
+        {/* Ingrédients clés & Toppings */}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <span className="rounded-lg bg-[#faf8f4] border border-[#e8e2d9] px-2 py-0.5 text-[10px] font-bold text-[#68756f]">
+            🍚 Base au choix
+          </span>
+          <span className="rounded-lg bg-[#faf8f4] border border-[#e8e2d9] px-2 py-0.5 text-[10px] font-bold text-[#68756f]">
+            🛡️ Allergies : modifiable
+          </span>
+          <span className="rounded-lg bg-[#faf8f4] border border-[#e8e2d9] px-2 py-0.5 text-[10px] font-bold text-[#ff705f]">
+            ✨ Toppings à volonté
+          </span>
+        </div>
+
+        <div
+          className={`mt-4 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.16em] ${
+            ok ? "text-[#ff705f]" : "text-[#9aa39c]"
+          }`}
+        >
+          {ok ? "Personnaliser & Commander →" : soldOut}
+        </div>
+      </div>
+    </>
+  );
+}

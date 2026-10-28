@@ -1,0 +1,1385 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState, useRef } from "react";
+import {
+  Printer,
+  Volume2,
+  VolumeX,
+  RefreshCw,
+  Clock,
+  CheckCircle,
+  Truck,
+  CookingPot,
+  AlertTriangle,
+  Settings,
+  Search,
+  ExternalLink,
+  ChevronRight,
+  Shield,
+  Layers,
+  MapPin,
+  Phone,
+  Navigation,
+} from "lucide-react";
+import {
+  getPosOrders,
+  setPosOrderStatus,
+  triggerReprint,
+  getOrderReceipts,
+  ackPosPrint,
+  createTestDeliveryOrder,
+} from "../../fn/pos";
+import {
+  type PrinterConfig,
+  loadPrinterConfig,
+  savePrinterConfig,
+  sendReceiptToPrinter,
+  buildEposXmlTest,
+  buildEposXmlOrder,
+  scanForPrinterIp,
+} from "../../lib/epos-client";
+import type { Order } from "../../lib/orders";
+import QRCode from "qrcode";
+
+export const Route = createFileRoute("/pos/")({
+  component: PosApplicationPage,
+});
+
+export function PosApplicationPage() {
+  const [pin, setPin] = useState<string>(() => {
+    return (typeof window !== "undefined" && localStorage.getItem("pnb_pos_pin")) || "1234";
+  });
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState(false);
+
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [activePrintOrder, setActivePrintOrder] = useState<Order | null>(null);
+  const [printQrDataUrl, setPrintQrDataUrl] = useState<string>("");
+  const [modalQrDataUrl, setModalQrDataUrl] = useState<string>("");
+
+  useEffect(() => {
+    // Le QR de suivi GPS ne concerne que les commandes en livraison, jamais le retrait.
+    const token = selectedOrder?.customer.fulfillment === "delivery"
+      ? (selectedOrder.deliveryToken || selectedOrder.id)
+      : null;
+    if (token) {
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+      const trackUrl = `${origin}/track/${encodeURIComponent(token)}`;
+      QRCode.toDataURL(trackUrl, {
+        errorCorrectionLevel: "H",
+        margin: 4,
+        width: 320,
+        color: { dark: "#000000", light: "#ffffff" },
+      })
+        .then(setModalQrDataUrl)
+        .catch(() => setModalQrDataUrl(""));
+    } else {
+      setModalQrDataUrl("");
+    }
+  }, [selectedOrder]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<"kanban" | "history" | "settings">("kanban");
+
+  // Configuration Imprimante & Audio
+  const [config, setConfig] = useState<PrinterConfig>(loadPrinterConfig);
+  const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
+  const [testingPrinter, setTestingPrinter] = useState(false);
+  const [printBannerError, setPrintBannerError] = useState<string | null>(null);
+  const [printLog, setPrintLog] = useState<Array<{ time: string; msg: string; type: "ok" | "err" }>>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const alertedOrderIds = useRef<Set<string>>(new Set());
+
+  // Auto-nettoyage et migration immédiate du port vers 8043 (élimine définitivement 9100)
+  useEffect(() => {
+    if (config.printerPort !== 8043) {
+      const fixed = { ...config, printerPort: 8043, printMode: "epos" as const };
+      setConfig(fixed);
+      savePrinterConfig(fixed);
+    }
+  }, [config.printerPort]);
+
+  // Helper local storage pour se souvenir des commandes déjà imprimées
+  const getPrintedOrderIds = (): Set<string> => {
+    if (typeof window === "undefined") return new Set();
+    try {
+      const raw = localStorage.getItem("pnb_printed_orders");
+      if (raw) return new Set(JSON.parse(raw));
+    } catch { }
+    return new Set();
+  };
+
+  const markOrderAsPrintedLocally = (id: string) => {
+    if (typeof window === "undefined") return;
+    try {
+      const ids = getPrintedOrderIds();
+      ids.add(id);
+      const arr = Array.from(ids).slice(-200);
+      localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
+    } catch { }
+  };
+
+  // Garder trace des IDs pour les nouvelles alertes
+  const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
+  const initialOrdersLoaded = useRef(false);
+  const autoPrintInFlight = useRef<Set<string>>(new Set());
+  // Évite de relancer une impression en boucle toutes les 4 s après un échec réseau.
+  // La commande reste éligible à une nouvelle tentative après 60 s.
+  const autoPrintRetryAfter = useRef<Map<string, number>>(new Map());
+  const [creatingTestOrder, setCreatingTestOrder] = useState(false);
+
+  const handleCreateTestOrder = async () => {
+    setCreatingTestOrder(true);
+    try {
+      const response = await fetch("/api/create-test-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!data.success || !data.order) {
+        alert("Erreur : " + (data.error ?? "Échec création"));
+        return;
+      }
+      playAlertSound();
+      const created = data.order as Order;
+      // Affichage immédiat dans la modale et la liste
+      setOrders((prev) => [created, ...prev.filter((o) => o.id !== created.id)]);
+      setSelectedOrder(created);
+      // Synchronisation en arrière-plan sans bloquer
+      loadOrders().catch(() => { });
+    } catch (e: any) {
+      alert("Erreur lors de la création de la commande test : " + (e?.message ?? String(e)));
+    } finally {
+      setCreatingTestOrder(false);
+    }
+  };
+
+  // Préparer le son depuis un clic utilisateur : Chrome/Android bloque sinon l'audio automatique.
+  const enableSoundAndTest = async () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) throw new Error("Web Audio API indisponible");
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+      if (audioContextRef.current.state === "suspended") await audioContextRef.current.resume();
+      setConfig((current) => { const next = { ...current, soundEnabled: true }; savePrinterConfig(next); return next; });
+      playAlertSound(true);
+      alert("Son activé. Laissez cette page ouverte sur la caisse pour recevoir les alertes.");
+    } catch (e: any) { alert("Impossible d’activer le son : " + (e?.message ?? String(e))); }
+  };
+
+  // Carillon cuisine : trois bips, sur un contexte audio réutilisable.
+  const playAlertSound = (force = false) => {
+    if (!config.soundEnabled && !force) return;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+      const ctx = audioContextRef.current;
+      if (ctx.state === "suspended") void ctx.resume();
+
+      const playChime = (startTime: number, freq1: number, freq2: number) => {
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = "triangle";
+        osc2.type = "sine";
+        osc1.frequency.setValueAtTime(freq1, startTime);
+        osc2.frequency.setValueAtTime(freq2, startTime + 0.12);
+
+        gain.gain.setValueAtTime(0.85, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(startTime);
+        osc1.stop(startTime + 0.15);
+        osc2.start(startTime + 0.12);
+        osc2.stop(startTime + 0.38);
+      };
+
+      if (!force && !config.soundEnabled) return;
+      const now = ctx.currentTime;
+      playChime(now, 784, 1046.5);        // Ding-Dong 1
+      playChime(now + 0.42, 784, 1046.5); // Ding-Dong 2
+      playChime(now + 0.84, 784, 1046.5); // Ding-Dong 3
+    } catch (e) {
+      console.warn("[POS] Audio non disponible:", e);
+    }
+  };
+
+  // Chargement des commandes (Double stratégie : API REST directe puis RPC)
+  const loadOrders = async () => {
+    try {
+      let newOrders: Order[] | null = null;
+
+      // 1. Essayer l'API REST directe /api/pos-orders
+      try {
+        const resRest = await fetch("/api/pos-orders", {
+          headers: { Accept: "application/json", "x-pos-pin": pin },
+          cache: "no-store",
+        });
+        if (resRest.ok) {
+          const json = await resRest.json();
+          if (json.success && Array.isArray(json.orders)) {
+            newOrders = json.orders;
+          }
+        }
+      } catch (err) {
+        console.warn("[POS] Erreur REST /api/pos-orders, fallback RPC:", err);
+      }
+
+      // 2. Fallback createServerFn
+      if (!newOrders) {
+        const res = await getPosOrders({ data: { pin } });
+        newOrders = res.orders;
+      }
+
+      // Détection automatique de toute commande non encore imprimée
+      const printableStatuses: Order["status"][] = ["paid", "awaiting_pickup", "awaiting_delivery"];
+      const printedIds = getPrintedOrderIds();
+      const nowMs = Date.now();
+      const fourHoursMs = 4 * 60 * 60 * 1000;
+
+      const newlyPrintable = newOrders.filter((o) => {
+        if (!printableStatuses.includes(o.status)) return false;
+        if (o.printStatus === "printed") return false;
+        if (printedIds.has(o.id)) return false;
+        if (autoPrintInFlight.current.has(o.id)) return false;
+        const retryAfter = autoPrintRetryAfter.current.get(o.id) ?? 0;
+        if (nowMs < retryAfter) return false;
+
+        // Éviter de réimprimer les commandes de services précédents (> 4h)
+        const createdAtMs = new Date(o.createdAt).getTime();
+        const isRecent = !isNaN(createdAtMs) && (nowMs - createdAtMs) < fourHoursMs;
+        if (!isRecent) {
+          markOrderAsPrintedLocally(o.id);
+          return false;
+        }
+
+        return true;
+      });
+
+      // Détecter les commandes nouvellement arrivées indépendamment de leur éligibilité
+      // à l'impression (statut, accusé d'impression ou temporisation de sécurité).
+      const newlyArrivedOrders = newOrders.filter((o) => !knownOrderStatuses.current.has(o.id));
+      if (initialOrdersLoaded.current && newlyArrivedOrders.length > 0) {
+        newlyArrivedOrders.forEach((o) => alertedOrderIds.current.add(o.id));
+        playAlertSound();
+      }
+      for (const order of newOrders) {
+        knownOrderStatuses.current.set(order.id, order.status);
+      }
+      initialOrdersLoaded.current = true;
+
+      setOrders(newOrders);
+
+      // Impression automatique sur l'imprimante dès qu'une commande tombe sur le site
+      for (const order of newlyPrintable) {
+        if (autoPrintInFlight.current.has(order.id)) continue;
+        autoPrintInFlight.current.add(order.id);
+        (async () => {
+          try {
+            // Après une tentative non confirmée, ne pas relancer automatiquement :
+            // l'imprimante peut avoir reçu le ticket même si Chrome n'a pas reçu l'accusé.
+            // Cela évite les doublons ; une réimpression reste disponible manuellement.
+            const res = await handleExecutePrint(order, true);
+            if (!res.success) {
+              autoPrintRetryAfter.current.set(order.id, Date.now() + fourHoursMs);
+              console.warn("[POS Auto-print] Échec non confirmé pour", order.id, res.message);
+              setPrintLog((prev) => [
+                { time: new Date().toLocaleTimeString(), msg: `Impression de ${order.id} non confirmée : ${res.message}. Pas de nouvelle tentative automatique pour éviter un doublon ; vérifiez le ticket puis utilisez la réimpression manuelle si nécessaire.`, type: "err" },
+                ...prev.slice(0, 30),
+              ]);
+            } else {
+              autoPrintRetryAfter.current.delete(order.id);
+            }
+          } catch (err) {
+            autoPrintRetryAfter.current.set(order.id, Date.now() + 60_000);
+            console.error("[POS Auto-print] Erreur :", err);
+          } finally {
+            autoPrintInFlight.current.delete(order.id);
+          }
+        })();
+      }
+    } catch (e) {
+      console.error("[POS] Erreur globale loadOrders:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isUnlocked) {
+      loadOrders();
+      const timer = setInterval(loadOrders, 4000);
+      return () => clearInterval(timer);
+    }
+    return undefined;
+  }, [isUnlocked, pin]);
+
+  // Impression navigateur de secours : noir sur blanc, ticket 80 mm et QR en pied de ticket.
+  // Chrome exige une validation dans sa fenêtre d'impression ; l'impression silencieuse dépend de la configuration système.
+  const printBrowserTicket = async (order: Order): Promise<boolean> => {
+    const popup = window.open("", "_blank", "width=420,height=760");
+    if (!popup) { alert("Chrome a bloqué la fenêtre d’impression. Autorisez les fenêtres pop-up pour ce site puis réessayez."); return false; }
+    try {
+      const esc = (value: unknown) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      // QR GPS uniquement pour la livraison ; retrait = aucun QR sur le ticket.
+      const qr = order.customer.fulfillment === "delivery"
+        ? await QRCode.toDataURL(`${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`, { errorCorrectionLevel: "H", margin: 2, width: 240, color: { dark: "#000000", light: "#ffffff" } })
+        : "";
+      const grouped = new Map<string, { item: Order["items"][number]; quantity: number }>();
+      for (const item of order.items) {
+        const key = JSON.stringify([item.name.trim().toLowerCase(), item.price, item.toppings.map((t) => t.trim().toLowerCase())]);
+        const previous = grouped.get(key);
+        if (previous) previous.quantity += item.quantity;
+        else grouped.set(key, { item, quantity: item.quantity });
+      }
+      const items = Array.from(grouped.values()).map(({ item, quantity }) => {
+        const toppingsHtml = (item.toppings || []).map((top) =>
+          `<div class="detail">${/^feta$/i.test(top.trim()) ? "+ Feta — 1,00 €" : esc(top)}</div>`
+        ).join("");
+        return `<div class="item"><div class="item-main"><div class="item-name">${quantity} × ${esc(item.name)}</div>${toppingsHtml ? `<div class="details">${toppingsHtml}</div>` : ""}</div><b class="item-price">${(item.price * quantity).toFixed(2)} €</b></div>`;
+      }).join("");
+      popup.document.open();
+      popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.3 "Courier New",monospace;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;letter-spacing:.4px;margin:0 0 3px}h2{font-size:14px;margin:5px 0;text-transform:uppercase}p{margin:3px 0;overflow-wrap:anywhere}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;align-items:flex-start;gap:4px;margin:5px 0;break-inside:avoid}.item-main{min-width:0;flex:1}.item-name{font-weight:700;overflow-wrap:anywhere}.item-price{white-space:nowrap;font-weight:700}.details{margin:3px 0 0 5px;font-size:10px;line-height:1.35}.detail{overflow-wrap:anywhere}.receipt-badge{display:inline-block;border:1px solid #000;padding:2px 8px;font-size:11px;letter-spacing:1px}.total{font-size:16px;font-weight:bold;border-top:1px dashed #000;padding-top:6px}.qr{display:block;width:28mm;height:28mm;margin:5px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div>${order.customer.fulfillment === "delivery" ? `<p class="center"><b>SCANNEZ POUR GPS LIVREUR</b></p><img class="qr" src="${qr}" alt="QR de géolocalisation livraison"><p class="center">Waze &amp; Google Maps en 1-clic</p><div class="line"></div>` : ""}<p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();</script></body></html>`);
+      popup.document.close();
+      return true;
+    } catch (e) { popup.close(); alert("Erreur de préparation du ticket : " + String(e)); return false; }
+  };
+
+  // Action d'impression directe ePOS réseau (impression silencieuse sans pop-up)
+  const handleExecutePrint = async (order: Order, silent = false): Promise<{ success: boolean; message: string }> => {
+    setPrintingOrderId(order.id);
+    let result = { success: false, message: "Erreur inconnue" };
+    try {
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+
+      // 1. Génération XML ePOS native avec mise en page thermique 80mm et QR Code GPS
+      const xml = buildEposXmlOrder(order, origin);
+
+      // 2. Envoi direct à l'Epson TM-m30II (aucun pop-up, aucun fallback PDF)
+      const res = await sendReceiptToPrinter(xml, config);
+      result = res;
+      const now = new Date().toLocaleTimeString();
+
+      if (res.success) {
+        markOrderAsPrintedLocally(order.id);
+        setPrintBannerError(null);
+        setPrintLog((prev) => [
+          { time: now, msg: `Commande ${order.id} : ticket officiel imprimé sur ${config.printerIp}.`, type: "ok" },
+          ...prev.slice(0, 30),
+        ]);
+        if (!silent) alert(`✅ Ticket de caisse commande ${order.id} imprimé avec succès sur l'Epson (${config.printerIp}) !`);
+
+        // Synchronisation du statut d'impression vers l'API REST
+        try {
+          await fetch("/api/pos-orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-pos-pin": pin },
+            body: JSON.stringify({
+              orderId: order.id,
+              printStatus: "printed",
+              pin,
+            }),
+          });
+        } catch (ackErr) {
+          console.warn("[POS] Échec synchronisation ack print:", ackErr);
+        }
+      } else {
+        setPrintLog((prev) => [
+          { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
+          ...prev.slice(0, 30),
+        ]);
+        setPrintBannerError(
+          `⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Cliquez sur "Autoriser Chrome" ou vérifiez l'adresse IP.`
+        );
+        if (!silent) {
+          alert(`⚠️ Impossible d'imprimer sur l'Epson (${config.printerIp}) :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "Autoriser Chrome" dans l'onglet Paramètres et que l'imprimante est allumée.`);
+        }
+      }
+    } catch (err: any) {
+      console.error("[POS] Erreur handleExecutePrint:", err);
+      result = { success: false, message: err?.message || String(err) };
+    } finally {
+      setPrintingOrderId(null);
+    }
+    return result;
+  };
+
+  const handleManualReprint = async (orderId: string) => {
+    const targetOrder = orders.find((o) => o.id === orderId) || (selectedOrder?.id === orderId ? selectedOrder : null);
+    if (!targetOrder) {
+      alert("Commande introuvable.");
+      return;
+    }
+    // ePOS direct d'abord ; en cas d'échec, proposer l'impression navigateur.
+    const result = await handleExecutePrint(targetOrder, false);
+    if (!result.success && window.confirm("L’impression directe ePOS a échoué. Voulez-vous ouvrir le ticket via l’impression Chrome ?")) await printBrowserTicket(targetOrder);
+  };
+
+  const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
+    try {
+      // 1. Essayer API REST
+      try {
+        const res = await fetch("/api/pos-orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-pos-pin": pin },
+          body: JSON.stringify({ orderId, status, pin }),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success) {
+            setOrders((prev) =>
+              prev.map((o) => (o.id === orderId ? { ...o, status } : o)),
+            );
+            if (selectedOrder && selectedOrder.id === orderId) {
+              setSelectedOrder((prev) => (prev ? { ...prev, status } : null));
+            }
+            loadOrders().catch(() => { });
+            return;
+          }
+        }
+      } catch { }
+
+      // 2. Fallback serverFn
+      await setPosOrderStatus({ data: { pin, orderId, status } });
+      await loadOrders();
+      if (selectedOrder && selectedOrder.id === orderId) {
+        setSelectedOrder((prev) => (prev ? { ...prev, status } : null));
+      }
+    } catch (e) {
+      alert("Erreur de mise à jour du statut.");
+    }
+  };
+
+  // État de recherche réseau d'imprimante
+  const [scanningIp, setScanningIp] = useState(false);
+  const [scanStatus, setScanStatus] = useState<string | null>(null);
+
+  const handleScanPrinter = async () => {
+    if (scanningIp) return;
+    setScanningIp(true);
+    setScanStatus("Recherche de l'imprimante Epson en cours sur le réseau...");
+    try {
+      const foundIp = await scanForPrinterIp((testedIp) => {
+        setScanStatus(`Test de ${testedIp}...`);
+      });
+      if (foundIp) {
+        const updated = { ...config, printerIp: foundIp };
+        setConfig(updated);
+        savePrinterConfig(updated);
+        setScanStatus(`✅ Epson détectée à l'adresse ${foundIp} !`);
+        alert(`✅ Imprimante Epson trouvée à l'adresse ${foundIp} !\n\nL'adresse IP a été mise à jour dans la configuration.`);
+      } else {
+        setScanStatus("Aucune Epson détectée sur les adresses habituelles.");
+        alert("Aucune imprimante détectée automatiquement.\n\n💡 Pour vérifier son IP exacte : éteignez l'imprimante, maintenez le bouton FEED enfoncé et rallumez-la : elle imprime une bandelette avec son IP !");
+      }
+    } catch (e: any) {
+      setScanStatus(`Erreur : ${e?.message}`);
+    } finally {
+      setScanningIp(false);
+    }
+  };
+
+  // Test d'impression direct sur l'Epson (envoi propre de ticket ePOS avec QR code)
+  const handleTestPrint = async () => {
+    if (testingPrinter) return;
+    setTestingPrinter(true);
+    setPrintLog((prev) => [
+      { time: new Date().toLocaleTimeString(), msg: `Test ePOS vers ${config.printerIp}...`, type: "ok" },
+      ...prev.slice(0, 30),
+    ]);
+    try {
+      const xml = buildEposXmlTest(config.printerIp);
+      const res = await sendReceiptToPrinter(xml, config);
+      const now = new Date().toLocaleTimeString();
+
+      if (res.success) {
+        setPrintBannerError(null);
+        setPrintLog((prev) => [
+          { time: now, msg: `Test ePOS direct REUSSI sur ${config.printerIp} !`, type: "ok" },
+          ...prev.slice(0, 30),
+        ]);
+        alert(`✅ Succès ! Le ticket de test est sorti sur votre imprimante Epson (${config.printerIp}).`);
+      } else {
+        setPrintBannerError(`⚠️ Imprimante (${config.printerIp}) inaccessible : ${res.message}`);
+        setPrintLog((prev) => [
+          { time: now, msg: `Échec du test : ${res.message}`, type: "err" },
+          ...prev.slice(0, 30),
+        ]);
+        alert(
+          `⚠️ Échec de l'impression sur ${config.printerIp} :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "1. Ouvrir l'autorisation Chrome" ci-dessous pour approuver le certificat local, et que l'imprimante est allumée.`
+        );
+      }
+    } catch (e: any) {
+      console.error("Erreur test imprimante", e);
+      const message = e?.message ?? "Erreur inconnue";
+      setPrintLog((prev) => [
+        { time: new Date().toLocaleTimeString(), msg: `Erreur du test : ${message}`, type: "err" },
+        ...prev.slice(0, 30),
+      ]);
+      alert(`Erreur test imprimante : ${message}`);
+    } finally {
+      setTestingPrinter(false);
+    }
+  };
+
+  // Écran PIN
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen bg-[#2C1D16] flex items-center justify-center p-4 select-none">
+        <div className="w-full max-w-sm rounded-3xl bg-white p-8 shadow-2xl text-center space-y-6">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-[#ff705f]/10 flex items-center justify-center text-[#ff705f]">
+            <Shield className="w-8 h-8" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-[#2C1D16]">POKE N BOWL</h1>
+            <p className="text-sm font-bold text-[#7a847e] mt-1">Accès POS Caisse</p>
+          </div>
+
+          <div className="flex justify-center gap-3">
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className={`w-4 h-4 rounded-full transition-all ${pinInput.length > i ? "bg-[#ff705f] scale-110" : "bg-black/10"
+                  }`}
+              />
+            ))}
+          </div>
+
+          {pinError && <p className="text-xs font-bold text-red-500">Code PIN incorrect</p>}
+
+          <div className="grid grid-cols-3 gap-3">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+              <button
+                key={num}
+                onClick={() => {
+                  if (pinInput.length < 4) {
+                    const next = pinInput + num;
+                    setPinInput(next);
+                    if (next.length === 4) {
+                      if (next === pin) {
+                        setIsUnlocked(true);
+                        setPinError(false);
+                      } else {
+                        setPinError(true);
+                        setTimeout(() => setPinInput(""), 600);
+                      }
+                    }
+                  }
+                }}
+                className="h-16 rounded-2xl bg-[#F6F1E9] text-2xl font-black text-[#2C1D16] hover:bg-black/5 active:scale-95 transition"
+              >
+                {num}
+              </button>
+            ))}
+            <button
+              onClick={() => setPinInput("")}
+              className="h-16 rounded-2xl bg-black/5 text-sm font-extrabold text-[#7a847e]"
+            >
+              Effacer
+            </button>
+            <button
+              onClick={() => {
+                if (pinInput.length < 4) {
+                  const next = pinInput + "0";
+                  setPinInput(next);
+                  if (next.length === 4) {
+                    if (next === pin) {
+                      setIsUnlocked(true);
+                      setPinError(false);
+                    } else {
+                      setPinError(true);
+                      setTimeout(() => setPinInput(""), 600);
+                    }
+                  }
+                }
+              }}
+              className="h-16 rounded-2xl bg-[#F6F1E9] text-2xl font-black text-[#2C1D16] active:scale-95 transition"
+            >
+              0
+            </button>
+            <button
+              onClick={() => {
+                if (pinInput === pin) {
+                  setIsUnlocked(true);
+                  setPinError(false);
+                } else {
+                  setPinError(true);
+                  setTimeout(() => setPinInput(""), 600);
+                }
+              }}
+              className="h-16 rounded-2xl bg-[#ff705f]/10 text-xs font-black text-[#ff705f]"
+            >
+              Entrée
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Filtrage des commandes par statut
+  const newOrdersList = orders.filter(
+    (o) => o.status === "paid" || o.status === "awaiting_pickup" || o.status === "awaiting_delivery",
+  );
+  const preparingOrdersList = orders.filter((o) => o.status === "preparing");
+  const readyOrdersList = orders.filter((o) => o.status === "ready");
+  const deliveringOrdersList = orders.filter((o) => o.status === "delivering");
+  const completedOrdersList = orders.filter((o) => o.status === "completed" || o.status === "cancelled");
+
+  return (
+    <>
+      <div className="pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
+        {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5 bg-[#2C1D16]">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="flex h-3 w-3 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <span className="text-lg font-black tracking-wider text-white">POKENBOWL POS</span>
+            </div>
+
+            <nav className="flex rounded-xl bg-black/30 p-1">
+              <button
+                onClick={() => setActiveTab("kanban")}
+                className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+                  }`}
+              >
+                Commandes en direct ({newOrdersList.length + preparingOrdersList.length + readyOrdersList.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("history")}
+                className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "history" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+                  }`}
+              >
+                Historique
+              </button>
+              <button
+                onClick={() => setActiveTab("settings")}
+                className={`rounded-lg px-4 py-1.5 text-xs font-black transition ${activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+                  }`}
+              >
+                Imprimante & Paramètres
+              </button>
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Toggle Son */}
+            <button
+              onClick={() => {
+                if (!config.soundEnabled) { void enableSoundAndTest(); return; }
+                const updated = { ...config, soundEnabled: false };
+                setConfig(updated);
+                savePrinterConfig(updated);
+              }}
+              className={`rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
+                }`}
+              title={config.soundEnabled ? "Désactiver le son" : "Activer le son et autoriser l'audio"}
+            >
+              {config.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+            </button>
+
+            {/* Rafraîchissement manuel */}
+            <button
+              onClick={loadOrders}
+              className="rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition"
+              title="Rafraîchir"
+            >
+              <RefreshCw className={`h-5 w-5 ${loading ? "animate-spin" : ""}`} />
+            </button>
+
+            {/* Statut Imprimante & Lien d'autorisation direct */}
+            <a
+              href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-1.5 text-xs font-bold border border-white/10 transition cursor-pointer"
+              title="Cliquez pour autoriser l'imprimante dans Chrome (permet l'impression 100% automatique)"
+            >
+              <Printer className="h-4 w-4 text-[#ff705f]" />
+              <span className="text-[#98aba3]">{config.printerIp}</span>
+            </a>
+          </div>
+        </header>
+
+        {/* ─── Bannière Alerte Impression Réseau ───────────────────────────── */}
+        {printBannerError && (
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-amber-500/20 border-b border-amber-500/40 px-5 py-3 text-xs text-amber-200">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+              <span className="font-semibold">{printBannerError}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <a
+                href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg text-xs font-black transition shadow"
+              >
+                <span>🔒 1. Autoriser Chrome</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <button
+                onClick={handleTestPrint}
+                disabled={testingPrinter}
+                className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-black transition"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>2. Réessayer</span>
+              </button>
+              <button
+                onClick={() => setActiveTab("settings")}
+                className="underline text-xs text-amber-300 hover:text-white px-2 py-1 font-bold"
+              >
+                Réglages
+              </button>
+              <button
+                onClick={() => setPrintBannerError(null)}
+                className="rounded-lg bg-black/30 px-2 py-1 text-[10px] font-bold text-amber-200 hover:bg-black/50"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Contenu Principal ────────────────────────────────────────────── */}
+        <div className="flex flex-1 min-h-0 overflow-hidden">
+          {activeTab === "kanban" && (
+            <div className="grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden">
+              {/* Colonne 1 : NOUVELLES */}
+              <KanbanColumn
+                title="Nouvelles"
+                badgeCount={newOrdersList.length}
+                color="bg-[#ff705f]"
+                orders={newOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
+                nextLabel="Préparer"
+                nextIcon={<CookingPot className="w-4 h-4" />}
+              />
+
+              {/* Colonne 2 : EN PRÉPARATION */}
+              <KanbanColumn
+                title="En Cuisine"
+                badgeCount={preparingOrdersList.length}
+                color="bg-[#f59e0b]"
+                orders={preparingOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => handleUpdateStatus(id, "ready")}
+                nextLabel="Prête"
+                nextIcon={<CheckCircle className="w-4 h-4" />}
+              />
+
+              {/* Colonne 3 : PRÊTES */}
+              <KanbanColumn
+                title="Prêtes / Comptoir"
+                badgeCount={readyOrdersList.length}
+                color="bg-[#10b981]"
+                orders={readyOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => {
+                  const target = orders.find((o) => o.id === id);
+                  if (target?.customer.fulfillment === "delivery") {
+                    handleUpdateStatus(id, "delivering");
+                  } else {
+                    handleUpdateStatus(id, "completed");
+                  }
+                }}
+                nextLabel="Départ Livr. / Remis"
+                nextIcon={<Truck className="w-4 h-4" />}
+              />
+
+              {/* Colonne 4 : EN LIVRAISON */}
+              <KanbanColumn
+                title="En Livraison"
+                badgeCount={deliveringOrdersList.length}
+                color="bg-[#3b82f6]"
+                orders={deliveringOrdersList}
+                onSelect={setSelectedOrder}
+                onReprint={handleManualReprint}
+                onNextStatus={(id) => handleUpdateStatus(id, "completed")}
+                nextLabel="Livrée"
+                nextIcon={<CheckCircle className="w-4 h-4" />}
+              />
+            </div>
+          )}
+
+          {activeTab === "history" && (
+            <div className="flex-1 p-6 overflow-y-auto space-y-4">
+              <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                <Search className="h-5 w-5 text-[#7a847e]" />
+                <input
+                  type="text"
+                  placeholder="Rechercher par n° de commande, client, téléphone..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent flex-1 text-white placeholder-[#7a847e] outline-none font-bold"
+                />
+              </div>
+
+              <div className="rounded-2xl border border-white/10 overflow-hidden">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-black/30 text-xs uppercase text-[#8ea39b] font-black">
+                    <tr>
+                      <th className="p-4">N° Commande</th>
+                      <th className="p-4">Date / Heure</th>
+                      <th className="p-4">Client</th>
+                      <th className="p-4">Mode</th>
+                      <th className="p-4">Total</th>
+                      <th className="p-4">Statut</th>
+                      <th className="p-4">Impression</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 font-semibold">
+                    {orders
+                      .filter(
+                        (o) =>
+                          o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          o.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          o.customer.phone.includes(searchQuery),
+                      )
+                      .map((o) => (
+                        <tr key={o.id} className="hover:bg-white/5 transition">
+                          <td className="p-4 font-mono font-bold text-white">{o.id}</td>
+                          <td className="p-4 text-[#8ea39b]">
+                            {new Date(o.createdAt).toLocaleDateString("fr-BE")}{" "}
+                            {new Date(o.createdAt).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}
+                          </td>
+                          <td className="p-4">{o.customer.name}</td>
+                          <td className="p-4">{o.customer.fulfillment === "delivery" ? "Livraison" : "Retrait"}</td>
+                          <td className="p-4 font-bold text-white">{o.total.toFixed(2)} €</td>
+                          <td className="p-4">
+                            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black">
+                              {o.status}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span
+                              className={`rounded-full px-2.5 py-1 text-xs font-black ${o.printStatus === "printed"
+                                  ? "bg-emerald-500/20 text-emerald-300"
+                                  : o.printStatus === "failed"
+                                    ? "bg-red-500/20 text-red-300"
+                                    : "bg-amber-500/20 text-amber-300"
+                                }`}
+                            >
+                              {o.printStatus ?? "pending"}
+                            </span>
+                          </td>
+                          <td className="p-4 text-right space-x-2">
+                            <button
+                              onClick={() => setSelectedOrder(o)}
+                              className="rounded-xl bg-white/10 px-3 py-1.5 text-xs font-black hover:bg-white/20"
+                            >
+                              Détail
+                            </button>
+                            <button
+                              onClick={() => handleManualReprint(o.id)}
+                              className="rounded-xl bg-[#ff705f] px-3 py-1.5 text-xs font-black text-white hover:bg-[#ff5a47]"
+                            >
+                              Réimprimer
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "settings" && (
+            <div className="flex-1 min-h-0 w-full overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 pb-48">
+              <div className="max-w-2xl mx-auto space-y-6">
+                {/* En-tête de Configuration */}
+                <div className="sticky top-0 z-30 flex items-center justify-between bg-[#0d1a16]/95 backdrop-blur-md py-3 px-4 -mx-4 border-b border-white/10 rounded-2xl shadow-xl">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white">Imprimante Epson TM-m30II</h2>
+                    <p className="text-xs text-[#8ea39b] mt-0.5">Impression thermique directe 80mm &amp; QR Code GPS</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold">
+                      Direct ePOS XML
+                    </span>
+                  </div>
+                </div>
+
+                {/* Étape 1 : Autorisation Chrome (Cruciale au premier lancement) */}
+                <div className="rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 p-6 space-y-4 shadow-lg shadow-amber-500/5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-amber-500 text-black font-black text-xs px-2 py-0.5 rounded-md">
+                          ÉTAPE 1
+                        </span>
+                        <h3 className="text-base font-black text-amber-200">
+                          Autoriser la connexion locale dans Chrome
+                        </h3>
+                      </div>
+                      <p className="text-xs text-amber-200/90 mt-1.5 leading-relaxed">
+                        Pour que votre tablette puisse communiquer directement avec l'imprimante Epson sans faire apparaître la fenêtre système Android, Chrome doit accepter le certificat de sécurité local :
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-black/30 p-4 rounded-xl space-y-3 border border-amber-500/20">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                      <div className="text-xs text-[#dcdedc] space-y-1">
+                        <p><strong>1.</strong> Cliquez sur le bouton bleu ci-contre :</p>
+                        <p><strong>2.</strong> Sur l'écran Chrome, cliquez sur <em>"Paramètres avancés"</em> puis <em>"Continuer vers {config.printerIp} (non sécurisé)"</em>.</p>
+                        <p><strong>3.</strong> Revenez ici : l'impression sera alors 100% automatique et instantanée !</p>
+                      </div>
+                      <a
+                        href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black px-5 py-3.5 rounded-xl text-xs font-black transition shadow-lg shrink-0 cursor-pointer active:scale-95"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>🔒 1. Ouvrir l'autorisation Chrome</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Étape 2 : Adresse IP & Détection */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md">
+                        ÉTAPE 2
+                      </span>
+                      <h3 className="text-base font-black text-white">Adresse Réseau de l'Imprimante</h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleScanPrinter}
+                      disabled={scanningIp}
+                      className="rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white px-3 py-1.5 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${scanningIp ? "animate-spin text-[#ff705f]" : ""}`} />
+                      <span>{scanningIp ? "Recherche..." : "🔍 Détecter l'IP"}</span>
+                    </button>
+                  </div>
+
+                  {scanStatus && (
+                    <p className="text-xs font-mono p-2.5 rounded-xl bg-black/40 text-emerald-300 border border-emerald-500/20">
+                      {scanStatus}
+                    </p>
+                  )}
+
+                  <div>
+                    <label className="text-xs font-extrabold uppercase text-[#8ea39b]">Adresse IP locale de l'Epson TM-m30II</label>
+                    <div className="mt-1.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <input
+                        type="text"
+                        value={config.printerIp}
+                        onChange={(e) => {
+                          const updated = { ...config, printerIp: e.target.value.trim(), printerPort: 8043 };
+                          setConfig(updated);
+                          savePrinterConfig(updated);
+                        }}
+                        className="flex-1 rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold text-base"
+                        placeholder="192.168.0.5"
+                      />
+                      <div className="rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-xs text-[#8ea39b] font-mono shrink-0 flex items-center gap-2">
+                        <span>Port ePOS :</span>
+                        <span className="text-emerald-400 font-bold">8043 (HTTPS Direct)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-black/30 p-3 text-[11px] text-[#8ea39b] leading-relaxed border border-white/5">
+                    <strong className="text-white">💡 Astuce pour vérifier l'IP :</strong> Éteignez l'imprimante Epson, maintenez le bouton <strong>FEED</strong> enfoncé et rallumez-la : elle imprime une bandelette avec son adresse IP exacte.
+                  </div>
+                </div>
+
+                {/* Étape 3 : Ticket complet automatique */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-md">
+                      ÉTAPE 3
+                    </span>
+                    <h3 className="text-base font-black text-white">Ticket complet automatique</h3>
+                  </div>
+                  <div className="rounded-xl bg-black/20 p-4 space-y-2">
+                    <p className="text-sm font-bold text-white">Un seul ticket complet par nouvelle commande</p>
+                    <p className="text-xs text-[#8ea39b] leading-relaxed">
+                      Le ticket regroupe les informations de préparation et du client : commande, heure demandée,
+                      coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement.
+                      Le QR code GPS est imprimé en bas des tickets de livraison uniquement ; aucun QR de suivi n’apparaît sur les tickets de retrait.
+                    </p>
+                    <p className="text-xs text-emerald-300 font-bold">
+                      L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Étape 4 : Tests & Diagnostics Matériel */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-emerald-500/20 text-emerald-300 font-black text-xs px-2 py-0.5 rounded-md">
+                        TESTS
+                      </span>
+                      <h3 className="text-base font-black text-white">Tester l'impression réelle</h3>
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#8ea39b] leading-relaxed">
+                    Testez la communication en direct sur l'Epson ({config.printerIp}) ou simulez une commande complète :
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={handleTestPrint}
+                      disabled={testingPrinter}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
+                    >
+                      <Printer className={`w-4 h-4 ${testingPrinter ? "animate-spin" : ""}`} />
+                      <span>🖨️ Imprimer un Ticket de Test Epson</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { const now = new Date().toISOString(); const demo: Order = { id: "TEST-TICKET-" + Date.now().toString().slice(-6), createdAt: now, status: "paid", paymentMethod: "online", currency: "EUR", deliveryToken: "test", customer: { name: "CLIENT TEST (NE PAS LIVRER)", phone: "0000000000", fulfillment: "pickup", requestedTime: "TEST UNIQUEMENT", notes: "Ticket de test — aucune vraie commande", deliveryFee: 0 }, items: [{ id: "test-poke", name: "Poké de test", price: 1, quantity: 1, toppings: ["Avocat", "Sésame"] }], total: 1 }; void printBrowserTicket(demo); }}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-sky-600 hover:bg-sky-500 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
+                    >
+                      <Printer className="w-4 h-4" />
+                      <span>Ticket test navigateur (sans commande réelle)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCreateTestOrder}
+                      disabled={creatingTestOrder}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-50 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg shadow-[#ff705f]/25 transition cursor-pointer"
+                    >
+                      <span>🧪 Simuler une Commande Complète (GPS)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Logs d'impression */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-3">
+                  <h3 className="text-base font-black text-white">Journal d'impression en direct</h3>
+                  <div className="h-36 overflow-y-auto font-mono text-xs space-y-1 bg-black/40 p-3 rounded-xl border border-white/5">
+                    {printLog.length === 0 ? (
+                      <p className="text-[#6c7d76]">Aucune impression récente.</p>
+                    ) : (
+                      printLog.map((log, idx) => (
+                        <div key={idx} className={log.type === "ok" ? "text-emerald-400" : "text-rose-400"}>
+                          [{log.time}] {log.msg}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Sauvegarde des réglages */}
+                <div className="rounded-2xl bg-[#142822] border border-[#ff705f]/40 p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+                  <div className="text-xs text-[#8ea39b]">
+                    <strong className="text-white block font-bold">Mémoriser les réglages</strong>
+                    Enregistre l'adresse IP et les préférences sur cette tablette.
+                  </div>
+                  <button
+                    onClick={() => {
+                      savePrinterConfig(config);
+                      alert("✅ Configuration enregistrée avec succès !");
+                    }}
+                    className="rounded-xl bg-[#ff705f] hover:bg-[#ff5a47] py-3 px-6 text-white font-black text-sm transition shadow-lg shadow-[#ff705f]/25 active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
+                  >
+                    <span>💾 Enregistrer les Réglages</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ─── Modal Détail Commande ────────────────────────────────────────── */}
+        {selectedOrder && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <span className="font-mono text-xl font-black">{selectedOrder.id}</span>
+                  <p className="text-xs text-[#8ea39b] mt-0.5">
+                    Créée à {new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedOrder(null)}
+                  className="rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Infos Client */}
+              <div className="rounded-2xl bg-black/30 p-4 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-base font-black">{selectedOrder.customer.name}</span>
+                  <a
+                    href={`tel:${selectedOrder.customer.phone}`}
+                    className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 transition px-3 py-1.5 rounded-xl"
+                    title="Appeler le numéro du client"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
+                    <span>Client : {selectedOrder.customer.phone}</span>
+                  </a>
+                </div>
+                {selectedOrder.customer.fulfillment === "delivery" ? (
+                  <div className="text-xs text-[#8ea39b] pt-1 border-t border-white/5">
+                    <p className="font-bold text-white">{selectedOrder.customer.address}</p>
+                    <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-[#EADCC9] font-bold">Retrait sur place</p>
+                )}
+                {selectedOrder.customer.notes && (
+                  <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">
+                    <strong>Note :</strong> {selectedOrder.customer.notes}
+                  </div>
+                )}
+              </div>
+
+              {/* Articles */}
+              <div className="space-y-2">
+                <span className="text-xs font-black uppercase text-[#8ea39b]">Articles commandés</span>
+                <ul className="divide-y divide-white/5 bg-black/20 rounded-2xl p-3">
+                  {selectedOrder.items.map((it, idx) => (
+                    <li key={idx} className="py-2 first:pt-0 last:pb-0">
+                      <div className="flex justify-between font-bold text-sm">
+                        <span>{it.quantity}× {it.name}</span>
+                        <span>{(it.price * it.quantity).toFixed(2)} €</span>
+                      </div>
+                      {it.toppings && it.toppings.length > 0 && (
+                        <div className="pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50">
+                          {it.toppings.map((top, tidx) => (
+                            <p key={tidx}>{top}</p>
+                          ))}
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex justify-between items-center pt-2 px-2 font-black text-base">
+                  <span>Total</span>
+                  <span>{selectedOrder.total.toFixed(2)} €</span>
+                </div>
+              </div>
+
+              {/* Section GPS & Livreur pour les commandes en livraison */}
+              {selectedOrder.customer.fulfillment === "delivery" && (
+                <div className="rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black uppercase text-emerald-400">
+                      GPS & Navigation Livreur
+                    </span>
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
+                      1-Clic
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      Google Maps
+                    </a>
+                    <a
+                      href={`https://waze.com/ul?q=${encodeURIComponent(
+                        `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      Waze
+                    </a>
+                  </div>
+
+                  {(selectedOrder.deliveryToken || selectedOrder.id) && (
+                    <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 bg-black/40 p-4 rounded-2xl">
+                      <div className="bg-white p-2.5 rounded-xl shadow-lg shrink-0">
+                        {modalQrDataUrl ? (
+                          <img
+                            src={modalQrDataUrl}
+                            alt="QR Code GPS Livreur"
+                            className="w-36 h-36 block"
+                            style={{ imageRendering: "pixelated" }}
+                          />
+                        ) : (
+                          <div className="w-36 h-36 flex items-center justify-center text-black text-xs font-bold">
+                            Génération...
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-xs space-y-2 flex-1">
+                        <p className="font-black text-white text-sm">QR Code GPS Haute Précision</p>
+                        <p className="text-[#8ea39b] text-xs leading-relaxed">
+                          Scannez ce QR Code avec votre téléphone pour ouvrir instantanément l'itinéraire GPS <strong>Waze</strong> ou <strong>Google Maps</strong> vers :
+                        </p>
+                        <p className="text-white font-bold bg-white/10 p-2 rounded-xl border border-white/10">
+                          📍 {selectedOrder.customer.address}, {selectedOrder.customer.postalCode} {selectedOrder.customer.city}
+                        </p>
+                        <div className="pt-1 flex gap-2">
+                          <a
+                            href={`/track/${selectedOrder.deliveryToken || selectedOrder.id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 bg-[#ff705f] hover:bg-[#ff5a47] text-white px-3 py-2 rounded-xl font-black text-xs transition"
+                          >
+                            <span>📱 Ouvrir la navigation livreur</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Action Impression Unique & Directe */}
+              <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
+                <button
+                  onClick={() => handleManualReprint(selectedOrder.id)}
+                  disabled={printingOrderId === selectedOrder.id}
+                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                  title="Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II"
+                >
+                  <Printer className={`w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}`} />
+                  <span>
+                    {printingOrderId === selectedOrder.id
+                      ? "Impression sur l'Epson..."
+                      : "🖨️ Imprimer Ticket Caisse (80mm)"}
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+interface ColumnProps {
+  title: string;
+  badgeCount: number;
+  color: string;
+  orders: Order[];
+  onSelect: (o: Order) => void;
+  onReprint: (id: string) => void;
+  onNextStatus: (id: string) => void;
+  nextLabel: string;
+  nextIcon: React.ReactNode;
+}
+
+function KanbanColumn({
+  title,
+  badgeCount,
+  color,
+  orders,
+  onSelect,
+  onReprint,
+  onNextStatus,
+  nextLabel,
+  nextIcon,
+}: ColumnProps) {
+  return (
+    <div className="flex flex-col rounded-2xl bg-[#142822] border border-white/5 overflow-hidden">
+      {/* Header Colonne */}
+      <div className="flex items-center justify-between p-3.5 border-b border-white/5 bg-black/20">
+        <div className="flex items-center gap-2">
+          <span className={`w-3 h-3 rounded-full ${color}`} />
+          <h2 className="text-sm font-black tracking-wide text-white">{title}</h2>
+        </div>
+        <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-white">
+          {badgeCount}
+        </span>
+      </div>
+
+      {/* Cartes Commandes */}
+      <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5">
+        {orders.length === 0 ? (
+          <div className="flex h-32 items-center justify-center text-xs font-bold text-[#62776f]">
+            Aucune commande
+          </div>
+        ) : (
+          orders.map((o) => (
+            <div
+              key={o.id}
+              onClick={() => onSelect(o)}
+              className="rounded-2xl bg-black/40 border border-white/10 p-3.5 shadow hover:border-white/30 transition cursor-pointer space-y-2.5"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-sm font-black text-white">{o.id}</span>
+                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-[#8ea39b]">
+                  {o.customer.requestedTime}
+                </span>
+              </div>
+
+              <div>
+                <p className="text-base font-black text-white">{o.customer.name}</p>
+                <p className="text-xs font-semibold text-[#8ea39b]">
+                  {o.items.reduce((acc, it) => acc + it.quantity, 0)} articles · {o.total.toFixed(2)} €
+                </p>
+              </div>
+
+              {o.customer.notes && (
+                <p className="text-xs bg-[#ff705f]/15 p-2 rounded-xl text-[#ff8e80] line-clamp-1 font-bold">
+                  ! {o.customer.notes}
+                </p>
+              )}
+
+              {/* Barre d'action rapide sur carte */}
+              <div
+                className="pt-1 flex items-center gap-2 border-t border-white/5"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => onReprint(o.id)}
+                  className="rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition"
+                  title="Réimprimer"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => onNextStatus(o.id)}
+                  className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition"
+                >
+                  {nextIcon}
+                  <span>{nextLabel}</span>
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
