@@ -5,7 +5,7 @@ import { Sparkles, ArrowRight, Heart, Award, Flame, Utensils } from "lucide-reac
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
-const bowlCroustyCurry = "https://d2ol7oe51mr4n9.cloudfront.net/user_3CWyfseY5SlAB1v9O94YRIcxpSv/79221efe-dce7-468f-90c2-7c735c713ca8.jpg";
+import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 
 const INGREDIENTS_SHOWCASE = [
   {
@@ -90,7 +90,7 @@ export function DishTasteExplorer() {
                     src={item.image}
                     alt={item.title}
                     loading="lazy"
-                    className={`h-full w-full ${item.id === "crousty" ? "object-contain bg-white" : "object-cover"} transition-transform duration-700 ease-out group-hover:scale-108`}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                   />
                   <div className="absolute top-3 left-3 z-10">
                     <span

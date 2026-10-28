@@ -4,7 +4,7 @@ import { Sparkles, ShieldCheck, ArrowRight, Award } from "lucide-react";
 
 import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweet from "@/assets/bowl-sweet-chicken.jpg";
-import bowlCrousty from "@/assets/crousty-chicken-original.jpeg";
+import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
 
 export function PokawaBrandValues() {
@@ -79,7 +79,7 @@ export function PokawaBrandValues() {
               <img
                 src={val.image}
                 alt={val.title}
-                className={`absolute inset-0 h-full w-full ${val.id === "crousty" ? "object-contain bg-white" : "object-cover"} transition duration-700 group-hover:scale-108`}
+                className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-108"
               />
 
               {/* Voile sombre cinématographique pour garantir la lisibilité optimale */}
