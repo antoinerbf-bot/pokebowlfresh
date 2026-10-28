@@ -12,7 +12,7 @@ import { t as BLOG_ARTICLES } from "./blogArticles-DCjyMFYL.mjs";
 import { n as drink_fanta_orange_default, r as tiramisu_oreo_default, t as drink_coca_zero_default } from "./drink-fanta-orange-DggJO5Uo.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as AnimatePresence, t as motion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Cyr7KmX7.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-Dn5mBE5_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var NOTIFICATIONS = [
@@ -1035,7 +1035,7 @@ function PokawaFloatingNavbar() {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "text-base",
 								children: "🥗"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pokés & Chirashis" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pokés" })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "text-[10px] font-bold text-[#ff705f]",
 							children: "Dès 10 € →"
@@ -3344,7 +3344,7 @@ function MobileAppStickyBar() {
 var CATEGORIES = [
 	{
 		id: "pokes",
-		title: "Pokés & Chirashis",
+		title: "Pokés",
 		badge: "Dès 10,00 €",
 		badgeColor: "bg-[#2C1D16] text-[#EADCC9]",
 		image: bowl_saumon_default,
@@ -3353,7 +3353,7 @@ var CATEGORIES = [
 	},
 	{
 		id: "crousty",
-		title: "Gamme Chaude",
+		title: "Crousty Chicken",
 		badge: "Formule 11 € · Boisson Offerte",
 		badgeColor: "bg-[#ea580c] text-white",
 		image: "/assets/bowl-crousty-curry-DQZ1PYgR.jpg",
