@@ -21,7 +21,7 @@ interface CategoryCard {
 const CATEGORIES: CategoryCard[] = [
   {
     id: "pokes",
-    title: "Pokés & Chirashis",
+    title: "Pokés",
     badge: "Dès 10,00 €",
     badgeColor: "bg-[#2C1D16] text-[#EADCC9]",
     image: bowlSaumon,
@@ -30,7 +30,7 @@ const CATEGORIES: CategoryCard[] = [
   },
   {
     id: "crousty",
-    title: "Gamme Chaude",
+    title: "Crousty Chicken",
     badge: "Formule 11 € · Boisson Offerte",
     badgeColor: "bg-[#ea580c] text-white",
     image: bowlCrousty,
