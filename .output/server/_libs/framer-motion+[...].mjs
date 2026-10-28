@@ -1,4 +1,4 @@
-import { r as __toESM } from "../_runtime.mjs";
+import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "./@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "./radix-ui__react-context+react.mjs";
 //#region node_modules/framer-motion/dist/es/context/LayoutGroupContext.mjs
@@ -9950,4 +9950,43 @@ var motion = /*@__PURE__*/ createMotionProxy({
 	...layout
 }, createDomVisualElement);
 //#endregion
-export { AnimatePresence as n, motion as t };
+//#region node_modules/framer-motion/dist/es/utils/reduced-motion/use-reduced-motion.mjs
+/**
+* A hook that returns `true` if we should be using reduced motion based on the current device's Reduced Motion setting.
+*
+* This can be used to implement changes to your UI based on Reduced Motion. For instance, replacing motion-sickness inducing
+* `x`/`y` animations with `opacity`, disabling the autoplay of background videos, or turning off parallax motion.
+*
+* It will actively respond to changes and re-render your components with the latest setting.
+*
+* ```jsx
+* export function Sidebar({ isOpen }) {
+*   const shouldReduceMotion = useReducedMotion()
+*   const closedX = shouldReduceMotion ? 0 : "-100%"
+*
+*   return (
+*     <motion.div animate={{
+*       opacity: isOpen ? 1 : 0,
+*       x: isOpen ? 0 : closedX
+*     }} />
+*   )
+* }
+* ```
+*
+* @return boolean
+*
+* @public
+*/
+function useReducedMotion() {
+	/**
+	* Lazy initialisation of prefersReducedMotion
+	*/
+	!hasReducedMotionListener.current && initPrefersReducedMotion();
+	const [shouldReduceMotion] = (0, import_react.useState)(prefersReducedMotion.current);
+	/**
+	* TODO See if people miss automatically updating shouldReduceMotion setting
+	*/
+	return shouldReduceMotion;
+}
+//#endregion
+export { motion as n, AnimatePresence as r, useReducedMotion as t };
