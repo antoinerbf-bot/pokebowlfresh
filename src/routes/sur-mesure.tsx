@@ -42,7 +42,10 @@ function SurMesurePage() {
   });
   const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0] ?? null);
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
-  const [selectedSauce, setSelectedSauce] = React.useState<CustomIngredientOption | null>(detailedSauces[5] ?? detailedSauces[0] ?? null);
+  const [selectedSauce, setSelectedSauce] = React.useState<CustomIngredientOption | null>(
+    detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0] ?? null,
+  );
+  const [extraSauce, setExtraSauce] = React.useState<string | null>(null);
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -140,8 +143,9 @@ function SurMesurePage() {
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingsCount - 1);
   const toppingsExtra = extraToppingsCount * 0.50;
+  const extraSaucePrice = extraSauce ? 1.00 : 0;
 
-  const unitPrice = BASE_PRICE + sizeExtra + mainProteinExtra + extraProteinsPrice + mixInsExtra + toppingsExtra;
+  const unitPrice = BASE_PRICE + sizeExtra + mainProteinExtra + extraProteinsPrice + mixInsExtra + toppingsExtra + extraSaucePrice;
   const totalPrice = unitPrice * qty;
 
   const mixinsFormatted = Object.entries(mixinQuantities)
@@ -188,6 +192,7 @@ function SurMesurePage() {
       `Protéine : ${selectedProtein.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
       ...extraProteinLines,
       `Sauce : ${selectedSauce.name}`,
+      ...(extraSauce ? [`Sauce extra (+1€) : ${extraSauce}`] : []),
       ...(toppingsFormatted.length > 0
         ? [`Toppings : ${toppingsFormatted.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`]
         : ["Toppings : Aucun"]),
@@ -667,6 +672,50 @@ function SurMesurePage() {
                     </button>
                   );
                 })}
+                <button
+                  type="button"
+                  onClick={() => setSelectedSauce({ id: "sans-sauce", name: "Sans sauce", emoji: "🚫" })}
+                  className={[
+                    "flex items-center gap-2 rounded-2xl border-2 p-3 text-left transition-all duration-200 cursor-pointer",
+                    selectedSauce?.id === "sans-sauce"
+                      ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
+                      : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
+                  ].join(" ")}
+                >
+                  <span className="text-xl">🚫</span>
+                  <span className="min-w-0 flex-1 truncate text-xs font-black text-[#2C1D16]">
+                    Sans sauce
+                  </span>
+                  {selectedSauce?.id === "sans-sauce" && (
+                    <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
+                      <Check className="h-2.5 w-2.5 stroke-[3]" />
+                    </div>
+                  )}
+                </button>
+              </div>
+
+              {/* Sauce extra payante (+1€) */}
+              <div className="mt-4 border-t border-[#DECBB3] pt-3">
+                <p className="text-[11px] font-black uppercase tracking-wider text-[#6E5A49] mb-2">
+                  Envie d'un 2ème pot de sauce séparé ? (+1,00 €)
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {detailedSauces.map((s) => (
+                    <button
+                      key={`extra-${s.id}`}
+                      type="button"
+                      onClick={() => setExtraSauce(extraSauce === s.name ? null : s.name)}
+                      className={[
+                        "rounded-full border px-3 py-1 text-[11px] font-bold transition-all cursor-pointer",
+                        extraSauce === s.name
+                          ? "border-[#ff705f] bg-[#ff705f] text-white shadow-sm"
+                          : "border-[#DECBB3] bg-[#FFFDF9] text-[#2C1D16] hover:border-[#ff705f]/50",
+                      ].join(" ")}
+                    >
+                      {extraSauce === s.name ? `✓ Extra ${s.name} (+1€)` : `+ ${s.name} (+1€)`}
+                    </button>
+                  ))}
+                </div>
               </div>
             </section>
 

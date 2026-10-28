@@ -38,7 +38,10 @@ export function InteractiveBowlBuilder() {
     "Salade d'algues": 1,
     Maïs: 1,
   });
-  const [sauce, setSauce] = React.useState(() => detailedSauces[5] ?? detailedSauces[0]!); // Teriyaki par défaut
+  const [sauce, setSauce] = React.useState(
+    () => detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0]!,
+  ); // Teriyaki par défaut
+  const [extraSauce, setExtraSauce] = React.useState<string | null>(null);
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -71,13 +74,15 @@ export function InteractiveBowlBuilder() {
   const totalToppingUnits = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingUnits - 1);
   const extraToppingsPrice = extraToppingsCount * 0.5;
+  const extraSaucePrice = extraSauce ? 1.0 : 0;
 
   const totalPrice =
     basePrice +
     mainProteinExtra +
     extraProteinsPrice +
     extraMixinsPrice +
-    extraToppingsPrice;
+    extraToppingsPrice +
+    extraSaucePrice;
 
   const proteinImages: Record<string, string> = {
     poulet: bowlSweetChicken,
@@ -147,7 +152,8 @@ export function InteractiveBowlBuilder() {
       "Salade d'algues": 1,
       Maïs: 1,
     });
-    setSauce(detailedSauces[5] ?? detailedSauces[0]!);
+    setSauce(detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0]!);
+    setExtraSauce(null);
     setToppingQuantities({ "Oignons frits": 1 });
   };
 
@@ -192,6 +198,7 @@ export function InteractiveBowlBuilder() {
         ...extraProteinLines,
         `Mix-ins : ${mixinFormatted.length > 0 ? mixinFormatted.join(", ") : "Aucun"}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
         `Sauce : ${sauce.name}`,
+        ...(extraSauce ? [`Sauce extra (+1€) : ${extraSauce}`] : []),
         `Toppings : ${toppingFormatted.length > 0 ? toppingFormatted.join(", ") : "Aucun"}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`,
       ],
       removedIngredients: [],
@@ -705,6 +712,46 @@ export function InteractiveBowlBuilder() {
                           </button>
                         );
                       })}
+                      <button
+                        type="button"
+                        onClick={() => setSauce({ id: "sans-sauce", name: "Sans sauce", emoji: "🚫" })}
+                        className={`flex items-center gap-2 rounded-2xl p-3 border-2 text-left transition cursor-pointer ${
+                          sauce.id === "sans-sauce"
+                            ? "bg-[#FFF3EF] border-[#ff705f] shadow-sm"
+                            : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
+                        }`}
+                      >
+                        <span className="text-xl">🚫</span>
+                        <span className="text-xs font-black text-[#2C1D16] truncate flex-1">
+                          Sans sauce
+                        </span>
+                        {sauce.id === "sans-sauce" && (
+                          <Check className="h-3.5 w-3.5 text-[#ff705f] shrink-0" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* 2ème pot de sauce séparé (+1.00€) */}
+                    <div className="mt-4 pt-3 border-t border-[#DECBB3]">
+                      <p className="text-[11px] font-black uppercase tracking-wider text-[#6E5A49] mb-2">
+                        Envie d'un 2ème pot de sauce séparé ? (+1,00 €)
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {detailedSauces.map((s) => (
+                          <button
+                            key={`extra-sauce-${s.id}`}
+                            type="button"
+                            onClick={() => setExtraSauce(extraSauce === s.name ? null : s.name)}
+                            className={`rounded-full border px-3 py-1 text-[11px] font-bold transition-all cursor-pointer ${
+                              extraSauce === s.name
+                                ? "border-[#ff705f] bg-[#ff705f] text-white shadow-sm"
+                                : "border-[#DECBB3] bg-[#FFFDF9] text-[#2C1D16] hover:border-[#ff705f]/50"
+                            }`}
+                          >
+                            {extraSauce === s.name ? `✓ Extra ${s.name} (+1€)` : `+ ${s.name} (+1€)`}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
