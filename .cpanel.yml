@@ -2,11 +2,14 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/puzo3938/pokenbowl.be/
-    - /bin/mkdir -p $DEPLOYPATH
-    - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' ! -name '.env*' ! -name 'pokenbowl-orders.json' -exec /bin/rm -rf {} +
+    - /bin/mkdir -p $DEPLOYPATH $DEPLOYPATH/backups $DEPLOYPATH/.prev-assets
+    - if [ -f $DEPLOYPATH/pokenbowl-orders.json ]; then /bin/cp -p $DEPLOYPATH/pokenbowl-orders.json $DEPLOYPATH/backups/pokenbowl-orders.$(date +%Y%m%d-%H%M%S).json; fi
+    - if [ -d $DEPLOYPATH/.output/public/assets ]; then /bin/cp -R $DEPLOYPATH/.output/public/assets/* $DEPLOYPATH/.prev-assets/ 2>/dev/null || true; fi
+    - /usr/bin/find $DEPLOYPATH -mindepth 1 -maxdepth 1 ! -name '.well-known' ! -name '.env*' ! -name 'pokenbowl-orders.json*' ! -name 'backups' ! -name '.prev-assets' ! -name 'node_modules' -exec /bin/rm -rf {} +
     - /bin/cp -R src $DEPLOYPATH
     - /bin/cp -R public $DEPLOYPATH
     - /bin/cp -R .output $DEPLOYPATH
+    - if [ -d $DEPLOYPATH/.prev-assets ]; then /bin/cp -n $DEPLOYPATH/.prev-assets/* $DEPLOYPATH/.output/public/assets/ 2>/dev/null || true; /bin/rm -rf $DEPLOYPATH/.prev-assets; fi
     - /bin/cp package.json $DEPLOYPATH
     - /bin/cp package-lock.json $DEPLOYPATH
     - /bin/cp vite.config.ts $DEPLOYPATH

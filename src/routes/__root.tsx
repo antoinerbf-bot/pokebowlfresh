@@ -8,7 +8,7 @@ import {
   Scripts,
   useRouterState,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -37,12 +37,64 @@ function NotFoundComponent() {
   );
 }
 
+function isDynamicChunkError(err: unknown): boolean {
+  const msg = String((err as Error)?.message ?? err ?? "").toLowerCase();
+  return (
+    msg.includes("failed to fetch dynamically imported module") ||
+    msg.includes("importing a module script failed") ||
+    msg.includes("error loading dynamically imported module") ||
+    msg.includes("unable to preload css") ||
+    msg.includes("chunkloaderror") ||
+    msg.includes("loading chunk")
+  );
+}
+
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const autoRetriedRef = useRef(false);
+
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
+
+    if (typeof window === "undefined") return;
+
+    // 1. Auto-recover once per route transition if a chunk or suspense boundary raced
+    if (!autoRetriedRef.current) {
+      autoRetriedRef.current = true;
+      try {
+        const retryKey = `pnb_auto_retry:${window.location.pathname}`;
+        const lastRetry = Number(sessionStorage.getItem(retryKey) || "0");
+        const now = Date.now();
+        if (now - lastRetry > 10_000) {
+          sessionStorage.setItem(retryKey, String(now));
+          const timer = window.setTimeout(() => {
+            router.invalidate();
+            reset();
+          }, 60);
+          return () => window.clearTimeout(timer);
+        }
+      } catch {
+        // Ignore sessionStorage errors
+      }
+    }
+
+    // 2. If a deployment replaced chunk hashes, reload once to get the new manifest
+    if (isDynamicChunkError(error)) {
+      try {
+        const reloadKey = `pnb_chunk_reload:${window.location.pathname}`;
+        const lastReload = Number(sessionStorage.getItem(reloadKey) || "0");
+        const now = Date.now();
+        if (now - lastReload > 20_000) {
+          sessionStorage.setItem(reloadKey, String(now));
+          window.location.reload();
+        }
+      } catch {
+        // Ignore sessionStorage errors
+      }
+    }
+    return undefined;
+  }, [error, reset, router]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -99,6 +151,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
   }),
 
+  wrapInSuspense: true,
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -121,15 +174,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({
-    select: (state) => state.location.pathname,
+  const resolvedPathname = useRouterState({
+    select: (state) => state.resolvedLocation?.pathname ?? state.location.pathname,
   });
 
   useEffect(() => {
-    // Always start each route at the real top of the viewport.
-    // This also fixes the case where Safari/browser history restores a previous
-    // scroll position after the homepage has already mounted.
+    // Always start each new route at the top of the viewport once resolved,
+    // unless navigating directly to an in-page hash anchor (#carte, #composer).
     window.history.scrollRestoration = "manual";
+    if (window.location.hash) return;
 
     const resetScroll = () => {
       window.scrollTo(0, 0);
@@ -139,22 +192,20 @@ function RootComponent() {
 
     resetScroll();
     const frame = window.requestAnimationFrame(resetScroll);
-    const frame2 = window.requestAnimationFrame(() =>
-      window.requestAnimationFrame(resetScroll),
-    );
 
     return () => {
       window.cancelAnimationFrame(frame);
-      window.cancelAnimationFrame(frame2);
     };
-  }, [pathname]);
+  }, [resolvedPathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <CartProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          {/* Required: nested routes render here. Suspense prevents lazy route chunks from bubbling into CatchBoundary. */}
+          <Suspense fallback={null}>
+            <Outlet />
+          </Suspense>
         </CartProvider>
       </I18nProvider>
     </QueryClientProvider>

@@ -27,7 +27,7 @@ export const orderItemSchema = z.object({
   name: z.string(),
   price: z.number().positive(),
   quantity: z.number().int().positive(),
-  toppings: z.array(z.string()),
+  toppings: z.array(z.string()).default([]),
 });
 
 export const checkoutSchema = z.object({
@@ -56,13 +56,23 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
   ]);
 
   return items.map((item) => {
-    // ─── 1. Bowl sur mesure ───────────────────────────────────────────
-    if (item.id === "sur-mesure") {
+    const rawId = item.id.trim();
+
+    // ─── 1. Bowl sur mesure (page /sur-mesure ou composeur #composer) ───
+    if (
+      rawId === "sur-mesure" ||
+      rawId.startsWith("custom-live-") ||
+      rawId.startsWith("sur-mesure-")
+    ) {
       let unitPrice = 10.00;
       const opts = item.toppings ?? [];
 
       // Format Grand (+3.00€ · 13€)
-      if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) {
+      const isGrand =
+        rawId.endsWith("-grand") ||
+        /\(Grand\)/i.test(item.name) ||
+        opts.some((t) => /Taille\s*:\s*Grand/i.test(t) || /Format\s+Grand/i.test(t));
+      if (isGrand) {
         unitPrice += 3.00;
       }
 
@@ -72,15 +82,21 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += 1.00;
       }
 
-      // Mix-ins (5 inclus, +1.00€ chacun au-delà — aligné sur le composeur)
+      // Mix-ins (5 hors feta inclus, +1.00€ chacun au-delà ; feta = +1.00€ fixe)
       const mixInsLine = opts.find((t) => /^Mix-ins?\s*:/i.test(t));
       if (mixInsLine) {
-        const rawMixIns = mixInsLine
+        const hasFeta = /\bfeta\b/i.test(mixInsLine);
+        if (hasFeta) {
+          unitPrice += 1.00;
+        }
+        const cleanedMixIns = mixInsLine
           .replace(/^Mix-ins?\s*:\s*/i, "")
-          .replace(/\s*\(\+[\d.,]+€\)\s*$/, "")
+          .replace(/·\s*Feta\s*\(\+[\d.,]+€\)/gi, "")
+          .replace(/\(\+[\d.,]+€\)/g, "");
+        const rawMixIns = cleanedMixIns
           .split(",")
           .map((s) => s.trim())
-          .filter((s) => s.length > 0 && !/^feta$/i.test(s));
+          .filter((s) => s.length > 0 && !/^aucun/i.test(s) && !/^feta$/i.test(s));
         const extraMixIns = Math.max(0, rawMixIns.length - 5);
         unitPrice += extraMixIns * 1.00;
       }
@@ -96,7 +112,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
           const parts = rawContent.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
           for (const part of parts) {
             const match = part.match(/\(x(\d+)\)/i) || part.match(/x(\d+)/i);
-            const count = match ? parseInt(match[1], 10) : 1;
+            const count = match?.[1] ? parseInt(match[1], 10) : 1;
             totalToppingUnits += isNaN(count) ? 1 : count;
           }
         }
@@ -107,30 +123,59 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         let totalToppingUnits = 0;
         for (const t of individualToppings) {
           const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
-          const count = match ? parseInt(match[1], 10) : 1;
+          const count = match?.[1] ? parseInt(match[1], 10) : 1;
           totalToppingUnits += isNaN(count) ? 1 : count;
         }
         const extraToppings = Math.max(0, totalToppingUnits - 1);
         unitPrice += extraToppings * 0.50;
       }
 
+      // Sauce supplémentaire éventuelle (+1.00€)
+      const extraSauces = opts.filter((t) =>
+        /sauce\s+(suppl[ée]mentaire|extra|2[èe]me\s+pot)/i.test(t),
+      );
+      unitPrice += extraSauces.length * 1.00;
+
       return {
         ...item,
-        name: "Poke Bowl sur mesure",
+        id: "sur-mesure",
+        name: isGrand ? "Poke Bowl sur mesure (Grand)" : "Poke Bowl sur mesure",
         price: unitPrice,
         toppings: opts,
       };
     }
 
-    // ─── 2. Bowls signatures ─────────────────────────────────────────
-    const bowl = bowls.find((b) => b.id === item.id || item.id === `${b.id}-moyen` || item.id === `${b.id}-grand` || item.id.startsWith(b.id));
+    // Normalisation des suffixes ajoutés côté UI (-moyen, -grand, -mega, -blog, -timestamp)
+    const strippedId = rawId.replace(/-(moyen|grand|mega|blog|\d{10,})$/i, "");
+
+    // ─── 2. Bowls signatures & Crousty ───────────────────────────────
+    const bowl = bowls.find((b) => b.id === rawId || b.id === strippedId);
     if (bowl) {
+      const isCrousty = bowl.id.startsWith("crousty-");
       let unitPrice = bowl.price;
       const opts = item.toppings ?? [];
 
-      // Format Grand (+3.00€ · 13€)
-      if (opts.some((t) => /Taille\s*:\s*Grand/i.test(t))) {
-        unitPrice += 3.00;
+      // Format Grand (+3.00€ pour les poké bowls)
+      const isGrand =
+        !isCrousty &&
+        (rawId.endsWith("-grand") ||
+          /\(Grand\)/i.test(item.name) ||
+          opts.some((t) => /Taille\s*:\s*Grand/i.test(t) || /Format\s+Grand/i.test(t)));
+      if (isGrand) {
+        unitPrice = bowl.grandPrice ?? bowl.price + 3.00;
+      }
+
+      // Supplément Protéine / Poulet Croustillant (+2.50€)
+      const extraProteins = opts.filter((t) =>
+        /(Suppl[ée]ment\s*Prot[ée]ine|Prot[ée]ine\s*suppl[ée]mentaire|Portion\s+extra\s+Poulet|Suppl[ée]ment\s+Poulet\s+Croustillant)/i.test(t),
+      );
+      unitPrice += extraProteins.length * 2.50;
+
+      // Suppléments Légumes / Mix-ins sur bowl signature (+1.00€ pour Feta, +0.50€ sinon)
+      const extraMixins = opts.filter((t) => /^L[ée]gume\s*\/\s*Mix-in/i.test(t));
+      for (const m of extraMixins) {
+        const mixinName = m.replace(/^L[ée]gume\s*\/\s*Mix-in[^:]*:\s*/i, "").trim();
+        unitPrice += /^feta$/i.test(mixinName) ? 1.00 : 0.50;
       }
 
       // Toppings additionnels (+0.50€ chaque portion, illimité)
@@ -138,38 +183,43 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       let totalSignatureToppings = 0;
       for (const t of toppingEntries) {
         const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
-        const count = match ? parseInt(match[1], 10) : 1;
+        const count = match?.[1] ? parseInt(match[1], 10) : 1;
         totalSignatureToppings += isNaN(count) ? 1 : count;
       }
       unitPrice += totalSignatureToppings * 0.50;
 
       // Sauce extra (+1.00€)
-      const extraSauces = opts.filter((t) => /sauce extra/i.test(t));
+      const extraSauces = opts.filter((t) =>
+        /sauce\s+(extra|suppl[ée]mentaire|2[èe]me\s+pot)/i.test(t),
+      );
       unitPrice += extraSauces.length * 1.00;
 
       return {
         ...item,
-        name: bowl.name,
+        id: isCrousty ? bowl.id : `${bowl.id}-${isGrand ? "grand" : "moyen"}`,
+        name: isCrousty ? bowl.name : `${bowl.name} (${isGrand ? "Grand" : "Moyen"})`,
         price: unitPrice,
         toppings: opts,
       };
     }
 
     // ─── 3. Boissons & Desserts ──────────────────────────────────────
-    if (item.id === "tira-nutella") {
+    if (rawId === "tira-nutella" || strippedId === "tira-nutella") {
       throw new Error("Le Tiramisu Nutella est actuellement victime de son succès (sold out).");
     }
 
-    const canonicalPrice = catalog.get(item.id);
+    const canonicalId = catalog.has(rawId) ? rawId : strippedId;
+    const canonicalPrice = catalog.get(canonicalId);
     if (canonicalPrice == null) {
       throw new Error("Article invalide");
     }
 
-    const drink = drinks.find((d) => d.id === item.id);
-    const dessert = desserts.find((d) => d.id === item.id);
+    const drink = drinks.find((d) => d.id === canonicalId);
+    const dessert = desserts.find((d) => d.id === canonicalId);
 
     return {
       ...item,
+      id: canonicalId,
       name: drink?.name ?? dessert?.name ?? item.name,
       price: canonicalPrice,
       toppings: [],

@@ -36,10 +36,10 @@ function SurMesurePage() {
 
   // Form State
   const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
-  const [selectedBase, setSelectedBase] = React.useState<CustomIngredientOption | null>(detailedBases[0]);
+  const [selectedBase, setSelectedBase] = React.useState<CustomIngredientOption | null>(detailedBases[0] ?? null);
   const [selectedMixIns, setSelectedMixIns] = React.useState<string[]>([]);
-  const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0]);
-  const [selectedSauce, setSelectedSauce] = React.useState<CustomIngredientOption | null>(detailedSauces[0]);
+  const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0] ?? null);
+  const [selectedSauce, setSelectedSauce] = React.useState<CustomIngredientOption | null>(detailedSauces[0] ?? null);
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({});
   const [qty, setQty] = React.useState(1);
   const [added, setAdded] = React.useState(false);
@@ -52,14 +52,14 @@ function SurMesurePage() {
   };
   const activeBowlImage = selectedProtein ? (proteinImages[selectedProtein.id] || bowlSaumon) : bowlSaumon;
 
-  // Toggle Mix-in (5 inclus, illimité à +0.50€ au-delà)
+  // Toggle Mix-in (5 hors feta inclus, +1.00€ au-delà, feta à +1.00€)
   const toggleMixIn = (name: string) => {
     setSelectedMixIns((cur) =>
       cur.includes(name) ? cur.filter((item) => item !== name) : [...cur, name]
     );
   };
 
-  // Topping stepper (2 portions incluses, illimité à +0.50€ chaque portion supplémentaire)
+  // Topping stepper (1 portion incluse, illimité à +0.50€ chaque portion supplémentaire)
   const addTopping = (name: string) => {
     setToppingQuantities((cur) => ({
       ...cur,
@@ -79,16 +79,16 @@ function SurMesurePage() {
     });
   };
 
-  // Pricing calculations (5 mix-ins inclus, feta en supplément à 1 €, 2 toppings inclus)
+  // Pricing calculations (5 mix-ins hors feta inclus puis +1.00€, feta en supplément à 1.00€, 1 topping inclus puis +0.50€)
   const sizeExtra = selectedSize === "grand" ? 3.00 : 0;
   const proteinExtra = selectedProtein?.extraPrice ?? 0;
   const hasFeta = selectedMixIns.some((mixIn) => mixIn.trim().toLowerCase() === "feta");
   const pricedMixInsCount = selectedMixIns.filter((mixIn) => mixIn.trim().toLowerCase() !== "feta").length;
   const extraMixInsCount = Math.max(0, pricedMixInsCount - INCLUDED_MIX_INS);
   const fetaExtra = hasFeta ? 1.00 : 0;
-  const mixInsExtra = extraMixInsCount * 0.50 + fetaExtra;
+  const mixInsExtra = extraMixInsCount * 1.00 + fetaExtra;
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
-  const extraToppingsCount = Math.max(0, totalToppingsCount - 2);
+  const extraToppingsCount = Math.max(0, totalToppingsCount - 1);
   const toppingsExtra = extraToppingsCount * 0.50;
   const unitPrice = BASE_PRICE + sizeExtra + proteinExtra + mixInsExtra + toppingsExtra;
   const totalPrice = unitPrice * qty;
@@ -113,12 +113,12 @@ function SurMesurePage() {
   };
 
   const handleAddToCart = () => {
-    if (!isValid) return;
+    if (!isValid || !selectedBase || !selectedProtein || !selectedSauce) return;
 
     const options = [
       `Taille : ${selectedSize === "grand" ? "Grand (+3.00€)" : "Moyen (Standard)"}`,
       `Base : ${selectedBase.name}`,
-      `Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${(extraMixInsCount * 0.50).toFixed(2)}€)` : ""}${hasFeta ? " · Feta (+1.00€)" : ""}`,
+      `Mix-ins : ${selectedMixIns.join(", ")}${extraMixInsCount > 0 ? ` (+${(extraMixInsCount * 1.00).toFixed(2)}€)` : ""}${hasFeta ? " · Feta (+1.00€)" : ""}`,
       `Protéine : ${selectedProtein.name}${proteinExtra > 0 ? ` (+${proteinExtra.toFixed(2)}€)` : ""}`,
       `Sauce : ${selectedSauce.name}`,
       ...(toppingsFormatted.length > 0
@@ -338,7 +338,7 @@ function SurMesurePage() {
               </div>
             </section>
 
-            {/* ══ ÉTAPE 2 : MIX IN (5 INCLUS · ILLIMITÉ À +0,50€ AU-DELÀ) ══════ */}
+            {/* ══ ÉTAPE 2 : MIX IN (5 HORS FETA INCLUS · +1,00€ AU-DELÀ) ══════ */}
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <div>
@@ -352,26 +352,26 @@ function SurMesurePage() {
                 <div
                   className={[
                     "rounded-full px-3 py-1 text-xs font-black transition-colors",
-                    selectedMixIns.length >= INCLUDED_MIX_INS
+                    pricedMixInsCount >= INCLUDED_MIX_INS
                       ? "bg-[#2C1D16] text-[#EADCC9]"
                       : "bg-[#ff705f]/10 text-[#ff705f]",
                   ].join(" ")}
                 >
-                  {selectedMixIns.length <= INCLUDED_MIX_INS
-                    ? `${selectedMixIns.length} / ${INCLUDED_MIX_INS} inclus`
-                    : `${selectedMixIns.length} choisis (${INCLUDED_MIX_INS} inclus hors feta + ${extraMixInsCount} extra à +0,50€)`}
+                  {pricedMixInsCount <= INCLUDED_MIX_INS
+                    ? `${pricedMixInsCount} / ${INCLUDED_MIX_INS} inclus`
+                    : `${selectedMixIns.length} choisis (${INCLUDED_MIX_INS} inclus hors feta + ${extraMixInsCount} extra à +1,00€)`}
                 </div>
               </div>
 
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-[#7a847e]">
                 <span>
-                  {selectedMixIns.length < INCLUDED_MIX_INS
-                    ? `5 ingrédients inclus dans la formule (encore ${INCLUDED_MIX_INS - selectedMixIns.length} gratuit${INCLUDED_MIX_INS - selectedMixIns.length > 1 ? "s" : ""}) :`
-                    : `Choisis 5 ingrédients inclus (feta à +1,00 € ; ingrédients supplémentaires à +0,50 €) :`}
+                  {pricedMixInsCount < INCLUDED_MIX_INS
+                    ? `5 ingrédients hors feta inclus dans la formule (encore ${INCLUDED_MIX_INS - pricedMixInsCount} inclus) :`
+                    : `5 ingrédients hors feta inclus (feta à +1,00 € ; ingrédients supplémentaires à +1,00 €) :`}
                 </span>
-                {extraMixInsCount > 0 && (
+                {mixInsExtra > 0 && (
                   <span className="rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[10px] font-extrabold text-[#ff705f]">
-                    +{mixInsExtra.toFixed(2)} € d’ingrédients supplémentaires
+                    +{mixInsExtra.toFixed(2)} € de suppléments mix-ins
                   </span>
                 )}
               </div>
@@ -379,7 +379,8 @@ function SurMesurePage() {
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {detailedMixIns.map((mixIn) => {
                   const isSelected = selectedMixIns.includes(mixIn.name);
-                  const isExtra = !isSelected && selectedMixIns.length >= INCLUDED_MIX_INS;
+                  const isFeta = mixIn.id === "feta" || mixIn.name.trim().toLowerCase() === "feta";
+                  const isExtra = !isFeta && !isSelected && pricedMixInsCount >= INCLUDED_MIX_INS;
 
                   return (
                     <button
@@ -398,19 +399,19 @@ function SurMesurePage() {
                         <span className="block truncate text-xs font-bold text-[#17231f]">
                           {mixIn.name}
                         </span>
-                        {mixIn.id === "feta" && (
+                        {isFeta && (
                           <span className="block text-[10px] font-extrabold text-[#ff705f]">
                             +1,00 € / portion
                           </span>
                         )}
                         {isExtra && (
                           <span className="text-[10px] font-bold text-[#ff705f]">
-                            +0,50 €
+                            +1,00 €
                           </span>
                         )}
-                        {isSelected && selectedMixIns.indexOf(mixIn.name) >= INCLUDED_MIX_INS && (
+                        {!isFeta && isSelected && selectedMixIns.filter((m) => m.trim().toLowerCase() !== "feta").indexOf(mixIn.name) >= INCLUDED_MIX_INS && (
                           <span className="text-[9px] font-bold text-[#ff705f]">
-                            +0,50 €
+                            +1,00 €
                           </span>
                         )}
                       </div>
@@ -507,7 +508,7 @@ function SurMesurePage() {
               </div>
             </section>
 
-            {/* ══ ÉTAPE 5 : TOPPING (2 INCLUS, ILLIMITÉS AU-DELÀ) ══ */}
+            {/* ══ ÉTAPE 5 : TOPPING (1 INCLUS, ILLIMITÉS AU-DELÀ) ══ */}
             <section className="rounded-[24px] border border-[#e8e2d9] bg-white p-6 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <div>
@@ -519,13 +520,13 @@ function SurMesurePage() {
                   </h2>
                 </div>
                 <span className="rounded-full bg-[#2C1D16] px-3 py-1 text-xs font-black text-[#EADCC9]">
-                  {totalToppingsCount <= 2
-                    ? `${totalToppingsCount} / 2 inclus`
-                    : `2 inclus + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)`}
+                  {totalToppingsCount <= 1
+                    ? `${totalToppingsCount} / 1 inclus`
+                    : `1 inclus + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)`}
                 </span>
               </div>
               <p className="mb-4 text-xs font-semibold text-[#7a847e]">
-                <strong>2 portions incluses dans la formule</strong> · Prenez autant de portions que vous souhaitez (+0.50€ chaque portion extra, même 10 ou 40 fois le même) :
+                <strong>1 portion incluse dans la formule</strong> · Prenez autant de portions que vous souhaitez (+0.50€ chaque portion extra) :
               </p>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {toppings.map((top) => {
@@ -667,7 +668,7 @@ function SurMesurePage() {
                   <span className="font-semibold text-[#7a847e]">Toppings :</span>
                   <span className="font-bold text-[#17231f] text-right">
                     {totalToppingsCount > 0
-                      ? `${toppingsFormatted.join(", ")} (${Math.min(2, totalToppingsCount)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)` : ""})`
+                      ? `${toppingsFormatted.join(", ")} (${Math.min(1, totalToppingsCount)} inclus${extraToppingsCount > 0 ? ` + ${extraToppingsCount} extra (+${toppingsExtra.toFixed(2)}€)` : ""})`
                       : "Aucun topping"}
                   </span>
                 </div>

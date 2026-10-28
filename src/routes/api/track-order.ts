@@ -127,10 +127,11 @@ export const Route = createFileRoute("/api/track-order")({
           const body = await request.json();
           const token = (body?.token ?? "").trim();
           const status = body?.status;
+          const allowedStatuses = ["preparing", "ready", "delivering", "completed"];
 
-          if (!token || !status) {
+          if (!token || !status || !allowedStatuses.includes(status)) {
             return new Response(
-              JSON.stringify({ success: false, error: "Paramètres token ou status manquants." }),
+              JSON.stringify({ success: false, error: "Paramètres token ou status invalides." }),
               {
                 status: 400,
                 headers: { "Content-Type": "application/json; charset=utf-8" },

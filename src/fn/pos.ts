@@ -12,8 +12,8 @@ import { buildKitchenReceipt, buildDeliveryReceipt } from "../lib/escpos";
 import { generateOrderId, type Order } from "../lib/orders";
 
 function verifyPin(pin?: string): boolean {
-  const expectedPin = process.env.POS_PIN ?? "1234";
-  return !pin || pin === expectedPin || pin === "1234";
+  const expectedPin = process.env["POS_PIN"] ?? "1234";
+  return Boolean(pin && (pin === expectedPin || pin === "1234"));
 }
 
 export const getPosOrders = createServerFn({ method: "POST" })
@@ -42,6 +42,7 @@ export const setPosOrderStatus = createServerFn({ method: "POST" })
         "delivering",
         "completed",
         "cancelled",
+        "expired",
       ]),
     }),
   )
@@ -102,7 +103,7 @@ export const getOrderReceipts = createServerFn({ method: "POST" })
       let binary = "";
       const len = bytes.byteLength;
       for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
+        binary += String.fromCharCode(bytes[i] ?? 0);
       }
       return btoa(binary);
     };

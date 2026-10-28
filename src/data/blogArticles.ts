@@ -91,11 +91,11 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     date: "14 Octobre 2026",
     isoDate: "2026-10-14",
     author: {
-      name: "Antoine Rousseau",
-      role: "Fondateur & Chef Poke N Bowl",
+      name: "L'équipe Poke N Bowl",
+      role: "Artisans Fraîcheur à Visé",
     },
     image: imgGuideVise,
-    summary: "Tout savoir sur Poke N Bowl à Visé : horaires d'ouverture, formule étudiante 11€ avec boisson, options sans gluten, retrait sans file d'attente et livraison rapide en région liégeoise.",
+    summary: "Tout savoir sur Poke N Bowl à Visé : horaires d'ouverture, gamme Crousty Chicken à 10€, boisson 33cl offerte sur les poké bowls, retrait rapide et livraison en Basse-Meuse.",
     seoKeywords: [
       "poké bowl visé",
       "restaurant visé liège",
@@ -113,7 +113,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       <h2>Visé, carrefour gourmand de la Basse-Meuse</h2>
       <p>Située idéalement entre Liège, Maastricht et Verviers, la charmante ville de Visé regorge de dynamisme commercial. Pourtant, trouver une option de restauration rapide qui soit à la fois <strong>fraîche, copieuse, abordable et saine</strong> relevait souvent du casse-tête entre les sandwicheries traditionnelles et les friteries.</p>
       
-      <p>C'est pour combler ce manque que nous avons créé <strong>Poke N Bowl au 12 Avenue du Pont</strong>. Notre mission : proposer une alternative moderne aux fast-foods avec des ingrédients nobles préparés à la commande sous vos yeux.</p>
+      <p>C'est pour combler ce manque que nous avons créé <strong>Poke N Bowl au 7 Place Reine Astrid à Visé</strong>. Notre mission : proposer une alternative moderne aux fast-foods avec des ingrédients nobles préparés à la commande sous vos yeux.</p>
 
       <h2>Click & Collect express : votre bowl prêt en 15 minutes</h2>
       <p>Pour les travailleurs du centre-ville, les commerçants de Visé et les étudiants des écoles avoisinantes, le temps du déjeuner est souvent compté. Grâce à notre système de commande en ligne :</p>
@@ -124,13 +124,13 @@ export const BLOG_ARTICLES: BlogArticle[] = [
         <li>Vous récupérez votre sac kraft scellé au comptoir sans faire la file, prêt à emporter au bureau ou au bord de la Meuse !</li>
       </ul>
 
-      <h2>La formule Crousty Chicken à 11 € : le carton du midi</h2>
-      <p>Tous les appétits ne sont pas tournés vers le poisson cru, surtout lors des journées d'automne ou d'hiver. Notre gamme <strong>Crousty Chicken</strong> propose de délicieux morceaux de poulet pané ultra-croustillants, nappés au choix d'une sauce curry dorée ou d'une sauce blanche onctueuse, servis sur riz chaud avec des oignons frits.</p>
+      <h2>La gamme Crousty Chicken à 10 € : le carton chaud et croustillant</h2>
+      <p>Tous les appétits ne sont pas tournés vers le poisson cru, surtout lors des journées d'automne ou d'hiver. Notre gamme <strong>Crousty Chicken</strong> propose de délicieux morceaux de poulet pané ultra-croustillants, nappés au choix d'une sauce curry dorée, thaïger, teriyaki, spicy-mayo ou sauce blanche onctueuse, servis sur riz chaud avec des oignons frits.</p>
       
-      <p>La formule étudiante est proposée à 11,00 € avec une boisson de 33 cl incluse, exclusivement aux étudiants et uniquement le midi.</p>
+      <p>Chaque Crousty Chicken est proposé au tarif unique de 10,00 €.</p>
 
       <h2>Où nous trouver et comment venir ?</h2>
-      <p>Notre restaurant vous accueille du <strong>Lundi au Vendredi de 12h à 14h et de 17h à 21h</strong>, ainsi que le <strong>Samedi soir de 18h à 21h</strong>. De nombreuses places de stationnement en zone bleue ou parking public sont disponibles le long de l'Avenue du Pont et sur la Place Reine Astrid.</p>
+      <p>Notre restaurant vous accueille au <strong>7 Place Reine Astrid, 4600 Visé</strong>, du <strong>Mardi au Dimanche de 11h30 à 22h00</strong> (fermé le lundi). De nombreuses places de stationnement sont disponibles directement sur la Place Reine Astrid.</p>
     `,
   },
   {
@@ -236,20 +236,20 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     date: "08 Octobre 2026",
     isoDate: "2026-10-08",
     author: {
-      name: "Antoine Rousseau",
-      role: "Fondateur & Chef",
+      name: "L'équipe Poke N Bowl",
+      role: "Artisans Fraîcheur à Visé",
     },
     image: imgCroustyChaud,
-    summary: "Pourquoi la gamme Crousty Chicken chaude de Poke N Bowl Visé est devenue le plat incontournable de l'automne et de l'hiver. Morceaux de poulet croustillants, sauce curry, oignons frits et boisson offerte.",
+    summary: "Pourquoi la gamme Crousty Chicken chaude de Poke N Bowl Visé est devenue le plat incontournable de l'automne et de l'hiver. Morceaux de poulet croustillants, sauces maison et oignons frits à 10 €.",
     seoKeywords: [
       "crousty chicken visé",
       "poké bowl chaud",
       "hot bowl poulet croustillant",
-      "formule étudiant 11 euros",
+      "crousty chicken 10 euros",
       "repas chaud à emporter",
     ],
     recommendedDish: {
-      id: "crousty-chicken-blanche",
+      id: "crousty-chicken-sauce-blanche",
       name: "Crousty Chicken Sauce Blanche",
       price: 11.0,
       badge: "Formule Chaud & Réconfort",
@@ -266,11 +266,11 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       <ul>
         <li><strong>Sauce Curry Dorée :</strong> Un curry doux et parfumé, crémeux et subtilement épicé, rappelant les meilleurs currys katsu japonais.</li>
         <li><strong>Sauce Blanche Maison :</strong> Une sauce fraîche et onctueuse relevée d'herbes aromatiques pour un contraste chaud-frais irrésistible.</li>
-        <li><strong>Le topping croquant :</strong> Une pluie d'oignons frits croustillants et une touche d'edamames ou de sésame pour parfaire la bouchée.</li>
+        <li><strong>Le topping croquant :</strong> Une pluie d'oignons frits croustillants et une touche de sésame pour parfaire la bouchée.</li>
       </ul>
 
-      <h2>La formule étudiante à 11 € avec boisson (uniquement le midi)</h2>
-      <p>Réservée aux étudiants et proposée uniquement le midi, la formule Crousty Chicken à 11 € comprend une boisson de 33 cl au choix (Coca-Cola, Fanta, Ice Tea ou eau minérale).</p>
+      <h2>Toute la gamme Crousty Chicken à 10 €</h2>
+      <p>Déclinée en 5 recettes gourmandes (Thaïger, Curry, Teriyaki, Blanche et Spicy), la gamme Crousty Chicken est proposée à 10,00 € sur place, à emporter ou en livraison.</p>
     `,
   },
 ];

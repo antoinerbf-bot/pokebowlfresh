@@ -84,17 +84,20 @@ export function PokawaMegaMenu({
       id: string;
       name: string;
       price: number;
-      image?: string;
+      image?: string | undefined;
+      soldOut?: boolean | undefined;
     },
     isCrousty = false
   ) => {
+    if (dish.soldOut) return;
+    const isPoke = bowls.some((b) => b.id === dish.id && !b.id.startsWith("crousty-"));
     addItem({
-      id: `${dish.id}-mega`,
-      name: dish.name,
+      id: isPoke ? `${dish.id}-moyen` : dish.id,
+      name: isPoke ? `${dish.name} (Moyen)` : dish.name,
       basePrice: dish.price,
       price: dish.price,
       quantity: 1,
-      toppings: isCrousty ? ["Boisson 33cl incluse"] : [],
+      toppings: isCrousty ? ["Boisson 33cl incluse : Coca-Cola (33 cl)"] : [],
       removedIngredients: [],
       image: dish.image,
     });
@@ -113,6 +116,7 @@ export function PokawaMegaMenu({
       price: 4.0,
       desc: "Véritables biscuits Lotus & mascarpone artisanal.",
       image: tiramisuSpeculoos,
+      soldOut: false,
     },
     {
       id: "tira-nutella",
@@ -120,6 +124,7 @@ export function PokawaMegaMenu({
       price: 4.0,
       desc: "Nutella coulant & éclats de noisettes.",
       image: tiramisuNutella,
+      soldOut: true,
     },
     {
       id: "tira-oreo",
@@ -127,6 +132,7 @@ export function PokawaMegaMenu({
       price: 4.0,
       desc: "Biscuits Oreo noir et crème fouettée.",
       image: tiramisuOreo,
+      soldOut: false,
     },
   ];
 
@@ -285,7 +291,7 @@ export function PokawaMegaMenu({
                             <DishImage
                               dishId={poke.id}
                               alt={poke.name}
-                              className={`h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-108"}`}
+                              className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
                             />
                             <span className="absolute top-1.5 right-1.5 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2 py-0.5 text-[10px] font-black text-[#2C1D16] shadow">
                               {poke.price.toFixed(2)} €
@@ -515,10 +521,17 @@ export function PokawaMegaMenu({
 
                           <button
                             type="button"
+                            disabled={dessert.soldOut}
                             onClick={() => handleQuickAdd(dessert)}
-                            className="mt-2.5 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
+                            className={`mt-2.5 flex items-center justify-center gap-1 rounded-xl py-1.5 text-[10px] font-black uppercase text-white transition ${
+                              dessert.soldOut
+                                ? "bg-black/25 cursor-not-allowed"
+                                : "bg-[#2C1D16] hover:bg-[#ff705f] active:scale-95"
+                            }`}
                           >
-                            {addedDishId === dessert.id ? (
+                            {dessert.soldOut ? (
+                              <>Épuisé</>
+                            ) : addedDishId === dessert.id ? (
                               <>
                                 <Check className="h-3 w-3 stroke-[3]" /> Ajouté !
                               </>
@@ -561,7 +574,7 @@ export function PokawaMegaMenu({
                             <img
                               src={drink.image}
                               alt={drink.name}
-                              className="h-full w-full object-cover transition duration-500 group-hover:scale-108"
+                              className={`h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2 bg-white" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-108"}`}
                             />
                             <span className="absolute top-1.5 right-1.5 rounded-full bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] shadow">
                               {drink.price.toFixed(2)} €

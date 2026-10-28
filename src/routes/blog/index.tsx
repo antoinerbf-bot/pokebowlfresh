@@ -386,7 +386,15 @@ function BlogHubPage() {
             <Link to="/recrutement" className="hover:text-white transition">Recrutement</Link>
           </div>
           <div className="text-[11px] text-[#EADCC9]/40">
-            © {new Date().getFullYear()} Poke N Bowl Visé · Tous droits réservés
+            © {new Date().getFullYear()} Poke N Bowl Visé · Tous droits réservés ·{" "}
+            <a
+              href="https://xragencyai.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white underline underline-offset-2 transition"
+            >
+              Site créé par xragencyai.com
+            </a>
           </div>
         </div>
       </footer>

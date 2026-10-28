@@ -50,7 +50,7 @@ export class EscPosBuilder {
         this.buffer.push(code);
       } else {
         // Encodage accents basiques
-        const char = str[i];
+        const char = str[i] ?? "";
         const map: Record<string, number> = {
           é: 0x82,
           è: 0x8a,
@@ -158,17 +158,15 @@ export function buildKitchenReceipt(order: Order): Uint8Array {
     .bold(false)
     .line();
 
-  // Mode & Créneau en très gros
+  // Mode & Créneau en très gros (sans fond noir pour économiser l'encre/tête thermique)
   b.align("center")
-    .invert(true)
     .doubleSize(true)
     .bold(true)
     .line(
       order.customer.fulfillment === "delivery"
-        ? ` LIVRAISON : ${order.customer.requestedTime} `
-        : ` A EMPORTER : ${order.customer.requestedTime} `,
+        ? `LIVRAISON : ${order.customer.requestedTime}`
+        : `A EMPORTER : ${order.customer.requestedTime}`,
     )
-    .invert(false)
     .doubleSize(false)
     .bold(false)
     .line();
@@ -178,12 +176,12 @@ export function buildKitchenReceipt(order: Order): Uint8Array {
     .line(`COMMANDE : ${order.id}`)
     .bold(false)
     .line(`Client : ${order.customer.name}`)
-    .line(`Reçue le : ${new Date(order.createdAt).toLocaleDateString("fr-BE")} à ${new Date(order.createdAt).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}`)
+    .line(`Reçue le : ${new Date(order.createdAt).toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" })} à ${new Date(order.createdAt).toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" })}`)
     .divider("=");
 
   // Remarques ou allergies client
   if (order.customer.notes) {
-    b.invert(true).bold(true).line(` NOTE CLIENT / ALLERGIES : `).invert(false).bold(false);
+    b.bold(true).line(`! NOTE CLIENT / ALLERGIES :`).bold(false);
     b.line(truncate(order.customer.notes, 42));
     b.divider("-");
   }
@@ -197,8 +195,8 @@ export function buildKitchenReceipt(order: Order): Uint8Array {
     if (item.toppings && item.toppings.length > 0) {
       for (const top of item.toppings) {
         if (top.toLowerCase().startsWith("sans :")) {
-          // Ingrédients retirés / allergies en gras inversé
-          b.invert(true).bold(true).line(`  ! ${top} `).invert(false).bold(false);
+          // Ingrédients retirés / allergies en gras
+          b.bold(true).line(`  ! ${top}`).bold(false);
         } else {
           b.line(`  + ${truncate(top, 38)}`);
         }
@@ -215,7 +213,7 @@ export function buildKitchenReceipt(order: Order): Uint8Array {
 
 /**
  * 2. TICKET CLIENT / LIVREUR
- * Contient coordonnées complètes, adresse, paiement et QR Code de suivi/GPS.
+ * Contient coordonnées complètes, adresse, paiement et QR Code de suivi/GPS (livraison uniquement).
  */
 export function buildDeliveryReceipt(order: Order, origin = "https://pokenbowl.be"): Uint8Array {
   const b = new EscPosBuilder();
@@ -225,8 +223,8 @@ export function buildDeliveryReceipt(order: Order, origin = "https://pokenbowl.b
     .doubleSize(true)
     .line("POKE N BOWL")
     .doubleSize(false)
-    .line("Rue Haute 38, 4600 Visé")
-    .line("Tel: 04 222 00 00")
+    .line("Rue Haute 38, 4600 Vise")
+    .line("Tel: 0491 28 14 56")
     .line()
     .bold(true)
     .line(
@@ -241,7 +239,7 @@ export function buildDeliveryReceipt(order: Order, origin = "https://pokenbowl.b
     .bold(true)
     .line(`COMMANDE N° : ${order.id}`)
     .bold(false)
-    .line(`Date : ${new Date(order.createdAt).toLocaleDateString("fr-BE")} ${new Date(order.createdAt).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}`)
+    .line(`Date : ${new Date(order.createdAt).toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" })} ${new Date(order.createdAt).toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" })}`)
     .divider("-");
 
   // Client
@@ -290,30 +288,31 @@ export function buildDeliveryReceipt(order: Order, origin = "https://pokenbowl.b
   b.line(totalStr);
   b.doubleSize(false).bold(false);
 
-  // Statut paiement
+  // Statut paiement (sans fond noir)
   b.line();
   b.align("center").bold(true);
   if (order.status === "paid") {
-    b.invert(true).line(" PAIEMENT VALIDE - EN LIGNE ").invert(false);
+    b.line("[ PAIEMENT VALIDE - EN LIGNE ]");
   } else {
-    b.line(`PAIEMENT SUR PLACE : ${order.total.toFixed(2)} EUR`);
+    b.line(`[ PAIEMENT SUR PLACE : ${order.total.toFixed(2)} EUR ]`);
   }
   b.bold(false).line();
 
-  // QR code sécurisé imprimé au bas de chaque ticket client.
-  // getOrderReceipts crée et enregistre un jeton si une ancienne commande en manque.
-  const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken ?? ""}`;
-  b.divider("=");
-  b.align("center")
-    .bold(true)
-    .line("SCANNEZ POUR GPS ET ITINERAIRE")
-    .bold(false)
-    .line("Waze & Google Maps en 1-clic")
-    .line()
-    .qrCode(trackUrl, 6)
-    .line()
-    .line("Suivi livreur & contact client")
-    .align("left");
+  // QR code sécurisé imprimé uniquement pour les commandes en livraison
+  if (order.customer.fulfillment === "delivery" && (order.deliveryToken || order.id)) {
+    const trackUrl = `${origin.replace(/\/$/, "")}/track/${order.deliveryToken || order.id}`;
+    b.divider("=");
+    b.align("center")
+      .bold(true)
+      .line("SCANNEZ POUR GPS ET ITINERAIRE")
+      .bold(false)
+      .line("Waze & Google Maps en 1-clic")
+      .line()
+      .qrCode(trackUrl, 6)
+      .line()
+      .line("Suivi livreur & contact client")
+      .align("left");
+  }
 
   b.divider("=");
   b.line("Merci de votre confiance !");
@@ -338,18 +337,16 @@ export function buildOrderReceipt(order: Order, origin = "https://pokenbowl.be")
     .line("POKE N BOWL VISE")
     .doubleSize(false)
     .line("Rue Haute 38, 4600 Vise")
-    .line("Tel: 04 222 00 00")
+    .line("Tel: 0491 28 14 56")
     .line();
 
-  // Bannière Type de Commande
+  // Bannière Type de Commande (sans fond noir)
   const isDelivery = order.customer.fulfillment === "delivery";
-  b.invert(true)
-    .bold(true)
+  b.bold(true)
     .doubleSize(true)
-    .line(isDelivery ? " *** LIVRAISON *** " : " *** A EMPORTER *** ")
+    .line(isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***")
     .doubleSize(false)
-    .line(` HEURE : ${order.customer.requestedTime || "DES QUE POSSIBLE"} `)
-    .invert(false)
+    .line(`HEURE : ${order.customer.requestedTime || "DES QUE POSSIBLE"}`)
     .bold(false)
     .line();
 
@@ -360,7 +357,7 @@ export function buildOrderReceipt(order: Order, origin = "https://pokenbowl.be")
     .line(`CMD : ${order.id}`)
     .doubleSize(false)
     .bold(false)
-    .line(`Date: ${new Date(order.createdAt).toLocaleDateString("fr-BE")} a ${new Date(order.createdAt).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}`)
+    .line(`Date: ${new Date(order.createdAt).toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" })} a ${new Date(order.createdAt).toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" })}`)
     .divider("-");
 
   b.bold(true).line("CLIENT :").bold(false);
@@ -377,7 +374,7 @@ export function buildOrderReceipt(order: Order, origin = "https://pokenbowl.be")
   // Remarques / Allergies
   if (order.customer.notes) {
     b.divider("-");
-    b.invert(true).bold(true).line(" ! REMARQUE / ALLERGIES ! ").invert(false).bold(false);
+    b.bold(true).line("! REMARQUE / ALLERGIES !").bold(false);
     b.line(truncate(order.customer.notes, 42));
   }
 
@@ -396,7 +393,7 @@ export function buildOrderReceipt(order: Order, origin = "https://pokenbowl.be")
     if (item.toppings && item.toppings.length > 0) {
       for (const top of item.toppings) {
         if (top.toLowerCase().startsWith("sans :") || top.toLowerCase().includes("allerg")) {
-          b.invert(true).bold(true).line(`  ! ${top} `).invert(false).bold(false);
+          b.bold(true).line(`  ! ${top}`).bold(false);
         } else {
           b.line(`  + ${truncate(top, 38)}`);
         }
@@ -418,13 +415,13 @@ export function buildOrderReceipt(order: Order, origin = "https://pokenbowl.be")
   b.line(totalStr);
   b.doubleSize(false).bold(false);
 
-  // Statut Paiement
+  // Statut Paiement (sans fond noir)
   b.line();
   b.align("center").bold(true);
   if (order.status === "paid") {
-    b.invert(true).line(" [ PAIEMENT VALIDE EN LIGNE ] ").invert(false);
+    b.line("[ PAIEMENT VALIDE EN LIGNE ]");
   } else {
-    b.invert(true).line(` [ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ] `).invert(false);
+    b.line(`[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`);
   }
   b.bold(false).line();
 

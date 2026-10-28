@@ -223,7 +223,7 @@ export function PosApplicationPage() {
       // 1. Essayer l'API REST directe /api/pos-orders
       try {
         const resRest = await fetch("/api/pos-orders", {
-          headers: { Accept: "application/json" },
+          headers: { Accept: "application/json", "x-pos-pin": pin },
           cache: "no-store",
         });
         if (resRest.ok) {
@@ -322,6 +322,7 @@ export function PosApplicationPage() {
       const timer = setInterval(loadOrders, 4000);
       return () => clearInterval(timer);
     }
+    return undefined;
   }, [isUnlocked, pin]);
 
   // Impression navigateur de secours : noir sur blanc, ticket 80 mm et QR en pied de ticket.
@@ -383,10 +384,11 @@ export function PosApplicationPage() {
         try {
           await fetch("/api/pos-orders", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "x-pos-pin": pin },
             body: JSON.stringify({
               orderId: order.id,
               printStatus: "printed",
+              pin,
             }),
           });
         } catch (ackErr) {
@@ -430,8 +432,8 @@ export function PosApplicationPage() {
       try {
         const res = await fetch("/api/pos-orders", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderId, status }),
+          headers: { "Content-Type": "application/json", "x-pos-pin": pin },
+          body: JSON.stringify({ orderId, status, pin }),
         });
         if (res.ok) {
           const json = await res.json();
@@ -608,7 +610,13 @@ export function PosApplicationPage() {
             </button>
             <button
               onClick={() => {
-                setIsUnlocked(true); // Bypass dev
+                if (pinInput === pin) {
+                  setIsUnlocked(true);
+                  setPinError(false);
+                } else {
+                  setPinError(true);
+                  setTimeout(() => setPinInput(""), 600);
+                }
               }}
               className="h-16 rounded-2xl bg-[#ff705f]/10 text-xs font-black text-[#ff705f]"
             >

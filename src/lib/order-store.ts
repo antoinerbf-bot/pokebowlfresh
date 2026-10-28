@@ -231,7 +231,7 @@ export async function getOrderFromStore(id: string): Promise<Order | undefined> 
     try {
       await ensureSchema();
       const sql = getSql();
-      const rows = await sql<DbRow>`
+      const rows = (await sql`
         SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
                customer_json, items_json, total, currency,
                print_status, printed_at, print_claimed_at, print_attempts, print_error
@@ -241,7 +241,7 @@ export async function getOrderFromStore(id: string): Promise<Order | undefined> 
            OR LOWER(id) = ${lowerId}
            OR LOWER(delivery_token) = ${lowerId}
         LIMIT 1
-      `;
+      `) as DbRow[];
       const row = rows[0];
       if (row) return rowToOrder(row);
     } catch (err) {
@@ -281,7 +281,7 @@ export async function getOrderByDeliveryToken(token: string): Promise<Order | un
     try {
       await ensureSchema();
       const sql = getSql();
-      const rows = await sql<DbRow>`
+      const rows = (await sql`
         SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
                customer_json, items_json, total, currency,
                print_status, printed_at, print_claimed_at, print_attempts, print_error
@@ -291,7 +291,7 @@ export async function getOrderByDeliveryToken(token: string): Promise<Order | un
            OR LOWER(delivery_token) = ${lowerToken}
            OR LOWER(id) = ${lowerToken}
         LIMIT 1
-      `;
+      `) as DbRow[];
       const row = rows[0];
       if (row) return rowToOrder(row);
     } catch (err) {
@@ -313,14 +313,14 @@ export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
   try {
     await ensureSchema();
     const sql = getSql();
-    const rows = await sql<DbRow>`
+    const rows = (await sql`
       SELECT id, delivery_token, created_at, status, payment_method, mollie_payment_id,
              customer_json, items_json, total, currency,
              print_status, printed_at, print_claimed_at, print_attempts, print_error
       FROM orders
       ORDER BY created_at DESC
       LIMIT ${limit}
-    `;
+    `) as DbRow[];
     // PostgreSQL is the primary store, but include locally persisted orders too.
     // This prevents an order saved locally from disappearing from the POS if the
     // database insert failed or the DB is temporarily behind.
@@ -468,7 +468,7 @@ export async function claimNextPrintJob(): Promise<Order | undefined> {
 
   await ensureSchema();
   const sql = getSql();
-  const rows = await sql<DbRow>`
+  const rows = (await sql`
     UPDATE orders
     SET
       print_status = 'printing',
@@ -490,7 +490,7 @@ export async function claimNextPrintJob(): Promise<Order | undefined> {
     RETURNING id, delivery_token, created_at, status, payment_method, mollie_payment_id,
               customer_json, items_json, total, currency,
               print_status, printed_at, print_claimed_at, print_attempts, print_error
-  `;
+  `) as DbRow[];
   const row = rows[0];
   return row ? rowToOrder(row) : undefined;
 }

@@ -177,20 +177,6 @@ function Ticker() {
 function Index() {
   const { t } = useTranslation();
 
-  /* Reset scroll on mount */
-  React.useEffect(() => {
-    const prev = window.history.scrollRestoration;
-    window.history.scrollRestoration = "manual";
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    const frame = window.requestAnimationFrame(() =>
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" })
-    );
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.history.scrollRestoration = prev;
-    };
-  }, []);
-
   return (
     <div className="min-h-screen overflow-x-clip bg-[#F6F1E9] text-[#2C1D16]">
       <CartDrawer />
@@ -537,7 +523,15 @@ function Index() {
 
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#EADCC9]/50 font-medium">
             <div>
-              © {new Date().getFullYear()} Poke N Bowl Visé · Poké bowls frais & Crousty Chicken. Tous droits réservés.
+              © {new Date().getFullYear()} Poke N Bowl Visé · Poké bowls frais & Crousty Chicken. Tous droits réservés. ·{" "}
+              <a
+                href="https://xragencyai.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white underline underline-offset-2 transition"
+              >
+                Site créé par xragencyai.com
+              </a>
             </div>
             <div className="flex gap-4">
               <Link to="/contact" className="hover:text-white transition">Contact</Link>

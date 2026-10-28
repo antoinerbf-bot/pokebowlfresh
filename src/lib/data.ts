@@ -153,6 +153,7 @@ export interface Bowl {
   id: string;
   name: string;
   price: number;
+  grandPrice?: number;
   desc: string;
   defaultBase: string;
   defaultSauce: string;

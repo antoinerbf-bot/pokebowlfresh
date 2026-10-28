@@ -74,7 +74,6 @@ async function createHandler() {
             JSON.stringify({
               success: false,
               error: err?.message ?? String(err),
-              stack: err?.stack,
             }),
             {
               status: 200,

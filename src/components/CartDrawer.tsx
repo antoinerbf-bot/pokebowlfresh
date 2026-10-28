@@ -19,7 +19,7 @@ import { DishImage } from "./DishImage";
 import { bowls } from "../lib/data";
 
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
-import tiramisuNutella from "@/assets/tiramisu-nutella.jpg";
+import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
 import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
 import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
 import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
@@ -35,12 +35,12 @@ const CROSS_SELL_ITEMS = [
     subtitle: "Artisanal · Lotus",
   },
   {
-    id: "tira-nutella",
-    name: "Tiramisu Nutella Maison",
+    id: "tira-oreo",
+    name: "Tiramisu Oreo Maison",
     price: 4.0,
-    emoji: "🍫",
-    image: tiramisuNutella,
-    subtitle: "Fondant & Gourmand",
+    emoji: "🍪",
+    image: tiramisuOreo,
+    subtitle: "Biscuits Oreo & Mascarpone",
   },
   {
     id: "coca",
@@ -78,9 +78,9 @@ export function CartDrawer() {
   const diffToFree = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
   const progressPercent = Math.min(100, Math.round((total / FREE_DELIVERY_THRESHOLD) * 100));
 
-  const handleQuickAddCrossSell = (item: (typeof CROSS_SELL_ITEMS)[0]) => {
+  const handleQuickAddCrossSell = (item: (typeof CROSS_SELL_ITEMS)[number]) => {
     addItem({
-      id: `${item.id}-${Date.now()}`,
+      id: item.id,
       name: item.name,
       basePrice: item.price,
       price: item.price,

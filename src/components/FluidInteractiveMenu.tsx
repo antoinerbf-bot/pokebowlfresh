@@ -170,13 +170,20 @@ export function FluidInteractiveMenu() {
       ? `${item.name} (${isGrand ? "Grand" : "Moyen"})`
       : item.name;
 
+    const itemId = item.grandPrice ? `${item.id}-${size}` : item.id;
+    const itemToppings = item.isCombo
+      ? ["Boisson 33cl incluse : Coca-Cola (33 cl)"]
+      : item.grandPrice
+        ? [isGrand ? "Taille : Grand (+3.00€)" : "Taille : Moyen (Standard)"]
+        : [];
+
     addItem({
-      id: `${item.id}-${size}`,
+      id: itemId,
       name: displayName,
-      basePrice: finalPrice,
+      basePrice: item.price,
       price: finalPrice,
       quantity: 1,
-      toppings: item.isCombo ? ["Boisson 33cl incluse"] : [],
+      toppings: itemToppings,
       removedIngredients: [],
       image: item.image,
     });

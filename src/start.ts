@@ -15,7 +15,7 @@ const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
     const url = request?.url ?? "";
     const isJson =
       accept.includes("application/json") ||
-      url.includes("/_serverFn/") ||
+      url.includes("/_server") ||
       url.includes("/api/");
 
     if (isJson) {

@@ -61,13 +61,12 @@ function consumeLastCapturedError() {
 	lastCapturedError = void 0;
 	return error;
 }
-function renderErrorPage(error) {
-	const detail = error ? String(error?.stack || error?.message || error) : "";
+function renderErrorPage(_error) {
 	return `<!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>This page didn't load</title>
+    <title>This page didn't load — Poke N Bowl Visé</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body { font: 15px/1.5 system-ui, -apple-system, sans-serif; background: #fafafa; color: #111; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 1.5rem; }
@@ -83,8 +82,7 @@ function renderErrorPage(error) {
   <body>
     <div class="card">
       <h1>This page didn't load</h1>
-      <p>Something went wrong on our end. You can try refreshing or head back home.</p>
-      ${detail ? `<details style="margin-top:1.5rem;margin-bottom:1.5rem;text-align:left;font-size:11px;background:#f3f4f6;padding:0.75rem;border-radius:0.5rem;overflow:auto;max-height:16rem;"><summary style="cursor:pointer;font-weight:600;color:#374151;">Détails techniques (admin)</summary><pre style="margin-top:0.5rem;white-space:pre-wrap;color:#b91c1c;">${detail.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre></details>` : ""}
+      <p>Un problème temporaire est survenu. Vous pouvez réessayer ou revenir à l’accueil.</p>
       <div class="actions">
         <button class="primary" onclick="location.reload()">Try again</button>
         <a class="secondary" href="/">Go home</a>
@@ -95,7 +93,7 @@ function renderErrorPage(error) {
 }
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-lgnIM6S9.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-Bc-H43DX.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {

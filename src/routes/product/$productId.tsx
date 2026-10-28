@@ -195,6 +195,38 @@ function ProductPage() {
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
 
+  // States (appelés inconditionnellement avant tout return anticipé — règle des Hooks React)
+  const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
+  const [selectedBase, setSelectedBase] = React.useState<string>(product?.defaultBase || "Riz à sushi");
+  const [selectedSauce, setSelectedSauce] = React.useState<string>(product?.defaultSauce || "Spicy-Mayo");
+  const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
+  
+  // Suppléments demandés par le client
+  const [extraChicken, setExtraChicken] = React.useState(false); // Crousty : supplément poulet croustillant (+2.50 €)
+  const [extraProtein, setExtraProtein] = React.useState<string | null>(null); // Poké : supplément protéine (+2.50 €)
+  const [selectedMixins, setSelectedMixins] = React.useState<string[]>([]); // Mix-ins : +0,50 € chacun ; feta : +1,00 €
+  const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({}); // Toppings (+0.50 € chaque portion, illimité)
+  const [extraSauce, setExtraSauce] = React.useState<string | null>(null); // 2ème pot de sauce (+1.00 €)
+  const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
+  const [qty, setQty] = React.useState(1);
+  const [added, setAdded] = React.useState(false);
+
+  // Réinitialiser la personnalisation lors d'un changement de fiche produit (/product/A -> /product/B)
+  React.useEffect(() => {
+    setSelectedSize("moyen");
+    setSelectedBase(product?.defaultBase || "Riz à sushi");
+    setSelectedSauce(product?.defaultSauce || "Spicy-Mayo");
+    setRemovedIngredients([]);
+    setExtraChicken(false);
+    setExtraProtein(null);
+    setSelectedMixins([]);
+    setToppingQuantities({});
+    setExtraSauce(null);
+    setSelectedDrink(drinks[0]?.name || "Coca-Cola (33 cl)");
+    setQty(1);
+    setAdded(false);
+  }, [productId, product?.defaultBase, product?.defaultSauce]);
+
   // Redirection si sur-mesure
   if (productId === "sur-mesure") {
     return <Navigate to="/sur-mesure" replace />;
@@ -215,22 +247,6 @@ function ProductPage() {
 
   const isCrousty = product.id.startsWith("crousty-");
   const productOk = available(product.id);
-
-  // States
-  const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
-  const [selectedBase, setSelectedBase] = React.useState<string>(product.defaultBase || "Riz à sushi");
-  const [selectedSauce, setSelectedSauce] = React.useState<string>(product.defaultSauce || "Spicy-Mayo");
-  const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
-  
-  // Suppléments demandés par le client
-  const [extraChicken, setExtraChicken] = React.useState(false); // Crousty : supplément poulet croustillant (+2.50 €)
-  const [extraProtein, setExtraProtein] = React.useState<string | null>(null); // Poké : supplément protéine (+2.50 €)
-  const [selectedMixins, setSelectedMixins] = React.useState<string[]>([]); // Mix-ins : +0,50 € chacun ; feta : +1,00 €
-  const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({}); // Toppings (+0.50 € chaque portion, illimité)
-  const [extraSauce, setExtraSauce] = React.useState<string | null>(null); // 2ème pot de sauce (+1.00 €)
-  const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
-  const [qty, setQty] = React.useState(1);
-  const [added, setAdded] = React.useState(false);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
@@ -318,7 +334,8 @@ function ProductPage() {
 
     // Suppléments Légumes & Mix-ins sélectionnés
     selectedMixins.forEach((m) => {
-      optionsList.push(`Légume / Mix-in (+0.50€) : ${m}`);
+      const priceLabel = m.trim().toLowerCase() === "feta" ? "+1.00€" : "+0.50€";
+      optionsList.push(`Légume / Mix-in (${priceLabel}) : ${m}`);
     });
 
     // Toppings payants sélectionnés

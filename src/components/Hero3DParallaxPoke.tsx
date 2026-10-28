@@ -276,9 +276,8 @@ export function Hero3DParallaxPoke() {
 
               {/* Ambient Ring Glow */}
               <div
-                style={{ transform: "translateZ(-20px)" }}
+                style={{ transform: "translateZ(-20px)", backgroundColor: currentDish.tagColor }}
                 className="absolute inset-4 rounded-full blur-3xl opacity-40 transition-colors duration-1000 pointer-events-none"
-                style={{ backgroundColor: currentDish.tagColor }}
               />
 
               {/* The Main Gourmet Poké Bowl in Ceramic Stoneware */}
@@ -360,33 +359,15 @@ export function Hero3DParallaxPoke() {
               {/* ── 3D Floating Ingredients around the bowl (Parallax Layers) ── */}
               <AnimatePresence mode="wait">
                 <React.Fragment key={currentDish.id}>
-                  {currentDish.floatingIngredients.map((item, idx) => {
-                    const depthX = useTransform(smoothMouseX, [-0.5, 0.5], [-item.depth * 0.7, item.depth * 0.7]);
-                    const depthY = useTransform(smoothMouseY, [-0.5, 0.5], [-item.depth * 0.7, item.depth * 0.7]);
-
-                    return (
-                      <motion.div
-                        key={`${currentDish.id}-${idx}`}
-                        initial={{ opacity: 0, scale: 0.6 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.6 }}
-                        transition={{ duration: 0.5, delay: idx * 0.08 }}
-                        style={{
-                          left: item.x,
-                          top: item.y,
-                          x: depthX,
-                          y: depthY,
-                          transform: `translateZ(${item.depth}px)`,
-                        }}
-                        className="pointer-events-none absolute z-30 hidden sm:flex items-center gap-2 rounded-2xl border border-white/20 bg-[#1C120C]/85 px-3.5 py-2 shadow-2xl backdrop-blur-md"
-                      >
-                        <span className="text-base">{item.emoji}</span>
-                        <span className="text-[11px] font-extrabold text-white tracking-wide whitespace-nowrap">
-                          {item.name}
-                        </span>
-                      </motion.div>
-                    );
-                  })}
+                  {currentDish.floatingIngredients.map((item, idx) => (
+                    <FloatingIngredientBadge
+                      key={`${currentDish.id}-${idx}`}
+                      item={item}
+                      idx={idx}
+                      smoothMouseX={smoothMouseX}
+                      smoothMouseY={smoothMouseY}
+                    />
+                  ))}
                 </React.Fragment>
               </AnimatePresence>
 
@@ -589,5 +570,42 @@ export function Hero3DParallaxPoke() {
         </div>
       </div>
     </section>
+  );
+}
+
+function FloatingIngredientBadge({
+  item,
+  idx,
+  smoothMouseX,
+  smoothMouseY,
+}: {
+  item: FloatingIngredient;
+  idx: number;
+  smoothMouseX: any;
+  smoothMouseY: any;
+}) {
+  const depthX = useTransform(smoothMouseX, [-0.5, 0.5], [-item.depth * 0.7, item.depth * 0.7]);
+  const depthY = useTransform(smoothMouseY, [-0.5, 0.5], [-item.depth * 0.7, item.depth * 0.7]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.6 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.6 }}
+      transition={{ duration: 0.5, delay: idx * 0.08 }}
+      style={{
+        left: item.x,
+        top: item.y,
+        x: depthX,
+        y: depthY,
+        transform: `translateZ(${item.depth}px)`,
+      }}
+      className="pointer-events-none absolute z-30 hidden sm:flex items-center gap-2 rounded-2xl border border-white/20 bg-[#1C120C]/85 px-3.5 py-2 shadow-2xl backdrop-blur-md"
+    >
+      <span className="text-base">{item.emoji}</span>
+      <span className="text-[11px] font-extrabold text-white tracking-wide whitespace-nowrap">
+        {item.name}
+      </span>
+    </motion.div>
   );
 }

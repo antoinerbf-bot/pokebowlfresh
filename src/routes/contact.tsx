@@ -107,17 +107,6 @@ function ContactPage() {
             Instagram: @POKE_NBOWL
           </a>
         </div>
-        <div className="mt-10 overflow-hidden rounded-[2rem] border border-border shadow-lift">
-          <iframe
-            title="Poke N Bowl Visé"
-            src="https://www.google.com/maps?q=Poke+N+Bowl,+Avenue+du+Pont+12,+4600+Vis%C3%A9&output=embed"
-            width="100%"
-            height="420"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            style={{ border: 0 }}
-          />
-        </div>
       </main>
     </div>
   );

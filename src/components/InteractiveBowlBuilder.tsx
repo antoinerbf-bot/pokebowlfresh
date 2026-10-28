@@ -65,8 +65,8 @@ const TOPPINGS = [
 export function InteractiveBowlBuilder() {
   const [activeStep, setActiveStep] = React.useState<number>(1);
   const [size, setSize] = React.useState<"moyen" | "grand">("moyen");
-  const [base, setBase] = React.useState(BASES[0]);
-  const [proteine, setProteine] = React.useState(PROTEINES[1]); // Saumon par défaut
+  const [base, setBase] = React.useState(() => BASES[0]!);
+  const [proteine, setProteine] = React.useState(() => PROTEINES[1]!); // Saumon par défaut
   const [selectedMixins, setSelectedMixins] = React.useState<string[]>([
     "avocat",
     "mangue",
@@ -74,7 +74,7 @@ export function InteractiveBowlBuilder() {
     "wakame",
     "feta",
   ]);
-  const [sauce, setSauce] = React.useState(SAUCES[0]);
+  const [sauce, setSauce] = React.useState(() => SAUCES[0]!);
   const [selectedToppings, setSelectedToppings] = React.useState<string[]>(["oignons-frits"]);
   const [added, setAdded] = React.useState(false);
 
@@ -131,9 +131,9 @@ export function InteractiveBowlBuilder() {
     );
 
     addItem({
-      id: `custom-live-${Date.now()}`,
-      name: `Bowl Sur-Mesure (${size === "grand" ? "Grand" : "Moyen"})`,
-      basePrice: totalPrice,
+      id: "sur-mesure",
+      name: `Poke Bowl sur mesure (${size === "grand" ? "Grand" : "Moyen"})`,
+      basePrice: basePrice,
       price: totalPrice,
       quantity: 1,
       toppings: [
@@ -156,8 +156,8 @@ export function InteractiveBowlBuilder() {
       setAdded(false);
       setActiveStep(1);
       setSize("moyen");
-      setBase(BASES[0]);
-      setProteine(PROTEINES[1]);
+      setBase(BASES[0]!);
+      setProteine(PROTEINES[1]!);
       setSelectedMixins(["avocat", "mangue", "edamame", "wakame", "feta"]);
       setSauce(SAUCES[0]);
       setSelectedToppings(["oignons-frits"]);
