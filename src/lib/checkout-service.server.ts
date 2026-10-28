@@ -165,11 +165,17 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += extraToppings * 0.50;
       }
 
-      // Sauce supplémentaire éventuelle (+1.00€)
+      // Suppléments de sauce (+0.50€ par pot supplémentaire, illimité, ex: x3 = +1.50€)
       const extraSauces = opts.filter((t) =>
         /sauce\s+(suppl[ée]mentaire|extra|2[èe]me\s+pot)/i.test(t),
       );
-      unitPrice += extraSauces.length * 1.00;
+      let totalExtraSauceUnits = 0;
+      for (const es of extraSauces) {
+        const match = es.match(/\(x(\d+)\)/i) || es.match(/x(\d+)/i);
+        const count = match?.[1] ? parseInt(match[1], 10) : 1;
+        totalExtraSauceUnits += isNaN(count) ? 1 : count;
+      }
+      unitPrice += totalExtraSauceUnits * 0.50;
 
       return {
         ...item,
@@ -232,11 +238,17 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       }
       unitPrice += totalSignatureToppings * 0.50;
 
-      // Sauce extra (+1.00€)
+      // Suppléments de sauce (+0.50€ par pot supplémentaire, illimité, ex: x3 = +1.50€)
       const extraSauces = opts.filter((t) =>
         /sauce\s+(extra|suppl[ée]mentaire|2[èe]me\s+pot)/i.test(t),
       );
-      unitPrice += extraSauces.length * 1.00;
+      let totalExtraSauceUnits = 0;
+      for (const es of extraSauces) {
+        const match = es.match(/\(x(\d+)\)/i) || es.match(/x(\d+)/i);
+        const count = match?.[1] ? parseInt(match[1], 10) : 1;
+        totalExtraSauceUnits += isNaN(count) ? 1 : count;
+      }
+      unitPrice += totalExtraSauceUnits * 0.50;
 
       return {
         ...item,

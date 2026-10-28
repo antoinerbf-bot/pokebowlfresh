@@ -41,7 +41,7 @@ export function InteractiveBowlBuilder() {
   const [sauce, setSauce] = React.useState(
     () => detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0]!,
   ); // Teriyaki par défaut
-  const [extraSauce, setExtraSauce] = React.useState<string | null>(null);
+  const [extraSauces, setExtraSauces] = React.useState<Record<string, number>>({});
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -54,6 +54,7 @@ export function InteractiveBowlBuilder() {
   // - Protéine principale : Poulet mariné (0 €), Scampis (0 €), Saumon (+1,00 €)
   // - Protéines supplémentaires : +2,00 € par portion ajoutée (illimité, ex: 3x = 6,00 €)
   // - Légumes / Mix-ins : 5 portions incluses (hors feta à +1,00 €), puis +1,00 € par portion supplémentaire (illimité)
+  // - Sauces : 1 au choix gratuite incluse, puis +0,50 € par pot supplémentaire (illimité, ex: 3x = 1,50 €)
   // - Toppings : 1 portion incluse, puis +0,50 € par portion supplémentaire (illimité)
   const basePrice = size === "grand" ? 13.0 : 10.0;
   const mainProteinExtra = proteine.extraPrice ?? 0;
@@ -74,7 +75,8 @@ export function InteractiveBowlBuilder() {
   const totalToppingUnits = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingUnits - 1);
   const extraToppingsPrice = extraToppingsCount * 0.5;
-  const extraSaucePrice = extraSauce ? 1.0 : 0;
+  const totalExtraSauceUnits = Object.values(extraSauces).reduce((sum, q) => sum + q, 0);
+  const extraSaucePrice = totalExtraSauceUnits * 0.5;
 
   const totalPrice =
     basePrice +
@@ -139,6 +141,22 @@ export function InteractiveBowlBuilder() {
     });
   };
 
+  // Gestion des suppléments de sauce (+0,50 € / pot supplémentaire, illimité)
+  const addExtraSauce = (name: string) => {
+    setExtraSauces((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
+  };
+  const removeExtraSauce = (name: string) => {
+    setExtraSauces((prev) => {
+      const cur = prev[name] ?? 0;
+      if (cur <= 1) {
+        const copy = { ...prev };
+        delete copy[name];
+        return copy;
+      }
+      return { ...prev, [name]: cur - 1 };
+    });
+  };
+
   const resetBuilder = () => {
     setActiveStep(1);
     setSize("moyen");
@@ -153,7 +171,7 @@ export function InteractiveBowlBuilder() {
       Maïs: 1,
     });
     setSauce(detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0]!);
-    setExtraSauce(null);
+    setExtraSauces({});
     setToppingQuantities({ "Oignons frits": 1 });
   };
 
@@ -185,6 +203,13 @@ export function InteractiveBowlBuilder() {
           `Supplément Protéine (+2.00€) : ${name}${q > 1 ? ` (x${q})` : ""}`
       );
 
+    const extraSauceLines = Object.entries(extraSauces)
+      .filter(([, q]) => q > 0)
+      .map(
+        ([name, q]) =>
+          `Sauce extra (+${(q * 0.5).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`
+      );
+
     addItem({
       id: "sur-mesure",
       name: `Poke Bowl sur mesure (${size === "grand" ? "Grand" : "Moyen"})`,
@@ -198,7 +223,7 @@ export function InteractiveBowlBuilder() {
         ...extraProteinLines,
         `Mix-ins : ${mixinFormatted.length > 0 ? mixinFormatted.join(", ") : "Aucun"}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
         `Sauce : ${sauce.name}`,
-        ...(extraSauce ? [`Sauce extra (+1€) : ${extraSauce}`] : []),
+        ...extraSauceLines,
         `Toppings : ${toppingFormatted.length > 0 ? toppingFormatted.join(", ") : "Aucun"}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`,
       ],
       removedIngredients: [],
@@ -731,26 +756,74 @@ export function InteractiveBowlBuilder() {
                       </button>
                     </div>
 
-                    {/* 2ème pot de sauce séparé (+1.00€) */}
+                    {/* Suppléments de sauce (+0,50 € par pot supplémentaire, illimité) */}
                     <div className="mt-4 pt-3 border-t border-[#DECBB3]">
-                      <p className="text-[11px] font-black uppercase tracking-wider text-[#6E5A49] mb-2">
-                        Envie d'un 2ème pot de sauce séparé ? (+1,00 €)
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {detailedSauces.map((s) => (
-                          <button
-                            key={`extra-sauce-${s.id}`}
-                            type="button"
-                            onClick={() => setExtraSauce(extraSauce === s.name ? null : s.name)}
-                            className={`rounded-full border px-3 py-1 text-[11px] font-bold transition-all cursor-pointer ${
-                              extraSauce === s.name
-                                ? "border-[#ff705f] bg-[#ff705f] text-white shadow-sm"
-                                : "border-[#DECBB3] bg-[#FFFDF9] text-[#2C1D16] hover:border-[#ff705f]/50"
-                            }`}
-                          >
-                            {extraSauce === s.name ? `✓ Extra ${s.name} (+1€)` : `+ ${s.name} (+1€)`}
-                          </button>
-                        ))}
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                        <div>
+                          <p className="text-xs font-black uppercase tracking-wider text-[#2C1D16]">
+                            🍯 Suppléments de sauce (+0,50 € / pot)
+                          </p>
+                          <p className="text-[11px] font-medium text-[#6E5A49]">
+                            Ajoutez autant de pots que vous voulez (+0,50 € chacun, ex : 3× la même = +1,50 €).
+                          </p>
+                        </div>
+                        {totalExtraSauceUnits > 0 && (
+                          <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
+                            +{totalExtraSauceUnits} sauce{totalExtraSauceUnits > 1 ? "s" : ""} (+{extraSaucePrice.toFixed(2)} €)
+                          </span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {detailedSauces.map((s) => {
+                          const qty = extraSauces[s.name] ?? 0;
+                          return (
+                            <div
+                              key={`extra-sauce-${s.id}`}
+                              className={`flex items-center justify-between gap-1.5 rounded-xl border-2 p-2.5 transition ${
+                                qty > 0
+                                  ? "border-[#ff705f] bg-white shadow-sm"
+                                  : "border-[#DECBB3] bg-[#F3E9DA]/55 hover:bg-[#F3E9DA]"
+                              }`}
+                            >
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="text-base shrink-0">{s.emoji}</span>
+                                <div className="min-w-0">
+                                  <span className="block text-[11px] font-black text-[#2C1D16] truncate">
+                                    {s.name}
+                                  </span>
+                                  <span className="text-[10px] font-bold text-[#ff705f]">
+                                    {qty > 0 ? `x${qty} (+${(qty * 0.5).toFixed(2)} €)` : "+0,50 €"}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1 shrink-0">
+                                {qty > 0 && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      onClick={() => removeExtraSauce(s.name)}
+                                      className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                                      aria-label={`Retirer sauce ${s.name}`}
+                                    >
+                                      <Minus className="h-3 w-3 stroke-[3]" />
+                                    </button>
+                                    <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                      {qty}
+                                    </span>
+                                  </>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => addExtraSauce(s.name)}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                                  aria-label={`Ajouter sauce ${s.name}`}
+                                >
+                                  <Plus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -967,6 +1040,32 @@ export function InteractiveBowlBuilder() {
                       </span>
                     ))}
                   </div>
+                </div>
+
+                <div className="rounded-xl bg-[#F3E9DA] px-3 py-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[#6E5A49]">Sauce :</span>
+                    <span className="font-black text-[#2C1D16]">
+                      {sauce.emoji} {sauce.name} (Incluse)
+                    </span>
+                  </div>
+                  {totalExtraSauceUnits > 0 && (
+                    <div className="mt-1.5 pt-1.5 border-t border-[#DECBB3] flex items-center justify-between gap-2">
+                      <div className="flex flex-wrap gap-1">
+                        {Object.entries(extraSauces).map(([name, q]) => (
+                          <span
+                            key={name}
+                            className="rounded-lg bg-white border border-[#ff705f]/30 px-2 py-0.5 text-[10px] font-black text-[#2C1D16]"
+                          >
+                            +{q}× {name}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-[10px] font-black text-[#ff705f] shrink-0">
+                        +{extraSaucePrice.toFixed(2)} €
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="rounded-xl bg-[#F3E9DA] px-3 py-2">
