@@ -21,11 +21,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-YDzfJEbi.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CvVHjsA8.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-B9FbZuUv.css";
+var styles_default = "/assets/styles-Df1-laqP.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -1055,7 +1055,7 @@ var DEFAULT_PRINTER_CONFIG = {
 	autoPrintKitchen: true,
 	autoPrintDelivery: true,
 	soundEnabled: true,
-	printMode: "epos"
+	printMode: "browser"
 };
 function loadPrinterConfig() {
 	if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
@@ -1069,14 +1069,12 @@ function loadPrinterConfig() {
 				8008,
 				443
 			].includes(Number(parsed.printerPort)) ? Number(parsed.printerPort) : 8043;
-			const cleanConfig = {
+			return {
 				...DEFAULT_PRINTER_CONFIG,
 				...parsed,
 				printerPort: safePort,
-				printMode: "epos"
+				printMode: parsed.printMode === "epos" ? "epos" : "browser"
 			};
-			if (parsed.printerPort === 9100 || !parsed.printerPort) localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
-			return cleanConfig;
 		}
 	} catch {}
 	return DEFAULT_PRINTER_CONFIG;
@@ -1092,7 +1090,7 @@ function savePrinterConfig(config) {
 	const cleanConfig = {
 		...config,
 		printerPort: safePort,
-		printMode: "epos"
+		printMode: config.printMode === "epos" ? "epos" : "browser"
 	};
 	localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
 }
@@ -1169,31 +1167,31 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const safeNotes = cleanThermalText(order.customer.notes || "");
 	const safeRequestedTime = cleanThermalText(order.customer.requestedTime || "DES QUE POSSIBLE");
 	let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
-	xml += `  <text align="center" em="true" font="font_b">POKE N BOWL VISE&#10;</text>\n`;
-	xml += `  <text align="center" font="font_b">Rue Haute 38, 4600 Vise&#10;</text>\n`;
-	xml += `  <text align="center" font="font_b">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
-	xml += `  <text align="center" em="true" font="font_a">${isDelivery ? "LIVRAISON" : "A EMPORTER"} &#10;</text>\n`;
-	xml += `  <text align="center" font="font_b">Date / heure : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
-	xml += `  <text font="font_b">&#10;</text>\n`;
-	xml += `  <text align="center" em="true" font="font_a"># ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
-	xml += `  <text align="left" font="font_b">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
-	xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-	xml += `  <text font="font_b" align="left" em="true">CLIENT :&#10;</text>\n`;
-	xml += `  <text font="font_b" align="left">Nom  : ${escapeXml(safeCustomerName)}&#10;</text>\n`;
-	xml += `  <text font="font_b" align="left">Tel  : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
+	xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
+	xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
+	xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
+	xml += `  <text align="center" em="true" dw="true" dh="true">${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}&#10;</text>\n`;
+	xml += `  <text align="center">Date / heure : ${escapeXml(safeRequestedTime)}&#10;</text>\n`;
+	xml += `  <text>&#10;</text>\n`;
+	xml += `  <text align="center" em="true"># ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
+	xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
+	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
+	xml += `  <text align="left">Nom  : ${escapeXml(safeCustomerName)}&#10;</text>\n`;
+	xml += `  <text align="left">Tel  : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
 	if (isDelivery) {
-		xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text font="font_b" align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
-		xml += `  <text font="font_b" align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
-		if (safeCity) xml += `  <text font="font_b" align="left">${escapeXml(safeCity)}&#10;</text>\n`;
+		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+		xml += `  <text align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
+		xml += `  <text align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
+		if (safeCity) xml += `  <text align="left">${escapeXml(safeCity)}&#10;</text>\n`;
 	}
 	if (safeNotes) {
-		xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text font="font_b" align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
-		xml += `  <text font="font_b" align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
+		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+		xml += `  <text align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
+		xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
 	}
-	xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-	xml += `  <text font="font_b" align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
+	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
 	const groupedItems = /* @__PURE__ */ new Map();
 	for (const item of order.items) {
 		const key = JSON.stringify([
@@ -1213,40 +1211,40 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 		const header = `${quantity}x ${cleanThermalText(item.name)}`;
 		const spaces = Math.max(1, 42 - header.length - itemTotal.length);
 		const line = header + " ".repeat(spaces) + itemTotal;
-		xml += `  <text font="font_b" align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
+		xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
 		for (const top of item.toppings || []) {
 			const safeTop = cleanThermalText(top);
-			if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) xml += `  <text font="font_b" align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
-			else if (/^feta$/i.test(safeTop.trim())) xml += `  <text font="font_b" align="left">${escapeXml("  + Feta")}${" ".repeat(Math.max(1, 26))}1.00 EUR&#10;</text>\n`;
-			else xml += `  <text font="font_b" align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
+			if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
+			else if (/^feta$/i.test(safeTop.trim())) xml += `  <text align="left">${escapeXml("  + Feta")}${" ".repeat(Math.max(1, 26))}1.00 EUR&#10;</text>\n`;
+			else xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
 		}
-		xml += `  <text font="font_b">&#10;</text>\n`;
+		xml += `  <text>&#10;</text>\n`;
 	}
-	xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
 	if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
 		const feeStr = order.customer.deliveryFee.toFixed(2) + " EUR";
 		const feeLine = "Frais de livraison";
 		const spaces = Math.max(1, 24 - feeStr.length);
 		const line = feeLine + " ".repeat(spaces) + feeStr;
-		xml += `  <text font="font_b" align="left">${escapeXml(line)}&#10;</text>\n`;
+		xml += `  <text align="left">${escapeXml(line)}&#10;</text>\n`;
 	}
-	xml += `  <text align="left" em="true" font="font_a">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
-	xml += `  <text font="font_b">&#10;</text>\n`;
+	xml += `  <text align="left" em="true" dw="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
+	xml += `  <text>&#10;</text>\n`;
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
-	xml += `  <text font="font_b" align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
-	xml += `  <text font="font_b">&#10;</text>\n`;
+	xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
+	xml += `  <text>&#10;</text>\n`;
 	if (isDelivery) {
 		const trackToken = order.deliveryToken || order.id;
 		const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
-		xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-		xml += `  <text font="font_b" align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-		xml += `  <text font="font_b" align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+		xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+		xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
+		xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
 		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
-		xml += `  <text font="font_b">&#10;</text>\n`;
+		xml += `  <text>&#10;</text>\n`;
 	}
-	xml += `  <text font="font_b" align="center">------------------------------------------&#10;</text>\n`;
-	xml += `  <text font="font_b" align="center">Merci pour votre commande !&#10;</text>\n`;
-	xml += `  <text font="font_b" align="center">www.pokenbowl.be&#10;</text>\n`;
+	xml += `  <text align="center">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="center">Merci pour votre commande !&#10;</text>\n`;
+	xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
 	xml += `  <feed line="4" />\n`;
 	xml += `  <cut type="feed" />\n`;
 	xml += `</epos-print>`;
@@ -1336,18 +1334,11 @@ async function sendReceiptToPrinter(payload, config) {
 		8008,
 		443
 	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
-	const targets = Array.from(/* @__PURE__ */ new Set([
-		`https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
-	]));
+	const targets = Array.from(/* @__PURE__ */ new Set([`https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000`, `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000`]));
 	let lastErr = "";
 	for (const url of targets) try {
 		console.log(`[ePOS] Envoi requête vers ${url}...`);
-		const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 4e3);
+		const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 2e3);
 		console.log(`[ePOS] Réponse reçue de ${url} (status ${status}):`, resText);
 		if (resText.includes("success=\"true\"")) return {
 			success: true,
@@ -1364,7 +1355,7 @@ async function sendReceiptToPrinter(payload, config) {
 		} else lastErr = `Réponse HTTP ${status} sans confirmation ePOS`;
 		break;
 	} catch (e) {
-		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : e?.message ?? String(e);
+		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2s)" : e?.message ?? String(e);
 		console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
 		if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
 	}
@@ -1456,7 +1447,7 @@ function PosApplicationPage() {
 			const fixed = {
 				...config,
 				printerPort: 8043,
-				printMode: "epos"
+				printMode: config.printMode || "browser"
 			};
 			setConfig(fixed);
 			savePrinterConfig(fixed);
@@ -1695,6 +1686,25 @@ function PosApplicationPage() {
 		}
 	};
 	const handleExecutePrint = async (order, silent = false) => {
+		if (config.printMode === "browser") {
+			if (await printBrowserTicket(order)) {
+				markOrderAsPrintedLocally(order.id);
+				const now = (/* @__PURE__ */ new Date()).toLocaleTimeString();
+				setPrintLog((prev) => [{
+					time: now,
+					msg: `Commande ${order.id} : ticket ouvert via l'impression système/Chrome.`,
+					type: "ok"
+				}, ...prev.slice(0, 30)]);
+				return {
+					success: true,
+					message: "Ticket imprimé via le navigateur."
+				};
+			}
+			return {
+				success: false,
+				message: "Impression annulée par l'utilisateur."
+			};
+		}
 		setPrintingOrderId(order.id);
 		let result = {
 			success: false,
@@ -1732,11 +1742,11 @@ function PosApplicationPage() {
 			} else {
 				setPrintLog((prev) => [{
 					time: now,
-					msg: `Échec commande ${order.id} : ${res.message}`,
+					msg: `Échec ePOS direct ${order.id} : ${res.message}. Ouverture de secours du ticket système...`,
 					type: "err"
 				}, ...prev.slice(0, 30)]);
-				setPrintBannerError(`⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Cliquez sur "Autoriser Chrome" ou vérifiez l'adresse IP.`);
-				if (!silent) alert(`⚠️ Impossible d'imprimer sur l'Epson (${config.printerIp}) :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "Autoriser Chrome" dans l'onglet Paramètres et que l'imprimante est allumée.`);
+				setPrintBannerError(`⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Le ticket de secours a été ouvert.`);
+				await printBrowserTicket(order);
 			}
 		} catch (err) {
 			console.error("[POS] Erreur handleExecutePrint:", err);
@@ -1744,6 +1754,7 @@ function PosApplicationPage() {
 				success: false,
 				message: err?.message || String(err)
 			};
+			await printBrowserTicket(order);
 		} finally {
 			setPrintingOrderId(null);
 		}
@@ -1755,7 +1766,7 @@ function PosApplicationPage() {
 			alert("Commande introuvable.");
 			return;
 		}
-		if (!(await handleExecutePrint(targetOrder, false)).success && window.confirm("L’impression directe ePOS a échoué. Voulez-vous ouvrir le ticket via l’impression Chrome ?")) await printBrowserTicket(targetOrder);
+		await handleExecutePrint(targetOrder, false);
 	};
 	const handleUpdateStatus = async (orderId, status) => {
 		try {
@@ -2279,8 +2290,76 @@ function PosApplicationPage() {
 										className: "flex items-center gap-2",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold",
-											children: "Direct ePOS XML"
+											children: config.printMode === "epos" ? "ePOS Réseau Direct" : "Pilote Système / Chrome"
 										})
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "bg-[#ff705f] text-white font-black text-xs px-2.5 py-0.5 rounded-md",
+											children: "ROUTE D'IMPRESSION"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-base font-black text-white",
+											children: "Sélection du mode d'impression"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "grid sm:grid-cols-2 gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											onClick: () => {
+												const updated = {
+													...config,
+													printMode: "browser"
+												};
+												setConfig(updated);
+												savePrinterConfig(updated);
+											},
+											className: `p-4 rounded-xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${config.printMode !== "epos" ? "border-emerald-500 bg-emerald-500/15 text-white shadow-lg" : "border-white/10 bg-white/5 text-[#8ea39b] hover:border-white/20"}`,
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between mb-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-black text-sm text-white",
+													children: "🖨️ Système / Chrome"
+												}), config.printMode !== "epos" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-emerald-500 text-black font-black text-[10px] px-2 py-0.5 rounded-full",
+													children: "ACTIF (RECOMMANDÉ)"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-xs text-[#8ea39b] leading-relaxed",
+												children: "Boîte d'impression native Chrome / Epson. 100% fiable, fonctionne instantanément sans autorisation SSL ni blocage réseau."
+											})] })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											onClick: () => {
+												const updated = {
+													...config,
+													printMode: "epos"
+												};
+												setConfig(updated);
+												savePrinterConfig(updated);
+											},
+											className: `p-4 rounded-xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${config.printMode === "epos" ? "border-emerald-500 bg-emerald-500/15 text-white shadow-lg" : "border-white/10 bg-white/5 text-[#8ea39b] hover:border-white/20"}`,
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between mb-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-black text-sm text-white",
+													children: "⚡ Réseau ePOS Direct (IP)"
+												}), config.printMode === "epos" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "bg-emerald-500 text-black font-black text-[10px] px-2 py-0.5 rounded-full",
+													children: "ACTIF"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+												className: "text-xs text-[#8ea39b] leading-relaxed",
+												children: [
+													"Envoi silencieux direct à l'IP locale (",
+													config.printerIp,
+													":8043). Nécessite l'autorisation de sécurité locale Chrome."
+												]
+											})] })
+										})]
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -2722,15 +2801,22 @@ function PosApplicationPage() {
 								})
 							]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
 								onClick: () => handleManualReprint(selectedOrder.id),
 								disabled: printingOrderId === selectedOrder.id,
-								className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
+								className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer",
 								title: "Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: printingOrderId === selectedOrder.id ? "Impression sur l'Epson..." : "🖨️ Imprimer Ticket Caisse (80mm)" })]
-							})
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: `w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: printingOrderId === selectedOrder.id ? "Impression en cours..." : "🖨️ Imprimer Ticket Caisse (80mm)" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => printBrowserTicket(selectedOrder),
+								className: "w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2 px-3 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95",
+								title: "Ouvrir immédiatement la boîte d'impression du système/Chrome (secours instantané 1-clic)",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5 text-emerald-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "⚡ Secours direct : Imprimer via Chrome / Système" })]
+							})]
 						})
 					]
 				})
