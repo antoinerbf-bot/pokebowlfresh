@@ -682,13 +682,16 @@ function SurMesurePage() {
                   <span className="rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 4
                   </span>
-                  <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">Choisis tes Sauces</h2>
+                  <h2 className="mt-1.5 text-xl font-black text-[#2C1D16] flex items-center gap-2">
+                    <span>🥫</span>
+                    <span>Choisis tes Sauces</span>
+                  </h2>
                   <p className="mt-1 text-xs text-[#7A6857]">
-                    1ère portion offerte · portions supplémentaires à <strong>+0,50 €</strong> chacune.
+                    1ère portion <strong>offerte (gratuite)</strong> · portions supplémentaires à <strong>+0,50 €</strong> chacune (cumulable sans limite).
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9]">
+                  <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9] shadow-sm">
                     {totalSauceUnits === 0
                       ? "Sans sauce"
                       : totalSauceUnits === 1
@@ -699,7 +702,7 @@ function SurMesurePage() {
                     <button
                       type="button"
                       onClick={setZeroSauce}
-                      className="rounded-full border border-[#DECBB3] bg-[#FAF5EE] px-2.5 py-1 text-[10px] font-bold text-[#7A6857] hover:bg-[#2C1D16] hover:text-white transition cursor-pointer"
+                      className="rounded-full border border-[#DECBB3] bg-[#FAF5EE] px-3 py-1 text-[11px] font-bold text-[#7A6857] hover:bg-[#2C1D16] hover:text-white transition cursor-pointer shadow-2xs"
                     >
                       Sans sauce
                     </button>
@@ -707,73 +710,99 @@ function SurMesurePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {detailedSauces.map((sauce) => {
                   const count = sauceQuantities[sauce.name] ?? 0;
                   const isSelected = count > 0;
                   return (
                     <div
                       key={sauce.id}
-                      className={`flex items-center justify-between gap-1.5 rounded-2xl border-2 p-2.5 transition-all ${
+                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
                         isSelected
-                          ? "border-[#ff705f] bg-[#FFF4F1] shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/40"
+                          ? "border-[#ff705f] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ff705f]/25"
+                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/50 hover:bg-white"
                       }`}
                     >
-                      <div
-                        onClick={() => addSauce(sauce.name)}
-                        className="flex items-center gap-2 min-w-0 flex-1 cursor-pointer"
-                      >
-                        <span className="text-xl shrink-0">{sauce.emoji}</span>
-                        <div className="min-w-0 flex-1">
-                          <span className="block text-xs font-black text-[#2C1D16] truncate">
-                            {sauce.name}
-                          </span>
-                          <span className="text-[10px] font-bold text-[#7A6857]">
-                            {count === 0
-                              ? totalSauceUnits === 0
-                                ? "Offerte"
-                                : "+0,50 €"
-                              : count === 1 && totalSauceUnits === 1
-                              ? "Offerte"
-                              : `${count}x (+${(count * 0.5).toFixed(2)}€)`}
-                          </span>
+                      {/* Haut : Icône sauce + Badge profil goût */}
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF5EE] border border-[#DECBB3] text-2xl shadow-2xs group-hover:scale-105 transition-transform">
+                          {sauce.emoji}
                         </div>
+                        {sauce.badge && (
+                          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                            isSelected
+                              ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
+                              : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
+                          }`}>
+                            {sauce.badge}
+                          </span>
+                        )}
                       </div>
 
-                      <div className="flex items-center gap-1 shrink-0">
-                        {count > 0 ? (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => removeSauce(sauce.name)}
-                              aria-label={`Diminuer sauce ${sauce.name}`}
-                              className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-95 cursor-pointer"
-                            >
-                              <Minus className="h-3 w-3 stroke-[3]" />
-                            </button>
-                            <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                              {count}
-                            </span>
+                      {/* Milieu : Nom complet & description */}
+                      <div
+                        onClick={() => addSauce(sauce.name)}
+                        className="flex-1 cursor-pointer mb-2.5"
+                      >
+                        <h3 className="text-sm font-black text-[#2C1D16] leading-tight">
+                          {sauce.name}
+                        </h3>
+                        {sauce.description && (
+                          <p className="mt-1 text-[11px] text-[#7A6857] leading-snug line-clamp-2">
+                            {sauce.description}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Bas : Tarif & Stepper stable (hauteur constante) */}
+                      <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
+                        <span className={`text-[11px] font-black ${
+                          isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                        }`}>
+                          {count === 0
+                            ? totalSauceUnits === 0
+                              ? "1ère offerte"
+                              : "+0,50 €"
+                            : count === 1 && totalSauceUnits === 1
+                            ? "Offerte (0 €)"
+                            : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
+                        </span>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {count > 0 ? (
+                            <div className="flex items-center gap-1 bg-white rounded-full border border-[#ff705f]/40 p-0.5 shadow-2xs">
+                              <button
+                                type="button"
+                                onClick={() => removeSauce(sauce.name)}
+                                aria-label={`Diminuer sauce ${sauce.name}`}
+                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-90 cursor-pointer"
+                              >
+                                <Minus className="h-3 w-3 stroke-[3]" />
+                              </button>
+                              <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+                                {count}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => addSauce(sauce.name)}
+                                aria-label={`Ajouter sauce ${sauce.name}`}
+                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-90 shadow-2xs cursor-pointer"
+                              >
+                                <Plus className="h-3 w-3 stroke-[3]" />
+                              </button>
+                            </div>
+                          ) : (
                             <button
                               type="button"
                               onClick={() => addSauce(sauce.name)}
-                              aria-label={`Ajouter sauce ${sauce.name}`}
-                              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-95 shadow-sm cursor-pointer"
+                              aria-label={`Choisir sauce ${sauce.name}`}
+                              className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
                             >
                               <Plus className="h-3 w-3 stroke-[3]" />
+                              <span>Choisir</span>
                             </button>
-                          </>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => addSauce(sauce.name)}
-                            aria-label={`Choisir sauce ${sauce.name}`}
-                            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-95 cursor-pointer"
-                          >
-                            <Plus className="h-3 w-3 stroke-[3]" />
-                          </button>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
                   );

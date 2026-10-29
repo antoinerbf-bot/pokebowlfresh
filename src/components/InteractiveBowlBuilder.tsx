@@ -768,62 +768,99 @@ export function InteractiveBowlBuilder() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                     {detailedSauces.map((s) => {
                       const qty = sauceQuantities[s.name] ?? 0;
+                      const isSelected = qty > 0;
                       return (
                         <div
                           key={s.id}
-                          className={`flex items-center justify-between gap-2 rounded-2xl p-2.5 border-2 transition ${
-                            qty > 0
-                              ? "bg-white border-[#ff705f] shadow-sm ring-1 ring-[#ff705f]/20"
-                              : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
+                          className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
+                            isSelected
+                              ? "bg-[#FFF5F2] border-[#ff705f] shadow-sm ring-1 ring-[#ff705f]/25"
+                              : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:border-[#ff705f]/50 hover:bg-white"
                           }`}
                         >
-                          <button
-                            type="button"
-                            onClick={() => addSauce(s.name)}
-                            className="flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer"
-                          >
-                            <span className="text-2xl shrink-0">{s.emoji}</span>
-                            <div className="min-w-0">
-                              <span className="block text-xs font-black text-[#2C1D16] truncate">
-                                {s.name}
-                              </span>
-                              <span className="block text-[10px] font-bold text-[#ff705f]">
-                                {qty === 0
-                                  ? totalSauceUnits === 0
-                                    ? "Offerte"
-                                    : "+0,50 €"
-                                  : `${qty} portion${qty > 1 ? "s" : ""}`}
-                              </span>
+                          {/* Haut : Icône sauce + Badge profil goût */}
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF5EE] border border-[#DECBB3] text-2xl shadow-2xs group-hover:scale-105 transition-transform">
+                              {s.emoji}
                             </div>
-                          </button>
+                            {s.badge && (
+                              <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                                isSelected
+                                  ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
+                                  : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
+                              }`}>
+                                {s.badge}
+                              </span>
+                            )}
+                          </div>
 
-                          <div className="flex items-center gap-1 shrink-0">
-                            {qty > 0 && (
-                              <>
+                          {/* Milieu : Nom complet & description */}
+                          <div
+                            onClick={() => addSauce(s.name)}
+                            className="flex-1 cursor-pointer mb-2.5"
+                          >
+                            <h3 className="text-sm font-black text-[#2C1D16] leading-tight">
+                              {s.name}
+                            </h3>
+                            {s.description && (
+                              <p className="mt-1 text-[11px] text-[#7A6857] leading-snug line-clamp-2">
+                                {s.description}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Bas : Tarif & Stepper stable */}
+                          <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
+                            <span className={`text-[11px] font-black ${
+                              isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                            }`}>
+                              {qty === 0
+                                ? totalSauceUnits === 0
+                                  ? "1ère offerte"
+                                  : "+0,50 €"
+                                : qty === 1 && totalSauceUnits === 1
+                                ? "Offerte (0 €)"
+                                : `${qty}x (+${(qty * 0.50).toFixed(2)}€)`}
+                            </span>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {qty > 0 ? (
+                                <div className="flex items-center gap-1 bg-white rounded-full border border-[#ff705f]/40 p-0.5 shadow-2xs">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeSauce(s.name)}
+                                    aria-label={`Diminuer sauce ${s.name}`}
+                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-90 cursor-pointer"
+                                  >
+                                    <Minus className="h-3 w-3 stroke-[3]" />
+                                  </button>
+                                  <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+                                    {qty}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => addSauce(s.name)}
+                                    aria-label={`Ajouter sauce ${s.name}`}
+                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-90 shadow-2xs cursor-pointer"
+                                  >
+                                    <Plus className="h-3 w-3 stroke-[3]" />
+                                  </button>
+                                </div>
+                              ) : (
                                 <button
                                   type="button"
-                                  onClick={() => removeSauce(s.name)}
-                                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                  aria-label={`Retirer sauce ${s.name}`}
+                                  onClick={() => addSauce(s.name)}
+                                  aria-label={`Choisir sauce ${s.name}`}
+                                  className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
                                 >
-                                  <Minus className="h-3 w-3 stroke-[3]" />
+                                  <Plus className="h-3 w-3 stroke-[3]" />
+                                  <span>Choisir</span>
                                 </button>
-                                <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                  {qty}
-                                </span>
-                              </>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => addSauce(s.name)}
-                              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                              aria-label={`Ajouter sauce ${s.name}`}
-                            >
-                              <Plus className="h-3 w-3 stroke-[3]" />
-                            </button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       );

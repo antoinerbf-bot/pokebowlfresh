@@ -52,6 +52,8 @@ export interface CustomIngredientOption {
   name: string;
   emoji: string;
   extraPrice?: number;
+  badge?: string;
+  description?: string;
 }
 
 export const detailedBases: CustomIngredientOption[] = [
@@ -131,18 +133,18 @@ export const customSauces = [
 ];
 
 export const detailedSauces: CustomIngredientOption[] = [
-  { id: "mayo",          name: "Mayo",          emoji: "🍶" },
-  { id: "mayo-wasabi",   name: "Mayo-Wasabi",   emoji: "🟢" },
-  { id: "spicy-mayo",    name: "Spicy-Mayo",    emoji: "🌶️" },
-  { id: "teriyaki",      name: "Teriyaki",      emoji: "🍯" },
-  { id: "sesame-salee",  name: "Sésame salée",  emoji: "🌰" },
-  { id: "sesame-sucree", name: "Sésame sucrée", emoji: "🌰" },
-  { id: "soja-sale",     name: "Soja salé",     emoji: "🥢" },
-  { id: "soja-sucre",    name: "Soja sucré",    emoji: "🥢" },
-  { id: "chili-doux",    name: "Chili doux",    emoji: "🌶️" },
-  { id: "mayo-truffe",   name: "Mayo truffe",   emoji: "🍄" },
-  { id: "sauce-curry",   name: "Sauce curry",   emoji: "🍛" },
-  { id: "sauce-blanche", name: "Sauce blanche", emoji: "🤍" },
+  { id: "mayo",          name: "Mayo",          emoji: "🍶", badge: "Onctueuse",      description: "Douce et crémeuse style japonais" },
+  { id: "mayo-wasabi",   name: "Mayo-Wasabi",   emoji: "🟢", badge: "Relevée 🌿",     description: "Pointe de wasabi vivifiante et fraîche" },
+  { id: "spicy-mayo",    name: "Spicy-Mayo",    emoji: "🌶️", badge: "Pimentée 🔥",    description: "Mayo relevée au piment doux et sriracha" },
+  { id: "teriyaki",      name: "Teriyaki",      emoji: "🍯", badge: "Japonaise 🍯",   description: "Sauce laquée sucrée-salée et brillante" },
+  { id: "sesame-salee",  name: "Sésame salée",  emoji: "🌰", badge: "Torréfiée 🌰",   description: "Sésame grillé salé riche en umami" },
+  { id: "sesame-sucree", name: "Sésame sucrée", emoji: "🌰", badge: "Caramélisée 🍯", description: "Douceur crémeuse au sésame blanc" },
+  { id: "soja-sale",     name: "Soja salé",     emoji: "🥢", badge: "Classique 🥢",   description: "Sauce soja japonaise pure et équilibrée" },
+  { id: "soja-sucre",    name: "Soja sucré",    emoji: "🥢", badge: "Sirupeuse 🥢",   description: "Sauce soja douce, ronde et caramélisée" },
+  { id: "chili-doux",    name: "Chili doux",    emoji: "🌶️", badge: "Aigre-doux 🌶️",  description: "Sweet chili thaï sucré avec juste ce qu'il faut de peps" },
+  { id: "mayo-truffe",   name: "Mayo truffe",   emoji: "🍄", badge: "Prestige 🍄",    description: "Arôme raffiné de truffe noire et texture soyeuse" },
+  { id: "sauce-curry",   name: "Sauce curry",   emoji: "🍛", badge: "Douce & Chaude 🍛", description: "Curry doux onctueux et très gourmand" },
+  { id: "sauce-blanche", name: "Sauce blanche", emoji: "🤍", badge: "Fraîcheur 🤍",   description: "Recette fraîche aux fines herbes et pointe d'ail doux" },
 ];
 
 // ─── TOPPINGS (structure extensible) ─────────────────────────────────────────
