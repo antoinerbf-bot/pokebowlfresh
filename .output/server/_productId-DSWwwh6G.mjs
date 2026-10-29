@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DIxAve94.mjs";
 import { n as useCart } from "./_ssr/CartContext-C3Z6ywuE.mjs";
 import { b as Link, x as Navigate } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-BJcob6vf.mjs";
+import { t as Route } from "./_productId-DMQmpT0U.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { G as Check, Q as ArrowLeft, a as TriangleAlert, b as Plus, d as ShoppingCart, m as ShieldCheck, s as Sun, u as Sparkles, w as Minus } from "./_libs/lucide-react.mjs";
-import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-DBn9GPDF.mjs";
+import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-BpbP1XOE.mjs";
 import { t as useStock } from "./_ssr/useStock-TcwXER-R.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-CNmYxdcr.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-DSWwwh6G.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {
@@ -486,10 +486,10 @@ function ProductPage() {
 											className: "flex items-center justify-between mb-2.5",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "block text-xs font-black uppercase tracking-wider text-[#2C1D16]",
-												children: "💪 Suppléments Protéines (+2,50 € / portion)"
+												children: "Suppléments Protéines (+2,50 € / portion)"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[11px] font-semibold text-[#7A542E]",
-												children: "Ajoutez des portions supplémentaires de Poulet, Saumon ou Crevettes (+2,50 € par portion, cumulable)"
+												children: "Poulet croustillant, Saumon frais ou Crevettes grillées"
 											})] }), totalExtraProteinUnits > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "rounded-full bg-[#ea580c] px-3 py-1 text-xs font-black text-white shadow-sm",
 												children: [
@@ -602,10 +602,10 @@ function ProductPage() {
 												className: "flex items-center justify-between mb-2",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "block text-[11px] font-black uppercase tracking-wider text-[#2C1D16]",
-													children: "Suppléments Protéines (+2,50 € par portion)"
+													children: "Suppléments Protéines (+2,50 € / portion)"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-[10px] font-semibold text-[#7A6857]",
-													children: "Ajoute autant de portions que tu veux (même 2x ou 3x la même protéine : 3x = +7,50 €)"
+													children: "Poulet mariné, Saumon frais ou Scampis royaux"
 												})] }), totalExtraProteinUnits > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm",
 													children: [
@@ -856,7 +856,7 @@ function ProductPage() {
 											children: "Suppléments Légumes & Fruits Frais (+1,00 € / portion)"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-[11px] text-[#7A6857]",
-											children: "Ajoute autant de portions de légumes que tu veux (+1,00 € chacune, même plusieurs fois le même)."
+											children: "Avocat, mangue, edamame, patates douces, grenade..."
 										})] }), totalMixinUnits > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "rounded-full bg-[#059669] px-3 py-1 text-xs font-black text-white shadow-sm",
 											children: [
@@ -919,10 +919,10 @@ function ProductPage() {
 										className: "mb-4 flex items-center justify-between gap-3",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 											className: "text-sm font-black uppercase tracking-wider text-[#2C1D16]",
-											children: "Toppings Croustillants"
+											children: "Toppings Croustillants (+0,50 € / portion)"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-[11px] text-[#7A6857]",
-											children: "À volonté · choisis autant de portions que tu veux (+0.50€ chaque)"
+											children: "Oignons frits, sésame grillé, noix de cajou, nachos..."
 										})] }), totalToppingsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 											className: "rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm",
 											children: [

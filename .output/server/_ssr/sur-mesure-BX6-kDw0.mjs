@@ -7,8 +7,11 @@ import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { G as Check, Q as ArrowLeft, W as ChefHat, b as Plus, f as ShoppingBag, w as Minus } from "../_libs/lucide-react.mjs";
-import { i as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-DBn9GPDF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-qeAG-pQJ.js
+import { t as CartDrawer } from "./CartDrawer-BpbP1XOE.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/bowl-saumon-8FL339kO.js
+var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
+//#endregion
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BX6-kDw0.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -441,10 +444,10 @@ function SurMesurePage() {
 												className: "flex flex-wrap items-center justify-between gap-2 mb-3",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 													className: "text-sm font-black text-[#2C1D16]",
-													children: "💪 Ajouter des portions de protéines supplémentaires (+2,50 € / portion)"
+													children: "Protéines supplémentaires (+2,50 € / portion)"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 													className: "text-[11px] text-[#6E5A49] font-medium",
-													children: "Ajoute autant de portions que tu veux (+2,50 € à chaque fois, ex : 3× = +7,50 €)."
+													children: "Poulet mariné, saumon frais ou scampis (+2,50 € / portion)"
 												})] }), totalExtraProteinUnits > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm",
 													children: [
@@ -728,7 +731,7 @@ function SurMesurePage() {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 											className: "mb-4 text-xs font-semibold text-[#6E5A49]",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "1 portion incluse dans la formule" }), " · Prenez autant de portions que vous souhaitez (+0,50 € chaque portion extra) :"]
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "1 portion incluse" }), " · Portions supplémentaires à +0,50 €"]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",

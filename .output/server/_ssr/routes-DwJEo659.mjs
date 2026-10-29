@@ -7,12 +7,12 @@ import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Heart, D as MapPin, E as Menu, G as Check, H as ChevronLeft, I as Clock, J as BookOpen, M as Flame, N as ExternalLink, R as CircleCheck, T as MessageCircle, U as ChevronDown, V as ChevronRight, W as ChefHat, X as Award, Y as Bell, Z as ArrowRight, _ as RotateCcw, b as Plus, f as ShoppingBag, g as Search, j as Funnel, k as Instagram, l as Star, m as ShieldCheck, q as BriefcaseBusiness, t as X, u as Sparkles, w as Minus, x as Phone } from "../_libs/lucide-react.mjs";
-import { a as bowl_scampis_default, c as drink_coca_cola_default, d as tiramisu_oreo_default, f as tiramisu_speculoos_default, i as bowl_saumon_default, l as drink_eau_gazeuse_default, n as DishImage, o as bowl_spicy_chicken_default, r as bowl_crousty_curry_default, s as bowl_sweet_chicken_default, t as CartDrawer, u as drink_eau_plate_default } from "./CartDrawer-DBn9GPDF.mjs";
+import { a as bowl_sweet_chicken_default, c as drink_eau_plate_default, d as tiramisu_speculoos_default, i as bowl_scampis_default, l as hero_saumon_clean_wide_default, n as DishImage, o as drink_coca_cola_default, r as bowl_crousty_curry_default, s as drink_eau_gazeuse_default, t as CartDrawer, u as tiramisu_oreo_default } from "./CartDrawer-BpbP1XOE.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-Chu9Vaby.mjs";
 import { i as tiramisu_nutella_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-DWuj5RB0.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-RSxLsi1K.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DwJEo659.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [{
@@ -1191,7 +1191,7 @@ function PokawaFloatingNavbar() {
 var SLIDES = [
 	{
 		id: "saumon-wasabi",
-		image: "/assets/hero-saumon-clean-wide-CmteSWDC.jpg",
+		image: hero_saumon_clean_wide_default,
 		titleLine1: "SAUMON WASABI",
 		titleLine2: "FRAÎCHEUR MINUTE",
 		dishName: "Saumon Wasabi",
@@ -1957,12 +1957,12 @@ function InteractiveBowlBuilder() {
 										className: "rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-4",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex flex-wrap items-center justify-between gap-2 mb-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
 												className: "text-sm font-black text-[#2C1D16] flex items-center gap-1.5",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "💪" }), " Ajouter des portions de protéines en plus (+2,50 € / portion)"]
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Protéines supplémentaires (+2,50 € / portion)" })
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-[11px] text-[#6E5A49] font-medium",
-												children: "Ajoutez autant de portions que vous voulez : +2,50 € à chaque ajout (ex : 3× = +7,50 €)."
+												children: "Poulet mariné, saumon frais ou scampis (+2,50 € / portion)"
 											})] }), totalExtraProteinUnits > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm",
 												children: [
@@ -3251,7 +3251,7 @@ function PokawaBrandValues() {
 							title: "Fraîcheur Quotidienne",
 							desc: "Découpe minute de nos légumes croquants et approvisionnement quotidien en saumon & scampis de première fraîcheur.",
 							perk: "Découpe chaque matin à Visé",
-							image: bowl_saumon_default
+							image: hero_saumon_clean_wide_default
 						},
 						{
 							id: "rice",
@@ -3440,35 +3440,35 @@ function PokawaPerksBanner() {
 var INSTA_POSTS = [
 	{
 		id: "post-1",
-		image: bowl_saumon_default,
+		image: hero_saumon_clean_wide_default,
 		likes: 248,
 		comments: 19,
-		caption: "Le Saumon Wasabi dans toute sa fraîcheur : avocat fondant, edamames croquants & sésame doré 🥑✨",
+		caption: "Le Saumon Wasabi dans toute sa fraîcheur : avocat fondant, edamames croquants & saumon découpé minute 🥑✨",
 		tag: "#PokeBowlVisé"
 	},
 	{
 		id: "post-2",
-		image: bowl_sweet_chicken_default,
-		likes: 312,
-		comments: 24,
-		caption: "Poulet mariné sweet & mangue fraîche du jour : le mix sucré-salé qui met tout le monde d'accord 🥭🍗",
-		tag: "#SweetChicken"
+		image: bowl_crousty_curry_default,
+		likes: 384,
+		comments: 31,
+		caption: "Le croustillant ultime : poulet doré minute, sauce curry onctueuse & oignons frits sur riz chaud 🍗🍛",
+		tag: "#CroustyChicken"
 	},
 	{
 		id: "post-3",
 		image: bowl_scampis_default,
 		likes: 195,
 		comments: 14,
-		caption: "Scampis Royaux sautés minute sur lit de riz à sushi vinaigré. Prêt en moins de 3 minutes pour votre pause déj 🦐",
+		caption: "Scampis Royaux sautés minute sur lit de riz vinaigré. Prêt en moins de 3 minutes pour votre pause déj 🦐",
 		tag: "#FraisDuJour"
 	},
 	{
 		id: "post-4",
-		image: bowl_spicy_chicken_default,
-		likes: 276,
-		comments: 22,
-		caption: "Pour ceux qui aiment quand ça réveille les papilles : Spicy Chicken et sauce pimentée maison 🔥",
-		tag: "#SpicyVibes"
+		image: bowl_sweet_chicken_default,
+		likes: 312,
+		comments: 24,
+		caption: "Poulet mariné sweet & mangue fraîche du jour : le mix sucré-salé qui met tout le monde d'accord 🥭🍗",
+		tag: "#SweetChicken"
 	}
 ];
 function PokawaInstagramWall() {
@@ -3720,7 +3720,7 @@ var CATEGORIES = [
 		title: "Pokés",
 		badge: "Dès 10,00 €",
 		badgeColor: "bg-[#2C1D16] text-[#EADCC9]",
-		image: bowl_saumon_default,
+		image: hero_saumon_clean_wide_default,
 		targetId: "carte",
 		desc: "Saumon minute, poulet mariné & scampis royaux"
 	},
