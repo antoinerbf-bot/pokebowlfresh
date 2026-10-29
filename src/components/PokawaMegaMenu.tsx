@@ -20,7 +20,9 @@ import tiramisuNutella from "@/assets/tiramisu-nutella.jpg";
 import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
 import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
 import drinkCocaZero from "@/assets/drink-coca-zero.jpg";
+import drinkFantaOrange from "@/assets/drink-fanta-orange.jpg";
 import drinkIceTea from "@/assets/drink-ice-tea.jpg";
+import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
 import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
 
 interface MegaCategory {
@@ -140,17 +142,24 @@ export function PokawaMegaMenu({
   const drinkItems = [
     {
       id: "coca",
-      name: "Coca-Cola 33cl",
+      name: "Coca-Cola (33 cl)",
       price: 2.0,
-      desc: "Servi givré.",
+      desc: "Servie glacée.",
       image: drinkCocaCola,
     },
     {
       id: "coca-zero",
-      name: "Coca-Cola Zéro 33cl",
+      name: "Coca-Cola Zéro (33 cl)",
       price: 2.0,
-      desc: "Zéro sucre, ultra frais.",
+      desc: "Zéro sucre, ultra fraîche.",
       image: drinkCocaZero,
+    },
+    {
+      id: "fanta",
+      name: "Fanta Orange (33 cl)",
+      price: 2.0,
+      desc: "Pétillante à l'orange.",
+      image: drinkFantaOrange,
     },
     {
       id: "ice-tea",
@@ -160,8 +169,15 @@ export function PokawaMegaMenu({
       image: drinkIceTea,
     },
     {
+      id: "eau-plate",
+      name: "SPA Reine Eau plate (50 cl)",
+      price: 2.0,
+      desc: "Eau minérale plate pure.",
+      image: drinkEauPlate,
+    },
+    {
       id: "eau-gaz",
-      name: "SPA Intense 50cl",
+      name: "SPA Intense Eau pétillante (50 cl)",
       price: 2.0,
       desc: "Eau pétillante de source.",
       image: drinkEauGazeuse,
@@ -589,7 +605,7 @@ export function PokawaMegaMenu({
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h4 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
-                          Boissons Fraîches Givron
+                          Boissons Fraîches Givrées
                         </h4>
                         <p className="text-[11px] text-[#7a847e]">
                           Canettes 33cl et eaux SPA minérales 50cl servies très fraîches
@@ -600,7 +616,7 @@ export function PokawaMegaMenu({
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 sm:gap-3">
                       {drinkItems.map((drink) => (
                         <div
                           key={drink.id}
@@ -610,7 +626,7 @@ export function PokawaMegaMenu({
                             <img
                               src={drink.image}
                               alt={drink.name}
-                              className={`h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2 bg-white" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-108"}`}
+                              className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-108"
                             />
                             <span className="absolute top-1.5 right-1.5 rounded-full bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] shadow">
                               {drink.price.toFixed(2)} €
@@ -618,7 +634,7 @@ export function PokawaMegaMenu({
                           </div>
 
                           <div>
-                            <h5 className="text-[11px] font-black text-[#2C1D16] truncate">
+                            <h5 className="text-[11px] font-black text-[#2C1D16] line-clamp-1">
                               {drink.name}
                             </h5>
                           </div>
@@ -626,7 +642,7 @@ export function PokawaMegaMenu({
                           <button
                             type="button"
                             onClick={() => handleQuickAdd(drink)}
-                            className="mt-2 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95"
+                            className="mt-2 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95 cursor-pointer"
                           >
                             {addedDishId === drink.id ? (
                               <>

@@ -21,8 +21,11 @@ import { bowls } from "../lib/data";
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
 import tiramisuOreo from "@/assets/tiramisu-oreo.jpg";
 import drinkCocaCola from "@/assets/drink-coca-cola.jpg";
-import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
+import drinkCocaZero from "@/assets/drink-coca-zero.jpg";
+import drinkFantaOrange from "@/assets/drink-fanta-orange.jpg";
+import drinkIceTea from "@/assets/drink-ice-tea.jpg";
 import drinkEauPlate from "@/assets/drink-eau-plate.jpg";
+import drinkEauGazeuse from "@/assets/drink-eau-gazeuse.jpg";
 
 // Articles suggérés en Cross-Selling express
 const CROSS_SELL_ITEMS = [
@@ -49,6 +52,30 @@ const CROSS_SELL_ITEMS = [
     emoji: "🥤",
     image: drinkCocaCola,
     subtitle: "Servi givré",
+  },
+  {
+    id: "coca-zero",
+    name: "Coca-Cola Zéro 33cl",
+    price: 2.0,
+    emoji: "🥤",
+    image: drinkCocaZero,
+    subtitle: "Zéro sucre ultra frais",
+  },
+  {
+    id: "fanta",
+    name: "Fanta Orange 33cl",
+    price: 2.0,
+    emoji: "🍊",
+    image: drinkFantaOrange,
+    subtitle: "Pétillant à l'orange",
+  },
+  {
+    id: "ice-tea",
+    name: "Ice Tea Sparkling 33cl",
+    price: 2.0,
+    emoji: "🧊",
+    image: drinkIceTea,
+    subtitle: "Pétillant bien frais",
   },
   {
     id: "eau-gaz",
