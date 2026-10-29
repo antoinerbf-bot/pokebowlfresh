@@ -22,7 +22,7 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,
-  printMode: "browser", // DÉFAUT TRÈS FIABLE SUR TOUS LES APPAREILS (ZÉRO CERTIFICAT REQUIS)
+  printMode: "epos",
 };
 
 export function loadPrinterConfig(): PrinterConfig {
@@ -39,8 +39,11 @@ export function loadPrinterConfig(): PrinterConfig {
         ...DEFAULT_PRINTER_CONFIG,
         ...parsed,
         printerPort: safePort,
-        printMode: parsed.printMode === "epos" ? "epos" : "browser",
+        printMode: "epos",
       };
+      if (parsed.printerPort === 9100 || !parsed.printerPort) {
+        localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
+      }
       return cleanConfig;
     }
   } catch {}
@@ -52,11 +55,7 @@ export function savePrinterConfig(config: PrinterConfig): void {
   const safePort = (config.printerPort && [8043, 80, 8008, 443].includes(Number(config.printerPort)))
     ? Number(config.printerPort)
     : 8043;
-  const cleanConfig: PrinterConfig = {
-    ...config,
-    printerPort: safePort,
-    printMode: config.printMode === "epos" ? "epos" : "browser",
-  };
+  const cleanConfig: PrinterConfig = { ...config, printerPort: safePort, printMode: "epos" };
   localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
 }
 
@@ -151,7 +150,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
 
-  // En-tête restaurant avec repère clair adapté à l'impression thermique
+  // En-tête restaurant
   xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
   xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
   xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
@@ -188,35 +187,23 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   xml += `  <text align="left">==========================================&#10;</text>\n`;
   xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
 
-  // Regrouper les articles strictement identiques pour ne pas répéter leurs détails.
-  const groupedItems = new Map<string, { item: typeof order.items[number]; quantity: number }>();
   for (const item of order.items) {
-    const key = JSON.stringify([item.name.trim().toLowerCase(), item.price, item.toppings.map((t) => t.trim().toLowerCase())]);
-    const existing = groupedItems.get(key);
-    if (existing) existing.quantity += item.quantity;
-    else groupedItems.set(key, { item, quantity: item.quantity });
-  }
-
-  for (const { item, quantity } of groupedItems.values()) {
-    const itemTotal = (item.price * quantity).toFixed(2) + " EUR";
+    const itemTotal = (item.price * item.quantity).toFixed(2) + " EUR";
     const safeItemName = cleanThermalText(item.name);
-    const header = `${quantity}x ${safeItemName}`;
+    const header = `${item.quantity}x ${safeItemName}`;
     const spaces = Math.max(1, 42 - header.length - itemTotal.length);
     const line = header + " ".repeat(spaces) + itemTotal;
 
     xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
 
-    // Les ingrédients et suppléments ne sont détaillés qu'une seule fois par plat.
-    for (const top of item.toppings || []) {
-      const safeTop = cleanThermalText(top);
-      if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
-        xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
-      } else if (/^feta$/i.test(safeTop.trim())) {
-        const label = "  + Feta";
-        const price = "1.00 EUR";
-        xml += `  <text align="left">${escapeXml(label)}${" ".repeat(Math.max(1, 42 - label.length - price.length))}${price}&#10;</text>\n`;
-      } else {
-        xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
+    if (item.toppings && item.toppings.length > 0) {
+      for (const top of item.toppings) {
+        const safeTop = cleanThermalText(top);
+        if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
+          xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
+        } else {
+          xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
+        }
       }
     }
     xml += `  <text>&#10;</text>\n`;
@@ -244,15 +231,15 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
-  // Le QR de géolocalisation est strictement réservé aux commandes en livraison.
-  // Aucun QR code n'est imprimé sur un ticket de retrait.
-  if (isDelivery) {
+  // QR code au bas de chaque ticket : suivi de livraison ou de commande retrait.
+  {
     const trackToken = order.deliveryToken || order.id;
     const cleanOrigin = origin.replace(/\/$/, "");
     const qrUrl = `${cleanOrigin}/track/${encodeURIComponent(trackToken)}`;
     xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-    xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+    xml += `  <text align="center" em="true">${isDelivery ? "SCANNEZ POUR GPS LIVREUR" : "SCANNEZ POUR SUIVRE LA COMMANDE"}&#10;</text>\n`;
+    if (isDelivery) xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+    else xml += `  <text align="center">Suivi de commande Poke N Bowl&#10;&#10;</text>\n`;
     xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
     xml += `  <text>&#10;</text>\n`;
   }
@@ -376,15 +363,19 @@ export async function sendReceiptToPrinter(
   // si la connexion échoue avant toute réponse. Dès qu'un serveur répond ou qu'un
   // délai expire, arrêter : une seconde requête pourrait imprimer un doublon.
   const targets = Array.from(new Set([
-    `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000`,
-    `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000`,
+    `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
   ]));
 
   let lastErr = "";
   for (const url of targets) {
     try {
       console.log(`[ePOS] Envoi requête vers ${url}...`);
-      const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 2000);
+      const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 4000);
       console.log(`[ePOS] Réponse reçue de ${url} (status ${status}):`, resText);
 
       // Toute réponse HTTP signifie qu'un endpoint a été atteint : ne pas envoyer
@@ -405,9 +396,12 @@ export async function sendReceiptToPrinter(
       }
       break;
     } catch (e: any) {
-      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2s)" : (e?.message ?? String(e));
+      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : (e?.message ?? String(e));
       console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
+      // Un timeout est ambigu : l'imprimante peut avoir reçu le ticket.
+      // Ne jamais réessayer après un timeout pour éviter les doublons.
       if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
+      // Erreur de connexion/certificat avant réponse : essayer l'endpoint suivant.
     }
   }
 

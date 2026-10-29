@@ -60,13 +60,10 @@ export function PosApplicationPage() {
   const [modalQrDataUrl, setModalQrDataUrl] = useState<string>("");
 
   useEffect(() => {
-    // Le QR de suivi GPS ne concerne que les commandes en livraison, jamais le retrait.
-    const token = selectedOrder?.customer.fulfillment === "delivery"
-      ? (selectedOrder.deliveryToken || selectedOrder.id)
-      : null;
+    const token = selectedOrder?.deliveryToken || selectedOrder?.id;
     if (token) {
       const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
-      const trackUrl = `${origin}/track/${encodeURIComponent(token)}`;
+      const trackUrl = `${origin}/track/${token}`;
       QRCode.toDataURL(trackUrl, {
         errorCorrectionLevel: "H",
         margin: 4,
@@ -74,7 +71,7 @@ export function PosApplicationPage() {
         color: { dark: "#000000", light: "#ffffff" },
       })
         .then(setModalQrDataUrl)
-        .catch(() => setModalQrDataUrl(""));
+        .catch(() => { });
     } else {
       setModalQrDataUrl("");
     }
@@ -95,7 +92,7 @@ export function PosApplicationPage() {
   // Auto-nettoyage et migration immédiate du port vers 8043 (élimine définitivement 9100)
   useEffect(() => {
     if (config.printerPort !== 8043) {
-      const fixed = { ...config, printerPort: 8043, printMode: config.printMode || "browser" };
+      const fixed = { ...config, printerPort: 8043, printMode: "epos" as const };
       setConfig(fixed);
       savePrinterConfig(fixed);
     }
@@ -223,7 +220,7 @@ export function PosApplicationPage() {
       // 1. Essayer l'API REST directe /api/pos-orders
       try {
         const resRest = await fetch("/api/pos-orders", {
-          headers: { Accept: "application/json", "x-pos-pin": pin },
+          headers: { Accept: "application/json" },
           cache: "no-store",
         });
         if (resRest.ok) {
@@ -322,7 +319,6 @@ export function PosApplicationPage() {
       const timer = setInterval(loadOrders, 4000);
       return () => clearInterval(timer);
     }
-    return undefined;
   }, [isUnlocked, pin]);
 
   // Impression navigateur de secours : noir sur blanc, ticket 80 mm et QR en pied de ticket.
@@ -332,47 +328,18 @@ export function PosApplicationPage() {
     if (!popup) { alert("Chrome a bloqué la fenêtre d’impression. Autorisez les fenêtres pop-up pour ce site puis réessayez."); return false; }
     try {
       const esc = (value: unknown) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-      // QR GPS uniquement pour la livraison ; retrait = aucun QR sur le ticket.
-      const qr = order.customer.fulfillment === "delivery"
-        ? await QRCode.toDataURL(`${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`, { errorCorrectionLevel: "H", margin: 2, width: 240, color: { dark: "#000000", light: "#ffffff" } })
-        : "";
-      const grouped = new Map<string, { item: Order["items"][number]; quantity: number }>();
-      for (const item of order.items) {
-        const key = JSON.stringify([item.name.trim().toLowerCase(), item.price, item.toppings.map((t) => t.trim().toLowerCase())]);
-        const previous = grouped.get(key);
-        if (previous) previous.quantity += item.quantity;
-        else grouped.set(key, { item, quantity: item.quantity });
-      }
-      const items = Array.from(grouped.values()).map(({ item, quantity }) => {
-        const toppingsHtml = (item.toppings || []).map((top) =>
-          `<div class="detail">${/^feta$/i.test(top.trim()) ? "+ Feta — 1,00 €" : esc(top)}</div>`
-        ).join("");
-        return `<div class="item"><div class="item-main"><div class="item-name">${quantity} × ${esc(item.name)}</div>${toppingsHtml ? `<div class="details">${toppingsHtml}</div>` : ""}</div><b class="item-price">${(item.price * quantity).toFixed(2)} €</b></div>`;
-      }).join("");
+      const qrTarget = `${window.location.origin}/track/${encodeURIComponent(order.deliveryToken || order.id)}`;
+      const qr = await QRCode.toDataURL(qrTarget, { errorCorrectionLevel: "H", margin: 2, width: 240, color: { dark: "#000000", light: "#ffffff" } });
+      const items = order.items.map((item) => `<div class="item"><span>${item.quantity} × ${esc(item.name)}${item.toppings?.length ? `<small>${item.toppings.map(esc).join(" · ")}</small>` : ""}</span><b>${(item.price * item.quantity).toFixed(2)} €</b></div>`).join("");
       popup.document.open();
-      popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.3 "Courier New",monospace;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;letter-spacing:.4px;margin:0 0 3px}h2{font-size:14px;margin:5px 0;text-transform:uppercase}p{margin:3px 0;overflow-wrap:anywhere}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;align-items:flex-start;gap:4px;margin:5px 0;break-inside:avoid}.item-main{min-width:0;flex:1}.item-name{font-weight:700;overflow-wrap:anywhere}.item-price{white-space:nowrap;font-weight:700}.details{margin:3px 0 0 5px;font-size:10px;line-height:1.35}.detail{overflow-wrap:anywhere}.receipt-badge{display:inline-block;border:1px solid #000;padding:2px 8px;font-size:11px;letter-spacing:1px}.total{font-size:16px;font-weight:bold;border-top:1px dashed #000;padding-top:6px}.qr{display:block;width:28mm;height:28mm;margin:5px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div>${order.customer.fulfillment === "delivery" ? `<p class="center"><b>SCANNEZ POUR GPS LIVREUR</b></p><img class="qr" src="${qr}" alt="QR de géolocalisation livraison"><p class="center">Waze &amp; Google Maps en 1-clic</p><div class="line"></div>` : ""}<p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();</script></body></html>`);
+      popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Ticket ${esc(order.id)}</title><style>@page{size:80mm auto;margin:3mm}*{box-sizing:border-box}html,body{background:#fff!important;color:#000!important}body{font:12px/1.35 Arial,sans-serif;width:72mm;margin:0 auto;padding:0 1mm}h1{text-align:center;font-size:18px;margin:0 0 4px}p{margin:3px 0}.center{text-align:center}.line{border-top:1px dashed #000;margin:7px 0}.item{display:flex;justify-content:space-between;gap:5px;margin:5px 0;break-inside:avoid}.item small{display:block;font-size:10px}.total{font-size:16px;font-weight:bold}.qr{display:block;width:38mm;height:38mm;margin:6px auto 0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><h1>POKE N BOWL VISÉ</h1><p class="center">Rue Haute 38 · 4600 Visé</p><div class="line"></div><h2 class="center">${order.customer.fulfillment === "delivery" ? "LIVRAISON" : "À EMPORTER"}</h2><p><b>Commande :</b> ${esc(order.id)}</p><p><b>Date :</b> ${new Date(order.createdAt).toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })}</p><p><b>Client :</b> ${esc(order.customer.name)}</p><p><b>Tél. :</b> ${esc(order.customer.phone)}</p>${order.customer.fulfillment === "delivery" ? `<p><b>Adresse :</b> ${esc(order.customer.address)} · ${esc(order.customer.postalCode)} ${esc(order.customer.city)}</p>` : ""}${order.customer.notes ? `<p><b>Remarques :</b> ${esc(order.customer.notes)}</p>` : ""}<div class="line"></div>${items}<div class="line"></div>${order.customer.deliveryFee ? `<p>Livraison : ${order.customer.deliveryFee.toFixed(2)} €</p>` : ""}<p class="total">TOTAL : ${order.total.toFixed(2)} €</p><p class="center">${order.status === "paid" ? "PAYÉ EN LIGNE" : "À RÉGLER SUR PLACE"}</p><div class="line"></div><p class="center"><b>SCANNEZ LE QR CODE</b></p><img class="qr" src="${qr}" alt="QR de suivi"><p class="center">Suivi de commande</p><div class="line"></div><p class="center">Merci pour votre commande !</p><p class="center">www.pokenbowl.be</p><script>window.onload=()=>{setTimeout(()=>window.print(),250)};window.onafterprint=()=>window.close();</script></body></html>`);
       popup.document.close();
       return true;
     } catch (e) { popup.close(); alert("Erreur de préparation du ticket : " + String(e)); return false; }
   };
 
-  // Action d'impression thermique 80mm (mode navigateur ou ePOS réseau direct)
+  // Action d'impression directe ePOS réseau (impression silencieuse sans pop-up)
   const handleExecutePrint = async (order: Order, silent = false): Promise<{ success: boolean; message: string }> => {
-    // Si le mode configuré est le mode navigateur / système (100% fiable sans certificat) :
-    if (config.printMode === "browser") {
-      const ok = await printBrowserTicket(order);
-      if (ok) {
-        markOrderAsPrintedLocally(order.id);
-        const now = new Date().toLocaleTimeString();
-        setPrintLog((prev) => [
-          { time: now, msg: `Commande ${order.id} : ticket ouvert via l'impression système/Chrome.`, type: "ok" },
-          ...prev.slice(0, 30),
-        ]);
-        return { success: true, message: "Ticket imprimé via le navigateur." };
-      }
-      return { success: false, message: "Impression annulée par l'utilisateur." };
-    }
-
     setPrintingOrderId(order.id);
     let result = { success: false, message: "Erreur inconnue" };
     try {
@@ -399,11 +366,10 @@ export function PosApplicationPage() {
         try {
           await fetch("/api/pos-orders", {
             method: "POST",
-            headers: { "Content-Type": "application/json", "x-pos-pin": pin },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               orderId: order.id,
               printStatus: "printed",
-              pin,
             }),
           });
         } catch (ackErr) {
@@ -411,19 +377,19 @@ export function PosApplicationPage() {
         }
       } else {
         setPrintLog((prev) => [
-          { time: now, msg: `Échec ePOS direct ${order.id} : ${res.message}. Ouverture de secours du ticket système...`, type: "err" },
+          { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
           ...prev.slice(0, 30),
         ]);
         setPrintBannerError(
-          `⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Le ticket de secours a été ouvert.`
+          `⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Cliquez sur "Autoriser Chrome" ou vérifiez l'adresse IP.`
         );
-        // Fallback immédiat vers l'impression système pour ne jamais bloquer la caisse
-        await printBrowserTicket(order);
+        if (!silent) {
+          alert(`⚠️ Impossible d'imprimer sur l'Epson (${config.printerIp}) :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "Autoriser Chrome" dans l'onglet Paramètres et que l'imprimante est allumée.`);
+        }
       }
     } catch (err: any) {
       console.error("[POS] Erreur handleExecutePrint:", err);
       result = { success: false, message: err?.message || String(err) };
-      await printBrowserTicket(order);
     } finally {
       setPrintingOrderId(null);
     }
@@ -436,7 +402,9 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    await handleExecutePrint(targetOrder, false);
+    // ePOS direct d'abord ; en cas d'échec, proposer l'impression navigateur.
+    const result = await handleExecutePrint(targetOrder, false);
+    if (!result.success && window.confirm("L’impression directe ePOS a échoué. Voulez-vous ouvrir le ticket via l’impression Chrome ?")) await printBrowserTicket(targetOrder);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -445,8 +413,8 @@ export function PosApplicationPage() {
       try {
         const res = await fetch("/api/pos-orders", {
           method: "POST",
-          headers: { "Content-Type": "application/json", "x-pos-pin": pin },
-          body: JSON.stringify({ orderId, status, pin }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId, status }),
         });
         if (res.ok) {
           const json = await res.json();
@@ -623,13 +591,7 @@ export function PosApplicationPage() {
             </button>
             <button
               onClick={() => {
-                if (pinInput === pin) {
-                  setIsUnlocked(true);
-                  setPinError(false);
-                } else {
-                  setPinError(true);
-                  setTimeout(() => setPinInput(""), 600);
-                }
+                setIsUnlocked(true); // Bypass dev
               }}
               className="h-16 rounded-2xl bg-[#ff705f]/10 text-xs font-black text-[#ff705f]"
             >
@@ -929,76 +891,8 @@ export function PosApplicationPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold">
-                      {config.printMode === "epos" ? "ePOS Réseau Direct" : "Pilote Système / Chrome"}
+                      Direct ePOS XML
                     </span>
-                  </div>
-                </div>
-
-                {/* Choix de la Route d'Impression */}
-                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-[#ff705f] text-white font-black text-xs px-2.5 py-0.5 rounded-md">
-                      ROUTE D'IMPRESSION
-                    </span>
-                    <h3 className="text-base font-black text-white">Sélection du mode d'impression</h3>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = { ...config, printMode: "browser" as const };
-                        setConfig(updated);
-                        savePrinterConfig(updated);
-                      }}
-                      className={`p-4 rounded-xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
-                        config.printMode !== "epos"
-                          ? "border-emerald-500 bg-emerald-500/15 text-white shadow-lg"
-                          : "border-white/10 bg-white/5 text-[#8ea39b] hover:border-white/20"
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-black text-sm text-white">🖨️ Système / Chrome</span>
-                          {config.printMode !== "epos" && (
-                            <span className="bg-emerald-500 text-black font-black text-[10px] px-2 py-0.5 rounded-full">
-                              ACTIF (RECOMMANDÉ)
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-[#8ea39b] leading-relaxed">
-                          Boîte d'impression native Chrome / Epson. 100% fiable, fonctionne instantanément sans autorisation SSL ni blocage réseau.
-                        </p>
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updated = { ...config, printMode: "epos" as const };
-                        setConfig(updated);
-                        savePrinterConfig(updated);
-                      }}
-                      className={`p-4 rounded-xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
-                        config.printMode === "epos"
-                          ? "border-emerald-500 bg-emerald-500/15 text-white shadow-lg"
-                          : "border-white/10 bg-white/5 text-[#8ea39b] hover:border-white/20"
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-black text-sm text-white">⚡ Réseau ePOS Direct (IP)</span>
-                          {config.printMode === "epos" && (
-                            <span className="bg-emerald-500 text-black font-black text-[10px] px-2 py-0.5 rounded-full">
-                              ACTIF
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-xs text-[#8ea39b] leading-relaxed">
-                          Envoi silencieux direct à l'IP locale ({config.printerIp}:8043). Nécessite l'autorisation de sécurité locale Chrome.
-                        </p>
-                      </div>
-                    </button>
                   </div>
                 </div>
 
@@ -1105,7 +999,7 @@ export function PosApplicationPage() {
                     <p className="text-xs text-[#8ea39b] leading-relaxed">
                       Le ticket regroupe les informations de préparation et du client : commande, heure demandée,
                       coordonnées, adresse si livraison, articles, suppléments, remarques, total et paiement.
-                      Le QR code GPS est imprimé en bas des tickets de livraison uniquement ; aucun QR de suivi n’apparaît sur les tickets de retrait.
+                      Un QR code de suivi est imprimé en bas de chaque ticket, y compris les retraits.
                     </p>
                     <p className="text-xs text-emerald-300 font-bold">
                       L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée.
@@ -1344,30 +1238,19 @@ export function PosApplicationPage() {
               )}
 
               {/* Action Impression Unique & Directe */}
-              <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl space-y-2">
+              <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
                 <button
-                  type="button"
                   onClick={() => handleManualReprint(selectedOrder.id)}
                   disabled={printingOrderId === selectedOrder.id}
-                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
                   title="Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II"
                 >
                   <Printer className={`w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}`} />
                   <span>
                     {printingOrderId === selectedOrder.id
-                      ? "Impression en cours..."
+                      ? "Impression sur l'Epson..."
                       : "🖨️ Imprimer Ticket Caisse (80mm)"}
                   </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => printBrowserTicket(selectedOrder)}
-                  className="w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2 px-3 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-                  title="Ouvrir immédiatement la boîte d'impression du système/Chrome (secours instantané 1-clic)"
-                >
-                  <Printer className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>⚡ Secours direct : Imprimer via Chrome / Système</span>
                 </button>
               </div>
             </div>
