@@ -10,7 +10,7 @@ import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as Dial
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CRRf7LLS.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DrE66jaG.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -122,8 +122,11 @@ function DishImage({ dishId, alt, className = "", priority = false }) {
 var tiramisu_speculoos_default = "/assets/tiramisu-speculoos-CUQsAiGk.jpg";
 var tiramisu_oreo_default = "/assets/dessert-9PIP1ns9.jpg";
 var drink_coca_cola_default = "/assets/drink-coca-cola-CWOKerZY.jpg";
-var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-6sOWN-TD.jpg";
+var drink_coca_zero_default = "/assets/drink-coca-zero-eyT1b9_N.jpg";
+var drink_fanta_orange_default = "/assets/drink-fanta-orange-PDmbpAsA.jpg";
+var drink_ice_tea_default = "/assets/drink-ice-tea-DMtxtUDf.jpg";
 var drink_eau_plate_default = "/assets/drink-eau-plate-C5KCvpt5.jpg";
+var drink_eau_gazeuse_default = "/assets/drink-eau-gazeuse-6sOWN-TD.jpg";
 var CROSS_SELL_ITEMS = [
 	{
 		id: "tira-spec",
@@ -148,6 +151,30 @@ var CROSS_SELL_ITEMS = [
 		emoji: "🥤",
 		image: drink_coca_cola_default,
 		subtitle: "Servi givré"
+	},
+	{
+		id: "coca-zero",
+		name: "Coca-Cola Zéro 33cl",
+		price: 2,
+		emoji: "🥤",
+		image: drink_coca_zero_default,
+		subtitle: "Zéro sucre ultra frais"
+	},
+	{
+		id: "fanta",
+		name: "Fanta Orange 33cl",
+		price: 2,
+		emoji: "🍊",
+		image: drink_fanta_orange_default,
+		subtitle: "Pétillant à l'orange"
+	},
+	{
+		id: "ice-tea",
+		name: "Ice Tea Sparkling 33cl",
+		price: 2,
+		emoji: "🧊",
+		image: drink_ice_tea_default,
+		subtitle: "Pétillant bien frais"
 	},
 	{
 		id: "eau-gaz",
@@ -416,4 +443,4 @@ function CartDrawer() {
 	});
 }
 //#endregion
-export { bowl_sweet_chicken_default as a, drink_eau_plate_default as c, tiramisu_speculoos_default as d, bowl_scampis_default as i, hero_saumon_clean_wide_default as l, DishImage as n, drink_coca_cola_default as o, bowl_crousty_curry_default as r, drink_eau_gazeuse_default as s, CartDrawer as t, tiramisu_oreo_default as u };
+export { bowl_sweet_chicken_default as a, drink_eau_gazeuse_default as c, drink_ice_tea_default as d, hero_saumon_clean_wide_default as f, bowl_scampis_default as i, drink_eau_plate_default as l, tiramisu_speculoos_default as m, DishImage as n, drink_coca_cola_default as o, tiramisu_oreo_default as p, bowl_crousty_curry_default as r, drink_coca_zero_default as s, CartDrawer as t, drink_fanta_orange_default as u };

@@ -7,9 +7,9 @@ import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { Q as ArrowLeft, Z as ArrowRight, f as ShoppingBag, u as Sparkles } from "../_libs/lucide-react.mjs";
-import { c as drink_eau_plate_default, d as tiramisu_speculoos_default, n as DishImage, o as drink_coca_cola_default, s as drink_eau_gazeuse_default, t as CartDrawer, u as tiramisu_oreo_default } from "./CartDrawer-CRRf7LLS.mjs";
+import { c as drink_eau_gazeuse_default, d as drink_ice_tea_default, l as drink_eau_plate_default, m as tiramisu_speculoos_default, n as DishImage, o as drink_coca_cola_default, p as tiramisu_oreo_default, s as drink_coca_zero_default, t as CartDrawer, u as drink_fanta_orange_default } from "./CartDrawer-DrE66jaG.mjs";
 import { t as useStock } from "./useStock-TcwXER-R.mjs";
-import { i as tiramisu_nutella_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-DWuj5RB0.mjs";
+import { t as tiramisu_nutella_default } from "./tiramisu-nutella-Ckv_PV9y.mjs";
 require_react();
 var import_jsx_runtime = require_jsx_runtime();
 var DESSERT_IMAGES = {

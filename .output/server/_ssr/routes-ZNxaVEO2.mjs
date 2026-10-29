@@ -7,12 +7,12 @@ import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Heart, D as MapPin, E as Menu, G as Check, H as ChevronLeft, I as Clock, J as BookOpen, M as Flame, N as ExternalLink, R as CircleCheck, T as MessageCircle, U as ChevronDown, V as ChevronRight, W as ChefHat, X as Award, Y as Bell, Z as ArrowRight, _ as RotateCcw, b as Plus, f as ShoppingBag, g as Search, j as Funnel, k as Instagram, l as Star, m as ShieldCheck, q as BriefcaseBusiness, t as X, u as Sparkles, w as Minus, x as Phone } from "../_libs/lucide-react.mjs";
-import { a as bowl_sweet_chicken_default, c as drink_eau_plate_default, d as tiramisu_speculoos_default, i as bowl_scampis_default, l as hero_saumon_clean_wide_default, n as DishImage, o as drink_coca_cola_default, r as bowl_crousty_curry_default, s as drink_eau_gazeuse_default, t as CartDrawer, u as tiramisu_oreo_default } from "./CartDrawer-CRRf7LLS.mjs";
+import { a as bowl_sweet_chicken_default, c as drink_eau_gazeuse_default, d as drink_ice_tea_default, f as hero_saumon_clean_wide_default, i as bowl_scampis_default, l as drink_eau_plate_default, m as tiramisu_speculoos_default, n as DishImage, o as drink_coca_cola_default, p as tiramisu_oreo_default, r as bowl_crousty_curry_default, s as drink_coca_zero_default, t as CartDrawer, u as drink_fanta_orange_default } from "./CartDrawer-DrE66jaG.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-Chu9Vaby.mjs";
-import { i as tiramisu_nutella_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-DWuj5RB0.mjs";
+import { t as tiramisu_nutella_default } from "./tiramisu-nutella-Ckv_PV9y.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CHcEwnfA.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-ZNxaVEO2.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [{
@@ -450,17 +450,24 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 	const drinkItems = [
 		{
 			id: "coca",
-			name: "Coca-Cola 33cl",
+			name: "Coca-Cola (33 cl)",
 			price: 2,
-			desc: "Servi givré.",
+			desc: "Servie glacée.",
 			image: drink_coca_cola_default
 		},
 		{
 			id: "coca-zero",
-			name: "Coca-Cola Zéro 33cl",
+			name: "Coca-Cola Zéro (33 cl)",
 			price: 2,
-			desc: "Zéro sucre, ultra frais.",
+			desc: "Zéro sucre, ultra fraîche.",
 			image: drink_coca_zero_default
+		},
+		{
+			id: "fanta",
+			name: "Fanta Orange (33 cl)",
+			price: 2,
+			desc: "Pétillante à l'orange.",
+			image: drink_fanta_orange_default
 		},
 		{
 			id: "ice-tea",
@@ -470,8 +477,15 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 			image: drink_ice_tea_default
 		},
 		{
+			id: "eau-plate",
+			name: "SPA Reine Eau plate (50 cl)",
+			price: 2,
+			desc: "Eau minérale plate pure.",
+			image: drink_eau_plate_default
+		},
+		{
 			id: "eau-gaz",
-			name: "SPA Intense 50cl",
+			name: "SPA Intense Eau pétillante (50 cl)",
 			price: 2,
 			desc: "Eau pétillante de source.",
 			image: drink_eau_gazeuse_default
@@ -870,7 +884,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 								className: "flex items-center justify-between mb-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h4", {
 									className: "text-sm font-black uppercase tracking-wider text-[#2C1D16]",
-									children: "Boissons Fraîches Givron"
+									children: "Boissons Fraîches Givrées"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-[11px] text-[#7a847e]",
 									children: "Canettes 33cl et eaux SPA minérales 50cl servies très fraîches"
@@ -879,7 +893,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 									children: "2,00 € l'unité"
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "grid grid-cols-2 sm:grid-cols-4 gap-3",
+								className: "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 sm:gap-3",
 								children: drinkItems.map((drink) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "group relative flex flex-col justify-between rounded-2xl bg-white border border-black/5 p-2.5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 text-center",
 									children: [
@@ -888,20 +902,20 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 												src: drink.image,
 												alt: drink.name,
-												className: `h-full w-full ${drink.id === "ice-tea" ? "object-contain p-2 bg-white" : "object-cover"} transition duration-500 ${drink.id === "ice-tea" ? "" : "group-hover:scale-108"}`
+												className: "h-full w-full object-cover object-center transition duration-500 group-hover:scale-108"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "absolute top-1.5 right-1.5 rounded-full bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black text-[#EADCC9] shadow",
 												children: [drink.price.toFixed(2), " €"]
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
-											className: "text-[11px] font-black text-[#2C1D16] truncate",
+											className: "text-[11px] font-black text-[#2C1D16] line-clamp-1",
 											children: drink.name
 										}) }),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											type: "button",
 											onClick: () => handleQuickAdd(drink),
-											className: "mt-2 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95",
+											className: "mt-2 flex items-center justify-center gap-1 rounded-xl bg-[#2C1D16] py-1.5 text-[10px] font-black uppercase text-white hover:bg-[#ff705f] transition active:scale-95 cursor-pointer",
 											children: addedDishId === drink.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-3 w-3 stroke-[3]" }), " Ajouté !"] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3" }), " Ajouter"] })
 										})
 									]

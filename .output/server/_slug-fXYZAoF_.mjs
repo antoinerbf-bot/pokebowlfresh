@@ -1,7 +1,7 @@
 import { X as notFound, _ as lazyRouteComponent, v as createFileRoute } from "./_libs/@tanstack/react-router+[...].mjs";
 import { t as BLOG_ARTICLES } from "./_ssr/blogArticles-Chu9Vaby.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_slug-CGjXADij.js
-var $$splitComponentImporter = () => import("./_slug-2GZwRBqE.mjs");
+//#region node_modules/.nitro/vite/services/ssr/assets/_slug-fXYZAoF_.js
+var $$splitComponentImporter = () => import("./_slug-CPmCLK9V.mjs");
 var Route = createFileRoute("/blog/$slug")({
 	loader: ({ params }) => {
 		const article = BLOG_ARTICLES.find((a) => a.slug === params.slug);
