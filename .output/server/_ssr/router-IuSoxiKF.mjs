@@ -4,7 +4,7 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-DIxAve94.mjs";
 import { t as CartProvider } from "./CartContext-C3Z6ywuE.mjs";
 import { C as useRouter, _ as lazyRouteComponent, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$21 } from "../_productId-DMQmpT0U.mjs";
+import { t as Route$21 } from "../_productId-uRRxk4K_.mjs";
 import { C as Navigation, F as CookingPot, N as ExternalLink, a as TriangleAlert, g as Search, i as Truck, n as VolumeX, p as Shield, r as Volume2, v as RefreshCw, x as Phone, y as Printer, z as CircleCheckBig } from "../_libs/lucide-react.mjs";
 import { n as createServerFn } from "./ssr.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-C1p7zOu_.mjs";
@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CLIG8FVO.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-IuSoxiKF.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -231,7 +231,7 @@ function RootComponent() {
 		}) }) })
 	});
 }
-var $$splitComponentImporter$7 = () => import("./routes-DwJEo659.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-CN_tFJet.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "FastFoodRestaurant",
@@ -332,7 +332,7 @@ var Route$15 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./sur-mesure-BX6-kDw0.mjs");
+var $$splitComponentImporter$2 = () => import("./sur-mesure-Z5Ykb0Ts.mjs");
 var Route$14 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 var $$splitComponentImporter$1 = () => import("./stocks-Djr2dRPB.mjs");
 var Route$13 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });

@@ -12,7 +12,7 @@ import { t as BLOG_ARTICLES } from "./blogArticles-Chu9Vaby.mjs";
 import { i as tiramisu_nutella_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-DWuj5RB0.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DwJEo659.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CN_tFJet.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [{
@@ -1527,7 +1527,7 @@ function InteractiveBowlBuilder() {
 		"Salade d'algues": 1,
 		Maïs: 1
 	});
-	const [sauceQuantities, setSauceQuantities] = import_react.useState({ Teriyaki: 1 });
+	const [sauceQuantities, setSauceQuantities] = import_react.useState({});
 	const [toppingQuantities, setToppingQuantities] = import_react.useState({ "Oignons frits": 1 });
 	const [added, setAdded] = import_react.useState(false);
 	const { addItem, setIsCartOpen } = useCart();
@@ -1613,6 +1613,10 @@ function InteractiveBowlBuilder() {
 		});
 	};
 	const addSauce = (name) => {
+		if (totalSauceUnits === 1 && !sauceQuantities[name]) {
+			setSauceQuantities({ [name]: 1 });
+			return;
+		}
 		setSauceQuantities((prev) => ({
 			...prev,
 			[name]: (prev[name] ?? 0) + 1
@@ -1648,7 +1652,7 @@ function InteractiveBowlBuilder() {
 			"Salade d'algues": 1,
 			Maïs: 1
 		});
-		setSauceQuantities({ Teriyaki: 1 });
+		setSauceQuantities({});
 		setToppingQuantities({ "Oignons frits": 1 });
 	};
 	const selectedSaucesList = import_react.useMemo(() => {
@@ -2193,7 +2197,7 @@ function InteractiveBowlBuilder() {
 														className: "flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: `text-[11px] font-black ${isSelected ? "text-[#ff705f]" : "text-[#7A6857]"}`,
-															children: qty === 0 ? totalSauceUnits === 0 ? "1ère offerte" : "+0,50 €" : qty === 1 && totalSauceUnits === 1 ? "Offerte (0 €)" : `${qty}x (+${(qty * .5).toFixed(2)}€)`
+															children: qty === 0 ? totalSauceUnits <= 1 ? "1ère offerte" : "+0,50 €" : qty === 1 && totalSauceUnits === 1 ? "Offerte (0 €)" : `${qty}x (+${(qty * .5).toFixed(2)}€)`
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 															className: "flex items-center gap-1.5 shrink-0",
 															children: qty > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

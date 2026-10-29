@@ -5,12 +5,12 @@ import { n as require_jsx_runtime } from "./_libs/radix-ui__react-context+react.
 import { n as useTranslation } from "./_ssr/I18nContext-DIxAve94.mjs";
 import { n as useCart } from "./_ssr/CartContext-C3Z6ywuE.mjs";
 import { b as Link, x as Navigate } from "./_libs/@tanstack/react-router+[...].mjs";
-import { t as Route } from "./_productId-DMQmpT0U.mjs";
+import { t as Route } from "./_productId-uRRxk4K_.mjs";
 import { t as BrandLogo } from "./_ssr/BrandLogo-f92236nt.mjs";
 import { G as Check, Q as ArrowLeft, a as TriangleAlert, b as Plus, d as ShoppingCart, m as ShieldCheck, s as Sun, u as Sparkles, w as Minus } from "./_libs/lucide-react.mjs";
 import { n as DishImage, t as CartDrawer } from "./_ssr/CartDrawer-BpbP1XOE.mjs";
 import { t as useStock } from "./_ssr/useStock-TcwXER-R.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_productId-DSWwwh6G.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_productId-vLGpD-aI.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var TAG_STYLES = {
@@ -257,6 +257,10 @@ function ProductPage() {
 		});
 	};
 	const addSauce = (name) => {
+		if (totalSauceUnits === 1 && !sauceQuantities[name]) {
+			setSauceQuantities({ [name]: 1 });
+			return;
+		}
 		setSauceQuantities((cur) => ({
 			...cur,
 			[name]: (cur[name] ?? 0) + 1
@@ -808,7 +812,7 @@ function ProductPage() {
 														className: "flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: `text-[11px] font-black ${isSelected ? "text-[#ff705f]" : "text-[#7A6857]"}`,
-															children: count === 0 ? totalSauceUnits === 0 ? "1ère offerte" : "+0,50 €" : count === 1 && totalSauceUnits === 1 ? "Offerte (0 €)" : `${count}x (+${(count * .5).toFixed(2)}€)`
+															children: count === 0 ? totalSauceUnits <= 1 ? "1ère offerte" : "+0,50 €" : count === 1 && totalSauceUnits === 1 ? "Offerte (0 €)" : `${count}x (+${(count * .5).toFixed(2)}€)`
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 															className: "flex items-center gap-1.5 shrink-0",
 															children: count > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

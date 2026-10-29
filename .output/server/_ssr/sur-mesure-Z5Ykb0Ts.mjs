@@ -11,7 +11,7 @@ import { t as CartDrawer } from "./CartDrawer-BpbP1XOE.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/bowl-saumon-8FL339kO.js
 var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
 //#endregion
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BX6-kDw0.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-Z5Ykb0Ts.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -31,7 +31,7 @@ function SurMesurePage() {
 	});
 	const [selectedProtein, setSelectedProtein] = import_react.useState(detailedProteins[0] ?? null);
 	const [extraProteins, setExtraProteins] = import_react.useState({});
-	const [sauceQuantities, setSauceQuantities] = import_react.useState({ "Teriyaki": 1 });
+	const [sauceQuantities, setSauceQuantities] = import_react.useState({});
 	const [toppingQuantities, setToppingQuantities] = import_react.useState({ "Oignons frits": 1 });
 	const [qty, setQty] = import_react.useState(1);
 	const [added, setAdded] = import_react.useState(false);
@@ -101,6 +101,10 @@ function SurMesurePage() {
 		});
 	};
 	const addSauce = (name) => {
+		if (totalSauceUnits === 1 && !sauceQuantities[name]) {
+			setSauceQuantities({ [name]: 1 });
+			return;
+		}
 		setSauceQuantities((cur) => ({
 			...cur,
 			[name]: (cur[name] ?? 0) + 1
@@ -674,7 +678,7 @@ function SurMesurePage() {
 														className: "flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: `text-[11px] font-black ${isSelected ? "text-[#ff705f]" : "text-[#7A6857]"}`,
-															children: count === 0 ? totalSauceUnits === 0 ? "1ère offerte" : "+0,50 €" : count === 1 && totalSauceUnits === 1 ? "Offerte (0 €)" : `${count}x (+${(count * .5).toFixed(2)}€)`
+															children: count === 0 ? totalSauceUnits <= 1 ? "1ère offerte" : "+0,50 €" : count === 1 && totalSauceUnits === 1 ? "Offerte (0 €)" : `${count}x (+${(count * .5).toFixed(2)}€)`
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 															className: "flex items-center gap-1.5 shrink-0",
 															children: count > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
