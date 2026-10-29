@@ -106,6 +106,36 @@ export function buildEposSoapEnvelope(innerXml: string): string {
 </s:Envelope>`;
 }
 
+export function formatThermalRow(left: string, right: string = "", width = 42): string {
+  const cLeft = cleanThermalText(left);
+  const cRight = cleanThermalText(right);
+  if (!cRight) return cLeft.slice(0, width);
+  const avail = width - cRight.length - 1;
+  const tLeft = cLeft.length > avail ? cLeft.slice(0, avail) : cLeft;
+  const spaces = Math.max(1, width - tLeft.length - cRight.length);
+  return tLeft + " ".repeat(spaces) + cRight;
+}
+
+export function unpackToppings(toppings: string[] = []): Array<{ text: string; price?: string; isAllergy?: boolean; isExtra?: boolean }> {
+  const result: Array<{ text: string; price?: string; isAllergy?: boolean; isExtra?: boolean }> = [];
+  for (const raw of toppings) {
+    if (!raw) continue;
+    const catMatch = raw.match(/^(?:Base|Taille|Proteine|Mix-ins?|Sauces?|Toppings?)\s*:\s*(.+)$/i);
+    const content = catMatch ? catMatch[1] : raw;
+    const parts = content.split(",").map((s) => s.trim()).filter(Boolean);
+    for (const part of parts) {
+      const isAllergy = /^(?:sans\s*:|sans\s+|allerg)/i.test(part);
+      const priceMatch = part.match(/\(\+([\d.,]+)\s*€?\)/);
+      const priceStr = priceMatch ? parseFloat(priceMatch[1].replace(",", ".")).toFixed(2) : undefined;
+      const cleanName = part.replace(/\(\+[\d.,]+\s*€?\)/g, "").replace(/\(x\d+\)/g, "").trim();
+      const isExtra = Boolean(priceStr) || cleanName.startsWith("+");
+      const displayText = cleanName.replace(/^\+\s*/, "");
+      result.push({ text: displayText, price: priceStr, isAllergy, isExtra });
+    }
+  }
+  return result;
+}
+
 /**
  * Générateur XML ePOS natif pour le ticket de test (Bouton vert)
  */
@@ -114,31 +144,35 @@ export function buildEposXmlTest(printerIp: string): string {
   const timeStr = now.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels" });
   const dateStr = now.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" });
 
-  return `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>
-  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>
-  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>
-  <text align="center" em="true" dw="true" dh="true"> *** TEST IMPRESSION *** &#10;</text>
-  <text align="center">==========================================&#10;</text>
-  <text align="center">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>
-  <text align="center">IP Imprimante : ${escapeXml(printerIp)}&#10;</text>
-  <text align="center" em="true">Epson TM-m30II Connectee !&#10;</text>
-  <text align="center">==========================================&#10;</text>
-  <text align="center">Pret pour la prise de commandes.&#10;&#10;</text>
-  <text align="center" em="true">SCANNEZ POUR TESTER&#10;</text>
-  <symbol type="qrcode_model_2" level="level_m" width="5">https://pokenbowl.be</symbol>
-  <feed line="4" />
-  <cut type="feed" />
-</epos-print>`;
+  let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
+  xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL&#10;</text>\n`;
+  xml += `  <text align="center">Poke N Bowl Vise&#10;</text>\n`;
+  xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
+  xml += `  <text align="center" em="true" dw="true" dh="true">*** TEST IMPRESSION ***&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(formatThermalRow("Date :", `${dateStr} a ${timeStr}`, 42))}&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(formatThermalRow("IP Imprimante :", printerIp, 42))}&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(formatThermalRow("Modele :", "Epson TM-m30II", 42))}&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(formatThermalRow("Connexion :", "ePOS-Print WiFi Direct", 42))}&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="center" em="true" dw="true" dh="true">TEST REUSSI&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">https://pokenbowl.be</symbol>\n`;
+  xml += `  <text align="center">Pret pour la prise de commandes.&#10;</text>\n`;
+  xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
+  xml += `  <feed line="4" />\n`;
+  xml += `  <cut type="feed" />\n`;
+  xml += `</epos-print>`;
+  return xml;
 }
 
 /**
- * Générateur XML ePOS natif pour le ticket de commande officiel (Cuisine & Livreur)
+ * Générateur XML ePOS natif pour le ticket de commande officiel (Style Takeaway.com)
  */
 export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be"): string {
   const isDelivery = order.customer.fulfillment === "delivery";
   const dateObj = new Date(order.createdAt);
-  const dateStr = dateObj.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels" });
+  const dateStr = dateObj.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels", day: "numeric", month: "short" });
   const timeStr = dateObj.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" });
 
   const safeCustomerName = cleanThermalText(order.customer.name);
@@ -146,108 +180,108 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   const safeAddress = cleanThermalText(order.customer.address || "Non precisee");
   const safeCity = cleanThermalText(`${order.customer.postalCode || ""} ${order.customer.city || ""}`.trim());
   const safeNotes = cleanThermalText(order.customer.notes || "");
-  const safeRequestedTime = cleanThermalText(order.customer.requestedTime || "DES QUE POSSIBLE");
+  const safeRequestedTime = cleanThermalText(order.customer.requestedTime || "des que possible");
+
+  // Réf de commande courte style Takeaway (ex: # J83 BY8 ou # G8PG)
+  const shortOrderRef = order.id.includes("-") ? order.id.split("-").pop() || order.id : order.id;
 
   let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
 
-  // En-tête restaurant
-  xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
-  xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
+  // 1. En-tête Poke N Bowl
+  xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL&#10;</text>\n`;
+  xml += `  <text align="center">Poke N Bowl Vise&#10;</text>\n`;
   xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
 
-  // Bannière Type
-  xml += `  <text align="center" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
-  xml += `  <text align="center"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
-  xml += `  <text>&#10;</text>\n`;
+  // 2. Type & Date (LIVRAISON / A EMPORTER)
+  xml += `  <text align="center" em="true" dw="true" dh="true">${isDelivery ? "LIVRAISON" : "A EMPORTER"}&#10;</text>\n`;
+  xml += `  <text align="center">Date : ${escapeXml(dateStr)}, ${escapeXml(safeRequestedTime)}&#10;</text>\n`;
+  xml += `  <text align="center">(${escapeXml(timeStr)})&#10;&#10;</text>\n`;
 
-  // Détails commande & client
-  xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
-  xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
+  // 3. Numéro de commande Takeaway (# XXXX)
+  xml += `  <text align="center" em="true" dw="true" dh="true"># ${escapeXml(shortOrderRef.toUpperCase())}&#10;</text>\n`;
+  xml += `  <text align="center">Ref: ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
   xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-  xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
-  xml += `  <text align="left">Nom  : ${escapeXml(safeCustomerName)}&#10;</text>\n`;
-  xml += `  <text align="left">Tel  : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
+  xml += `  <text align="right">EUR&#10;</text>\n`;
 
+  // 4. Liste des articles avec composition et suppléments indentés
+  for (const item of order.items) {
+    const itemTotal = (item.price * item.quantity).toFixed(2);
+    const safeItemName = cleanThermalText(item.name);
+    const header = `${item.quantity} x ${safeItemName}`;
+    const line = formatThermalRow(header, itemTotal, 42);
+
+    xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
+
+    const unpacked = unpackToppings(item.toppings || []);
+    for (const sub of unpacked) {
+      const prefix = sub.isAllergy ? "  ! " : (sub.isExtra ? "  + " : "    ");
+      const subLine = formatThermalRow(prefix + sub.text, sub.price || "", 42);
+      xml += `  <text align="left">${escapeXml(subLine)}&#10;</text>\n`;
+    }
+  }
+
+  // 5. Totaux & Frais
+  xml += `  <text align="left">&#10;</text>\n`;
+  const subTotal = order.items.reduce((acc, it) => acc + it.price * it.quantity, 0);
+  xml += `  <text align="left">${escapeXml(formatThermalRow("Sous-total", subTotal.toFixed(2), 42))}&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(formatThermalRow("Total de la commande", subTotal.toFixed(2), 42))}&#10;</text>\n`;
+  if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
+    xml += `  <text align="left">${escapeXml(formatThermalRow("Frais de livraison", order.customer.deliveryFee.toFixed(2), 42))}&#10;</text>\n`;
+  }
+  xml += `  <text align="left">&#10;</text>\n`;
+  xml += `  <text align="left" em="true">${escapeXml(formatThermalRow("Total du", order.total.toFixed(2), 42))}&#10;</text>\n`;
+  xml += `  <text align="left">==========================================&#10;</text>\n`;
+
+  // 6. Moyen de Paiement
+  const isPaid = order.status === "paid";
+  xml += `  <text align="left">Paye par :&#10;</text>\n`;
+  const paymentLabel = isPaid ? "En ligne (Mollie / Bancontact)" : "A regler sur place";
+  xml += `  <text align="left">${escapeXml(formatThermalRow(paymentLabel, order.total.toFixed(2), 42))}&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+
+  // 7. Mention Allergènes
+  xml += `  <text align="center">IMPORTANT : POUR LES INFORMATIONS SUR LES&#10;</text>\n`;
+  xml += `  <text align="center">ALLERGENES ALIMENTAIRES&#10;</text>\n`;
+  xml += `  <text align="center">Appelez le restaurant ou consultez le menu&#10;&#10;</text>\n`;
+
+  // 8. Statut Commande Payée / À Régler
+  xml += `  <text align="center" em="true" dw="true" dh="true">${isPaid ? "COMMANDE PAYEE" : "A REGLER SUR PLACE"}&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+
+  // 9. Détails Client & Adresse
+  xml += `  <text align="left" em="true">Details du client:&#10;&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(safeCustomerName)}&#10;</text>\n`;
+  if (safeCustomerPhone) {
+    xml += `  <text align="left">Tel : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
+  }
   if (isDelivery) {
-    xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
     xml += `  <text align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
     if (safeCity) {
       xml += `  <text align="left">${escapeXml(safeCity)}&#10;</text>\n`;
     }
   }
 
+  // 10. Notes / Remarques Client
   if (safeNotes) {
-    xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
+    xml += `  <text align="left">&#10;</text>\n`;
+    xml += `  <text align="left" em="true">Notes de livraison:&#10;</text>\n`;
     xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
   }
 
-  // Articles
-  xml += `  <text align="left">==========================================&#10;</text>\n`;
-  xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
-
-  for (const item of order.items) {
-    const itemTotal = (item.price * item.quantity).toFixed(2) + " EUR";
-    const safeItemName = cleanThermalText(item.name);
-    const header = `${item.quantity}x ${safeItemName}`;
-    const spaces = Math.max(1, 42 - header.length - itemTotal.length);
-    const line = header + " ".repeat(spaces) + itemTotal;
-
-    xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
-
-    if (item.toppings && item.toppings.length > 0) {
-      for (const top of item.toppings) {
-        const safeTop = cleanThermalText(top);
-        if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
-          xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
-        } else {
-          xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
-        }
-      }
-    }
-    xml += `  <text>&#10;</text>\n`;
-  }
-
   xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="left">${escapeXml(formatThermalRow("Commande passee a", `${timeStr} ${dateStr}`, 42))}&#10;</text>\n`;
+  xml += `  <text align="left">&#10;</text>\n`;
 
-  if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
-    const feeStr = order.customer.deliveryFee.toFixed(2) + " EUR";
-    const feeLine = "Frais de livraison";
-    const spaces = Math.max(1, 42 - feeLine.length - feeStr.length);
-    const line = feeLine + " ".repeat(spaces) + feeStr;
-    xml += `  <text align="left">${escapeXml(line)}&#10;</text>\n`;
-  }
-
-  // Total
-  xml += `  <text align="left" em="true" dw="true" dh="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
-  xml += `  <text>&#10;</text>\n`;
-
-  // Statut Paiement
-  const isPaid = order.status === "paid";
-  const payLabel = isPaid
-    ? "[ PAIEMENT VALIDE EN LIGNE ]"
-    : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
-  xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
-  xml += `  <text>&#10;</text>\n`;
-
-  // QR code au bas de chaque ticket : suivi de livraison ou de commande retrait.
+  // 11. QR Code Suivi / GPS Livreur
   {
     const trackToken = order.deliveryToken || order.id;
     const cleanOrigin = origin.replace(/\/$/, "");
     const qrUrl = `${cleanOrigin}/track/${encodeURIComponent(trackToken)}`;
-    xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text align="center" em="true">${isDelivery ? "SCANNEZ POUR GPS LIVREUR" : "SCANNEZ POUR SUIVRE LA COMMANDE"}&#10;</text>\n`;
-    if (isDelivery) xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
-    else xml += `  <text align="center">Suivi de commande Poke N Bowl&#10;&#10;</text>\n`;
     xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
-    xml += `  <text>&#10;</text>\n`;
+    xml += `  <text align="center">${isDelivery ? "Scannez pour livrer (GPS 1-clic)" : "Scannez pour suivre la commande"}&#10;</text>\n`;
+    xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
   }
 
-  // Pied de page
-  xml += `  <text align="center">==========================================&#10;</text>\n`;
-  xml += `  <text align="center">Merci pour votre commande !&#10;</text>\n`;
-  xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
   xml += `  <feed line="4" />\n`;
   xml += `  <cut type="feed" />\n`;
   xml += `</epos-print>`;
