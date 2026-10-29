@@ -95,7 +95,7 @@ export function PosApplicationPage() {
   // Auto-nettoyage et migration immédiate du port vers 8043 (élimine définitivement 9100)
   useEffect(() => {
     if (config.printerPort !== 8043) {
-      const fixed = { ...config, printerPort: 8043, printMode: "epos" as const };
+      const fixed = { ...config, printerPort: 8043, printMode: config.printMode || "browser" };
       setConfig(fixed);
       savePrinterConfig(fixed);
     }
@@ -356,8 +356,23 @@ export function PosApplicationPage() {
     } catch (e) { popup.close(); alert("Erreur de préparation du ticket : " + String(e)); return false; }
   };
 
-  // Action d'impression directe ePOS réseau (impression silencieuse sans pop-up)
+  // Action d'impression thermique 80mm (mode navigateur ou ePOS réseau direct)
   const handleExecutePrint = async (order: Order, silent = false): Promise<{ success: boolean; message: string }> => {
+    // Si le mode configuré est le mode navigateur / système (100% fiable sans certificat) :
+    if (config.printMode === "browser") {
+      const ok = await printBrowserTicket(order);
+      if (ok) {
+        markOrderAsPrintedLocally(order.id);
+        const now = new Date().toLocaleTimeString();
+        setPrintLog((prev) => [
+          { time: now, msg: `Commande ${order.id} : ticket ouvert via l'impression système/Chrome.`, type: "ok" },
+          ...prev.slice(0, 30),
+        ]);
+        return { success: true, message: "Ticket imprimé via le navigateur." };
+      }
+      return { success: false, message: "Impression annulée par l'utilisateur." };
+    }
+
     setPrintingOrderId(order.id);
     let result = { success: false, message: "Erreur inconnue" };
     try {
@@ -396,19 +411,19 @@ export function PosApplicationPage() {
         }
       } else {
         setPrintLog((prev) => [
-          { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
+          { time: now, msg: `Échec ePOS direct ${order.id} : ${res.message}. Ouverture de secours du ticket système...`, type: "err" },
           ...prev.slice(0, 30),
         ]);
         setPrintBannerError(
-          `⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Cliquez sur "Autoriser Chrome" ou vérifiez l'adresse IP.`
+          `⚠️ L'imprimante Epson (${config.printerIp}) n'a pas répondu. Le ticket de secours a été ouvert.`
         );
-        if (!silent) {
-          alert(`⚠️ Impossible d'imprimer sur l'Epson (${config.printerIp}) :\n\n${res.message}\n\n👉 Vérifiez que vous avez bien cliqué sur "Autoriser Chrome" dans l'onglet Paramètres et que l'imprimante est allumée.`);
-        }
+        // Fallback immédiat vers l'impression système pour ne jamais bloquer la caisse
+        await printBrowserTicket(order);
       }
     } catch (err: any) {
       console.error("[POS] Erreur handleExecutePrint:", err);
       result = { success: false, message: err?.message || String(err) };
+      await printBrowserTicket(order);
     } finally {
       setPrintingOrderId(null);
     }
@@ -421,9 +436,7 @@ export function PosApplicationPage() {
       alert("Commande introuvable.");
       return;
     }
-    // ePOS direct d'abord ; en cas d'échec, proposer l'impression navigateur.
-    const result = await handleExecutePrint(targetOrder, false);
-    if (!result.success && window.confirm("L’impression directe ePOS a échoué. Voulez-vous ouvrir le ticket via l’impression Chrome ?")) await printBrowserTicket(targetOrder);
+    await handleExecutePrint(targetOrder, false);
   };
 
   const handleUpdateStatus = async (orderId: string, status: Order["status"]) => {
@@ -916,8 +929,76 @@ export function PosApplicationPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs font-bold">
-                      Direct ePOS XML
+                      {config.printMode === "epos" ? "ePOS Réseau Direct" : "Pilote Système / Chrome"}
                     </span>
+                  </div>
+                </div>
+
+                {/* Choix de la Route d'Impression */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-[#ff705f] text-white font-black text-xs px-2.5 py-0.5 rounded-md">
+                      ROUTE D'IMPRESSION
+                    </span>
+                    <h3 className="text-base font-black text-white">Sélection du mode d'impression</h3>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = { ...config, printMode: "browser" as const };
+                        setConfig(updated);
+                        savePrinterConfig(updated);
+                      }}
+                      className={`p-4 rounded-xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
+                        config.printMode !== "epos"
+                          ? "border-emerald-500 bg-emerald-500/15 text-white shadow-lg"
+                          : "border-white/10 bg-white/5 text-[#8ea39b] hover:border-white/20"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-black text-sm text-white">🖨️ Système / Chrome</span>
+                          {config.printMode !== "epos" && (
+                            <span className="bg-emerald-500 text-black font-black text-[10px] px-2 py-0.5 rounded-full">
+                              ACTIF (RECOMMANDÉ)
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-[#8ea39b] leading-relaxed">
+                          Boîte d'impression native Chrome / Epson. 100% fiable, fonctionne instantanément sans autorisation SSL ni blocage réseau.
+                        </p>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = { ...config, printMode: "epos" as const };
+                        setConfig(updated);
+                        savePrinterConfig(updated);
+                      }}
+                      className={`p-4 rounded-xl border-2 text-left transition flex flex-col justify-between cursor-pointer ${
+                        config.printMode === "epos"
+                          ? "border-emerald-500 bg-emerald-500/15 text-white shadow-lg"
+                          : "border-white/10 bg-white/5 text-[#8ea39b] hover:border-white/20"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-black text-sm text-white">⚡ Réseau ePOS Direct (IP)</span>
+                          {config.printMode === "epos" && (
+                            <span className="bg-emerald-500 text-black font-black text-[10px] px-2 py-0.5 rounded-full">
+                              ACTIF
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-[#8ea39b] leading-relaxed">
+                          Envoi silencieux direct à l'IP locale ({config.printerIp}:8043). Nécessite l'autorisation de sécurité locale Chrome.
+                        </p>
+                      </div>
+                    </button>
                   </div>
                 </div>
 
@@ -1263,19 +1344,30 @@ export function PosApplicationPage() {
               )}
 
               {/* Action Impression Unique & Directe */}
-              <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl">
+              <div className="sticky bottom-0 z-10 bg-[#142822]/95 backdrop-blur-md pt-3 -mx-6 px-6 -mb-6 pb-5 border-t border-white/10 rounded-b-3xl shadow-2xl space-y-2">
                 <button
+                  type="button"
                   onClick={() => handleManualReprint(selectedOrder.id)}
                   disabled={printingOrderId === selectedOrder.id}
-                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-4 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
+                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg shadow-[#ff705f]/20 active:scale-95 cursor-pointer"
                   title="Lancer l'impression directe du ticket thermique 80mm sur l'Epson TM-m30II"
                 >
                   <Printer className={`w-5 h-5 ${printingOrderId === selectedOrder.id ? "animate-spin" : ""}`} />
                   <span>
                     {printingOrderId === selectedOrder.id
-                      ? "Impression sur l'Epson..."
+                      ? "Impression en cours..."
                       : "🖨️ Imprimer Ticket Caisse (80mm)"}
                   </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => printBrowserTicket(selectedOrder)}
+                  className="w-full rounded-xl bg-white/10 hover:bg-white/20 text-[#8ea39b] hover:text-white py-2 px-3 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                  title="Ouvrir immédiatement la boîte d'impression du système/Chrome (secours instantané 1-clic)"
+                >
+                  <Printer className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>⚡ Secours direct : Imprimer via Chrome / Système</span>
                 </button>
               </div>
             </div>

@@ -22,7 +22,7 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,
-  printMode: "epos",
+  printMode: "browser", // DÉFAUT TRÈS FIABLE SUR TOUS LES APPAREILS (ZÉRO CERTIFICAT REQUIS)
 };
 
 export function loadPrinterConfig(): PrinterConfig {
@@ -39,11 +39,8 @@ export function loadPrinterConfig(): PrinterConfig {
         ...DEFAULT_PRINTER_CONFIG,
         ...parsed,
         printerPort: safePort,
-        printMode: "epos",
+        printMode: parsed.printMode === "epos" ? "epos" : "browser",
       };
-      if (parsed.printerPort === 9100 || !parsed.printerPort) {
-        localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
-      }
       return cleanConfig;
     }
   } catch {}
@@ -55,7 +52,11 @@ export function savePrinterConfig(config: PrinterConfig): void {
   const safePort = (config.printerPort && [8043, 80, 8008, 443].includes(Number(config.printerPort)))
     ? Number(config.printerPort)
     : 8043;
-  const cleanConfig: PrinterConfig = { ...config, printerPort: safePort, printMode: "epos" };
+  const cleanConfig: PrinterConfig = {
+    ...config,
+    printerPort: safePort,
+    printMode: config.printMode === "epos" ? "epos" : "browser",
+  };
   localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
 }
 
@@ -150,42 +151,42 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
 
-  // En-tête restaurant avec repère halal monochrome adapté à l'impression thermique
-  xml += `  <text align="center" em="true" font="font_b">POKE N BOWL VISE&#10;</text>\n`;
-  xml += `  <text align="center" font="font_b">Rue Haute 38, 4600 Vise&#10;</text>\n`;
-  xml += `  <text align="center" font="font_b">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
+  // En-tête restaurant avec repère clair adapté à l'impression thermique 80mm
+  xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
+  xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
+  xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
 
   // Bannière Type
-  xml += `  <text align="center" em="true" font="font_a">${isDelivery ? "LIVRAISON" : "A EMPORTER"} &#10;</text>\n`;
-  xml += `  <text align="center" font="font_b">Date / heure : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
-  xml += `  <text font="font_b">&#10;</text>\n`;
+  xml += `  <text align="center" em="true" dw="true" dh="true">${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}&#10;</text>\n`;
+  xml += `  <text align="center">Date / heure : ${escapeXml(safeRequestedTime)}&#10;</text>\n`;
+  xml += `  <text>&#10;</text>\n`;
 
   // Détails commande & client
-  xml += `  <text align="center" em="true" font="font_a"># ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
-  xml += `  <text align="left" font="font_b">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
-  xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-  xml += `  <text font="font_b" align="left" em="true">CLIENT :&#10;</text>\n`;
-  xml += `  <text font="font_b" align="left">Nom  : ${escapeXml(safeCustomerName)}&#10;</text>\n`;
-  xml += `  <text font="font_b" align="left">Tel  : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
+  xml += `  <text align="center" em="true"># ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
+  xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
+  xml += `  <text align="left">Nom  : ${escapeXml(safeCustomerName)}&#10;</text>\n`;
+  xml += `  <text align="left">Tel  : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
 
   if (isDelivery) {
-    xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text font="font_b" align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
-    xml += `  <text font="font_b" align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
+    xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+    xml += `  <text align="left" em="true">ADRESSE LIVRAISON :&#10;</text>\n`;
+    xml += `  <text align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
     if (safeCity) {
-      xml += `  <text font="font_b" align="left">${escapeXml(safeCity)}&#10;</text>\n`;
+      xml += `  <text align="left">${escapeXml(safeCity)}&#10;</text>\n`;
     }
   }
 
   if (safeNotes) {
-    xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text font="font_b" align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
-    xml += `  <text font="font_b" align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
+    xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+    xml += `  <text align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
+    xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
   }
 
   // Articles
-  xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-  xml += `  <text font="font_b" align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
 
   // Regrouper les articles strictement identiques pour ne pas répéter leurs détails.
   const groupedItems = new Map<string, { item: typeof order.items[number]; quantity: number }>();
@@ -203,45 +204,45 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
     const spaces = Math.max(1, 42 - header.length - itemTotal.length);
     const line = header + " ".repeat(spaces) + itemTotal;
 
-    xml += `  <text font="font_b" align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
+    xml += `  <text align="left" em="true">${escapeXml(line)}&#10;</text>\n`;
 
     // Les ingrédients et suppléments ne sont détaillés qu'une seule fois par plat.
     for (const top of item.toppings || []) {
       const safeTop = cleanThermalText(top);
       if (safeTop.toLowerCase().startsWith("sans :") || safeTop.toLowerCase().includes("allerg")) {
-        xml += `  <text font="font_b" align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
+        xml += `  <text align="left" em="true">  ! ${escapeXml(safeTop)} &#10;</text>\n`;
       } else if (/^feta$/i.test(safeTop.trim())) {
         const label = "  + Feta";
         const price = "1.00 EUR";
-        xml += `  <text font="font_b" align="left">${escapeXml(label)}${" ".repeat(Math.max(1, 42 - label.length - price.length))}${price}&#10;</text>\n`;
+        xml += `  <text align="left">${escapeXml(label)}${" ".repeat(Math.max(1, 42 - label.length - price.length))}${price}&#10;</text>\n`;
       } else {
-        xml += `  <text font="font_b" align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
+        xml += `  <text align="left">  + ${escapeXml(safeTop)}&#10;</text>\n`;
       }
     }
-    xml += `  <text font="font_b">&#10;</text>\n`;
+    xml += `  <text>&#10;</text>\n`;
   }
 
-  xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
 
   if (isDelivery && order.customer.deliveryFee && order.customer.deliveryFee > 0) {
     const feeStr = order.customer.deliveryFee.toFixed(2) + " EUR";
     const feeLine = "Frais de livraison";
     const spaces = Math.max(1, 42 - feeLine.length - feeStr.length);
     const line = feeLine + " ".repeat(spaces) + feeStr;
-    xml += `  <text font="font_b" align="left">${escapeXml(line)}&#10;</text>\n`;
+    xml += `  <text align="left">${escapeXml(line)}&#10;</text>\n`;
   }
 
   // Total
-  xml += `  <text align="left" em="true" font="font_a">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
-  xml += `  <text font="font_b">&#10;</text>\n`;
+  xml += `  <text align="left" em="true" dw="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
+  xml += `  <text>&#10;</text>\n`;
 
   // Statut Paiement
   const isPaid = order.status === "paid";
   const payLabel = isPaid
     ? "[ PAIEMENT VALIDE EN LIGNE ]"
     : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
-  xml += `  <text font="font_b" align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
-  xml += `  <text font="font_b">&#10;</text>\n`;
+  xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
+  xml += `  <text>&#10;</text>\n`;
 
   // Le QR de géolocalisation est strictement réservé aux commandes en livraison.
   // Aucun QR code n'est imprimé sur un ticket de retrait.
@@ -249,17 +250,17 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
     const trackToken = order.deliveryToken || order.id;
     const cleanOrigin = origin.replace(/\/$/, "");
     const qrUrl = `${cleanOrigin}/track/${encodeURIComponent(trackToken)}`;
-    xml += `  <text font="font_b" align="left">------------------------------------------&#10;</text>\n`;
-    xml += `  <text font="font_b" align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
-    xml += `  <text font="font_b" align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
+    xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+    xml += `  <text align="center" em="true">SCANNEZ POUR GPS LIVREUR&#10;</text>\n`;
+    xml += `  <text align="center">Waze &amp; Google Maps en 1-clic&#10;&#10;</text>\n`;
     xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
-    xml += `  <text font="font_b">&#10;</text>\n`;
+    xml += `  <text>&#10;</text>\n`;
   }
 
   // Pied de page
-  xml += `  <text font="font_b" align="center">------------------------------------------&#10;</text>\n`;
-  xml += `  <text font="font_b" align="center">Merci pour votre commande !&#10;</text>\n`;
-  xml += `  <text font="font_b" align="center">www.pokenbowl.be&#10;</text>\n`;
+  xml += `  <text align="center">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="center">Merci pour votre commande !&#10;</text>\n`;
+  xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
   xml += `  <feed line="4" />\n`;
   xml += `  <cut type="feed" />\n`;
   xml += `</epos-print>`;
@@ -375,19 +376,15 @@ export async function sendReceiptToPrinter(
   // si la connexion échoue avant toute réponse. Dès qu'un serveur répond ou qu'un
   // délai expire, arrêter : une seconde requête pourrait imprimer un doublon.
   const targets = Array.from(new Set([
-    `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-    `http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+    `https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000`,
+    `http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000`,
   ]));
 
   let lastErr = "";
   for (const url of targets) {
     try {
       console.log(`[ePOS] Envoi requête vers ${url}...`);
-      const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 4000);
+      const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 2000);
       console.log(`[ePOS] Réponse reçue de ${url} (status ${status}):`, resText);
 
       // Toute réponse HTTP signifie qu'un endpoint a été atteint : ne pas envoyer
@@ -408,12 +405,9 @@ export async function sendReceiptToPrinter(
       }
       break;
     } catch (e: any) {
-      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : (e?.message ?? String(e));
+      lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (2s)" : (e?.message ?? String(e));
       console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
-      // Un timeout est ambigu : l'imprimante peut avoir reçu le ticket.
-      // Ne jamais réessayer après un timeout pour éviter les doublons.
       if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
-      // Erreur de connexion/certificat avant réponse : essayer l'endpoint suivant.
     }
   }
 
