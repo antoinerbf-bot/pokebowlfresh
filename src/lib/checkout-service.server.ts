@@ -7,11 +7,6 @@ import {
 } from "../lib/orders";
 
 import {
-  isBancontactProConfigured,
-  createBancontactProPayment,
-  getBancontactProPayment,
-} from "../lib/bancontact-pro.server";
-import {
   isMollieConfigured,
   createMolliePayment,
   getMolliePayment,
@@ -347,63 +342,30 @@ export async function processCheckout(data: z.infer<typeof checkoutSchema>) {
       };
     }
 
-    if (isMollieConfigured() && !isBancontactProConfigured()) {
-      const webhookUrl = `${data.origin}/api/mollie-webhook`;
-      const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
+    const webhookUrl = `${data.origin}/api/mollie-webhook`;
+    const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=mollie`;
 
-      const payment = await createMolliePayment({
-        amountValue: total.toFixed(2),
-        description: `Poke N Bowl ${orderId}`,
-        redirectUrl,
-        webhookUrl,
-        metadata: { orderId: order.id },
-      });
-
-      order.molliePaymentId = payment.id;
-      await upsertOrder(order);
-
-      const payUrl = payment._links?.checkout?.href;
-      if (!payUrl) {
-        throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
-      }
-
-      return {
-        type: "online" as const,
-        orderId: order.id,
-        total: order.total,
-        molliePaymentId: payment.id,
-        redirectUrl: payUrl,
-      };
-    }
-
-    const webhookUrl = `${data.origin}/api/bancontact-webhook`;
-    const redirectUrl = `${data.origin}/order/success?orderId=${encodeURIComponent(order.id)}&method=bancontact`;
-
-    const payment = await createBancontactProPayment({
-      amountEur: total,
+    const payment = await createMolliePayment({
+      amountValue: total.toFixed(2),
       description: `Poke N Bowl ${orderId}`,
-      reference: order.id,
-      returnUrl: redirectUrl,
-      callbackUrl: webhookUrl,
+      redirectUrl,
+      webhookUrl,
+      metadata: { orderId: order.id },
     });
 
-    order.molliePaymentId = `bancontact:${payment.paymentId}`;
+    order.molliePaymentId = payment.id;
     await upsertOrder(order);
 
-    const payUrl =
-      payment._links?.checkout?.href ||
-      payment._links?.deeplink?.href ||
-      payment._links?.qrcode?.href;
-
+    const payUrl = payment._links?.checkout?.href;
     if (!payUrl) {
-      throw new Error("Bancontact Pro n'a pas renvoyé d'URL de paiement");
+      throw new Error("Mollie n'a pas renvoyé d'URL de paiement.");
     }
 
     return {
       type: "online" as const,
       orderId: order.id,
       total: order.total,
-      molliePaymentId: payment.paymentId,
+      molliePaymentId: payment.id,
       redirectUrl: payUrl,
     };
     } catch (error) {

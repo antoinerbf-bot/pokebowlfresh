@@ -106,7 +106,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-hRWHz4KR.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-wS4lxI57.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -132,7 +132,7 @@ var manifest = {
 	},
 	"243c2b184d864a499b1d71c0c6b5eb7e9bd0b88cb2359335c4d165aeafd87962": {
 		functionName: "submitCheckout_createServerFn_handler",
-		importer: () => import("./checkout-DOI1eBSq.mjs")
+		importer: () => import("./checkout-CrWR0k9r.mjs")
 	},
 	"344ae2a8ed96db3241e90e9ee3089ec0df73f7602450a7faf6a43771144a5705": {
 		functionName: "setStockItem_createServerFn_handler",
@@ -156,7 +156,7 @@ var manifest = {
 	},
 	"92944dec917326ce81275bbe893d3642fead0ec3cc3aa98995106b3743ad6174": {
 		functionName: "getOrderStatus_createServerFn_handler",
-		importer: () => import("./checkout-DOI1eBSq.mjs")
+		importer: () => import("./checkout-CrWR0k9r.mjs")
 	},
 	"a3e5772b7bda801cc22b7f7df7f8f1e4e6dfbbed57f002933f5dce0db2f42f5a": {
 		functionName: "createTestDeliveryOrder_createServerFn_handler",
@@ -1559,7 +1559,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-BQpUrwdE.mjs"),
+		import("./router-DP6RcwNu.mjs"),
 		import("./start-CjndPHrO.mjs"),
 		import("./empty-plugin-adapters-D9UWiqvJ.mjs")
 	]);

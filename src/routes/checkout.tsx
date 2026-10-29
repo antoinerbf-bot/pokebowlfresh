@@ -397,7 +397,7 @@ function CheckoutPage() {
                   </div>
                   <span className="text-sm font-black">Bancontact & En ligne</span>
                   <span className="text-xs text-[#7A6857]">
-                    Bancontact Pro, Payconiq (QR code) ou Carte bancaire
+                    Bancontact, Payconiq, Carte bancaire ou Apple Pay
                   </span>
                 </button>
                 <button

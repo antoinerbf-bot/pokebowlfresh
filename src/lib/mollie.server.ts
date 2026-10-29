@@ -4,41 +4,26 @@
  */
 
 const MOLLIE_API = "https://api.mollie.com/v2";
+const LIVE_MOLLIE_API_KEY = "live_bz3dfcT6kH5aMkMyQrMwW4EfVfnFGs";
 
 import { loadAndGetEnv } from "./env.server";
 
-export function getMollieApiKey(): string | undefined {
+export function getMollieApiKey(): string {
   const env = loadAndGetEnv();
   const direct = env.MOLLIE_API_KEY || env.MOLLIE_KEY;
-  if (direct) return direct.trim();
-
-  const candidates = [
-    env.BANCONTACT_PRO_API_KEY,
-    env.PAYCONIQ_API_KEY,
-    env.BANCONTACT_API_KEY,
-    env.API_KEY,
-  ];
-  for (const c of candidates) {
-    if (c && (c.startsWith("live_") || c.startsWith("test_"))) {
-      return c.trim();
-    }
+  if (direct && (direct.trim().startsWith("live_") || direct.trim().startsWith("test_"))) {
+    return direct.trim();
   }
 
-  return undefined;
+  return LIVE_MOLLIE_API_KEY;
 }
 
 export function isMollieConfigured(): boolean {
-  return Boolean(getMollieApiKey());
+  return true;
 }
 
 function getApiKey(): string {
-  const key = getMollieApiKey();
-  if (!key) {
-    throw new Error(
-      "MOLLIE_API_KEY manquante. Renseigne la variable MOLLIE_API_KEY sur cPanel ou dans le fichier .env.",
-    );
-  }
-  return key;
+  return getMollieApiKey();
 }
 
 export type MolliePayment = {
