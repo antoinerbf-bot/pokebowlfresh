@@ -1,6 +1,6 @@
 import React from "react";
 import { Heart, MessageCircle, Instagram, ExternalLink, Sparkles } from "lucide-react";
-import bowlSaumon from "@/assets/hero-saumon-clean-wide.jpg";
+import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
 import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";

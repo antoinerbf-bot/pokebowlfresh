@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
-import bowlSaumon from "@/assets/hero-saumon-clean-wide.jpg";
+import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";
 import bowlSweet from "@/assets/bowl-sweet-chicken.jpg";
 import tiramisuImg from "@/assets/tiramisu-speculoos.jpg";
