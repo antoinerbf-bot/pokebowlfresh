@@ -1,1 +1,0 @@
-var e=`/assets/tiramisu-nutella-pyhQjNRy.jpg`;export{e as t};
