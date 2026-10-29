@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { L as CircleQuestionMark, U as ChevronDown } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/FaqNutritionSection-CgtPY2ns.js
+//#region node_modules/.nitro/vite/services/ssr/assets/FaqNutritionSection-BOFtjS_G.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FAQ_ITEMS = [
@@ -12,7 +12,7 @@ var FAQ_ITEMS = [
 	},
 	{
 		q: "Proposez-vous des options végétariennes ou adaptées aux intolérances ?",
-		a: "Oui, totalement ! Dans notre menu ainsi que dans notre atelier 'Sur-Mesure', vous pouvez composer un bowl 100% végétarien ou sans gluten en choisissant parmi nos bases de riz sushi, nos légumes croquants (avocat, edamame, mangue, concombre, carottes) et nos sauces soja naturellement sans lactose."
+		a: "Oui, totalement ! Dans notre menu ainsi que dans notre section 'Composer son bowl', vous pouvez composer un bowl 100% végétarien ou sans gluten en choisissant parmi nos bases de riz sushi, nos légumes croquants (avocat, edamame, mangue, concombre, carottes) et nos sauces soja naturellement sans lactose."
 	},
 	{
 		q: "Qu'est-ce qui différencie votre riz à sushi du riz ordinaire ?",

@@ -11,7 +11,7 @@ import { t as CartDrawer } from "./CartDrawer-DrE66jaG.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/bowl-saumon-C9L8Fc-p.js
 var bowl_saumon_default = "/assets/bowl-saumon-BdxM-yfD.jpg";
 //#endregion
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-7QMhAVI2.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-oKSwSXF3.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -261,7 +261,7 @@ function SurMesurePage() {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "inline-flex items-center gap-2 rounded-full bg-[#EADCC9]/15 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#EADCC9] border border-[#EADCC9]/25",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5 text-[#ff705f]" }), " Atelier Poké Sur-Mesure"]
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5 text-[#ff705f]" }), " Composer son bowl"]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
 										className: "mt-3 text-3xl font-black tracking-tight sm:text-5xl",

@@ -10,9 +10,9 @@ import { A as Heart, D as MapPin, E as Menu, G as Check, H as ChevronLeft, I as 
 import { a as bowl_sweet_chicken_default, c as drink_eau_gazeuse_default, d as drink_ice_tea_default, f as hero_saumon_clean_wide_default, i as bowl_scampis_default, l as drink_eau_plate_default, m as tiramisu_speculoos_default, n as DishImage, o as drink_coca_cola_default, p as tiramisu_oreo_default, r as bowl_crousty_curry_default, s as drink_coca_zero_default, t as CartDrawer, u as drink_fanta_orange_default } from "./CartDrawer-DrE66jaG.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-Chu9Vaby.mjs";
 import { t as tiramisu_nutella_default } from "./tiramisu-nutella-Ckv_PV9y.mjs";
-import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
+import { n as FaqNutritionSection } from "./FaqNutritionSection-BOFtjS_G.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-ZNxaVEO2.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DGJ87g1r.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [{
@@ -728,7 +728,7 @@ function PokawaMegaMenu({ isOpen, onClose }) {
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "inline-flex items-center gap-1.5 rounded-full bg-[#EADCC9] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16]",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3] text-[#ff705f]" }), "Atelier Sur-Mesure · Dès 10 €"]
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3] text-[#ff705f]" }), "Composer son bowl · Dès 10 €"]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
 												className: "mt-3 text-2xl sm:text-3xl font-black leading-tight text-white",
@@ -1739,7 +1739,7 @@ function InteractiveBowlBuilder() {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-md",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Atelier Poké Ludique · 100% Sur-Mesure" })]
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChefHat, { className: "h-3.5 w-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Composer son bowl · 100% Sur-Mesure" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 								className: "mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]",
@@ -3707,7 +3707,7 @@ function MobileAppStickyBar() {
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 				href: "#composer",
 				className: "flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] border border-white/15 active:scale-95 transition shrink-0",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sur-mesure" })]
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "h-3 w-3 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Composer" })]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				type: "button",
 				onClick: handleAction,
@@ -3753,7 +3753,7 @@ var CATEGORIES = [
 	},
 	{
 		id: "composer",
-		title: "Atelier Sur-Mesure",
+		title: "Composer son bowl",
 		badge: "Création Libre",
 		badgeColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
 		image: bowl_sweet_chicken_default,
@@ -4328,7 +4328,7 @@ function Index() {
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
 										to: "/sur-mesure",
 										className: "hover:text-white transition",
-										children: "Atelier Sur-Mesure"
+										children: "Composer son bowl"
 									}) }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 										href: "#carte",
