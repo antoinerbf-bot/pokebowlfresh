@@ -39,7 +39,7 @@ const CATEGORIES: CategoryCard[] = [
   },
   {
     id: "composer",
-    title: "Atelier Sur-Mesure",
+    title: "Composer son bowl",
     badge: "Création Libre",
     badgeColor: "bg-[#EADCC9] text-[#2C1D16] border border-[#D9C5AD]",
     image: bowlSweet,

@@ -441,7 +441,7 @@ function Index() {
                   <a href="#carte" className="hover:text-white transition">Gamme Chaude Crousty (11 €)</a>
                 </li>
                 <li>
-                  <Link to="/sur-mesure" className="hover:text-white transition">Atelier Sur-Mesure</Link>
+                  <Link to="/sur-mesure" className="hover:text-white transition">Composer son bowl</Link>
                 </li>
                 <li>
                   <a href="#carte" className="hover:text-white transition">Tiramisus Maison Spéculoos</a>

@@ -13,7 +13,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "Proposez-vous des options végétariennes ou adaptées aux intolérances ?",
-    a: "Oui, totalement ! Dans notre menu ainsi que dans notre atelier 'Sur-Mesure', vous pouvez composer un bowl 100% végétarien ou sans gluten en choisissant parmi nos bases de riz sushi, nos légumes croquants (avocat, edamame, mangue, concombre, carottes) et nos sauces soja naturellement sans lactose.",
+    a: "Oui, totalement ! Dans notre menu ainsi que dans notre section 'Composer son bowl', vous pouvez composer un bowl 100% végétarien ou sans gluten en choisissant parmi nos bases de riz sushi, nos légumes croquants (avocat, edamame, mangue, concombre, carottes) et nos sauces soja naturellement sans lactose.",
   },
   {
     q: "Qu'est-ce qui différencie votre riz à sushi du riz ordinaire ?",

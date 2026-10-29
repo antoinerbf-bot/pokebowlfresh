@@ -48,13 +48,13 @@ export function MobileAppStickyBar() {
         >
           <div className="rounded-[26px] bg-[#2C1D16]/95 backdrop-blur-xl border border-white/20 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] flex items-center justify-between gap-2.5 text-white">
             
-            {/* Raccourci rapide Atelier Sur-Mesure */}
+            {/* Raccourci rapide Composer son bowl */}
             <a
               href="#composer"
               className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] border border-white/15 active:scale-95 transition shrink-0"
             >
               <Sparkles className="h-3 w-3 stroke-[3]" />
-              <span>Sur-mesure</span>
+              <span>Composer</span>
             </a>
 
             {/* Bouton Panier interactif type Application Mobile */}

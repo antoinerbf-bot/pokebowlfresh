@@ -458,7 +458,7 @@ export function PokawaMegaMenu({
                       <div>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EADCC9] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16]">
                           <Sparkles className="h-3 w-3 stroke-[3] text-[#ff705f]" />
-                          Atelier Sur-Mesure · Dès 10 €
+                          Composer son bowl · Dès 10 €
                         </span>
                         <h4 className="mt-3 text-2xl sm:text-3xl font-black leading-tight text-white">
                           Ton poké, <span className="text-[#ff705f]">tes envies.</span>

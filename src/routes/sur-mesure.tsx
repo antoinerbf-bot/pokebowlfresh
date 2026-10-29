@@ -325,7 +325,7 @@ function SurMesurePage() {
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9]/15 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#EADCC9] border border-[#EADCC9]/25">
-                <ChefHat className="h-3.5 w-3.5 text-[#ff705f]" /> Atelier Poké Sur-Mesure
+                <ChefHat className="h-3.5 w-3.5 text-[#ff705f]" /> Composer son bowl
               </div>
               <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
                 Ton poké, <span className="text-[#ff705f]">tes envies.</span>

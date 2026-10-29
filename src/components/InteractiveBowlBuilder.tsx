@@ -274,7 +274,7 @@ export function InteractiveBowlBuilder() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-md">
               <ChefHat className="h-3.5 w-3.5 text-[#ff705f]" />
-              <span>Atelier Poké Ludique · 100% Sur-Mesure</span>
+              <span>Composer son bowl · 100% Sur-Mesure</span>
             </div>
             <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
               Ton poké, <span className="text-[#ff705f]">tes envies.</span>
