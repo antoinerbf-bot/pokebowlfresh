@@ -143,7 +143,7 @@ export function FluidInteractiveMenu() {
       coca: "Canette 33cl servie glacée",
       "coca-zero": "Canette 33cl zéro sucre ultra-fraîche",
       fanta: "Canette 33cl pétillante à l'orange",
-      "ice-tea": "Canette Lipton Ice Tea Original Sparkling 33cl fraîche",
+      "ice-tea": "Canette 33cl Lipton Ice Tea Sparkling bleue bien fraîche",
       "eau-plate": "Bouteille plastique SPA Reine 50cl plate",
       "eau-gaz": "Bouteille plastique SPA Intense 50cl pétillante",
     };

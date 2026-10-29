@@ -154,9 +154,9 @@ export function PokawaMegaMenu({
     },
     {
       id: "ice-tea",
-      name: "Lipton Ice Tea Original Sparkling 33cl",
+      name: "Ice Tea Sparkling (33 cl)",
       price: 2.0,
-      desc: "Lipton Ice Tea Original pétillant.",
+      desc: "Canette 33 cl rafraîchissante et pétillante.",
       image: drinkIceTea,
     },
     {
