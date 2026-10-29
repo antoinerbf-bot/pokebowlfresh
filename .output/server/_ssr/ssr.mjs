@@ -106,7 +106,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-CndvhvoI.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-IpVUmeIW.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -128,19 +128,19 @@ async function getStartManifest(matchedRoutes) {
 var manifest = {
 	"08e215f76fa376cf622d49bb0ca6d08af7f1b223e32441b26140e9e3d2fb64bf": {
 		functionName: "resetStock_createServerFn_handler",
-		importer: () => import("./stock-CSUb3yP9.mjs")
+		importer: () => import("./stock-De9Cytuz.mjs")
 	},
 	"243c2b184d864a499b1d71c0c6b5eb7e9bd0b88cb2359335c4d165aeafd87962": {
 		functionName: "submitCheckout_createServerFn_handler",
-		importer: () => import("./checkout-DYTJU6UW.mjs")
+		importer: () => import("./checkout-DOI1eBSq.mjs")
 	},
 	"344ae2a8ed96db3241e90e9ee3089ec0df73f7602450a7faf6a43771144a5705": {
 		functionName: "setStockItem_createServerFn_handler",
-		importer: () => import("./stock-CSUb3yP9.mjs")
+		importer: () => import("./stock-De9Cytuz.mjs")
 	},
 	"511defe839a5e1102b8bb0c4bc905f516f731e66b5893bf673574b68a2cc798f": {
 		functionName: "getStock_createServerFn_handler",
-		importer: () => import("./stock-CSUb3yP9.mjs")
+		importer: () => import("./stock-De9Cytuz.mjs")
 	},
 	"6515ae2b4b334ce5935aaa2290fe5a760aa9de9e4dbd2160f973f92e3ad32045": {
 		functionName: "triggerReprint_createServerFn_handler",
@@ -156,7 +156,7 @@ var manifest = {
 	},
 	"92944dec917326ce81275bbe893d3642fead0ec3cc3aa98995106b3743ad6174": {
 		functionName: "getOrderStatus_createServerFn_handler",
-		importer: () => import("./checkout-DYTJU6UW.mjs")
+		importer: () => import("./checkout-DOI1eBSq.mjs")
 	},
 	"a3e5772b7bda801cc22b7f7df7f8f1e4e6dfbbed57f002933f5dce0db2f42f5a": {
 		functionName: "createTestDeliveryOrder_createServerFn_handler",
@@ -168,7 +168,7 @@ var manifest = {
 	},
 	"b4ead3c5e8903f8b050b785eff4eb4b25d6e000d9c585032e252d84164ec0bd5": {
 		functionName: "setManyStock_createServerFn_handler",
-		importer: () => import("./stock-CSUb3yP9.mjs")
+		importer: () => import("./stock-De9Cytuz.mjs")
 	},
 	"c9404c0b075a83418748a0c227e03f7d1395bb14f3a6f06bf310f5ce8548a74b": {
 		functionName: "ackPosPrint_createServerFn_handler",
@@ -1559,7 +1559,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-BMTcgZE9.mjs"),
+		import("./router-D_gngcng.mjs"),
 		import("./start-CjndPHrO.mjs"),
 		import("./empty-plugin-adapters-D9UWiqvJ.mjs")
 	]);
