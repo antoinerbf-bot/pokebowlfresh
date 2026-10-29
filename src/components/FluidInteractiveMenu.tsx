@@ -567,13 +567,13 @@ function DishCard({
             <DishImage
               dishId={item.dishId}
               alt={item.name}
-              className="h-full w-full object-cover transition duration-700 group-hover:scale-108"
+              className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-108"
             />
           ) : item.image ? (
             <img
               src={item.image}
               alt={item.name}
-              className={`h-full w-full object-cover transition duration-700 group-hover:scale-108 ${
+              className={`h-full w-full object-cover object-center transition duration-700 group-hover:scale-108 ${
                 item.soldOut ? "grayscale contrast-75" : ""
               }`}
             />

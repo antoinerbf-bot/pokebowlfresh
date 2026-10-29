@@ -45,7 +45,7 @@ export function DishImage({
     <img
       src={src}
       alt={alt}
-      className={`h-full w-full object-cover ${className}`}
+      className={`h-full w-full object-cover object-center ${className}`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       fetchPriority={priority ? "high" : "auto"}

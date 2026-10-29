@@ -217,7 +217,7 @@ export function PokawaHeroExact() {
             initial={{ scale: 1.12, x: "1.5%" }}
             animate={{ scale: 1.0, x: "0%" }}
             transition={{ duration: AUTOPLAY_MS / 1000 + 1.2, ease: "linear" }}
-            style={{ objectPosition: slide.focus ?? "62% 55%" }}
+            style={{ objectPosition: slide.focus ?? "center center" }}
             className="h-full w-full object-cover will-change-transform"
             loading={currentIdx === 0 ? "eager" : "lazy"}
             decoding="async"
