@@ -20,6 +20,7 @@ import { PokawaBrandValues } from "@/components/PokawaBrandValues";
 import { PokawaPerksBanner } from "@/components/PokawaPerksBanner";
 import { PokawaInstagramWall } from "@/components/PokawaInstagramWall";
 import { SocialProofBanner } from "@/components/SocialProofBanner";
+import { PokeBowlMarqueeCarousel } from "@/components/PokeBowlMarqueeCarousel";
 import { MobileAppStickyBar } from "@/components/MobileAppStickyBar";
 import { PokawaCategoriesCarousel } from "@/components/PokawaCategoriesCarousel";
 import { PokawaMagSection } from "@/components/PokawaMagSection";
@@ -196,6 +197,11 @@ function Index() {
 
         {/* ════════════════════ 3.5 PREUVE SOCIALE & RASSURANCE LOCALE VISÉ ════════════════════ */}
         <SocialProofBanner />
+
+        {/* ════════════════════ 3.8 DÉFILÉ INTERACTIF DES PLATS VEDETTES ════════════════════ */}
+        <section className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+          <PokeBowlMarqueeCarousel />
+        </section>
 
         {/* ════════════════════ 4. LA CARTE GOURMANDE INTERACTIVE & FLUIDE ════════════════════ */}
         <FluidInteractiveMenu />

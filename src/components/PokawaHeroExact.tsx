@@ -158,18 +158,20 @@ const AUTOPLAY_MS = 6000;
 
 export function PokawaHeroExact() {
   const [currentIdx, setCurrentIdx] = React.useState(0);
+  const [isPaused, setIsPaused] = React.useState(false);
   const [addedNotice, setAddedNotice] = React.useState(false);
   const { addItem, setIsCartOpen } = useCart();
 
   const slide = SLIDES[currentIdx];
 
-  // Auto-play fluide
+  // Auto-play fluide avec pause au survol
   React.useEffect(() => {
+    if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentIdx((prev) => (prev + 1) % SLIDES.length);
     }, AUTOPLAY_MS);
     return () => clearInterval(interval);
-  }, [currentIdx]);
+  }, [currentIdx, isPaused]);
 
   const handlePrev = () => {
     setCurrentIdx((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
@@ -199,6 +201,8 @@ export function PokawaHeroExact() {
   return (
     <section
       aria-label="Accueil Poké N Bowl Visé — Poké bowls frais & Crousty Chicken"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
       className="relative w-full h-auto min-h-[780px] sm:h-[96vh] sm:min-h-[680px] max-h-none sm:max-h-[1050px] overflow-hidden bg-[#0a1713] select-none"
     >
       {/* ════════ PHOTO PLEIN ÉCRAN AVEC ZOOM CINÉMATIQUE LENT (EFFET VIDÉO) ════════ */}
@@ -309,24 +313,46 @@ export function PokawaHeroExact() {
         </div>
       </div>
 
-      {/* ════════ DOTS PAGINATION AU CENTRE EN BAS ════════ */}
-      <div className="absolute bottom-4 sm:bottom-5 inset-x-0 z-30 flex items-center justify-center gap-2 pointer-events-auto">
-        {SLIDES.map((s, idx) => {
-          const isActive = idx === currentIdx;
-          return (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => setCurrentIdx(idx)}
-              aria-label={`Aller au plat ${s.dishName}`}
-              className={`transition-all duration-300 rounded-full ${
-                isActive
-                  ? "w-8 h-2.5 bg-[#EBDCCB] shadow-[0_0_12px_rgba(235,220,203,0.9)]"
-                  : "w-2.5 h-2.5 bg-white/40 hover:bg-[#EBDCCB]"
-              }`}
-            />
-          );
-        })}
+      {/* ════════ BARRE DE NAVIGATION DES PLATS EN DÉFILEMENT ════════ */}
+      <div className="absolute bottom-4 sm:bottom-6 inset-x-0 z-30 flex items-center justify-center px-3 pointer-events-auto">
+        <div className="flex items-center gap-1.5 sm:gap-2 rounded-full bg-black/65 backdrop-blur-xl p-1.5 border border-white/20 shadow-2xl max-w-full overflow-x-auto no-scrollbar">
+          {SLIDES.map((s, idx) => {
+            const isActive = idx === currentIdx;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setCurrentIdx(idx)}
+                aria-label={`Afficher le plat ${s.dishName}`}
+                className={`relative flex items-center gap-1.5 sm:gap-2 rounded-full px-2.5 sm:px-3.5 py-1.5 text-xs font-black transition-all duration-300 cursor-pointer overflow-hidden ${
+                  isActive
+                    ? "bg-[#EBDCCB] text-[#2C1D16] shadow-md scale-102"
+                    : "text-white/75 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {/* Barre de progression fluide sur le plat actif */}
+                {isActive && !isPaused && (
+                  <motion.div
+                    key={`prog-${idx}`}
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
+                    className="absolute inset-y-0 left-0 bg-[#ff705f]/25 pointer-events-none"
+                  />
+                )}
+                <span className="text-sm shrink-0">{s.ingredientCallout.emoji}</span>
+                <span className="hidden md:inline whitespace-nowrap text-[11px] font-black uppercase tracking-tight">
+                  {s.dishName}
+                </span>
+                {isActive && (
+                  <span className="md:hidden text-[10.5px] font-black uppercase tracking-tight">
+                    {s.dishName}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* ════════ FLÈCHES DISCRÈTES GAUCHE / DROITE ════════ */}
