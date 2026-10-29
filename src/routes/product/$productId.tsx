@@ -601,10 +601,10 @@ function ProductPage() {
                       <div className="flex items-center justify-between mb-2.5">
                         <div>
                           <span className="block text-xs font-black uppercase tracking-wider text-[#2C1D16]">
-                            💪 Suppléments Protéines (+2,50 € / portion)
+                            Suppléments Protéines (+2,50 € / portion)
                           </span>
                           <span className="text-[11px] font-semibold text-[#7A542E]">
-                            Ajoutez des portions supplémentaires de Poulet, Saumon ou Crevettes (+2,50 € par portion, cumulable)
+                            Poulet croustillant, Saumon frais ou Crevettes grillées
                           </span>
                         </div>
                         {totalExtraProteinUnits > 0 && (
@@ -711,10 +711,10 @@ function ProductPage() {
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <span className="block text-[11px] font-black uppercase tracking-wider text-[#2C1D16]">
-                            Suppléments Protéines (+2,50 € par portion)
+                            Suppléments Protéines (+2,50 € / portion)
                           </span>
                           <span className="text-[10px] font-semibold text-[#7A6857]">
-                            Ajoute autant de portions que tu veux (même 2x ou 3x la même protéine : 3x = +7,50 €)
+                            Poulet mariné, Saumon frais ou Scampis royaux
                           </span>
                         </div>
                         {totalExtraProteinUnits > 0 && (
@@ -997,7 +997,7 @@ function ProductPage() {
                         Suppléments Légumes & Fruits Frais (+1,00 € / portion)
                       </h2>
                       <p className="text-[11px] text-[#7A6857]">
-                        Ajoute autant de portions de légumes que tu veux (+1,00 € chacune, même plusieurs fois le même).
+                        Avocat, mangue, edamame, patates douces, grenade...
                       </p>
                     </div>
                     {totalMixinUnits > 0 && (
@@ -1065,10 +1065,10 @@ function ProductPage() {
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
-                        Toppings Croustillants
+                        Toppings Croustillants (+0,50 € / portion)
                       </h2>
                       <p className="text-[11px] text-[#7A6857]">
-                        À volonté · choisis autant de portions que tu veux (+0.50€ chaque)
+                        Oignons frits, sésame grillé, noix de cajou, nachos...
                       </p>
                     </div>
                     {totalToppingsCount > 0 && (

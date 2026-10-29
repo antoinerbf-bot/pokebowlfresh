@@ -489,10 +489,10 @@ function SurMesurePage() {
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <div>
                     <h3 className="text-sm font-black text-[#2C1D16]">
-                      💪 Ajouter des portions de protéines supplémentaires (+2,50 € / portion)
+                      Protéines supplémentaires (+2,50 € / portion)
                     </h3>
                     <p className="text-[11px] text-[#6E5A49] font-medium">
-                      Ajoute autant de portions que tu veux (+2,50 € à chaque fois, ex : 3× = +7,50 €).
+                      Poulet mariné, saumon frais ou scampis (+2,50 € / portion)
                     </p>
                   </div>
                   {totalExtraProteinUnits > 0 && (
@@ -828,7 +828,7 @@ function SurMesurePage() {
                 </span>
               </div>
               <p className="mb-4 text-xs font-semibold text-[#6E5A49]">
-                <strong>1 portion incluse dans la formule</strong> · Prenez autant de portions que vous souhaitez (+0,50 € chaque portion extra) :
+                <strong>1 portion incluse</strong> · Portions supplémentaires à +0,50 €
               </p>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {toppings.map((top) => {

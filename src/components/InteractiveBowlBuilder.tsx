@@ -538,10 +538,10 @@ export function InteractiveBowlBuilder() {
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                       <div>
                         <h4 className="text-sm font-black text-[#2C1D16] flex items-center gap-1.5">
-                          <span>💪</span> Ajouter des portions de protéines en plus (+2,50 € / portion)
+                          <span>Protéines supplémentaires (+2,50 € / portion)</span>
                         </h4>
                         <p className="text-[11px] text-[#6E5A49] font-medium">
-                          Ajoutez autant de portions que vous voulez : +2,50 € à chaque ajout (ex : 3× = +7,50 €).
+                          Poulet mariné, saumon frais ou scampis (+2,50 € / portion)
                         </p>
                       </div>
                       {totalExtraProteinUnits > 0 && (

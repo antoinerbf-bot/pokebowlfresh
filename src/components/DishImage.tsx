@@ -3,7 +3,7 @@ import React from "react";
 // Photos produits haute définition — chaque recette Crousty dispose de son visuel dédié.
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis      from "@/assets/bowl-scampis.jpg";
-import bowlSaumon       from "@/assets/bowl-saumon.jpg";
+import bowlSaumon       from "@/assets/hero-saumon-clean-wide.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 import bowlCroustyBlanche from "@/assets/bowl-crousty-blanche.jpg";

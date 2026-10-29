@@ -1,9 +1,9 @@
 import React from "react";
 import { Heart, MessageCircle, Instagram, ExternalLink, Sparkles } from "lucide-react";
-import bowlSaumon from "@/assets/bowl-saumon.jpg";
+import bowlSaumon from "@/assets/hero-saumon-clean-wide.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
-import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
+import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";
 
 interface InstaPost {
   id: string;
@@ -20,32 +20,32 @@ const INSTA_POSTS: InstaPost[] = [
     image: bowlSaumon,
     likes: 248,
     comments: 19,
-    caption: "Le Saumon Wasabi dans toute sa fraîcheur : avocat fondant, edamames croquants & sésame doré 🥑✨",
+    caption: "Le Saumon Wasabi dans toute sa fraîcheur : avocat fondant, edamames croquants & saumon découpé minute 🥑✨",
     tag: "#PokeBowlVisé",
   },
   {
     id: "post-2",
-    image: bowlSweetChicken,
-    likes: 312,
-    comments: 24,
-    caption: "Poulet mariné sweet & mangue fraîche du jour : le mix sucré-salé qui met tout le monde d'accord 🥭🍗",
-    tag: "#SweetChicken",
+    image: bowlCrousty,
+    likes: 384,
+    comments: 31,
+    caption: "Le croustillant ultime : poulet doré minute, sauce curry onctueuse & oignons frits sur riz chaud 🍗🍛",
+    tag: "#CroustyChicken",
   },
   {
     id: "post-3",
     image: bowlScampis,
     likes: 195,
     comments: 14,
-    caption: "Scampis Royaux sautés minute sur lit de riz à sushi vinaigré. Prêt en moins de 3 minutes pour votre pause déj 🦐",
+    caption: "Scampis Royaux sautés minute sur lit de riz vinaigré. Prêt en moins de 3 minutes pour votre pause déj 🦐",
     tag: "#FraisDuJour",
   },
   {
     id: "post-4",
-    image: bowlSpicyChicken,
-    likes: 276,
-    comments: 22,
-    caption: "Pour ceux qui aiment quand ça réveille les papilles : Spicy Chicken et sauce pimentée maison 🔥",
-    tag: "#SpicyVibes",
+    image: bowlSweetChicken,
+    likes: 312,
+    comments: 24,
+    caption: "Poulet mariné sweet & mangue fraîche du jour : le mix sucré-salé qui met tout le monde d'accord 🥭🍗",
+    tag: "#SweetChicken",
   },
 ];
 

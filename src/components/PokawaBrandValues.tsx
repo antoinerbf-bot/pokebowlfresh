@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { Sparkles, ShieldCheck, ArrowRight, Award } from "lucide-react";
 
-import bowlSaumon from "@/assets/bowl-saumon.jpg";
+import bowlSaumon from "@/assets/hero-saumon-clean-wide.jpg";
 import bowlSweet from "@/assets/bowl-sweet-chicken.jpg";
 import bowlCrousty from "@/assets/bowl-crousty-curry.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
