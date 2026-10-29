@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CvVHjsA8.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DmO4KofY.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1170,10 +1170,10 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
 	xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
 	xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
-	xml += `  <text align="center" em="true" dw="true" dh="true">${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}&#10;</text>\n`;
-	xml += `  <text align="center">Date / heure : ${escapeXml(safeRequestedTime)}&#10;</text>\n`;
+	xml += `  <text align="center" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
+	xml += `  <text align="center"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
-	xml += `  <text align="center" em="true"># ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
+	xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
 	xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
 	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
 	xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
@@ -1190,7 +1190,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 		xml += `  <text align="left" em="true"> ! REMARQUE / ALLERGIES ! &#10;</text>\n`;
 		xml += `  <text align="left">${escapeXml(safeNotes)}&#10;</text>\n`;
 	}
-	xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="left">==========================================&#10;</text>\n`;
 	xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
 	const groupedItems = /* @__PURE__ */ new Map();
 	for (const item of order.items) {
@@ -1228,7 +1228,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 		const line = feeLine + " ".repeat(spaces) + feeStr;
 		xml += `  <text align="left">${escapeXml(line)}&#10;</text>\n`;
 	}
-	xml += `  <text align="left" em="true" dw="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
+	xml += `  <text align="left" em="true" dw="true" dh="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
 	xml += `  <text>&#10;</text>\n`;
 	const payLabel = order.status === "paid" ? "[ PAIEMENT VALIDE EN LIGNE ]" : `[ A REGLER SUR PLACE : ${order.total.toFixed(2)} EUR ]`;
 	xml += `  <text align="center" em="true"> ${escapeXml(payLabel)} &#10;</text>\n`;
@@ -1242,7 +1242,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 		xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
 		xml += `  <text>&#10;</text>\n`;
 	}
-	xml += `  <text align="center">------------------------------------------&#10;</text>\n`;
+	xml += `  <text align="center">==========================================&#10;</text>\n`;
 	xml += `  <text align="center">Merci pour votre commande !&#10;</text>\n`;
 	xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
 	xml += `  <feed line="4" />\n`;
