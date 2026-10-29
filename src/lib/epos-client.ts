@@ -151,18 +151,18 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
 
   let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
 
-  // En-tête restaurant avec repère clair adapté à l'impression thermique 80mm
+  // En-tête restaurant avec repère clair adapté à l'impression thermique
   xml += `  <text align="center" em="true" dw="true" dh="true">POKE N BOWL VISE&#10;</text>\n`;
   xml += `  <text align="center">Rue Haute 38, 4600 Vise&#10;</text>\n`;
   xml += `  <text align="center">Tel: 0491 28 14 56&#10;&#10;</text>\n`;
 
   // Bannière Type
-  xml += `  <text align="center" em="true" dw="true" dh="true">${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"}&#10;</text>\n`;
-  xml += `  <text align="center">Date / heure : ${escapeXml(safeRequestedTime)}&#10;</text>\n`;
+  xml += `  <text align="center" em="true" dw="true" dh="true"> ${isDelivery ? "*** LIVRAISON ***" : "*** A EMPORTER ***"} &#10;</text>\n`;
+  xml += `  <text align="center"> HEURE : ${escapeXml(safeRequestedTime)} &#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
   // Détails commande & client
-  xml += `  <text align="center" em="true"># ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
+  xml += `  <text align="left" em="true" dw="true" dh="true">CMD : ${escapeXml(cleanThermalText(order.id))}&#10;</text>\n`;
   xml += `  <text align="left">Date : ${escapeXml(dateStr)} a ${escapeXml(timeStr)}&#10;</text>\n`;
   xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
   xml += `  <text align="left" em="true">CLIENT :&#10;</text>\n`;
@@ -185,7 +185,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   }
 
   // Articles
-  xml += `  <text align="left">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="left">==========================================&#10;</text>\n`;
   xml += `  <text align="left" em="true">ARTICLES COMMANDES :&#10;&#10;</text>\n`;
 
   // Regrouper les articles strictement identiques pour ne pas répéter leurs détails.
@@ -233,7 +233,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   }
 
   // Total
-  xml += `  <text align="left" em="true" dw="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
+  xml += `  <text align="left" em="true" dw="true" dh="true">TOTAL : ${escapeXml(order.total.toFixed(2))} EUR&#10;</text>\n`;
   xml += `  <text>&#10;</text>\n`;
 
   // Statut Paiement
@@ -258,7 +258,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   }
 
   // Pied de page
-  xml += `  <text align="center">------------------------------------------&#10;</text>\n`;
+  xml += `  <text align="center">==========================================&#10;</text>\n`;
   xml += `  <text align="center">Merci pour votre commande !&#10;</text>\n`;
   xml += `  <text align="center">www.pokenbowl.be&#10;</text>\n`;
   xml += `  <feed line="4" />\n`;
