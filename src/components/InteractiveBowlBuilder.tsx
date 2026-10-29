@@ -38,9 +38,7 @@ export function InteractiveBowlBuilder() {
     "Salade d'algues": 1,
     Maïs: 1,
   });
-  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({
-    Teriyaki: 1,
-  });
+  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({});
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -141,8 +139,12 @@ export function InteractiveBowlBuilder() {
     });
   };
 
-  // Gestion unifiée des sauces (1ère offerte · puis +0,50 € par portion supplémentaire)
+  // Gestion unifiée des sauces (1ère offerte au choix libre · puis +0,50 € par portion supplémentaire)
   const addSauce = (name: string) => {
+    if (totalSauceUnits === 1 && !sauceQuantities[name]) {
+      setSauceQuantities({ [name]: 1 });
+      return;
+    }
     setSauceQuantities((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
   };
   const removeSauce = (name: string) => {
@@ -173,7 +175,7 @@ export function InteractiveBowlBuilder() {
       "Salade d'algues": 1,
       Maïs: 1,
     });
-    setSauceQuantities({ Teriyaki: 1 });
+    setSauceQuantities({});
     setToppingQuantities({ "Oignons frits": 1 });
   };
 
@@ -818,7 +820,7 @@ export function InteractiveBowlBuilder() {
                               isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
                             }`}>
                               {qty === 0
-                                ? totalSauceUnits === 0
+                                ? totalSauceUnits <= 1
                                   ? "1ère offerte"
                                   : "+0,50 €"
                                 : qty === 1 && totalSauceUnits === 1

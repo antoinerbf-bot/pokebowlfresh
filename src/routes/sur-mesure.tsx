@@ -42,9 +42,7 @@ function SurMesurePage() {
   });
   const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0] ?? null);
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
-  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({
-    "Teriyaki": 1,
-  });
+  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({});
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -118,8 +116,14 @@ function SurMesurePage() {
     });
   };
 
-  // Stepper Sauces (1ère sauce offerte, chaque portion supplémentaire à +0,50 €)
+  // Stepper Sauces (1ère sauce offerte au choix libre, chaque portion supplémentaire à +0,50 €)
   const addSauce = (name: string) => {
+    // Si l'utilisateur n'a qu'1 sauce sélectionnée (sa sauce offerte) et clique sur une AUTRE sauce :
+    // On remplace sa sauce offerte par la nouvelle choisie sans lui facturer de supplément !
+    if (totalSauceUnits === 1 && !sauceQuantities[name]) {
+      setSauceQuantities({ [name]: 1 });
+      return;
+    }
     setSauceQuantities((cur) => ({
       ...cur,
       [name]: (cur[name] ?? 0) + 1,
@@ -760,7 +764,7 @@ function SurMesurePage() {
                           isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
                         }`}>
                           {count === 0
-                            ? totalSauceUnits === 0
+                            ? totalSauceUnits <= 1
                               ? "1ère offerte"
                               : "+0,50 €"
                             : count === 1 && totalSauceUnits === 1
