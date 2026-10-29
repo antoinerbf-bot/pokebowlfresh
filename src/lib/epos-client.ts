@@ -16,7 +16,7 @@ export interface PrinterConfig {
 }
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
-  printerIp: "192.168.0.5",
+  printerIp: "192.168.0.8",
   printerPort: 8043,
   bridgeUrl: "",
   autoPrintKitchen: true,
@@ -445,6 +445,7 @@ export async function probePrinterIp(ip: string, port = 8043, timeoutMs = 1200):
 export async function scanForPrinterIp(onProgress?: (testedIp: string) => void): Promise<string | null> {
   // Liste des IPs prioritaires
   const candidates = [
+    "192.168.0.8",
     "192.168.0.5",
     "192.168.0.2", "192.168.0.3", "192.168.0.4", "192.168.0.6", "192.168.0.10", "192.168.0.50", "192.168.0.100",
     "192.168.1.5", "192.168.1.2", "192.168.1.10", "192.168.1.50", "192.168.1.100",

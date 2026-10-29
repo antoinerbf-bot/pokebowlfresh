@@ -972,7 +972,7 @@ export function PosApplicationPage() {
                           savePrinterConfig(updated);
                         }}
                         className="flex-1 rounded-xl bg-black/40 border border-white/10 p-3 text-white font-mono font-bold text-base"
-                        placeholder="192.168.0.5"
+                        placeholder="192.168.0.8"
                       />
                       <div className="rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-xs text-[#8ea39b] font-mono shrink-0 flex items-center gap-2">
                         <span>Port ePOS :</span>
