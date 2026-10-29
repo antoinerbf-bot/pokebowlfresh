@@ -7,12 +7,12 @@ import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Heart, D as MapPin, E as Menu, G as Check, H as ChevronLeft, I as Clock, J as BookOpen, M as Flame, N as ExternalLink, R as CircleCheck, T as MessageCircle, U as ChevronDown, V as ChevronRight, W as ChefHat, X as Award, Y as Bell, Z as ArrowRight, _ as RotateCcw, b as Plus, f as ShoppingBag, g as Search, j as Funnel, k as Instagram, l as Star, m as ShieldCheck, q as BriefcaseBusiness, t as X, u as Sparkles, w as Minus, x as Phone } from "../_libs/lucide-react.mjs";
-import { a as bowl_sweet_chicken_default, c as drink_eau_plate_default, d as tiramisu_speculoos_default, i as bowl_scampis_default, l as hero_saumon_clean_wide_default, n as DishImage, o as drink_coca_cola_default, r as bowl_crousty_curry_default, s as drink_eau_gazeuse_default, t as CartDrawer, u as tiramisu_oreo_default } from "./CartDrawer-BpbP1XOE.mjs";
+import { a as bowl_sweet_chicken_default, c as drink_eau_plate_default, d as tiramisu_speculoos_default, i as bowl_scampis_default, l as hero_saumon_clean_wide_default, n as DishImage, o as drink_coca_cola_default, r as bowl_crousty_curry_default, s as drink_eau_gazeuse_default, t as CartDrawer, u as tiramisu_oreo_default } from "./CartDrawer-CRRf7LLS.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-Chu9Vaby.mjs";
 import { i as tiramisu_nutella_default, n as drink_fanta_orange_default, r as drink_ice_tea_default, t as drink_coca_zero_default } from "./drink-ice-tea-DWuj5RB0.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-CgtPY2ns.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CN_tFJet.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CHcEwnfA.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [{
@@ -1229,7 +1229,7 @@ var SLIDES = [
 	},
 	{
 		id: "crousty-chicken-curry",
-		image: "/assets/hero-crousty-wide-paU3qHk7.jpg",
+		image: "/assets/hero-crousty-wide-Bj5oKA59.jpg",
 		titleLine1: "CROUSTY CHICKEN",
 		titleLine2: "CURRY CHAUD",
 		dishName: "Crousty Chicken Curry",
@@ -1249,7 +1249,7 @@ var SLIDES = [
 	},
 	{
 		id: "crousty-chicken-sauce-blanche",
-		image: "/assets/bowl-crousty-blanche-D4tEk0P7.jpg",
+		image: "/assets/bowl-crousty-blanche-DPn6fV9x.jpg",
 		titleLine1: "CROUSTY CHICKEN",
 		titleLine2: "SAUCE BLANCHE",
 		dishName: "Crousty Sauce Blanche",
@@ -1376,7 +1376,7 @@ function PokawaHeroExact() {
 								duration: 7.2,
 								ease: "linear"
 							},
-							style: { objectPosition: slide.focus ?? "62% 55%" },
+							style: { objectPosition: slide.focus ?? "center center" },
 							className: "h-full w-full object-cover will-change-transform",
 							loading: currentIdx === 0 ? "eager" : "lazy",
 							decoding: "async"
@@ -1549,7 +1549,7 @@ function InteractiveBowlBuilder() {
 	const totalPrice = basePrice + mainProteinExtra + extraProteinsPrice + extraMixinsPrice + extraToppingsPrice + extraSaucePrice;
 	const activeBowlImage = {
 		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
-		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
+		saumon: "/assets/bowl-saumon-BdxM-yfD.jpg",
 		scampis: "/assets/bowl-scampis-BPxsXKuI.jpg"
 	}[proteine.id] || "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 	const addExtraProtein = (name) => {
@@ -3048,11 +3048,11 @@ function DishCard({ item, selectedSize, onToggleSize, onAdd, isAdded, isCroustyS
 				item.dishId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DishImage, {
 					dishId: item.dishId,
 					alt: item.name,
-					className: "h-full w-full object-cover transition duration-700 group-hover:scale-108"
+					className: "h-full w-full object-cover object-center transition duration-700 group-hover:scale-108"
 				}) : item.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 					src: item.image,
 					alt: item.name,
-					className: `h-full w-full object-cover transition duration-700 group-hover:scale-108 ${item.soldOut ? "grayscale contrast-75" : ""}`
+					className: `h-full w-full object-cover object-center transition duration-700 group-hover:scale-108 ${item.soldOut ? "grayscale contrast-75" : ""}`
 				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex h-full w-full items-center justify-center bg-[#f4f0e6] text-4xl",
 					children: item.badge

@@ -10,7 +10,7 @@ import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as Dial
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-BpbP1XOE.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CRRf7LLS.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -94,14 +94,14 @@ var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 var bowl_scampis_default = "/assets/bowl-scampis-BPxsXKuI.jpg";
 var hero_saumon_clean_wide_default = "/assets/hero-saumon-clean-wide-CmteSWDC.jpg";
 var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B5NdQDhG.jpg";
-var bowl_crousty_curry_default = "/assets/hero-crousty-wide-paU3qHk7.jpg";
+var bowl_crousty_curry_default = "/assets/hero-crousty-wide-Bj5oKA59.jpg";
 var images = {
 	"sweet-chicken": bowl_sweet_chicken_default,
 	"scampis-royaux": bowl_scampis_default,
 	"saumon-wasabi": hero_saumon_clean_wide_default,
 	"spicy-chicken": bowl_spicy_chicken_default,
 	"crousty-chicken-curry": bowl_crousty_curry_default,
-	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-D4tEk0P7.jpg",
+	"crousty-chicken-sauce-blanche": "/assets/bowl-crousty-blanche-DPn6fV9x.jpg",
 	"sur-mesure": hero_saumon_clean_wide_default
 };
 function DishImage({ dishId, alt, className = "", priority = false }) {
@@ -113,7 +113,7 @@ function DishImage({ dishId, alt, className = "", priority = false }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 		src,
 		alt,
-		className: `h-full w-full object-cover ${className}`,
+		className: `h-full w-full object-cover object-center ${className}`,
 		loading: priority ? "eager" : "lazy",
 		decoding: "async",
 		fetchPriority: priority ? "high" : "auto"

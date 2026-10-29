@@ -7,11 +7,11 @@ import { n as useCart } from "./CartContext-C3Z6ywuE.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { G as Check, Q as ArrowLeft, W as ChefHat, b as Plus, f as ShoppingBag, w as Minus } from "../_libs/lucide-react.mjs";
-import { t as CartDrawer } from "./CartDrawer-BpbP1XOE.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/bowl-saumon-8FL339kO.js
-var bowl_saumon_default = "/assets/bowl-saumon-CRYVYQxR.jpg";
+import { t as CartDrawer } from "./CartDrawer-CRRf7LLS.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/bowl-saumon-C9L8Fc-p.js
+var bowl_saumon_default = "/assets/bowl-saumon-BdxM-yfD.jpg";
 //#endregion
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-Z5Ykb0Ts.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-Dmu-JW76.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -37,9 +37,9 @@ function SurMesurePage() {
 	const [added, setAdded] = import_react.useState(false);
 	const activeBowlImage = selectedProtein ? {
 		poulet: "/assets/bowl-sweet-chicken-T1JJVtIT.jpg",
-		saumon: "/assets/bowl-saumon-CRYVYQxR.jpg",
+		saumon: "/assets/bowl-saumon-BdxM-yfD.jpg",
 		scampis: "/assets/bowl-scampis-BPxsXKuI.jpg"
-	}[selectedProtein.id] || "/assets/bowl-saumon-CRYVYQxR.jpg" : bowl_saumon_default;
+	}[selectedProtein.id] || "/assets/bowl-saumon-BdxM-yfD.jpg" : bowl_saumon_default;
 	const addMixIn = (name) => {
 		setMixinQuantities((cur) => ({
 			...cur,
