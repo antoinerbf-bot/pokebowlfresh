@@ -38,10 +38,9 @@ export function InteractiveBowlBuilder() {
     "Salade d'algues": 1,
     Maïs: 1,
   });
-  const [sauce, setSauce] = React.useState(
-    () => detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0]!,
-  ); // Teriyaki par défaut
-  const [extraSauces, setExtraSauces] = React.useState<Record<string, number>>({});
+  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({
+    Teriyaki: 1,
+  });
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -52,7 +51,7 @@ export function InteractiveBowlBuilder() {
   // Calcul des quantités et des prix :
   // - Moyen : 10,00 € | Grand : 13,00 € (+3,00 €)
   // - Protéine principale : Poulet mariné (0 €), Scampis (0 €), Saumon (+1,00 €)
-  // - Protéines supplémentaires : +2,00 € par portion ajoutée (illimité, ex: 3x = 6,00 €)
+  // - Protéines supplémentaires : +2,50 € par portion ajoutée (illimité, ex: 3x = 7,50 €)
   // - Légumes / Mix-ins : 5 portions incluses (hors feta à +1,00 €), puis +1,00 € par portion supplémentaire (illimité)
   // - Sauces : 1 au choix gratuite incluse, puis +0,50 € par pot supplémentaire (illimité, ex: 3x = 1,50 €)
   // - Toppings : 1 portion incluse, puis +0,50 € par portion supplémentaire (illimité)
@@ -60,7 +59,7 @@ export function InteractiveBowlBuilder() {
   const mainProteinExtra = proteine.extraPrice ?? 0;
 
   const totalExtraProteinUnits = Object.values(extraProteins).reduce((sum, q) => sum + q, 0);
-  const extraProteinsPrice = totalExtraProteinUnits * 2.0;
+  const extraProteinsPrice = totalExtraProteinUnits * 2.5;
 
   const fetaCount = mixinQuantities["Feta"] ?? 0;
   const nonFetaCount = Object.entries(mixinQuantities).reduce(
@@ -75,8 +74,9 @@ export function InteractiveBowlBuilder() {
   const totalToppingUnits = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingUnits - 1);
   const extraToppingsPrice = extraToppingsCount * 0.5;
-  const totalExtraSauceUnits = Object.values(extraSauces).reduce((sum, q) => sum + q, 0);
-  const extraSaucePrice = totalExtraSauceUnits * 0.5;
+  const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
+  const extraSauceCount = Math.max(0, totalSauceUnits - 1);
+  const extraSaucePrice = extraSauceCount * 0.5;
 
   const totalPrice =
     basePrice +
@@ -93,7 +93,7 @@ export function InteractiveBowlBuilder() {
   };
   const activeBowlImage = proteinImages[proteine.id] || bowlSweetChicken;
 
-  // Gestion des protéines supplémentaires (+2,00 € / portion)
+  // Gestion des protéines supplémentaires (+2,50 € / portion)
   const addExtraProtein = (name: string) => {
     setExtraProteins((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
   };
@@ -141,12 +141,12 @@ export function InteractiveBowlBuilder() {
     });
   };
 
-  // Gestion des suppléments de sauce (+0,50 € / pot supplémentaire, illimité)
-  const addExtraSauce = (name: string) => {
-    setExtraSauces((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
+  // Gestion unifiée des sauces (1ère offerte · puis +0,50 € par portion supplémentaire)
+  const addSauce = (name: string) => {
+    setSauceQuantities((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
   };
-  const removeExtraSauce = (name: string) => {
-    setExtraSauces((prev) => {
+  const removeSauce = (name: string) => {
+    setSauceQuantities((prev) => {
       const cur = prev[name] ?? 0;
       if (cur <= 1) {
         const copy = { ...prev };
@@ -155,6 +155,9 @@ export function InteractiveBowlBuilder() {
       }
       return { ...prev, [name]: cur - 1 };
     });
+  };
+  const setZeroSauce = () => {
+    setSauceQuantities({});
   };
 
   const resetBuilder = () => {
@@ -170,12 +173,26 @@ export function InteractiveBowlBuilder() {
       "Salade d'algues": 1,
       Maïs: 1,
     });
-    setSauce(detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0]!);
-    setExtraSauces({});
+    setSauceQuantities({ Teriyaki: 1 });
     setToppingQuantities({ "Oignons frits": 1 });
   };
 
   // Liste plate des emojis de mix-ins pour la jauge ludique des 5 emplacements inclus
+  // Sauces sélectionnées pour affichage et calcul
+  const selectedSaucesList = React.useMemo(() => {
+    const list: string[] = [];
+    Object.entries(sauceQuantities).forEach(([name, q]) => {
+      for (let i = 0; i < q; i++) {
+        list.push(name);
+      }
+    });
+    return list;
+  }, [sauceQuantities]);
+
+  const primarySauceName = selectedSaucesList[0] ?? "Sans sauce";
+  const primarySauceObj = detailedSauces.find((s) => s.name === primarySauceName);
+  const primarySauceEmoji = primarySauceObj?.emoji || (primarySauceName === "Sans sauce" ? "🚫" : "🍯");
+
   const selectedMixinBadges = React.useMemo(() => {
     const list: { name: string; emoji: string; qty: number }[] = [];
     for (const [name, qty] of Object.entries(mixinQuantities)) {
@@ -200,15 +217,19 @@ export function InteractiveBowlBuilder() {
       .filter(([, q]) => q > 0)
       .map(
         ([name, q]) =>
-          `Supplément Protéine (+2.00€) : ${name}${q > 1 ? ` (x${q})` : ""}`
+          `Supplément Protéine (+2.50€) : ${name}${q > 1 ? ` (x${q})` : ""}`
       );
 
-    const extraSauceLines = Object.entries(extraSauces)
-      .filter(([, q]) => q > 0)
-      .map(
-        ([name, q]) =>
-          `Sauce extra (+${(q * 0.5).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`
-      );
+    const sauceNamesWithQty: string[] = [];
+    Object.entries(sauceQuantities).forEach(([name, q]) => {
+      for (let i = 0; i < q; i++) {
+        sauceNamesWithQty.push(name);
+      }
+    });
+    const firstSauce = sauceNamesWithQty[0] ?? "Sans sauce";
+    const extraSauceLines = sauceNamesWithQty.slice(1).map(
+      (name) => `Sauce extra (+0.50€) : ${name}`
+    );
 
     addItem({
       id: "sur-mesure",
@@ -222,7 +243,7 @@ export function InteractiveBowlBuilder() {
         `Protéine : ${proteine.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
         ...extraProteinLines,
         `Mix-ins : ${mixinFormatted.length > 0 ? mixinFormatted.join(", ") : "Aucun"}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
-        `Sauce : ${sauce.name}`,
+        `Sauce : ${firstSauce}`,
         ...extraSauceLines,
         `Toppings : ${toppingFormatted.length > 0 ? toppingFormatted.join(", ") : "Aucun"}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`,
       ],
@@ -254,10 +275,10 @@ export function InteractiveBowlBuilder() {
               <span>Atelier Poké Ludique · 100% Sur-Mesure</span>
             </div>
             <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#2C1D16]">
-              Composez votre bowl <span className="text-[#ff705f]">comme un chef.</span>
+              Ton poké, <span className="text-[#ff705f]">tes envies.</span>
             </h2>
             <p className="mt-2 text-sm sm:text-base text-[#5C4938] font-medium leading-relaxed">
-              Choisissez votre base, votre protéine et vos 5 légumes frais inclus. Envie de plus ? Ajoutez autant de protéines (+2 €) et de légumes (+1 €) que vous voulez !
+              Compose un bowl généreux, choisis tes ingrédients préférés et crée ton association idéale.
             </p>
           </div>
 
@@ -281,8 +302,8 @@ export function InteractiveBowlBuilder() {
           </div>
         </div>
 
-        {/* ── Barre d'étapes interactive & ludique ── */}
-        <div className="relative z-10 mt-7 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+        {/* ── Barre d'étapes interactive & ludique (5 étapes logiques) ── */}
+        <div className="relative z-10 mt-7 grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-2.5">
           {[
             {
               step: 1,
@@ -294,19 +315,25 @@ export function InteractiveBowlBuilder() {
               step: 2,
               icon: "🍗",
               title: "2. Protéines",
-              detail: `${proteine.name}${totalExtraProteinUnits > 0 ? ` + ${totalExtraProteinUnits} extra` : ""}`,
+              detail: `${proteine.name}${totalExtraProteinUnits > 0 ? ` +${totalExtraProteinUnits}` : ""}`,
             },
             {
               step: 3,
               icon: "🥑",
-              title: "3. Légumes & Mix-ins",
-              detail: `${totalMixinUnits} portion${totalMixinUnits > 1 ? "s" : ""} (${Math.min(INCLUDED_MIXINS, nonFetaCount)}/5 inclus)`,
+              title: "3. Légumes",
+              detail: `${totalMixinUnits} portion${totalMixinUnits > 1 ? "s" : ""} (${Math.min(INCLUDED_MIXINS, nonFetaCount)}/5)`,
             },
             {
               step: 4,
               icon: "🍯",
-              title: "4. Sauce & Crunch",
-              detail: `${sauce.name} · ${totalToppingUnits} topping${totalToppingUnits > 1 ? "s" : ""}`,
+              title: "4. Sauces",
+              detail: `${primarySauceName}${extraSauceCount > 0 ? ` +${extraSauceCount}` : ""}`,
+            },
+            {
+              step: 5,
+              icon: "🧅",
+              title: "5. Toppings",
+              detail: `${totalToppingUnits} portion${totalToppingUnits > 1 ? "s" : ""}`,
             },
           ].map((s) => {
             const isCurrent = activeStep === s.step;
@@ -511,10 +538,10 @@ export function InteractiveBowlBuilder() {
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                       <div>
                         <h4 className="text-sm font-black text-[#2C1D16] flex items-center gap-1.5">
-                          <span>💪</span> Ajouter des portions de protéines en plus (+2,00 € / portion)
+                          <span>💪</span> Ajouter des portions de protéines en plus (+2,50 € / portion)
                         </h4>
                         <p className="text-[11px] text-[#6E5A49] font-medium">
-                          Ajoutez autant de portions que vous voulez : +2,00 € à chaque ajout (ex : 3× = +6,00 €).
+                          Ajoutez autant de portions que vous voulez : +2,50 € à chaque ajout (ex : 3× = +7,50 €).
                         </p>
                       </div>
                       {totalExtraProteinUnits > 0 && (
@@ -543,7 +570,7 @@ export function InteractiveBowlBuilder() {
                                   {p.name}
                                 </span>
                                 <span className="text-[10px] font-bold text-[#ff705f]">
-                                  {qty > 0 ? `${qty}× (+${(qty * 2).toFixed(2)} €)` : "+2,00 € / portion"}
+                                  {qty > 0 ? `${qty}× (+${(qty * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
                                 </span>
                               </div>
                             </div>
@@ -704,193 +731,181 @@ export function InteractiveBowlBuilder() {
                 </motion.div>
               )}
 
-              {/* ════════ ÉTAPE 4 : SAUCE & TOPPINGS CROUSTILLANTS ════════ */}
+              {/* ════════ ÉTAPE 4 : SAUCES (1ÈRE OFFERTE · EXTRA +0,50 €) ════════ */}
               {activeStep === 4 && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="space-y-6"
+                  className="space-y-4"
                 >
-                  <div>
-                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-2.5">
-                      <span>🍯</span> 1. Choisissez votre sauce (incluse)
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                      {detailedSauces.map((s) => {
-                        const isSelected = sauce.id === s.id;
-                        return (
-                          <button
-                            key={s.id}
-                            type="button"
-                            onClick={() => setSauce(s)}
-                            className={`flex items-center gap-2 rounded-2xl p-3 border-2 text-left transition cursor-pointer ${
-                              isSelected
-                                ? "bg-[#FFF3EF] border-[#ff705f] shadow-sm"
-                                : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
-                            }`}
-                          >
-                            <span className="text-xl">{s.emoji}</span>
-                            <span className="text-xs font-black text-[#2C1D16] truncate flex-1">
-                              {s.name}
-                            </span>
-                            {isSelected && <Check className="h-3.5 w-3.5 text-[#ff705f] shrink-0" />}
-                          </button>
-                        );
-                      })}
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2">
+                        <span>🍯</span> Choisissez votre sauce (1ère offerte)
+                      </h3>
+                      <p className="text-xs text-[#6E5A49] font-medium mt-0.5">
+                        La 1ère portion de sauce est gratuite. Chaque portion de sauce supplémentaire est à <strong>+0,50 €</strong>.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => setSauce({ id: "sans-sauce", name: "Sans sauce", emoji: "🚫" })}
-                        className={`flex items-center gap-2 rounded-2xl p-3 border-2 text-left transition cursor-pointer ${
-                          sauce.id === "sans-sauce"
-                            ? "bg-[#FFF3EF] border-[#ff705f] shadow-sm"
-                            : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
+                        onClick={setZeroSauce}
+                        className={`rounded-xl px-3 py-1.5 text-xs font-black transition cursor-pointer ${
+                          totalSauceUnits === 0
+                            ? "bg-[#2C1D16] text-[#EADCC9] shadow-sm"
+                            : "bg-[#F3E9DA] text-[#6E5A49] hover:bg-[#2C1D16] hover:text-white"
                         }`}
                       >
-                        <span className="text-xl">🚫</span>
-                        <span className="text-xs font-black text-[#2C1D16] truncate flex-1">
-                          Sans sauce
-                        </span>
-                        {sauce.id === "sans-sauce" && (
-                          <Check className="h-3.5 w-3.5 text-[#ff705f] shrink-0" />
-                        )}
+                        🚫 Sans sauce
                       </button>
-                    </div>
-
-                    {/* Suppléments de sauce (+0,50 € par pot supplémentaire, illimité) */}
-                    <div className="mt-4 pt-3 border-t border-[#DECBB3]">
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
-                        <div>
-                          <p className="text-xs font-black uppercase tracking-wider text-[#2C1D16]">
-                            🍯 Suppléments de sauce (+0,50 € / pot)
-                          </p>
-                          <p className="text-[11px] font-medium text-[#6E5A49]">
-                            Ajoutez autant de pots que vous voulez (+0,50 € chacun, ex : 3× la même = +1,50 €).
-                          </p>
-                        </div>
-                        {totalExtraSauceUnits > 0 && (
-                          <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                            +{totalExtraSauceUnits} sauce{totalExtraSauceUnits > 1 ? "s" : ""} (+{extraSaucePrice.toFixed(2)} €)
-                          </span>
-                        )}
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {detailedSauces.map((s) => {
-                          const qty = extraSauces[s.name] ?? 0;
-                          return (
-                            <div
-                              key={`extra-sauce-${s.id}`}
-                              className={`flex items-center justify-between gap-1.5 rounded-xl border-2 p-2.5 transition ${
-                                qty > 0
-                                  ? "border-[#ff705f] bg-white shadow-sm"
-                                  : "border-[#DECBB3] bg-[#F3E9DA]/55 hover:bg-[#F3E9DA]"
-                              }`}
-                            >
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <span className="text-base shrink-0">{s.emoji}</span>
-                                <div className="min-w-0">
-                                  <span className="block text-[11px] font-black text-[#2C1D16] truncate">
-                                    {s.name}
-                                  </span>
-                                  <span className="text-[10px] font-bold text-[#ff705f]">
-                                    {qty > 0 ? `x${qty} (+${(qty * 0.5).toFixed(2)} €)` : "+0,50 €"}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-1 shrink-0">
-                                {qty > 0 && (
-                                  <>
-                                    <button
-                                      type="button"
-                                      onClick={() => removeExtraSauce(s.name)}
-                                      className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                      aria-label={`Retirer sauce ${s.name}`}
-                                    >
-                                      <Minus className="h-3 w-3 stroke-[3]" />
-                                    </button>
-                                    <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                      {qty}
-                                    </span>
-                                  </>
-                                )}
-                                <button
-                                  type="button"
-                                  onClick={() => addExtraSauce(s.name)}
-                                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                  aria-label={`Ajouter sauce ${s.name}`}
-                                >
-                                  <Plus className="h-3 w-3 stroke-[3]" />
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                      {totalSauceUnits > 0 && (
+                        <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9]">
+                          {totalSauceUnits} portion{totalSauceUnits > 1 ? "s" : ""}
+                          {extraSauceCount > 0 ? ` (+${extraSaucePrice.toFixed(2)} €)` : " (1ère offerte)"}
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <div>
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2">
-                        <span>🧅</span> 2. Toppings croustillants (1 inclus · puis +0,50 € à volonté)
-                      </h3>
-                      <span className="rounded-full bg-[#2C1D16] px-3 py-0.5 text-[11px] font-black text-[#EADCC9]">
-                        {totalToppingUnits} portion{totalToppingUnits > 1 ? "s" : ""}
-                        {extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)} €)` : " (Inclus)"}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {toppings.map((tp) => {
-                        const qty = toppingQuantities[tp.name] ?? 0;
-                        return (
-                          <div
-                            key={tp.id}
-                            className={`flex items-center justify-between gap-2 rounded-2xl p-3 border-2 transition ${
-                              qty > 0
-                                ? "bg-white border-[#ff705f] shadow-sm"
-                                : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
-                            }`}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+                    {detailedSauces.map((s) => {
+                      const qty = sauceQuantities[s.name] ?? 0;
+                      return (
+                        <div
+                          key={s.id}
+                          className={`flex items-center justify-between gap-2 rounded-2xl p-2.5 border-2 transition ${
+                            qty > 0
+                              ? "bg-white border-[#ff705f] shadow-sm ring-1 ring-[#ff705f]/20"
+                              : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => addSauce(s.name)}
+                            className="flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer"
                           >
-                            <div className="flex items-center gap-2 min-w-0">
-                              <span className="text-xl">{tp.emoji}</span>
-                              <div className="min-w-0">
-                                <span className="block text-xs font-black text-[#2C1D16] truncate">
-                                  {tp.name}
-                                </span>
-                                <span className="text-[10px] font-bold text-[#ff705f]">
-                                  {qty > 0 ? `x${qty}` : "+0,50 € / extra"}
-                                </span>
-                              </div>
+                            <span className="text-2xl shrink-0">{s.emoji}</span>
+                            <div className="min-w-0">
+                              <span className="block text-xs font-black text-[#2C1D16] truncate">
+                                {s.name}
+                              </span>
+                              <span className="block text-[10px] font-bold text-[#ff705f]">
+                                {qty === 0
+                                  ? totalSauceUnits === 0
+                                    ? "Offerte"
+                                    : "+0,50 €"
+                                  : `${qty} portion${qty > 1 ? "s" : ""}`}
+                              </span>
                             </div>
+                          </button>
 
-                            <div className="flex items-center gap-1 shrink-0">
-                              {qty > 0 && (
-                                <>
-                                  <button
-                                    type="button"
-                                    onClick={() => removeTopping(tp.name)}
-                                    className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                    aria-label={`Retirer ${tp.name}`}
-                                  >
-                                    <Minus className="h-3 w-3 stroke-[3]" />
-                                  </button>
-                                  <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                    {qty}
-                                  </span>
-                                </>
-                              )}
-                              <button
-                                type="button"
-                                onClick={() => addTopping(tp.name)}
-                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                aria-label={`Ajouter ${tp.name}`}
-                              >
-                                <Plus className="h-3 w-3 stroke-[3]" />
-                              </button>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {qty > 0 && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => removeSauce(s.name)}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                                  aria-label={`Retirer sauce ${s.name}`}
+                                >
+                                  <Minus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                                <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                  {qty}
+                                </span>
+                              </>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => addSauce(s.name)}
+                              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                              aria-label={`Ajouter sauce ${s.name}`}
+                            >
+                              <Plus className="h-3 w-3 stroke-[3]" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ════════ ÉTAPE 5 : TOPPINGS CROUSTILLANTS (1 INCLUS · EXTRA +0,50 €) ════════ */}
+              {activeStep === 5 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-4"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2">
+                        <span>🧅</span> Choisissez vos toppings croustillants
+                      </h3>
+                      <p className="text-xs text-[#6E5A49] font-medium mt-0.5">
+                        1 topping inclus · Chaque portion supplémentaire est à <strong>+0,50 €</strong> à volonté.
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9]">
+                      {totalToppingUnits} portion{totalToppingUnits > 1 ? "s" : ""}
+                      {extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)} €)` : " (1 inclus)"}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                    {toppings.map((tp) => {
+                      const qty = toppingQuantities[tp.name] ?? 0;
+                      return (
+                        <div
+                          key={tp.id}
+                          className={`flex items-center justify-between gap-2 rounded-2xl p-3 border-2 transition ${
+                            qty > 0
+                              ? "bg-white border-[#ff705f] shadow-sm ring-1 ring-[#ff705f]/20"
+                              : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="text-xl">{tp.emoji}</span>
+                            <div className="min-w-0">
+                              <span className="block text-xs font-black text-[#2C1D16] truncate">
+                                {tp.name}
+                              </span>
+                              <span className="text-[10px] font-bold text-[#ff705f]">
+                                {qty > 0 ? `x${qty}` : "+0,50 € / extra"}
+                              </span>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
+
+                          <div className="flex items-center gap-1 shrink-0">
+                            {qty > 0 && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => removeTopping(tp.name)}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                                  aria-label={`Retirer ${tp.name}`}
+                                >
+                                  <Minus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                                <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                  {qty}
+                                </span>
+                              </>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => addTopping(tp.name)}
+                              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                              aria-label={`Ajouter ${tp.name}`}
+                            >
+                              <Plus className="h-3 w-3 stroke-[3]" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </motion.div>
               )}
@@ -913,10 +928,10 @@ export function InteractiveBowlBuilder() {
 
               <button
                 type="button"
-                onClick={() => setActiveStep((curr) => (curr < 4 ? curr + 1 : 1))}
+                onClick={() => setActiveStep((curr) => (curr < 5 ? curr + 1 : 1))}
                 className="text-xs font-black px-5 py-2.5 rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer shadow-sm"
               >
-                {activeStep < 4 ? `Étape suivante (${activeStep + 1}/4) →` : "Revenir à l'étape 1"}
+                {activeStep < 5 ? `Étape suivante (${activeStep + 1}/5) →` : "Revenir à l'étape 1"}
               </button>
             </div>
           </div>
@@ -973,7 +988,8 @@ export function InteractiveBowlBuilder() {
                     )}
                   </span>
                   <span className="rounded-xl bg-[#EADCC9] px-2.5 py-1 text-[10px] font-black uppercase text-[#2C1D16] shadow">
-                    {sauce.emoji} {sauce.name}
+                    {primarySauceEmoji} {primarySauceName}
+                    {extraSauceCount > 0 && ` +${extraSauceCount}`}
                   </span>
                 </div>
               </div>
@@ -1009,7 +1025,7 @@ export function InteractiveBowlBuilder() {
                           key={name}
                           className="rounded-lg bg-white px-2 py-0.5 text-[10px] font-black text-[#2C1D16] border border-[#ff705f]/30"
                         >
-                          +{q}× {name} ({(q * 2).toFixed(2)} €)
+                          +{q}× {name} ({(q * 2.5).toFixed(2)} €)
                         </span>
                       ))}
                     </div>
@@ -1046,18 +1062,18 @@ export function InteractiveBowlBuilder() {
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-[#6E5A49]">Sauce :</span>
                     <span className="font-black text-[#2C1D16]">
-                      {sauce.emoji} {sauce.name} (Incluse)
+                      {primarySauceEmoji} {primarySauceName} {totalSauceUnits > 0 ? "(Incluse)" : ""}
                     </span>
                   </div>
-                  {totalExtraSauceUnits > 0 && (
+                  {extraSauceCount > 0 && (
                     <div className="mt-1.5 pt-1.5 border-t border-[#DECBB3] flex items-center justify-between gap-2">
                       <div className="flex flex-wrap gap-1">
-                        {Object.entries(extraSauces).map(([name, q]) => (
+                        {selectedSaucesList.slice(1).map((sName, idx) => (
                           <span
-                            key={name}
+                            key={`${sName}-${idx}`}
                             className="rounded-lg bg-white border border-[#ff705f]/30 px-2 py-0.5 text-[10px] font-black text-[#2C1D16]"
                           >
-                            +{q}× {name}
+                            +{sName}
                           </span>
                         ))}
                       </div>

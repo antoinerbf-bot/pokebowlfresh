@@ -442,29 +442,29 @@ export function PokawaMegaMenu({
                       <div>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EADCC9] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16]">
                           <Sparkles className="h-3 w-3 stroke-[3] text-[#ff705f]" />
-                          Créativité illimitée · Dès 10 €
+                          Atelier Sur-Mesure · Dès 10 €
                         </span>
                         <h4 className="mt-3 text-2xl sm:text-3xl font-black leading-tight text-white">
-                          Compose ton Poké <span className="text-[#ff705f]">de A à Z</span>
+                          Ton poké, <span className="text-[#ff705f]">tes envies.</span>
                         </h4>
                         <p className="mt-1.5 max-w-md text-xs leading-relaxed text-[#EADCC9]/85">
-                          Ta base, ta protéine fraîche, 5 légumes inclus, ta sauce et ton topping croustillant.
-                          Envie de plus ? Ajoute autant de suppléments que tu veux.
+                          Compose un bowl généreux, choisis tes ingrédients préférés et crée ton association idéale.
                         </p>
 
-                        {/* Les 4 étapes, identiques au composeur */}
-                        <ol className="mt-4 grid grid-cols-2 gap-2">
+                        {/* Les 5 étapes logiques et gourmandes */}
+                        <ol className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                           {[
-                            { n: 1, icon: "🍚", title: "Format & Base", detail: "Moyen 10 € · Grand 13 €" },
-                            { n: 2, icon: "🐟", title: "Protéine", detail: "1 incluse · extra +1 €" },
-                            { n: 3, icon: "🥑", title: "5 Légumes", detail: "Inclus · extra +1 €" },
-                            { n: 4, icon: "🍯", title: "Sauce & Crunch", detail: "1 sauce offerte · +0,50 €" },
+                            { n: 1, icon: "🍚", title: "Format & Base", detail: "Riz, Pâtes, Salade" },
+                            { n: 2, icon: "🐟", title: "Protéines", detail: "1 incluse · extra +2,50 €" },
+                            { n: 3, icon: "🥑", title: "5 Légumes frais", detail: "Inclus · extra +1,00 €" },
+                            { n: 4, icon: "🍯", title: "Sauce maison", detail: "1 offerte · extra +0,50 €" },
+                            { n: 5, icon: "🧅", title: "Topping crunch", detail: "1 inclus · extra +0,50 €" },
                           ].map((s) => (
                             <li
                               key={s.n}
-                              className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.06] p-2.5 transition hover:border-[#ff705f]/60 hover:bg-white/[0.1]"
+                              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.06] p-2.5 transition hover:border-[#ff705f]/60 hover:bg-white/[0.1]"
                             >
-                              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EADCC9] text-lg shadow-sm">
+                              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#EADCC9] text-base shadow-sm">
                                 {s.icon}
                               </span>
                               <span className="min-w-0">
@@ -482,7 +482,7 @@ export function PokawaMegaMenu({
                         <Link
                           to="/sur-mesure"
                           onClick={onClose}
-                          className="mt-5 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-[#ff705f] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-lg shadow-[#ff705f]/25 transition hover:bg-[#ff5a47] hover:scale-[1.02] active:scale-95"
+                          className="mt-5 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-[#ff705f] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-lg shadow-[#ff705f]/25 transition hover:bg-[#ff5a47] hover:scale-[1.02] active:scale-95 cursor-pointer"
                         >
                           <ChefHat className="h-4 w-4" />
                           <span>Composer mon bowl</span>
@@ -494,13 +494,13 @@ export function PokawaMegaMenu({
                       <div className="relative hidden md:block">
                         <div className="relative aspect-square overflow-hidden rounded-[28px] border-2 border-[#EADCC9]/25 shadow-2xl">
                           <DishImage
-                            dishId="scampis-royaux"
+                            dishId="saumon-wasabi"
                             alt="Poké bowl composé sur mesure"
                             className="h-full w-full object-cover"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                           <span className="absolute bottom-3 left-3 rounded-full bg-[#2C1D16]/90 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#EADCC9] backdrop-blur">
-                            100 % à ton goût
+                            100 % frais · Préparé minute
                           </span>
                         </div>
                         <span className="absolute -right-2 -top-2 rotate-6 rounded-2xl bg-[#ff705f] px-3 py-2 text-center text-white shadow-xl">

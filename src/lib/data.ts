@@ -1,3 +1,43 @@
+// ─── RÈGLES COMMERCIALES & TARIFICATION CENTRALISÉE ─────────────────────────
+export const PRICING_RULES = {
+  BASE_BOWL_PRICE: 10.00,
+  GRAND_SIZE_EXTRA: 3.00,
+  MAIN_SALMON_EXTRA: 1.00,
+  EXTRA_PROTEIN_PRICE: 2.50, // 2,50 € par portion supplémentaire
+  EXTRA_SAUCE_PRICE: 0.50,   // 1ère gratuite, +0,50 € par portion supplémentaire
+  EXTRA_MIXIN_PRICE: 1.00,   // 5 inclus (hors feta à +1 €), puis +1,00 € par portion extra
+  EXTRA_TOPPING_PRICE: 0.50, // 1 inclus (sur-mesure), puis +0,50 € par portion extra
+  INCLUDED_MIXINS_COUNT: 5,
+  INCLUDED_TOPPINGS_COUNT: 1,
+  INCLUDED_SAUCES_COUNT: 1,
+} as const;
+
+export const EXTRA_PROTEIN_PRICE = PRICING_RULES.EXTRA_PROTEIN_PRICE;
+export const EXTRA_SAUCE_PRICE = PRICING_RULES.EXTRA_SAUCE_PRICE;
+export const EXTRA_MIXIN_PRICE = PRICING_RULES.EXTRA_MIXIN_PRICE;
+export const EXTRA_TOPPING_PRICE = PRICING_RULES.EXTRA_TOPPING_PRICE;
+export const GRAND_SIZE_EXTRA = PRICING_RULES.GRAND_SIZE_EXTRA;
+
+/**
+ * Calcule le supplément pour les protéines additionnelles :
+ * Chaque portion supplémentaire coûte 2,50 €.
+ * Exemples : 1 portion = 2,50 €, 2 portions = 5,00 €, 3 portions = 7,50 €.
+ */
+export function calculateExtraProteinsPrice(totalUnits: number): number {
+  return Math.max(0, totalUnits) * EXTRA_PROTEIN_PRICE;
+}
+
+/**
+ * Calcule le supplément pour les sauces :
+ * 1 sauce incluse gratuitement (0,00 €).
+ * Chaque portion supplémentaire au-delà de la 1ère coûte 0,50 €.
+ * Exemples : 1 sauce = 0,00 €, 2 sauces = 0,50 €, 3 sauces = 1,00 €, 4 sauces = 1,50 €.
+ */
+export function calculateSaucesPrice(totalSaucesCount: number): number {
+  const extraSauces = Math.max(0, totalSaucesCount - PRICING_RULES.INCLUDED_SAUCES_COUNT);
+  return extraSauces * EXTRA_SAUCE_PRICE;
+}
+
 // ─── BASES ────────────────────────────────────────────────────────────────────
 export const customBases = [
   "Riz",
@@ -268,7 +308,7 @@ export const bowls: Bowl[] = [
     defaultSauce: "Sauce curry",
     tag: "Formule Étudiant 11 € · Midi uniquement",
     tagColor: "bestseller",
-    menuNote: "🎓 Formule étudiant à 11 € avec canette 33 cl incluse au choix — disponible UNIQUEMENT LE MIDI (12h00 – 14h00). Supplément protéine : +2,00 € · Supplément légume/mix-in : +1,00 €.",
+    menuNote: "🎓 Formule étudiant à 11 € avec canette 33 cl incluse au choix — disponible UNIQUEMENT LE MIDI (12h00 – 14h00). Supplément protéine : +2,50 € · Supplément légume/mix-in : +1,00 €.",
     ingredients: [
       { name: "Riz",                                   emoji: "🍚", removable: true, isBase: true },
       { name: "Petits morceaux de poulet croustillant", emoji: "🍗", removable: true, isProtein: true },
@@ -285,7 +325,7 @@ export const bowls: Bowl[] = [
     defaultSauce: "Sauce blanche",
     tag: "Formule Étudiant 11 € · Midi uniquement",
     tagColor: "bestseller",
-    menuNote: "🎓 Formule étudiant à 11 € avec canette 33 cl incluse au choix — disponible UNIQUEMENT LE MIDI (12h00 – 14h00). Supplément protéine : +2,00 € · Supplément légume/mix-in : +1,00 €.",
+    menuNote: "🎓 Formule étudiant à 11 € avec canette 33 cl incluse au choix — disponible UNIQUEMENT LE MIDI (12h00 – 14h00). Supplément protéine : +2,50 € · Supplément légume/mix-in : +1,00 €.",
     ingredients: [
       { name: "Riz",                                   emoji: "🍚", removable: true, isBase: true },
       { name: "Petits morceaux de poulet croustillant", emoji: "🍗", removable: true, isProtein: true },

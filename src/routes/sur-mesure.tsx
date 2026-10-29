@@ -42,10 +42,9 @@ function SurMesurePage() {
   });
   const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0] ?? null);
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
-  const [selectedSauce, setSelectedSauce] = React.useState<CustomIngredientOption | null>(
-    detailedSauces.find((s) => s.id === "teriyaki") ?? detailedSauces[0] ?? null,
-  );
-  const [extraSauces, setExtraSauces] = React.useState<Record<string, number>>({});
+  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({
+    "Teriyaki": 1,
+  });
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
   });
@@ -119,16 +118,16 @@ function SurMesurePage() {
     });
   };
 
-  // Stepper Suppléments de sauce (+0,50 € chaque pot supplémentaire, illimité)
-  const addExtraSauce = (name: string) => {
-    setExtraSauces((cur) => ({
+  // Stepper Sauces (1ère sauce offerte, chaque portion supplémentaire à +0,50 €)
+  const addSauce = (name: string) => {
+    setSauceQuantities((cur) => ({
       ...cur,
       [name]: (cur[name] ?? 0) + 1,
     }));
   };
 
-  const removeExtraSauce = (name: string) => {
-    setExtraSauces((cur) => {
+  const removeSauce = (name: string) => {
+    setSauceQuantities((cur) => {
       const current = cur[name] ?? 0;
       if (current <= 1) {
         const copy = { ...cur };
@@ -139,17 +138,21 @@ function SurMesurePage() {
     });
   };
 
+  const setZeroSauce = () => {
+    setSauceQuantities({});
+  };
+
   // Calcul des prix :
   // - Moyen : 10,00 € | Grand : 13,00 € (+3,00 €)
   // - Protéine principale : Poulet mariné (0 €), Scampis (0 €), Saumon (+1,00 €)
-  // - Suppléments Protéines : +2,00 € chaque portion ajoutée (même 3x = +6,00 €)
+  // - Suppléments Protéines : +2,50 € chaque portion ajoutée (1x = +2,50 €, 2x = +5,00 €, 3x = +7,50 €)
   // - Légumes / Mix-ins : 5 portions hors feta incluses, puis +1,00 € chaque portion supplémentaire (et Feta +1,00 € / portion)
-  // - Sauces : 1 au choix gratuite incluse, puis +0,50 € chaque pot supplémentaire (ex: 3x la même = +1,50 €)
+  // - Sauces : 1 au choix gratuite incluse, puis +0,50 € chaque portion supplémentaire (ex: 2x = +0,50 €, 3x = +1,00 €)
   // - Toppings : 1 portion incluse, puis +0,50 € chaque portion supplémentaire
   const sizeExtra = selectedSize === "grand" ? 3.00 : 0;
   const mainProteinExtra = selectedProtein?.extraPrice ?? 0;
   const totalExtraProteinUnits = Object.values(extraProteins).reduce((sum, q) => sum + q, 0);
-  const extraProteinsPrice = totalExtraProteinUnits * 1.00; // Updated price per extra protein
+  const extraProteinsPrice = totalExtraProteinUnits * 2.50; // 2,50 € par portion supplémentaire
 
   const fetaUnits = mixinQuantities["Feta"] ?? 0;
   const nonFetaUnits = Object.entries(mixinQuantities).reduce(
@@ -164,8 +167,9 @@ function SurMesurePage() {
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingsCount - 1);
   const toppingsExtra = extraToppingsCount * 0.50;
-  const totalExtraSauceUnits = Object.values(extraSauces).reduce((sum, q) => sum + q, 0);
-  const extraSaucePrice = totalExtraSauceUnits * 0.50;
+  const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
+  const extraSauceCount = Math.max(0, totalSauceUnits - 1);
+  const extraSaucePrice = extraSauceCount * 0.50;
 
   const unitPrice = BASE_PRICE + sizeExtra + mainProteinExtra + extraProteinsPrice + mixInsExtra + toppingsExtra + extraSaucePrice;
   const totalPrice = unitPrice * qty;
@@ -182,7 +186,7 @@ function SurMesurePage() {
     .filter(([, q]) => q > 0)
     .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name));
 
-  const extraSaucesFormatted = Object.entries(extraSauces)
+  const saucesFormatted = Object.entries(sauceQuantities)
     .filter(([, q]) => q > 0)
     .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name));
 
@@ -190,41 +194,45 @@ function SurMesurePage() {
   const isBaseReady = selectedBase !== null;
   const isMixInsReady = totalMixInUnits >= 1;
   const isProteinReady = selectedProtein !== null;
-  const isSauceReady = selectedSauce !== null;
-  const isValid = isBaseReady && isMixInsReady && isProteinReady && isSauceReady;
+  const isSauceReady = true; // Sauces are optional (can be "Sans sauce" or selected)
+  const isValid = isBaseReady && isMixInsReady && isProteinReady;
 
   const getMissingReason = () => {
     if (!isBaseReady) return "Étape 1 : Choisis une base";
-    if (!isMixInsReady) return "Étape 2 : Sélectionne au moins 1 légume ou ingrédient";
-    if (!isProteinReady) return "Étape 3 : Choisis une protéine";
-    if (!isSauceReady) return "Étape 4 : Choisis une sauce";
+    if (!isProteinReady) return "Étape 2 : Choisis une protéine";
+    if (!isMixInsReady) return "Étape 3 : Sélectionne au moins 1 légume ou mix-in";
     return null;
   };
 
   const handleAddToCart = () => {
-    if (!isValid || !selectedBase || !selectedProtein || !selectedSauce) return;
+    if (!isValid || !selectedBase || !selectedProtein) return;
 
     const extraProteinLines = Object.entries(extraProteins)
       .filter(([, q]) => q > 0)
       .map(
         ([name, q]) =>
-          `Supplément Protéine (+2.00€) : ${name}${q > 1 ? ` (x${q})` : ""}`
+          `Supplément Protéine (+2.50€) : ${name}${q > 1 ? ` (x${q})` : ""}`
       );
 
-    const extraSauceLines = Object.entries(extraSauces)
-      .filter(([, q]) => q > 0)
-      .map(
-        ([name, q]) =>
-          `Sauce extra (+${(q * 0.50).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`
-      );
+    const activeSauces = Object.entries(sauceQuantities).filter(([, q]) => q > 0);
+    const mainSauceName = activeSauces[0]?.[0] || "Sans sauce";
+    const extraSauceLines: string[] = [];
+    if (activeSauces[0] && activeSauces[0][1] > 1) {
+      const extraQ = activeSauces[0][1] - 1;
+      extraSauceLines.push(`Sauce extra (+${(extraQ * 0.50).toFixed(2)}€) : ${activeSauces[0][0]}${extraQ > 1 ? ` (x${extraQ})` : ""}`);
+    }
+    for (let i = 1; i < activeSauces.length; i++) {
+      const [name, q] = activeSauces[i];
+      extraSauceLines.push(`Sauce extra (+${(q * 0.50).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`);
+    }
 
     const options = [
       `Taille : ${selectedSize === "grand" ? "Grand (+3.00€)" : "Moyen (Standard)"}`,
       `Base : ${selectedBase.name}`,
-      `Mix-ins : ${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
       `Protéine : ${selectedProtein.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
       ...extraProteinLines,
-      `Sauce : ${selectedSauce.name}`,
+      `Mix-ins : ${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
+      `Sauce : ${mainSauceName}`,
       ...extraSauceLines,
       ...(toppingsFormatted.length > 0
         ? [`Toppings : ${toppingsFormatted.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`]
@@ -313,13 +321,13 @@ function SurMesurePage() {
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9]/15 px-3.5 py-1 text-[11px] font-black uppercase tracking-widest text-[#EADCC9] border border-[#EADCC9]/25">
-                <ChefHat className="h-3.5 w-3.5 text-[#ff705f]" /> Atelier Sur-Mesure Ludique
+                <ChefHat className="h-3.5 w-3.5 text-[#ff705f]" /> Atelier Poké Sur-Mesure
               </div>
               <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
-                Poke Bowl <span className="text-[#ff705f]">sur mesure</span>
+                Ton poké, <span className="text-[#ff705f]">tes envies.</span>
               </h1>
               <p className="mt-2 text-sm leading-relaxed text-[#EADCC9]/80 sm:text-base">
-                Compose ton bol personnalisé selon tes envies : 1 base, 5 légumes frais inclus (+1 € par portion extra), 1 protéine incluse (+1 € par portion extra), 1 sauce et toppings croustillants !
+                Compose un bowl généreux, choisis tes ingrédients préférés et crée ton association idéale. 5 légumes frais inclus, protéines au choix (+2,50 € par portion supplémentaire) et sauces savoureuses (1ère offerte, +0,50 € par portion supplémentaire).
               </p>
             </div>
             <div className="flex items-center gap-4 rounded-2xl bg-[#FAF5EE]/10 border border-[#EADCC9]/20 p-5 backdrop-blur-md sm:flex-col sm:items-start">
@@ -443,7 +451,7 @@ function SurMesurePage() {
                   </span>
                   <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">Choisis ta Protéine</h2>
                 </div>
-                <span className="text-xs font-bold text-[#ff705f]">1 incluse · Extras à +2,00 €</span>
+                <span className="text-xs font-bold text-[#ff705f]">1 incluse · Extras à +2,50 €</span>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {detailedProteins.map((prot) => {
@@ -476,15 +484,15 @@ function SurMesurePage() {
                 })}
               </div>
 
-              {/* Suppléments Protéines (+2,00 € chaque portion ajoutée, illimité) */}
+              {/* Suppléments Protéines (+2,50 € chaque portion ajoutée, illimité) */}
               <div className="mt-5 rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <div>
                     <h3 className="text-sm font-black text-[#2C1D16]">
-                      💪 Ajouter des portions de protéines supplémentaires (+2,00 € / portion)
+                      💪 Ajouter des portions de protéines supplémentaires (+2,50 € / portion)
                     </h3>
                     <p className="text-[11px] text-[#6E5A49] font-medium">
-                      Ajoute autant de portions que tu veux (+2,00 € à chaque fois, ex : 3× = +6,00 €).
+                      Ajoute autant de portions que tu veux (+2,50 € à chaque fois, ex : 3× = +7,50 €).
                     </p>
                   </div>
                   {totalExtraProteinUnits > 0 && (
@@ -513,7 +521,7 @@ function SurMesurePage() {
                               {prot.name}
                             </span>
                             <span className="text-[10px] font-bold text-[#ff705f]">
-                              {q > 0 ? `${q}× (+${(q * 2).toFixed(2)} €)` : "+2,00 € / portion"}
+                              {q > 0 ? `${q}× (+${(q * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
                             </span>
                           </div>
                         </div>
@@ -667,137 +675,109 @@ function SurMesurePage() {
               </div>
             </section>
 
-            {/* ══ ÉTAPE 4 : SAUCE ════════════════════════════════ */}
+            {/* ══ ÉTAPE 4 : SAUCE UNIFIÉE (1ÈRE OFFERTE · +0,50 € PAR PORTION SUPPLÉMENTAIRE) ══ */}
             <section className="rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card">
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
                     Étape 4
                   </span>
-                  <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">Choisis ta Sauce</h2>
+                  <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">Choisis tes Sauces</h2>
+                  <p className="mt-1 text-xs text-[#7A6857]">
+                    1ère portion offerte · portions supplémentaires à <strong>+0,50 €</strong> chacune.
+                  </p>
                 </div>
-                <span className="text-xs font-bold text-[#ff705f]">Incluse</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-                {detailedSauces.map((sauce) => {
-                  const isSelected = selectedSauce?.id === sauce.id;
-                  return (
-                    <button
-                      key={sauce.id}
-                      type="button"
-                      onClick={() => setSelectedSauce(sauce)}
-                      className={[
-                        "flex items-center gap-2 rounded-2xl border-2 p-3 text-left transition-all duration-200 cursor-pointer",
-                        isSelected
-                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
-                      ].join(" ")}
-                    >
-                      <span className="text-xl">{sauce.emoji}</span>
-                      <span className="min-w-0 flex-1 truncate text-xs font-black text-[#2C1D16]">
-                        {sauce.name}
-                      </span>
-                      {isSelected && (
-                        <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
-                          <Check className="h-2.5 w-2.5 stroke-[3]" />
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  onClick={() => setSelectedSauce({ id: "sans-sauce", name: "Sans sauce", emoji: "🚫" })}
-                  className={[
-                    "flex items-center gap-2 rounded-2xl border-2 p-3 text-left transition-all duration-200 cursor-pointer",
-                    selectedSauce?.id === "sans-sauce"
-                      ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
-                      : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
-                  ].join(" ")}
-                >
-                  <span className="text-xl">🚫</span>
-                  <span className="min-w-0 flex-1 truncate text-xs font-black text-[#2C1D16]">
-                    Sans sauce
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9]">
+                    {totalSauceUnits === 0
+                      ? "Sans sauce"
+                      : totalSauceUnits === 1
+                      ? "1 sauce offerte (0,00 €)"
+                      : `${totalSauceUnits} sauces (1 offerte + ${extraSauceCount} extra · +${extraSaucePrice.toFixed(2)} €)`}
                   </span>
-                  {selectedSauce?.id === "sans-sauce" && (
-                    <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
-                      <Check className="h-2.5 w-2.5 stroke-[3]" />
-                    </div>
-                  )}
-                </button>
-              </div>
-
-              {/* Suppléments de sauce (+0,50 € par pot supplémentaire, illimité) */}
-              <div className="mt-4 border-t border-[#DECBB3] pt-4">
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-wider text-[#2C1D16]">
-                      🍯 Suppléments de sauce (+0,50 € / pot)
-                    </p>
-                    <p className="text-[11px] font-medium text-[#6E5A49]">
-                      1 sauce gratuite au choix · ajoute autant de pots que tu veux (+0,50 € chacun, ex : 3× la même = +1,50 €).
-                    </p>
-                  </div>
-                  {totalExtraSauceUnits > 0 && (
-                    <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                      +{totalExtraSauceUnits} sauce{totalExtraSauceUnits > 1 ? "s" : ""} (+{extraSaucePrice.toFixed(2)} €)
-                    </span>
+                  {totalSauceUnits > 0 && (
+                    <button
+                      type="button"
+                      onClick={setZeroSauce}
+                      className="rounded-full border border-[#DECBB3] bg-[#FAF5EE] px-2.5 py-1 text-[10px] font-bold text-[#7A6857] hover:bg-[#2C1D16] hover:text-white transition cursor-pointer"
+                    >
+                      Sans sauce
+                    </button>
                   )}
                 </div>
+              </div>
 
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {detailedSauces.map((s) => {
-                    const q = extraSauces[s.name] ?? 0;
-                    return (
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
+                {detailedSauces.map((sauce) => {
+                  const count = sauceQuantities[sauce.name] ?? 0;
+                  const isSelected = count > 0;
+                  return (
+                    <div
+                      key={sauce.id}
+                      className={`flex items-center justify-between gap-1.5 rounded-2xl border-2 p-2.5 transition-all ${
+                        isSelected
+                          ? "border-[#ff705f] bg-[#FFF4F1] shadow-sm"
+                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/40"
+                      }`}
+                    >
                       <div
-                        key={`extra-${s.id}`}
-                        className={`flex items-center justify-between gap-1.5 rounded-xl border-2 p-2.5 transition ${
-                          q > 0
-                            ? "border-[#ff705f] bg-white shadow-sm"
-                            : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40"
-                        }`}
+                        onClick={() => addSauce(sauce.name)}
+                        className="flex items-center gap-2 min-w-0 flex-1 cursor-pointer"
                       >
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-base shrink-0">{s.emoji}</span>
-                          <div className="min-w-0">
-                            <span className="block text-[11px] font-black text-[#2C1D16] truncate">
-                              {s.name}
-                            </span>
-                            <span className="text-[10px] font-black text-[#ff705f]">
-                              {q > 0 ? `x${q} (+${(q * 0.5).toFixed(2)} €)` : "+0,50 €"}
-                            </span>
-                          </div>
+                        <span className="text-xl shrink-0">{sauce.emoji}</span>
+                        <div className="min-w-0 flex-1">
+                          <span className="block text-xs font-black text-[#2C1D16] truncate">
+                            {sauce.name}
+                          </span>
+                          <span className="text-[10px] font-bold text-[#7A6857]">
+                            {count === 0
+                              ? totalSauceUnits === 0
+                                ? "Offerte"
+                                : "+0,50 €"
+                              : count === 1 && totalSauceUnits === 1
+                              ? "Offerte"
+                              : `${count}x (+${(count * 0.5).toFixed(2)}€)`}
+                          </span>
                         </div>
+                      </div>
 
-                        <div className="flex items-center gap-1 shrink-0">
-                          {q > 0 && (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => removeExtraSauce(s.name)}
-                                className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                aria-label={`Diminuer sauce ${s.name}`}
-                              >
-                                <Minus className="h-3 w-3 stroke-[3]" />
-                              </button>
-                              <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                {q}
-                              </span>
-                            </>
-                          )}
+                      <div className="flex items-center gap-1 shrink-0">
+                        {count > 0 ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => removeSauce(sauce.name)}
+                              aria-label={`Diminuer sauce ${sauce.name}`}
+                              className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-95 cursor-pointer"
+                            >
+                              <Minus className="h-3 w-3 stroke-[3]" />
+                            </button>
+                            <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                              {count}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => addSauce(sauce.name)}
+                              aria-label={`Ajouter sauce ${sauce.name}`}
+                              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-95 shadow-sm cursor-pointer"
+                            >
+                              <Plus className="h-3 w-3 stroke-[3]" />
+                            </button>
+                          </>
+                        ) : (
                           <button
                             type="button"
-                            onClick={() => addExtraSauce(s.name)}
-                            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                            aria-label={`Ajouter sauce ${s.name}`}
+                            onClick={() => addSauce(sauce.name)}
+                            aria-label={`Choisir sauce ${sauce.name}`}
+                            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-95 cursor-pointer"
                           >
                             <Plus className="h-3 w-3 stroke-[3]" />
                           </button>
-                        </div>
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
             </section>
 
@@ -958,22 +938,13 @@ function SurMesurePage() {
                 </div>
 
                 <div className="pt-2 flex justify-between gap-2">
-                  <span className="font-semibold text-[#6E5A49]">Sauce :</span>
+                  <span className="font-semibold text-[#6E5A49]">Sauces :</span>
                   <span className="font-bold text-[#2C1D16] text-right">
-                    {selectedSauce
-                      ? `${selectedSauce.emoji} ${selectedSauce.name}`
-                      : "Non choisie"}
+                    {saucesFormatted.length > 0
+                      ? `${saucesFormatted.join(", ")}${extraSaucePrice > 0 ? ` (+${extraSaucePrice.toFixed(2)} €)` : ""}`
+                      : "Sans sauce"}
                   </span>
                 </div>
-
-                {extraSaucesFormatted.length > 0 && (
-                  <div className="pt-2 flex justify-between gap-2">
-                    <span className="font-semibold text-[#6E5A49]">Suppléments Sauces :</span>
-                    <span className="font-bold text-[#ff705f] text-right">
-                      {extraSaucesFormatted.join(", ")} (+{extraSaucePrice.toFixed(2)} €)
-                    </span>
-                  </div>
-                )}
 
                 <div className="pt-2 flex justify-between gap-2">
                   <span className="font-semibold text-[#6E5A49]">Toppings :</span>

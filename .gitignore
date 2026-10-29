@@ -12,6 +12,8 @@ dist
 dist-ssr
 # Build output for O2Switch deployment
 .output/
+server.js
+app.js
 
 .vinxi
 .tanstack/**

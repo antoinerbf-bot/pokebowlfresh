@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { X, ArrowRight } from "lucide-react";
 import { DishImage } from "./DishImage";
+import { useTranslation } from "@/context/I18nContext";
 
 /**
  * Suggestion gourmande discrète (Crousty Chicken · Formule Étudiant midi).
@@ -20,7 +21,7 @@ import { DishImage } from "./DishImage";
 interface Suggestion {
   id: string;
   title: string;
-  subtitle: string;
+  subtitleKey: string;
   price: string;
   productId: string;
 }
@@ -29,14 +30,14 @@ const SUGGESTIONS: Suggestion[] = [
   {
     id: "crousty-curry",
     title: "Crousty Chicken Curry",
-    subtitle: "Poulet croustillant · sauce curry maison",
+    subtitleKey: "toast.curry_sub",
     price: "11 €",
     productId: "crousty-chicken-curry",
   },
   {
     id: "crousty-blanche",
     title: "Crousty Sauce Blanche",
-    subtitle: "Poulet croustillant · sauce blanche onctueuse",
+    subtitleKey: "toast.white_sub",
     price: "11 €",
     productId: "crousty-chicken-sauce-blanche",
   },
@@ -69,6 +70,7 @@ function writeSession(s: ToastSession) {
 }
 
 export function CroustyNotificationToast() {
+  const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -82,14 +84,14 @@ export function CroustyNotificationToast() {
 
   // Planifie un affichage si les conditions sont réunies
   const scheduleShow = (delay: number) => {
-    const t = window.setTimeout(() => {
+    const tId = window.setTimeout(() => {
       const session = readSession();
       if (session.dismissed || session.shows >= MAX_SHOWS) return;
       setIndex(session.shows % SUGGESTIONS.length);
       writeSession({ ...session, shows: session.shows + 1 });
       setIsVisible(true);
     }, delay);
-    timers.current.push(t);
+    timers.current.push(tId);
   };
 
   // Premier affichage : seulement après défilement au-delà du hero + délai minimum
@@ -121,12 +123,12 @@ export function CroustyNotificationToast() {
   // Masquage automatique après VISIBLE_MS (sauf survol / toucher), puis 2e suggestion plus tard
   useEffect(() => {
     if (!isVisible || isPaused) return;
-    const t = window.setTimeout(() => {
+    const tId = window.setTimeout(() => {
       setIsVisible(false);
       scheduleShow(GAP_MS);
     }, VISIBLE_MS);
-    timers.current.push(t);
-    return () => window.clearTimeout(t);
+    timers.current.push(tId);
+    return () => window.clearTimeout(tId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, isPaused]);
 
@@ -149,7 +151,7 @@ export function CroustyNotificationToast() {
   return (
     <div
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-3 bottom-[5.5rem] z-30 md:inset-x-auto md:bottom-6 md:right-6 md:w-[340px]"
+      className="pointer-events-none fixed inset-x-3 bottom-[5.5rem] z-30 flex justify-center md:inset-x-auto md:bottom-6 md:right-6 md:block md:w-[340px]"
     >
       <AnimatePresence>
         {isVisible && (
@@ -162,16 +164,16 @@ export function CroustyNotificationToast() {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onTouchStart={() => setIsPaused(true)}
-            className="pointer-events-auto relative overflow-hidden rounded-2xl border border-[#DECBB3] bg-[#FAF5EE]/95 text-[#2C1D16] shadow-[0_14px_40px_rgba(44,29,22,0.22)] backdrop-blur-xl"
+            className="pointer-events-auto relative w-full max-w-[370px] overflow-hidden rounded-2xl border border-[#DECBB3] bg-[#FAF5EE]/95 text-[#2C1D16] shadow-[0_14px_40px_rgba(44,29,22,0.22)] backdrop-blur-xl"
           >
             <Link
               to="/product/$productId"
               params={{ productId: s.productId }}
               onClick={onNavigate}
-              className="group flex items-center gap-3 p-2 pr-10 md:p-2.5 md:pr-10"
+              className="group flex items-center gap-3 p-2.5 pr-9 md:pr-10"
             >
               {/* Vignette du plat */}
-              <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl md:h-16 md:w-16">
+              <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl md:h-14 md:w-14">
                 <DishImage
                   dishId={s.productId}
                   alt={s.title}
@@ -182,7 +184,7 @@ export function CroustyNotificationToast() {
               <span className="min-w-0 flex-1">
                 <span className="flex items-center gap-1.5">
                   <span className="rounded-full bg-[#ff705f]/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#c0350f]">
-                    🎓 Étudiant · midi
+                    {t("toast.student_badge")}
                   </span>
                   <span className="text-[11px] font-black text-[#2C1D16]">{s.price}</span>
                 </span>
@@ -190,7 +192,7 @@ export function CroustyNotificationToast() {
                   {s.title}
                 </span>
                 <span className="block truncate text-[10.5px] font-semibold text-[#7A6857] md:text-[11px]">
-                  <span className="hidden md:inline">{s.subtitle} · </span>canette 33 cl incluse le midi
+                  <span className="hidden md:inline">{t(s.subtitleKey)} · </span>{t("toast.drink_included")}
                 </span>
               </span>
 
@@ -202,7 +204,7 @@ export function CroustyNotificationToast() {
             <button
               type="button"
               onClick={dismiss}
-              aria-label="Masquer la suggestion"
+              aria-label={t("toast.dismiss_aria")}
               className="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full text-[#7A6857] transition hover:bg-[#2C1D16]/10 hover:text-[#2C1D16]"
             >
               <X className="h-3.5 w-3.5" />

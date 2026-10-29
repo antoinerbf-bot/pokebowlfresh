@@ -198,18 +198,19 @@ function ProductPage() {
   // States (appelés inconditionnellement avant tout return anticipé — règle des Hooks React)
   const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
   const [selectedBase, setSelectedBase] = React.useState<string>(product?.defaultBase || "Riz");
-  const [selectedSauce, setSelectedSauce] = React.useState<string>(product?.defaultSauce || "Spicy-Mayo");
+  const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>(() => {
+    const defaultS = product?.defaultSauce || "Spicy-Mayo";
+    return defaultS ? { [defaultS]: 1 } : {};
+  });
   const [removedIngredients, setRemovedIngredients] = React.useState<string[]>([]);
 
   // Suppléments demandés par le client (illimités avec steppers - / +)
-  // Protéines supplémentaires : +2,00 € par portion ajoutée (même 3x la même = 3x 2€)
+  // Protéines supplémentaires : +2,50 € par portion ajoutée (même 3x la même = 3x 2,50€)
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
   // Légumes / Mix-ins supplémentaires : +1,00 € par portion ajoutée (même 3x le même = 3x 1€)
   const [mixinQuantities, setMixinQuantities] = React.useState<Record<string, number>>({});
   // Toppings croustillants : +0,50 € par portion ajoutée
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({});
-  // Suppléments de sauce : +0,50 € par pot supplémentaire (illimité, ex: 3x la même = +1,50 €)
-  const [extraSauces, setExtraSauces] = React.useState<Record<string, number>>({});
   const [selectedDrink, setSelectedDrink] = React.useState<string>(drinks[0]?.name || "Coca-Cola (33 cl)");
   const [qty, setQty] = React.useState(1);
   const [added, setAdded] = React.useState(false);
@@ -218,12 +219,12 @@ function ProductPage() {
   React.useEffect(() => {
     setSelectedSize("moyen");
     setSelectedBase(product?.defaultBase || "Riz");
-    setSelectedSauce(product?.defaultSauce || "Spicy-Mayo");
+    const defaultS = product?.defaultSauce || "Spicy-Mayo";
+    setSauceQuantities(defaultS ? { [defaultS]: 1 } : {});
     setRemovedIngredients([]);
     setExtraProteins({});
     setMixinQuantities({});
     setToppingQuantities({});
-    setExtraSauces({});
     setSelectedDrink(drinks[0]?.name || "Coca-Cola (33 cl)");
     setQty(1);
     setAdded(false);
@@ -256,13 +257,14 @@ function ProductPage() {
   // Crousty chicken a UNE SEULE TAILLE (pas de grand format +3€).
   const sizeExtra = !isCrousty && selectedSize === "grand" ? 3.00 : 0;
   const totalExtraProteinUnits = Object.values(extraProteins).reduce((sum, q) => sum + q, 0);
-  const extraProteinPrice = totalExtraProteinUnits * 2.00;
+  const extraProteinPrice = totalExtraProteinUnits * 2.50;
   const totalMixinUnits = Object.values(mixinQuantities).reduce((sum, q) => sum + q, 0);
   const mixinsExtraPrice = totalMixinUnits * 1.00;
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const toppingsExtraPrice = totalToppingsCount * 0.50;
-  const totalExtraSauceUnits = Object.values(extraSauces).reduce((sum, q) => sum + q, 0);
-  const extraSaucePrice = totalExtraSauceUnits * 0.50;
+  const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
+  const extraSauceCount = Math.max(0, totalSauceUnits - 1);
+  const extraSaucePrice = extraSauceCount * 0.50;
 
   const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
   const totalPrice = unitPrice * qty;
@@ -274,7 +276,7 @@ function ProductPage() {
     );
   };
 
-  // Extra protein stepper (+2.00 € par portion)
+  // Extra protein stepper (+2.50 € par portion)
   const addExtraProtein = (name: string) => {
     setExtraProteins((cur) => ({
       ...cur,
@@ -334,16 +336,16 @@ function ProductPage() {
     });
   };
 
-  // Sauce supplémentaire stepper (illimité, chaque pot supplémentaire à +0.50€)
-  const addExtraSauce = (name: string) => {
-    setExtraSauces((cur) => ({
+  // Sauce stepper (1ère sauce offerte, chaque portion supplémentaire à +0.50€)
+  const addSauce = (name: string) => {
+    setSauceQuantities((cur) => ({
       ...cur,
       [name]: (cur[name] ?? 0) + 1,
     }));
   };
 
-  const removeExtraSauce = (name: string) => {
-    setExtraSauces((cur) => {
+  const removeSauce = (name: string) => {
+    setSauceQuantities((cur) => {
       const current = cur[name] ?? 0;
       if (current <= 1) {
         const copy = { ...cur };
@@ -352,6 +354,10 @@ function ProductPage() {
       }
       return { ...cur, [name]: current - 1 };
     });
+  };
+
+  const setZeroSauce = () => {
+    setSauceQuantities({});
   };
 
   // Ajout au panier
@@ -372,11 +378,11 @@ function ProductPage() {
       }
     }
 
-    // Suppléments Protéine (+2.00€ chaque portion)
+    // Suppléments Protéine (+2.50€ chaque portion)
     Object.entries(extraProteins).forEach(([name, q]) => {
       if (q > 0) {
         optionsList.push(
-          `Supplément Protéine (+${(q * 2).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`,
+          `Supplément Protéine (+${(q * 2.5).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`,
         );
       }
     });
@@ -384,11 +390,25 @@ function ProductPage() {
     // Base
     optionsList.push(`Base : ${selectedBase}`);
 
-    // Sauce principale
-    if (selectedSauce === "none") {
+    // Sauces (1ère gratuite incluse, chaque sauce supplémentaire à +0,50 €)
+    const activeSauces = Object.entries(sauceQuantities).filter(([, q]) => q > 0);
+    if (activeSauces.length === 0) {
       optionsList.push("Sauce : Sans sauce");
     } else {
-      optionsList.push(`Sauce : ${selectedSauce}`);
+      const [firstSauceName, firstQty] = activeSauces[0];
+      optionsList.push(`Sauce : ${firstSauceName}`);
+
+      if (firstQty > 1) {
+        optionsList.push(
+          `Sauce extra (+${((firstQty - 1) * 0.50).toFixed(2)}€) : ${firstSauceName}${firstQty > 2 ? ` (x${firstQty - 1})` : ""}`,
+        );
+      }
+      for (let i = 1; i < activeSauces.length; i++) {
+        const [name, q] = activeSauces[i];
+        optionsList.push(
+          `Sauce extra (+${(q * 0.50).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`,
+        );
+      }
     }
 
     // Suppléments Légumes & Mix-ins sélectionnés (+1.00€ chaque portion)
@@ -404,15 +424,6 @@ function ProductPage() {
     Object.entries(toppingQuantities).forEach(([t, q]) => {
       if (q > 0) {
         optionsList.push(`Topping (+0.50€) : ${t}${q > 1 ? ` (x${q})` : ""}`);
-      }
-    });
-
-    // Suppléments de sauce (+0.50€ par pot supplémentaire, ex: 3x = +1.50€)
-    Object.entries(extraSauces).forEach(([name, q]) => {
-      if (q > 0) {
-        optionsList.push(
-          `Sauce extra (+${(q * 0.50).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`,
-        );
       }
     });
 
@@ -523,7 +534,7 @@ function ProductPage() {
               <p className="text-xs text-[#6E5A49] leading-relaxed">
                 {isCrousty
                   ? "Servi dans une barquette rectangulaire avec du riz chaud, des morceaux de poulet croustillant dorés minute, notre sauce signature et des oignons frits. La Formule Étudiant à 11,00 € avec canette 33 cl incluse est valable uniquement le midi."
-                  : "Chaque bowl est assemblé à la commande à Visé avec du poisson frais, du poulet mariné et des légumes du jour. Vous pouvez retirer n'importe quel ingrédient ou ajouter autant de protéines (+2 €) et de légumes (+1 €) que vous le souhaitez."}
+                  : "Chaque bowl est assemblé à la commande à Visé avec du poisson frais, du poulet mariné et des légumes du jour. Vous pouvez retirer n'importe quel ingrédient ou ajouter autant de protéines (+2,50 €) et de légumes (+1 €) que vous le souhaitez."}
               </p>
             </div>
           </div>
@@ -585,55 +596,79 @@ function ProductPage() {
                       <span className="text-2xl font-black text-[#ea580c] shrink-0">11.00 €</span>
                     </div>
 
-                    {/* Supplément Poulet Croustillant (+2.00€ chaque portion, illimité) */}
+                    {/* Suppléments Protéines pour Crispy Chicken (+2,50 € chaque portion, illimité) */}
                     <div className="mt-4 pt-3 border-t border-[#F59E0B]/30">
-                      <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-[#E6C79C] bg-[#FFFDF9] p-3">
-                        <div className="flex items-center gap-2.5">
-                          <span className="text-2xl">🍗</span>
-                          <div className="text-left">
-                            <span className="block text-xs font-black text-[#2C1D16]">
-                              Supplément Poulet Croustillant (+2,00 € / portion)
-                            </span>
-                            <span className="text-[10px] font-bold text-[#7A6857]">
-                              Ajoute autant de portions de poulet croustillant que tu veux (1x = +2€, 2x = +4€, 3x = +6€)
-                            </span>
-                          </div>
+                      <div className="flex items-center justify-between mb-2.5">
+                        <div>
+                          <span className="block text-xs font-black uppercase tracking-wider text-[#2C1D16]">
+                            💪 Suppléments Protéines (+2,50 € / portion)
+                          </span>
+                          <span className="text-[11px] font-semibold text-[#7A542E]">
+                            Ajoutez des portions supplémentaires de Poulet, Saumon ou Crevettes (+2,50 € par portion, cumulable)
+                          </span>
                         </div>
+                        {totalExtraProteinUnits > 0 && (
+                          <span className="rounded-full bg-[#ea580c] px-3 py-1 text-xs font-black text-white shadow-sm">
+                            +{totalExtraProteinUnits} portion{totalExtraProteinUnits > 1 ? "s" : ""} (+{extraProteinPrice.toFixed(2)}€)
+                          </span>
+                        )}
+                      </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
-                          {croustyExtraChickenCount > 0 ? (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => removeExtraProtein("Poulet croustillant")}
-                                aria-label="Diminuer supplément poulet croustillant"
-                                className="flex h-8 w-8 items-center justify-center rounded-full border border-[#ea580c]/40 bg-white text-[#ea580c] font-black hover:bg-[#ea580c] hover:text-white transition"
-                              >
-                                <Minus className="h-3.5 w-3.5 stroke-[3]" />
-                              </button>
-                              <span className="min-w-[2.2rem] text-center text-xs font-black text-[#2C1D16]">
-                                +{croustyExtraChickenCount}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => addExtraProtein("Poulet croustillant")}
-                                aria-label="Ajouter supplément poulet croustillant"
-                                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ea580c] text-white font-black hover:bg-[#c2410c] transition"
-                              >
-                                <Plus className="h-3.5 w-3.5 stroke-[3]" />
-                              </button>
-                            </>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => addExtraProtein("Poulet croustillant")}
-                              className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-1.5 text-xs font-black text-[#EADCC9] hover:bg-[#ea580c] hover:text-white transition"
+                      <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                        {[
+                          { id: "crousty-poulet", name: "Poulet croustillant", emoji: "🍗" },
+                          { id: "crousty-saumon", name: "Saumon frais", emoji: "🐟" },
+                          { id: "crousty-scampis", name: "Crevettes (Scampis)", emoji: "🦐" },
+                        ].map((prot) => {
+                          const count = extraProteins[prot.name] ?? 0;
+                          return (
+                            <div
+                              key={prot.id}
+                              className={`flex items-center justify-between rounded-2xl border-2 p-2.5 transition-all ${
+                                count > 0
+                                  ? "border-[#ea580c] bg-[#FFF4F1] shadow-sm"
+                                  : "border-[#E6C79C] bg-[#FFFDF9]"
+                              }`}
                             >
-                              <Plus className="h-3.5 w-3.5" />
-                              <span>+2,00 €</span>
-                            </button>
-                          )}
-                        </div>
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className="text-xl">{prot.emoji}</span>
+                                <div className="min-w-0">
+                                  <span className="block text-xs font-black text-[#2C1D16] truncate">
+                                    {prot.name}
+                                  </span>
+                                  <span className="text-[10px] font-black text-[#ea580c]">
+                                    {count > 0 ? `${count}x (+${(count * 2.5).toFixed(2)}€)` : "+2,50 €"}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {count > 0 && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      onClick={() => removeExtraProtein(prot.name)}
+                                      aria-label={`Diminuer ${prot.name}`}
+                                      className="flex h-7 w-7 items-center justify-center rounded-full border border-[#ea580c]/40 bg-white text-[#ea580c] font-black hover:bg-[#ea580c] hover:text-white transition"
+                                    >
+                                      <Minus className="h-3 w-3 stroke-[3]" />
+                                    </button>
+                                    <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                      {count}
+                                    </span>
+                                  </>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => addExtraProtein(prot.name)}
+                                  aria-label={`Ajouter ${prot.name}`}
+                                  className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#ea580c] hover:text-white transition"
+                                >
+                                  <Plus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </section>
@@ -676,10 +711,10 @@ function ProductPage() {
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <span className="block text-[11px] font-black uppercase tracking-wider text-[#2C1D16]">
-                            Suppléments Protéines (+2,00 € par portion)
+                            Suppléments Protéines (+2,50 € par portion)
                           </span>
                           <span className="text-[10px] font-semibold text-[#7A6857]">
-                            Ajoute autant de portions que tu veux (même 2x ou 3x la même protéine : 3x = +6,00 €)
+                            Ajoute autant de portions que tu veux (même 2x ou 3x la même protéine : 3x = +7,50 €)
                           </span>
                         </div>
                         {totalExtraProteinUnits > 0 && (
@@ -707,7 +742,7 @@ function ProductPage() {
                                     {pr.name}
                                   </span>
                                   <span className="text-[10px] font-black text-[#ff705f]">
-                                    {count > 0 ? `${count}x (+${(count * 2).toFixed(2)}€)` : "+2,00 €"}
+                                    {count > 0 ? `${count}x (+${(count * 2.5).toFixed(2)}€)` : "+2,50 €"}
                                   </span>
                                 </div>
                               </div>
@@ -822,127 +857,108 @@ function ProductPage() {
                   )}
                 </section>
 
-                {/* ══ STEP 4: SAUCE (1 AU CHOIX GRATUITE + SUPPLÉMENTS À +0,50 €) ══ */}
+                {/* ══ STEP 4: SAUCE UNIFIÉE (1ÈRE OFFERTE · +0,50 € PAR PORTION SUPPLÉMENTAIRE) ══ */}
                 <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-5 shadow-card">
-                  <div className="mb-3 flex items-center justify-between">
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
-                        Sauce au choix (1 gratuite incluse)
+                        {isCrousty ? "Sauce de nappage" : "4. Sauces au choix"}
                       </h2>
                       <p className="text-[11px] text-[#7A6857]">
-                        1ère sauce gratuite au choix · chaque supplément de sauce à +0,50 €
+                        La 1ère sauce est <strong>offerte</strong> · chaque portion supplémentaire est à <strong>+0,50 €</strong>
                       </p>
                     </div>
-                    <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-[10px] font-black text-[#EADCC9]">
-                      {selectedSauce === "none" ? "Sans sauce" : selectedSauce}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {detailedSauces.map((s) => (
-                      <button
-                        key={s.id}
-                        type="button"
-                        onClick={() => setSelectedSauce(s.name)}
-                        className={[
-                          "flex items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs transition-all",
-                          selectedSauce === s.name
-                            ? "border-[#ff705f] bg-[#FFF4F1] font-black text-[#c0350f]"
-                            : "border-[#DECBB3] bg-[#FFFDF9] font-bold text-[#2C1D16] hover:border-[#ff705f]/40",
-                        ].join(" ")}
-                      >
-                        <span>{s.emoji}</span>
-                        <span className="truncate">{s.name}</span>
-                      </button>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedSauce("none")}
-                      className={[
-                        "flex items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs transition-all",
-                        selectedSauce === "none"
-                          ? "border-[#ff705f] bg-[#FFF4F1] font-black text-[#c0350f]"
-                          : "border-[#DECBB3] bg-[#FFFDF9] font-bold text-[#7A6857] hover:border-[#ff705f]/40",
-                      ].join(" ")}
-                    >
-                      <span>🚫</span>
-                      <span>Sans sauce</span>
-                    </button>
-                  </div>
-
-                  {/* Suppléments de sauce (+0,50 € par pot, illimité, même plusieurs fois la même) */}
-                  <div className="mt-4 border-t border-[#DECBB3] pt-4">
-                    <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <p className="text-xs font-black uppercase tracking-wider text-[#2C1D16]">
-                          🍯 Suppléments de sauce (+0,50 € / pot)
-                        </p>
-                        <p className="text-[11px] text-[#7A6857]">
-                          Ajoute autant de pots que tu veux (+0,50 € chacun, ex : 3× la même = +1,50 €).
-                        </p>
-                      </div>
-                      {totalExtraSauceUnits > 0 && (
-                        <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                          +{totalExtraSauceUnits} sauce{totalExtraSauceUnits > 1 ? "s" : ""} (+{extraSaucePrice.toFixed(2)}€)
-                        </span>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-[#2C1D16] px-3 py-1 text-[11px] font-black text-[#EADCC9]">
+                        {totalSauceUnits === 0
+                          ? "Sans sauce"
+                          : totalSauceUnits === 1
+                          ? "1 sauce offerte (0,00 €)"
+                          : `${totalSauceUnits} sauces (1 offerte + ${extraSauceCount} extra · +${extraSaucePrice.toFixed(2)} €)`}
+                      </span>
+                      {totalSauceUnits > 0 && (
+                        <button
+                          type="button"
+                          onClick={setZeroSauce}
+                          className="rounded-full border border-[#DECBB3] bg-[#FFFDF9] px-2.5 py-1 text-[10px] font-bold text-[#7A6857] hover:bg-[#2C1D16] hover:text-[#EADCC9] transition"
+                        >
+                          Sans sauce
+                        </button>
                       )}
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                      {detailedSauces.map((s) => {
-                        const count = extraSauces[s.name] ?? 0;
-                        return (
+                  <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
+                    {detailedSauces.map((s) => {
+                      const count = sauceQuantities[s.name] ?? 0;
+                      const isSelected = count > 0;
+                      return (
+                        <div
+                          key={s.id}
+                          className={`flex items-center justify-between gap-1.5 rounded-2xl border-2 p-2.5 transition-all ${
+                            isSelected
+                              ? "border-[#ff705f] bg-[#FFF4F1] shadow-sm"
+                              : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#ff705f]/40"
+                          }`}
+                        >
                           <div
-                            key={`extra-${s.id}`}
-                            className={`flex items-center justify-between gap-1.5 rounded-xl border-2 p-2.5 transition ${
-                              count > 0
-                                ? "border-[#ff705f] bg-[#FFF4F1] shadow-sm"
-                                : "border-[#DECBB3] bg-[#FFFDF9]"
-                            }`}
+                            onClick={() => addSauce(s.name)}
+                            className="flex items-center gap-2 min-w-0 flex-1 cursor-pointer"
                           >
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <span className="text-base shrink-0">{s.emoji}</span>
-                              <div className="min-w-0">
-                                <span className="block text-[11px] font-black text-[#2C1D16] truncate">
-                                  {s.name}
-                                </span>
-                                <span className="text-[10px] font-black text-[#ff705f]">
-                                  {count > 0
-                                    ? `${count}x (+${(count * 0.5).toFixed(2)}€)`
-                                    : "+0,50 €"}
-                                </span>
-                              </div>
+                            <span className="text-xl shrink-0">{s.emoji}</span>
+                            <div className="min-w-0 flex-1">
+                              <span className="block text-xs font-black text-[#2C1D16] truncate">
+                                {s.name}
+                              </span>
+                              <span className="text-[10px] font-bold text-[#7A6857]">
+                                {count === 0
+                                  ? totalSauceUnits === 0
+                                    ? "Offerte"
+                                    : "+0,50 €"
+                                  : count === 1 && totalSauceUnits === 1
+                                  ? "1 offerte"
+                                  : `${count}x (+${(count * 0.5).toFixed(2)}€)`}
+                              </span>
                             </div>
+                          </div>
 
-                            <div className="flex items-center gap-1 shrink-0">
-                              {count > 0 && (
-                                <>
-                                  <button
-                                    type="button"
-                                    onClick={() => removeExtraSauce(s.name)}
-                                    aria-label={`Diminuer sauce ${s.name}`}
-                                    className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition"
-                                  >
-                                    <Minus className="h-3 w-3 stroke-[3]" />
-                                  </button>
-                                  <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                    {count}
-                                  </span>
-                                </>
-                              )}
+                          <div className="flex items-center gap-1 shrink-0">
+                            {count > 0 ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => removeSauce(s.name)}
+                                  aria-label={`Diminuer sauce ${s.name}`}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-95"
+                                >
+                                  <Minus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                                <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                  {count}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => addSauce(s.name)}
+                                  aria-label={`Ajouter sauce ${s.name}`}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-95 shadow-sm"
+                                >
+                                  <Plus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                              </>
+                            ) : (
                               <button
                                 type="button"
-                                onClick={() => addExtraSauce(s.name)}
-                                aria-label={`Ajouter sauce ${s.name}`}
-                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#ff705f] hover:text-white transition"
+                                onClick={() => addSauce(s.name)}
+                                aria-label={`Choisir sauce ${s.name}`}
+                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-95"
                               >
                                 <Plus className="h-3 w-3 stroke-[3]" />
                               </button>
-                            </div>
+                            )}
                           </div>
-                        );
-                      })}
-                    </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </section>
 

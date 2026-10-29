@@ -19,7 +19,7 @@ import {
 import {
   upsertOrder,
 } from "../lib/order-store";
-import { allToppings, bowls, drinks, desserts } from "../lib/data";
+import { allToppings, bowls, drinks, desserts, EXTRA_PROTEIN_PRICE, EXTRA_SAUCE_PRICE } from "../lib/data";
 import { getDeliveryZone } from "../lib/delivery";
 
 export const orderItemSchema = z.object({
@@ -86,7 +86,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += 1.00;
       }
 
-      // Suppléments Protéines additionnels (+2.00€ par portion, illimité)
+      // Suppléments Protéines additionnels (+2.50€ par portion, illimité)
       const customExtraProteins = opts.filter((t) =>
         /^Suppl[ée]ment\s*Prot[ée]ine/i.test(t),
       );
@@ -96,7 +96,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         const count = match?.[1] ? parseInt(match[1], 10) : 1;
         totalCustomExtraProteinUnits += isNaN(count) ? 1 : count;
       }
-      unitPrice += totalCustomExtraProteinUnits * 2.00;
+      unitPrice += totalCustomExtraProteinUnits * EXTRA_PROTEIN_PRICE;
 
       // Mix-ins (5 hors feta inclus, +1.00€ par portion au-delà ; feta = +1.00€ par portion)
       const mixInsLine = opts.find((t) => /^Mix-ins?\s*:/i.test(t));
@@ -175,7 +175,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         const count = match?.[1] ? parseInt(match[1], 10) : 1;
         totalExtraSauceUnits += isNaN(count) ? 1 : count;
       }
-      unitPrice += totalExtraSauceUnits * 0.50;
+      unitPrice += totalExtraSauceUnits * EXTRA_SAUCE_PRICE;
 
       return {
         ...item,
@@ -206,9 +206,9 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice = bowl.grandPrice ?? bowl.price + 3.00;
       }
 
-      // Supplément Protéine / Poulet Croustillant (+2.00€ par portion, illimité)
+      // Supplément Protéine / Poulet Croustillant / Saumon / Scampis (+2.50€ par portion, illimité)
       const extraProteins = opts.filter((t) =>
-        /(Suppl[ée]ment\s*Prot[ée]ine|Prot[ée]ine\s*suppl[ée]mentaire|Portion\s+extra\s+Poulet|Suppl[ée]ment\s+Poulet\s+Croustillant)/i.test(t),
+        /(Suppl[ée]ment\s*Prot[ée]ine|Prot[ée]ine\s*suppl[ée]mentaire|Portion\s+extra\s+Poulet|Suppl[ée]ment\s+Poulet\s+Croustillant|Suppl[ée]ment\s+Saumon|Suppl[ée]ment\s+Scampis)/i.test(t),
       );
       let totalExtraProteinUnits = 0;
       for (const ep of extraProteins) {
@@ -216,7 +216,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         const count = match?.[1] ? parseInt(match[1], 10) : 1;
         totalExtraProteinUnits += isNaN(count) ? 1 : count;
       }
-      unitPrice += totalExtraProteinUnits * 1.00;
+      unitPrice += totalExtraProteinUnits * EXTRA_PROTEIN_PRICE;
 
       // Suppléments Légumes / Mix-ins sur bowl signature (+1.00€ par portion, illimité)
       const extraMixins = opts.filter((t) => /^L[ée]gume\s*\/\s*Mix-in/i.test(t));
@@ -248,7 +248,7 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         const count = match?.[1] ? parseInt(match[1], 10) : 1;
         totalExtraSauceUnits += isNaN(count) ? 1 : count;
       }
-      unitPrice += totalExtraSauceUnits * 0.50;
+      unitPrice += totalExtraSauceUnits * EXTRA_SAUCE_PRICE;
 
       return {
         ...item,
