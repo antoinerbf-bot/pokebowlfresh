@@ -167,10 +167,10 @@ export function PokawaFloatingNavbar() {
               )}
             </button>
 
-            {/* Bouton COMMANDER Chocolat & Crème */}
+            {/* Bouton COMMANDER Rouge */}
             <Link
               to="/commander"
-              className="inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-1.5 xl:px-5 xl:py-2 text-[10.5px] xl:text-xs font-black uppercase tracking-[0.12em] text-[#FAF4EB] shadow-lg transition hover:bg-[#482F22] hover:scale-105 active:scale-95 shrink-0"
+              className="inline-flex items-center gap-1 rounded-full bg-[#E53535] hover:bg-[#CC2B2B] px-3.5 py-1.5 xl:px-5 xl:py-2 text-[10.5px] xl:text-xs font-black uppercase tracking-[0.12em] text-white shadow-lg shadow-red-500/25 transition hover:scale-105 active:scale-95 shrink-0"
             >
               <span>Commander</span>
             </Link>
@@ -181,7 +181,7 @@ export function PokawaFloatingNavbar() {
         <div className="flex lg:hidden items-center gap-2">
           <Link
             to="/commander"
-            className="inline-flex items-center gap-1 rounded-full bg-[#2C1D16] px-3.5 py-2 text-[10px] font-black uppercase tracking-wider text-[#FAF4EB] shadow-lg"
+            className="inline-flex items-center gap-1 rounded-full bg-[#E53535] hover:bg-[#CC2B2B] px-3.5 py-2 text-[10px] font-black uppercase tracking-wider text-white shadow-lg shadow-red-500/25 transition active:scale-95"
           >
             Commander
           </Link>
