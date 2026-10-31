@@ -14,7 +14,9 @@ const images: Record<string, string> = {
   "saumon-wasabi":                 bowlSaumon,
   "spicy-chicken":                 bowlSpicyChicken,
   "crousty-chicken-curry":         bowlCroustyCurry,
+  "crousty-curry":                 bowlCroustyCurry,
   "crousty-chicken-sauce-blanche": bowlCroustyBlanche,
+  "crousty-blanche":               bowlCroustyBlanche,
   "sur-mesure":                    bowlSaumon,
 };
 
