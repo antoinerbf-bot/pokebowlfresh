@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C4gmTD4D.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-sOyFXlzo.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -1260,11 +1260,15 @@ function buildEposXmlTest(printerIp, origin = "https://pokenbowl.be") {
 function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const isDelivery = order.customer.fulfillment === "delivery";
 	const dateObj = new Date(order.createdAt);
-	const dateStr = dateObj.toLocaleDateString("fr-BE", {
+	const dayStr = dateObj.toLocaleDateString("fr-BE", {
 		timeZone: "Europe/Brussels",
-		day: "numeric",
-		month: "short"
+		day: "numeric"
 	});
+	const rawMonth = dateObj.toLocaleDateString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		month: "short"
+	}).replace(/\./g, "").trim();
+	const monthStr = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
 	const timeStr = dateObj.toLocaleTimeString("fr-BE", {
 		timeZone: "Europe/Brussels",
 		hour: "2-digit",
@@ -1276,18 +1280,37 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const safeCity = cleanThermalText(order.customer.city || "");
 	const safePostalCode = cleanThermalText(order.customer.postalCode || "");
 	const safeNotes = cleanThermalText(order.customer.notes || "");
-	const safeRequestedTime = cleanThermalText(order.customer.requestedTime || "dès que possible");
+	const rawRequestedTime = cleanThermalText(order.customer.requestedTime || "dès que possible");
+	const isScheduled = rawRequestedTime.toLowerCase() !== "dès que possible" && rawRequestedTime.length > 0;
 	const rawId = order.id.includes("-") ? order.id.split("-").pop() || order.id : order.id;
 	const shortOrderRef = rawId.length === 6 ? `${rawId.slice(0, 3)} ${rawId.slice(3)}` : rawId;
 	let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
-	xml += `  <text align="center">Poke N Bowl&#10;</text>\n`;
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
-	xml += `  <text align="center" em="true" dh="true" dw="false">${isDelivery ? "LIVRAISON" : "À EMPORTER"}&#10;</text>\n`;
-	xml += `  <text align="center">Date : ${escapeXml(dateStr)}, ${escapeXml(safeRequestedTime)}&#10;</text>\n`;
-	xml += `  <text align="center">(${escapeXml(timeStr)})&#10;&#10;</text>\n`;
-	xml += `  <text align="center" em="true" dh="true" dw="false"># ${escapeXml(shortOrderRef.toUpperCase())}&#10;</text>\n`;
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
-	xml += `  <text align="right">EUR&#10;</text>\n`;
+	const line = (text, align = "left", em = false) => {
+		xml += `  <text font="font_a" align="${align}" em="${em ? "true" : "false"}" dh="false" dw="false">${escapeXml(text)}&#10;</text>\n`;
+	};
+	const hr = () => {
+		line("------------------------------------------------", "left", false);
+	};
+	line("Takeaway.com", "center", true);
+	line("Poke N Bowl", "center", false);
+	hr();
+	if (isDelivery) if (isScheduled) {
+		line("LIVRAISON PLANIFIÉE", "center", true);
+		line(`Date : ${dayStr} ${monthStr}, à ${rawRequestedTime}`, "center", false);
+	} else {
+		line("LIVRAISON", "center", true);
+		line(`Date : ${dayStr} ${monthStr}, dès que possible`, "center", false);
+		line(`(${timeStr})`, "center", false);
+	}
+	else {
+		line("À EMPORTER", "center", true);
+		line(`Date : ${dayStr} ${monthStr}, ${rawRequestedTime}`, "center", false);
+		line(`(${timeStr})`, "center", false);
+	}
+	line("", "center", false);
+	line(`# ${shortOrderRef.toUpperCase()}`, "center", true);
+	hr();
+	line(formatThermalRow("", "EUR", 48), "left", false);
 	let subTotal = 0;
 	for (const item of order.items) {
 		const safeItemName = cleanThermalText(item.name);
@@ -1295,66 +1318,67 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
 		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
 		subTotal += item.price * item.quantity;
-		if (unpacked.length > 0) xml += `  <text align="left">${escapeXml(safeItemName)}&#10;</text>\n`;
-		const itemLine = formatThermalRow(`${item.quantity} x ${safeItemName}`, itemBaseTotalStr, 48);
-		xml += `  <text align="left">${escapeXml(itemLine)}&#10;</text>\n`;
-		for (const sub of unpacked) if (sub.isExtra && sub.price) {
-			const extraLine = formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48);
-			xml += `  <text align="left">${escapeXml(extraLine)}&#10;</text>\n`;
-		} else if (sub.isAllergy) xml += `  <text align="left">  ! ${escapeXml(sub.text)}&#10;</text>\n`;
-		else xml += `  <text align="left">    ${escapeXml(sub.text)}&#10;</text>\n`;
+		if (unpacked.length > 0) line(safeItemName, "left", false);
+		line(formatThermalRow(`${item.quantity} x ${safeItemName}`, itemBaseTotalStr, 48), "left", false);
+		for (const sub of unpacked) if (sub.isExtra && sub.price) line(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48), "left", false);
+		else if (sub.isAllergy) line(`  ! ${sub.text}`, "left", false);
+		else line(`    ${sub.text}`, "left", false);
 	}
-	xml += `  <text align="left">&#10;</text>\n`;
-	xml += `  <text align="left">${escapeXml(formatThermalRow("Sous-total", subTotal.toFixed(2), 48))}&#10;</text>\n`;
-	xml += `  <text align="left">${escapeXml(formatThermalRow("Total de la commande", subTotal.toFixed(2), 48))}&#10;</text>\n`;
+	line("", "left", false);
+	line(formatThermalRow("Sous-total", subTotal.toFixed(2), 48), "left", false);
+	line(formatThermalRow("Total de la commande", subTotal.toFixed(2), 48), "left", false);
 	const deliveryFee = isDelivery && order.customer.deliveryFee ? order.customer.deliveryFee : 0;
-	if (isDelivery && deliveryFee > 0) xml += `  <text align="left">${escapeXml(formatThermalRow("Frais de livraison", deliveryFee.toFixed(2), 48))}&#10;</text>\n`;
-	xml += `  <text align="left">&#10;</text>\n`;
-	xml += `  <text align="left" em="true">${escapeXml(formatThermalRow("Total dû", order.total.toFixed(2), 48))}&#10;</text>\n`;
-	xml += `  <text align="right">-----&#10;</text>\n`;
+	if (isDelivery && deliveryFee > 0) line(formatThermalRow("Frais de livraison", deliveryFee.toFixed(2), 48), "left", false);
+	line(formatThermalRow("", "-----", 48), "left", false);
+	line(formatThermalRow("Total dû", order.total.toFixed(2), 48), "left", true);
+	line(formatThermalRow("", "=====", 48), "left", false);
+	line("", "left", false);
+	line("Payé par :", "left", false);
 	const isPaid = order.status === "paid";
-	xml += `  <text align="left">Payé par :&#10;</text>\n`;
-	xml += `  <text align="left">${escapeXml(formatThermalRow(isPaid ? "Carte ************" : "À régler sur place", order.total.toFixed(2), 48))}&#10;</text>\n`;
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
-	xml += `  <text align="center">IMPORTANT : POUR LES INFORMATIONS SUR LES&#10;</text>\n`;
-	xml += `  <text align="center">ALLERGÈNES ALIMENTAIRES&#10;</text>\n`;
-	xml += `  <text align="center">Appelez le restaurant ou consultez leur menu&#10;</text>\n`;
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
-	xml += `  <text align="center" em="true" dh="true" dw="false">${isPaid ? "COMMANDE PAYÉE" : "À RÉGLER SUR PLACE"}&#10;</text>\n`;
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
-	xml += `  <text align="left">Détails du client:&#10;&#10;</text>\n`;
-	xml += `  <text align="left">${escapeXml(safeCustomerName)}&#10;</text>\n`;
-	if (safeCustomerPhone) xml += `  <text align="left">Tél : ${escapeXml(safeCustomerPhone)}&#10;</text>\n`;
+	line(formatThermalRow(isPaid ? "Carte ************" : "À régler sur place", order.total.toFixed(2), 48), "left", false);
+	hr();
+	line("   IMPORTANT : POUR LES INFORMATIONS SUR LES    ", "center", false);
+	line("             ALLERGÈNES ALIMENTAIRES            ", "center", false);
+	line("    Appelez le restaurant ou consultez leur menu", "center", false);
+	hr();
+	line(isPaid ? "COMMANDE PAYÉE" : "À RÉGLER SUR PLACE", "center", true);
+	hr();
+	line("Détails du client:", "left", false);
+	line("", "left", false);
+	line(safeCustomerName, "left", false);
+	line("", "left", false);
+	if (safeCustomerPhone) line(`Tél : ${safeCustomerPhone}`, "left", false);
 	if (isDelivery) {
-		xml += `  <text align="left">&#10;</text>\n`;
-		if (safeAddress) xml += `  <text align="left">${escapeXml(safeAddress)}&#10;</text>\n`;
-		if (safeCity) xml += `  <text align="left">${escapeXml(safeCity)}&#10;</text>\n`;
-		if (safePostalCode) xml += `  <text align="left">${escapeXml(safePostalCode)}&#10;</text>\n`;
+		if (safeAddress) line(safeAddress, "left", false);
+		if (safeCity) line(safeCity, "left", false);
+		if (safePostalCode) line(safePostalCode, "left", false);
 	} else {
-		xml += `  <text align="left">&#10;Retrait au restaurant&#10;</text>\n`;
-		xml += `  <text align="left">Rue Haute 38 · 4600 Visé&#10;</text>\n`;
+		line("Retrait au restaurant", "left", false);
+		line("Rue Haute 38 · 4600 Visé", "left", false);
 	}
 	if (safeNotes) {
-		xml += `  <text align="left">&#10;Notes de livraison:&#10;</text>\n`;
+		line("", "left", false);
+		line("Notes de livraison:", "left", false);
 		const wrappedNotes = wrapThermalText(safeNotes, 48);
-		for (const noteLine of wrappedNotes) xml += `  <text align="left">${escapeXml(noteLine)}&#10;</text>\n`;
+		for (const noteLine of wrappedNotes) line(noteLine, "left", false);
 	}
 	const acceptedTimeStr = new Date(dateObj.getTime() + 6e4).toLocaleTimeString("fr-BE", {
 		timeZone: "Europe/Brussels",
 		hour: "2-digit",
 		minute: "2-digit"
 	});
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
-	xml += `  <text align="left">${escapeXml(formatThermalRow("Commande passée à", `${timeStr} ${dateStr}`, 48))}&#10;</text>\n`;
-	xml += `  <text align="left">${escapeXml(formatThermalRow("Commande acceptée à", `${acceptedTimeStr} ${dateStr}`, 48))}&#10;</text>\n`;
-	xml += `  <text align="left">------------------------------------------------&#10;</text>\n`;
+	line("", "left", false);
+	hr();
+	line(formatThermalRow("Commande passée à", `${timeStr} ${dayStr} ${monthStr}`, 48), "left", false);
+	line(formatThermalRow("Commande acceptée à", `${acceptedTimeStr} ${dayStr} ${monthStr}`, 48), "left", false);
+	hr();
 	const trackToken = order.deliveryToken || order.id;
 	const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
-	xml += `  <symbol type="qrcode_model_2" level="level_m" width="5">${escapeXml(qrUrl)}</symbol>\n`;
-	xml += `  <text align="center">${isDelivery ? "Scannez pour livrer" : "Scannez pour suivre la commande"}&#10;</text>\n`;
-	xml += `  <text align="center">(Ceci n'est pas une facture)&#10;</text>\n`;
-	xml += `  <text align="center">Poke N Bowl · www.pokenbowl.be&#10;</text>\n`;
-	xml += `  <feed line="4" />\n`;
+	xml += `  <symbol type="qrcode_model_2" level="level_m" width="8">${escapeXml(qrUrl)}</symbol>\n`;
+	line(isDelivery ? "Scannez pour livrer" : "Scannez pour suivre la commande", "center", false);
+	line("Ceci n'est pas une facture", "center", false);
+	hr();
+	xml += `  <feed line="3" />\n`;
 	xml += `  <cut type="feed" />\n`;
 	xml += `</epos-print>`;
 	return xml;
