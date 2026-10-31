@@ -480,7 +480,8 @@ export function PosApplicationPage() {
       ...prev.slice(0, 30),
     ]);
     try {
-      const xml = buildEposXmlTest(config.printerIp);
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://pokenbowl.be";
+      const xml = buildEposXmlTest(config.printerIp, origin);
       const res = await sendReceiptToPrinter(xml, config);
       const now = new Date().toLocaleTimeString();
 
