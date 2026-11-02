@@ -166,14 +166,14 @@ export const createTestDeliveryOrder = createServerFn({ method: "POST" })
       items: [
         {
           id: "spicy-chicken",
-          name: "Spicy Chicken Poké (Grand)",
+          name: "Spicy Chicken (Grand)",
           price: 15.5,
           quantity: 1,
           toppings: ["Avocat", "Oignons frits", "Sauce Spicy Mayo"],
         },
         {
           id: "crousty-chicken",
-          name: "Crousty Chicken Poké",
+          name: "Crousty Chicken",
           price: 14.5,
           quantity: 1,
           toppings: ["Sauce Sésame", "Edamame", "Cacahuètes"],

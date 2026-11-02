@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-sOyFXlzo.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-D7GmcySV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -561,7 +561,7 @@ async function createHandler() {
 			},
 			items: [{
 				id: "spicy-chicken",
-				name: "Spicy Chicken Poké (Grand)",
+				name: "Spicy Chicken (Grand)",
 				price: 15.5,
 				quantity: 1,
 				toppings: [
@@ -571,7 +571,7 @@ async function createHandler() {
 				]
 			}, {
 				id: "crousty-chicken",
-				name: "Crousty Chicken Poké",
+				name: "Crousty Chicken",
 				price: 14.5,
 				quantity: 1,
 				toppings: [
@@ -1114,6 +1114,18 @@ function cleanThermalText(str = "") {
 	return String(str).replace(/€/g, "EUR").replace(/[’‘`]/g, "'").replace(/[–—]/g, "-").replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/[^\x20-\x7E\n\r\u00C0-\u00FF]/g, "");
 }
 /**
+* Nettoie le nom d'un article pour le ticket thermique :
+* Supprime le mot redondant "Poké" ou "Poke" dans l'intitulé des plats
+* Ex: "Spicy Chicken Poké (Grand)" -> "Spicy Chicken (Grand)"
+*     "Crousty Chicken Poké" -> "Crousty Chicken"
+*/
+function cleanReceiptItemName(name = "") {
+	if (!name) return "";
+	let res = cleanThermalText(name);
+	while (/(^|\s+)pok[eé](\s+|$)/i.test(res)) res = res.replace(/(^|\s+)pok[eé](\s+|$)/i, "$1$2");
+	return res.replace(/\s+/g, " ").replace(/\s+\)/g, ")").replace(/\(\s+/g, "(").trim();
+}
+/**
 * Nettoyage et échappement sécurisé des caractères pour le XML ePOS
 */
 function escapeXml(str = "") {
@@ -1313,7 +1325,7 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	line(formatThermalRow("", "EUR", 48), "left", false);
 	let subTotal = 0;
 	for (const item of order.items) {
-		const safeItemName = cleanThermalText(item.name);
+		const safeItemName = cleanReceiptItemName(item.name);
 		const unpacked = unpackToppings(item.toppings || []);
 		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
 		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
@@ -2583,7 +2595,7 @@ function PosApplicationPage() {
 															},
 															items: [{
 																id: "test-poke",
-																name: "Poké de test",
+																name: "Bowl de test",
 																price: 1,
 																quantity: 1,
 																toppings: ["Avocat", "Sésame"]

@@ -1033,7 +1033,7 @@ export function PosApplicationPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => { const now = new Date().toISOString(); const demo: Order = { id: "TEST-TICKET-" + Date.now().toString().slice(-6), createdAt: now, status: "paid", paymentMethod: "online", currency: "EUR", deliveryToken: "test", customer: { name: "CLIENT TEST (NE PAS LIVRER)", phone: "0000000000", fulfillment: "pickup", requestedTime: "TEST UNIQUEMENT", notes: "Ticket de test — aucune vraie commande", deliveryFee: 0 }, items: [{ id: "test-poke", name: "Poké de test", price: 1, quantity: 1, toppings: ["Avocat", "Sésame"] }], total: 1 }; void printBrowserTicket(demo); }}
+                      onClick={() => { const now = new Date().toISOString(); const demo: Order = { id: "TEST-TICKET-" + Date.now().toString().slice(-6), createdAt: now, status: "paid", paymentMethod: "online", currency: "EUR", deliveryToken: "test", customer: { name: "CLIENT TEST (NE PAS LIVRER)", phone: "0000000000", fulfillment: "pickup", requestedTime: "TEST UNIQUEMENT", notes: "Ticket de test — aucune vraie commande", deliveryFee: 0 }, items: [{ id: "test-poke", name: "Bowl de test", price: 1, quantity: 1, toppings: ["Avocat", "Sésame"] }], total: 1 }; void printBrowserTicket(demo); }}
                       className="flex items-center justify-center gap-2 rounded-xl bg-sky-600 hover:bg-sky-500 active:scale-95 py-3.5 px-4 text-white font-black text-xs shadow-lg transition cursor-pointer"
                     >
                       <Printer className="w-4 h-4" />

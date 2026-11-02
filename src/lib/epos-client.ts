@@ -75,6 +75,25 @@ export function cleanThermalText(str: string = ""): string {
 }
 
 /**
+ * Nettoie le nom d'un article pour le ticket thermique :
+ * Supprime le mot redondant "Poké" ou "Poke" dans l'intitulé des plats
+ * Ex: "Spicy Chicken Poké (Grand)" -> "Spicy Chicken (Grand)"
+ *     "Crousty Chicken Poké" -> "Crousty Chicken"
+ */
+export function cleanReceiptItemName(name: string = ""): string {
+  if (!name) return "";
+  let res = cleanThermalText(name);
+  while (/(^|\s+)pok[eé](\s+|$)/i.test(res)) {
+    res = res.replace(/(^|\s+)pok[eé](\s+|$)/i, "$1$2");
+  }
+  return res
+    .replace(/\s+/g, " ")
+    .replace(/\s+\)/g, ")")
+    .replace(/\(\s+/g, "(")
+    .trim();
+}
+
+/**
  * Nettoyage et échappement sécurisé des caractères pour le XML ePOS
  */
 export function escapeXml(str: string = ""): string {
@@ -300,7 +319,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   // 5. Articles & Ingrédients
   let subTotal = 0;
   for (const item of order.items) {
-    const safeItemName = cleanThermalText(item.name);
+    const safeItemName = cleanReceiptItemName(item.name);
     const unpacked = unpackToppings(item.toppings || []);
     const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
     const baseUnitPrice = Math.max(0, item.price - supplementsTotal);
