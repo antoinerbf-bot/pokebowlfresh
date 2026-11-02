@@ -3,7 +3,7 @@ import { n as booleanType, o as objectType, r as enumType, s as stringType } fro
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, o as requestOrderReprint, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-BVCggltC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-BLL0H5LI.js
 /**
 * Générateur de commandes binaires ESC/POS pour Epson TM-m30III
 * Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
@@ -341,7 +341,7 @@ var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objec
 			toppings: [
 				"Sauce Sésame",
 				"Edamame",
-				"Cacahuètes"
+				"Noix de cajou"
 			]
 		}],
 		total: 32

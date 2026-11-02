@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-D7GmcySV.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BudN_Jah.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -577,7 +577,7 @@ async function createHandler() {
 				toppings: [
 					"Sauce Sésame",
 					"Edamame",
-					"Cacahuètes"
+					"Noix de cajou"
 				]
 			}],
 			total: 32
@@ -1111,7 +1111,7 @@ function savePrinterConfig(config) {
 */
 function cleanThermalText(str = "") {
 	if (!str) return "";
-	return String(str).replace(/€/g, "EUR").replace(/[’‘`]/g, "'").replace(/[–—]/g, "-").replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/[^\x20-\x7E\n\r\u00C0-\u00FF]/g, "");
+	return String(str).replace(/cacahu[eè]tes?/gi, "Noix de cajou").replace(/€/g, "EUR").replace(/[’‘`]/g, "'").replace(/[–—]/g, "-").replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/[^\x20-\x7E\n\r\u00C0-\u00FF]/g, "");
 }
 /**
 * Nettoie le nom d'un article pour le ticket thermique :

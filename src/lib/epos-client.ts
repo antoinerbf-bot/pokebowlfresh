@@ -66,6 +66,7 @@ export function savePrinterConfig(config: PrinterConfig): void {
 export function cleanThermalText(str: string = ""): string {
   if (!str) return "";
   return String(str)
+    .replace(/cacahu[eè]tes?/gi, "Noix de cajou")
     .replace(/€/g, "EUR")
     .replace(/[’‘`]/g, "'")
     .replace(/[–—]/g, "-")
