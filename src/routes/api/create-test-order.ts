@@ -53,7 +53,7 @@ async function createHandler() {
                 name: "Crousty Chicken",
                 price: 14.5,
                 quantity: 1,
-                toppings: ["Sauce Sésame", "Edamame", "Noix de cajou"],
+                toppings: ["Sauce Sésame sucrée", "Edamame", "Noix de cajou"],
               },
             ],
             total: 32.0,
