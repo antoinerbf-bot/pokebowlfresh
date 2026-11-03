@@ -190,15 +190,21 @@ function QuantitySelector({
 /* ─── Main Product Page ──────────────────────────────────────────── */
 function ProductPage() {
   const { productId } = Route.useParams();
-  const product = bowls.find((b) => b.id === productId);
+  const product = bowls.find((b) => b.id === productId || (productId === "crousty-mix" && b.id === "crousty-chicken-mix"));
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
   const { available } = useStock();
+
+  const isCrousty = Boolean(product && (product.id.startsWith("crousty-") || product.id === "crousty-mix"));
+  const isCroustyMix = Boolean(product && (product.id === "crousty-chicken-mix" || product.id === "crousty-mix" || productId === "crousty-mix"));
 
   // States (appelés inconditionnellement avant tout return anticipé — règle des Hooks React)
   const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
   const [selectedBase, setSelectedBase] = React.useState<string>(product?.defaultBase || "Riz");
   const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>(() => {
+    if (productId === "crousty-chicken-mix" || productId === "crousty-mix") {
+      return { "Sauce curry": 1, "Sauce blanche": 1 };
+    }
     const defaultS = product?.defaultSauce || "Spicy-Mayo";
     return defaultS ? { [defaultS]: 1 } : {};
   });
@@ -219,8 +225,12 @@ function ProductPage() {
   React.useEffect(() => {
     setSelectedSize("moyen");
     setSelectedBase(product?.defaultBase || "Riz");
-    const defaultS = product?.defaultSauce || "Spicy-Mayo";
-    setSauceQuantities(defaultS ? { [defaultS]: 1 } : {});
+    if (productId === "crousty-chicken-mix" || productId === "crousty-mix") {
+      setSauceQuantities({ "Sauce curry": 1, "Sauce blanche": 1 });
+    } else {
+      const defaultS = product?.defaultSauce || "Spicy-Mayo";
+      setSauceQuantities(defaultS ? { [defaultS]: 1 } : {});
+    }
     setRemovedIngredients([]);
     setExtraProteins({});
     setMixinQuantities({});
@@ -248,7 +258,6 @@ function ProductPage() {
     );
   }
 
-  const isCrousty = product.id.startsWith("crousty-");
   const productOk = available(product.id);
 
   const cartItemsCount = items.reduce((sum, i) => sum + i.quantity, 0);
@@ -263,7 +272,9 @@ function ProductPage() {
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const toppingsExtraPrice = totalToppingsCount * 0.50;
   const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
-  const extraSauceCount = Math.max(0, totalSauceUnits - 1);
+  // Crousty Mix inclut 2 sauces d'office (Curry + Blanche), les autres formules 1 sauce incluse.
+  const includedSaucesCount = isCroustyMix ? 2 : 1;
+  const extraSauceCount = Math.max(0, totalSauceUnits - includedSaucesCount);
   const extraSaucePrice = extraSauceCount * 0.50;
 
   const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
@@ -336,11 +347,11 @@ function ProductPage() {
     });
   };
 
-  // Sauce stepper (1ère sauce offerte, chaque portion supplémentaire à +0.50€)
+  // Sauce stepper (sauces incluses selon formule, chaque portion supplémentaire à +0.50€)
   const addSauce = (name: string) => {
-    // Si l'utilisateur n'a qu'1 sauce sélectionnée (la sauce offerte du bowl) et clique sur une AUTRE sauce :
+    // Si plat standard avec 1 seule sauce offerte et qu'on clique sur une AUTRE sauce :
     // On remplace sa sauce offerte par la nouvelle choisie sans surcoût !
-    if (totalSauceUnits === 1 && !sauceQuantities[name]) {
+    if (!isCroustyMix && totalSauceUnits === 1 && !sauceQuantities[name]) {
       setSauceQuantities({ [name]: 1 });
       return;
     }
@@ -372,10 +383,14 @@ function ProductPage() {
 
     const optionsList: string[] = [];
 
-    // Format / Taille
+    // Format / Taille & Formule
     if (isCrousty) {
-      optionsList.push("Format : Barquette rectangulaire standard · Formule Étudiant 11€ (Midi uniquement)");
-      optionsList.push(`Boisson 33cl incluse (Formule Midi) : ${selectedDrink}`);
+      optionsList.push(
+        isCroustyMix
+          ? "Format : Barquette rectangulaire · Formule Étudiant 11€ (Crousty Mix Curry & Blanche)"
+          : "Format : Barquette rectangulaire · Formule Étudiant 11€ (Boisson 33cl incluse)"
+      );
+      optionsList.push(`Boisson 33cl incluse : ${selectedDrink}`);
     } else {
       if (selectedSize === "grand") {
         optionsList.push("Taille : Grand (+3.00€)");
@@ -396,23 +411,18 @@ function ProductPage() {
     // Base
     optionsList.push(`Base : ${selectedBase}`);
 
-    // Sauces (1ère gratuite incluse, chaque sauce supplémentaire à +0,50 €)
+    // Sauces (Crousty Mix inclut Duo Curry & Blanche, plats standards incluent 1 sauce offerte)
     const activeSauces = Object.entries(sauceQuantities).filter(([, q]) => q > 0);
     if (activeSauces.length === 0) {
       optionsList.push("Sauce : Sans sauce");
     } else {
-      const [firstSauceName, firstQty] = activeSauces[0];
-      optionsList.push(`Sauce : ${firstSauceName}`);
-
-      if (firstQty > 1) {
+      const sauceSummary = activeSauces
+        .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name))
+        .join(" + ");
+      optionsList.push(`Sauce : ${sauceSummary}`);
+      if (extraSauceCount > 0) {
         optionsList.push(
-          `Sauce extra (+${((firstQty - 1) * 0.50).toFixed(2)}€) : ${firstSauceName}${firstQty > 2 ? ` (x${firstQty - 1})` : ""}`,
-        );
-      }
-      for (let i = 1; i < activeSauces.length; i++) {
-        const [name, q] = activeSauces[i];
-        optionsList.push(
-          `Sauce extra (+${(q * 0.50).toFixed(2)}€) : ${name}${q > 1 ? ` (x${q})` : ""}`,
+          `Sauce extra (+${extraSaucePrice.toFixed(2)}€) : ${extraSauceCount} portion${extraSauceCount > 1 ? "s" : ""}`,
         );
       }
     }
@@ -579,7 +589,7 @@ function ProductPage() {
               </div>
             ) : (
               <>
-                {/* ══ STEP 1: FORMAT & TAILLE OU BANNIÈRE CROUSTY FORMULE MIDI ══════ */}
+                {/* ══ STEP 1: FORMAT & TAILLE OU BANNIÈRE CROUSTY FORMULE ══════ */}
                 {isCrousty ? (
                   <section className="rounded-[24px] border-2 border-[#F59E0B]/40 bg-[#FFF6E8] p-5 shadow-card">
                     <div className="flex items-start justify-between gap-3">
@@ -588,15 +598,22 @@ function ProductPage() {
                           <span className="inline-flex items-center gap-1 rounded-full bg-[#2C1D16] text-[#EADCC9] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider">
                             🥡 Barquette Rectangulaire
                           </span>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#ea580c] text-white px-3 py-0.5 text-[10px] font-black uppercase tracking-wider">
-                            ☀️ Formule Étudiant 11 € · Uniquement le midi
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#ea580c] text-white px-3 py-0.5 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                            ⚡ Formule Étudiant 11 € · Boisson 33 cl incluse
                           </span>
+                          {isCroustyMix && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#F59E0B] text-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                              ⭐ Duo Signature Curry & Blanche
+                            </span>
+                          )}
                         </div>
                         <h2 className="text-sm font-black text-[#2C1D16]">
-                          Portion Généreuse Chaude · Morceaux de poulet croustillant + Riz
+                          {isCroustyMix
+                            ? "Crousty Mix : Duo Curry & Blanche · Poulet croustillant + Riz parfumé"
+                            : "Portion Généreuse Chaude · Morceaux de poulet croustillant + Riz"}
                         </h2>
                         <p className="text-[11px] font-semibold text-[#7A542E] mt-1">
-                          🎓 <strong>Formule Étudiant à 11,00 € avec canette 33 cl incluse :</strong> valable <strong>uniquement le midi</strong>.
+                          🎓 <strong>Formule Étudiant à 11,00 € avec canette 33 cl incluse :</strong> poulet croustillant doré minute, riz chaud parfumé, oignons frits croquants & sauces maison.
                         </p>
                       </div>
                       <span className="text-2xl font-black text-[#ea580c] shrink-0">11.00 €</span>
@@ -863,22 +880,34 @@ function ProductPage() {
                   )}
                 </section>
 
-                {/* ══ STEP 4: SAUCE UNIFIÉE (1ÈRE OFFERTE · +0,50 € PAR PORTION SUPPLÉMENTAIRE) ══ */}
+                {/* ══ STEP 4: SAUCE UNIFIÉE ══ */}
                 <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-5 shadow-card">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16] flex items-center gap-1.5">
                         <span className="text-base">🥫</span>
-                        <span>{isCrousty ? "Sauce de nappage au choix" : "4. Sauces au choix"}</span>
+                        <span>
+                          {isCroustyMix
+                            ? "Duo de Sauces Signature (Curry & Blanche)"
+                            : isCrousty
+                            ? "Sauce de nappage au choix"
+                            : "4. Sauces au choix"}
+                        </span>
                       </h2>
                       <p className="text-[11px] text-[#7A6857] mt-0.5">
-                        La 1ère sauce est <strong>offerte (gratuite)</strong> · chaque portion supplémentaire est à <strong>+0,50 €</strong> (cumulable sans limite).
+                        {isCroustyMix
+                          ? "Le duo Sauce Curry onctueuse + Sauce Blanche maison est inclus dans la formule · sauces supplémentaires à +0,50 €."
+                          : "La 1ère sauce est offerte (gratuite) · chaque portion supplémentaire est à +0,50 € (cumulable sans limite)."}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9] shadow-sm">
                         {totalSauceUnits === 0
                           ? "Sans sauce"
+                          : isCroustyMix
+                          ? totalSauceUnits <= 2
+                            ? "Duo de sauces inclus (0,00 €)"
+                            : `${totalSauceUnits} sauces (Duo inclus + ${extraSauceCount} extra · +${extraSaucePrice.toFixed(2)} €)`
                           : totalSauceUnits === 1
                           ? "1 sauce offerte (0,00 €)"
                           : `${totalSauceUnits} sauces (1 offerte + ${extraSauceCount} extra · +${extraSaucePrice.toFixed(2)} €)`}
@@ -944,11 +973,17 @@ function ProductPage() {
                             <span className={`text-[11px] font-black ${
                               isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
                             }`}>
-                              {count === 0
-                                ? totalSauceUnits <= 1
-                                  ? "1ère offerte"
+                              {isCroustyMix && (s.name === "Sauce curry" || s.name === "Sauce blanche")
+                                ? count === 1
+                                  ? "Incluse dans le Mix (0 €)"
+                                  : count > 1
+                                  ? `${count}x (+${((count - 1) * 0.50).toFixed(2)}€)`
+                                  : "Incluse dans le Mix"
+                                : count === 0
+                                ? totalSauceUnits < includedSaucesCount
+                                  ? "Incluse"
                                   : "+0,50 €"
-                                : count === 1 && totalSauceUnits === 1
+                                : count === 1 && totalSauceUnits <= includedSaucesCount
                                 ? "Offerte (0 €)"
                                 : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
                             </span>
@@ -1103,10 +1138,10 @@ function ProductPage() {
                     <div className="mb-3">
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16] flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-[#ea580c]" />
-                        Canette 33 cl Incluse (Formule Étudiant 11 € · Midi uniquement)
+                        Canette 33 cl Incluse (Formule Étudiant 11 € · Boisson incluse)
                       </h2>
                       <p className="text-[11px] font-semibold text-[#7A542E]">
-                        Comprise dans la formule étudiant du midi à 11,00 € · sélectionne ta boisson fraîche
+                        Comprise dans la formule à 11,00 € · sélectionne ta boisson fraîche parmi notre sélection 33 cl
                       </p>
                     </div>
                     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">

@@ -6,6 +6,7 @@ import bowlSaumon from "@/assets/bowl-saumon.jpg";
 import bowlSweetChicken from "@/assets/bowl-sweet-chicken.jpg";
 import bowlScampis from "@/assets/bowl-scampis.jpg";
 import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
+import bowlCroustyMix from "@/assets/bowl-crousty-mix.jpg";
 
 const INGREDIENTS_SHOWCASE = [
   {
@@ -32,14 +33,14 @@ const INGREDIENTS_SHOWCASE = [
   },
   {
     id: "crousty",
-    title: "Le Fameux Crousty Chicken",
+    title: "Le Fameux Crousty Chicken & Mix",
     subtitle: "Barquette rectangulaire · Poulet croustillant minute",
-    desc: "Morceaux de poulet croustillant dorés sur riz chaud, nappés de sauce curry chaude onctueuse ou sauce blanche et d'oignons frits.",
-    badge: "Formule Étudiant 11 € · Uniquement le midi",
+    desc: "Morceaux de poulet croustillant dorés sur riz chaud, duo signature sauce curry onctueuse & sauce blanche maison, pointe d'aigre-douce et oignons frits.",
+    badge: "⭐ Formule Étudiant 11 € · Boisson 33 cl incluse",
     badgeColor: "#f59e0b",
-    image: bowlCroustyCurry,
-    linkDish: "crousty-chicken-curry",
-    stats: "Canette 33 cl incluse le midi · suppléments dès +1 €",
+    image: bowlCroustyMix,
+    linkDish: "crousty-chicken-mix",
+    stats: "Canette 33 cl incluse · Duo Curry & Blanche",
   },
   {
     id: "scampis",

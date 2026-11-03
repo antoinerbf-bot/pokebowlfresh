@@ -257,33 +257,75 @@ function CommanderPage() {
             })}
           </div>
 
-          {/* ── Section Crousty Chicken ────────────────── */}
+          {/* ── Section Crousty Chicken & Crousty Mix ────────────────── */}
           <div className="mt-16 sm:mt-20">
+            {/* Bannière Promotionnelle Spéciale Crousty Mix inspirée de l'affiche */}
+            <div className="mb-8 relative overflow-hidden rounded-[28px] border-2 border-[#ea580c]/40 bg-gradient-to-r from-[#2C1D16] via-[#3d271c] to-[#2C1D16] p-6 sm:p-8 text-[#FAF5EE] shadow-lift">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-[#ea580c] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">
+                      ⚡ MAINTENANT DISPONIBLE
+                    </span>
+                    <span className="rounded-full bg-[#F59E0B] px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16] shadow-sm">
+                      ⭐ CROUSTY MIX · CURRY & BLANCHE
+                    </span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                    Formule Étudiant <span className="text-[#F59E0B]">11 €</span> · Boisson 33 cl Incluse
+                  </h3>
+                  <p className="max-w-xl text-xs sm:text-sm text-[#EADCC9]/80 leading-relaxed">
+                    Morceaux de poulet croustillant dorés minute sur riz chaud parfumé, oignons frits, pointe d'aigre-douce et le duo parfait : <strong>Sauce Curry onctueuse + Sauce Blanche maison</strong> !
+                  </p>
+                </div>
+                <div className="flex items-center gap-4 shrink-0">
+                  <div className="text-right">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[#EADCC9]/70">Formule complète</span>
+                    <span className="text-3xl font-black text-[#F59E0B]">11,00 €</span>
+                  </div>
+                  <Link
+                    to="/product/$productId"
+                    params={{ productId: "crousty-chicken-mix" }}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-white shadow-card hover:bg-[#c2410c] hover:scale-105 transition active:scale-95"
+                  >
+                    Commander le Mix <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">
-                  <Sparkles className="h-3 w-3" /> ☀️ Formule Étudiant 11 € avec canette 33 cl · UNIQUEMENT LE MIDI
+                  <Sparkles className="h-3 w-3" /> ☀️ Nos Recettes Crousty Chicken
                 </div>
-                <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl">
-                  Crousty Chicken (Barquette Rectangulaire)
+                <h2 className="mt-2 text-2xl font-black tracking-tight sm:text-3xl lg:text-4xl text-[#2C1D16]">
+                  La Gamme Chaude Crousty
                 </h2>
                 <p className="mt-1 text-xs sm:text-sm text-[#6E5A49]">
-                  Morceaux de poulet croustillant dorés · Riz chaud · Canette 33cl fraîche incluse dans la formule étudiant du midi
+                  Morceaux de poulet croustillant dorés · Riz parfumé chaud · Oignons frits · Canette 33 cl incluse dans la formule à 11 €
                 </p>
               </div>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {croustyBowls.map((bowl) => {
                 const ok = available(bowl.id);
-                const tagStyle = TAG_STYLES[bowl.tagColor ?? "bestseller"] ?? "bg-[#ff705f] text-white";
+                const isMix = bowl.id.includes("mix");
+                const tagStyle = isMix
+                  ? "bg-[#F59E0B] text-[#2C1D16] font-black"
+                  : TAG_STYLES[bowl.tagColor ?? "bestseller"] ?? "bg-[#ff705f] text-white";
 
                 return ok ? (
                   <Link
                     key={bowl.id}
                     to="/product/$productId"
                     params={{ productId: bowl.id }}
-                    className="group block overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] shadow-card ring-2 ring-[#ff705f]/30 ring-offset-2 ring-offset-[#EFE6D8] transition-all duration-500 hover:-translate-y-2 hover:shadow-lift"
+                    className={`group block overflow-hidden rounded-[28px] border border-[#DECBB3] bg-[#FAF5EE] shadow-card transition-all duration-500 hover:-translate-y-2 hover:shadow-lift ${
+                      isMix
+                        ? "ring-2 ring-[#ea580c] ring-offset-2 ring-offset-[#EFE6D8]"
+                        : "ring-1 ring-[#DECBB3]"
+                    }`}
                   >
                     <BowlCard bowl={bowl} ok tagStyle={tagStyle} soldOut={t("cmd.sold_out")} />
                   </Link>

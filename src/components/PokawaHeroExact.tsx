@@ -7,6 +7,7 @@ import { useCart } from "@/context/CartContext";
 // Photos culinaires plein écran ultra haute définition 1080p (Poke N Bowl Visé)
 import heroSaumonWide from "@/assets/hero-saumon-clean-wide.jpg";
 import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
+import heroCroustyMixWide from "@/assets/hero-crousty-mix-wide.jpg";
 import heroCroustyWide from "@/assets/hero-crousty-wide.jpg";
 import heroCroustyBlancheWide from "@/assets/hero-crousty-blanche-wide.jpg";
 import heroScampisWide from "@/assets/hero-scampis-wide.jpg";
@@ -75,12 +76,32 @@ const SLIDES: PokawaSlide[] = [
     ingredients: "Poulet mariné sur riz, guacamole velouté, mangue, maïs doux, tomates cerises, feta crémeuse, oignons croustillants & sauce teriyaki.",
   },
   {
+    id: "crousty-chicken-mix",
+    image: heroCroustyMixWide,
+    titleLine1: "CROUSTY MIX",
+    titleLine2: "CURRY & BLANCHE",
+    dishName: "Crousty Mix (Curry & Blanche)",
+    badge: "⭐ Formule Étudiant 11 € · Boisson 33 cl incluse",
+    ingredientCallout: {
+      text: "DUO SIGNATURE",
+      subtext: "CURRY ONCTUEUX + BLANCHE MAISON",
+      emoji: "🍗",
+    },
+    statBadge: {
+      main: "11.00 €",
+      sub: "BOISSON INCLUSE",
+    },
+    price: 11.0,
+    ingredients: "La formule star : morceaux de poulet croustillant dorés, duo Sauce Curry onctueuse + Sauce Blanche maison, pointe d'aigre-douce, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl incluse !",
+    isCrousty: true,
+  },
+  {
     id: "crousty-chicken-curry",
     image: heroCroustyWide,
     titleLine1: "CROUSTY CHICKEN",
     titleLine2: "CURRY CHAUD",
     dishName: "Crousty Chicken Curry",
-    badge: "Formule Étudiant 11 € · Midi uniquement (avec canette)",
+    badge: "Formule Étudiant 11 € · Boisson 33 cl incluse",
     ingredientCallout: {
       text: "BARQUETTE RECTANGULAIRE",
       subtext: "POULET EN MORCEAUX & SAUCE CURRY",
@@ -88,10 +109,10 @@ const SLIDES: PokawaSlide[] = [
     },
     statBadge: {
       main: "11.00 €",
-      sub: "CANETTE INCLUSE LE MIDI",
+      sub: "CANETTE 33 CL INCLUSE",
     },
     price: 11.0,
-    ingredients: "Servi en barquette rectangulaire : morceaux de poulet croustillant dorés, sauce curry onctueuse maison, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl uniquement le midi.",
+    ingredients: "Servi en barquette rectangulaire : morceaux de poulet croustillant dorés, sauce curry onctueuse maison, pointe d'aigre-douce, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl incluse.",
     isCrousty: true,
   },
   {
@@ -100,7 +121,7 @@ const SLIDES: PokawaSlide[] = [
     titleLine1: "CROUSTY CHICKEN",
     titleLine2: "SAUCE BLANCHE",
     dishName: "Crousty Sauce Blanche",
-    badge: "Formule Étudiant 11 € · Midi uniquement (avec canette)",
+    badge: "Formule Étudiant 11 € · Boisson 33 cl incluse",
     ingredientCallout: {
       text: "BARQUETTE RECTANGULAIRE",
       subtext: "POULET EN MORCEAUX & SAUCE BLANCHE",
@@ -108,10 +129,10 @@ const SLIDES: PokawaSlide[] = [
     },
     statBadge: {
       main: "11.00 €",
-      sub: "CANETTE INCLUSE LE MIDI",
+      sub: "CANETTE 33 CL INCLUSE",
     },
     price: 11.0,
-    ingredients: "Servi en barquette rectangulaire : morceaux de poulet croustillant dorés, sauce blanche onctueuse, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl uniquement le midi.",
+    ingredients: "Servi en barquette rectangulaire : morceaux de poulet croustillant dorés, sauce blanche onctueuse, pointe d'aigre-douce, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl incluse.",
     isCrousty: true,
   },
   {

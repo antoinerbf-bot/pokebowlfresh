@@ -264,13 +264,14 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       <p>Chaque bol est assemblé minute sur une base de riz à sushi chaud, puis généreusement nappé de votre sauce maison favorite :</p>
       
       <ul>
+        <li><strong>Nouveau Crousty Mix (Curry & Blanche) :</strong> Le duo star qui fait l'unanimité ! L'onctuosité du curry doux mariée à la fraîcheur de la sauce blanche maison, avec pointe d'aigre-douce et canette 33 cl incluse dans la formule étudiant à 11 €.</li>
         <li><strong>Sauce Curry Dorée :</strong> Un curry doux et parfumé, crémeux et subtilement épicé, rappelant les meilleurs currys katsu japonais.</li>
         <li><strong>Sauce Blanche Maison :</strong> Une sauce fraîche et onctueuse relevée d'herbes aromatiques pour un contraste chaud-frais irrésistible.</li>
-        <li><strong>Le topping croquant :</strong> Une pluie d'oignons frits croustillants et une touche de sésame pour parfaire la bouchée.</li>
+        <li><strong>Le topping croquant :</strong> Une pluie d'oignons frits croustillants pour parfaire la bouchée.</li>
       </ul>
 
-      <h2>Toute la gamme Crousty Chicken à 10 €</h2>
-      <p>Déclinée en 5 recettes gourmandes (Thaïger, Curry, Teriyaki, Blanche et Spicy), la gamme Crousty Chicken est proposée à 10,00 € sur place, à emporter ou en livraison.</p>
+      <h2>Formule Étudiant à 11 € avec Boisson Incluse</h2>
+      <p>Servie en barquette rectangulaire bien chaude, la gamme Crousty Chicken et le nouveau Crousty Mix sont proposés dans la formule étudiant à 11,00 € avec canette 33 cl incluse au choix.</p>
     `,
   },
 ];

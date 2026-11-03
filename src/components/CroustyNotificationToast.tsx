@@ -28,6 +28,13 @@ interface Suggestion {
 
 const SUGGESTIONS: Suggestion[] = [
   {
+    id: "crousty-mix",
+    title: "Crousty Mix (Curry & Blanche)",
+    subtitleKey: "toast.mix_sub",
+    price: "11 €",
+    productId: "crousty-chicken-mix",
+  },
+  {
     id: "crousty-curry",
     title: "Crousty Chicken Curry",
     subtitleKey: "toast.curry_sub",

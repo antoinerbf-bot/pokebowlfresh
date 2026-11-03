@@ -168,12 +168,12 @@ export function unpackToppings(toppings: string[] = []): Array<{ text: string; p
     const content = catMatch ? catMatch[1] : raw;
     const parts = content.split(",").map((s) => s.trim()).filter(Boolean);
     for (const part of parts) {
-      const isAllergy = /^(?:sans\s*:|sans\s+|allerg)/i.test(part);
+      const isAllergy = /^[!\s]*(?:sans\s*:|sans\s+|allerg)/i.test(part);
       const priceMatch = part.match(/\(\+?([\d.,]+)\s*€?\)/);
       const priceStr = priceMatch ? parseFloat(priceMatch[1].replace(",", ".")).toFixed(2) : undefined;
       const cleanName = part.replace(/\(\+?[\d.,]+\s*€?\)/g, "").replace(/\(x\d+\)/g, "").trim();
       const isExtra = Boolean(priceStr) || cleanName.startsWith("+");
-      const displayText = cleanName.replace(/^\+\s*/, "");
+      const displayText = cleanName.replace(/^[!+\s]+/, "");
       result.push({ text: displayText, price: priceStr, isAllergy, isExtra });
     }
   }

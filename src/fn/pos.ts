@@ -250,14 +250,14 @@ export const createTestDeliveryOrder = createServerFn({ method: "POST" })
             toppings: ["Grande (+3.00 €)"],
           },
           {
-            id: "crousty-chicken",
-            name: "Crousty Chicken",
-            price: 14.5,
+            id: "crousty-chicken-mix",
+            name: "Crousty Mix (Curry & Blanche)",
+            price: 11.0,
             quantity: 1,
-            toppings: ["+ Sauce Sésame sucrée (+0.50 €)"],
+            toppings: ["Boisson 33cl incluse : Coca-Cola (33 cl)"],
           },
         ],
-        total: 32.0,
+        total: 26.5,
       };
     }
 

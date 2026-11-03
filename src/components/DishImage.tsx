@@ -7,12 +7,15 @@ import bowlSaumon       from "@/assets/bowl-saumon.jpg";
 import bowlSpicyChicken from "@/assets/bowl-spicy-chicken.jpg";
 import bowlCroustyCurry from "@/assets/bowl-crousty-curry.jpg";
 import bowlCroustyBlanche from "@/assets/bowl-crousty-blanche.jpg";
+import bowlCroustyMix from "@/assets/bowl-crousty-mix.jpg";
 
 const images: Record<string, string> = {
   "sweet-chicken":                 bowlSweetChicken,
   "scampis-royaux":                bowlScampis,
   "saumon-wasabi":                 bowlSaumon,
   "spicy-chicken":                 bowlSpicyChicken,
+  "crousty-chicken-mix":           bowlCroustyMix,
+  "crousty-mix":                   bowlCroustyMix,
   "crousty-chicken-curry":         bowlCroustyCurry,
   "crousty-curry":                 bowlCroustyCurry,
   "crousty-chicken-sauce-blanche": bowlCroustyBlanche,
