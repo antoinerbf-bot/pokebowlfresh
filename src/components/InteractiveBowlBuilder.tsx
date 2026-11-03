@@ -29,7 +29,7 @@ export function InteractiveBowlBuilder() {
   const [activeStep, setActiveStep] = React.useState<number>(1);
   const [size, setSize] = React.useState<"moyen" | "grand">("moyen");
   const [base, setBase] = React.useState(() => detailedBases[0]!);
-  const [proteine, setProteine] = React.useState(() => detailedProteins[0]!); // Poulet mariné par défaut
+  const [proteine, setProteine] = React.useState(() => detailedProteins[0]!); // Poulet par défaut
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
   const [mixinQuantities, setMixinQuantities] = React.useState<Record<string, number>>({
     Avocat: 1,
@@ -48,7 +48,7 @@ export function InteractiveBowlBuilder() {
 
   // Calcul des quantités et des prix :
   // - Moyen : 10,00 € | Grand : 13,00 € (+3,00 €)
-  // - Protéine principale : Poulet mariné (0 €), Scampis (0 €), Saumon (+1,00 €)
+  // - Protéine principale : Poulet (0 €), Scampis (0 €), Saumon (+1,00 €)
   // - Protéines supplémentaires : +2,50 € par portion ajoutée (illimité, ex: 3x = 7,50 €)
   // - Légumes / Mix-ins : 5 portions incluses (hors feta à +1,00 €), puis +1,00 € par portion supplémentaire (illimité)
   // - Sauces : 1 au choix gratuite incluse, puis +0,50 € par pot supplémentaire (illimité, ex: 3x = 1,50 €)
@@ -543,7 +543,7 @@ export function InteractiveBowlBuilder() {
                           <span>Protéines supplémentaires (+2,50 € / portion)</span>
                         </h4>
                         <p className="text-[11px] text-[#6E5A49] font-medium">
-                          Poulet mariné, saumon frais ou scampis (+2,50 € / portion)
+                          Poulet, saumon frais ou scampis (+2,50 € / portion)
                         </p>
                       </div>
                       {totalExtraProteinUnits > 0 && (

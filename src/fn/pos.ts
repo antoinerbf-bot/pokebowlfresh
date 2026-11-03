@@ -180,7 +180,7 @@ export const createTestDeliveryOrder = createServerFn({ method: "POST" })
             toppings: [
               "Grande (+3.00 €)",
               "Riz",
-              "Poulet mariné",
+              "Poulet",
               "+ Boeuf effiloché (+1.50 €)",
               "+ Saumon (+1.00 €)",
               "+ Scampis (+1.50 €)",

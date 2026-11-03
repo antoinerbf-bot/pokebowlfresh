@@ -105,15 +105,15 @@ export const detailedMixIns: CustomIngredientOption[] = [
 
 // ─── PROTÉINES ────────────────────────────────────────────────────────────────
 export const customProteins = [
-  "Poulet mariné",
+  "Poulet",
   "Saumon (+1 €)",
   "Scampis",
 ];
 
 export const detailedProteins: CustomIngredientOption[] = [
-  { id: "poulet",  name: "Poulet mariné", emoji: "🍗", extraPrice: 0 },
-  { id: "saumon",  name: "Saumon",        emoji: "🐟", extraPrice: 1.00 },
-  { id: "scampis", name: "Scampis",       emoji: "🦐", extraPrice: 0 },
+  { id: "poulet",  name: "Poulet",  emoji: "🍗", extraPrice: 0 },
+  { id: "saumon",  name: "Saumon",  emoji: "🐟", extraPrice: 1.00 },
+  { id: "scampis", name: "Scampis", emoji: "🦐", extraPrice: 0 },
 ];
 
 // ─── SAUCES ───────────────────────────────────────────────────────────────────

@@ -720,7 +720,7 @@ function ProductPage() {
                             Suppléments Protéines (+2,50 € / portion)
                           </span>
                           <span className="text-[10px] font-semibold text-[#7A6857]">
-                            Poulet mariné, Saumon frais ou Scampis royaux
+                            Poulet, Saumon frais ou Scampis royaux
                           </span>
                         </div>
                         {totalExtraProteinUnits > 0 && (

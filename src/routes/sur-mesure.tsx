@@ -148,7 +148,7 @@ function SurMesurePage() {
 
   // Calcul des prix :
   // - Moyen : 10,00 € | Grand : 13,00 € (+3,00 €)
-  // - Protéine principale : Poulet mariné (0 €), Scampis (0 €), Saumon (+1,00 €)
+  // - Protéine principale : Poulet (0 €), Scampis (0 €), Saumon (+1,00 €)
   // - Suppléments Protéines : +2,50 € chaque portion ajoutée (1x = +2,50 €, 2x = +5,00 €, 3x = +7,50 €)
   // - Légumes / Mix-ins : 5 portions hors feta incluses, puis +1,00 € chaque portion supplémentaire (et Feta +1,00 € / portion)
   // - Sauces : 1 au choix gratuite incluse, puis +0,50 € chaque portion supplémentaire (ex: 2x = +0,50 €, 3x = +1,00 €)
@@ -496,7 +496,7 @@ function SurMesurePage() {
                       Protéines supplémentaires (+2,50 € / portion)
                     </h3>
                     <p className="text-[11px] text-[#6E5A49] font-medium">
-                      Poulet mariné, saumon frais ou scampis (+2,50 € / portion)
+                      Poulet, saumon frais ou scampis (+2,50 € / portion)
                     </p>
                   </div>
                   {totalExtraProteinUnits > 0 && (
