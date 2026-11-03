@@ -169,9 +169,9 @@ export function unpackToppings(toppings: string[] = []): Array<{ text: string; p
     const parts = content.split(",").map((s) => s.trim()).filter(Boolean);
     for (const part of parts) {
       const isAllergy = /^(?:sans\s*:|sans\s+|allerg)/i.test(part);
-      const priceMatch = part.match(/\(\+([\d.,]+)\s*€?\)/);
+      const priceMatch = part.match(/\(\+?([\d.,]+)\s*€?\)/);
       const priceStr = priceMatch ? parseFloat(priceMatch[1].replace(",", ".")).toFixed(2) : undefined;
-      const cleanName = part.replace(/\(\+[\d.,]+\s*€?\)/g, "").replace(/\(x\d+\)/g, "").trim();
+      const cleanName = part.replace(/\(\+?[\d.,]+\s*€?\)/g, "").replace(/\(x\d+\)/g, "").trim();
       const isExtra = Boolean(priceStr) || cleanName.startsWith("+");
       const displayText = cleanName.replace(/^\+\s*/, "");
       result.push({ text: displayText, price: priceStr, isAllergy, isExtra });
@@ -436,6 +436,151 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   xml += `</epos-print>`;
 
   return xml;
+}
+
+/**
+ * Rendu textuel brut exact du ticket thermique (48 colonnes)
+ * Utile pour prévisualiser dans la console / le terminal ou en test bash
+ */
+export function renderThermalTextReceipt(order: Order, origin = "https://pokenbowl.be"): string {
+  const isDelivery = order.customer.fulfillment === "delivery";
+  const dateObj = new Date(order.createdAt);
+  const dayStr = dateObj.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels", day: "numeric" });
+  const rawMonth = dateObj.toLocaleDateString("fr-BE", { timeZone: "Europe/Brussels", month: "short" }).replace(/\./g, "").trim();
+  const monthStr = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
+  const timeStr = dateObj.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" });
+
+  const rawId = order.id.includes("-") ? order.id.split("-").pop() || order.id : order.id;
+  const shortOrderRef = rawId.length === 6 ? `${rawId.slice(0, 3)} ${rawId.slice(3)}` : rawId;
+  const rawRequestedTime = cleanThermalText(order.customer.requestedTime || "dès que possible");
+  const isScheduled = rawRequestedTime.toLowerCase() !== "dès que possible" && rawRequestedTime.length > 0;
+
+  const lines: string[] = [];
+  const center = (t: string) => {
+    const clean = cleanThermalText(t);
+    const pad = Math.max(0, Math.floor((48 - clean.length) / 2));
+    lines.push(" ".repeat(pad) + clean);
+  };
+  const hr = () => lines.push("-".repeat(48));
+
+  center("Takeaway.com");
+  center("Poke N Bowl");
+  hr();
+  if (isDelivery) {
+    if (isScheduled) {
+      center("LIVRAISON PLANIFIÉE");
+      center(`Date : ${dayStr} ${monthStr}, à ${rawRequestedTime}`);
+    } else {
+      center("LIVRAISON");
+      center(`Date : ${dayStr} ${monthStr}, dès que possible`);
+      center(`(${timeStr})`);
+    }
+  } else {
+    center("À EMPORTER");
+    center(`Date : ${dayStr} ${monthStr}, ${rawRequestedTime}`);
+    center(`(${timeStr})`);
+  }
+  lines.push("");
+  center(`# ${shortOrderRef.toUpperCase()}`);
+  hr();
+  lines.push(formatThermalRow("", "EUR", 48));
+
+  let subTotal = 0;
+  for (const item of order.items) {
+    const safeItemName = cleanReceiptItemName(item.name);
+    const unpacked = unpackToppings(item.toppings || []);
+    const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
+    const baseUnitPrice = Math.max(0, item.price - supplementsTotal);
+    const itemBaseTotalStr = (baseUnitPrice * item.quantity).toFixed(2);
+    subTotal += item.price * item.quantity;
+
+    if (unpacked.length > 0) {
+      lines.push(safeItemName);
+    }
+    const itemHeader = `${item.quantity} x ${safeItemName}`;
+    lines.push(formatThermalRow(itemHeader, itemBaseTotalStr, 48));
+
+    for (const sub of unpacked) {
+      if (sub.isExtra && sub.price) {
+        lines.push(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48));
+      } else if (sub.isAllergy) {
+        lines.push(`  ! ${sub.text}`);
+      } else {
+        lines.push(`    ${sub.text}`);
+      }
+    }
+  }
+
+  lines.push("");
+  lines.push(formatThermalRow("Sous-total", subTotal.toFixed(2), 48));
+  lines.push(formatThermalRow("Total de la commande", subTotal.toFixed(2), 48));
+
+  const deliveryFee = (isDelivery && order.customer.deliveryFee) ? order.customer.deliveryFee : 0;
+  if (isDelivery && deliveryFee > 0) {
+    lines.push(formatThermalRow("Frais de livraison", deliveryFee.toFixed(2), 48));
+  }
+
+  lines.push(formatThermalRow("", "-----", 48));
+  lines.push(formatThermalRow("Total dû", order.total.toFixed(2), 48));
+  lines.push(formatThermalRow("", "=====", 48));
+
+  lines.push("");
+  lines.push("Payé par :");
+  const isPaid = order.status === "paid";
+  const paymentLabel = isPaid ? "Carte ************" : "À régler sur place";
+  lines.push(formatThermalRow(paymentLabel, order.total.toFixed(2), 48));
+
+  hr();
+  center("IMPORTANT : POUR LES INFORMATIONS SUR LES");
+  center("ALLERGÈNES ALIMENTAIRES");
+  center("Appelez le restaurant ou consultez leur menu");
+  hr();
+  center(isPaid ? "COMMANDE PAYÉE" : "À RÉGLER SUR PLACE");
+  hr();
+
+  lines.push("Détails du client:");
+  lines.push("");
+  lines.push(cleanThermalText(order.customer.name));
+  lines.push("");
+  if (order.customer.phone) {
+    lines.push(`Tél : ${cleanThermalText(order.customer.phone)}`);
+  }
+  if (isDelivery) {
+    if (order.customer.address) lines.push(cleanThermalText(order.customer.address));
+    if (order.customer.city) lines.push(cleanThermalText(order.customer.city));
+    if (order.customer.postalCode) lines.push(cleanThermalText(order.customer.postalCode));
+  } else {
+    lines.push("Retrait au restaurant");
+    lines.push("Rue Haute 38 · 4600 Visé");
+  }
+
+  if (order.customer.notes) {
+    lines.push("");
+    lines.push("Notes de livraison:");
+    const wrappedNotes = wrapThermalText(order.customer.notes, 48);
+    for (const noteLine of wrappedNotes) {
+      lines.push(noteLine);
+    }
+  }
+
+  const acceptedDateObj = new Date(dateObj.getTime() + 60000);
+  const acceptedTimeStr = acceptedDateObj.toLocaleTimeString("fr-BE", { timeZone: "Europe/Brussels", hour: "2-digit", minute: "2-digit" });
+  lines.push("");
+  hr();
+  lines.push(formatThermalRow("Commande passée à", `${timeStr} ${dayStr} ${monthStr}`, 48));
+  lines.push(formatThermalRow("Commande acceptée à", `${acceptedTimeStr} ${dayStr} ${monthStr}`, 48));
+  hr();
+
+  const trackToken = order.deliveryToken || order.id;
+  const cleanOrigin = origin.replace(/\/$/, "");
+  const qrUrl = `${cleanOrigin}/track/${encodeURIComponent(trackToken)}`;
+  center("[ QR CODE TRACKING GPS ]");
+  center(qrUrl);
+  center(isDelivery ? "Scannez pour livrer" : "Scannez pour suivre la commande");
+  center("Ceci n'est pas une facture");
+  hr();
+
+  return lines.join("\n");
 }
 
 export type PrintPayload =

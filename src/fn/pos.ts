@@ -134,7 +134,12 @@ export const ackPosPrint = createServerFn({ method: "POST" })
   });
 
 export const createTestDeliveryOrder = createServerFn({ method: "POST" })
-  .validator(z.object({ pin: z.string().optional() }))
+  .validator(
+    z.object({
+      pin: z.string().optional(),
+      type: z.enum(["standard", "all-supplements"]).optional(),
+    }),
+  )
   .handler(async ({ data }) => {
     if (!verifyPin(data.pin)) {
       throw new Error("Code PIN invalide.");
@@ -143,44 +148,123 @@ export const createTestDeliveryOrder = createServerFn({ method: "POST" })
     const testId = generateOrderId();
     const deliveryToken = crypto.randomUUID().replace(/-/g, "");
 
-    const testOrder: Order = {
-      id: testId,
-      createdAt: new Date().toISOString(),
-      status: "paid",
-      paymentMethod: "online",
-      printStatus: "pending",
-      deliveryToken,
-      currency: "EUR",
-      customer: {
-        name: "Jean Dupont (TEST LIVREUR GPS)",
-        phone: "+32 499 12 34 56",
-        email: "livreur.test@pokenbowl.be",
-        fulfillment: "delivery",
-        requestedTime: "Dès que possible",
-        address: "Avenue Reine Astrid 15",
-        postalCode: "4600",
-        city: "Visé",
-        deliveryFee: 2.0,
-        notes: "Test Waze & Google Maps - Sonner interphone 2B",
-      },
-      items: [
-        {
-          id: "spicy-chicken",
-          name: "Spicy Chicken (Grand)",
-          price: 15.5,
-          quantity: 1,
-          toppings: ["Avocat", "Oignons frits", "Sauce Spicy Mayo"],
+    let testOrder: Order;
+
+    if (data.type === "all-supplements") {
+      testOrder = {
+        id: testId,
+        createdAt: new Date().toISOString(),
+        status: "paid",
+        paymentMethod: "online",
+        printStatus: "pending",
+        deliveryToken,
+        currency: "EUR",
+        customer: {
+          name: "Client Test (TOUS LES SUPPLÉMENTS)",
+          phone: "0491 28 14 56",
+          email: "test.supplements@pokenbowl.be",
+          fulfillment: "delivery",
+          requestedTime: "Dès que possible",
+          address: "Rue Haute 38",
+          postalCode: "4600",
+          city: "Visé",
+          deliveryFee: 3.0,
+          notes: "TEST COMPLET : Vérification du rendu ticket thermique avec l'intégralité des suppléments",
         },
-        {
-          id: "crousty-chicken",
-          name: "Crousty Chicken",
-          price: 14.5,
-          quantity: 1,
-          toppings: ["Sauce Sésame sucrée", "Edamame", "Noix de cajou"],
+        items: [
+          {
+            id: "cree-ton-bowl",
+            name: "Crée ton bowl",
+            price: 26.50,
+            quantity: 1,
+            toppings: [
+              "Grande (+3.00 €)",
+              "Riz blanc",
+              "Quinoa",
+              "Poulet mariné",
+              "+ Boeuf effiloché (+1.50 €)",
+              "+ Saumon (+1.00 €)",
+              "+ Scampis (+1.50 €)",
+              "Mangue",
+              "Edamame",
+              "Carottes",
+              "+ Feta (+1.00 €)",
+              "+ Guacamole (+1.00 €)",
+              "+ Salade d'algues (+1.00 €)",
+              "+ Patates douces (+1.00 €)",
+              "+ Houmous (+1.00 €)",
+              "Sauce sésame sucrée",
+              "+ Sauce sésame salée (+0.50 €)",
+              "+ Mayo-Wasabi (+0.50 €)",
+              "+ Mayo truffe (+0.50 €)",
+              "+ Teriyaki (+0.50 €)",
+              "Oignons frits",
+              "+ Noix de cajou (+0.50 €)",
+              "+ Graines de sésame (+0.50 €)",
+              "+ Nachos (+0.50 €)",
+              "+ Wasabi (+0.50 €)",
+              "+ Flocons-Chili (+0.50 €)",
+              "! Sans coriandre",
+            ],
+          },
+          {
+            id: "crousty-chicken-curry",
+            name: "Crousty Chicken Curry",
+            price: 15.00,
+            quantity: 1,
+            toppings: [
+              "Riz",
+              "Petits morceaux de poulet croustillant",
+              "Sauce curry onctueuse",
+              "Oignons frits croustillants",
+              "+ Double poulet croustillant (+2.50 €)",
+              "+ Feta (+1.00 €)",
+              "+ Sauce blanche (+0.50 €)",
+            ],
+          },
+        ],
+        total: 44.50,
+      };
+    } else {
+      testOrder = {
+        id: testId,
+        createdAt: new Date().toISOString(),
+        status: "paid",
+        paymentMethod: "online",
+        printStatus: "pending",
+        deliveryToken,
+        currency: "EUR",
+        customer: {
+          name: "Jean Dupont (TEST LIVREUR GPS)",
+          phone: "+32 499 12 34 56",
+          email: "livreur.test@pokenbowl.be",
+          fulfillment: "delivery",
+          requestedTime: "Dès que possible",
+          address: "Avenue Reine Astrid 15",
+          postalCode: "4600",
+          city: "Visé",
+          deliveryFee: 2.0,
+          notes: "Test Waze & Google Maps - Sonner interphone 2B",
         },
-      ],
-      total: 32.0,
-    };
+        items: [
+          {
+            id: "spicy-chicken",
+            name: "Spicy Chicken (Grand)",
+            price: 15.5,
+            quantity: 1,
+            toppings: ["Avocat", "Oignons frits", "Sauce Spicy Mayo"],
+          },
+          {
+            id: "crousty-chicken",
+            name: "Crousty Chicken",
+            price: 14.5,
+            quantity: 1,
+            toppings: ["Sauce Sésame sucrée", "Edamame", "Noix de cajou"],
+          },
+        ],
+        total: 32.0,
+      };
+    }
 
     await upsertOrder(testOrder);
     return { success: true, order: testOrder };

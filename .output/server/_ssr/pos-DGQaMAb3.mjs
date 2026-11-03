@@ -3,7 +3,7 @@ import { n as booleanType, o as objectType, r as enumType, s as stringType } fro
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, o as requestOrderReprint, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-DUH2vA2u.js
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-DGQaMAb3.js
 /**
 * Générateur de commandes binaires ESC/POS pour Epson TM-m30III
 * Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
@@ -299,11 +299,86 @@ var createTestDeliveryOrder_createServerFn_handler = createServerRpc({
 	name: "createTestDeliveryOrder",
 	filename: "src/fn/pos.ts"
 }, (opts) => createTestDeliveryOrder.__executeServer(opts));
-var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(createTestDeliveryOrder_createServerFn_handler, async ({ data }) => {
+var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	type: enumType(["standard", "all-supplements"]).optional()
+})).handler(createTestDeliveryOrder_createServerFn_handler, async ({ data }) => {
 	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
 	const testId = generateOrderId();
 	const deliveryToken = crypto.randomUUID().replace(/-/g, "");
-	const testOrder = {
+	let testOrder;
+	if (data.type === "all-supplements") testOrder = {
+		id: testId,
+		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+		status: "paid",
+		paymentMethod: "online",
+		printStatus: "pending",
+		deliveryToken,
+		currency: "EUR",
+		customer: {
+			name: "Client Test (TOUS LES SUPPLÉMENTS)",
+			phone: "0491 28 14 56",
+			email: "test.supplements@pokenbowl.be",
+			fulfillment: "delivery",
+			requestedTime: "Dès que possible",
+			address: "Rue Haute 38",
+			postalCode: "4600",
+			city: "Visé",
+			deliveryFee: 3,
+			notes: "TEST COMPLET : Vérification du rendu ticket thermique avec l'intégralité des suppléments"
+		},
+		items: [{
+			id: "cree-ton-bowl",
+			name: "Crée ton bowl",
+			price: 26.5,
+			quantity: 1,
+			toppings: [
+				"Grande (+3.00 €)",
+				"Riz blanc",
+				"Quinoa",
+				"Poulet mariné",
+				"+ Boeuf effiloché (+1.50 €)",
+				"+ Saumon (+1.00 €)",
+				"+ Scampis (+1.50 €)",
+				"Mangue",
+				"Edamame",
+				"Carottes",
+				"+ Feta (+1.00 €)",
+				"+ Guacamole (+1.00 €)",
+				"+ Salade d'algues (+1.00 €)",
+				"+ Patates douces (+1.00 €)",
+				"+ Houmous (+1.00 €)",
+				"Sauce sésame sucrée",
+				"+ Sauce sésame salée (+0.50 €)",
+				"+ Mayo-Wasabi (+0.50 €)",
+				"+ Mayo truffe (+0.50 €)",
+				"+ Teriyaki (+0.50 €)",
+				"Oignons frits",
+				"+ Noix de cajou (+0.50 €)",
+				"+ Graines de sésame (+0.50 €)",
+				"+ Nachos (+0.50 €)",
+				"+ Wasabi (+0.50 €)",
+				"+ Flocons-Chili (+0.50 €)",
+				"! Sans coriandre"
+			]
+		}, {
+			id: "crousty-chicken-curry",
+			name: "Crousty Chicken Curry",
+			price: 15,
+			quantity: 1,
+			toppings: [
+				"Riz",
+				"Petits morceaux de poulet croustillant",
+				"Sauce curry onctueuse",
+				"Oignons frits croustillants",
+				"+ Double poulet croustillant (+2.50 €)",
+				"+ Feta (+1.00 €)",
+				"+ Sauce blanche (+0.50 €)"
+			]
+		}],
+		total: 44.5
+	};
+	else testOrder = {
 		id: testId,
 		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
 		status: "paid",

@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Cuk1atzW.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DCsuWooO.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -531,15 +531,720 @@ var Route$10 = createFileRoute("/api/checkout")({ server: { handlers: { POST: as
 		});
 	}
 } } } });
-var Route$9 = createFileRoute("/api/create-test-order")({ server: { handlers: {
-	GET: async () => createHandler(),
-	POST: async () => createHandler()
-} } });
-async function createHandler() {
+var DEFAULT_PRINTER_CONFIG = {
+	printerIp: "192.168.0.8",
+	printerPort: 8043,
+	bridgeUrl: "",
+	autoPrintKitchen: true,
+	autoPrintDelivery: true,
+	soundEnabled: true,
+	printMode: "epos"
+};
+function loadPrinterConfig() {
+	if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
 	try {
+		const raw = localStorage.getItem("pnb_printer_config");
+		if (raw) {
+			const parsed = JSON.parse(raw);
+			const safePort = parsed.printerPort && [
+				8043,
+				80,
+				8008,
+				443
+			].includes(Number(parsed.printerPort)) ? Number(parsed.printerPort) : 8043;
+			const cleanConfig = {
+				...DEFAULT_PRINTER_CONFIG,
+				...parsed,
+				printerPort: safePort,
+				printMode: "epos"
+			};
+			if (parsed.printerPort === 9100 || !parsed.printerPort) localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
+			return cleanConfig;
+		}
+	} catch {}
+	return DEFAULT_PRINTER_CONFIG;
+}
+function savePrinterConfig(config) {
+	if (typeof window === "undefined") return;
+	const safePort = config.printerPort && [
+		8043,
+		80,
+		8008,
+		443
+	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
+	const cleanConfig = {
+		...config,
+		printerPort: safePort,
+		printMode: "epos"
+	};
+	localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
+}
+/**
+* Nettoyage thermique préservant les accents français (é, è, à, ç, etc.)
+* et convertissant les caractères spéciaux non gérés par l'imprimante
+*/
+function cleanThermalText(str = "") {
+	if (!str) return "";
+	return String(str).replace(/cacahu[eè]tes?/gi, "Noix de cajou").replace(/€/g, "EUR").replace(/[’‘`]/g, "'").replace(/[–—]/g, "-").replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/[^\x20-\x7E\n\r\u00C0-\u00FF]/g, "");
+}
+/**
+* Nettoie le nom d'un article pour le ticket thermique :
+* Supprime le mot redondant "Poké" ou "Poke" dans l'intitulé des plats
+* Ex: "Spicy Chicken Poké (Grand)" -> "Spicy Chicken (Grand)"
+*     "Crousty Chicken Poké" -> "Crousty Chicken"
+*/
+function cleanReceiptItemName(name = "") {
+	if (!name) return "";
+	let res = cleanThermalText(name);
+	while (/(^|\s+)pok[eé](\s+|$)/i.test(res)) res = res.replace(/(^|\s+)pok[eé](\s+|$)/i, "$1$2");
+	return res.replace(/\s+/g, " ").replace(/\s+\)/g, ")").replace(/\(\s+/g, "(").trim();
+}
+/**
+* Nettoyage et échappement sécurisé des caractères pour le XML ePOS
+*/
+function escapeXml(str = "") {
+	return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+/**
+* Enveloppe SOAP standard pour ePOS-Print
+*/
+function buildEposSoapEnvelope(innerXml) {
+	if (innerXml.includes("<s:Envelope") || innerXml.includes("<soap:Envelope")) return innerXml;
+	return `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Header>
+    <parameter xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
+      <devid>local_printer</devid>
+      <timeout>10000</timeout>
+    </parameter>
+  </s:Header>
+  <s:Body>
+    ${innerXml.trim()}
+  </s:Body>
+</s:Envelope>`;
+}
+/**
+* Alignement thermique 48 colonnes (Standard 80mm Epson TM-m30II / Takeaway)
+*/
+function formatThermalRow(left, right = "", width = 48) {
+	const cLeft = cleanThermalText(left);
+	const cRight = cleanThermalText(right);
+	if (!cRight) return cLeft.slice(0, width);
+	const avail = width - cRight.length - 1;
+	const tLeft = cLeft.length > avail ? cLeft.slice(0, avail) : cLeft;
+	const spaces = Math.max(1, width - tLeft.length - cRight.length);
+	return tLeft + " ".repeat(spaces) + cRight;
+}
+/**
+* Découpe propre d'un texte long sans couper les mots
+*/
+function wrapThermalText(text, maxWidth = 48) {
+	if (!text) return [];
+	const words = cleanThermalText(text).split(/\s+/);
+	const lines = [];
+	let current = "";
+	for (const word of words) if (!current) current = word;
+	else if (current.length + 1 + word.length <= maxWidth) current += " " + word;
+	else {
+		lines.push(current);
+		current = word;
+	}
+	if (current) lines.push(current);
+	return lines;
+}
+function unpackToppings(toppings = []) {
+	const result = [];
+	for (const raw of toppings) {
+		if (!raw) continue;
+		const catMatch = raw.match(/^(?:Base|Taille|Proteine|Protéine|Mix-ins?|Sauces?|Toppings?|Crunch)\s*:\s*(.+)$/i);
+		const parts = (catMatch ? catMatch[1] : raw).split(",").map((s) => s.trim()).filter(Boolean);
+		for (const part of parts) {
+			const isAllergy = /^(?:sans\s*:|sans\s+|allerg)/i.test(part);
+			const priceMatch = part.match(/\(\+?([\d.,]+)\s*€?\)/);
+			const priceStr = priceMatch ? parseFloat(priceMatch[1].replace(",", ".")).toFixed(2) : void 0;
+			const cleanName = part.replace(/\(\+?[\d.,]+\s*€?\)/g, "").replace(/\(x\d+\)/g, "").trim();
+			const isExtra = Boolean(priceStr) || cleanName.startsWith("+");
+			const displayText = cleanName.replace(/^\+\s*/, "");
+			result.push({
+				text: displayText,
+				price: priceStr,
+				isAllergy,
+				isExtra
+			});
+		}
+	}
+	return result;
+}
+/**
+* Générateur XML ePOS natif pour le ticket de test (Bouton vert)
+* Imprime une réplique exacte et complète du ticket Takeaway.com
+*/
+function buildEposXmlTest(printerIp, origin = "https://pokenbowl.be") {
+	return buildEposXmlOrder({
+		id: "J83 BY8",
+		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+		status: "paid",
+		paymentMethod: "online",
+		currency: "EUR",
+		deliveryToken: "test-epson",
+		customer: {
+			name: "Hervé S.",
+			phone: "0491 28 14 56",
+			fulfillment: "delivery",
+			requestedTime: "dès que possible",
+			address: "Rue du Viaduc",
+			city: "Dalhem",
+			postalCode: "4607",
+			deliveryFee: 3,
+			notes: "merci de déposer la commande sur le muret, mon fils dort"
+		},
+		items: [{
+			id: "bowl-1",
+			name: "Crée ton bowl",
+			price: 11,
+			quantity: 1,
+			toppings: [
+				"Moyenne",
+				"Riz blanc",
+				"Guacamole",
+				"Patates douces",
+				"Feta (+1.00 €)",
+				"Mangue",
+				"Houmous",
+				"Poulet",
+				"Teriyaki",
+				"Noix de cajou",
+				"Oignons frits"
+			]
+		}, {
+			id: "bowl-2",
+			name: "Crée ton bowl",
+			price: 14,
+			quantity: 1,
+			toppings: [
+				"Grande (+3.00 €)",
+				"Riz blanc",
+				"Guacamole",
+				"Feta (+1.00 €)",
+				"Houmous",
+				"Poivrons",
+				"Mangue",
+				"Poulet",
+				"Mayo wasabi",
+				"Oignons frits",
+				"Graines de sésame",
+				"Flocons de chili",
+				"Nachos"
+			]
+		}],
+		total: 28
+	}, origin);
+}
+/**
+* Générateur XML ePOS natif pour le ticket de commande officiel (Style 100% Takeaway.com)
+*/
+function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
+	const isDelivery = order.customer.fulfillment === "delivery";
+	const dateObj = new Date(order.createdAt);
+	const dayStr = dateObj.toLocaleDateString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		day: "numeric"
+	});
+	const rawMonth = dateObj.toLocaleDateString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		month: "short"
+	}).replace(/\./g, "").trim();
+	const monthStr = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
+	const timeStr = dateObj.toLocaleTimeString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		hour: "2-digit",
+		minute: "2-digit"
+	});
+	const safeCustomerName = cleanThermalText(order.customer.name);
+	const safeCustomerPhone = cleanThermalText(order.customer.phone);
+	const safeAddress = cleanThermalText(order.customer.address || "Non précisée");
+	const safeCity = cleanThermalText(order.customer.city || "");
+	const safePostalCode = cleanThermalText(order.customer.postalCode || "");
+	const safeNotes = cleanThermalText(order.customer.notes || "");
+	const rawRequestedTime = cleanThermalText(order.customer.requestedTime || "dès que possible");
+	const isScheduled = rawRequestedTime.toLowerCase() !== "dès que possible" && rawRequestedTime.length > 0;
+	const rawId = order.id.includes("-") ? order.id.split("-").pop() || order.id : order.id;
+	const shortOrderRef = rawId.length === 6 ? `${rawId.slice(0, 3)} ${rawId.slice(3)}` : rawId;
+	let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
+	const line = (text, align = "left", em = false) => {
+		xml += `  <text font="font_a" align="${align}" em="${em ? "true" : "false"}" dh="false" dw="false">${escapeXml(text)}&#10;</text>\n`;
+	};
+	const hr = () => {
+		line("------------------------------------------------", "left", false);
+	};
+	line("Takeaway.com", "center", true);
+	line("Poke N Bowl", "center", false);
+	hr();
+	if (isDelivery) if (isScheduled) {
+		line("LIVRAISON PLANIFIÉE", "center", true);
+		line(`Date : ${dayStr} ${monthStr}, à ${rawRequestedTime}`, "center", false);
+	} else {
+		line("LIVRAISON", "center", true);
+		line(`Date : ${dayStr} ${monthStr}, dès que possible`, "center", false);
+		line(`(${timeStr})`, "center", false);
+	}
+	else {
+		line("À EMPORTER", "center", true);
+		line(`Date : ${dayStr} ${monthStr}, ${rawRequestedTime}`, "center", false);
+		line(`(${timeStr})`, "center", false);
+	}
+	line("", "center", false);
+	line(`# ${shortOrderRef.toUpperCase()}`, "center", true);
+	hr();
+	line(formatThermalRow("", "EUR", 48), "left", false);
+	let subTotal = 0;
+	for (const item of order.items) {
+		const safeItemName = cleanReceiptItemName(item.name);
+		const unpacked = unpackToppings(item.toppings || []);
+		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
+		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
+		subTotal += item.price * item.quantity;
+		if (unpacked.length > 0) line(safeItemName, "left", false);
+		line(formatThermalRow(`${item.quantity} x ${safeItemName}`, itemBaseTotalStr, 48), "left", false);
+		for (const sub of unpacked) if (sub.isExtra && sub.price) line(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48), "left", false);
+		else if (sub.isAllergy) line(`  ! ${sub.text}`, "left", false);
+		else line(`    ${sub.text}`, "left", false);
+	}
+	line("", "left", false);
+	line(formatThermalRow("Sous-total", subTotal.toFixed(2), 48), "left", false);
+	line(formatThermalRow("Total de la commande", subTotal.toFixed(2), 48), "left", false);
+	const deliveryFee = isDelivery && order.customer.deliveryFee ? order.customer.deliveryFee : 0;
+	if (isDelivery && deliveryFee > 0) line(formatThermalRow("Frais de livraison", deliveryFee.toFixed(2), 48), "left", false);
+	line(formatThermalRow("", "-----", 48), "left", false);
+	line(formatThermalRow("Total dû", order.total.toFixed(2), 48), "left", true);
+	line(formatThermalRow("", "=====", 48), "left", false);
+	line("", "left", false);
+	line("Payé par :", "left", false);
+	const isPaid = order.status === "paid";
+	line(formatThermalRow(isPaid ? "Carte ************" : "À régler sur place", order.total.toFixed(2), 48), "left", false);
+	hr();
+	line("   IMPORTANT : POUR LES INFORMATIONS SUR LES    ", "center", false);
+	line("             ALLERGÈNES ALIMENTAIRES            ", "center", false);
+	line("    Appelez le restaurant ou consultez leur menu", "center", false);
+	hr();
+	line(isPaid ? "COMMANDE PAYÉE" : "À RÉGLER SUR PLACE", "center", true);
+	hr();
+	line("Détails du client:", "left", false);
+	line("", "left", false);
+	line(safeCustomerName, "left", false);
+	line("", "left", false);
+	if (safeCustomerPhone) line(`Tél : ${safeCustomerPhone}`, "left", false);
+	if (isDelivery) {
+		if (safeAddress) line(safeAddress, "left", false);
+		if (safeCity) line(safeCity, "left", false);
+		if (safePostalCode) line(safePostalCode, "left", false);
+	} else {
+		line("Retrait au restaurant", "left", false);
+		line("Rue Haute 38 · 4600 Visé", "left", false);
+	}
+	if (safeNotes) {
+		line("", "left", false);
+		line("Notes de livraison:", "left", false);
+		const wrappedNotes = wrapThermalText(safeNotes, 48);
+		for (const noteLine of wrappedNotes) line(noteLine, "left", false);
+	}
+	const acceptedTimeStr = new Date(dateObj.getTime() + 6e4).toLocaleTimeString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		hour: "2-digit",
+		minute: "2-digit"
+	});
+	line("", "left", false);
+	hr();
+	line(formatThermalRow("Commande passée à", `${timeStr} ${dayStr} ${monthStr}`, 48), "left", false);
+	line(formatThermalRow("Commande acceptée à", `${acceptedTimeStr} ${dayStr} ${monthStr}`, 48), "left", false);
+	hr();
+	const trackToken = order.deliveryToken || order.id;
+	const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
+	xml += `  <symbol type="qrcode_model_2" level="level_m" width="8">${escapeXml(qrUrl)}</symbol>\n`;
+	line(isDelivery ? "Scannez pour livrer" : "Scannez pour suivre la commande", "center", false);
+	line("Ceci n'est pas une facture", "center", false);
+	hr();
+	xml += `  <feed line="3" />\n`;
+	xml += `  <cut type="feed" />\n`;
+	xml += `</epos-print>`;
+	return xml;
+}
+/**
+* Rendu textuel brut exact du ticket thermique (48 colonnes)
+* Utile pour prévisualiser dans la console / le terminal ou en test bash
+*/
+function renderThermalTextReceipt(order, origin = "https://pokenbowl.be") {
+	const isDelivery = order.customer.fulfillment === "delivery";
+	const dateObj = new Date(order.createdAt);
+	const dayStr = dateObj.toLocaleDateString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		day: "numeric"
+	});
+	const rawMonth = dateObj.toLocaleDateString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		month: "short"
+	}).replace(/\./g, "").trim();
+	const monthStr = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
+	const timeStr = dateObj.toLocaleTimeString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		hour: "2-digit",
+		minute: "2-digit"
+	});
+	const rawId = order.id.includes("-") ? order.id.split("-").pop() || order.id : order.id;
+	const shortOrderRef = rawId.length === 6 ? `${rawId.slice(0, 3)} ${rawId.slice(3)}` : rawId;
+	const rawRequestedTime = cleanThermalText(order.customer.requestedTime || "dès que possible");
+	const isScheduled = rawRequestedTime.toLowerCase() !== "dès que possible" && rawRequestedTime.length > 0;
+	const lines = [];
+	const center = (t) => {
+		const clean = cleanThermalText(t);
+		const pad = Math.max(0, Math.floor((48 - clean.length) / 2));
+		lines.push(" ".repeat(pad) + clean);
+	};
+	const hr = () => lines.push("-".repeat(48));
+	center("Takeaway.com");
+	center("Poke N Bowl");
+	hr();
+	if (isDelivery) if (isScheduled) {
+		center("LIVRAISON PLANIFIÉE");
+		center(`Date : ${dayStr} ${monthStr}, à ${rawRequestedTime}`);
+	} else {
+		center("LIVRAISON");
+		center(`Date : ${dayStr} ${monthStr}, dès que possible`);
+		center(`(${timeStr})`);
+	}
+	else {
+		center("À EMPORTER");
+		center(`Date : ${dayStr} ${monthStr}, ${rawRequestedTime}`);
+		center(`(${timeStr})`);
+	}
+	lines.push("");
+	center(`# ${shortOrderRef.toUpperCase()}`);
+	hr();
+	lines.push(formatThermalRow("", "EUR", 48));
+	let subTotal = 0;
+	for (const item of order.items) {
+		const safeItemName = cleanReceiptItemName(item.name);
+		const unpacked = unpackToppings(item.toppings || []);
+		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
+		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
+		subTotal += item.price * item.quantity;
+		if (unpacked.length > 0) lines.push(safeItemName);
+		const itemHeader = `${item.quantity} x ${safeItemName}`;
+		lines.push(formatThermalRow(itemHeader, itemBaseTotalStr, 48));
+		for (const sub of unpacked) if (sub.isExtra && sub.price) lines.push(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48));
+		else if (sub.isAllergy) lines.push(`  ! ${sub.text}`);
+		else lines.push(`    ${sub.text}`);
+	}
+	lines.push("");
+	lines.push(formatThermalRow("Sous-total", subTotal.toFixed(2), 48));
+	lines.push(formatThermalRow("Total de la commande", subTotal.toFixed(2), 48));
+	const deliveryFee = isDelivery && order.customer.deliveryFee ? order.customer.deliveryFee : 0;
+	if (isDelivery && deliveryFee > 0) lines.push(formatThermalRow("Frais de livraison", deliveryFee.toFixed(2), 48));
+	lines.push(formatThermalRow("", "-----", 48));
+	lines.push(formatThermalRow("Total dû", order.total.toFixed(2), 48));
+	lines.push(formatThermalRow("", "=====", 48));
+	lines.push("");
+	lines.push("Payé par :");
+	const isPaid = order.status === "paid";
+	const paymentLabel = isPaid ? "Carte ************" : "À régler sur place";
+	lines.push(formatThermalRow(paymentLabel, order.total.toFixed(2), 48));
+	hr();
+	center("IMPORTANT : POUR LES INFORMATIONS SUR LES");
+	center("ALLERGÈNES ALIMENTAIRES");
+	center("Appelez le restaurant ou consultez leur menu");
+	hr();
+	center(isPaid ? "COMMANDE PAYÉE" : "À RÉGLER SUR PLACE");
+	hr();
+	lines.push("Détails du client:");
+	lines.push("");
+	lines.push(cleanThermalText(order.customer.name));
+	lines.push("");
+	if (order.customer.phone) lines.push(`Tél : ${cleanThermalText(order.customer.phone)}`);
+	if (isDelivery) {
+		if (order.customer.address) lines.push(cleanThermalText(order.customer.address));
+		if (order.customer.city) lines.push(cleanThermalText(order.customer.city));
+		if (order.customer.postalCode) lines.push(cleanThermalText(order.customer.postalCode));
+	} else {
+		lines.push("Retrait au restaurant");
+		lines.push("Rue Haute 38 · 4600 Visé");
+	}
+	if (order.customer.notes) {
+		lines.push("");
+		lines.push("Notes de livraison:");
+		const wrappedNotes = wrapThermalText(order.customer.notes, 48);
+		for (const noteLine of wrappedNotes) lines.push(noteLine);
+	}
+	const acceptedTimeStr = new Date(dateObj.getTime() + 6e4).toLocaleTimeString("fr-BE", {
+		timeZone: "Europe/Brussels",
+		hour: "2-digit",
+		minute: "2-digit"
+	});
+	lines.push("");
+	hr();
+	lines.push(formatThermalRow("Commande passée à", `${timeStr} ${dayStr} ${monthStr}`, 48));
+	lines.push(formatThermalRow("Commande acceptée à", `${acceptedTimeStr} ${dayStr} ${monthStr}`, 48));
+	hr();
+	const trackToken = order.deliveryToken || order.id;
+	const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
+	center("[ QR CODE TRACKING GPS ]");
+	center(qrUrl);
+	center(isDelivery ? "Scannez pour livrer" : "Scannez pour suivre la commande");
+	center("Ceci n'est pas une facture");
+	hr();
+	return lines.join("\n");
+}
+/**
+* Envoi réseau vers l'imprimante avec fetch + secours XMLHttpRequest
+*/
+async function sendHttpRequest(url, body, timeoutMs = 4e3) {
+	try {
+		const res = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "text/xml; charset=utf-8",
+				"If-Modified-Since": "Thu, 01 Jan 1970 00:00:00 GMT",
+				SOAPAction: "\"\""
+			},
+			body,
+			signal: AbortSignal.timeout(timeoutMs)
+		});
+		const text = await res.text();
+		return {
+			ok: res.ok,
+			status: res.status,
+			text
+		};
+	} catch (fetchErr) {
+		if (typeof XMLHttpRequest !== "undefined") try {
+			return await new Promise((resolve, reject) => {
+				const xhr = new XMLHttpRequest();
+				xhr.open("POST", url, true);
+				xhr.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
+				xhr.setRequestHeader("SOAPAction", "\"\"");
+				xhr.timeout = timeoutMs;
+				xhr.onload = () => resolve({
+					ok: xhr.status >= 200 && xhr.status < 300,
+					status: xhr.status,
+					text: xhr.responseText
+				});
+				xhr.onerror = () => reject(/* @__PURE__ */ new Error("Erreur réseau / Certificat non approuvé"));
+				xhr.ontimeout = () => reject(/* @__PURE__ */ new Error(`Délai d'attente dépassé (${Math.round(timeoutMs / 1e3)}s)`));
+				xhr.send(body);
+			});
+		} catch {}
+		throw fetchErr;
+	}
+}
+/**
+* Envoie un flux d'impression à l'imprimante Epson :
+* ePOS-Print XML direct (HTTP/HTTPS SOAP sur port 8043 ou 8008)
+*/
+async function sendReceiptToPrinter(payload, config) {
+	let xmlContent = "";
+	let base64Data = "";
+	if (typeof payload === "string") if (payload.trim().startsWith("<")) xmlContent = payload.trim();
+	else base64Data = payload;
+	else if (payload && typeof payload === "object") {
+		xmlContent = payload.xml?.trim() || "";
+		base64Data = payload.base64?.trim() || "";
+	}
+	if (config.bridgeUrl && base64Data) try {
+		const bridgeEndpoint = `${config.bridgeUrl.replace(/\/$/, "")}/print`;
+		if ((await fetch(bridgeEndpoint, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				printerIp: config.printerIp,
+				printerPort: config.printerPort,
+				dataBase64: base64Data
+			})
+		})).ok) return {
+			success: true,
+			message: "Imprimé avec succès via Print Bridge."
+		};
+	} catch (err) {
+		console.warn("Print Bridge injoignable, essai ePOS-Print direct...", err);
+	}
+	if (!xmlContent) return {
+		success: false,
+		message: "Données du ticket invalides : flux ePOS XML manquant."
+	};
+	const soapEnvelope = buildEposSoapEnvelope(xmlContent);
+	const ip = config.printerIp.trim();
+	const safePort = config.printerPort && [
+		8043,
+		80,
+		8008,
+		443
+	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
+	const targets = Array.from(/* @__PURE__ */ new Set([
+		`https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
+		`http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
+	]));
+	let lastErr = "";
+	for (const url of targets) try {
+		console.log(`[ePOS] Envoi requête vers ${url}...`);
+		const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 4e3);
+		console.log(`[ePOS] Réponse reçue de ${url} (status ${status}):`, resText);
+		if (resText.includes("success=\"true\"")) return {
+			success: true,
+			message: `Ticket imprimé avec succès sur ${ip} !`
+		};
+		if (ok && resText.includes("<response")) {
+			const codeMatch = resText.match(/code="([^"]*)"/);
+			const code = codeMatch ? codeMatch[1] : "";
+			if (!code || code === "None" || code === "SUCCESS") return {
+				success: true,
+				message: `Ticket imprimé avec succès sur ${ip} !`
+			};
+			lastErr = `Code imprimante: ${code}`;
+		} else lastErr = `Réponse HTTP ${status} sans confirmation ePOS`;
+		break;
+	} catch (e) {
+		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : e?.message ?? String(e);
+		console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
+		if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
+	}
+	return {
+		success: false,
+		message: lastErr.includes("Failed to fetch") || lastErr.includes("NetworkError") || lastErr.includes("Certificat non approuvé") || lastErr.includes("Délai d'attente") ? `Certificat local non autorisé dans Chrome ou imprimante ${config.printerIp} injoignable.` : lastErr
+	};
+}
+/**
+* Test rapide d'accessibilité d'une IP pour scanner le réseau
+*/
+async function probePrinterIp(ip, port = 8043, timeoutMs = 1200) {
+	const url = `https://${ip}:${port}/cgi-bin/epos/service.cgi`;
+	try {
+		await fetch(url, {
+			method: "GET",
+			mode: "no-cors",
+			signal: AbortSignal.timeout(timeoutMs)
+		});
+		return true;
+	} catch (err) {
+		return err?.name !== "TimeoutError";
+	}
+}
+/**
+* Détection automatique de l'imprimante sur les sous-réseaux locaux usuels
+*/
+async function scanForPrinterIp(onProgress) {
+	for (const ip of [
+		"192.168.0.8",
+		"192.168.0.5",
+		"192.168.0.2",
+		"192.168.0.3",
+		"192.168.0.4",
+		"192.168.0.6",
+		"192.168.0.10",
+		"192.168.0.50",
+		"192.168.0.100",
+		"192.168.1.5",
+		"192.168.1.2",
+		"192.168.1.10",
+		"192.168.1.50",
+		"192.168.1.100"
+	]) {
+		onProgress?.(ip);
+		if (await probePrinterIp(ip, 8043, 1e3)) return ip;
+	}
+	return null;
+}
+var Route$9 = createFileRoute("/api/create-test-order")({ server: { handlers: {
+	GET: async ({ request }) => createHandler(request),
+	POST: async ({ request }) => createHandler(request)
+} } });
+async function createHandler(request) {
+	try {
+		const url = request ? new URL(request.url) : null;
+		const typeParam = (url?.searchParams.get("type") || url?.searchParams.get("mode") || "").toLowerCase();
+		const isTextFormat = url?.searchParams.get("format") === "text" || request?.headers.get("accept")?.includes("text/plain");
+		let body = null;
+		if (request && request.method === "POST") try {
+			const text = await request.text();
+			if (text) body = JSON.parse(text);
+		} catch {}
 		const testId = generateOrderId();
 		const deliveryToken = typeof crypto?.randomUUID === "function" ? crypto.randomUUID().replace(/-/g, "") : Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-		const testOrder = {
+		const isAllSupplements = typeParam === "all-supplements" || typeParam === "all" || typeParam === "supplements" || url?.searchParams.has("all") || url?.searchParams.has("supplements") || body?.type === "all-supplements" || body?.allSupplements === true;
+		let testOrder;
+		if (isAllSupplements) testOrder = {
+			id: testId,
+			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+			status: "paid",
+			paymentMethod: "online",
+			printStatus: "pending",
+			deliveryToken,
+			currency: "EUR",
+			customer: {
+				name: "Client Test (TOUS LES SUPPLÉMENTS)",
+				phone: "0491 28 14 56",
+				email: "test.supplements@pokenbowl.be",
+				fulfillment: "delivery",
+				requestedTime: "Dès que possible",
+				address: "Rue Haute 38",
+				postalCode: "4600",
+				city: "Visé",
+				deliveryFee: 3,
+				notes: "TEST COMPLET : Vérification du rendu ticket thermique avec l'intégralité des suppléments"
+			},
+			items: [{
+				id: "cree-ton-bowl",
+				name: "Crée ton bowl",
+				price: 26.5,
+				quantity: 1,
+				toppings: [
+					"Grande (+3.00 €)",
+					"Riz blanc",
+					"Quinoa",
+					"Poulet mariné",
+					"+ Boeuf effiloché (+1.50 €)",
+					"+ Saumon (+1.00 €)",
+					"+ Scampis (+1.50 €)",
+					"Mangue",
+					"Edamame",
+					"Carottes",
+					"+ Feta (+1.00 €)",
+					"+ Guacamole (+1.00 €)",
+					"+ Salade d'algues (+1.00 €)",
+					"+ Patates douces (+1.00 €)",
+					"+ Houmous (+1.00 €)",
+					"Sauce sésame sucrée",
+					"+ Sauce sésame salée (+0.50 €)",
+					"+ Mayo-Wasabi (+0.50 €)",
+					"+ Mayo truffe (+0.50 €)",
+					"+ Teriyaki (+0.50 €)",
+					"Oignons frits",
+					"+ Noix de cajou (+0.50 €)",
+					"+ Graines de sésame (+0.50 €)",
+					"+ Nachos (+0.50 €)",
+					"+ Wasabi (+0.50 €)",
+					"+ Flocons-Chili (+0.50 €)",
+					"! Sans coriandre"
+				]
+			}, {
+				id: "crousty-chicken-curry",
+				name: "Crousty Chicken Curry",
+				price: 15,
+				quantity: 1,
+				toppings: [
+					"Riz",
+					"Petits morceaux de poulet croustillant",
+					"Sauce curry onctueuse",
+					"Oignons frits croustillants",
+					"+ Double poulet croustillant (+2.50 €)",
+					"+ Feta (+1.00 €)",
+					"+ Sauce blanche (+0.50 €)"
+				]
+			}],
+			total: 44.5
+		};
+		else testOrder = {
 			id: testId,
 			createdAt: (/* @__PURE__ */ new Date()).toISOString(),
 			status: "paid",
@@ -583,9 +1288,24 @@ async function createHandler() {
 			total: 32
 		};
 		await upsertOrder(testOrder);
+		const origin = url ? `${url.protocol}//${url.host}` : "https://pokenbowl.be";
+		const receiptPreview = renderThermalTextReceipt(testOrder, origin);
+		const eposXml = buildEposXmlOrder(testOrder, origin);
+		const soapEnvelope = buildEposSoapEnvelope(eposXml);
+		if (isTextFormat) return new Response(receiptPreview, {
+			status: 200,
+			headers: {
+				"Content-Type": "text/plain; charset=utf-8",
+				"Cache-Control": "no-store",
+				"X-Order-Id": testOrder.id
+			}
+		});
 		return new Response(JSON.stringify({
 			success: true,
-			order: testOrder
+			order: testOrder,
+			receiptPreview,
+			eposXml,
+			soapEnvelope
 		}), {
 			status: 200,
 			headers: {
@@ -1056,507 +1776,10 @@ createServerFn({ method: "POST" }).validator(objectType({
 	success: booleanType(),
 	error: stringType().optional()
 })).handler(createSsrRpc("c9404c0b075a83418748a0c227e03f7d1395bb14f3a6f06bf310f5ce8548a74b"));
-createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(createSsrRpc("a3e5772b7bda801cc22b7f7df7f8f1e4e6dfbbed57f002933f5dce0db2f42f5a"));
-var DEFAULT_PRINTER_CONFIG = {
-	printerIp: "192.168.0.8",
-	printerPort: 8043,
-	bridgeUrl: "",
-	autoPrintKitchen: true,
-	autoPrintDelivery: true,
-	soundEnabled: true,
-	printMode: "epos"
-};
-function loadPrinterConfig() {
-	if (typeof window === "undefined") return DEFAULT_PRINTER_CONFIG;
-	try {
-		const raw = localStorage.getItem("pnb_printer_config");
-		if (raw) {
-			const parsed = JSON.parse(raw);
-			const safePort = parsed.printerPort && [
-				8043,
-				80,
-				8008,
-				443
-			].includes(Number(parsed.printerPort)) ? Number(parsed.printerPort) : 8043;
-			const cleanConfig = {
-				...DEFAULT_PRINTER_CONFIG,
-				...parsed,
-				printerPort: safePort,
-				printMode: "epos"
-			};
-			if (parsed.printerPort === 9100 || !parsed.printerPort) localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
-			return cleanConfig;
-		}
-	} catch {}
-	return DEFAULT_PRINTER_CONFIG;
-}
-function savePrinterConfig(config) {
-	if (typeof window === "undefined") return;
-	const safePort = config.printerPort && [
-		8043,
-		80,
-		8008,
-		443
-	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
-	const cleanConfig = {
-		...config,
-		printerPort: safePort,
-		printMode: "epos"
-	};
-	localStorage.setItem("pnb_printer_config", JSON.stringify(cleanConfig));
-}
-/**
-* Nettoyage thermique préservant les accents français (é, è, à, ç, etc.)
-* et convertissant les caractères spéciaux non gérés par l'imprimante
-*/
-function cleanThermalText(str = "") {
-	if (!str) return "";
-	return String(str).replace(/cacahu[eè]tes?/gi, "Noix de cajou").replace(/€/g, "EUR").replace(/[’‘`]/g, "'").replace(/[–—]/g, "-").replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/[^\x20-\x7E\n\r\u00C0-\u00FF]/g, "");
-}
-/**
-* Nettoie le nom d'un article pour le ticket thermique :
-* Supprime le mot redondant "Poké" ou "Poke" dans l'intitulé des plats
-* Ex: "Spicy Chicken Poké (Grand)" -> "Spicy Chicken (Grand)"
-*     "Crousty Chicken Poké" -> "Crousty Chicken"
-*/
-function cleanReceiptItemName(name = "") {
-	if (!name) return "";
-	let res = cleanThermalText(name);
-	while (/(^|\s+)pok[eé](\s+|$)/i.test(res)) res = res.replace(/(^|\s+)pok[eé](\s+|$)/i, "$1$2");
-	return res.replace(/\s+/g, " ").replace(/\s+\)/g, ")").replace(/\(\s+/g, "(").trim();
-}
-/**
-* Nettoyage et échappement sécurisé des caractères pour le XML ePOS
-*/
-function escapeXml(str = "") {
-	return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-/**
-* Enveloppe SOAP standard pour ePOS-Print
-*/
-function buildEposSoapEnvelope(innerXml) {
-	if (innerXml.includes("<s:Envelope") || innerXml.includes("<soap:Envelope")) return innerXml;
-	return `<?xml version="1.0" encoding="utf-8"?>
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-  <s:Header>
-    <parameter xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-      <devid>local_printer</devid>
-      <timeout>10000</timeout>
-    </parameter>
-  </s:Header>
-  <s:Body>
-    ${innerXml.trim()}
-  </s:Body>
-</s:Envelope>`;
-}
-/**
-* Alignement thermique 48 colonnes (Standard 80mm Epson TM-m30II / Takeaway)
-*/
-function formatThermalRow(left, right = "", width = 48) {
-	const cLeft = cleanThermalText(left);
-	const cRight = cleanThermalText(right);
-	if (!cRight) return cLeft.slice(0, width);
-	const avail = width - cRight.length - 1;
-	const tLeft = cLeft.length > avail ? cLeft.slice(0, avail) : cLeft;
-	const spaces = Math.max(1, width - tLeft.length - cRight.length);
-	return tLeft + " ".repeat(spaces) + cRight;
-}
-/**
-* Découpe propre d'un texte long sans couper les mots
-*/
-function wrapThermalText(text, maxWidth = 48) {
-	if (!text) return [];
-	const words = cleanThermalText(text).split(/\s+/);
-	const lines = [];
-	let current = "";
-	for (const word of words) if (!current) current = word;
-	else if (current.length + 1 + word.length <= maxWidth) current += " " + word;
-	else {
-		lines.push(current);
-		current = word;
-	}
-	if (current) lines.push(current);
-	return lines;
-}
-function unpackToppings(toppings = []) {
-	const result = [];
-	for (const raw of toppings) {
-		if (!raw) continue;
-		const catMatch = raw.match(/^(?:Base|Taille|Proteine|Protéine|Mix-ins?|Sauces?|Toppings?|Crunch)\s*:\s*(.+)$/i);
-		const parts = (catMatch ? catMatch[1] : raw).split(",").map((s) => s.trim()).filter(Boolean);
-		for (const part of parts) {
-			const isAllergy = /^(?:sans\s*:|sans\s+|allerg)/i.test(part);
-			const priceMatch = part.match(/\(\+([\d.,]+)\s*€?\)/);
-			const priceStr = priceMatch ? parseFloat(priceMatch[1].replace(",", ".")).toFixed(2) : void 0;
-			const cleanName = part.replace(/\(\+[\d.,]+\s*€?\)/g, "").replace(/\(x\d+\)/g, "").trim();
-			const isExtra = Boolean(priceStr) || cleanName.startsWith("+");
-			const displayText = cleanName.replace(/^\+\s*/, "");
-			result.push({
-				text: displayText,
-				price: priceStr,
-				isAllergy,
-				isExtra
-			});
-		}
-	}
-	return result;
-}
-/**
-* Générateur XML ePOS natif pour le ticket de test (Bouton vert)
-* Imprime une réplique exacte et complète du ticket Takeaway.com
-*/
-function buildEposXmlTest(printerIp, origin = "https://pokenbowl.be") {
-	return buildEposXmlOrder({
-		id: "J83 BY8",
-		createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-		status: "paid",
-		paymentMethod: "online",
-		currency: "EUR",
-		deliveryToken: "test-epson",
-		customer: {
-			name: "Hervé S.",
-			phone: "0491 28 14 56",
-			fulfillment: "delivery",
-			requestedTime: "dès que possible",
-			address: "Rue du Viaduc",
-			city: "Dalhem",
-			postalCode: "4607",
-			deliveryFee: 3,
-			notes: "merci de déposer la commande sur le muret, mon fils dort"
-		},
-		items: [{
-			id: "bowl-1",
-			name: "Crée ton bowl",
-			price: 11,
-			quantity: 1,
-			toppings: [
-				"Moyenne",
-				"Riz blanc",
-				"Guacamole",
-				"Patates douces",
-				"Feta (+1.00 €)",
-				"Mangue",
-				"Houmous",
-				"Poulet",
-				"Teriyaki",
-				"Noix de cajou",
-				"Oignons frits"
-			]
-		}, {
-			id: "bowl-2",
-			name: "Crée ton bowl",
-			price: 14,
-			quantity: 1,
-			toppings: [
-				"Grande (+3.00 €)",
-				"Riz blanc",
-				"Guacamole",
-				"Feta (+1.00 €)",
-				"Houmous",
-				"Poivrons",
-				"Mangue",
-				"Poulet",
-				"Mayo wasabi",
-				"Oignons frits",
-				"Graines de sésame",
-				"Flocons de chili",
-				"Nachos"
-			]
-		}],
-		total: 28
-	}, origin);
-}
-/**
-* Générateur XML ePOS natif pour le ticket de commande officiel (Style 100% Takeaway.com)
-*/
-function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
-	const isDelivery = order.customer.fulfillment === "delivery";
-	const dateObj = new Date(order.createdAt);
-	const dayStr = dateObj.toLocaleDateString("fr-BE", {
-		timeZone: "Europe/Brussels",
-		day: "numeric"
-	});
-	const rawMonth = dateObj.toLocaleDateString("fr-BE", {
-		timeZone: "Europe/Brussels",
-		month: "short"
-	}).replace(/\./g, "").trim();
-	const monthStr = rawMonth.charAt(0).toUpperCase() + rawMonth.slice(1);
-	const timeStr = dateObj.toLocaleTimeString("fr-BE", {
-		timeZone: "Europe/Brussels",
-		hour: "2-digit",
-		minute: "2-digit"
-	});
-	const safeCustomerName = cleanThermalText(order.customer.name);
-	const safeCustomerPhone = cleanThermalText(order.customer.phone);
-	const safeAddress = cleanThermalText(order.customer.address || "Non précisée");
-	const safeCity = cleanThermalText(order.customer.city || "");
-	const safePostalCode = cleanThermalText(order.customer.postalCode || "");
-	const safeNotes = cleanThermalText(order.customer.notes || "");
-	const rawRequestedTime = cleanThermalText(order.customer.requestedTime || "dès que possible");
-	const isScheduled = rawRequestedTime.toLowerCase() !== "dès que possible" && rawRequestedTime.length > 0;
-	const rawId = order.id.includes("-") ? order.id.split("-").pop() || order.id : order.id;
-	const shortOrderRef = rawId.length === 6 ? `${rawId.slice(0, 3)} ${rawId.slice(3)}` : rawId;
-	let xml = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">\n`;
-	const line = (text, align = "left", em = false) => {
-		xml += `  <text font="font_a" align="${align}" em="${em ? "true" : "false"}" dh="false" dw="false">${escapeXml(text)}&#10;</text>\n`;
-	};
-	const hr = () => {
-		line("------------------------------------------------", "left", false);
-	};
-	line("Takeaway.com", "center", true);
-	line("Poke N Bowl", "center", false);
-	hr();
-	if (isDelivery) if (isScheduled) {
-		line("LIVRAISON PLANIFIÉE", "center", true);
-		line(`Date : ${dayStr} ${monthStr}, à ${rawRequestedTime}`, "center", false);
-	} else {
-		line("LIVRAISON", "center", true);
-		line(`Date : ${dayStr} ${monthStr}, dès que possible`, "center", false);
-		line(`(${timeStr})`, "center", false);
-	}
-	else {
-		line("À EMPORTER", "center", true);
-		line(`Date : ${dayStr} ${monthStr}, ${rawRequestedTime}`, "center", false);
-		line(`(${timeStr})`, "center", false);
-	}
-	line("", "center", false);
-	line(`# ${shortOrderRef.toUpperCase()}`, "center", true);
-	hr();
-	line(formatThermalRow("", "EUR", 48), "left", false);
-	let subTotal = 0;
-	for (const item of order.items) {
-		const safeItemName = cleanReceiptItemName(item.name);
-		const unpacked = unpackToppings(item.toppings || []);
-		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
-		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
-		subTotal += item.price * item.quantity;
-		if (unpacked.length > 0) line(safeItemName, "left", false);
-		line(formatThermalRow(`${item.quantity} x ${safeItemName}`, itemBaseTotalStr, 48), "left", false);
-		for (const sub of unpacked) if (sub.isExtra && sub.price) line(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48), "left", false);
-		else if (sub.isAllergy) line(`  ! ${sub.text}`, "left", false);
-		else line(`    ${sub.text}`, "left", false);
-	}
-	line("", "left", false);
-	line(formatThermalRow("Sous-total", subTotal.toFixed(2), 48), "left", false);
-	line(formatThermalRow("Total de la commande", subTotal.toFixed(2), 48), "left", false);
-	const deliveryFee = isDelivery && order.customer.deliveryFee ? order.customer.deliveryFee : 0;
-	if (isDelivery && deliveryFee > 0) line(formatThermalRow("Frais de livraison", deliveryFee.toFixed(2), 48), "left", false);
-	line(formatThermalRow("", "-----", 48), "left", false);
-	line(formatThermalRow("Total dû", order.total.toFixed(2), 48), "left", true);
-	line(formatThermalRow("", "=====", 48), "left", false);
-	line("", "left", false);
-	line("Payé par :", "left", false);
-	const isPaid = order.status === "paid";
-	line(formatThermalRow(isPaid ? "Carte ************" : "À régler sur place", order.total.toFixed(2), 48), "left", false);
-	hr();
-	line("   IMPORTANT : POUR LES INFORMATIONS SUR LES    ", "center", false);
-	line("             ALLERGÈNES ALIMENTAIRES            ", "center", false);
-	line("    Appelez le restaurant ou consultez leur menu", "center", false);
-	hr();
-	line(isPaid ? "COMMANDE PAYÉE" : "À RÉGLER SUR PLACE", "center", true);
-	hr();
-	line("Détails du client:", "left", false);
-	line("", "left", false);
-	line(safeCustomerName, "left", false);
-	line("", "left", false);
-	if (safeCustomerPhone) line(`Tél : ${safeCustomerPhone}`, "left", false);
-	if (isDelivery) {
-		if (safeAddress) line(safeAddress, "left", false);
-		if (safeCity) line(safeCity, "left", false);
-		if (safePostalCode) line(safePostalCode, "left", false);
-	} else {
-		line("Retrait au restaurant", "left", false);
-		line("Rue Haute 38 · 4600 Visé", "left", false);
-	}
-	if (safeNotes) {
-		line("", "left", false);
-		line("Notes de livraison:", "left", false);
-		const wrappedNotes = wrapThermalText(safeNotes, 48);
-		for (const noteLine of wrappedNotes) line(noteLine, "left", false);
-	}
-	const acceptedTimeStr = new Date(dateObj.getTime() + 6e4).toLocaleTimeString("fr-BE", {
-		timeZone: "Europe/Brussels",
-		hour: "2-digit",
-		minute: "2-digit"
-	});
-	line("", "left", false);
-	hr();
-	line(formatThermalRow("Commande passée à", `${timeStr} ${dayStr} ${monthStr}`, 48), "left", false);
-	line(formatThermalRow("Commande acceptée à", `${acceptedTimeStr} ${dayStr} ${monthStr}`, 48), "left", false);
-	hr();
-	const trackToken = order.deliveryToken || order.id;
-	const qrUrl = `${origin.replace(/\/$/, "")}/track/${encodeURIComponent(trackToken)}`;
-	xml += `  <symbol type="qrcode_model_2" level="level_m" width="8">${escapeXml(qrUrl)}</symbol>\n`;
-	line(isDelivery ? "Scannez pour livrer" : "Scannez pour suivre la commande", "center", false);
-	line("Ceci n'est pas une facture", "center", false);
-	hr();
-	xml += `  <feed line="3" />\n`;
-	xml += `  <cut type="feed" />\n`;
-	xml += `</epos-print>`;
-	return xml;
-}
-/**
-* Envoi réseau vers l'imprimante avec fetch + secours XMLHttpRequest
-*/
-async function sendHttpRequest(url, body, timeoutMs = 4e3) {
-	try {
-		const res = await fetch(url, {
-			method: "POST",
-			headers: {
-				"Content-Type": "text/xml; charset=utf-8",
-				"If-Modified-Since": "Thu, 01 Jan 1970 00:00:00 GMT",
-				SOAPAction: "\"\""
-			},
-			body,
-			signal: AbortSignal.timeout(timeoutMs)
-		});
-		const text = await res.text();
-		return {
-			ok: res.ok,
-			status: res.status,
-			text
-		};
-	} catch (fetchErr) {
-		if (typeof XMLHttpRequest !== "undefined") try {
-			return await new Promise((resolve, reject) => {
-				const xhr = new XMLHttpRequest();
-				xhr.open("POST", url, true);
-				xhr.setRequestHeader("Content-Type", "text/xml; charset=utf-8");
-				xhr.setRequestHeader("SOAPAction", "\"\"");
-				xhr.timeout = timeoutMs;
-				xhr.onload = () => resolve({
-					ok: xhr.status >= 200 && xhr.status < 300,
-					status: xhr.status,
-					text: xhr.responseText
-				});
-				xhr.onerror = () => reject(/* @__PURE__ */ new Error("Erreur réseau / Certificat non approuvé"));
-				xhr.ontimeout = () => reject(/* @__PURE__ */ new Error(`Délai d'attente dépassé (${Math.round(timeoutMs / 1e3)}s)`));
-				xhr.send(body);
-			});
-		} catch {}
-		throw fetchErr;
-	}
-}
-/**
-* Envoie un flux d'impression à l'imprimante Epson :
-* ePOS-Print XML direct (HTTP/HTTPS SOAP sur port 8043 ou 8008)
-*/
-async function sendReceiptToPrinter(payload, config) {
-	let xmlContent = "";
-	let base64Data = "";
-	if (typeof payload === "string") if (payload.trim().startsWith("<")) xmlContent = payload.trim();
-	else base64Data = payload;
-	else if (payload && typeof payload === "object") {
-		xmlContent = payload.xml?.trim() || "";
-		base64Data = payload.base64?.trim() || "";
-	}
-	if (config.bridgeUrl && base64Data) try {
-		const bridgeEndpoint = `${config.bridgeUrl.replace(/\/$/, "")}/print`;
-		if ((await fetch(bridgeEndpoint, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				printerIp: config.printerIp,
-				printerPort: config.printerPort,
-				dataBase64: base64Data
-			})
-		})).ok) return {
-			success: true,
-			message: "Imprimé avec succès via Print Bridge."
-		};
-	} catch (err) {
-		console.warn("Print Bridge injoignable, essai ePOS-Print direct...", err);
-	}
-	if (!xmlContent) return {
-		success: false,
-		message: "Données du ticket invalides : flux ePOS XML manquant."
-	};
-	const soapEnvelope = buildEposSoapEnvelope(xmlContent);
-	const ip = config.printerIp.trim();
-	const safePort = config.printerPort && [
-		8043,
-		80,
-		8008,
-		443
-	].includes(Number(config.printerPort)) ? Number(config.printerPort) : 8043;
-	const targets = Array.from(/* @__PURE__ */ new Set([
-		`https://${ip}:${safePort}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}:8043/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}:443/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`https://${ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:8008/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`,
-		`http://${ip}:80/cgi-bin/epos/service.cgi?devid=local_printer&timeout=10000`
-	]));
-	let lastErr = "";
-	for (const url of targets) try {
-		console.log(`[ePOS] Envoi requête vers ${url}...`);
-		const { ok, status, text: resText } = await sendHttpRequest(url, soapEnvelope, 4e3);
-		console.log(`[ePOS] Réponse reçue de ${url} (status ${status}):`, resText);
-		if (resText.includes("success=\"true\"")) return {
-			success: true,
-			message: `Ticket imprimé avec succès sur ${ip} !`
-		};
-		if (ok && resText.includes("<response")) {
-			const codeMatch = resText.match(/code="([^"]*)"/);
-			const code = codeMatch ? codeMatch[1] : "";
-			if (!code || code === "None" || code === "SUCCESS") return {
-				success: true,
-				message: `Ticket imprimé avec succès sur ${ip} !`
-			};
-			lastErr = `Code imprimante: ${code}`;
-		} else lastErr = `Réponse HTTP ${status} sans confirmation ePOS`;
-		break;
-	} catch (e) {
-		lastErr = e?.name === "TimeoutError" ? "Délai d'attente dépassé (4s)" : e?.message ?? String(e);
-		console.warn(`[ePOS] Échec de connexion sur ${url}:`, lastErr);
-		if (e?.name === "TimeoutError" || lastErr.includes("Délai d'attente")) break;
-	}
-	return {
-		success: false,
-		message: lastErr.includes("Failed to fetch") || lastErr.includes("NetworkError") || lastErr.includes("Certificat non approuvé") || lastErr.includes("Délai d'attente") ? `Certificat local non autorisé dans Chrome ou imprimante ${config.printerIp} injoignable.` : lastErr
-	};
-}
-/**
-* Test rapide d'accessibilité d'une IP pour scanner le réseau
-*/
-async function probePrinterIp(ip, port = 8043, timeoutMs = 1200) {
-	const url = `https://${ip}:${port}/cgi-bin/epos/service.cgi`;
-	try {
-		await fetch(url, {
-			method: "GET",
-			mode: "no-cors",
-			signal: AbortSignal.timeout(timeoutMs)
-		});
-		return true;
-	} catch (err) {
-		return err?.name !== "TimeoutError";
-	}
-}
-/**
-* Détection automatique de l'imprimante sur les sous-réseaux locaux usuels
-*/
-async function scanForPrinterIp(onProgress) {
-	for (const ip of [
-		"192.168.0.8",
-		"192.168.0.5",
-		"192.168.0.2",
-		"192.168.0.3",
-		"192.168.0.4",
-		"192.168.0.6",
-		"192.168.0.10",
-		"192.168.0.50",
-		"192.168.0.100",
-		"192.168.1.5",
-		"192.168.1.2",
-		"192.168.1.10",
-		"192.168.1.50",
-		"192.168.1.100"
-	]) {
-		onProgress?.(ip);
-		if (await probePrinterIp(ip, 8043, 1e3)) return ip;
-	}
-	return null;
-}
+createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	type: enumType(["standard", "all-supplements"]).optional()
+})).handler(createSsrRpc("a3e5772b7bda801cc22b7f7df7f8f1e4e6dfbbed57f002933f5dce0db2f42f5a"));
 var Route$2 = createFileRoute("/pos/")({ component: PosApplicationPage });
 function PosApplicationPage() {
 	const [pin, setPin] = (0, import_react.useState)(() => {
