@@ -321,14 +321,27 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
   let subTotal = 0;
   for (const item of order.items) {
     const safeItemName = cleanReceiptItemName(item.name);
+    const isCustom = /cr[eé][eé]\s+ton\s+bowl|sur[- ]mesure|custom/i.test(item.name);
     const unpacked = unpackToppings(item.toppings || []);
+
+    // Pour les plats composés (hors "Crée ton bowl"), on ne liste pas les ingrédients
+    // inclus par défaut dans la recette : on ne garde que les suppléments payants (+),
+    // les exclusions/allergies (! Sans) et les choix de boisson/formule.
+    const displayToppings = isCustom
+      ? unpacked
+      : unpacked.filter((sub) => {
+          if (sub.isExtra || sub.isAllergy) return true;
+          if (/^boisson/i.test(sub.text)) return true;
+          return false;
+        });
+
     const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
     const baseUnitPrice = Math.max(0, item.price - supplementsTotal);
     const itemBaseTotalStr = (baseUnitPrice * item.quantity).toFixed(2);
     subTotal += item.price * item.quantity;
 
-    // Titre d'article si Poké / Plat composé
-    if (unpacked.length > 0) {
+    // Titre d'article si Poké sur-mesure (Takeaway affiche "Crée ton bowl" au-dessus)
+    if (displayToppings.length > 0 && isCustom) {
       line(safeItemName, "left", false);
     }
 
@@ -337,7 +350,7 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
     line(formatThermalRow(itemHeader, itemBaseTotalStr, 48), "left", false);
 
     // Composition détaillée avec indentation Takeaway
-    for (const sub of unpacked) {
+    for (const sub of displayToppings) {
       if (sub.isExtra && sub.price) {
         // Supplément payant : "  + Feta                                    1.00" (2 espaces)
         line(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48), "left", false);
@@ -488,19 +501,32 @@ export function renderThermalTextReceipt(order: Order, origin = "https://pokenbo
   let subTotal = 0;
   for (const item of order.items) {
     const safeItemName = cleanReceiptItemName(item.name);
+    const isCustom = /cr[eé][eé]\s+ton\s+bowl|sur[- ]mesure|custom/i.test(item.name);
     const unpacked = unpackToppings(item.toppings || []);
+
+    // Pour les plats composés (hors "Crée ton bowl"), on ne liste pas les ingrédients
+    // inclus par défaut dans la recette : on ne garde que les suppléments payants (+),
+    // les exclusions/allergies (! Sans) et les choix de boisson/formule.
+    const displayToppings = isCustom
+      ? unpacked
+      : unpacked.filter((sub) => {
+          if (sub.isExtra || sub.isAllergy) return true;
+          if (/^boisson/i.test(sub.text)) return true;
+          return false;
+        });
+
     const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
     const baseUnitPrice = Math.max(0, item.price - supplementsTotal);
     const itemBaseTotalStr = (baseUnitPrice * item.quantity).toFixed(2);
     subTotal += item.price * item.quantity;
 
-    if (unpacked.length > 0) {
+    if (displayToppings.length > 0 && isCustom) {
       lines.push(safeItemName);
     }
     const itemHeader = `${item.quantity} x ${safeItemName}`;
     lines.push(formatThermalRow(itemHeader, itemBaseTotalStr, 48));
 
-    for (const sub of unpacked) {
+    for (const sub of displayToppings) {
       if (sub.isExtra && sub.price) {
         lines.push(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48));
       } else if (sub.isAllergy) {

@@ -21,7 +21,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DCsuWooO.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CkCz77h9.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -800,13 +800,19 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	let subTotal = 0;
 	for (const item of order.items) {
 		const safeItemName = cleanReceiptItemName(item.name);
+		const isCustom = /cr[eé][eé]\s+ton\s+bowl|sur[- ]mesure|custom/i.test(item.name);
 		const unpacked = unpackToppings(item.toppings || []);
+		const displayToppings = isCustom ? unpacked : unpacked.filter((sub) => {
+			if (sub.isExtra || sub.isAllergy) return true;
+			if (/^boisson/i.test(sub.text)) return true;
+			return false;
+		});
 		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
 		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
 		subTotal += item.price * item.quantity;
-		if (unpacked.length > 0) line(safeItemName, "left", false);
+		if (displayToppings.length > 0 && isCustom) line(safeItemName, "left", false);
 		line(formatThermalRow(`${item.quantity} x ${safeItemName}`, itemBaseTotalStr, 48), "left", false);
-		for (const sub of unpacked) if (sub.isExtra && sub.price) line(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48), "left", false);
+		for (const sub of displayToppings) if (sub.isExtra && sub.price) line(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48), "left", false);
 		else if (sub.isAllergy) line(`  ! ${sub.text}`, "left", false);
 		else line(`    ${sub.text}`, "left", false);
 	}
@@ -924,14 +930,20 @@ function renderThermalTextReceipt(order, origin = "https://pokenbowl.be") {
 	let subTotal = 0;
 	for (const item of order.items) {
 		const safeItemName = cleanReceiptItemName(item.name);
+		const isCustom = /cr[eé][eé]\s+ton\s+bowl|sur[- ]mesure|custom/i.test(item.name);
 		const unpacked = unpackToppings(item.toppings || []);
+		const displayToppings = isCustom ? unpacked : unpacked.filter((sub) => {
+			if (sub.isExtra || sub.isAllergy) return true;
+			if (/^boisson/i.test(sub.text)) return true;
+			return false;
+		});
 		const supplementsTotal = unpacked.reduce((sum, s) => sum + (s.price ? parseFloat(s.price) : 0), 0);
 		const itemBaseTotalStr = (Math.max(0, item.price - supplementsTotal) * item.quantity).toFixed(2);
 		subTotal += item.price * item.quantity;
-		if (unpacked.length > 0) lines.push(safeItemName);
+		if (displayToppings.length > 0 && isCustom) lines.push(safeItemName);
 		const itemHeader = `${item.quantity} x ${safeItemName}`;
 		lines.push(formatThermalRow(itemHeader, itemBaseTotalStr, 48));
-		for (const sub of unpacked) if (sub.isExtra && sub.price) lines.push(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48));
+		for (const sub of displayToppings) if (sub.isExtra && sub.price) lines.push(formatThermalRow(`  + ${sub.text}`, parseFloat(sub.price).toFixed(2), 48));
 		else if (sub.isAllergy) lines.push(`  ! ${sub.text}`);
 		else lines.push(`    ${sub.text}`);
 	}
@@ -1200,8 +1212,7 @@ async function createHandler(request) {
 				quantity: 1,
 				toppings: [
 					"Grande (+3.00 €)",
-					"Riz blanc",
-					"Quinoa",
+					"Riz",
 					"Poulet mariné",
 					"+ Boeuf effiloché (+1.50 €)",
 					"+ Saumon (+1.00 €)",
@@ -1225,7 +1236,7 @@ async function createHandler(request) {
 					"+ Nachos (+0.50 €)",
 					"+ Wasabi (+0.50 €)",
 					"+ Flocons-Chili (+0.50 €)",
-					"! Sans coriandre"
+					"! Sans oignons"
 				]
 			}, {
 				id: "crousty-chicken-curry",
@@ -1233,10 +1244,6 @@ async function createHandler(request) {
 				price: 15,
 				quantity: 1,
 				toppings: [
-					"Riz",
-					"Petits morceaux de poulet croustillant",
-					"Sauce curry onctueuse",
-					"Oignons frits croustillants",
 					"+ Double poulet croustillant (+2.50 €)",
 					"+ Feta (+1.00 €)",
 					"+ Sauce blanche (+0.50 €)"
@@ -1269,21 +1276,13 @@ async function createHandler(request) {
 				name: "Spicy Chicken (Grand)",
 				price: 15.5,
 				quantity: 1,
-				toppings: [
-					"Avocat",
-					"Oignons frits",
-					"Sauce Spicy Mayo"
-				]
+				toppings: ["Grande (+3.00 €)"]
 			}, {
 				id: "crousty-chicken",
 				name: "Crousty Chicken",
 				price: 14.5,
 				quantity: 1,
-				toppings: [
-					"Sauce Sésame sucrée",
-					"Edamame",
-					"Noix de cajou"
-				]
+				toppings: ["+ Sauce Sésame sucrée (+0.50 €)"]
 			}],
 			total: 32
 		};

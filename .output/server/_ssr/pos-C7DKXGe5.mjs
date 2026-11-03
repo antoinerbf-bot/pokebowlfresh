@@ -3,7 +3,7 @@ import { n as booleanType, o as objectType, r as enumType, s as stringType } fro
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, o as requestOrderReprint, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-DGQaMAb3.js
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-C7DKXGe5.js
 /**
 * Générateur de commandes binaires ESC/POS pour Epson TM-m30III
 * Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
@@ -334,8 +334,7 @@ var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objec
 			quantity: 1,
 			toppings: [
 				"Grande (+3.00 €)",
-				"Riz blanc",
-				"Quinoa",
+				"Riz",
 				"Poulet mariné",
 				"+ Boeuf effiloché (+1.50 €)",
 				"+ Saumon (+1.00 €)",
@@ -359,7 +358,7 @@ var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objec
 				"+ Nachos (+0.50 €)",
 				"+ Wasabi (+0.50 €)",
 				"+ Flocons-Chili (+0.50 €)",
-				"! Sans coriandre"
+				"! Sans oignons"
 			]
 		}, {
 			id: "crousty-chicken-curry",
@@ -367,10 +366,6 @@ var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objec
 			price: 15,
 			quantity: 1,
 			toppings: [
-				"Riz",
-				"Petits morceaux de poulet croustillant",
-				"Sauce curry onctueuse",
-				"Oignons frits croustillants",
 				"+ Double poulet croustillant (+2.50 €)",
 				"+ Feta (+1.00 €)",
 				"+ Sauce blanche (+0.50 €)"
@@ -403,21 +398,13 @@ var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objec
 			name: "Spicy Chicken (Grand)",
 			price: 15.5,
 			quantity: 1,
-			toppings: [
-				"Avocat",
-				"Oignons frits",
-				"Sauce Spicy Mayo"
-			]
+			toppings: ["Grande (+3.00 €)"]
 		}, {
 			id: "crousty-chicken",
 			name: "Crousty Chicken",
 			price: 14.5,
 			quantity: 1,
-			toppings: [
-				"Sauce Sésame sucrée",
-				"Edamame",
-				"Noix de cajou"
-			]
+			toppings: ["+ Sauce Sésame sucrée (+0.50 €)"]
 		}],
 		total: 32
 	};
