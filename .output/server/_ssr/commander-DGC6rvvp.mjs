@@ -178,7 +178,7 @@ function CommanderPage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "mt-1 max-w-xl text-xs leading-relaxed text-[#EADCC9]/80 sm:text-sm",
-												children: "1 base, 1 protéine, 5 légumes inclus, 1 sauce offerte et 1 topping croustillant. Suppléments à volonté : protéine +2 €, légume +1 €, sauce +0,50 €, topping +0,50 €."
+												children: "1 base, 5 légumes inclus, 1 protéine, 1 sauce offerte et 1 topping croustillant. Suppléments à volonté : légume +1 €, protéine +2,50 €, sauce +0,50 €, topping +0,50 €."
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 												className: "mt-3 flex flex-wrap gap-1.5",
@@ -188,12 +188,12 @@ function CommanderPage() {
 														label: "1. Format & Base"
 													},
 													{
-														icon: "🐟",
-														label: "2. Protéine"
+														icon: "🥑",
+														label: "2. 5 Légumes"
 													},
 													{
-														icon: "🥑",
-														label: "3. 5 Légumes"
+														icon: "🐟",
+														label: "3. Protéine"
 													},
 													{
 														icon: "🍯",

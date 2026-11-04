@@ -315,15 +315,15 @@ export function InteractiveBowlBuilder() {
             },
             {
               step: 2,
-              icon: "🍗",
-              title: "2. Protéines",
-              detail: `${proteine.name}${totalExtraProteinUnits > 0 ? ` +${totalExtraProteinUnits}` : ""}`,
+              icon: "🥑",
+              title: "2. Légumes",
+              detail: `${totalMixinUnits} portion${totalMixinUnits > 1 ? "s" : ""} (${Math.min(INCLUDED_MIXINS, nonFetaCount)}/5)`,
             },
             {
               step: 3,
-              icon: "🥑",
-              title: "3. Légumes",
-              detail: `${totalMixinUnits} portion${totalMixinUnits > 1 ? "s" : ""} (${Math.min(INCLUDED_MIXINS, nonFetaCount)}/5)`,
+              icon: "🍗",
+              title: "3. Protéines",
+              detail: `${proteine.name}${totalExtraProteinUnits > 0 ? ` +${totalExtraProteinUnits}` : ""}`,
             },
             {
               step: 4,
@@ -490,128 +490,8 @@ export function InteractiveBowlBuilder() {
                 </motion.div>
               )}
 
-              {/* ════════ ÉTAPE 2 : PROTÉINE PRINCIPALE + EXTRAS ILLIMITÉS (+2 €) ════════ */}
+              {/* ════════ ÉTAPE 2 : LÉGUMES & MIX-INS (5 INCLUS PUIS +1,00 € À VOLONTÉ) ════════ */}
               {activeStep === 2 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-6"
-                >
-                  <div>
-                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-2">
-                      <span>🍗</span> 1. Choisissez votre protéine principale
-                    </h3>
-                    <p className="text-xs text-[#6E5A49] font-medium mb-3">
-                      1 portion de protéine incluse dans la formule (Saumon : +1,00 €).
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {detailedProteins.map((p) => {
-                        const isSelected = proteine.id === p.id;
-                        return (
-                          <button
-                            key={p.id}
-                            type="button"
-                            onClick={() => setProteine(p)}
-                            className={`flex flex-col items-center justify-center rounded-2xl p-4 border-2 text-center transition cursor-pointer ${
-                              isSelected
-                                ? "bg-[#FFF3EF] border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
-                                : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
-                            }`}
-                          >
-                            <span className="text-3xl mb-1.5">{p.emoji}</span>
-                            <span className="font-black text-sm text-[#2C1D16]">{p.name}</span>
-                            {p.extraPrice && p.extraPrice > 0 ? (
-                              <span className="mt-1 rounded-full bg-[#ff705f] px-2.5 py-0.5 text-[10px] font-black text-white">
-                                +{p.extraPrice.toFixed(2)} €
-                              </span>
-                            ) : (
-                              <span className="mt-1 rounded-full bg-[#EADCC9] px-2.5 py-0.5 text-[10px] font-black text-[#2C1D16]">
-                                Inclus
-                              </span>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Suppléments de protéines illimités (+2,00 € chaque fois) */}
-                  <div className="rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <div>
-                        <h4 className="text-sm font-black text-[#2C1D16] flex items-center gap-1.5">
-                          <span>Protéines supplémentaires (+2,50 € / portion)</span>
-                        </h4>
-                        <p className="text-[11px] text-[#6E5A49] font-medium">
-                          Poulet, saumon frais ou scampis (+2,50 € / portion)
-                        </p>
-                      </div>
-                      {totalExtraProteinUnits > 0 && (
-                        <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                          +{totalExtraProteinUnits} portion{totalExtraProteinUnits > 1 ? "s" : ""} (+{extraProteinsPrice.toFixed(2)} €)
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3">
-                      {detailedProteins.map((p) => {
-                        const qty = extraProteins[p.name] ?? 0;
-                        return (
-                          <div
-                            key={`extra-${p.id}`}
-                            className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
-                              qty > 0
-                                ? "bg-white border-[#ff705f] shadow-sm"
-                                : "bg-[#FAF5EE] border-[#DECBB3]"
-                            }`}
-                          >
-                            <div className="flex items-center gap-2 min-w-0">
-                              <span className="text-xl">{p.emoji}</span>
-                              <div className="min-w-0">
-                                <span className="block text-xs font-black text-[#2C1D16] truncate">
-                                  {p.name}
-                                </span>
-                                <span className="text-[10px] font-bold text-[#ff705f]">
-                                  {qty > 0 ? `${qty}× (+${(qty * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-1.5 shrink-0">
-                              {qty > 0 && (
-                                <>
-                                  <button
-                                    type="button"
-                                    onClick={() => removeExtraProtein(p.name)}
-                                    className="flex h-7 w-7 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                                    aria-label={`Retirer une portion de ${p.name}`}
-                                  >
-                                    <Minus className="h-3 w-3 stroke-[3]" />
-                                  </button>
-                                  <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                    {qty}
-                                  </span>
-                                </>
-                              )}
-                              <button
-                                type="button"
-                                onClick={() => addExtraProtein(p.name)}
-                                className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer shadow-sm"
-                                aria-label={`Ajouter une portion de ${p.name}`}
-                              >
-                                <Plus className="h-3.5 w-3.5 stroke-[3]" />
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ════════ ÉTAPE 3 : LÉGUMES & MIX-INS (5 INCLUS PUIS +1,00 € À VOLONTÉ) ════════ */}
-              {activeStep === 3 && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -729,6 +609,126 @@ export function InteractiveBowlBuilder() {
                         </div>
                       );
                     })}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ════════ ÉTAPE 3 : PROTÉINE PRINCIPALE + EXTRAS ILLIMITÉS (+2,50 €) ════════ */}
+              {activeStep === 3 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <h3 className="text-base font-black text-[#2C1D16] flex items-center gap-2 mb-2">
+                      <span>🍗</span> 1. Choisissez votre protéine principale
+                    </h3>
+                    <p className="text-xs text-[#6E5A49] font-medium mb-3">
+                      1 portion de protéine incluse dans la formule (Saumon : +1,00 €).
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {detailedProteins.map((p) => {
+                        const isSelected = proteine.id === p.id;
+                        return (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setProteine(p)}
+                            className={`flex flex-col items-center justify-center rounded-2xl p-4 border-2 text-center transition cursor-pointer ${
+                              isSelected
+                                ? "bg-[#FFF3EF] border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
+                                : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
+                            }`}
+                          >
+                            <span className="text-3xl mb-1.5">{p.emoji}</span>
+                            <span className="font-black text-sm text-[#2C1D16]">{p.name}</span>
+                            {p.extraPrice && p.extraPrice > 0 ? (
+                              <span className="mt-1 rounded-full bg-[#ff705f] px-2.5 py-0.5 text-[10px] font-black text-white">
+                                +{p.extraPrice.toFixed(2)} €
+                              </span>
+                            ) : (
+                              <span className="mt-1 rounded-full bg-[#EADCC9] px-2.5 py-0.5 text-[10px] font-black text-[#2C1D16]">
+                                Inclus
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Suppléments de protéines illimités (+2,50 € chaque fois) */}
+                  <div className="rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <div>
+                        <h4 className="text-sm font-black text-[#2C1D16] flex items-center gap-1.5">
+                          <span>Protéines supplémentaires (+2,50 € / portion)</span>
+                        </h4>
+                        <p className="text-[11px] text-[#6E5A49] font-medium">
+                          Poulet, saumon frais ou scampis (+2,50 € / portion)
+                        </p>
+                      </div>
+                      {totalExtraProteinUnits > 0 && (
+                        <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
+                          +{totalExtraProteinUnits} portion{totalExtraProteinUnits > 1 ? "s" : ""} (+{extraProteinsPrice.toFixed(2)} €)
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-3">
+                      {detailedProteins.map((p) => {
+                        const qty = extraProteins[p.name] ?? 0;
+                        return (
+                          <div
+                            key={`extra-${p.id}`}
+                            className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
+                              qty > 0
+                                ? "bg-white border-[#ff705f] shadow-sm"
+                                : "bg-[#FAF5EE] border-[#DECBB3]"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className="text-xl">{p.emoji}</span>
+                              <div className="min-w-0">
+                                <span className="block text-xs font-black text-[#2C1D16] truncate">
+                                  {p.name}
+                                </span>
+                                <span className="text-[10px] font-bold text-[#ff705f]">
+                                  {qty > 0 ? `${qty}× (+${(qty * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {qty > 0 && (
+                                <>
+                                  <button
+                                    type="button"
+                                    onClick={() => removeExtraProtein(p.name)}
+                                    className="flex h-7 w-7 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                                    aria-label={`Retirer une portion de ${p.name}`}
+                                  >
+                                    <Minus className="h-3 w-3 stroke-[3]" />
+                                  </button>
+                                  <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                    {qty}
+                                  </span>
+                                </>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => addExtraProtein(p.name)}
+                                className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer shadow-sm"
+                                aria-label={`Ajouter une portion de ${p.name}`}
+                              >
+                                <Plus className="h-3.5 w-3.5 stroke-[3]" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -1042,6 +1042,32 @@ export function InteractiveBowlBuilder() {
                   </span>
                 </div>
 
+                <div className="rounded-xl bg-[#F3E9DA] px-3 py-2.5">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="font-bold text-[#6E5A49]">
+                      Légumes & Mix-ins ({totalMixinUnits}) :
+                    </span>
+                    {extraMixinsCount > 0 ? (
+                      <span className="text-[10px] font-black text-[#ff705f]">
+                        +{extraMixinsPrice.toFixed(2)} €
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-black text-[#2C1D16]">Inclus</span>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedMixinBadges.map((m) => (
+                      <span
+                        key={m.name}
+                        className="rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
+                      >
+                        {m.emoji} {m.name}
+                        {m.qty > 1 ? ` (x${m.qty})` : ""}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="flex items-center justify-between rounded-xl bg-[#F3E9DA] px-3 py-2">
                   <span className="font-bold text-[#6E5A49]">Protéine :</span>
                   <span className="font-black text-[#2C1D16]">
@@ -1070,32 +1096,6 @@ export function InteractiveBowlBuilder() {
                     </div>
                   </div>
                 )}
-
-                <div className="rounded-xl bg-[#F3E9DA] px-3 py-2.5">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-bold text-[#6E5A49]">
-                      Légumes & Mix-ins ({totalMixinUnits}) :
-                    </span>
-                    {extraMixinsCount > 0 ? (
-                      <span className="text-[10px] font-black text-[#ff705f]">
-                        +{extraMixinsPrice.toFixed(2)} €
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-black text-[#2C1D16]">Inclus</span>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedMixinBadges.map((m) => (
-                      <span
-                        key={m.name}
-                        className="rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
-                      >
-                        {m.emoji} {m.name}
-                        {m.qty > 1 ? ` (x${m.qty})` : ""}
-                      </span>
-                    ))}
-                  </div>
-                </div>
 
                 <div className="rounded-xl bg-[#F3E9DA] px-3 py-2">
                   <div className="flex items-center justify-between">

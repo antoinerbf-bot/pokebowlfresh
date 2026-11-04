@@ -203,8 +203,8 @@ function SurMesurePage() {
 
   const getMissingReason = () => {
     if (!isBaseReady) return "Étape 1 : Choisis une base";
-    if (!isProteinReady) return "Étape 2 : Choisis une protéine";
-    if (!isMixInsReady) return "Étape 3 : Sélectionne au moins 1 légume ou mix-in";
+    if (!isMixInsReady) return "Étape 2 : Sélectionne au moins 1 légume ou mix-in";
+    if (!isProteinReady) return "Étape 3 : Choisis une protéine";
     return null;
   };
 
@@ -446,126 +446,12 @@ function SurMesurePage() {
               </div>
             </section>
 
-            {/* ══ ÉTAPE 2 : PROTÉINE PRINCIPALE + EXTRAS ILLIMITÉS (+2,00 €) ═════════════ */}
-            <section className="rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card">
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <span className="rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
-                    Étape 2
-                  </span>
-                  <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">Choisis ta Protéine</h2>
-                </div>
-                <span className="text-xs font-bold text-[#ff705f]">1 incluse · Extras à +2,50 €</span>
-              </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                {detailedProteins.map((prot) => {
-                  const isSelected = selectedProtein?.id === prot.id;
-                  return (
-                    <button
-                      key={prot.id}
-                      type="button"
-                      onClick={() => setSelectedProtein(prot)}
-                      className={[
-                        "flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center transition-all duration-200 cursor-pointer",
-                        isSelected
-                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
-                      ].join(" ")}
-                    >
-                      <span className="text-3xl mb-1">{prot.emoji}</span>
-                      <p className="text-sm font-black text-[#2C1D16]">{prot.name}</p>
-                      {prot.extraPrice ? (
-                        <span className="mt-1 rounded-full bg-[#ff705f] px-2.5 py-0.5 text-[10px] font-black text-white">
-                          +{prot.extraPrice.toFixed(2)} €
-                        </span>
-                      ) : (
-                        <span className="mt-1 rounded-full bg-[#EADCC9] px-2.5 py-0.5 text-[10px] font-black text-[#2C1D16]">
-                          Inclus
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Suppléments Protéines (+2,50 € chaque portion ajoutée, illimité) */}
-              <div className="mt-5 rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <div>
-                    <h3 className="text-sm font-black text-[#2C1D16]">
-                      Protéines supplémentaires (+2,50 € / portion)
-                    </h3>
-                    <p className="text-[11px] text-[#6E5A49] font-medium">
-                      Poulet, saumon frais ou scampis (+2,50 € / portion)
-                    </p>
-                  </div>
-                  {totalExtraProteinUnits > 0 && (
-                    <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
-                      +{totalExtraProteinUnits} portion{totalExtraProteinUnits > 1 ? "s" : ""} (+{extraProteinsPrice.toFixed(2)} €)
-                    </span>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                  {detailedProteins.map((prot) => {
-                    const q = extraProteins[prot.name] ?? 0;
-                    return (
-                      <div
-                        key={`extra-${prot.id}`}
-                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
-                          q > 0
-                            ? "border-[#ff705f] bg-white shadow-sm"
-                            : "border-[#DECBB3] bg-[#FAF5EE]"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-xl">{prot.emoji}</span>
-                          <div className="min-w-0">
-                            <span className="block text-xs font-black text-[#2C1D16] truncate">
-                              {prot.name}
-                            </span>
-                            <span className="text-[10px] font-bold text-[#ff705f]">
-                              {q > 0 ? `${q}× (+${(q * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {q > 0 && (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => removeExtraProtein(prot.name)}
-                                className="flex h-7 w-7 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                              >
-                                <Minus className="h-3 w-3 stroke-[3]" />
-                              </button>
-                              <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
-                                {q}
-                              </span>
-                            </>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => addExtraProtein(prot.name)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                          >
-                            <Plus className="h-3.5 w-3.5 stroke-[3]" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </section>
-
-            {/* ══ ÉTAPE 3 : LÉGUMES & MIX-INS (5 INCLUS · +1,00 € PAR PORTION EXTRA À VOLONTÉ) ══════ */}
+            {/* ══ ÉTAPE 2 : LÉGUMES & MIX-INS (5 INCLUS · +1,00 € PAR PORTION EXTRA À VOLONTÉ) ══════ */}
             <section className="rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card">
               <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <span className="rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
-                    Étape 3
+                    Étape 2
                   </span>
                   <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">
                     Légumes & Mix-Ins Frais (5 inclus)
@@ -676,6 +562,120 @@ function SurMesurePage() {
                     </div>
                   );
                 })}
+              </div>
+            </section>
+
+            {/* ══ ÉTAPE 3 : PROTÉINE PRINCIPALE + EXTRAS ILLIMITÉS (+2,50 €) ═════════════ */}
+            <section className="rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <span className="rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]">
+                    Étape 3
+                  </span>
+                  <h2 className="mt-1.5 text-xl font-black text-[#2C1D16]">Choisis ta Protéine</h2>
+                </div>
+                <span className="text-xs font-bold text-[#ff705f]">1 incluse · Extras à +2,50 €</span>
+              </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {detailedProteins.map((prot) => {
+                  const isSelected = selectedProtein?.id === prot.id;
+                  return (
+                    <button
+                      key={prot.id}
+                      type="button"
+                      onClick={() => setSelectedProtein(prot)}
+                      className={[
+                        "flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center transition-all duration-200 cursor-pointer",
+                        isSelected
+                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
+                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
+                      ].join(" ")}
+                    >
+                      <span className="text-3xl mb-1">{prot.emoji}</span>
+                      <p className="text-sm font-black text-[#2C1D16]">{prot.name}</p>
+                      {prot.extraPrice ? (
+                        <span className="mt-1 rounded-full bg-[#ff705f] px-2.5 py-0.5 text-[10px] font-black text-white">
+                          +{prot.extraPrice.toFixed(2)} €
+                        </span>
+                      ) : (
+                        <span className="mt-1 rounded-full bg-[#EADCC9] px-2.5 py-0.5 text-[10px] font-black text-[#2C1D16]">
+                          Inclus
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Suppléments Protéines (+2,50 € chaque portion ajoutée, illimité) */}
+              <div className="mt-5 rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <div>
+                    <h3 className="text-sm font-black text-[#2C1D16]">
+                      Protéines supplémentaires (+2,50 € / portion)
+                    </h3>
+                    <p className="text-[11px] text-[#6E5A49] font-medium">
+                      Poulet, saumon frais ou scampis (+2,50 € / portion)
+                    </p>
+                  </div>
+                  {totalExtraProteinUnits > 0 && (
+                    <span className="rounded-full bg-[#ff705f] px-3 py-1 text-xs font-black text-white shadow-sm">
+                      +{totalExtraProteinUnits} portion{totalExtraProteinUnits > 1 ? "s" : ""} (+{extraProteinsPrice.toFixed(2)} €)
+                    </span>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {detailedProteins.map((prot) => {
+                    const q = extraProteins[prot.name] ?? 0;
+                    return (
+                      <div
+                        key={`extra-${prot.id}`}
+                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
+                          q > 0
+                            ? "border-[#ff705f] bg-white shadow-sm"
+                            : "border-[#DECBB3] bg-[#FAF5EE]"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-xl">{prot.emoji}</span>
+                          <div className="min-w-0">
+                            <span className="block text-xs font-black text-[#2C1D16] truncate">
+                              {prot.name}
+                            </span>
+                            <span className="text-[10px] font-bold text-[#ff705f]">
+                              {q > 0 ? `${q}× (+${(q * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {q > 0 && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => removeExtraProtein(prot.name)}
+                                className="flex h-7 w-7 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                              >
+                                <Minus className="h-3 w-3 stroke-[3]" />
+                              </button>
+                              <span className="w-4 text-center text-xs font-black text-[#2C1D16]">
+                                {q}
+                              </span>
+                            </>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => addExtraProtein(prot.name)}
+                            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                          >
+                            <Plus className="h-3.5 w-3.5 stroke-[3]" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </section>
 
@@ -944,6 +944,15 @@ function SurMesurePage() {
                 </div>
 
                 <div className="pt-2 flex justify-between gap-2">
+                  <span className="font-semibold text-[#6E5A49]">Légumes & Mix-ins :</span>
+                  <span className="font-bold text-[#2C1D16] text-right">
+                    {mixinsFormatted.length > 0
+                      ? `${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)} €)` : ""}`
+                      : "0 sélectionné"}
+                  </span>
+                </div>
+
+                <div className="pt-2 flex justify-between gap-2">
                   <span className="font-semibold text-[#6E5A49]">Protéine :</span>
                   <span className="font-bold text-[#2C1D16] text-right">
                     {selectedProtein
@@ -960,15 +969,6 @@ function SurMesurePage() {
                     </span>
                   </div>
                 )}
-
-                <div className="pt-2 flex justify-between gap-2">
-                  <span className="font-semibold text-[#6E5A49]">Légumes & Mix-ins :</span>
-                  <span className="font-bold text-[#2C1D16] text-right">
-                    {mixinsFormatted.length > 0
-                      ? `${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)} €)` : ""}`
-                      : "0 sélectionné"}
-                  </span>
-                </div>
 
                 <div className="pt-2 flex justify-between gap-2">
                   <span className="font-semibold text-[#6E5A49]">Sauces :</span>

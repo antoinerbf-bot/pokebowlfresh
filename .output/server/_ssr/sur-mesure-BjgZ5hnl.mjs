@@ -8,7 +8,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { G as Check, Q as ArrowLeft, W as ChefHat, b as Plus, f as ShoppingBag, w as Minus } from "../_libs/lucide-react.mjs";
 import { i as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-P8kRV83k.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-Y0UqCAhM.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BjgZ5hnl.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -151,8 +151,8 @@ function SurMesurePage() {
 	const isValid = isBaseReady && isMixInsReady && isProteinReady;
 	const getMissingReason = () => {
 		if (!isBaseReady) return "Étape 1 : Choisis une base";
-		if (!isProteinReady) return "Étape 2 : Choisis une protéine";
-		if (!isMixInsReady) return "Étape 3 : Sélectionne au moins 1 légume ou mix-in";
+		if (!isMixInsReady) return "Étape 2 : Sélectionne au moins 1 légume ou mix-in";
+		if (!isProteinReady) return "Étape 3 : Choisis une protéine";
 		return null;
 	};
 	const handleAddToCart = () => {
@@ -395,10 +395,112 @@ function SurMesurePage() {
 									className: "rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mb-4 flex items-center justify-between",
+											className: "mb-4 flex flex-wrap items-center justify-between gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]",
 												children: "Étape 2"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+												className: "mt-1.5 text-xl font-black text-[#2C1D16]",
+												children: "Légumes & Mix-Ins Frais (5 inclus)"
+											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9]",
+												children: [
+													Math.min(INCLUDED_MIX_INS, nonFetaUnits),
+													" / ",
+													INCLUDED_MIX_INS,
+													" inclus",
+													extraMixInsCount > 0 ? ` · +${extraMixInsCount} extra (+${mixInsExtra.toFixed(2)} €)` : ""
+												]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-3",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-black text-[#2C1D16]",
+													children: "Tes 5 portions incluses :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "flex items-center gap-1.5",
+													children: Array.from({ length: INCLUDED_MIX_INS }).map((_, idx) => {
+														const flatNonFeta = [];
+														for (const [name, q] of Object.entries(mixinQuantities)) if (name.trim().toLowerCase() !== "feta") {
+															const found = detailedMixIns.find((m) => m.name === name);
+															for (let i = 0; i < q; i++) flatNonFeta.push(found?.emoji || "🥗");
+														}
+														const emoji = flatNonFeta[idx];
+														return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+															className: `flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${emoji ? "bg-white border-[#ff705f] shadow-sm scale-105" : "bg-[#FAF5EE]/60 border-dashed border-[#C8B296] text-[10px] font-bold text-[#8A7665]"}`,
+															children: emoji || idx + 1
+														}, idx);
+													})
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "text-[11px] font-bold text-[#6E5A49]",
+												children: [
+													"Chaque portion supplémentaire = ",
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+														className: "text-[#ff705f]",
+														children: "+1,00 €"
+													}),
+													" (à volonté !)"
+												]
+											})]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
+											children: detailedMixIns.map((mixIn) => {
+												const q = mixinQuantities[mixIn.name] ?? 0;
+												const isFeta = mixIn.id === "feta" || mixIn.name.trim().toLowerCase() === "feta";
+												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: ["flex items-center justify-between gap-2 rounded-2xl border-2 p-2.5 transition-all duration-150", q > 0 ? "border-[#ff705f] bg-white shadow-sm" : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:bg-[#F3E9DA]"].join(" "),
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+														type: "button",
+														onClick: () => addMixIn(mixIn.name),
+														className: "flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-xl shrink-0",
+															children: mixIn.emoji
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+															className: "min-w-0 flex-1",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																className: "block truncate text-xs font-black text-[#2C1D16]",
+																children: mixIn.name
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																className: "block text-[10px] font-bold text-[#6E5A49]",
+																children: isFeta ? "+1,00 € / portion" : q > 0 ? `${q} portion${q > 1 ? "s" : ""}` : nonFetaUnits < INCLUDED_MIX_INS ? "Inclus (5 max)" : "+1,00 €"
+															})]
+														})]
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center gap-1 shrink-0",
+														children: [q > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+															type: "button",
+															onClick: () => removeMixIn(mixIn.name),
+															className: "flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3 stroke-[3]" })
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "w-4 text-center text-xs font-black text-[#2C1D16]",
+															children: q
+														})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+															type: "button",
+															onClick: () => addMixIn(mixIn.name),
+															className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" })
+														})]
+													})]
+												}, mixIn.id);
+											})
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+									className: "rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "mb-4 flex items-center justify-between",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]",
+												children: "Étape 3"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 												className: "mt-1.5 text-xl font-black text-[#2C1D16]",
 												children: "Choisis ta Protéine"
@@ -502,108 +604,6 @@ function SurMesurePage() {
 													}, `extra-${prot.id}`);
 												})
 											})]
-										})
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-									className: "rounded-[28px] border-2 border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-card",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mb-4 flex flex-wrap items-center justify-between gap-2",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "rounded-full bg-[#2C1D16] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#EADCC9]",
-												children: "Étape 3"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-												className: "mt-1.5 text-xl font-black text-[#2C1D16]",
-												children: "Légumes & Mix-Ins Frais (5 inclus)"
-											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9]",
-												children: [
-													Math.min(INCLUDED_MIX_INS, nonFetaUnits),
-													" / ",
-													INCLUDED_MIX_INS,
-													" inclus",
-													extraMixInsCount > 0 ? ` · +${extraMixInsCount} extra (+${mixInsExtra.toFixed(2)} €)` : ""
-												]
-											})]
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-[#F3E9DA] border border-[#D9C5AD] p-3",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex items-center gap-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-xs font-black text-[#2C1D16]",
-													children: "Tes 5 portions incluses :"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: "flex items-center gap-1.5",
-													children: Array.from({ length: INCLUDED_MIX_INS }).map((_, idx) => {
-														const flatNonFeta = [];
-														for (const [name, q] of Object.entries(mixinQuantities)) if (name.trim().toLowerCase() !== "feta") {
-															const found = detailedMixIns.find((m) => m.name === name);
-															for (let i = 0; i < q; i++) flatNonFeta.push(found?.emoji || "🥗");
-														}
-														const emoji = flatNonFeta[idx];
-														return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-															className: `flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${emoji ? "bg-white border-[#ff705f] shadow-sm scale-105" : "bg-[#FAF5EE]/60 border-dashed border-[#C8B296] text-[10px] font-bold text-[#8A7665]"}`,
-															children: emoji || idx + 1
-														}, idx);
-													})
-												})]
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "text-[11px] font-bold text-[#6E5A49]",
-												children: [
-													"Chaque portion supplémentaire = ",
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-														className: "text-[#ff705f]",
-														children: "+1,00 €"
-													}),
-													" (à volonté !)"
-												]
-											})]
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "grid grid-cols-2 gap-2.5 sm:grid-cols-3",
-											children: detailedMixIns.map((mixIn) => {
-												const q = mixinQuantities[mixIn.name] ?? 0;
-												const isFeta = mixIn.id === "feta" || mixIn.name.trim().toLowerCase() === "feta";
-												return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: ["flex items-center justify-between gap-2 rounded-2xl border-2 p-2.5 transition-all duration-150", q > 0 ? "border-[#ff705f] bg-white shadow-sm" : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:bg-[#F3E9DA]"].join(" "),
-													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-														type: "button",
-														onClick: () => addMixIn(mixIn.name),
-														className: "flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "text-xl shrink-0",
-															children: mixIn.emoji
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-															className: "min-w-0 flex-1",
-															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-																className: "block truncate text-xs font-black text-[#2C1D16]",
-																children: mixIn.name
-															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-																className: "block text-[10px] font-bold text-[#6E5A49]",
-																children: isFeta ? "+1,00 € / portion" : q > 0 ? `${q} portion${q > 1 ? "s" : ""}` : nonFetaUnits < INCLUDED_MIX_INS ? "Inclus (5 max)" : "+1,00 €"
-															})]
-														})]
-													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-														className: "flex items-center gap-1 shrink-0",
-														children: [q > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-															type: "button",
-															onClick: () => removeMixIn(mixIn.name),
-															className: "flex h-6 w-6 items-center justify-center rounded-full border border-[#ff705f]/40 bg-white text-[#ff705f] hover:bg-[#ff705f] hover:text-white transition cursor-pointer",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "h-3 w-3 stroke-[3]" })
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "w-4 text-center text-xs font-black text-[#2C1D16]",
-															children: q
-														})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-															type: "button",
-															onClick: () => addMixIn(mixIn.name),
-															className: "flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer",
-															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "h-3 w-3 stroke-[3]" })
-														})]
-													})]
-												}, mixIn.id);
-											})
 										})
 									]
 								}),
@@ -857,6 +857,16 @@ function SurMesurePage() {
 												className: "pt-2 flex justify-between gap-2",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "font-semibold text-[#6E5A49]",
+													children: "Légumes & Mix-ins :"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-bold text-[#2C1D16] text-right",
+													children: mixinsFormatted.length > 0 ? `${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)} €)` : ""}` : "0 sélectionné"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "pt-2 flex justify-between gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "font-semibold text-[#6E5A49]",
 													children: "Protéine :"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "font-bold text-[#2C1D16] text-right",
@@ -876,16 +886,6 @@ function SurMesurePage() {
 														extraProteinsPrice.toFixed(2),
 														" €)"
 													]
-												})]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "pt-2 flex justify-between gap-2",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "font-semibold text-[#6E5A49]",
-													children: "Légumes & Mix-ins :"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "font-bold text-[#2C1D16] text-right",
-													children: mixinsFormatted.length > 0 ? `${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)} €)` : ""}` : "0 sélectionné"
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

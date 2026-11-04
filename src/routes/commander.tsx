@@ -183,14 +183,14 @@ function CommanderPage() {
                     Compose ton Poké <span className="text-[#ff705f]">de A à Z</span>
                   </h3>
                   <p className="mt-1 max-w-xl text-xs leading-relaxed text-[#EADCC9]/80 sm:text-sm">
-                    1 base, 1 protéine, 5 légumes inclus, 1 sauce offerte et 1 topping croustillant.
-                    Suppléments à volonté : protéine +2 €, légume +1 €, sauce +0,50 €, topping +0,50 €.
+                    1 base, 5 légumes inclus, 1 protéine, 1 sauce offerte et 1 topping croustillant.
+                    Suppléments à volonté : légume +1 €, protéine +2,50 €, sauce +0,50 €, topping +0,50 €.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {[
                       { icon: "🍚", label: "1. Format & Base" },
-                      { icon: "🐟", label: "2. Protéine" },
-                      { icon: "🥑", label: "3. 5 Légumes" },
+                      { icon: "🥑", label: "2. 5 Légumes" },
+                      { icon: "🐟", label: "3. Protéine" },
                       { icon: "🍯", label: "4. Sauce & Crunch" },
                     ].map((s) => (
                       <span
