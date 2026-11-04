@@ -7,6 +7,7 @@ import {
   requestOrderReprint,
   acknowledgePrint,
   upsertOrder,
+  clearAllOrdersFromStore,
 } from "../lib/order-store";
 import { buildKitchenReceipt, buildDeliveryReceipt } from "../lib/escpos";
 import { generateOrderId, type Order } from "../lib/orders";
@@ -25,6 +26,16 @@ export const getPosOrders = createServerFn({ method: "POST" })
 
     const orders = await listOrdersFromStore(100);
     return { orders };
+  });
+
+export const clearPosOrders = createServerFn({ method: "POST" })
+  .validator(z.object({ pin: z.string().optional() }))
+  .handler(async ({ data }) => {
+    if (!verifyPin(data.pin)) {
+      throw new Error("Code PIN invalide.");
+    }
+    const deletedCount = await clearAllOrdersFromStore();
+    return { success: true, deletedCount };
   });
 
 export const setPosOrderStatus = createServerFn({ method: "POST" })

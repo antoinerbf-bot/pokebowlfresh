@@ -2187,4 +2187,4 @@ function getState(open) {
 }
 __name(getState, "getState");
 //#endregion
-export { DialogOverlay as a, Presence as c, require_react_dom as d, useLayoutEffect2 as f, DialogDescription as i, useCallbackRef$1 as l, DialogClose as n, DialogPortal as o, DialogContent as r, DialogTitle as s, Dialog as t, Primitive as u };
+export { DialogOverlay as a, require_react_dom as c, DialogDescription as i, DialogClose as n, DialogPortal as o, DialogContent as r, DialogTitle as s, Dialog as t };

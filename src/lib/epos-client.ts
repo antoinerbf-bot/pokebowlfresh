@@ -12,6 +12,8 @@ export interface PrinterConfig {
   autoPrintKitchen: boolean;
   autoPrintDelivery: boolean;
   soundEnabled: boolean;
+  soundTheme?: "signature" | "zen_bell" | "marimba";
+  soundVolume?: number; // 0.1 à 1.0 (défaut 0.85)
   printMode?: "epos" | "browser"; // "epos" (Réseau direct silencieux) ou "browser" (Boîte d'impression navigateur / USB)
 }
 
@@ -22,6 +24,8 @@ export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
   autoPrintKitchen: true,
   autoPrintDelivery: true,
   soundEnabled: true,
+  soundTheme: "signature",
+  soundVolume: 0.85,
   printMode: "epos",
 };
 

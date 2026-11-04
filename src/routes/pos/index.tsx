@@ -19,6 +19,9 @@ import {
   MapPin,
   Phone,
   Navigation,
+  Trash2,
+  Bell,
+  Sparkles,
 } from "lucide-react";
 import {
   getPosOrders,
@@ -27,6 +30,7 @@ import {
   getOrderReceipts,
   ackPosPrint,
   createTestDeliveryOrder,
+  clearPosOrders,
 } from "../../fn/pos";
 import {
   type PrinterConfig,
@@ -169,46 +173,130 @@ export function PosApplicationPage() {
     } catch (e: any) { alert("Impossible d’activer le son : " + (e?.message ?? String(e))); }
   };
 
-  // Carillon cuisine : trois bips, sur un contexte audio réutilisable.
-  const playAlertSound = (force = false) => {
+  // ─── Carillon Restaurant Pokénball (Sonnerie gastronomique riche & originale) ───
+  const playAlertSound = (force = false, soundOverride?: "signature" | "zen_bell" | "marimba") => {
     if (!config.soundEnabled && !force) return;
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
       if (!AudioCtx) return;
-      if (!audioContextRef.current || audioContextRef.current.state === "closed") audioContextRef.current = new AudioCtx();
+      if (!audioContextRef.current || audioContextRef.current.state === "closed") {
+        audioContextRef.current = new AudioCtx();
+      }
       const ctx = audioContextRef.current;
       if (ctx.state === "suspended") void ctx.resume();
 
-      const playChime = (startTime: number, freq1: number, freq2: number) => {
-        const osc1 = ctx.createOscillator();
-        const osc2 = ctx.createOscillator();
-        const gain = ctx.createGain();
+      const theme = soundOverride || config.soundTheme || "signature";
+      const masterVol = config.soundVolume ?? 0.85;
+      const now = ctx.currentTime;
 
-        osc1.type = "triangle";
-        osc2.type = "sine";
-        osc1.frequency.setValueAtTime(freq1, startTime);
-        osc2.frequency.setValueAtTime(freq2, startTime + 0.12);
+      // Note de cloche / percussion avec fondamentale + harmonique + enveloppe naturelle
+      const playTone = (
+        time: number,
+        freq: number,
+        duration: number,
+        gainVal: number,
+        type: OscillatorType = "sine",
+        harmonicMultiplier = 2.0,
+        harmonicRatio = 0.25
+      ) => {
+        // Oscillateur fondamental
+        const oscFund = ctx.createOscillator();
+        oscFund.type = type;
+        oscFund.frequency.setValueAtTime(freq, time);
 
-        gain.gain.setValueAtTime(0.85, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.35);
+        // Harmonique d'ambiance
+        const oscHarm = ctx.createOscillator();
+        oscHarm.type = "sine";
+        oscHarm.frequency.setValueAtTime(freq * harmonicMultiplier, time);
 
-        osc1.connect(gain);
-        osc2.connect(gain);
-        gain.connect(ctx.destination);
+        // Enveloppe de gain avec attaque douce (anti-clic) et décroissance exponentielle
+        const gainNode = ctx.createGain();
+        const effectiveGain = Math.max(0.01, gainVal * masterVol);
 
-        osc1.start(startTime);
-        osc1.stop(startTime + 0.15);
-        osc2.start(startTime + 0.12);
-        osc2.stop(startTime + 0.38);
+        gainNode.gain.setValueAtTime(0.0001, time);
+        gainNode.gain.linearRampToValueAtTime(effectiveGain, time + 0.008);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+        oscFund.connect(gainNode);
+
+        // Gain pour l'harmonique
+        const harmGain = ctx.createGain();
+        harmGain.gain.setValueAtTime(effectiveGain * harmonicRatio, time);
+        harmGain.gain.exponentialRampToValueAtTime(0.0001, time + duration * 0.7);
+        oscHarm.connect(harmGain);
+        harmGain.connect(gainNode);
+
+        gainNode.connect(ctx.destination);
+
+        oscFund.start(time);
+        oscFund.stop(time + duration + 0.05);
+        oscHarm.start(time);
+        oscHarm.stop(time + duration + 0.05);
       };
 
-      if (!force && !config.soundEnabled) return;
-      const now = ctx.currentTime;
-      playChime(now, 784, 1046.5);        // Ding-Dong 1
-      playChime(now + 0.42, 784, 1046.5); // Ding-Dong 2
-      playChime(now + 0.84, 784, 1046.5); // Ding-Dong 3
+      if (theme === "signature") {
+        // 🎵 Carillon Pokénball Signature : 4 cloches montantes + duo doré
+        // G5 (784Hz) -> B5 (988Hz) -> D6 (1175Hz) -> G6 (1568Hz)
+        playTone(now + 0.00, 783.99, 0.45, 0.75, "triangle", 2.0, 0.2);
+        playTone(now + 0.13, 987.77, 0.45, 0.80, "sine", 2.0, 0.25);
+        playTone(now + 0.26, 1174.66, 0.50, 0.85, "triangle", 2.0, 0.3);
+        playTone(now + 0.40, 1567.98, 0.85, 0.95, "sine", 2.0, 0.35);
+
+        // Duo affirmatif retentissant
+        playTone(now + 0.72, 1174.66, 0.55, 0.75, "triangle", 2.0, 0.25);
+        playTone(now + 0.88, 1567.98, 1.10, 1.00, "sine", 2.0, 0.4);
+      } else if (theme === "zen_bell") {
+        // 🔔 Cloche Restaurant Zen : Carillon cristallin 2 frappes pures
+        // E6 (1318.5Hz) -> A6 (1760Hz) avec résonance scintillante
+        playTone(now + 0.00, 1318.51, 0.9, 0.85, "sine", 2.76, 0.3);
+        playTone(now + 0.35, 1760.00, 1.4, 0.95, "sine", 2.76, 0.35);
+      } else {
+        // 🥁 Marimba Boisé Gourmet : 4 frappes courtes et chaleureuses
+        // C5 (523Hz) -> E5 (659Hz) -> G5 (784Hz) -> C6 (1046Hz)
+        playTone(now + 0.00, 523.25, 0.25, 0.9, "triangle", 3.0, 0.15);
+        playTone(now + 0.11, 659.25, 0.28, 0.9, "triangle", 3.0, 0.15);
+        playTone(now + 0.22, 783.99, 0.32, 0.95, "triangle", 3.0, 0.2);
+        playTone(now + 0.36, 1046.50, 0.55, 1.0, "triangle", 2.0, 0.25);
+      }
     } catch (e) {
       console.warn("[POS] Audio non disponible:", e);
+    }
+  };
+
+  // Nettoyage complet de l'historique des commandes (Remise à zéro du POS)
+  const handleClearAllOrders = async () => {
+    const ok = window.confirm(
+      "⚠️ Vider tout l'historique du POS ?\n\nCette action va effacer TOUTES les commandes actuelles pour démarrer un service complètement propre."
+    );
+    if (!ok) return;
+
+    try {
+      setLoading(true);
+      // 1. Essai endpoint REST DELETE
+      let cleared = false;
+      try {
+        const res = await fetch("/api/pos-orders", {
+          method: "DELETE",
+          headers: { "x-pos-pin": pin || "1234" },
+        });
+        const data = await res.json().catch(() => null);
+        if (data?.success) cleared = true;
+      } catch {}
+
+      // 2. Si échec ou fallback, appeler createServerFn clearPosOrders
+      if (!cleared) {
+        await clearPosOrders({ data: { pin } });
+      }
+
+      setOrders([]);
+      setSelectedOrder(null);
+      alertedOrderIds.current.clear();
+      knownOrderStatuses.current.clear();
+      alert("✅ Toutes les anciennes commandes ont été effacées ! Le POS est maintenant parfaitement propre.");
+    } catch (e: any) {
+      alert("Erreur lors de la suppression des commandes : " + (e?.message ?? String(e)));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -652,7 +740,29 @@ export function PosApplicationPage() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Nettoyer les commandes du POS */}
+            <button
+              type="button"
+              onClick={handleClearAllOrders}
+              className="flex items-center gap-1.5 rounded-xl bg-red-500/15 hover:bg-red-500/30 border border-red-500/30 px-3 py-2 text-xs font-bold text-red-300 hover:text-white transition cursor-pointer active:scale-95 shadow-xs"
+              title="Nettoyer et effacer toutes les anciennes commandes du POS"
+            >
+              <Trash2 className="h-4 w-4 text-red-400" />
+              <span className="hidden sm:inline">Nettoyer commandes</span>
+            </button>
+
+            {/* Tester le Carillon */}
+            <button
+              type="button"
+              onClick={() => playAlertSound(true)}
+              className="flex items-center gap-1.5 rounded-xl bg-white/10 hover:bg-white/20 px-2.5 py-2 text-xs font-bold text-[#EADCC9] transition cursor-pointer active:scale-95"
+              title="Tester le bip d'alerte Pokénball"
+            >
+              <Bell className="h-4 w-4 text-[#ff705f]" />
+              <span className="hidden lg:inline">Bip Alerte</span>
+            </button>
+
             {/* Toggle Son */}
             <button
               onClick={() => {
@@ -1005,6 +1115,163 @@ export function PosApplicationPage() {
                     <p className="text-xs text-emerald-300 font-bold">
                       L'impression automatique reste activée dès qu'une nouvelle commande admissible est détectée.
                     </p>
+                  </div>
+                </div>
+
+                {/* Étape 4 : Sonnerie & Bip d'alerte approprié et original */}
+                <div className="rounded-2xl bg-white/5 p-6 border border-white/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-amber-500/20 text-amber-300 font-black text-xs px-2 py-0.5 rounded-md">
+                        SONNERIE
+                      </span>
+                      <h3 className="text-base font-black text-white">Bip d'alerte nouvelle commande</h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => playAlertSound(true)}
+                      className="rounded-xl bg-amber-500 hover:bg-amber-400 text-[#142822] px-3.5 py-1.5 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow"
+                    >
+                      <Bell className="w-4 h-4 stroke-[2.5]" />
+                      <span>Tester le bip</span>
+                    </button>
+                  </div>
+
+                  <p className="text-xs text-[#8ea39b] leading-relaxed">
+                    Carillons acoustiques originaux et agréables créés sur-mesure pour être distincts et audibles en cuisine sans agresser les oreilles :
+                  </p>
+
+                  <div className="grid gap-2.5 sm:grid-cols-3">
+                    {/* Option 1: Signature Pokénball */}
+                    <div
+                      onClick={() => {
+                        const updated = { ...config, soundTheme: "signature" as const };
+                        setConfig(updated);
+                        savePrinterConfig(updated);
+                        playAlertSound(true, "signature");
+                      }}
+                      className={`p-3.5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                        (config.soundTheme || "signature") === "signature"
+                          ? "border-[#ff705f] bg-[#ff705f]/15"
+                          : "border-white/10 bg-black/20 hover:border-white/25"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg">🎵</span>
+                          {(config.soundTheme || "signature") === "signature" && (
+                            <span className="text-[10px] font-black uppercase text-[#ff705f] bg-[#ff705f]/20 px-2 py-0.5 rounded-full">Actif</span>
+                          )}
+                        </div>
+                        <h4 className="font-black text-sm text-white mt-1.5">Pokénball Signature</h4>
+                        <p className="text-[11px] text-[#8ea39b] mt-0.5">4 cloches montantes + duo doré</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playAlertSound(true, "signature");
+                        }}
+                        className="mt-3 text-[10px] font-bold text-amber-300 hover:underline flex items-center gap-1"
+                      >
+                        <Bell className="w-3 h-3" /> Écouter
+                      </button>
+                    </div>
+
+                    {/* Option 2: Zen Bell */}
+                    <div
+                      onClick={() => {
+                        const updated = { ...config, soundTheme: "zen_bell" as const };
+                        setConfig(updated);
+                        savePrinterConfig(updated);
+                        playAlertSound(true, "zen_bell");
+                      }}
+                      className={`p-3.5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                        config.soundTheme === "zen_bell"
+                          ? "border-[#ff705f] bg-[#ff705f]/15"
+                          : "border-white/10 bg-black/20 hover:border-white/25"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg">🔔</span>
+                          {config.soundTheme === "zen_bell" && (
+                            <span className="text-[10px] font-black uppercase text-[#ff705f] bg-[#ff705f]/20 px-2 py-0.5 rounded-full">Actif</span>
+                          )}
+                        </div>
+                        <h4 className="font-black text-sm text-white mt-1.5">Cloche Zen & Cristal</h4>
+                        <p className="text-[11px] text-[#8ea39b] mt-0.5">2 tintements purs avec résonance</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playAlertSound(true, "zen_bell");
+                        }}
+                        className="mt-3 text-[10px] font-bold text-amber-300 hover:underline flex items-center gap-1"
+                      >
+                        <Bell className="w-3 h-3" /> Écouter
+                      </button>
+                    </div>
+
+                    {/* Option 3: Marimba */}
+                    <div
+                      onClick={() => {
+                        const updated = { ...config, soundTheme: "marimba" as const };
+                        setConfig(updated);
+                        savePrinterConfig(updated);
+                        playAlertSound(true, "marimba");
+                      }}
+                      className={`p-3.5 rounded-2xl border-2 transition cursor-pointer flex flex-col justify-between ${
+                        config.soundTheme === "marimba"
+                          ? "border-[#ff705f] bg-[#ff705f]/15"
+                          : "border-white/10 bg-black/20 hover:border-white/25"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-lg">🥁</span>
+                          {config.soundTheme === "marimba" && (
+                            <span className="text-[10px] font-black uppercase text-[#ff705f] bg-[#ff705f]/20 px-2 py-0.5 rounded-full">Actif</span>
+                          )}
+                        </div>
+                        <h4 className="font-black text-sm text-white mt-1.5">Marimba Boisé Gourmand</h4>
+                        <p className="text-[11px] text-[#8ea39b] mt-0.5">4 frappes rondes et chaleureuses</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playAlertSound(true, "marimba");
+                        }}
+                        className="mt-3 text-[10px] font-bold text-amber-300 hover:underline flex items-center gap-1"
+                      >
+                        <Bell className="w-3 h-3" /> Écouter
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Étape 5 : Nettoyage et Remise à zéro des commandes */}
+                <div className="rounded-2xl bg-red-950/30 p-6 border border-red-500/30 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-red-500/20 text-red-300 font-black text-xs px-2 py-0.5 rounded-md">
+                      MAINTENANCE
+                    </span>
+                    <h3 className="text-base font-black text-white">Nettoyage des anciennes commandes</h3>
+                  </div>
+                  <p className="text-xs text-[#8ea39b] leading-relaxed">
+                    Permet d'effacer d'un coup toutes les anciennes commandes enregistrées dans le POS pour désencombrer l'écran et démarrer un nouveau service complètement propre.
+                  </p>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={handleClearAllOrders}
+                      className="rounded-xl bg-red-600 hover:bg-red-500 active:scale-95 py-3 px-5 text-white font-black text-xs shadow-lg transition flex items-center gap-2 cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span>🧹 Effacer et nettoyer toutes les commandes du POS</span>
+                    </button>
                   </div>
                 </div>
 

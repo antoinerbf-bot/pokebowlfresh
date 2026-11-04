@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { listOrdersFromStore, updateOrderStatus, acknowledgePrint } from "../../lib/order-store";
+import { listOrdersFromStore, updateOrderStatus, acknowledgePrint, clearAllOrdersFromStore } from "../../lib/order-store";
 
 function isAuthorizedPosRequest(request: Request, bodyPin?: string): boolean {
   const expectedPin = process.env["POS_PIN"] ?? "1234";
@@ -77,6 +77,30 @@ export const Route = createFileRoute("/api/pos-orders")({
             status: 200,
             headers: { "Content-Type": "application/json" },
           });
+        } catch (err: any) {
+          return new Response(
+            JSON.stringify({ success: false, error: err?.message || String(err) }),
+            { status: 500, headers: { "Content-Type": "application/json" } },
+          );
+        }
+      },
+      DELETE: async ({ request }) => {
+        try {
+          if (!isAuthorizedPosRequest(request)) {
+            return new Response(
+              JSON.stringify({ success: false, error: "Code PIN POS requis" }),
+              { status: 401, headers: { "Content-Type": "application/json" } },
+            );
+          }
+          const deletedCount = await clearAllOrdersFromStore();
+          return new Response(
+            JSON.stringify({
+              success: true,
+              message: "Toutes les anciennes commandes ont été effacées avec succès",
+              deletedCount,
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } },
+          );
         } catch (err: any) {
           return new Response(
             JSON.stringify({ success: false, error: err?.message || String(err) }),

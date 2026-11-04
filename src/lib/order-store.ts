@@ -423,6 +423,44 @@ export async function updateOrderStatus(orderId: string, status: Order["status"]
   }
 }
 
+export async function clearAllOrdersFromStore(): Promise<number> {
+  loadLocalOrders(true);
+  const count = memoryOrders.size;
+  memoryOrders.clear();
+  lastLoadedTime = Date.now();
+  saveLocalOrders();
+
+  const candidates = getStoreCandidatePaths();
+  for (const filePath of candidates) {
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, "[]", "utf-8");
+      }
+    } catch {}
+  }
+
+  // Miroir /tmp
+  try {
+    fs.writeFileSync("/tmp/pokenbowl-orders.json", "[]", "utf-8");
+  } catch {}
+
+  if (isPostgresConfigured()) {
+    try {
+      await ensureSchema();
+      const sql = getSql();
+      await sql`TRUNCATE TABLE orders CASCADE`;
+    } catch (err) {
+      console.error("[OrderStore] Erreur TRUNCATE orders Postgres:", err);
+      try {
+        const sql = getSql();
+        await sql`DELETE FROM orders`;
+      } catch {}
+    }
+  }
+
+  return count;
+}
+
 export async function requestOrderReprint(orderId: string): Promise<void> {
   const cleanId = (orderId ?? "").trim();
   if (!cleanId) return;

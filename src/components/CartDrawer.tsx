@@ -13,8 +13,8 @@ import {
   CheckCircle2,
   Clock,
   ArrowRight,
+  X,
 } from "lucide-react";
-import { ScrollArea } from "./ui/scroll-area";
 import { DishImage } from "./DishImage";
 import { bowls } from "../lib/data";
 
@@ -104,7 +104,6 @@ export function CartDrawer() {
     items,
     updateQuantityByIndex,
     removeItemByIndex,
-    clearCart,
     addItem,
     total,
     itemCount,
@@ -129,29 +128,37 @@ export function CartDrawer() {
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-      <SheetContent className="flex w-full flex-col bg-[#F8F5EE] p-0 sm:max-w-md border-l border-[#DECBB3]">
-        {/* Header */}
-        <SheetHeader className="border-b border-[#DECBB3] bg-[#FFFDF9] px-6 py-4 shadow-xs">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="flex items-center gap-2 text-base font-black text-[#2C1D16]">
-              <ShoppingBag className="h-5 w-5 text-[#ff705f]" />
-              {t("cart.title")}
-            </SheetTitle>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-xs font-black text-[#EADCC9]">
-                {itemCount} {itemCount > 1 ? "articles" : "article"}
-              </span>
-              {items.length > 0 && (
-                <button
-                  type="button"
-                  onClick={clearCart}
-                  className="text-[11px] font-bold text-[#8A796E] hover:text-[#e11d48] transition px-1.5 py-0.5 rounded cursor-pointer"
-                  title="Vider tout le panier"
-                >
-                  Vider
-                </button>
-              )}
+      <SheetContent
+        hideCloseButton
+        className="flex h-full max-h-screen w-full max-w-full sm:max-w-md md:max-w-lg lg:max-w-[500px] flex-col bg-[#FAF7F2] p-0 gap-0 border-l-2 border-[#DECBB3] shadow-2xl overflow-hidden"
+      >
+        {/* ── Header parfaitement cadré (aucun chevauchement d'icônes) ── */}
+        <SheetHeader className="shrink-0 border-b border-[#DECBB3] bg-[#FFFDF9] px-5 py-4 sm:px-6 shadow-xs">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2C1D16] text-[#EADCC9] shadow-xs">
+                <ShoppingBag className="h-5 w-5 text-[#ff705f]" />
+              </div>
+              <div>
+                <SheetTitle className="text-base font-black text-[#2C1D16] leading-tight">
+                  {t("cart.title")}
+                </SheetTitle>
+                <span className="text-[11px] font-bold text-[#8A796E]">
+                  {itemCount} {itemCount > 1 ? "articles ajoutés" : "article ajouté"}
+                </span>
+              </div>
             </div>
+
+            {/* Bouton de fermeture dédié & accessible */}
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(false)}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FAF5EE] text-[#766358] hover:bg-[#2C1D16] hover:text-[#EADCC9] transition cursor-pointer active:scale-90 shadow-2xs border border-[#DECBB3]"
+              aria-label="Fermer le panier"
+              title="Fermer"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
 
           {/* ════════ JAUGE DE LIVRAISON OFFERTE DYNAMIQUE ════════ */}
@@ -194,6 +201,7 @@ export function CartDrawer() {
           )}
         </SheetHeader>
 
+        {/* ── Corps du panier (Scrollable avec min-h-0 pour ne JAMAIS déborder de l'écran) ── */}
         {items.length === 0 ? (
           /* Empty state chaleureux et interactif */
           <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 py-12 text-center">
@@ -212,7 +220,7 @@ export function CartDrawer() {
             <Link
               to="/commander"
               onClick={() => setIsCartOpen(false)}
-              className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#EADCC9] shadow-md hover:bg-[#ff705f] hover:text-white transition active:scale-95"
+              className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#EADCC9] shadow-md hover:bg-[#ff705f] hover:text-white transition active:scale-95 cursor-pointer"
             >
               <span>Découvrir la carte</span>
               <ArrowRight className="h-4 w-4" />
@@ -220,19 +228,18 @@ export function CartDrawer() {
           </div>
         ) : (
           <>
-            {/* Liste des articles avec bouton de suppression individuel & gestion des quantités */}
-            <ScrollArea className="flex-1">
-              <div className="flex flex-col gap-2.5 p-4 sm:p-5">
-                {items.map((item, index) => {
-                  const isBowl = bowls.some((b) => b.id === item.id);
-                  return (
-                    <div
-                      key={`${item.id}-${index}-${JSON.stringify(item.toppings)}-${JSON.stringify(item.removedIngredients)}`}
-                      className="group relative flex gap-3.5 rounded-2xl border-2 border-[#DECBB3]/70 bg-[#FFFDF9] p-3.5 shadow-xs transition hover:border-[#2C1D16]/30 hover:shadow-card"
-                    >
+            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar p-4 sm:p-5 flex flex-col gap-3">
+              {items.map((item, index) => {
+                const isBowl = bowls.some((b) => b.id === item.id);
+                return (
+                  <div
+                    key={`${item.id}-${index}-${JSON.stringify(item.toppings)}-${JSON.stringify(item.removedIngredients)}`}
+                    className="group relative flex flex-col sm:flex-row gap-3.5 rounded-2xl border-2 border-[#DECBB3]/80 bg-[#FFFDF9] p-3.5 sm:p-4 shadow-xs transition hover:border-[#2C1D16]/40 hover:shadow-card"
+                  >
+                    <div className="flex items-start gap-3 w-full">
                       {/* Photo produit */}
                       {isBowl ? (
-                        <div className="relative h-18 w-18 shrink-0 overflow-hidden rounded-xl bg-[#2C1D16] shadow-xs">
+                        <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-xl bg-[#2C1D16] shadow-xs">
                           <DishImage
                             dishId={item.id}
                             alt={item.name}
@@ -243,36 +250,49 @@ export function CartDrawer() {
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="h-18 w-18 shrink-0 rounded-xl object-cover shadow-xs"
+                          className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-xl object-cover shadow-xs"
                         />
                       ) : (
-                        <div className="flex h-18 w-18 shrink-0 items-center justify-center rounded-xl bg-[#EFE6D8] text-2xl font-black text-[#2C1D16]">
+                        <div className="flex h-16 w-16 sm:h-20 sm:w-20 shrink-0 items-center justify-center rounded-xl bg-[#EFE6D8] text-2xl font-black text-[#2C1D16]">
                           🥣
                         </div>
                       )}
 
                       {/* Détails de l'article */}
-                      <div className="flex flex-1 flex-col justify-between min-w-0 pr-6">
-                        <div>
-                          <h4 className="truncate text-sm font-black text-[#2C1D16]">
+                      <div className="flex flex-1 flex-col justify-between min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <h4 className="text-sm font-black text-[#2C1D16] leading-tight pr-2">
                             {item.name}
                           </h4>
-                          {/* Toppings / Options ajoutées */}
-                          {item.toppings.length > 0 && (
-                            <p className="mt-0.5 line-clamp-2 text-[11px] font-semibold text-[#766358]">
-                              + {item.toppings.join(", ")}
-                            </p>
-                          )}
-                          {/* Ingrédients retirés */}
-                          {item.removedIngredients && item.removedIngredients.length > 0 && (
-                            <p className="mt-0.5 truncate text-[11px] font-bold text-[#e11d48] line-through">
-                              ✕ {item.removedIngredients.join(", ")}
-                            </p>
-                          )}
+
+                          {/* ════ BOUTON RETIRER DU PANIER (CLAIREMENT VISIBLE ET EXPLICITE) ════ */}
+                          <button
+                            type="button"
+                            onClick={() => removeItemByIndex(index)}
+                            className="inline-flex items-center gap-1 shrink-0 rounded-full bg-red-50 hover:bg-red-500 text-red-600 hover:text-white border border-red-200/80 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider transition cursor-pointer active:scale-95 shadow-2xs"
+                            title="Retirer ce produit du panier"
+                            aria-label={`Retirer ${item.name} du panier`}
+                          >
+                            <Trash2 className="h-3 w-3 stroke-[2.5]" />
+                            <span>Retirer</span>
+                          </button>
                         </div>
 
+                        {/* Toppings / Options ajoutées */}
+                        {item.toppings.length > 0 && (
+                          <p className="mt-1 line-clamp-2 text-[11px] font-semibold text-[#766358] leading-snug">
+                            + {item.toppings.join(", ")}
+                          </p>
+                        )}
+                        {/* Ingrédients retirés */}
+                        {item.removedIngredients && item.removedIngredients.length > 0 && (
+                          <p className="mt-0.5 truncate text-[11px] font-bold text-[#e11d48] line-through">
+                            ✕ {item.removedIngredients.join(", ")}
+                          </p>
+                        )}
+
                         {/* Tarif et Stepper de quantité (+ / - jusqu'à 0 pour suppression) */}
-                        <div className="mt-2.5 flex items-center justify-between">
+                        <div className="mt-3 flex items-center justify-between gap-2 pt-2 border-t border-[#DECBB3]/40">
                           <div>
                             <span className="text-sm font-black text-[#2C1D16]">
                               € {(item.price * item.quantity).toFixed(2)}
@@ -317,24 +337,13 @@ export function CartDrawer() {
                           </div>
                         </div>
                       </div>
-
-                      {/* ════ BOUTON DE SUPPRESSION INDIVIDUEL EXPLICITE (POUBELLE DÉDIÉE) ════ */}
-                      <button
-                        type="button"
-                        onClick={() => removeItemByIndex(index)}
-                        className="absolute top-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-full text-[#A08F81] hover:text-[#e11d48] hover:bg-red-50 transition cursor-pointer"
-                        title="Supprimer cet article du panier"
-                        aria-label={`Supprimer ${item.name} du panier`}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
 
-              {/* ════════ CROSS-SELLING EXPRESS EN 1 CLIC (+15% À +25% PANIER MOYEN) ════════ */}
-              <div className="mx-6 my-4 rounded-2xl bg-white border border-black/5 p-4 shadow-sm">
+              {/* ════════ CROSS-SELLING EXPRESS EN 1 CLIC ════════ */}
+              <div className="mt-2 rounded-2xl bg-white border border-[#DECBB3] p-4 shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 text-[#ff705f]" />
@@ -342,7 +351,7 @@ export function CartDrawer() {
                       Envie d'une douceur ou d'une boisson ?
                     </span>
                   </div>
-                  <span className="text-[10px] font-bold text-[#7a847e]">1 clic</span>
+                  <span className="text-[10px] font-bold text-[#8A796E]">Ajout 1 clic</span>
                 </div>
 
                 <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
@@ -351,7 +360,7 @@ export function CartDrawer() {
                       key={cs.id}
                       type="button"
                       onClick={() => handleQuickAddCrossSell(cs)}
-                      className="group flex flex-col items-center justify-between rounded-xl bg-[#faf8f4] border border-black/5 p-2 w-28 shrink-0 text-center transition hover:border-[#ff705f] hover:bg-white hover:scale-[1.02] shadow-sm"
+                      className="group flex flex-col items-center justify-between rounded-xl bg-[#FAF8F4] border border-[#DECBB3]/70 p-2.5 w-28 shrink-0 text-center transition hover:border-[#ff705f] hover:bg-white hover:scale-[1.02] shadow-2xs cursor-pointer"
                     >
                       <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-[#eee8dc]">
                         <img
@@ -372,12 +381,12 @@ export function CartDrawer() {
                   ))}
                 </div>
               </div>
-            </ScrollArea>
+            </div>
 
-            {/* Footer avec Réassurance & Bouton de Paiement */}
-            <div className="border-t border-black/5 bg-white px-6 pb-safe pt-4 shadow-[0_-12px_30px_-15px_rgba(0,0,0,.08)]">
+            {/* ── Footer fixé en bas (ne disparaît jamais, parfaitement cadré) ── */}
+            <div className="shrink-0 border-t border-[#DECBB3] bg-[#FFFDF9] px-5 py-4 sm:px-6 shadow-[0_-10px_25px_-10px_rgba(44,29,22,0.06)]">
               {/* Rassurance express */}
-              <div className="mb-3 flex items-center justify-between text-[11px] font-semibold text-[#5a6760] bg-[#faf8f4] px-3 py-1.5 rounded-xl border border-black/5">
+              <div className="mb-3 flex items-center justify-between text-[11px] font-semibold text-[#5a6760] bg-[#FAF8F4] px-3 py-1.5 rounded-xl border border-[#DECBB3]/60">
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3 text-emerald-600" />
                   Prêt en 15-20 min
@@ -388,12 +397,12 @@ export function CartDrawer() {
                 </span>
               </div>
 
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-3.5 flex items-center justify-between">
                 <div>
                   <span className="text-xs font-bold text-[#7a847e]">Sous-total commande</span>
                   <p className="text-[10px] text-[#a09a92]">TVA incluse</p>
                 </div>
-                <span className="text-2xl font-black text-[#17231f]">
+                <span className="text-2xl font-black text-[#2C1D16]">
                   € {total.toFixed(2)}
                 </span>
               </div>
@@ -401,13 +410,13 @@ export function CartDrawer() {
               <Link
                 to="/checkout"
                 onClick={() => setIsCartOpen(false)}
-                className="btn-primary flex items-center justify-center gap-2 w-full text-center no-underline py-4 text-sm font-black uppercase tracking-wider shadow-lg"
+                className="flex items-center justify-center gap-2 w-full rounded-full bg-[#2C1D16] hover:bg-[#ff705f] text-[#EADCC9] hover:text-white text-center no-underline py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider transition active:scale-98 shadow-md cursor-pointer"
               >
-                <span>{t("cart.checkout")}</span>
-                <ArrowRight className="h-4 w-4" />
+                <span>{t("cart.checkout")} · € {total.toFixed(2)}</span>
+                <ArrowRight className="h-4 w-4 stroke-[3]" />
               </Link>
 
-              <p className="mt-2.5 text-center text-[10px] font-semibold text-[#a09a92]">
+              <p className="mt-2 text-center text-[10px] font-semibold text-[#a09a92]">
                 Paiement sécurisé en ligne ou sur place · Avenue du Pont 12, Visé
               </p>
             </div>
