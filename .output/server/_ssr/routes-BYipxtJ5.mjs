@@ -7,12 +7,12 @@ import { n as useCart } from "./CartContext-D7fTgwIa.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { A as Heart, D as MapPin, E as Menu, G as ChefHat, H as ChevronRight, J as BriefcaseBusiness, K as Check, L as Clock, M as Flame, N as ExternalLink, Q as ArrowRight, T as MessageCircle, U as ChevronLeft, W as ChevronDown, X as Bell, Y as BookOpen, Z as Award, _ as RotateCcw, b as Plus, f as ShoppingBag, g as Search, j as Funnel, k as Instagram, l as Star, m as ShieldCheck, t as X, u as Sparkles, w as Minus, x as Phone, z as CircleCheck } from "../_libs/lucide-react.mjs";
-import { c as bowl_sweet_chicken_default, d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, i as bowl_crousty_curry_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, o as bowl_saumon_default, p as drink_fanta_orange_default, s as bowl_scampis_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-CMD4JKDa.mjs";
+import { c as bowl_sweet_chicken_default, d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, i as bowl_crousty_curry_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, o as bowl_saumon_default, p as drink_fanta_orange_default, s as bowl_scampis_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-DrmeyM1n.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-BpboJaFF.mjs";
-import { n as tiramisu_nutella_default, t as CroustyExperienceSection } from "./CroustyExperienceSection-qLoPBaYA.mjs";
-import { n as FaqNutritionSection } from "./FaqNutritionSection-BOFtjS_G.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BL3Lvw9m.js
+import { n as tiramisu_nutella_default, t as CroustyExperienceSection } from "./CroustyExperienceSection-B2sPdoyZ.mjs";
+import { n as FaqNutritionSection } from "./FaqNutritionSection-BOFtjS_G.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BYipxtJ5.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [

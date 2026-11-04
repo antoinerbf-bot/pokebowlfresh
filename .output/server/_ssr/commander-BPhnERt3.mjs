@@ -7,9 +7,9 @@ import { n as useCart } from "./CartContext-D7fTgwIa.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { $ as ArrowLeft, Q as ArrowRight, f as ShoppingBag, u as Sparkles } from "../_libs/lucide-react.mjs";
-import { d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, p as drink_fanta_orange_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-CMD4JKDa.mjs";
+import { d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, p as drink_fanta_orange_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-DrmeyM1n.mjs";
 import { t as useStock } from "./useStock-Bvo390fk.mjs";
-import { n as tiramisu_nutella_default, t as CroustyExperienceSection } from "./CroustyExperienceSection-qLoPBaYA.mjs";
+import { n as tiramisu_nutella_default, t as CroustyExperienceSection } from "./CroustyExperienceSection-B2sPdoyZ.mjs";
 require_react();
 var import_jsx_runtime = require_jsx_runtime();
 var DESSERT_IMAGES = {

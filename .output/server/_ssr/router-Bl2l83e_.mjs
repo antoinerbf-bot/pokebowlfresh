@@ -4,13 +4,13 @@ import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react
 import { t as I18nProvider } from "./I18nContext-BsLMWOZn.mjs";
 import { t as CartProvider } from "./CartContext-D7fTgwIa.mjs";
 import { C as useRouter, _ as lazyRouteComponent, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as Route$21 } from "../_productId-SRCjIjLM.mjs";
+import { t as Route$21 } from "../_productId-BGBRkQjO.mjs";
 import { B as CircleCheckBig, C as Navigation, I as CookingPot, N as ExternalLink, a as TriangleAlert, g as Search, i as Truck, n as VolumeX, p as Shield, r as Volume2, v as RefreshCw, x as Phone, y as Printer } from "../_libs/lucide-react.mjs";
 import { n as createServerFn } from "./ssr.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-C1p7zOu_.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-BpboJaFF.mjs";
-import { t as Route$22 } from "../_slug-HoRLC8cb.mjs";
+import { t as Route$22 } from "../_slug-gnUqpOvD.mjs";
 import { t as Route$23 } from "../_token-BisEVa2u.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as listOrdersFromStore, c as upsertOrder, i as getOrderFromStore, n as claimNextPrintJob, r as getOrderByDeliveryToken, s as updateOrderStatus, t as acknowledgePrint } from "./order-store-0FsFo7Nl.mjs";
@@ -21,11 +21,11 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Bz0c-oh-.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Bl2l83e_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles--EO-cj-0.css";
+var styles_default = "/assets/styles-xjR7FhuU.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -240,7 +240,7 @@ function RootComponent() {
 		}) }) })
 	});
 }
-var $$splitComponentImporter$7 = () => import("./routes-BL3Lvw9m.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-BYipxtJ5.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "FastFoodRestaurant",
@@ -329,7 +329,7 @@ var Route$19 = createFileRoute("/")({
 });
 var $$splitComponentImporter$6 = () => import("./checkout-CqI7Oe_-.mjs");
 var Route$18 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
-var $$splitComponentImporter$5 = () => import("./commander-B--KRquX.mjs");
+var $$splitComponentImporter$5 = () => import("./commander-BPhnERt3.mjs");
 var Route$17 = createFileRoute("/commander")({ component: lazyRouteComponent($$splitComponentImporter$5, "component") });
 var $$splitComponentImporter$4 = () => import("./contact-C-sw_FP-.mjs");
 var Route$16 = createFileRoute("/contact")({
@@ -341,7 +341,7 @@ var Route$15 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./sur-mesure-Dv54D5R-.mjs");
+var $$splitComponentImporter$2 = () => import("./sur-mesure-Bd6JT1pM.mjs");
 var Route$14 = createFileRoute("/sur-mesure")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
 var $$splitComponentImporter$1 = () => import("./stocks-C7JHCewu.mjs");
 var Route$13 = createFileRoute("/admin/stocks")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
@@ -1687,7 +1687,7 @@ var Route$4 = createFileRoute("/api/track-order")({ server: { handlers: {
 		}
 	}
 } } });
-var $$splitComponentImporter = () => import("./blog-DaJbZln1.mjs");
+var $$splitComponentImporter = () => import("./blog-DNgk8SIp.mjs");
 var BLOG_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "Blog",

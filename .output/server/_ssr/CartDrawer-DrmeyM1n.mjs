@@ -10,7 +10,7 @@ import { a as DialogOverlay, i as DialogDescription, n as DialogClose, o as Dial
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { a as Viewport, i as ScrollAreaThumb, n as Root, r as ScrollAreaScrollbar, t as Corner } from "../_libs/radix-ui__react-scroll-area.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-CMD4JKDa.js
+//#region node_modules/.nitro/vite/services/ssr/assets/CartDrawer-DrmeyM1n.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -94,7 +94,7 @@ var bowl_sweet_chicken_default = "/assets/bowl-sweet-chicken-T1JJVtIT.jpg";
 var bowl_scampis_default = "/assets/bowl-scampis-BPxsXKuI.jpg";
 var bowl_saumon_default = "/assets/bowl-saumon-DM6umsVA.jpg";
 var bowl_spicy_chicken_default = "/assets/bowl-spicy-chicken-B5NdQDhG.jpg";
-var bowl_crousty_curry_default = "/assets/hero-crousty-wide-DkYcLRjh.jpg";
+var bowl_crousty_curry_default = "/assets/bowl-crousty-curry-DkYcLRjh.jpg";
 var bowl_crousty_blanche_default = "/assets/bowl-crousty-blanche-DbHS9siD.jpg";
 var bowl_crousty_mix_default = "/assets/bowl-crousty-mix-BNaau8f8.jpg";
 var images = {
