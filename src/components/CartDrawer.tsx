@@ -98,8 +98,17 @@ const CROSS_SELL_ITEMS = [
 const FREE_DELIVERY_THRESHOLD = 50.0;
 
 export function CartDrawer() {
-  const { isCartOpen, setIsCartOpen, items, updateQuantity, removeItem, addItem, total } =
-    useCart();
+  const {
+    isCartOpen,
+    setIsCartOpen,
+    items,
+    updateQuantityByIndex,
+    removeItemByIndex,
+    clearCart,
+    addItem,
+    total,
+    itemCount,
+  } = useCart();
   const { t } = useTranslation();
 
   const diffToFree = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
@@ -120,22 +129,34 @@ export function CartDrawer() {
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-      <SheetContent className="flex w-full flex-col bg-[#f7f4ec] p-0 sm:max-w-md">
+      <SheetContent className="flex w-full flex-col bg-[#F8F5EE] p-0 sm:max-w-md border-l border-[#DECBB3]">
         {/* Header */}
-        <SheetHeader className="border-b border-black/5 bg-white px-6 py-4 shadow-sm">
+        <SheetHeader className="border-b border-[#DECBB3] bg-[#FFFDF9] px-6 py-4 shadow-xs">
           <div className="flex items-center justify-between">
-            <SheetTitle className="flex items-center gap-2 text-base font-black text-[#17231f]">
+            <SheetTitle className="flex items-center gap-2 text-base font-black text-[#2C1D16]">
               <ShoppingBag className="h-5 w-5 text-[#ff705f]" />
               {t("cart.title")}
             </SheetTitle>
-            <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-xs font-black text-[#EADCC9]">
-              {items.reduce((s, i) => s + i.quantity, 0)} {items.length > 1 ? "articles" : "article"}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-[#2C1D16] px-2.5 py-0.5 text-xs font-black text-[#EADCC9]">
+                {itemCount} {itemCount > 1 ? "articles" : "article"}
+              </span>
+              {items.length > 0 && (
+                <button
+                  type="button"
+                  onClick={clearCart}
+                  className="text-[11px] font-bold text-[#8A796E] hover:text-[#e11d48] transition px-1.5 py-0.5 rounded cursor-pointer"
+                  title="Vider tout le panier"
+                >
+                  Vider
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* ════════ JAUGE DE LIVRAISON OFFERTE DYNAMIQUE (GAMIFICATION CRO) ════════ */}
+          {/* ════════ JAUGE DE LIVRAISON OFFERTE DYNAMIQUE ════════ */}
           {items.length > 0 && (
-            <div className="mt-3 pt-3 border-t border-black/5">
+            <div className="mt-3 pt-3 border-t border-[#DECBB3]/60">
               <div className="flex items-center justify-between text-xs font-bold mb-1.5">
                 <span className="flex items-center gap-1.5 text-[#2C1D16]">
                   <Truck className="h-3.5 w-3.5 text-[#ff705f]" />
@@ -159,7 +180,7 @@ export function CartDrawer() {
               </div>
 
               {/* Barre de progression */}
-              <div className="h-2 w-full overflow-hidden rounded-full bg-black/5">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-[#EADCC9]/50">
                 <div
                   className={`h-full transition-all duration-500 rounded-full ${
                     diffToFree === 0
@@ -174,38 +195,44 @@ export function CartDrawer() {
         </SheetHeader>
 
         {items.length === 0 ? (
-          /* Empty state */
-          <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 py-10 text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-card text-4xl">
-              🥣
+          /* Empty state chaleureux et interactif */
+          <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 py-12 text-center">
+            <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-[#FFFDF9] to-[#EFE6D8] border-2 border-[#DECBB3] shadow-card text-5xl">
+              <span className="animate-bounce">🥣</span>
+              <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-xs font-black text-white shadow">
+                0
+              </span>
             </div>
-            <div>
-              <p className="font-black text-[#17231f]">Ton panier est vide</p>
-              <p className="mt-1 text-sm text-[#7a847e]">{t("cart.empty")}</p>
+            <div className="max-w-xs">
+              <h3 className="text-lg font-black text-[#2C1D16]">Votre panier est vide</h3>
+              <p className="mt-1.5 text-xs text-[#766358] leading-relaxed">
+                Envie d'un Poké frais découpé minute, d'un Crousty Chicken chaud ou de composer votre bowl sur-mesure ?
+              </p>
             </div>
-            <button
+            <Link
+              to="/commander"
               onClick={() => setIsCartOpen(false)}
-              className="btn-primary mt-2"
-              type="button"
+              className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16] px-6 py-3.5 text-xs font-black uppercase tracking-wider text-[#EADCC9] shadow-md hover:bg-[#ff705f] hover:text-white transition active:scale-95"
             >
-              <Link to="/commander">{t("cart.empty_cta")}</Link>
-            </button>
+              <span>Découvrir la carte</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         ) : (
           <>
-            {/* Items */}
+            {/* Liste des articles avec bouton de suppression individuel & gestion des quantités */}
             <ScrollArea className="flex-1">
-              <div className="flex flex-col divide-y divide-black/5 px-6">
-                {items.map((item) => {
+              <div className="flex flex-col gap-2.5 p-4 sm:p-5">
+                {items.map((item, index) => {
                   const isBowl = bowls.some((b) => b.id === item.id);
                   return (
                     <div
-                      key={`${item.id}-${JSON.stringify(item.toppings)}-${JSON.stringify(item.removedIngredients)}`}
-                      className="flex gap-4 py-4"
+                      key={`${item.id}-${index}-${JSON.stringify(item.toppings)}-${JSON.stringify(item.removedIngredients)}`}
+                      className="group relative flex gap-3.5 rounded-2xl border-2 border-[#DECBB3]/70 bg-[#FFFDF9] p-3.5 shadow-xs transition hover:border-[#2C1D16]/30 hover:shadow-card"
                     >
-                      {/* Image */}
+                      {/* Photo produit */}
                       {isBowl ? (
-                        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#ece8dc] shadow-sm">
+                        <div className="relative h-18 w-18 shrink-0 overflow-hidden rounded-xl bg-[#2C1D16] shadow-xs">
                           <DishImage
                             dishId={item.id}
                             alt={item.name}
@@ -216,78 +243,91 @@ export function CartDrawer() {
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="h-16 w-16 shrink-0 rounded-2xl object-cover shadow-sm"
+                          className="h-18 w-18 shrink-0 rounded-xl object-cover shadow-xs"
                         />
                       ) : (
-                        <div className="h-16 w-16 shrink-0 rounded-2xl bg-[#ece8dc]" />
+                        <div className="flex h-18 w-18 shrink-0 items-center justify-center rounded-xl bg-[#EFE6D8] text-2xl font-black text-[#2C1D16]">
+                          🥣
+                        </div>
                       )}
 
-                      {/* Info */}
-                      <div className="flex flex-1 flex-col justify-between min-w-0">
+                      {/* Détails de l'article */}
+                      <div className="flex flex-1 flex-col justify-between min-w-0 pr-6">
                         <div>
-                          <h4 className="truncate text-sm font-black text-[#17231f]">
+                          <h4 className="truncate text-sm font-black text-[#2C1D16]">
                             {item.name}
                           </h4>
-                          {/* Toppings ajoutés */}
+                          {/* Toppings / Options ajoutées */}
                           {item.toppings.length > 0 && (
-                            <p className="mt-0.5 truncate text-[11px] text-[#7a847e]">
+                            <p className="mt-0.5 line-clamp-2 text-[11px] font-semibold text-[#766358]">
                               + {item.toppings.join(", ")}
                             </p>
                           )}
                           {/* Ingrédients retirés */}
                           {item.removedIngredients && item.removedIngredients.length > 0 && (
-                            <p className="mt-0.5 truncate text-[11px] text-[#ff705f] line-through decoration-[#ff705f]/50">
+                            <p className="mt-0.5 truncate text-[11px] font-bold text-[#e11d48] line-through">
                               ✕ {item.removedIngredients.join(", ")}
                             </p>
                           )}
                         </div>
 
-                        {/* Qté + prix */}
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="text-sm font-black text-[#17231f]">
-                            € {(item.price * item.quantity).toFixed(2)}
-                          </span>
-                          <div className="flex items-center gap-1.5">
+                        {/* Tarif et Stepper de quantité (+ / - jusqu'à 0 pour suppression) */}
+                        <div className="mt-2.5 flex items-center justify-between">
+                          <div>
+                            <span className="text-sm font-black text-[#2C1D16]">
+                              € {(item.price * item.quantity).toFixed(2)}
+                            </span>
+                            {item.quantity > 1 && (
+                              <span className="ml-1.5 text-[10px] font-bold text-[#8A796E]">
+                                ({item.price.toFixed(2)} € / u)
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-1.5 bg-[#FAF7F2] border border-[#DECBB3] rounded-full p-0.5 shadow-2xs">
                             <button
                               type="button"
-                              aria-label="Diminuer"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  item.toppings,
-                                  item.removedIngredients ?? [],
-                                  item.quantity - 1
-                                )
-                              }
-                              className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e2d9] bg-white transition hover:border-[#ff705f] hover:text-[#ff705f] shadow-sm"
+                              aria-label={item.quantity === 1 ? "Supprimer l'article" : "Diminuer la quantité"}
+                              onClick={() => updateQuantityByIndex(index, item.quantity - 1)}
+                              className={`flex h-7 w-7 items-center justify-center rounded-full transition cursor-pointer active:scale-90 ${
+                                item.quantity === 1
+                                  ? "bg-red-50 text-[#e11d48] hover:bg-red-500 hover:text-white"
+                                  : "bg-[#FFFDF9] text-[#2C1D16] hover:bg-[#2C1D16] hover:text-[#EADCC9]"
+                              }`}
+                              title={item.quantity === 1 ? "Supprimer cet article" : "Diminuer la quantité"}
                             >
                               {item.quantity === 1 ? (
-                                <Trash2 className="h-3 w-3" />
+                                <Trash2 className="h-3.5 w-3.5" />
                               ) : (
-                                <Minus className="h-3 w-3" />
+                                <Minus className="h-3.5 w-3.5" />
                               )}
                             </button>
-                            <span className="w-5 text-center text-sm font-black">
+                            <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
                               {item.quantity}
                             </span>
                             <button
                               type="button"
-                              aria-label="Augmenter"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  item.toppings,
-                                  item.removedIngredients ?? [],
-                                  item.quantity + 1
-                                )
-                              }
-                              className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e2d9] bg-white transition hover:border-[#ff705f] hover:text-[#ff705f] shadow-sm"
+                              aria-label="Augmenter la quantité"
+                              onClick={() => updateQuantityByIndex(index, item.quantity + 1)}
+                              className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer active:scale-90 shadow-2xs"
+                              title="Ajouter un exemplaire"
                             >
-                              <Plus className="h-3 w-3" />
+                              <Plus className="h-3.5 w-3.5" />
                             </button>
                           </div>
                         </div>
                       </div>
+
+                      {/* ════ BOUTON DE SUPPRESSION INDIVIDUEL EXPLICITE (POUBELLE DÉDIÉE) ════ */}
+                      <button
+                        type="button"
+                        onClick={() => removeItemByIndex(index)}
+                        className="absolute top-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-full text-[#A08F81] hover:text-[#e11d48] hover:bg-red-50 transition cursor-pointer"
+                        title="Supprimer cet article du panier"
+                        aria-label={`Supprimer ${item.name} du panier`}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
                     </div>
                   );
                 })}

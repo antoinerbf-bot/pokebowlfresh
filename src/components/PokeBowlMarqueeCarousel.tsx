@@ -13,6 +13,12 @@ export function PokeBowlMarqueeCarousel() {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const [addedId, setAddedId] = useState<string | null>(null);
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, "moyen" | "grand">>({});
+
+  // Filtrer exclusivement les 4 Poké Bowls Signatures (AUCUN Crousty Chicken)
+  const pokeBowls = React.useMemo(() => {
+    return bowls.filter((b) => !b.id.startsWith("crousty-"));
+  }, []);
 
   // Vérifier la position du scroll pour activer/désactiver les flèches
   const checkScroll = () => {
@@ -33,7 +39,7 @@ export function PokeBowlMarqueeCarousel() {
   // Défilement fluide gauche / droite
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-    const cardWidth = 340;
+    const cardWidth = 360;
     const scrollAmount = direction === "left" ? -cardWidth : cardWidth;
     scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
@@ -47,27 +53,34 @@ export function PokeBowlMarqueeCarousel() {
       if (scrollLeft >= scrollWidth - clientWidth - 20) {
         scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
       } else {
-        scrollRef.current.scrollBy({ left: 340, behavior: "smooth" });
+        scrollRef.current.scrollBy({ left: 360, behavior: "smooth" });
       }
-    }, 4000);
+    }, 4500);
 
     return () => clearInterval(interval);
   }, [isAutoScrolling]);
 
   const handleQuickAdd = (bowl: Bowl) => {
-    const isCrousty = bowl.id.startsWith("crousty-");
+    const size = selectedSizes[bowl.id] || "moyen";
+    const isGrand = size === "grand";
+    const finalPrice = isGrand ? bowl.price + 3 : bowl.price;
+
     addItem({
-      id: isCrousty ? bowl.id : `${bowl.id}-moyen`,
-      name: isCrousty ? bowl.name : `${bowl.name} (Moyen)`,
+      id: `${bowl.id}-${size}`,
+      name: `${bowl.name} (${isGrand ? "Grand" : "Moyen"})`,
       basePrice: bowl.price,
-      price: bowl.price,
+      price: finalPrice,
       quantity: 1,
-      toppings: isCrousty ? ["Boisson 33cl incluse au choix"] : [],
+      toppings: [isGrand ? "Taille : Grand (+3.00€)" : "Taille : Moyen (Standard)"],
       removedIngredients: [],
     });
     setAddedId(bowl.id);
     setTimeout(() => setAddedId(null), 1800);
     setIsCartOpen(true);
+  };
+
+  const toggleSize = (bowlId: string, size: "moyen" | "grand") => {
+    setSelectedSizes((prev) => ({ ...prev, [bowlId]: size }));
   };
 
   return (
@@ -81,15 +94,15 @@ export function PokeBowlMarqueeCarousel() {
       {/* ── En-tête du Défilé avec titre & boutons de navigation ── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between px-1 mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#2C1D16]/5 px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2C1D16] border border-black/5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-[#2C1D16]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#ff705f] animate-pulse" />
-            ✦ Le Défilé de nos Recettes Vedettes
+            ✦ Nos Poké Bowls Signatures
           </div>
           <h3 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#2C1D16]">
-            Les plats préférés de nos clients
+            Les recettes fraîches découpées minute
           </h3>
           <p className="mt-1 text-xs sm:text-sm text-[#7A6857] max-w-2xl font-medium">
-            Poké bowls frais découpés minute et barquettes Crousty bien chaudes. Fait maison chaque jour à Visé.
+            Saumon frais découpé au couteau chaque matin, scampis grillés saisis minute, poulet mariné fondant & légumes croquants sur lit de riz vinaigré.
           </p>
         </div>
 
@@ -100,7 +113,7 @@ export function PokeBowlMarqueeCarousel() {
             onClick={() => scroll("left")}
             disabled={!canScrollLeft}
             aria-label="Faire défiler vers la gauche"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9C5AD] bg-[#FFFDF9] text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-[#EADCC9] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9C5AD] bg-[#FFFDF9] text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-[#EADCC9] disabled:opacity-30 disabled:pointer-events-none cursor-pointer active:scale-95"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -109,67 +122,68 @@ export function PokeBowlMarqueeCarousel() {
             onClick={() => scroll("right")}
             disabled={!canScrollRight}
             aria-label="Faire défiler vers la droite"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9C5AD] bg-[#FFFDF9] text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-[#EADCC9] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9C5AD] bg-[#FFFDF9] text-[#2C1D16] shadow-sm transition hover:bg-[#2C1D16] hover:text-[#EADCC9] disabled:opacity-30 disabled:pointer-events-none cursor-pointer active:scale-95"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
       </div>
 
-      {/* ── Piste horizontale des cartes de plats ── */}
+      {/* ── Piste horizontale des 4 Poké Bowls avec rendu photographique haute immersion ── */}
       <div
         ref={scrollRef}
-        className="flex gap-5 overflow-x-auto pb-6 pt-2 scroll-smooth no-scrollbar snap-x snap-mandatory px-1"
+        className="flex gap-6 overflow-x-auto pb-6 pt-2 scroll-smooth no-scrollbar snap-x snap-mandatory px-1"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {bowls.map((bowl) => {
-          const isCrousty = bowl.id.startsWith("crousty-");
+        {pokeBowls.map((bowl) => {
           const isAdded = addedId === bowl.id;
+          const currentSize = selectedSizes[bowl.id] || "moyen";
+          const currentPrice = currentSize === "grand" ? bowl.price + 3 : bowl.price;
 
           return (
             <div
               key={bowl.id}
-              className="w-[290px] sm:w-[320px] md:w-[340px] shrink-0 snap-start group flex flex-col overflow-hidden rounded-[28px] border-2 border-[#DECBB3] bg-[#FFFDF9] shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift hover:border-[#2C1D16]/30"
+              className="w-[300px] sm:w-[340px] md:w-[360px] shrink-0 snap-start group flex flex-col overflow-hidden rounded-[30px] border-2 border-[#DECBB3] bg-[#FFFDF9] shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-lift hover:border-[#2C1D16]/40"
             >
-              {/* Photo du plat haute définition */}
+              {/* Photo du Poké Bowl haute définition avec mise en valeur des textures */}
               <div className="relative aspect-square w-full overflow-hidden bg-[#2C1D16]">
                 <DishImage
                   dishId={bowl.id}
-                  alt={bowl.name}
-                  className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-105"
+                  alt={`Poké Bowl ${bowl.name} frais préparé minute à Visé`}
+                  className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-108 filter contrast-[1.05] saturate-[1.12]"
                 />
 
-                {/* Dégradé léger en bas */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                {/* Voile dégradé subtil bas pour clarté des badges */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
 
-                {/* Badge Tag */}
+                {/* Badge Tag Supérieur Gauche */}
                 <div className="absolute top-3.5 left-3.5">
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur-md ${
-                      isCrousty
-                        ? "bg-[#ea580c] text-white"
-                        : bowl.tagColor === "bestseller"
-                        ? "bg-[#EBDCCB] text-[#2C1D16] border border-[#D9C5AD]"
-                        : "bg-white/95 text-[#2C1D16]"
-                    }`}
-                  >
-                    {isCrousty && <Flame className="h-3 w-3" />}
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FFFDF9]/95 backdrop-blur-md px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16] shadow-md border border-[#DECBB3]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#ff705f] animate-ping" />
                     {bowl.tag}
                   </span>
                 </div>
 
-                {/* Pastille Prix */}
-                <div className="absolute bottom-3.5 right-3.5">
-                  <span className="rounded-full bg-[#2C1D16] px-3.5 py-1.5 text-xs font-black text-[#EADCC9] shadow-md border border-white/20">
-                    {bowl.price.toFixed(2)} €
+                {/* Pastille Fraîcheur Supérieure Droite */}
+                <div className="absolute top-3.5 right-3.5">
+                  <span className="rounded-full bg-[#2C1D16]/85 backdrop-blur-md px-3 py-1 text-[10px] font-bold text-[#EADCC9] shadow-md border border-white/15">
+                    Frais minute 🌿
                   </span>
                 </div>
 
-                {isCrousty && (
-                  <span className="absolute bottom-3.5 left-3.5 rounded-full bg-[#EBDCCB] border border-[#D9C5AD] px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-[#2C1D16] shadow-md">
-                    Boisson incluse 🥤
+                {/* Pastille Prix dynamique en bas à droite */}
+                <div className="absolute bottom-3.5 right-3.5">
+                  <span className="rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-3.5 py-1.5 text-xs font-black text-[#2C1D16] shadow-md">
+                    {currentPrice.toFixed(2)} €
                   </span>
-                )}
+                </div>
+
+                {/* Badge Base en bas à gauche */}
+                <div className="absolute bottom-3.5 left-3.5">
+                  <span className="rounded-lg bg-black/60 backdrop-blur-md px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-xs">
+                    Base Riz Vinaigré 🍚
+                  </span>
+                </div>
               </div>
 
               {/* Détails du plat */}
@@ -177,14 +191,14 @@ export function PokeBowlMarqueeCarousel() {
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-black uppercase tracking-wider text-[#ff705f]">
-                      {isCrousty ? "Spécialité Chaude" : "Poké Bowl Signature"}
+                      Poké Bowl Signature
                     </span>
                     <span className="text-[10px] font-bold text-[#7A6857]">
-                      {isCrousty ? "Barquette kraft" : "Découpé minute"}
+                      Visé, Belgique
                     </span>
                   </div>
 
-                  <h4 className="mt-1 text-lg font-black text-[#2C1D16] group-hover:text-[#ff705f] transition">
+                  <h4 className="mt-1 text-xl font-black text-[#2C1D16] group-hover:text-[#ff705f] transition">
                     {bowl.name}
                   </h4>
 
@@ -192,33 +206,64 @@ export function PokeBowlMarqueeCarousel() {
                     {bowl.desc}
                   </p>
 
-                  {/* Chips des ingrédients */}
-                  <div className="mt-3.5 flex flex-wrap gap-1">
-                    {bowl.ingredients.slice(0, 4).map((ing, i) => (
+                  {/* Chips des ingrédients frais */}
+                  <div className="mt-3.5 flex flex-wrap gap-1.5">
+                    {bowl.ingredients.slice(0, 5).map((ing, i) => (
                       <span
                         key={i}
-                        className="rounded-md bg-[#FAF5EE] border border-[#DECBB3]/60 px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
+                        className="rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2.5 py-1 text-[10px] font-bold text-[#2C1D16]"
                       >
                         {ing.emoji} {ing.name}
                       </span>
                     ))}
-                    {bowl.ingredients.length > 4 && (
-                      <span className="rounded-md bg-[#FAF5EE] border border-[#DECBB3]/60 px-1.5 py-0.5 text-[10px] font-bold text-[#7A6857]">
-                        +{bowl.ingredients.length - 4}
+                    {bowl.ingredients.length > 5 && (
+                      <span className="rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2 py-1 text-[10px] font-bold text-[#7A6857]">
+                        +{bowl.ingredients.length - 5}
                       </span>
                     )}
+                  </div>
+
+                  {/* Sélecteur de format Moyen / Grand directement sur la carte */}
+                  <div className="mt-4 flex items-center justify-between border-t border-[#DECBB3]/60 pt-3">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#7A6857]">
+                      Format :
+                    </span>
+                    <div className="inline-flex rounded-full bg-[#FAF5EE] border border-[#DECBB3] p-0.5 shadow-2xs">
+                      <button
+                        type="button"
+                        onClick={() => toggleSize(bowl.id, "moyen")}
+                        className={`rounded-full px-2.5 py-1 text-[10px] font-black transition cursor-pointer ${
+                          currentSize === "moyen"
+                            ? "bg-[#2C1D16] text-[#EADCC9] shadow-xs"
+                            : "text-[#7A6857] hover:text-[#2C1D16]"
+                        }`}
+                      >
+                        Moyen ({bowl.price.toFixed(0)} €)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleSize(bowl.id, "grand")}
+                        className={`rounded-full px-2.5 py-1 text-[10px] font-black transition cursor-pointer ${
+                          currentSize === "grand"
+                            ? "bg-[#2C1D16] text-[#EADCC9] shadow-xs"
+                            : "text-[#7A6857] hover:text-[#2C1D16]"
+                        }`}
+                      >
+                        Grand ({(bowl.price + 3).toFixed(0)} €)
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Boutons d'action : Ajout direct 1 clic & Personnaliser */}
-                <div className="mt-5 pt-4 border-t border-[#DECBB3]/60 flex items-center gap-2">
+                <div className="mt-4 pt-3 border-t border-[#DECBB3]/60 flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => handleQuickAdd(bowl)}
-                    title="Ajouter direct au panier"
+                    title={`Ajouter ${bowl.name} au panier`}
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition active:scale-95 font-black cursor-pointer shadow-sm ${
                       isAdded
-                        ? "bg-emerald-600 text-white border-emerald-700"
+                        ? "bg-emerald-600 text-white border-emerald-700 shadow-md"
                         : "bg-[#EBDCCB] border-[#D9C5AD] text-[#2C1D16] hover:bg-[#2C1D16] hover:text-[#EADCC9]"
                     }`}
                   >
@@ -232,7 +277,7 @@ export function PokeBowlMarqueeCarousel() {
                   <Link
                     to="/product/$productId"
                     params={{ productId: bowl.id }}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#2C1D16] py-3 px-3 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-soft transition hover:bg-[#ff705f] hover:text-white hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#2C1D16] py-3 px-3 text-[11px] font-black uppercase tracking-wider text-[#EADCC9] shadow-sm transition hover:bg-[#ff705f] hover:text-white hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                   >
                     <span>Personnaliser</span>
                     <ArrowRight className="h-3 w-3" />

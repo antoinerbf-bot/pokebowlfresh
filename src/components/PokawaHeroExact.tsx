@@ -7,9 +7,6 @@ import { useCart } from "@/context/CartContext";
 // Photos culinaires plein écran ultra haute définition 1080p (Poke N Bowl Visé)
 import heroSaumonWide from "@/assets/hero-saumon-clean-wide.jpg";
 import heroSweetWide from "@/assets/hero-sweet-wide.jpg";
-import heroCroustyMixWide from "@/assets/hero-crousty-mix-wide.jpg";
-import heroCroustyWide from "@/assets/hero-crousty-wide.jpg";
-import heroCroustyBlancheWide from "@/assets/hero-crousty-blanche-wide.jpg";
 import heroScampisWide from "@/assets/hero-scampis-wide.jpg";
 import heroSpicyWide from "@/assets/hero-spicy-wide.jpg";
 
@@ -18,158 +15,81 @@ interface PokawaSlide {
   image: string;
   /** Point focal du plat pour un recadrage parfait sur mobile (CSS object-position) */
   focus?: string;
-  titleLine1: string;
-  titleLine2: string;
   dishName: string;
   badge: string;
+  subtitle: string;
   ingredientCallout: {
     text: string;
     subtext: string;
     emoji: string;
   };
-  statBadge: {
-    main: string;
-    sub: string;
-  };
+  keyIngredients: string[];
   price: number;
   ingredients: string;
-  isCrousty?: boolean;
 }
 
 const SLIDES: PokawaSlide[] = [
   {
     id: "saumon-wasabi",
     image: heroSaumonWide,
-    titleLine1: "SAUMON WASABI",
-    titleLine2: "FRAÎCHEUR MINUTE",
+    focus: "center 42%",
     dishName: "Saumon Wasabi",
-    badge: "Signature Premium · Saumon",
+    badge: "Signature Premium · Saumon Frais",
+    subtitle: "Dés fondants de saumon frais découpé minute & touche wasabi veloutée",
     ingredientCallout: {
       text: "SAUMON FRAIS",
       subtext: "DÉCOUPÉ DU MATIN",
       emoji: "🐟",
     },
-    statBadge: {
-      main: "11.00 €",
-      sub: "PREMIUM FRAÎCHEUR",
-    },
+    keyIngredients: ["Saumon frais minute", "Avocat mûr à point", "Mangue juteuse", "Edamame croquant", "Salade d'algues wakame"],
     price: 11.0,
     ingredients: "Saumon en dés généreux sur riz, avocat, mangue mûre, edamame croquant, salade d'algues wakame & mayo wasabi veloutée.",
   },
   {
     id: "sweet-chicken",
     image: heroSweetWide,
-    titleLine1: "SWEET CHICKEN",
-    titleLine2: "TERIYAKI MAISON",
+    focus: "center 45%",
     dishName: "Sweet Chicken",
     badge: "Best-Seller · Poulet Mariné",
+    subtitle: "Gourmandise teriyaki, guacamole onctueux & oignons croustillants dorés",
     ingredientCallout: {
       text: "POULET MARINÉ",
       subtext: "MARINADE TERIYAKI",
       emoji: "🍗",
     },
-    statBadge: {
-      main: "10.00 €",
-      sub: "BEST-SELLER",
-    },
+    keyIngredients: ["Poulet mariné fondant", "Guacamole maison", "Feta crémeuse", "Tomates cerises", "Oignons frits croustillants"],
     price: 10.0,
     ingredients: "Poulet mariné sur riz, guacamole velouté, mangue, maïs doux, tomates cerises, feta crémeuse, oignons croustillants & sauce teriyaki.",
   },
   {
-    id: "crousty-chicken-mix",
-    image: heroCroustyMixWide,
-    titleLine1: "CROUSTY MIX",
-    titleLine2: "CURRY & BLANCHE",
-    dishName: "Crousty Mix (Curry & Blanche)",
-    badge: "⭐ Formule Étudiant 11 € · Boisson 33 cl incluse",
-    ingredientCallout: {
-      text: "DUO SIGNATURE",
-      subtext: "CURRY ONCTUEUX + BLANCHE MAISON",
-      emoji: "🍗",
-    },
-    statBadge: {
-      main: "11.00 €",
-      sub: "BOISSON INCLUSE",
-    },
-    price: 11.0,
-    ingredients: "La formule star : morceaux de poulet croustillant dorés, duo Sauce Curry onctueuse + Sauce Blanche maison, pointe d'aigre-douce, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl incluse !",
-    isCrousty: true,
-  },
-  {
-    id: "crousty-chicken-curry",
-    image: heroCroustyWide,
-    titleLine1: "CROUSTY CHICKEN",
-    titleLine2: "CURRY CHAUD",
-    dishName: "Crousty Chicken Curry",
-    badge: "Formule Étudiant 11 € · Boisson 33 cl incluse",
-    ingredientCallout: {
-      text: "BARQUETTE RECTANGULAIRE",
-      subtext: "POULET EN MORCEAUX & SAUCE CURRY",
-      emoji: "🍛",
-    },
-    statBadge: {
-      main: "11.00 €",
-      sub: "CANETTE 33 CL INCLUSE",
-    },
-    price: 11.0,
-    ingredients: "Servi en barquette rectangulaire : morceaux de poulet croustillant dorés, sauce curry onctueuse maison, pointe d'aigre-douce, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl incluse.",
-    isCrousty: true,
-  },
-  {
-    id: "crousty-chicken-sauce-blanche",
-    image: heroCroustyBlancheWide,
-    titleLine1: "CROUSTY CHICKEN",
-    titleLine2: "SAUCE BLANCHE",
-    dishName: "Crousty Sauce Blanche",
-    badge: "Formule Étudiant 11 € · Boisson 33 cl incluse",
-    ingredientCallout: {
-      text: "BARQUETTE RECTANGULAIRE",
-      subtext: "POULET EN MORCEAUX & SAUCE BLANCHE",
-      emoji: "🤍",
-    },
-    statBadge: {
-      main: "11.00 €",
-      sub: "CANETTE 33 CL INCLUSE",
-    },
-    price: 11.0,
-    ingredients: "Servi en barquette rectangulaire : morceaux de poulet croustillant dorés, sauce blanche onctueuse, pointe d'aigre-douce, oignons frits & riz chaud. Formule Étudiant 11 € avec canette 33 cl incluse.",
-    isCrousty: true,
-  },
-  {
     id: "scampis-royaux",
     image: heroScampisWide,
-    titleLine1: "SCAMPIS ROYAUX",
-    titleLine2: "SPICY MAYO",
+    focus: "center 45%",
     dishName: "Scampis Royal",
-    badge: "Coup de Cœur · Grillé Minute",
+    badge: "Coup de Cœur · Scampis Grillés",
+    subtitle: "Scampis saisis minute au grill, kick de spicy mayo & fraîcheur exotique",
     ingredientCallout: {
-      text: "SCAMPIS ROYAUX GRILLÉS",
+      text: "SCAMPIS ROYAUX",
       subtext: "SAISIS AU GRILL",
       emoji: "🦐",
     },
-    statBadge: {
-      main: "10.00 €",
-      sub: "SIGNATURE",
-    },
+    keyIngredients: ["Scampis grillés saisis", "Guacamole velouté", "Edamame", "Poivrons croquants", "Spicy mayo relevée"],
     price: 10.0,
     ingredients: "Scampis saisis au grill sur riz, guacamole maison velouté, edamame croquant, tomates fraîches, concombre, poivrons, jalapeños & spicy mayo.",
   },
   {
     id: "spicy-chicken",
     image: heroSpicyWide,
-    titleLine1: "SPICY CHICKEN",
-    titleLine2: "KICK ÉPICÉ",
+    focus: "center 45%",
     dishName: "Spicy Chicken",
-    badge: "Épicé Gourmand · Poulet Mariné",
+    badge: "Épicé Gourmand · Kick Pimenté",
+    subtitle: "Poulet mariné relevé, patates douces rôties, jalapeños & feta fondante",
     ingredientCallout: {
-      text: "POULET MARINÉ ÉPICÉ",
+      text: "POULET ÉPICÉ",
       subtext: "FLOCONS DE CHILI",
       emoji: "🔥",
     },
-    statBadge: {
-      main: "10.00 €",
-      sub: "ÉPICÉ GOURMAND",
-    },
+    keyIngredients: ["Poulet mariné épicé", "Patates douces rôties", "Jalapeños pimentés", "Feta crémeuse", "Flocons de chili"],
     price: 10.0,
     ingredients: "Poulet mariné épicé sur riz, avocat, patates douces rôties, maïs doux, feta, jalapeños, sauce spicy mayo onctueuse & sésame mix.",
   },
@@ -203,14 +123,13 @@ export function PokawaHeroExact() {
   };
 
   const handleQuickAdd = () => {
-    const isCrousty = slide.isCrousty;
     addItem({
-      id: isCrousty ? slide.id : `${slide.id}-moyen`,
-      name: isCrousty ? slide.dishName : `${slide.dishName} (Moyen)`,
+      id: `${slide.id}-moyen`,
+      name: `${slide.dishName} (Moyen)`,
       basePrice: slide.price,
       price: slide.price,
       quantity: 1,
-      toppings: isCrousty ? ["Boisson 33cl incluse au choix"] : [],
+      toppings: ["Taille : Moyen (Standard)"],
       removedIngredients: [],
       image: slide.image,
     });
@@ -221,12 +140,12 @@ export function PokawaHeroExact() {
 
   return (
     <section
-      aria-label="Accueil Poké N Bowl Visé — Poké bowls frais & Crousty Chicken"
+      aria-label="Accueil Poké N Bowl Visé — Poké bowls frais & sains"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       className="relative w-full h-auto min-h-[780px] sm:h-[96vh] sm:min-h-[680px] max-h-none sm:max-h-[1050px] overflow-hidden bg-[#0a1713] select-none"
     >
-      {/* ════════ PHOTO PLEIN ÉCRAN AVEC ZOOM CINÉMATIQUE LENT (EFFET VIDÉO) ════════ */}
+      {/* ════════ PHOTO PLEIN ÉCRAN HAUTE DÉFINITION AVEC TRAITEMENT VISUEL VIBRANT ════════ */}
       <AnimatePresence initial={false}>
         <motion.div
           key={`bg-${slide.id}`}
@@ -239,18 +158,18 @@ export function PokawaHeroExact() {
           <motion.img
             src={slide.image}
             alt={`${slide.dishName} — Poké N Bowl Visé`}
-            initial={{ scale: 1.12, x: "1.5%" }}
+            initial={{ scale: 1.1, x: "1%" }}
             animate={{ scale: 1.0, x: "0%" }}
             transition={{ duration: AUTOPLAY_MS / 1000 + 1.2, ease: "linear" }}
-            style={{ objectPosition: slide.focus ?? "center center" }}
-            className="h-full w-full object-cover will-change-transform"
+            style={{ objectPosition: slide.focus ?? "center 45%" }}
+            className="h-full w-full object-cover will-change-transform filter contrast-[1.06] saturate-[1.12] brightness-[1.02]"
             loading={currentIdx === 0 ? "eager" : "lazy"}
             decoding="async"
           />
 
-          {/* Dégradés : lisibilité du texte en bas à gauche sans masquer le plat */}
-          <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none" />
-          <div className="absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-black/45 to-transparent pointer-events-none hidden sm:block" />
+          {/* Dégradés cinématiques étudiés : protègent le texte tout en sublimant le plat */}
+          <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[#140b06]/95 via-[#140b06]/40 to-transparent pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-[55%] bg-gradient-to-r from-[#140b06]/65 via-[#140b06]/20 to-transparent pointer-events-none hidden sm:block" />
           <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
@@ -263,7 +182,7 @@ export function PokawaHeroExact() {
         </span>
       </div>
 
-      {/* ════════ TYPOGRAPHIE ÉPURÉE, FLUIDE ET LIMPIDE STYLE POKAWA (SANS GROSSE ÉCRITURE GÊNANTE) ════════ */}
+      {/* ════════ COMPOSITION TYPOGRAPHIQUE ÉDITORIALE HAUT DE GAMME ════════ */}
       <div className="absolute inset-x-0 bottom-10 sm:bottom-14 z-20 px-4 sm:px-8 lg:px-12 pointer-events-none">
         <div className="mx-auto max-w-[1400px] flex flex-col items-start pointer-events-auto">
           <AnimatePresence mode="wait">
@@ -273,38 +192,53 @@ export function PokawaHeroExact() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-xl space-y-2.5"
+              className="max-w-2xl space-y-3"
             >
               {/* Badge discret crème biscuit */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EBDCCB] px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-[#2C1D16] shadow-md border border-[#D9C5AD]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#ff705f]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#ff705f] animate-pulse" />
                   {slide.badge}
                 </span>
-                <span className="text-[11px] font-bold text-white/90 drop-shadow">
-                  {slide.isCrousty ? "Gamme Chaude" : "Découpe minute"}
+                <span className="rounded-full bg-black/40 backdrop-blur-md border border-white/20 px-3 py-0.5 text-[10px] font-bold text-white/90 shadow">
+                  🥣 Poké Bowl Frais
+                </span>
+                <span className="text-[11px] font-bold text-white/90 drop-shadow hidden sm:inline">
+                  Découpé minute à Visé
                 </span>
               </div>
 
-              {/* Titre élégant et épuré (ne mange pas la photo) */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
+              {/* Titre élégant et épuré */}
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
                 {slide.dishName}
               </h1>
 
-              {/* Ingrédients concis sur une ligne */}
-              <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] max-w-lg line-clamp-2">
-                {slide.ingredients}
+              {/* Sous-titre gourmand */}
+              <p className="text-xs sm:text-base text-[#FAF5EE] font-semibold leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] max-w-xl">
+                {slide.subtitle}
               </p>
+
+              {/* Ingrédients clés en puces texturées */}
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                {slide.keyIngredients.map((ing, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center rounded-lg bg-black/40 backdrop-blur-md border border-white/20 px-2.5 py-1 text-[10px] font-bold text-[#FAF5EE] shadow-xs"
+                  >
+                    {ing}
+                  </span>
+                ))}
+              </div>
 
               {/* Actions rapides & tarif clair */}
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <button
                   type="button"
                   onClick={handleQuickAdd}
-                  className="group relative inline-flex items-center gap-2 rounded-full bg-[#EBDCCB] px-6 py-3 text-xs sm:text-sm font-black uppercase tracking-wider text-[#2C1D16] shadow-[0_8px_25px_rgba(44,29,22,0.45)] transition hover:bg-[#F5ECE0] hover:scale-105 active:scale-95 border border-[#D9C5AD]"
+                  className="group relative inline-flex items-center gap-2 rounded-full bg-[#EBDCCB] px-6 py-3.5 text-xs sm:text-sm font-black uppercase tracking-wider text-[#2C1D16] shadow-[0_8px_25px_rgba(44,29,22,0.45)] transition hover:bg-[#F5ECE0] hover:scale-105 active:scale-95 border border-[#D9C5AD] cursor-pointer"
                 >
                   <Plus className="h-4 w-4 stroke-[3] text-[#2C1D16]" />
-                  <span>Ajouter · {slide.price.toFixed(2)} €</span>
+                  <span>Ajouter au panier · dès {slide.price.toFixed(2)} €</span>
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" />
 
                   {addedNotice && (
@@ -317,16 +251,16 @@ export function PokawaHeroExact() {
                 <Link
                   to="/product/$productId"
                   params={{ productId: slide.id }}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-black/40 border border-white/30 px-4 py-3 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white shadow"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-black/45 border border-white/30 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white shadow cursor-pointer"
                 >
-                  Personnaliser
+                  Personnaliser les ingrédients
                 </Link>
 
                 <a
                   href="#carte"
-                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#EADCC9] hover:underline ml-1 drop-shadow"
+                  className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#EADCC9] hover:text-white hover:underline ml-1 drop-shadow cursor-pointer"
                 >
-                  La Carte →
+                  Toute la Carte ↓
                 </a>
               </div>
             </motion.div>

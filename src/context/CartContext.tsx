@@ -14,10 +14,13 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (id: string, toppings: string[], removedIngredients: string[]) => void;
-  updateQuantity: (id: string, toppings: string[], removedIngredients: string[], quantity: number) => void;
+  removeItem: (id: string, toppings?: string[], removedIngredients?: string[]) => void;
+  removeItemByIndex: (index: number) => void;
+  updateQuantity: (id: string, toppings?: string[], removedIngredients?: string[], quantity?: number) => void;
+  updateQuantityByIndex: (index: number, quantity: number) => void;
   clearCart: () => void;
   total: number;
+  itemCount: number;
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
 }
@@ -26,8 +29,10 @@ const CART_STORAGE_KEY = "pnb_cart_v1";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-function itemKey(item: Pick<CartItem, "id" | "toppings" | "removedIngredients">) {
-  return `${item.id}::${[...item.toppings].sort().join(",")}::${[...item.removedIngredients].sort().join(",")}`;
+function itemKey(item: { id: string; toppings?: string[]; removedIngredients?: string[] }) {
+  const toppingsList = Array.isArray(item.toppings) ? [...item.toppings].sort().join(",") : "";
+  const removedList = Array.isArray(item.removedIngredients) ? [...item.removedIngredients].sort().join(",") : "";
+  return `${item.id}::${toppingsList}::${removedList}`;
 }
 
 function normalizeStoredCartItem(raw: unknown): CartItem | null {
@@ -122,16 +127,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen(true);
   };
 
-  const removeItem = (id: string, toppings: string[], removedIngredients: string[]) => {
+  const removeItem = (id: string, toppings: string[] = [], removedIngredients: string[] = []) => {
     const key = itemKey({ id, toppings, removedIngredients });
     setItems((prev) => prev.filter((item) => itemKey(item) !== key));
   };
 
+  const removeItemByIndex = (index: number) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const updateQuantity = (
     id: string,
-    toppings: string[],
-    removedIngredients: string[],
-    quantity: number
+    toppings: string[] = [],
+    removedIngredients: string[] = [],
+    quantity = 0
   ) => {
     if (quantity <= 0) {
       removeItem(id, toppings, removedIngredients);
@@ -143,9 +152,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const updateQuantityByIndex = (index: number, quantity: number) => {
+    if (quantity <= 0) {
+      removeItemByIndex(index);
+      return;
+    }
+    setItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, quantity } : item))
+    );
+  };
+
   const clearCart = () => setItems([]);
 
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
@@ -153,9 +173,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         items,
         addItem,
         removeItem,
+        removeItemByIndex,
         updateQuantity,
+        updateQuantityByIndex,
         clearCart,
         total,
+        itemCount,
         isCartOpen,
         setIsCartOpen,
       }}

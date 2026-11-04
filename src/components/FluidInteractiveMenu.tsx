@@ -18,6 +18,7 @@ import { useCart } from "@/context/CartContext";
 import { DishImage } from "@/components/DishImage";
 import { bowls, drinks, desserts } from "@/lib/data";
 import { InteractiveBowlBuilder } from "@/components/InteractiveBowlBuilder";
+import { CroustyExperienceSection } from "@/components/CroustyExperienceSection";
 
 // Photos culinaires officielles générées
 import tiramisuSpeculoos from "@/assets/tiramisu-speculoos.jpg";
@@ -395,52 +396,11 @@ export function FluidInteractiveMenu() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════════════════════
-          CATÉGORIE 2 : CROUSTY CHICKEN (Barquette carrée takeaway)
+          CATÉGORIE 2 : CROUSTY CHICKEN (Expérience Éditoriale Immersive)
          ═══════════════════════════════════════════════════════════════════════════ */}
-      {(activeSection === "all" || activeSection === "crousty") && filteredCrousty.length > 0 && (
-        <div className="mt-16 pt-8 border-t border-black/5">
-          <div className="rounded-[32px] bg-gradient-to-br from-[#FFF4E4] to-[#FFE7CA] border-2 border-[#F59E0B]/40 p-6 sm:p-8 mb-6 shadow-sm">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-[#ea580c] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-sm">
-                  <Flame className="h-3.5 w-3.5 fill-white" />
-                  Crousty Chicken · Barquette Rectangulaire Chaude
-                </div>
-                <h3 className="mt-2 text-2xl sm:text-3xl font-black text-[#7c2d12]">
-                  Crousty Chicken
-                </h3>
-                <p className="mt-1 text-xs sm:text-sm text-[#9a3412] max-w-2xl font-medium">
-                  Morceaux de poulet croustillant dorés servis dans une barquette rectangulaire sur riz chaud, généreusement nappés de sauce maison onctueuse (curry ou sauce blanche) et d'oignons frits.
-                </p>
-              </div>
-
-              <div className="shrink-0 flex items-center gap-3 rounded-2xl bg-[#FFFDF9] p-4 border-2 border-[#ea580c]/30 shadow-card">
-                <span className="text-2xl">🎓</span>
-                <div>
-                  <span className="block text-[10px] font-black uppercase tracking-wider text-[#ea580c]">
-                    ☀️ Formule Étudiant · UNIQUEMENT LE MIDI
-                  </span>
-                  <span className="text-lg font-black text-[#7c2d12]">
-                    11,00 € <span className="text-xs font-bold text-[#9a3412]">(avec canette 33 cl incluse · le midi uniquement)</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            {filteredCrousty.map((item) => (
-              <DishCard
-                key={item.id}
-                item={item}
-                selectedSize="moyen"
-                onToggleSize={() => {}}
-                onAdd={() => handleAddToCart(item)}
-                isAdded={recentlyAddedId === item.id}
-                isCroustySpecial
-              />
-            ))}
-          </div>
+      {(activeSection === "all" || activeSection === "crousty") && (
+        <div id="crousty" className="mt-16 pt-8 border-t border-[#E2D6C5]">
+          <CroustyExperienceSection />
         </div>
       )}
 
@@ -561,19 +521,19 @@ function DishCard({
       }`}
     >
       <div>
-        {/* Photo Haute Définition */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#e9e5dc]">
+        {/* Photo Haute Définition Plein Format Carré */}
+        <div className="relative aspect-square w-full overflow-hidden bg-[#2C1D16]">
           {item.dishId ? (
             <DishImage
               dishId={item.dishId}
               alt={item.name}
-              className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-108"
+              className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-108 filter contrast-[1.05] saturate-[1.12]"
             />
           ) : item.image ? (
             <img
               src={item.image}
               alt={item.name}
-              className={`h-full w-full object-cover object-center transition duration-700 group-hover:scale-108 ${
+              className={`h-full w-full object-cover object-center transition duration-700 group-hover:scale-108 filter contrast-[1.05] saturate-[1.12] ${
                 item.soldOut ? "grayscale contrast-75" : ""
               }`}
             />
@@ -584,7 +544,7 @@ function DishCard({
           )}
 
           {/* Léger voile subtil en bas uniquement pour préserver la clarté et la luminosité */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
 
           {/* Badge Supérieur Gauche */}
           <span
