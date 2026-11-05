@@ -12,7 +12,7 @@ import { t as createSsrRpc } from "./createSsrRpc-C1p7zOu_.mjs";
 import { n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-BpboJaFF.mjs";
 import { t as Route$22 } from "../_slug-CxQJd897.mjs";
-import { t as Route$23 } from "../_token-BisEVa2u.mjs";
+import { i as openWazeApp, r as openGoogleMapsApp, t as Route$23 } from "../_token-BftHRnjS.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as getOrderFromStore, c as updateOrderStatus, i as getOrderByDeliveryToken, l as upsertOrder, n as claimNextPrintJob, o as listOrdersFromStore, r as clearAllOrdersFromStore, t as acknowledgePrint } from "./order-store-DWJaQAWE.mjs";
 import { a as getCheckedFiles, c as getMolliePayment, i as getBancontactProPayment, l as loadAndGetEnv, n as getAllBankKeyCandidates, r as getBancontactProApiKey, s as getMollieApiKey, t as checkoutSchema, u as processCheckout } from "./bancontact-pro.server-DtyJ3T9-.mjs";
@@ -22,7 +22,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Cj7NRr2Q.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Cu6ZyB-B.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -889,7 +889,7 @@ function buildEposXmlTest(printerIp, origin = "https://pokenbowl.be") {
 	}, origin);
 }
 /**
-* Générateur XML ePOS natif pour le ticket de commande officiel (Style 100% Takeaway.com)
+* Générateur XML ePOS natif pour le ticket de commande officiel Poke N Bowl (48 colonnes)
 */
 function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const isDelivery = order.customer.fulfillment === "delivery";
@@ -925,8 +925,10 @@ function buildEposXmlOrder(order, origin = "https://pokenbowl.be") {
 	const hr = () => {
 		line("------------------------------------------------", "left", false);
 	};
-	line("Takeaway.com", "center", true);
-	line("Poke N Bowl", "center", false);
+	xml += `  <text font="font_a" align="center" em="true" dh="true" dw="true">POKE N BOWL&#10;</text>\n`;
+	line("pokenbowl.be", "center", true);
+	line("Avenue du Pont 12, 4600 Vise", "center", false);
+	line("Tel: 0491 28 14 56", "center", false);
 	hr();
 	if (isDelivery) if (isScheduled) {
 		line("LIVRAISON PLANIFIÉE", "center", true);
@@ -1055,8 +1057,10 @@ function renderThermalTextReceipt(order, origin = "https://pokenbowl.be") {
 		lines.push(" ".repeat(pad) + clean);
 	};
 	const hr = () => lines.push("-".repeat(48));
-	center("Takeaway.com");
-	center("Poke N Bowl");
+	center("POKE N BOWL");
+	center("pokenbowl.be");
+	center("Avenue du Pont 12, 4600 Vise");
+	center("Tel: 0491 28 14 56");
 	hr();
 	if (isDelivery) if (isScheduled) {
 		center("LIVRAISON PLANIFIÉE");
@@ -3430,18 +3434,16 @@ function PosApplicationPage() {
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "grid grid-cols-2 gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-										href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
-										target: "_blank",
-										rel: "noreferrer",
-										className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps"]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-										href: `https://waze.com/ul?q=${encodeURIComponent(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`)}`,
-										target: "_blank",
-										rel: "noreferrer",
-										className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze"]
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => openGoogleMapsApp(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`),
+										className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps (App)"]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => openWazeApp(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`),
+										className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze (App)"]
 									})]
 								}),
 								(selectedOrder.deliveryToken || selectedOrder.id) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

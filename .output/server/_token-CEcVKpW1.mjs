@@ -6,8 +6,8 @@ import { H as CircleAlert, O as MapPin, R as Clock, S as Phone, V as CircleCheck
 import { n as createServerFn } from "./_ssr/ssr.mjs";
 import { t as createSsrRpc } from "./_ssr/createSsrRpc-C1p7zOu_.mjs";
 import { o as objectType, r as enumType, s as stringType } from "./_libs/zod.mjs";
-import { t as Route } from "./_token-BisEVa2u.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/_token-DI0jb6TI.js
+import { i as openWazeApp, n as openApplePlansApp, r as openGoogleMapsApp, t as Route } from "./_token-BftHRnjS.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/_token-CEcVKpW1.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var getDeliveryOrder = createServerFn({ method: "GET" }).validator(objectType({ token: stringType().min(1) })).handler(createSsrRpc("7c6d647b6f9e61f1dd19432e0ce31dfb70d3dd1840600bf36fabbc33694dfca9"));
@@ -89,9 +89,6 @@ function DeliveryTrackPage() {
 	};
 	const hasAddress = Boolean(order?.address && String(order.address).trim().length > 0);
 	const fullAddress = `${order?.address ?? ""}, ${order?.postalCode ?? ""} ${order?.city ?? ""}`.trim();
-	const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
-	const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
-	const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
 	(0, import_react.useEffect)(() => {
 		fetchOrder();
 		const interval = setInterval(fetchOrder, 1e4);
@@ -101,15 +98,11 @@ function DeliveryTrackPage() {
 		if (typeof window !== "undefined" && order && fullAddress) {
 			const search = window.location.search;
 			const auto = new URLSearchParams(search).get("auto");
-			if (auto === "waze") window.location.href = wazeUrl;
-			else if (auto === "maps") window.location.href = mapsUrl;
+			if (auto === "waze") openWazeApp(fullAddress);
+			else if (auto === "maps") openGoogleMapsApp(fullAddress);
+			else if (auto === "apple") openApplePlansApp(fullAddress);
 		}
-	}, [
-		order,
-		fullAddress,
-		wazeUrl,
-		mapsUrl
-	]);
+	}, [order, fullAddress]);
 	const handleStatusChange = async (newStatus) => {
 		setUpdating(true);
 		try {
@@ -235,31 +228,28 @@ function DeliveryTrackPage() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-3 pt-1",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: wazeUrl,
-								target: "_blank",
-								rel: "noopener noreferrer",
-								className: "flex items-center justify-center gap-2 rounded-2xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => openWazeApp(fullAddress),
+								className: "flex items-center justify-center gap-2 rounded-2xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center cursor-pointer",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Lancer WAZE" })]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: mapsUrl,
-								target: "_blank",
-								rel: "noopener noreferrer",
-								className: "flex items-center justify-center gap-2 rounded-2xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Google Maps" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: () => openGoogleMapsApp(fullAddress),
+								className: "flex items-center justify-center gap-2 rounded-2xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center cursor-pointer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "h-5 w-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Google Maps (App)" })]
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-center justify-between pt-1 text-xs text-[#8ea39b]",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
-								href: appleMapsUrl,
-								target: "_blank",
-								rel: "noopener noreferrer",
-								className: "hover:text-white underline font-medium",
-								children: "Ou ouvrir avec Apple Plans"
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => openApplePlansApp(fullAddress),
+								className: "hover:text-white underline font-medium cursor-pointer",
+								children: " Ouvrir avec Apple Plans (iPhone)"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "text-[11px] text-[#8ea39b]/80",
-								children: "Ouvre le GPS du smartphone"
+								children: "Ouvre l'application GPS native"
 							})]
 						})
 					]

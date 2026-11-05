@@ -256,7 +256,7 @@ export function buildEposXmlTest(printerIp: string, origin = "https://pokenbowl.
 }
 
 /**
- * Générateur XML ePOS natif pour le ticket de commande officiel (Style 100% Takeaway.com)
+ * Générateur XML ePOS natif pour le ticket de commande officiel Poke N Bowl (48 colonnes)
  */
 export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be"): string {
   const isDelivery = order.customer.fulfillment === "delivery";
@@ -292,9 +292,11 @@ export function buildEposXmlOrder(order: Order, origin = "https://pokenbowl.be")
     line("------------------------------------------------", "left", false);
   };
 
-  // 1. En-tête restaurant (Style officiel Takeaway.com)
-  line("Takeaway.com", "center", true);
-  line("Poke N Bowl", "center", false);
+  // 1. En-tête restaurant officiel POKE N BOWL
+  xml += `  <text font="font_a" align="center" em="true" dh="true" dw="true">POKE N BOWL&#10;</text>\n`;
+  line("pokenbowl.be", "center", true);
+  line("Avenue du Pont 12, 4600 Vise", "center", false);
+  line("Tel: 0491 28 14 56", "center", false);
   hr();
 
   // 2. Type & Timing de commande
@@ -480,8 +482,10 @@ export function renderThermalTextReceipt(order: Order, origin = "https://pokenbo
   };
   const hr = () => lines.push("-".repeat(48));
 
-  center("Takeaway.com");
-  center("Poke N Bowl");
+  center("POKE N BOWL");
+  center("pokenbowl.be");
+  center("Avenue du Pont 12, 4600 Vise");
+  center("Tel: 0491 28 14 56");
   hr();
   if (isDelivery) {
     if (isScheduled) {

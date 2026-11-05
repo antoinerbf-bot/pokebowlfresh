@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Phone, MapPin, Navigation, Clock, CheckCircle, Truck, AlertCircle, Loader2 } from "lucide-react";
 import { getDeliveryOrder, updateDeliveryStatus } from "../../fn/delivery";
 import { BrandLogo } from "../../components/BrandLogo";
+import { openGoogleMapsApp, openWazeApp, openApplePlansApp } from "../../lib/navigation";
 
 export const Route = createFileRoute("/track/$token")({
   component: DeliveryTrackPage,
@@ -85,9 +86,6 @@ function DeliveryTrackPage() {
 
   const hasAddress = Boolean(order?.address && String(order.address).trim().length > 0);
   const fullAddress = `${order?.address ?? ""}, ${order?.postalCode ?? ""} ${order?.city ?? ""}`.trim();
-  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
-  const wazeUrl = `https://waze.com/ul?q=${encodeURIComponent(fullAddress)}&navigate=yes`;
-  const appleMapsUrl = `https://maps.apple.com/?daddr=${encodeURIComponent(fullAddress)}`;
 
   useEffect(() => {
     fetchOrder();
@@ -95,19 +93,21 @@ function DeliveryTrackPage() {
     return () => clearInterval(interval);
   }, [token]);
 
-  // Redirection automatique optionnelle (si ?auto=waze ou ?auto=maps)
+  // Redirection automatique optionnelle (si ?auto=waze, ?auto=maps ou ?auto=apple)
   useEffect(() => {
     if (typeof window !== "undefined" && order && fullAddress) {
       const search = window.location.search;
       const params = new URLSearchParams(search);
       const auto = params.get("auto");
       if (auto === "waze") {
-        window.location.href = wazeUrl;
+        openWazeApp(fullAddress);
       } else if (auto === "maps") {
-        window.location.href = mapsUrl;
+        openGoogleMapsApp(fullAddress);
+      } else if (auto === "apple") {
+        openApplePlansApp(fullAddress);
       }
     }
-  }, [order, fullAddress, wazeUrl, mapsUrl]);
+  }, [order, fullAddress]);
 
   const handleStatusChange = async (newStatus: "delivering" | "completed") => {
     setUpdating(true);
@@ -215,39 +215,36 @@ function DeliveryTrackPage() {
               </div>
             </div>
 
-            {/* Gros Boutons GPS 1-Clic Ultra Visibles */}
+            {/* Gros Boutons GPS 1-Clic Ultra Visibles - Lancement direct des applications natives */}
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <a
-                href={wazeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-2xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center"
+              <button
+                type="button"
+                onClick={() => openWazeApp(fullAddress)}
+                className="flex items-center justify-center gap-2 rounded-2xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center cursor-pointer"
               >
                 <Navigation className="h-5 w-5" />
                 <span>Lancer WAZE</span>
-              </a>
-              <a
-                href={mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-2xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center"
+              </button>
+              <button
+                type="button"
+                onClick={() => openGoogleMapsApp(fullAddress)}
+                className="flex items-center justify-center gap-2 rounded-2xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-4 px-3 font-black text-base shadow-xl transition active:scale-95 text-center cursor-pointer"
               >
                 <Navigation className="h-5 w-5" />
-                <span>Google Maps</span>
-              </a>
+                <span>Google Maps (App)</span>
+              </button>
             </div>
 
             <div className="flex items-center justify-between pt-1 text-xs text-[#8ea39b]">
-              <a
-                href={appleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white underline font-medium"
+              <button
+                type="button"
+                onClick={() => openApplePlansApp(fullAddress)}
+                className="hover:text-white underline font-medium cursor-pointer"
               >
-                Ou ouvrir avec Apple Plans
-              </a>
+                 Ouvrir avec Apple Plans (iPhone)
+              </button>
               <span className="text-[11px] text-[#8ea39b]/80">
-                Ouvre le GPS du smartphone
+                Ouvre l'application GPS native
               </span>
             </div>
           </section>

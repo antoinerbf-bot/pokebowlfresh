@@ -42,6 +42,7 @@ import {
   scanForPrinterIp,
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
+import { openGoogleMapsApp, openWazeApp } from "../../lib/navigation";
 import QRCode from "qrcode";
 
 export const Route = createFileRoute("/pos/")({
@@ -1450,28 +1451,30 @@ export function PosApplicationPage() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                        `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
-                      )}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95"
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openGoogleMapsApp(
+                          `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                        )
+                      }
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer"
                     >
                       <Navigation className="w-3.5 h-3.5" />
-                      Google Maps
-                    </a>
-                    <a
-                      href={`https://waze.com/ul?q=${encodeURIComponent(
-                        `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
-                      )}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95"
+                      Google Maps (App)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openWazeApp(
+                          `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`,
+                        )
+                      }
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer"
                     >
                       <Navigation className="w-3.5 h-3.5" />
-                      Waze
-                    </a>
+                      Waze (App)
+                    </button>
                   </div>
 
                   {(selectedOrder.deliveryToken || selectedOrder.id) && (
