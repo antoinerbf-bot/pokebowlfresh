@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { getBancontactProPayment } from "../../lib/bancontact-pro.server";
 import {
   getOrderFromStore,
@@ -38,7 +38,12 @@ export const Route = createFileRoute("/api/bancontact-webhook")({
           }
 
           if (payment.status === "SUCCEEDED") {
-            await upsertOrder({ ...order, status: "paid", molliePaymentId: `bancontact:${paymentId}` });
+            await upsertOrder({
+              ...order,
+              status: "paid",
+              molliePaymentId: `bancontact:${paymentId}`,
+              printStatus: order.printStatus || "pending",
+            });
           } else if (
             payment.status === "CANCELLED" ||
             payment.status === "EXPIRED" ||

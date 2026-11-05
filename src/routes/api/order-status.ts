@@ -55,7 +55,7 @@ export const Route = createFileRoute("/api/order-status")({
               try {
                 const payment = await getMolliePayment(order.molliePaymentId);
                 if (payment.status === "paid") {
-                  order = { ...order, status: "paid" };
+                  order = { ...order, status: "paid", printStatus: order.printStatus || "pending" };
                   await upsertOrder(order);
                 } else if (
                   payment.status === "canceled" ||

@@ -22,7 +22,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BvByM4p-.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-BuSoRiIV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -511,7 +511,8 @@ var Route$12 = createFileRoute("/api/bancontact-webhook")({ server: { handlers: 
 		if (payment.status === "SUCCEEDED") await upsertOrder({
 			...order,
 			status: "paid",
-			molliePaymentId: `bancontact:${paymentId}`
+			molliePaymentId: `bancontact:${paymentId}`,
+			printStatus: order.printStatus || "pending"
 		});
 		else if (payment.status === "CANCELLED" || payment.status === "EXPIRED" || payment.status === "FAILED") await upsertOrder({
 			...order,
@@ -1505,7 +1506,8 @@ var Route$8 = createFileRoute("/api/mollie-webhook")({ server: { handlers: { POS
 		if (payment.status === "paid") await upsertOrder({
 			...order,
 			status: "paid",
-			molliePaymentId: paymentId
+			molliePaymentId: paymentId,
+			printStatus: order.printStatus || "pending"
 		});
 		else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") await upsertOrder({
 			...order,
@@ -1556,7 +1558,8 @@ var Route$7 = createFileRoute("/api/order-status")({ server: { handlers: { GET: 
 			if (payment.status === "paid") {
 				order = {
 					...order,
-					status: "paid"
+					status: "paid",
+					printStatus: order.printStatus || "pending"
 				};
 				await upsertOrder(order);
 			} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {

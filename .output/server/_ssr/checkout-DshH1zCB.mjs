@@ -1,9 +1,9 @@
 import { n as createServerFn } from "./ssr.mjs";
 import { a as numberType, i as literalType, o as objectType, r as enumType, s as stringType, t as arrayType } from "../_libs/zod.mjs";
-import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
 import { a as getOrderFromStore, l as upsertOrder } from "./order-store-DWJaQAWE.mjs";
 import { c as getMolliePayment, i as getBancontactProPayment, u as processCheckout } from "./bancontact-pro.server-DGrLO-M1.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-CSyiwiEt.js
+import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-DshH1zCB.js
 var orderItemSchema = objectType({
 	id: stringType(),
 	name: stringType(),
@@ -63,7 +63,8 @@ var getOrderStatus = createServerFn({ method: "GET" }).validator(objectType({ or
 		if (payment.status === "paid") {
 			order = {
 				...order,
-				status: "paid"
+				status: "paid",
+				printStatus: order.printStatus || "pending"
 			};
 			await upsertOrder(order);
 		} else if (payment.status === "canceled" || payment.status === "expired" || payment.status === "failed") {

@@ -38,7 +38,12 @@ export const Route = createFileRoute("/api/mollie-webhook")({
           }
 
           if (payment.status === "paid") {
-            await upsertOrder({ ...order, status: "paid", molliePaymentId: paymentId });
+            await upsertOrder({
+              ...order,
+              status: "paid",
+              molliePaymentId: paymentId,
+              printStatus: order.printStatus || "pending",
+            });
           } else if (
             payment.status === "canceled" ||
             payment.status === "expired" ||
