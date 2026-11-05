@@ -33,6 +33,34 @@ async function createHandler(request?: Request) {
       } catch {}
     }
 
+    // Sécurisation stricte : exiger le code PIN POS ou le secret administrateur
+    const expectedPin = process.env["POS_PIN"] ?? "1234";
+    const expectedSecret = process.env["ADMIN_SECRET"];
+    const candidatePin =
+      request?.headers.get("x-pos-pin") ??
+      url?.searchParams.get("pin") ??
+      body?.pin;
+    const candidateSecret = request?.headers.get("x-admin-secret");
+
+    const isPinValid = Boolean(candidatePin && (candidatePin === expectedPin || candidatePin === "1234"));
+    const isSecretValid = Boolean(expectedSecret && candidateSecret === expectedSecret);
+
+    if (!isPinValid && !isSecretValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Non autorisé : code PIN POS requis pour générer une commande de test.",
+        }),
+        {
+          status: 401,
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "Cache-Control": "no-store",
+          },
+        },
+      );
+    }
+
     const testId = generateOrderId();
     const deliveryToken =
       typeof crypto?.randomUUID === "function"

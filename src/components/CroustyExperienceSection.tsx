@@ -31,7 +31,7 @@ interface CroustyRecipe {
   chips: string[];
 }
 
-// ⚠️ ORDRE EXPLICITE DEMANDÉ :
+// ⚠️ ORDRE EXPLICITE DEMANDÉ (FIDÈLE AU FLYER RESTAURANT) :
 // 1. Sauce Blanche & Sauce Curry en avant
 // 2. Crousty Mix (Duo) vient après !
 const CROUSTY_RECIPES: CroustyRecipe[] = [
@@ -39,43 +39,43 @@ const CROUSTY_RECIPES: CroustyRecipe[] = [
     id: "crousty-chicken-sauce-blanche",
     name: "Crousty Chicken Sauce Blanche",
     shortTitle: "Sauce Blanche",
-    badge: "🤍 Velouté & Fines Herbes",
+    badge: "🤍 Blanche Maison",
     badgeIcon: "🤍",
     badgeClass: "bg-[#2C1D16] text-[#EADCC9]",
     accentColor: "#2C1D16",
     price: 11.0,
     image: bowlCroustyBlanche,
-    tasteNote: "Douceur crémeuse veloutée aux herbes fraîches et pointe d'ail doux",
-    desc: "Morceaux de poulet croustillant dorés minute sur riz chaud parfumé, nappés de sauce blanche onctueuse maison et parsemés d'oignons frits croquants. Formule 11 € avec canette 33 cl incluse le midi.",
-    chips: ["🍗 Poulet doré minute", "🤍 Blanche maison", "🧅 Oignons frits", "🍚 Riz chaud"],
+    tasteNote: "Douceur onctueuse de notre blanche maison veloutée et oignons frits",
+    desc: "Poulet croustillant doré minute sur lit de riz parfumé, blanche maison veloutée, oignon frit croustillant et pointe d'aigre-douce. Formule avec boisson incluse !",
+    chips: ["✓ Poulet croustillant", "✓ Riz parfumé", "✓ Blanche maison", "✓ Oignon frit croustillant", "✓ Aigre douce"],
   },
   {
     id: "crousty-chicken-curry",
     name: "Crousty Chicken Sauce Curry",
     shortTitle: "Sauce Curry",
-    badge: "🍛 Curry Doux Onctueux",
+    badge: "🍛 Curry Onctueux",
     badgeIcon: "🍛",
     badgeClass: "bg-[#d97706] text-white",
     accentColor: "#d97706",
     price: 11.0,
     image: bowlCroustyCurry,
-    tasteNote: "Onctuosité chaude et réconfortante d'un curry doux mijoté",
-    desc: "Morceaux de poulet croustillant dorés minute sur riz chaud parfumé, généreusement nappés de notre sauce curry maison onctueuse et d'oignons frits. Formule 11 € avec canette 33 cl incluse le midi.",
-    chips: ["🍗 Poulet doré minute", "🍛 Curry doux", "🧅 Oignons frits", "🍚 Riz chaud"],
+    tasteNote: "Onctuosité chaude et réconfortante de notre sauce curry maison",
+    desc: "Poulet croustillant doré minute sur lit de riz parfumé, généreusement nappé de sauce curry onctueuse, oignon frit croustillant et pointe d'aigre-douce. Formule avec boisson incluse !",
+    chips: ["✓ Poulet croustillant", "✓ Riz parfumé", "✓ Sauce curry onctueuse", "✓ Oignon frit croustillant", "✓ Aigre douce"],
   },
   {
     id: "crousty-chicken-mix",
     name: "Crousty Chicken Mix (Curry & Blanche)",
-    shortTitle: "Le Mix Duo",
-    badge: "⭐ Duo Curry & Blanche",
-    badgeIcon: "⭐",
+    shortTitle: "Crousty Mix",
+    badge: "⚡ Duo Curry & Blanche",
+    badgeIcon: "⚡",
     badgeClass: "bg-gradient-to-r from-[#ea580c] to-[#d97706] text-white shadow-xs",
     accentColor: "#ea580c",
     price: 11.0,
     image: bowlCroustyMix,
-    tasteNote: "Le duo star : Sauce Curry dorée + Sauce Blanche maison réunies",
-    desc: "La formule vedette : morceaux de poulet croustillant dorés minute sur riz chaud, duo Sauce Curry onctueuse + Sauce Blanche maison, pointe d'aigre-douce et oignons frits. Formule 11 € avec canette 33 cl incluse le midi.",
-    chips: ["🍗 Poulet croustillant", "🍛 Curry onctueux", "🤍 Blanche maison", "🧅 Oignons frits"],
+    tasteNote: "Le mix star réunissant les deux sauces signatures : Curry & Blanche",
+    desc: "La formule vedette réunissant les deux sauces : poulet croustillant sur lit de riz parfumé, duo Sauce Curry onctueuse + Blanche maison, oignon frit et aigre-douce. Formule avec boisson incluse !",
+    chips: ["✓ Poulet croustillant", "✓ Riz parfumé", "✓ Curry & Blanche réunis", "✓ Oignon frit croustillant", "✓ Aigre douce"],
   },
 ];
 
@@ -134,33 +134,33 @@ export function CroustyExperienceSection({
 
   return (
     <div className={`relative ${className}`}>
-      {/* ── En-tête harmonieux et fluide (s'intègre naturellement à la page) ── */}
+      {/* ── En-tête harmonieux fidèle à l'affiche officielle Crousty Chicken ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-5 border-b border-[#DECBB3]">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-[#FAF5EE] border border-[#DECBB3] px-3.5 py-1 text-[11px] font-black uppercase tracking-wider text-[#2C1D16]">
             <Flame className="h-3.5 w-3.5 text-[#ea580c] animate-pulse" />
-            La Gamme Chaude Crousty Chicken
+            Maintenant disponible · Le croustillant qui fait référence !
           </div>
           <h3 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#2C1D16]">
-            Doré minute sur riz chaud parfumé
+            CROUSTY CHICKEN
           </h3>
           <p className="mt-1 text-xs sm:text-sm text-[#766358] max-w-2xl font-medium">
-            Blancs de poulet panés croustillants, servis bien chauds en barquette rectangulaire kraft avec oignons frits.
-            <strong className="text-[#ea580c] ml-1">Formule Étudiant 11 € avec canette 33 cl incluse le midi.</strong>
+            Poulet croustillant doré minute sur lit de riz parfumé, oignon frit croquant & sauces maison.
+            <strong className="text-[#ea580c] ml-1">Menu Étudiant à 11 € avec canette 33 cl incluse !</strong>
           </p>
         </div>
 
-        {/* Badge Formule Étudiant discret & lisible */}
-        <div className="shrink-0 flex items-center gap-3 rounded-2xl bg-[#FFFDF9] border border-[#DECBB3] p-3 shadow-xs">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2C1D16] text-[#EADCC9] text-base font-black">
-            🎓
+        {/* Badge Formule Étudiant fidèle au flyer */}
+        <div className="shrink-0 flex items-center gap-3 rounded-2xl bg-gradient-to-br from-[#FFFDF9] to-[#FAF5EE] border-2 border-[#ea580c]/30 p-3.5 shadow-sm">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#ea580c] text-white text-lg font-black shadow-xs">
+            11€
           </div>
           <div>
-            <span className="block text-[10px] font-black uppercase tracking-wider text-[#ea580c]">
-              Midi uniquement
+            <span className="block text-[11px] font-black uppercase tracking-wider text-[#ea580c]">
+              Menu Étudiant
             </span>
-            <span className="text-base font-black text-[#2C1D16]">
-              11,00 € <span className="text-xs font-semibold text-[#766358]">+ boisson 33 cl</span>
+            <span className="text-xs font-black text-[#2C1D16]">
+              Boisson 33 cl incluse 🥤
             </span>
           </div>
         </div>
@@ -366,6 +366,14 @@ export function CroustyExperienceSection({
             </motion.div>
           );
         })}
+      </div>
+
+      {/* ── Mention sauces supplémentaires fidèle à l'affiche ─────────── */}
+      <div className="mt-6 flex items-center justify-center gap-2 text-center text-xs text-[#766358]">
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#ea580c]" />
+        <span className="font-semibold">
+          Pour toute sauce supplémentaire : disponible en supplément lors de la commande (+1,00 €).
+        </span>
       </div>
     </div>
   );

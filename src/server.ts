@@ -45,6 +45,30 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+function applySecurityHeaders(response: Response): Response {
+  const headers = new Headers(response.headers);
+  if (!headers.has("X-Content-Type-Options")) {
+    headers.set("X-Content-Type-Options", "nosniff");
+  }
+  if (!headers.has("X-Frame-Options")) {
+    headers.set("X-Frame-Options", "SAMEORIGIN");
+  }
+  if (!headers.has("Referrer-Policy")) {
+    headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  }
+  if (!headers.has("X-XSS-Protection")) {
+    headers.set("X-XSS-Protection", "1; mode=block");
+  }
+  if (!headers.has("Permissions-Policy")) {
+    headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(self)");
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     const isApiOrServerFn =
@@ -56,21 +80,26 @@ export default {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       if (isApiOrServerFn) {
-        return response;
+        return applySecurityHeaders(response);
       }
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return applySecurityHeaders(normalized);
     } catch (error) {
       console.error(error);
       if (isApiOrServerFn) {
-        return new Response(JSON.stringify({ error: (error as any)?.message ?? String(error) }), {
-          status: 500,
-          headers: { "content-type": "application/json" },
-        });
+        return applySecurityHeaders(
+          new Response(JSON.stringify({ error: (error as any)?.message ?? String(error) }), {
+            status: 500,
+            headers: { "content-type": "application/json" },
+          }),
+        );
       }
-      return new Response(renderErrorPage(error), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return applySecurityHeaders(
+        new Response(renderErrorPage(error), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };

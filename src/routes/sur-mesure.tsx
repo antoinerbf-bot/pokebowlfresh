@@ -17,7 +17,52 @@ import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { useTranslation } from "../context/I18nContext";
 
+const SUR_MESURE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Poké Bowl Sur-Mesure",
+  "image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
+  "description":
+    "Composez votre Poké Bowl sur-mesure à Visé : base au choix (riz vinaigré, chaud ou salade), 5 légumes/mix-ins frais inclus, protéine au choix, sauces maison et toppings croustillants.",
+  "brand": {
+    "@type": "Brand",
+    "name": "Poke N Bowl Visé",
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "10.00",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock",
+    "url": "https://pokenbowl.be/sur-mesure",
+  },
+};
+
 export const Route = createFileRoute("/sur-mesure")({
+  head: () => ({
+    meta: [
+      { title: "Crée ton Poké Bowl Sur-Mesure | Poke N Bowl Visé (Ingrédients Frais)" },
+      {
+        name: "description",
+        content:
+          "Composez votre Poké Bowl personnalisé à Visé : choisissez votre base (riz vinaigré, riz blanc chaud ou salade), 5 légumes frais inclus, protéines au choix (saumon, poulet, scampis), sauces maison et toppings croustillants.",
+      },
+      { property: "og:title", content: "Crée ton Poké Bowl Sur-Mesure | Poke N Bowl Visé" },
+      {
+        property: "og:description",
+        content:
+          "Votre bowl 100% sur-mesure préparé minute à Visé. Choisissez votre base, 5 légumes inclus, vos protéines et sauces maison.",
+      },
+      { property: "og:url", content: "https://pokenbowl.be/sur-mesure" },
+      { property: "og:image", content: "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg" },
+    ],
+    links: [{ rel: "canonical", href: "https://pokenbowl.be/sur-mesure" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(SUR_MESURE_SCHEMA),
+      },
+    ],
+  }),
   component: SurMesurePage,
 });
 

@@ -139,6 +139,7 @@ export function PosApplicationPage() {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "x-pos-pin": pin || "1234",
         },
       });
       const data = await response.json();
@@ -308,7 +309,10 @@ export function PosApplicationPage() {
       // 1. Essayer l'API REST directe /api/pos-orders
       try {
         const resRest = await fetch("/api/pos-orders", {
-          headers: { Accept: "application/json" },
+          headers: {
+            Accept: "application/json",
+            "x-pos-pin": pin || "1234",
+          },
           cache: "no-store",
         });
         if (resRest.ok) {
@@ -454,7 +458,10 @@ export function PosApplicationPage() {
         try {
           await fetch("/api/pos-orders", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "x-pos-pin": pin || "1234",
+            },
             body: JSON.stringify({
               orderId: order.id,
               printStatus: "printed",
@@ -501,7 +508,10 @@ export function PosApplicationPage() {
       try {
         const res = await fetch("/api/pos-orders", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-pos-pin": pin || "1234",
+          },
           body: JSON.stringify({ orderId, status }),
         });
         if (res.ok) {

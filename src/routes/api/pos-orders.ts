@@ -11,9 +11,7 @@ function isAuthorizedPosRequest(request: Request, bodyPin?: string): boolean {
   if (candidate) {
     return candidate === expectedPin || candidate === "1234";
   }
-  const secFetchSite = request.headers.get("sec-fetch-site");
-  const referer = request.headers.get("referer") ?? "";
-  return secFetchSite === "same-origin" && referer.includes("/pos");
+  return false;
 }
 
 export const Route = createFileRoute("/api/pos-orders")({

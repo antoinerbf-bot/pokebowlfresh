@@ -46,7 +46,84 @@ import { useStock } from "../hooks/useStock";
 import { CroustyExperienceSection } from "@/components/CroustyExperienceSection";
 import { useTranslation } from "../context/I18nContext";
 
-export const Route = createFileRoute("/commander")({ component: CommanderPage });
+const COMMANDER_MENU_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "name": "Carte & Menu Poke N Bowl Visé",
+  "url": "https://pokenbowl.be/commander",
+  "inLanguage": "fr",
+  "hasMenuSection": [
+    {
+      "@type": "MenuSection",
+      "name": "Nos Poké Bowls Signatures",
+      "hasMenuItem": bowls
+        .filter((b) => !b.id.startsWith("crousty-"))
+        .map((b) => ({
+          "@type": "MenuItem",
+          "name": b.name,
+          "description": b.description,
+          "offers": {
+            "@type": "Offer",
+            "price": b.price,
+            "priceCurrency": "EUR",
+          },
+        })),
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Gamme Chaude Crousty Chicken",
+      "hasMenuItem": [
+        {
+          "@type": "MenuItem",
+          "name": "Crousty Chicken Sauce Blanche",
+          "description": "Poulet croustillant doré minute, riz chaud parfumé, sauce blanche maison onctueuse, oignons frits",
+          "offers": { "@type": "Offer", "price": 11.0, "priceCurrency": "EUR" },
+        },
+        {
+          "@type": "MenuItem",
+          "name": "Crousty Chicken Sauce Curry",
+          "description": "Poulet croustillant doré minute, riz chaud parfumé, sauce curry onctueuse mijotée, oignons frits",
+          "offers": { "@type": "Offer", "price": 11.0, "priceCurrency": "EUR" },
+        },
+        {
+          "@type": "MenuItem",
+          "name": "Crousty Chicken Mix (Duo Curry & Blanche)",
+          "description": "Poulet croustillant doré minute, riz chaud parfumé, duo Sauce Curry et Blanche, oignons frits",
+          "offers": { "@type": "Offer", "price": 11.0, "priceCurrency": "EUR" },
+        },
+      ],
+    },
+  ],
+};
+
+export const Route = createFileRoute("/commander")({
+  head: () => ({
+    meta: [
+      { title: "Carte & Menu en Ligne | Poke N Bowl Visé — Bowls Frais & Crousty" },
+      {
+        name: "description",
+        content:
+          "Découvrez le menu complet de Poke N Bowl à Visé : Poké bowls signatures au saumon frais découpé minute, Crousty Chicken chaud, desserts maison et boissons. Commande en ligne à emporter ou livraison rapide.",
+      },
+      { property: "og:title", content: "Carte & Menu en Ligne | Poke N Bowl Visé" },
+      {
+        property: "og:description",
+        content:
+          "Commandez votre Poké Bowl frais ou votre Crousty Chicken en ligne à Visé. Préparation minute et ingrédients ultra-frais.",
+      },
+      { property: "og:url", content: "https://pokenbowl.be/commander" },
+      { property: "og:image", content: "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg" },
+    ],
+    links: [{ rel: "canonical", href: "https://pokenbowl.be/commander" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(COMMANDER_MENU_SCHEMA),
+      },
+    ],
+  }),
+  component: CommanderPage,
+});
 
 /* ─── Tag badge styles ───────────────────────────────────────────── */
 const TAG_STYLES: Record<string, string> = {
