@@ -22,7 +22,7 @@ import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C7HZeMVJ.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DIzuYf9e.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -328,7 +328,7 @@ var Route$19 = createFileRoute("/")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
-var $$splitComponentImporter$6 = () => import("./checkout-BWafLNve.mjs");
+var $$splitComponentImporter$6 = () => import("./checkout-GspvHb7b.mjs");
 var Route$18 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
 var $$splitComponentImporter$5 = () => import("./commander-C3pbDFoP.mjs");
 var COMMANDER_MENU_SCHEMA = {

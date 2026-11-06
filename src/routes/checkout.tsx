@@ -377,7 +377,7 @@ function CheckoutPage() {
             </section>
 
             <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]">
-              <h2 className="text-lg font-black text-[#2C1D16]">Paiement</h2>
+              <h2 className="text-lg font-black text-[#2C1D16]">Mode de règlement</h2>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <button
@@ -391,15 +391,22 @@ function CheckoutPage() {
                 >
                   <div className="flex items-center justify-between w-full">
                     <CreditCard className="h-5 w-5 text-[#ff705f]" />
-                    <span className="inline-flex items-center rounded-md bg-[#2C1D16] px-2 py-0.5 text-[11px] font-black text-[#EADCC9]">
-                      Bancontact
+                    <span className="inline-flex items-center rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase text-[#EADCC9]">
+                      Sécurisé SSL
                     </span>
                   </div>
-                  <span className="text-sm font-black">Bancontact & En ligne</span>
-                  <span className="text-xs text-[#7A6857]">
-                    Bancontact, Payconiq, Carte bancaire ou Apple Pay
+                  <span className="text-sm font-black">Paiement sécurisé en ligne</span>
+                  <span className="text-xs text-[#7A6857] leading-relaxed">
+                    Carte bancaire (Visa, Mastercard), Apple Pay, Payconiq ou Virement instantané
                   </span>
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-[#DECBB3]/40 w-full text-[10px] font-bold text-[#2C1D16]">
+                    <span className="rounded bg-black/5 px-2 py-0.5">💳 Carte bancaire</span>
+                    <span className="rounded bg-black/5 px-2 py-0.5">🍎 Apple Pay</span>
+                    <span className="rounded bg-black/5 px-2 py-0.5">📱 Payconiq</span>
+                    <span className="rounded bg-black/5 px-2 py-0.5">⚡ Virement direct</span>
+                  </div>
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("on_site")}
@@ -409,15 +416,24 @@ function CheckoutPage() {
                       : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#2C1D16]/30"
                   }`}
                 >
-                  <Store className="h-5 w-5 text-[#ff705f]" />
+                  <div className="flex items-center justify-between w-full">
+                    <Store className="h-5 w-5 text-[#ff705f]" />
+                    <span className="inline-flex items-center rounded-md bg-black/5 px-2 py-0.5 text-[10px] font-bold text-[#7A6857]">
+                      {fulfillment === "delivery" ? "Livraison" : "Comptoir"}
+                    </span>
+                  </div>
                   <span className="text-sm font-black">
                     {fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"}
                   </span>
-                  <span className="text-xs text-[#7A6857]">
+                  <span className="text-xs text-[#7A6857] leading-relaxed">
                     {fulfillment === "delivery"
-                      ? "Espèces ou Bancontact mobile lors de la livraison"
-                      : "Espèces ou Bancontact au comptoir lors du retrait"}
+                      ? "Espèces ou terminal de paiement mobile lors de la livraison"
+                      : "Espèces ou terminal de paiement au comptoir lors du retrait"}
                   </span>
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-[#DECBB3]/40 w-full text-[10px] font-bold text-[#7A6857]">
+                    <span className="rounded bg-black/5 px-2 py-0.5">💶 Espèces</span>
+                    <span className="rounded bg-black/5 px-2 py-0.5">💳 Terminal carte</span>
+                  </div>
                 </button>
               </div>
             </section>
@@ -459,12 +475,12 @@ function CheckoutPage() {
             <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
               <div>
                 <span className="font-bold">Total</span>
-                <div className="mt-1 text-right">
-                  <div className="text-xs text-white/50">Sous-total · € {total.toFixed(2)}</div>
-                  {fulfillment === "delivery" && <div className="text-xs text-white/50">Livraison · {deliveryFee === 0 ? "Gratuite" : `€ ${deliveryFee.toFixed(2)}`}</div>}
-                  <div className="text-2xl font-black text-[#ff705f]">€ {orderTotal.toFixed(2)}</div>
+                <div className="text-xs text-white/50">
+                  Sous-total · € {total.toFixed(2)}
+                  {fulfillment === "delivery" && ` · Livraison ${deliveryFee === 0 ? "Gratuite" : `€ ${deliveryFee.toFixed(2)}`}`}
                 </div>
               </div>
+              <div className="text-2xl font-black text-[#ff705f]">€ {orderTotal.toFixed(2)}</div>
             </div>
             <button
               type="submit"
@@ -477,11 +493,22 @@ function CheckoutPage() {
                   Traitement…
                 </>
               ) : paymentMethod === "online" ? (
-                "Payer en ligne"
+                "Payer en ligne en toute sécurité"
               ) : (
                 "Confirmer la commande"
               )}
             </button>
+            {paymentMethod === "online" && (
+              <div className="mt-3 rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
+                <p className="text-[11px] font-bold text-emerald-400 flex items-center justify-center gap-1.5">
+                  <ShieldCheck className="h-4 w-4 shrink-0" />
+                  <span>Paiement en ligne chiffré et sécurisé</span>
+                </p>
+                <p className="text-[10px] text-white/60 mt-1">
+                  Cartes bancaires (Visa, Mastercard) · Apple Pay · Payconiq · Virement instantané
+                </p>
+              </div>
+            )}
             <p className="mt-3 text-center text-[10px] text-white/40">
               Livraison selon zone · retrait possible à Poke N Bowl Visé
             </p>
