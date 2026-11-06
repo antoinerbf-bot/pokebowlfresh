@@ -118,7 +118,7 @@ export function RushPauseBanner() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-300"></span>
               </span>
-              <span>Pause Momentanée · Plein Rush</span>
+              <span>🔥 Victime de notre succès · Pause momentanée</span>
             </div>
             <p className="mt-0.5 text-xs sm:text-sm font-extrabold text-white leading-snug">
               {msg}

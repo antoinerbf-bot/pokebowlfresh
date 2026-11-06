@@ -110,12 +110,12 @@ export const Route = createFileRoute("/")({
 const MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 
 const HOUR_ROWS = [
-  ["info.day.mon", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
-  ["info.day.tue", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
-  ["info.day.wed", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
-  ["info.day.thu", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
-  ["info.day.fri", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
-  ["info.day.sat", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
+  ["info.day.mon", "Commandes dès 17h30 · Livraisons 18h00 – 20h30"],
+  ["info.day.tue", "Commandes dès 17h30 · Livraisons 18h00 – 20h30"],
+  ["info.day.wed", "Commandes dès 17h30 · Livraisons 18h00 – 20h30"],
+  ["info.day.thu", "Commandes dès 17h30 · Livraisons 18h00 – 20h30"],
+  ["info.day.fri", "Commandes dès 17h30 · Livraisons 18h00 – 20h30"],
+  ["info.day.sat", "Commandes dès 17h30 · Livraisons 18h00 – 20h30"],
   ["info.day.sun", "closed"],
 ] as const;
 
@@ -353,7 +353,7 @@ function Index() {
                           <span className="text-[10px] text-[#766358] font-medium">Site en ligne & téléphone</span>
                         </div>
                         <div className="text-right">
-                          <span className="block text-xs font-black text-[#ff705f]">Dès 17h40</span>
+                          <span className="block text-xs font-black text-[#ff705f]">Dès 17h30</span>
                           <span className="block text-[9px] font-bold text-emerald-700">En direct de la cuisine</span>
                         </div>
                       </div>
@@ -518,7 +518,7 @@ function Index() {
                 <p className="font-bold text-white">Avenue du Pont 12, 4600 Visé</p>
                 <p>📞 0491 28 14 56</p>
                 <p className="text-[11px] leading-relaxed text-[#EADCC9]/60">
-                  Commandes : dès 17h40<br />
+                  Commandes : dès 17h30<br />
                   Livraisons : 18h00 – 20h30 (aucune livraison le midi)<br />
                   Dimanche : Fermé
                 </p>

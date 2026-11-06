@@ -30,6 +30,7 @@ import {
 import { CartDrawer } from "../../components/CartDrawer";
 import { BrandLogo } from "@/components/BrandLogo";
 import { useStock } from "../../hooks/useStock";
+import { isIngredientAvailable } from "../../lib/stock";
 
 export const Route = createFileRoute("/product/$productId")({
   head: ({ params }) => {
@@ -245,7 +246,7 @@ function ProductPage() {
   const product = bowls.find((b) => b.id === productId || (productId === "crousty-mix" && b.id === "crousty-chicken-mix"));
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
-  const { available } = useStock();
+  const { available, stock } = useStock();
 
   const isCrousty = Boolean(product && (product.id.startsWith("crousty-") || product.id === "crousty-mix"));
   const isCroustyMix = Boolean(product && (product.id === "crousty-chicken-mix" || product.id === "crousty-mix" || productId === "crousty-mix"));
@@ -911,22 +912,31 @@ function ProductPage() {
                     </div>
                   ) : (
                     <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-                      {detailedBases.map((b) => (
-                        <button
-                          key={b.id}
-                          type="button"
-                          onClick={() => setSelectedBase(b.name)}
-                          className={[
-                            "flex flex-col items-center justify-center rounded-xl border-2 p-2.5 text-center transition-all",
-                            selectedBase === b.name
-                              ? "border-[#ff705f] bg-[#FFF4F1] font-black text-[#c0350f]"
-                              : "border-[#DECBB3] bg-[#FFFDF9] font-bold text-[#2C1D16] hover:border-[#ff705f]/40",
-                          ].join(" ")}
-                        >
-                          <span className="text-xl">{b.emoji}</span>
-                          <span className="mt-1 text-[11px] leading-tight">{b.name}</span>
-                        </button>
-                      ))}
+                      {detailedBases.map((b) => {
+                        const isAvailable = isIngredientAvailable(stock, b.name);
+                        return (
+                          <button
+                            key={b.id}
+                            type="button"
+                            disabled={!isAvailable}
+                            onClick={() => isAvailable && setSelectedBase(b.name)}
+                            className={[
+                              "flex flex-col items-center justify-center rounded-xl border-2 p-2.5 text-center transition-all",
+                              !isAvailable
+                                ? "border-red-300/40 bg-gray-100 opacity-60 cursor-not-allowed"
+                                : selectedBase === b.name
+                                ? "border-[#ff705f] bg-[#FFF4F1] font-black text-[#c0350f] cursor-pointer"
+                                : "border-[#DECBB3] bg-[#FFFDF9] font-bold text-[#2C1D16] hover:border-[#ff705f]/40 cursor-pointer",
+                            ].join(" ")}
+                          >
+                            <span className="text-xl">{b.emoji}</span>
+                            <span className="mt-1 text-[11px] leading-tight">{b.name}</span>
+                            {!isAvailable && (
+                              <span className="mt-1 text-[9px] font-black text-red-500">Rupture</span>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 </section>
@@ -1030,11 +1040,14 @@ function ProductPage() {
                     {(isCrousty ? croustySauces : detailedSauces).map((s) => {
                       const count = sauceQuantities[s.name] ?? 0;
                       const isSelected = count > 0;
+                      const isAvailable = isIngredientAvailable(stock, s.name);
                       return (
                         <div
                           key={s.id}
                           className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3.5 transition-all duration-150 ${
-                            isSelected
+                            !isAvailable
+                              ? "border-red-300/40 bg-gray-100 opacity-60"
+                              : isSelected
                               ? "border-[#ea580c] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ea580c]/25"
                               : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#ea580c]/50 hover:bg-white"
                           }`}
@@ -1044,7 +1057,11 @@ function ProductPage() {
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF5EE] border border-[#DECBB3] text-2xl shadow-2xs group-hover:scale-105 transition-transform">
                               {s.emoji}
                             </div>
-                            {s.badge && (
+                            {!isAvailable ? (
+                              <span className="rounded-full px-2.5 py-0.5 text-[10px] font-black bg-red-100 text-red-600 border border-red-200">
+                                Rupture
+                              </span>
+                            ) : s.badge && (
                               <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
                                 isSelected
                                   ? "bg-[#ea580c]/15 text-[#c2410c] border-[#ea580c]/30"
@@ -1057,8 +1074,8 @@ function ProductPage() {
 
                           {/* Milieu : Nom complet (sans coupure) & description */}
                           <div
-                            onClick={() => addSauce(s.name)}
-                            className="flex-1 cursor-pointer mb-2.5"
+                            onClick={() => isAvailable && addSauce(s.name)}
+                            className={`flex-1 mb-2.5 ${isAvailable ? "cursor-pointer" : "cursor-not-allowed"}`}
                           >
                             <h3 className="text-sm font-black text-[#2C1D16] leading-tight">
                               {s.name}
@@ -1073,9 +1090,11 @@ function ProductPage() {
                           {/* Bas : Tarif & Stepper stable (hauteur constante) */}
                           <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
                             <span className={`text-[11px] font-black ${
-                              isSelected ? "text-[#ea580c]" : "text-[#7A6857]"
+                              !isAvailable ? "text-red-500 font-bold" : isSelected ? "text-[#ea580c]" : "text-[#7A6857]"
                             }`}>
-                              {isCrousty
+                              {!isAvailable
+                                ? "Victime de son succès"
+                                : isCrousty
                                 ? count === 0
                                   ? "+0,50 € / portion"
                                   : `${count} portion${count > 1 ? "s" : ""} (+${(count * 0.50).toFixed(2)} €)`
@@ -1094,41 +1113,43 @@ function ProductPage() {
                                 : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
                             </span>
 
-                            <div className="flex items-center gap-1.5 shrink-0">
-                              {count > 0 ? (
-                                <div className="flex items-center gap-1 bg-white rounded-full border border-[#ea580c]/40 p-0.5 shadow-2xs">
-                                  <button
-                                    type="button"
-                                    onClick={() => removeSauce(s.name)}
-                                    aria-label={`Diminuer sauce ${s.name}`}
-                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ea580c] font-black hover:bg-[#ea580c] hover:text-white transition active:scale-90 cursor-pointer"
-                                  >
-                                    <Minus className="h-3 w-3 stroke-[3]" />
-                                  </button>
-                                  <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
-                                    {count}
-                                  </span>
+                            {isAvailable && (
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {count > 0 ? (
+                                  <div className="flex items-center gap-1 bg-white rounded-full border border-[#ea580c]/40 p-0.5 shadow-2xs">
+                                    <button
+                                      type="button"
+                                      onClick={() => removeSauce(s.name)}
+                                      aria-label={`Diminuer sauce ${s.name}`}
+                                      className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ea580c] font-black hover:bg-[#ea580c] hover:text-white transition active:scale-90 cursor-pointer"
+                                    >
+                                      <Minus className="h-3 w-3 stroke-[3]" />
+                                    </button>
+                                    <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+                                      {count}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => addSauce(s.name)}
+                                      aria-label={`Ajouter sauce ${s.name}`}
+                                      className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ea580c] text-white font-black hover:bg-[#c2410c] transition active:scale-90 shadow-2xs cursor-pointer"
+                                    >
+                                      <Plus className="h-3 w-3 stroke-[3]" />
+                                    </button>
+                                  </div>
+                                ) : (
                                   <button
                                     type="button"
                                     onClick={() => addSauce(s.name)}
-                                    aria-label={`Ajouter sauce ${s.name}`}
-                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ea580c] text-white font-black hover:bg-[#c2410c] transition active:scale-90 shadow-2xs cursor-pointer"
+                                    aria-label={`Choisir sauce ${s.name}`}
+                                    className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ea580c] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
                                   >
                                     <Plus className="h-3 w-3 stroke-[3]" />
+                                    <span>+ 0,50 €</span>
                                   </button>
-                                </div>
-                              ) : (
-                                <button
-                                  type="button"
-                                  onClick={() => addSauce(s.name)}
-                                  aria-label={`Choisir sauce ${s.name}`}
-                                  className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ea580c] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
-                                >
-                                  <Plus className="h-3 w-3 stroke-[3]" />
-                                  <span>+ 0,50 €</span>
-                                </button>
-                              )}
-                            </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -1161,11 +1182,14 @@ function ProductPage() {
                   <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                     {(isCrousty ? croustyMixIns : detailedMixIns).map((mix) => {
                       const count = mixinQuantities[mix.name] ?? 0;
+                      const isAvailable = isIngredientAvailable(stock, mix.name);
                       return (
                         <div
                           key={mix.id}
                           className={`flex items-center justify-between gap-2 rounded-2xl border-2 p-2.5 text-left transition ${
-                            count > 0
+                            !isAvailable
+                              ? "border-red-300/40 bg-gray-100 opacity-60"
+                              : count > 0
                               ? "border-[#059669] bg-[#ECFDF5] text-[#065F46] shadow-sm"
                               : "border-[#DECBB3] bg-[#FFFDF9] text-[#2C1D16]"
                           }`}
@@ -1174,8 +1198,12 @@ function ProductPage() {
                             <span className="text-xl">{mix.emoji}</span>
                             <div className="min-w-0">
                               <span className="block text-xs font-bold truncate">{mix.name}</span>
-                              <span className="text-[10px] text-[#059669] font-black">
-                                {count > 0 ? `${count}x (+${(count * 1).toFixed(2)}€)` : "+1,00 €"}
+                              <span className={`text-[10px] font-black ${!isAvailable ? "text-red-500" : "text-[#059669]"}`}>
+                                {!isAvailable
+                                  ? "Rupture"
+                                  : count > 0
+                                  ? `${count}x (+${(count * 1).toFixed(2)}€)`
+                                  : "+1,00 €"}
                               </span>
                             </div>
                           </div>
@@ -1187,7 +1215,7 @@ function ProductPage() {
                                   type="button"
                                   onClick={() => removeMixin(mix.name)}
                                   aria-label={`Diminuer ${mix.name}`}
-                                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#059669]/40 bg-white text-[#059669] font-black hover:bg-[#059669] hover:text-white transition"
+                                  className="flex h-6 w-6 items-center justify-center rounded-full border border-[#059669]/40 bg-white text-[#059669] font-black hover:bg-[#059669] hover:text-white transition cursor-pointer"
                                 >
                                   <Minus className="h-3 w-3 stroke-[3]" />
                                 </button>
@@ -1196,14 +1224,16 @@ function ProductPage() {
                                 </span>
                               </>
                             )}
-                            <button
-                              type="button"
-                              onClick={() => addMixin(mix.name)}
-                              aria-label={`Ajouter ${mix.name}`}
-                              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#059669] hover:text-white transition"
-                            >
-                              <Plus className="h-3 w-3 stroke-[3]" />
-                            </button>
+                            {isAvailable && (
+                              <button
+                                type="button"
+                                onClick={() => addMixin(mix.name)}
+                                aria-label={`Ajouter ${mix.name}`}
+                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] font-black hover:bg-[#059669] hover:text-white transition cursor-pointer"
+                              >
+                                <Plus className="h-3 w-3 stroke-[3]" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       );

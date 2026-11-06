@@ -124,24 +124,10 @@ async function ensureRushDbSchema(): Promise<void> {
 }
 
 export function buildRushMessages(durationMinutes: number): { fr: string; en: string; nl: string } {
-  if (durationMinutes === 10) {
-    return {
-      fr: "Oups ! Nous sommes actuellement en plein rush. Notre équipe prépare vos commandes et revient dans 10 minutes. Merci pour votre patience !",
-      en: "Oops! We are currently in the middle of a rush. Our kitchen is preparing current orders and will reopen in 10 minutes. Thank you for your patience!",
-      nl: "Oeps! We zitten midden in een rush. Ons keukenteam bereidt de huidige bestellingen voor en is over 10 minuten terug. Bedankt voor uw geduld!",
-    };
-  }
-  if (durationMinutes === 20) {
-    return {
-      fr: "Nous sommes très sollicités actuellement ! Nous prenons quelques minutes pour préparer vos commandes dans les meilleures conditions. Les commandes reprennent dans 20 minutes.",
-      en: "We are currently experiencing very high demand! We are taking a few minutes to prepare your orders in top conditions. Orders resume in 20 minutes.",
-      nl: "We hebben momenteel te maken met grote drukte! We nemen even de tijd om uw bestellingen in optimale omstandigheden te bereiden. Bestellingen heropenen over 20 minuten.",
-    };
-  }
   return {
-    fr: "Notre cuisine est actuellement en pleine activité ! Nous faisons une petite pause sur les nouvelles commandes. Retrouvez-nous dans 30 minutes.",
-    en: "Our kitchen is currently operating at maximum capacity! We are taking a brief pause on new orders. See you in 30 minutes.",
-    nl: "Onze keuken draait momenteel op volle toeren! We lassen een korte pauze in voor nieuwe bestellingen. Tot over 30 minuten.",
+    fr: `🔥 Prise de commandes en pause — Victime de notre succès ! Notre cuisine prépare vos bowls avec soin. Reprise des commandes dans ${durationMinutes} minutes.`,
+    en: `🔥 Orders paused — Victim of our own success! Our kitchen is preparing current bowls with care. Resuming in ${durationMinutes} minutes.`,
+    nl: `🔥 Bestellingen gepauzeerd — Slachtoffer van ons eigen succes! Onze keuken bereidt uw bowls met zorg. Heropening over ${durationMinutes} minuten.`,
   };
 }
 

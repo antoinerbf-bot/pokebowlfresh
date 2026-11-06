@@ -7,6 +7,8 @@ import { useCart } from "../context/CartContext";
 
 import type { FulfillmentMethod, PaymentMethod } from "../lib/orders";
 import { getDeliveryZone } from "../lib/delivery";
+import { useRushState, formatRushCountdown } from "../components/RushPauseBanner";
+import { getServiceSchedule } from "../lib/opening-hours";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -15,6 +17,8 @@ export const Route = createFileRoute("/checkout")({
 function CheckoutPage() {
   const { items, total, clearCart } = useCart();
   const navigate = useNavigate();
+  const rush = useRushState();
+  const schedule = getServiceSchedule();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -214,7 +218,43 @@ function CheckoutPage() {
           Renseigne tes coordonnées, ton adresse de livraison et le mode de paiement.
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-10 grid gap-8 lg:grid-cols-[1fr_320px]">
+        {/* ── Alerte Rush Cuisine : Pause Active ── */}
+        {rush.isPaused && (
+          <div className="mt-6 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-red-500/20 border-2 border-red-500 p-4 shadow-lg text-left animate-fade-in">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+              </span>
+              <span className="text-xs font-black uppercase tracking-wider text-red-600">
+                🔥 Victime de notre succès · Prise de commandes en pause momentanée
+              </span>
+            </div>
+            <p className="mt-1.5 text-xs text-[#2C1D16] font-bold leading-relaxed">
+              Notre cuisine prépare actuellement les commandes en cours avec soin. La prise de commandes reprendra automatiquement dans :
+            </p>
+            <div className="mt-2 inline-flex items-center gap-2 bg-[#2C1D16] text-[#EADCC9] px-3.5 py-1.5 rounded-xl font-mono text-lg font-black tracking-widest">
+              ⏳ {formatRushCountdown(rush.remainingSeconds)}
+            </div>
+          </div>
+        )}
+
+        {/* ── Information Horaires de Commande (si avant 17h30) ── */}
+        {!rush.isPaused && schedule.status === "before_opening" && (
+          <div className="mt-6 rounded-2xl bg-[#FFF6E8] border border-[#ea580c]/30 p-4 text-left">
+            <div className="flex items-center gap-2">
+              <span className="text-base">🥢</span>
+              <span className="text-xs font-black uppercase tracking-wider text-[#ea580c]">
+                Prise de commandes dès 17h30 · Livraisons 18h00 – 20h30
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-[#6E5A49] font-medium leading-relaxed">
+              Le service commence ce soir à 17h30 (aucune livraison le midi). Vous pouvez valider votre commande, elle sera prise en charge dès l'ouverture du service.
+            </p>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-6">
             <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]">
               <h2 className="text-lg font-black text-[#2C1D16]">Mode de réception</h2>
@@ -494,14 +534,20 @@ function CheckoutPage() {
             </div>
             <button
               type="submit"
-              disabled={loading}
-              className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#ff705f] py-3.5 text-sm font-black text-white transition hover:bg-[#ff705f]/90 disabled:opacity-60"
+              disabled={loading || rush.isPaused}
+              className={`mt-6 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-black text-white transition ${
+                rush.isPaused
+                  ? "bg-slate-700 cursor-not-allowed opacity-75"
+                  : "bg-[#ff705f] hover:bg-[#ff705f]/90 shadow-lg shadow-[#ff705f]/30 cursor-pointer"
+              }`}
             >
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
                   {paymentMethod === "online" ? "Redirection vers Mollie…" : "Traitement…"}
                 </>
+              ) : rush.isPaused ? (
+                `⏸️ Commandes en pause (${formatRushCountdown(rush.remainingSeconds)})`
               ) : paymentMethod === "online" ? (
                 "Payer en ligne via Mollie"
               ) : (
@@ -535,8 +581,8 @@ function CheckoutPage() {
 function buildTimeSlots(fulfillment: FulfillmentMethod): string[] {
   const slots: string[] = [];
   const now = new Date();
-  // Horaires stricts : Prise de commande dès 17h40, début livraisons à 18h00, fin de service à 20h30. Aucune livraison le midi.
-  const startMinute = fulfillment === "delivery" ? 18 * 60 : 17 * 60 + 40;
+  // Horaires officiels PokeNBowl : Prise de commandes dès 17h30, livraisons 18h00 – 20h30. Aucune livraison le midi.
+  const startMinute = fulfillment === "delivery" ? 18 * 60 : 17 * 60 + 30;
   const endMinute = 20 * 60 + 30;
 
   for (let dayOffset = 0; dayOffset <= 7; dayOffset += 1) {

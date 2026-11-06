@@ -61,7 +61,7 @@ import {
 } from "../../lib/epos-client";
 import type { Order } from "../../lib/orders";
 import { openGoogleMapsApp, openWazeApp } from "../../lib/navigation";
-import type { StockItem } from "../../lib/stock";
+import { type StockItem, getItemEmoji } from "../../lib/stock";
 import QRCode from "qrcode";
 
 export const Route = createFileRoute("/pos/")({
@@ -174,35 +174,64 @@ export function PosApplicationPage() {
   }, [rushState.isPaused, rushState.pause?.endsAt]);
 
   const handleSetRushPause = async (durationMinutes: number) => {
+    // Mise à jour optimiste immédiate : pas de latence pour l'opérateur en cuisine
+    const now = Date.now();
+    const endsAt = new Date(now + durationMinutes * 60 * 1000).toISOString();
+    setRushState({
+      isPaused: true,
+      pause: {
+        id: "rush-" + now,
+        durationMinutes,
+        startedAt: new Date(now).toISOString(),
+        endsAt,
+        status: "active",
+        activatedBy: "Caisse POS",
+        messages: {
+          fr: "Victime de notre succès ! Notre cuisine prépare vos bowls avec soin.",
+          en: "Victim of our success! Our kitchen is preparing your bowls.",
+          nl: "Wegens groot succes bereidt onze keuken uw bowls met zorg.",
+        },
+      },
+      remainingSeconds: durationMinutes * 60,
+    });
+    setShowRushModal(false);
+
     try {
       const res = await fetch("/api/rush-pause", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-pos-pin": pin || "1234" },
-        body: JSON.stringify({ action: "pause", durationMinutes }),
+        body: JSON.stringify({ action: "pause", durationMinutes, pin: pin || "1234" }),
       });
       const data = await res.json();
       if (data.success) {
         setRushState(data);
-        setShowRushModal(false);
+      } else {
+        console.warn("Pause API error:", data);
       }
     } catch (e: any) {
-      alert("Erreur mise en pause : " + (e?.message ?? String(e)));
+      console.error("Erreur mise en pause :", e);
     }
   };
 
   const handleResumeRush = async () => {
+    // Reprise immédiate optimiste
+    setRushState({
+      isPaused: false,
+      pause: null,
+      remainingSeconds: 0,
+    });
     try {
       const res = await fetch("/api/rush-pause", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-pos-pin": pin || "1234" },
-        body: JSON.stringify({ action: "resume" }),
+        body: JSON.stringify({ action: "resume", pin: pin || "1234" }),
       });
       const data = await res.json();
       if (data.success) {
         setRushState(data);
       }
     } catch (e: any) {
-      alert("Erreur reprise : " + (e?.message ?? String(e)));
+      console.error("Erreur reprise :", e);
     }
   };
 
@@ -227,12 +256,29 @@ export function PosApplicationPage() {
   };
 
   const handleUpdateStock = async (id: string, updates: Partial<StockItem>) => {
-    setStocks((prev) => prev.map((item) => (item.id === id ? { ...item, ...updates } : item)));
+    const targetStatus = updates.status;
+    const targetAvailable = targetStatus ? targetStatus !== "out_of_stock" : updates.available;
+
+    setStocks((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              ...updates,
+              ...(targetAvailable !== undefined ? { available: targetAvailable } : {}),
+            }
+          : item,
+      ),
+    );
     try {
       await fetch("/api/stock", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-pos-pin": pin || "1234" },
-        body: JSON.stringify({ id, ...updates }),
+        body: JSON.stringify({
+          id,
+          ...updates,
+          available: targetAvailable,
+        }),
       });
     } catch {
       loadStock();
@@ -1095,8 +1141,79 @@ export function PosApplicationPage() {
               <Printer className="h-4 w-4 text-[#ff705f]" />
               <span className="text-[#98aba3]">{config.printerIp}</span>
             </a>
+
+            {/* Pauses Rapides Caisse (Accès 1-clic direct depuis tous les onglets) */}
+            {!rushState.isPaused ? (
+              <div className="hidden sm:flex items-center gap-1.5 bg-black/40 rounded-2xl p-1 border border-white/10">
+                <span className="text-[10px] font-black uppercase text-[#8ea39b] px-1.5">Pause :</span>
+                <button
+                  type="button"
+                  onClick={() => handleSetRushPause(10)}
+                  className="rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer"
+                  title="Pause Rush 10 minutes"
+                >
+                  ⏸️ 10m
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSetRushPause(20)}
+                  className="rounded-xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer"
+                  title="Pause Rush 20 minutes"
+                >
+                  ⏸️ 20m
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSetRushPause(30)}
+                  className="rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer"
+                  title="Pause Rush 30 minutes"
+                >
+                  ⏸️ 30m
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResumeRush}
+                className="hidden sm:flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-3 py-1.5 text-xs font-black shadow-lg shadow-emerald-500/30 animate-pulse active:scale-95 cursor-pointer transition"
+              >
+                ▶️ Réouvrir
+              </button>
+            )}
           </div>
         </header>
+
+        {/* ─── Bannière Pause Rush Active (Visible sur tous les onglets du POS) ─── */}
+        {rushState.isPaused && (
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-amber-600 via-red-600 to-rose-700 px-5 py-2.5 text-white shadow-xl border-b-2 border-red-400">
+            <div className="flex items-center gap-3">
+              <span className="flex h-3 w-3 rounded-full bg-yellow-300 animate-ping" />
+              <div>
+                <span className="text-xs sm:text-sm font-black uppercase tracking-wider block">
+                  🔥 VICTIME DE NOTRE SUCCÈS — PRISE DE COMMANDES EN PAUSE SUR LE SITE
+                </span>
+                <span className="text-[11px] text-white/80">
+                  Le site client affiche le décompte en direct. Les commandes en cuisine restent actives.
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 bg-black/40 px-3.5 py-1.5 rounded-xl border border-white/20">
+                <span className="text-[10px] font-black uppercase text-amber-200">Reprise dans :</span>
+                <span className="font-mono text-lg font-black text-white">
+                  {Math.floor(rushState.remainingSeconds / 60)}:{(rushState.remainingSeconds % 60).toString().padStart(2, "0")}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleResumeRush}
+                className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 cursor-pointer transition active:scale-95"
+              >
+                ▶️ Réouvrir maintenant
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ─── Bannière Alerte : Commandes Non Acceptées ─────────────────── */}
         {unacceptedOrders.length > 0 && (
@@ -1139,27 +1256,42 @@ export function PosApplicationPage() {
           {activeTab === "dashboard" && (
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
               {/* Carte Contrôle Pause Rush */}
-              <div className="rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border border-white/10 p-6 shadow-xl">
+              <div className="rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border-2 border-white/10 p-6 shadow-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
-                  <div>
-                    <span className="text-xs font-black uppercase tracking-wider text-[#ff705f]">Gestion du Rush</span>
-                    <h2 className="text-xl sm:text-2xl font-black text-white">Mise en Pause des Commandes Web</h2>
-                    <p className="text-xs text-[#8ea39b] mt-1">
-                      Permet à la cuisine de souffler. N'annule et ne retarde jamais les commandes déjà validées.
-                    </p>
+                  <div className="flex items-center gap-4">
+                    <div className={`h-14 w-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg transition-transform ${
+                      rushState.isPaused
+                        ? "bg-gradient-to-br from-red-500 to-rose-600 text-white animate-pulse scale-105"
+                        : "bg-gradient-to-br from-amber-500 to-orange-500 text-white"
+                    }`}>
+                      {rushState.isPaused ? "🔥" : "⚡"}
+                    </div>
+                    <div>
+                      <span className="text-xs font-black uppercase tracking-wider text-[#ff705f]">Gestion du Rush Cuisine</span>
+                      <h2 className="text-xl sm:text-2xl font-black text-white">
+                        {rushState.isPaused
+                          ? "Pause Active : Victime de notre succès !"
+                          : "Mise en Pause des Commandes Web"}
+                      </h2>
+                      <p className="text-xs text-[#8ea39b] mt-0.5">
+                        {rushState.isPaused
+                          ? "Le site public affiche 'Victime de notre succès' avec compte à rebours de reprise."
+                          : "Permet à la cuisine de souffler et préparer les commandes sans accumulation."}
+                      </p>
+                    </div>
                   </div>
 
                   {rushState.isPaused ? (
                     <div className="flex items-center gap-3">
                       <div className="text-right">
                         <span className="block text-xs font-black uppercase text-red-400">Reprise dans</span>
-                        <span className="font-mono text-2xl font-black text-white">
+                        <span className="font-mono text-3xl font-black text-white tracking-wider">
                           {Math.floor(rushState.remainingSeconds / 60)}:{(rushState.remainingSeconds % 60).toString().padStart(2, "0")}
                         </span>
                       </div>
                       <button
                         onClick={handleResumeRush}
-                        className="rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg transition"
+                        className="rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition hover:scale-105 active:scale-95 cursor-pointer"
                       >
                         ▶️ Réouvrir maintenant
                       </button>
@@ -1167,7 +1299,7 @@ export function PosApplicationPage() {
                   ) : (
                     <button
                       onClick={() => setShowRushModal(true)}
-                      className="rounded-2xl bg-amber-600 hover:bg-amber-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg transition"
+                      className="rounded-2xl bg-gradient-to-r from-amber-500 to-[#ea580c] hover:from-amber-400 hover:to-orange-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg shadow-amber-500/30 transition hover:scale-105 active:scale-95 cursor-pointer"
                     >
                       ⏸️ Mettre en pause le site
                     </button>
@@ -1177,24 +1309,24 @@ export function PosApplicationPage() {
                 {/* 3 boutons rapides de pause */}
                 {!rushState.isPaused && (
                   <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <span className="text-xs font-bold text-[#8ea39b]">Pauses rapides :</span>
+                    <span className="text-xs font-bold text-[#8ea39b]">Pauses rapides directes :</span>
                     <button
                       onClick={() => handleSetRushPause(10)}
-                      className="rounded-xl bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 text-xs font-black transition"
+                      className="rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
                     >
-                      10 Minutes
+                      ⏸️ 10 Minutes
                     </button>
                     <button
                       onClick={() => handleSetRushPause(20)}
-                      className="rounded-xl bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 text-xs font-black transition"
+                      className="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
                     >
-                      20 Minutes
+                      ⏸️ 20 Minutes
                     </button>
                     <button
                       onClick={() => handleSetRushPause(30)}
-                      className="rounded-xl bg-white/10 hover:bg-white/20 text-white px-3.5 py-1.5 text-xs font-black transition"
+                      className="rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-red-600/20 hover:scale-105 active:scale-95 transition cursor-pointer"
                     >
-                      30 Minutes
+                      ⏸️ 30 Minutes
                     </button>
                   </div>
                 )}
@@ -1340,125 +1472,237 @@ export function PosApplicationPage() {
             </div>
           )}
 
-          {/* ══════ TAB 3 : GESTION DES STOCKS & INGRÉDIENTS ══════ */}
+          {/* ══════ TAB 3 : GESTION DES STOCKS & INGRÉDIENTS (ULTRA-LUDIQUE & PRO) ══════ */}
           {activeTab === "stock" && (
             <div className="flex-1 flex flex-col min-h-0 bg-[#0d1a16] p-4 sm:p-6 overflow-hidden">
-              {/* Entête & Filtres Stocks */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10 shrink-0">
+              {/* Entête & Statistiques Flash */}
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10 shrink-0">
                 <div>
-                  <h2 className="text-xl font-black text-white">Gestion des Stocks en Direct</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40">
+                      🥗 STOCKS EN DIRECT
+                    </span>
+                    <span className="text-xs text-[#8ea39b]">
+                      • Mise à jour instantanée du site pokenbowl.be
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-black text-white mt-1">
+                    Gestion des Produits & Ingrédients
+                  </h2>
                   <p className="text-xs text-[#8ea39b]">
-                    Synchronisation temps réel avec le site client. Les ruptures désactivent immédiatement la commande.
+                    Cliquez sur un bouton coloré pour basculer instantanément : 🟢 Disponible, 🟠 Stock faible, ou 🔴 Victime de son succès.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    placeholder="Filtrer un ingrédient..."
-                    value={stockSearch}
-                    onChange={(e) => setStockSearch(e.target.value)}
-                    className="rounded-xl bg-black/40 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-[#8ea39b]/60 focus:outline-none"
-                  />
+                {/* Compteurs ludiques & recherche */}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="flex items-center gap-2 bg-black/40 rounded-2xl px-3.5 py-2 border border-white/10">
+                    <span className="text-xs font-black text-emerald-400">
+                      🟢 {stocks.filter((s) => s.status === "available" || (!s.status && s.available)).length} Dispos
+                    </span>
+                    <span className="text-white/20">|</span>
+                    <span className={`text-xs font-black ${
+                      stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length > 0
+                        ? "text-red-400 animate-pulse"
+                        : "text-white/60"
+                    }`}>
+                      🔴 {stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length} Victimes du succès
+                    </span>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="🔍 Filtrer un ingrédient..."
+                      value={stockSearch}
+                      onChange={(e) => setStockSearch(e.target.value)}
+                      className="rounded-2xl bg-black/40 border border-white/15 pl-4 pr-9 py-2 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f] w-48 sm:w-60"
+                    />
+                    {stockSearch && (
+                      <button
+                        onClick={() => setStockSearch("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-xs"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
                   <button
                     onClick={loadStock}
-                    className="rounded-xl bg-white/10 hover:bg-white/20 p-2 text-white"
-                    title="Actualiser"
+                    className="rounded-2xl bg-white/10 hover:bg-white/20 p-2.5 text-white transition active:scale-95"
+                    title="Actualiser les stocks"
                   >
                     <RefreshCw className="h-4 w-4" />
                   </button>
                 </div>
               </div>
 
-              {/* Catégories de filtres */}
-              <div className="flex gap-2 py-3 overflow-x-auto shrink-0">
+              {/* Catégories de filtres super colorées et tactiles */}
+              <div className="flex gap-2 py-3 overflow-x-auto shrink-0 no-scrollbar">
                 {[
-                  { id: "all", label: "Tous" },
-                  { id: "bowls", label: "Bowls Signatures" },
-                  { id: "vegetables", label: "Légumes & Mix-ins" },
-                  { id: "proteins", label: "Protéines" },
-                  { id: "sauces", label: "Sauces" },
-                  { id: "toppings", label: "Toppings" },
-                  { id: "drinks", label: "Boissons" },
-                  { id: "desserts", label: "Desserts" },
-                ].map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setStockCategory(cat.id)}
-                    className={`rounded-xl px-3.5 py-1.5 text-xs font-black transition shrink-0 cursor-pointer ${
-                      stockCategory === cat.id ? "bg-[#ff705f] text-white shadow" : "bg-black/30 text-[#8ea39b] hover:text-white"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
+                  { id: "all", label: "Tous", emoji: "✨", count: stocks.length },
+                  { id: "bowl", label: "Bowls Signatures", emoji: "🥣", count: stocks.filter((s) => s.category === "bowl").length },
+                  { id: "base", label: "Bases", emoji: "🍚", count: stocks.filter((s) => s.category === "base").length },
+                  { id: "protein", label: "Protéines", emoji: "🍗", count: stocks.filter((s) => s.category === "protein").length },
+                  { id: "ingredient", label: "Légumes & Mix-ins", emoji: "🥑", count: stocks.filter((s) => s.category === "ingredient").length },
+                  { id: "sauce", label: "Sauces & Nappages", emoji: "🍯", count: stocks.filter((s) => s.category === "sauce").length },
+                  { id: "topping", label: "Toppings", emoji: "🥜", count: stocks.filter((s) => s.category === "topping").length },
+                  { id: "drink", label: "Boissons", emoji: "🥤", count: stocks.filter((s) => s.category === "drink").length },
+                  { id: "dessert", label: "Desserts", emoji: "🍰", count: stocks.filter((s) => s.category === "dessert").length },
+                ].map((cat) => {
+                  const isActive =
+                    stockCategory === cat.id ||
+                    (cat.id === "bowl" && stockCategory === "bowls") ||
+                    (cat.id === "base" && stockCategory === "bases") ||
+                    (cat.id === "protein" && stockCategory === "proteins") ||
+                    (cat.id === "ingredient" && stockCategory === "vegetables") ||
+                    (cat.id === "sauce" && stockCategory === "sauces") ||
+                    (cat.id === "topping" && stockCategory === "toppings") ||
+                    (cat.id === "drink" && stockCategory === "drinks") ||
+                    (cat.id === "dessert" && stockCategory === "desserts");
+
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setStockCategory(cat.id)}
+                      className={`flex items-center gap-2 rounded-2xl px-4 py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${
+                        isActive
+                          ? "bg-gradient-to-r from-[#ff705f] to-[#ea580c] text-white shadow-lg shadow-[#ea580c]/30 scale-105"
+                          : "bg-[#142822] text-[#8ea39b] hover:text-white hover:bg-[#1a352d] border border-white/5"
+                      }`}
+                    >
+                      <span className="text-base">{cat.emoji}</span>
+                      <span>{cat.label}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] ${
+                        isActive ? "bg-white/25 text-white" : "bg-black/30 text-white/50"
+                      }`}>
+                        {cat.count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Grille des Produits & Ingrédients */}
-              <div className="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+              <div className="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 pt-2 pb-6">
                 {stocks
-                  .filter((s) => (stockCategory === "all" ? true : s.category === stockCategory))
+                  .filter((s) => {
+                    if (stockCategory === "all") return true;
+                    if (stockCategory === "bowl" || stockCategory === "bowls") return s.category === "bowl";
+                    if (stockCategory === "base" || stockCategory === "bases") return s.category === "base";
+                    if (stockCategory === "protein" || stockCategory === "proteins") return s.category === "protein";
+                    if (stockCategory === "ingredient" || stockCategory === "vegetables") return s.category === "ingredient";
+                    if (stockCategory === "sauce" || stockCategory === "sauces") return s.category === "sauce";
+                    if (stockCategory === "topping" || stockCategory === "toppings") return s.category === "topping";
+                    if (stockCategory === "drink" || stockCategory === "drinks") return s.category === "drink";
+                    if (stockCategory === "dessert" || stockCategory === "desserts") return s.category === "dessert";
+                    return s.category === stockCategory;
+                  })
                   .filter((s) => (!stockSearch ? true : s.name.toLowerCase().includes(stockSearch.toLowerCase())))
-                  .map((item) => (
-                    <div
-                      key={item.id}
-                      className="rounded-2xl bg-[#142822] border border-white/10 p-4 space-y-3 shadow flex flex-col justify-between"
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#8ea39b]">
-                            {item.category}
-                          </span>
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase ${
-                              item.status === "available"
-                                ? "bg-emerald-500/20 text-emerald-300"
-                                : item.status === "low"
-                                ? "bg-amber-500/20 text-amber-300"
-                                : "bg-red-500/20 text-red-300"
+                  .map((item) => {
+                    const isOutOfStock = item.status === "out_of_stock" || item.available === false;
+                    const isLow = item.status === "low";
+                    const isAvailable = !isOutOfStock && !isLow;
+                    const emoji = getItemEmoji(item);
+
+                    return (
+                      <div
+                        key={item.id}
+                        className={`rounded-3xl p-4 flex flex-col justify-between transition-all duration-200 border-2 shadow-lg ${
+                          isOutOfStock
+                            ? "bg-[#251313] border-red-500/80 shadow-red-500/20"
+                            : isLow
+                            ? "bg-[#251d10] border-amber-500/60 shadow-amber-500/20"
+                            : "bg-[#142822] border-emerald-500/30 hover:border-emerald-500/60"
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2.5">
+                              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-2xl shadow-inner">
+                                {emoji}
+                              </span>
+                              <div className="min-w-0">
+                                <span className="block text-[10px] font-black uppercase tracking-wider text-[#8ea39b] truncate">
+                                  {item.category === "bowl"
+                                    ? "Bowl"
+                                    : item.category === "base"
+                                    ? "Base"
+                                    : item.category === "protein"
+                                    ? "Protéine"
+                                    : item.category === "ingredient"
+                                    ? "Légume / Mix-in"
+                                    : item.category === "sauce"
+                                    ? "Sauce"
+                                    : item.category === "topping"
+                                    ? "Topping"
+                                    : item.category === "drink"
+                                    ? "Boisson"
+                                    : "Dessert"}
+                                </span>
+                                <h4 className="font-black text-sm text-white truncate" title={item.name}>
+                                  {item.name}
+                                </h4>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Badge de statut actuel */}
+                          <div className="mt-3 flex items-center justify-between">
+                            <span
+                              className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${
+                                isOutOfStock
+                                  ? "bg-red-500 text-white shadow-md shadow-red-500/40 animate-pulse"
+                                  : isLow
+                                  ? "bg-amber-500 text-black font-black shadow-md shadow-amber-500/40"
+                                  : "bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40"
+                              }`}
+                            >
+                              {isOutOfStock ? "🔴 Victime de son succès" : isLow ? "🟠 Stock Faible" : "🟢 Disponible"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* 3 Grands Boutons Tactiles Instantanés */}
+                        <div className="grid grid-cols-3 gap-1.5 pt-3 mt-3 border-t border-white/10">
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateStock(item.id, { status: "available", available: true })}
+                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${
+                              isAvailable
+                                ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-emerald-300 scale-102"
+                                : "bg-white/5 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
                             }`}
                           >
-                            {item.status === "available" ? "Disponible" : item.status === "low" ? "Stock faible" : "Rupture"}
-                          </span>
+                            🟢 Dispo
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateStock(item.id, { status: "low", available: true })}
+                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${
+                              isLow
+                                ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/40 ring-2 ring-amber-300 scale-102"
+                                : "bg-white/5 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30"
+                            }`}
+                          >
+                            🟠 Faible
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateStock(item.id, { status: "out_of_stock", available: false })}
+                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${
+                              isOutOfStock
+                                ? "bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400 scale-102 animate-pulse"
+                                : "bg-white/5 text-red-400 hover:bg-red-500/20 border border-red-500/30"
+                            }`}
+                          >
+                            🔴 Rupture
+                          </button>
                         </div>
-                        <h4 className="font-black text-sm text-white mt-1">{item.name}</h4>
                       </div>
-
-                      {/* 3 boutons instantanés de statut */}
-                      <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-white/5">
-                        <button
-                          onClick={() => handleUpdateStock(item.id, { status: "available" })}
-                          className={`rounded-xl py-1.5 text-[11px] font-black transition cursor-pointer ${
-                            item.status === "available"
-                              ? "bg-emerald-600 text-white shadow"
-                              : "bg-white/5 text-[#8ea39b] hover:bg-white/10"
-                          }`}
-                        >
-                          🟢 Dispo
-                        </button>
-                        <button
-                          onClick={() => handleUpdateStock(item.id, { status: "low" })}
-                          className={`rounded-xl py-1.5 text-[11px] font-black transition cursor-pointer ${
-                            item.status === "low"
-                              ? "bg-amber-600 text-white shadow"
-                              : "bg-white/5 text-[#8ea39b] hover:bg-white/10"
-                          }`}
-                        >
-                          🟠 Faible
-                        </button>
-                        <button
-                          onClick={() => handleUpdateStock(item.id, { status: "out_of_stock" })}
-                          className={`rounded-xl py-1.5 text-[11px] font-black transition cursor-pointer ${
-                            item.status === "out_of_stock"
-                              ? "bg-red-600 text-white shadow"
-                              : "bg-white/5 text-[#8ea39b] hover:bg-white/10"
-                          }`}
-                        >
-                          🔴 Rupture
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
           )}
@@ -2008,22 +2252,25 @@ export function PosApplicationPage() {
                 Les clients verront un bandeau dynamique avec le temps restant avant réouverture. Les commandes en cours ne sont pas affectées.
               </p>
 
-              <div className="grid gap-2.5 pt-2">
+              <div className="grid gap-3 pt-2">
                 <button
+                  type="button"
                   onClick={() => handleSetRushPause(10)}
-                  className="w-full rounded-2xl bg-gradient-to-r from-amber-600 to-[#ea580c] py-3 text-sm font-black uppercase text-white shadow hover:scale-[1.02] active:scale-98 transition"
+                  className="w-full rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 py-3.5 text-sm font-black uppercase text-white shadow-lg shadow-amber-500/25 hover:scale-[1.02] active:scale-95 transition cursor-pointer"
                 >
                   ⏸️ Pause 10 Minutes
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleSetRushPause(20)}
-                  className="w-full rounded-2xl bg-gradient-to-r from-amber-600 to-[#ea580c] py-3 text-sm font-black uppercase text-white shadow hover:scale-[1.02] active:scale-98 transition"
+                  className="w-full rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 py-3.5 text-sm font-black uppercase text-white shadow-lg shadow-orange-500/25 hover:scale-[1.02] active:scale-95 transition cursor-pointer"
                 >
                   ⏸️ Pause 20 Minutes
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleSetRushPause(30)}
-                  className="w-full rounded-2xl bg-gradient-to-r from-amber-600 to-[#ea580c] py-3 text-sm font-black uppercase text-white shadow hover:scale-[1.02] active:scale-98 transition"
+                  className="w-full rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 py-3.5 text-sm font-black uppercase text-white shadow-lg shadow-red-600/30 hover:scale-[1.02] active:scale-95 transition cursor-pointer"
                 >
                   ⏸️ Pause 30 Minutes
                 </button>

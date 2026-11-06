@@ -11,7 +11,7 @@
 
 export const OFFICIAL_HOURS = {
   ORDER_OPEN_HOUR: 17,
-  ORDER_OPEN_MINUTE: 40,
+  ORDER_OPEN_MINUTE: 30,
   DELIVERY_START_HOUR: 18,
   DELIVERY_START_MINUTE: 0,
   SERVICE_END_HOUR: 20,
@@ -161,9 +161,9 @@ export function getServiceSchedule(nowDate: Date = new Date()): ServiceScheduleI
 
   const messages = {
     before_opening: {
-      fr: "Ce soir, c'est PokeNBowl ! Les commandes ouvrent à 17h40. Prépare ton bowl !",
-      en: "Tonight is PokeNBowl night! Orders open at 5:40 PM. Prepare your bowl!",
-      nl: "Vanavond is het PokeNBowl-tijd! Bestellingen openen om 17:40. Stel je bowl samen!",
+      fr: "Ce soir, c'est PokeNBowl ! Les commandes ouvrent à 17h30. Prépare ton bowl !",
+      en: "Tonight is PokeNBowl night! Orders open at 5:30 PM. Prepare your bowl!",
+      nl: "Vanavond is het PokeNBowl-tijd! Bestellingen openen om 17:30. Stel je bowl samen!",
     },
     open: {
       fr: "C'est parti ! Les commandes sont ouvertes. Fais-toi plaisir !",
@@ -179,7 +179,7 @@ export function getServiceSchedule(nowDate: Date = new Date()): ServiceScheduleI
 
   const subMessages = {
     before_opening: {
-      fr: "Prises de commandes dès 17h40 · Début des livraisons à 18h00 · Aucune livraison le midi.",
+      fr: "Prises de commandes dès 17h30 · Début des livraisons à 18h00 · Aucune livraison le midi.",
       en: "Orders start at 5:40 PM · Deliveries start at 6:00 PM · No lunch deliveries.",
       nl: "Bestellingen vanaf 17:40 · Leveringen vanaf 18:00 · Geen levering 's middags.",
     },
@@ -195,9 +195,9 @@ export function getServiceSchedule(nowDate: Date = new Date()): ServiceScheduleI
         : "Bestellingen geopend! Leveringen starten stipt om 18:00 tot 20:30.",
     },
     closed_for_day: {
-      fr: "Service terminé pour aujourd'hui. Réouverture des commandes demain dès 17h40 !",
-      en: "Service finished for today. Reopening tomorrow from 5:40 PM!",
-      nl: "Dienst voor vandaag afgelopen. Heropening morgen vanaf 17:40!",
+      fr: "Service terminé pour aujourd'hui. Réouverture des commandes demain dès 17h30 !",
+      en: "Service finished for today. Reopening tomorrow from 5:30 PM!",
+      nl: "Dienst voor vandaag afgelopen. Heropening morgen vanaf 17:30!",
     },
   }[status];
 

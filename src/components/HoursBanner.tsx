@@ -87,7 +87,7 @@ export function HoursBanner({ compact = false }: { compact?: boolean }) {
                 {schedule.status === "open"
                   ? "Commandes Ouvertes"
                   : schedule.status === "before_opening"
-                  ? "Ouverture ce soir à 17h40"
+                  ? "Ouverture ce soir à 17h30"
                   : "Fermé pour aujourd'hui"}
               </span>
 

@@ -15,7 +15,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "../context/I18nContext";
 import { CartProvider } from "../context/CartContext";
 import { RushPauseBanner } from "../components/RushPauseBanner";
-import { HoursMarketingModal } from "../components/HoursMarketingModal";
 
 function NotFoundComponent() {
   return (
@@ -207,7 +206,6 @@ function RootComponent() {
       <I18nProvider>
         <CartProvider>
           <RushPauseBanner />
-          <HoursMarketingModal />
           {/* Required: nested routes render here. Suspense prevents lazy route chunks from bubbling into CatchBoundary. */}
           <Suspense fallback={null}>
             <Outlet />

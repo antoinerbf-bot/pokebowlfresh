@@ -1277,30 +1277,6 @@ var Users = createLucideIcon("users", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
-var UtensilsCrossed = createLucideIcon("utensils-crossed", [
-	["path", {
-		d: "m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8",
-		key: "n7qcjb"
-	}],
-	["path", {
-		d: "M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7",
-		key: "d0u48b"
-	}],
-	["path", {
-		d: "m2.1 21.8 6.4-6.3",
-		key: "yn04lh"
-	}],
-	["path", {
-		d: "m19 5-7 7",
-		key: "194lzd"
-	}]
-]);
-/**
-* @license lucide-react v0.575.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
 var Volume2 = createLucideIcon("volume-2", [
 	["path", {
 		d: "M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z",
@@ -1355,4 +1331,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { CircleAlert as $, Navigation as A, Heart as B, RotateCcw as C, Phone as D, Plus as E, MapPin as F, CupSoda as G, Flame as H, LoaderCircle as I, Compass as J, CreditCard as K, LayoutDashboard as L, Minus as M, MessageCircle as N, PhoneCall as O, Menu as P, CircleCheckBig as Q, Layers as R, Salad as S, Printer as T, FileSpreadsheet as U, Funnel as V, ExternalLink as W, CircleQuestionMark as X, Clock as Y, CircleCheck as Z, Shield as _, Users as a, Calendar as at, Settings as b, TrendingUp as c, Bell as ct, Store as d, ArrowLeft as dt, ChevronRight as et, Star as f, ShoppingBag as g, ShoppingCart as h, UtensilsCrossed as i, Check as it, Moon as j, Pause as k, Trash2 as l, Award as lt, SlidersHorizontal as m, VolumeX as n, ChevronDown as nt, Truck as o, BriefcaseBusiness as ot, Sparkles as p, CookingPot as q, Volume2 as r, ChefHat as rt, TriangleAlert as s, BookOpen as st, X as t, ChevronLeft as tt, Sun as u, ArrowRight as ut, ShieldCheck as v, RefreshCw as w, Search as x, Share2 as y, Instagram as z };
+export { ChevronRight as $, Moon as A, Funnel as B, RefreshCw as C, PhoneCall as D, Phone as E, LoaderCircle as F, CreditCard as G, FileSpreadsheet as H, LayoutDashboard as I, Clock as J, CookingPot as K, Layers as L, MessageCircle as M, Menu as N, Pause as O, MapPin as P, CircleAlert as Q, Instagram as R, RotateCcw as S, Plus as T, ExternalLink as U, Flame as V, CupSoda as W, CircleCheck as X, CircleQuestionMark as Y, CircleCheckBig as Z, ShieldCheck as _, Truck as a, BriefcaseBusiness as at, Search as b, Trash2 as c, Award as ct, Star as d, ChevronLeft as et, Sparkles as f, Shield as g, ShoppingBag as h, Users as i, Calendar as it, Minus as j, Navigation as k, Sun as l, ArrowRight as lt, ShoppingCart as m, VolumeX as n, ChefHat as nt, TriangleAlert as o, BookOpen as ot, SlidersHorizontal as p, Compass as q, Volume2 as r, Check as rt, TrendingUp as s, Bell as st, X as t, ChevronDown as tt, Store as u, ArrowLeft as ut, Share2 as v, Printer as w, Salad as x, Settings as y, Heart as z };

@@ -16,6 +16,8 @@ import {
 import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { useTranslation } from "../context/I18nContext";
+import { useStock } from "../hooks/useStock";
+import { isIngredientAvailable } from "../lib/stock";
 
 const SUR_MESURE_SCHEMA = {
   "@context": "https://schema.org",
@@ -72,6 +74,7 @@ const INCLUDED_MIX_INS = 5;
 function SurMesurePage() {
   const { t, language, setLanguage } = useTranslation();
   const { addItem, setIsCartOpen, items } = useCart();
+  const { stock } = useStock();
 
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -473,25 +476,31 @@ function SurMesurePage() {
               </div>
               <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                 {detailedBases.map((base) => {
+                  const isAvailable = isIngredientAvailable(stock, base.name);
                   const isSelected = selectedBase?.id === base.id;
                   return (
                     <button
                       key={base.id}
                       type="button"
-                      onClick={() => setSelectedBase(base)}
+                      disabled={!isAvailable}
+                      onClick={() => isAvailable && setSelectedBase(base)}
                       className={[
-                        "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left transition-all duration-200 cursor-pointer",
-                        isSelected
-                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
+                        "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left transition-all duration-200",
+                        !isAvailable
+                          ? "border-red-300/40 bg-gray-100 opacity-60 cursor-not-allowed"
+                          : isSelected
+                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm cursor-pointer"
+                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40 cursor-pointer",
                       ].join(" ")}
                     >
                       <span className="text-2xl">{base.emoji}</span>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-black text-[#2C1D16]">{base.name}</p>
-                        <p className="text-[10px] font-bold text-[#6E5A49]">Inclus</p>
+                        <p className={`text-[10px] font-bold ${!isAvailable ? "text-red-500 font-black" : "text-[#6E5A49]"}`}>
+                          {!isAvailable ? "Victime du succès" : "Inclus"}
+                        </p>
                       </div>
-                      {isSelected && (
+                      {isSelected && isAvailable && (
                         <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#ff705f] text-white">
                           <Check className="h-3 w-3 stroke-[3]" />
                         </div>
@@ -558,29 +567,35 @@ function SurMesurePage() {
                 {detailedMixIns.map((mixIn) => {
                   const q = mixinQuantities[mixIn.name] ?? 0;
                   const isFeta = mixIn.id === "feta" || mixIn.name.trim().toLowerCase() === "feta";
+                  const isAvailable = isIngredientAvailable(stock, mixIn.name);
 
                   return (
                     <div
                       key={mixIn.id}
                       className={[
                         "flex items-center justify-between gap-2 rounded-2xl border-2 p-2.5 transition-all duration-150",
-                        q > 0
+                        !isAvailable
+                          ? "border-red-300/40 bg-gray-100 opacity-60"
+                          : q > 0
                           ? "border-[#ff705f] bg-white shadow-sm"
                           : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:bg-[#F3E9DA]",
                       ].join(" ")}
                     >
                       <button
                         type="button"
-                        onClick={() => addMixIn(mixIn.name)}
-                        className="flex items-center gap-2 min-w-0 flex-1 text-left cursor-pointer"
+                        disabled={!isAvailable}
+                        onClick={() => isAvailable && addMixIn(mixIn.name)}
+                        className={`flex items-center gap-2 min-w-0 flex-1 text-left ${isAvailable ? "cursor-pointer" : "cursor-not-allowed"}`}
                       >
                         <span className="text-xl shrink-0">{mixIn.emoji}</span>
                         <div className="min-w-0 flex-1">
                           <span className="block truncate text-xs font-black text-[#2C1D16]">
                             {mixIn.name}
                           </span>
-                          <span className="block text-[10px] font-bold text-[#6E5A49]">
-                            {isFeta
+                          <span className={`block text-[10px] font-bold ${!isAvailable ? "text-red-500 font-black" : "text-[#6E5A49]"}`}>
+                            {!isAvailable
+                              ? "Victime du succès"
+                              : isFeta
                               ? "+1,00 € / portion"
                               : q > 0
                                 ? `${q} portion${q > 1 ? "s" : ""}`
@@ -606,13 +621,15 @@ function SurMesurePage() {
                             </span>
                           </>
                         )}
-                        <button
-                          type="button"
-                          onClick={() => addMixIn(mixIn.name)}
-                          className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                        >
-                          <Plus className="h-3 w-3 stroke-[3]" />
-                        </button>
+                        {isAvailable && (
+                          <button
+                            type="button"
+                            onClick={() => addMixIn(mixIn.name)}
+                            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                          >
+                            <Plus className="h-3 w-3 stroke-[3]" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
@@ -634,21 +651,29 @@ function SurMesurePage() {
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {detailedProteins.map((prot) => {
                   const isSelected = selectedProtein?.id === prot.id;
+                  const isAvailable = isIngredientAvailable(stock, prot.name);
                   return (
                     <button
                       key={prot.id}
                       type="button"
-                      onClick={() => setSelectedProtein(prot)}
+                      disabled={!isAvailable}
+                      onClick={() => isAvailable && setSelectedProtein(prot)}
                       className={[
-                        "flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center transition-all duration-200 cursor-pointer",
-                        isSelected
-                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
+                        "flex flex-col items-center justify-center rounded-2xl border-2 p-4 text-center transition-all duration-200",
+                        !isAvailable
+                          ? "border-red-300/40 bg-gray-100 opacity-60 cursor-not-allowed"
+                          : isSelected
+                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm cursor-pointer"
+                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40 cursor-pointer",
                       ].join(" ")}
                     >
                       <span className="text-3xl mb-1">{prot.emoji}</span>
                       <p className="text-sm font-black text-[#2C1D16]">{prot.name}</p>
-                      {prot.extraPrice ? (
+                      {!isAvailable ? (
+                        <span className="mt-1 rounded-full bg-red-100 px-2.5 py-0.5 text-[10px] font-black text-red-600">
+                          Victime du succès
+                        </span>
+                      ) : prot.extraPrice ? (
                         <span className="mt-1 rounded-full bg-[#ff705f] px-2.5 py-0.5 text-[10px] font-black text-white">
                           +{prot.extraPrice.toFixed(2)} €
                         </span>
@@ -683,13 +708,17 @@ function SurMesurePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {detailedProteins.map((prot) => {
                     const q = extraProteins[prot.name] ?? 0;
+                    const isAvailable = isIngredientAvailable(stock, prot.name);
                     return (
                       <div
                         key={`extra-${prot.id}`}
-                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${q > 0
+                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
+                          !isAvailable
+                            ? "border-red-300/40 bg-gray-100 opacity-60"
+                            : q > 0
                             ? "border-[#ff705f] bg-white shadow-sm"
                             : "border-[#DECBB3] bg-[#FAF5EE]"
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <span className="text-xl">{prot.emoji}</span>
@@ -697,8 +726,8 @@ function SurMesurePage() {
                             <span className="block text-xs font-black text-[#2C1D16] truncate">
                               {prot.name}
                             </span>
-                            <span className="text-[10px] font-bold text-[#ff705f]">
-                              {q > 0 ? `${q}× (+${(q * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
+                            <span className={`text-[10px] font-bold ${!isAvailable ? "text-red-500 font-black" : "text-[#ff705f]"}`}>
+                              {!isAvailable ? "Rupture" : q > 0 ? `${q}× (+${(q * 2.5).toFixed(2)} €)` : "+2,50 € / portion"}
                             </span>
                           </div>
                         </div>
@@ -718,13 +747,15 @@ function SurMesurePage() {
                               </span>
                             </>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => addExtraProtein(prot.name)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
-                          >
-                            <Plus className="h-3.5 w-3.5 stroke-[3]" />
-                          </button>
+                          {isAvailable && (
+                            <button
+                              type="button"
+                              onClick={() => addExtraProtein(prot.name)}
+                              className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2C1D16] text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition cursor-pointer"
+                            >
+                              <Plus className="h-3.5 w-3.5 stroke-[3]" />
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
@@ -772,20 +803,28 @@ function SurMesurePage() {
                 {detailedSauces.map((sauce) => {
                   const count = sauceQuantities[sauce.name] ?? 0;
                   const isSelected = count > 0;
+                  const isAvailable = isIngredientAvailable(stock, sauce.name);
                   return (
                     <div
                       key={sauce.id}
-                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${isSelected
+                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
+                        !isAvailable
+                          ? "border-red-300/40 bg-gray-100 opacity-60"
+                          : isSelected
                           ? "border-[#ff705f] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ff705f]/25"
                           : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/50 hover:bg-white"
-                        }`}
+                      }`}
                     >
                       {/* Haut : Icône sauce + Badge profil goût */}
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF5EE] border border-[#DECBB3] text-2xl shadow-2xs group-hover:scale-105 transition-transform">
                           {sauce.emoji}
                         </div>
-                        {sauce.badge && (
+                        {!isAvailable ? (
+                          <span className="rounded-full px-2.5 py-0.5 text-[10px] font-black bg-red-100 text-red-600 border border-red-200">
+                            Rupture
+                          </span>
+                        ) : sauce.badge && (
                           <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${isSelected
                               ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
                               : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
@@ -797,8 +836,8 @@ function SurMesurePage() {
 
                       {/* Milieu : Nom complet & description */}
                       <div
-                        onClick={() => addSauce(sauce.name)}
-                        className="flex-1 cursor-pointer mb-2.5"
+                        onClick={() => isAvailable && addSauce(sauce.name)}
+                        className={`flex-1 mb-2.5 ${isAvailable ? "cursor-pointer" : "cursor-not-allowed"}`}
                       >
                         <h3 className="text-sm font-black text-[#2C1D16] leading-tight">
                           {sauce.name}
@@ -812,9 +851,12 @@ function SurMesurePage() {
 
                       {/* Bas : Tarif & Stepper stable (hauteur constante) */}
                       <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
-                        <span className={`text-[11px] font-black ${isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
-                          }`}>
-                          {count === 0
+                        <span className={`text-[11px] font-black ${
+                          !isAvailable ? "text-red-500 font-bold" : isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                        }`}>
+                          {!isAvailable
+                            ? "Victime de son succès"
+                            : count === 0
                             ? totalSauceUnits <= 1
                               ? "1ère offerte"
                               : "+0,50 €"
@@ -823,41 +865,43 @@ function SurMesurePage() {
                               : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
                         </span>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {count > 0 ? (
-                            <div className="flex items-center gap-1 bg-white rounded-full border border-[#ff705f]/40 p-0.5 shadow-2xs">
-                              <button
-                                type="button"
-                                onClick={() => removeSauce(sauce.name)}
-                                aria-label={`Diminuer sauce ${sauce.name}`}
-                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-90 cursor-pointer"
-                              >
-                                <Minus className="h-3 w-3 stroke-[3]" />
-                              </button>
-                              <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
-                                {count}
-                              </span>
+                        {isAvailable && (
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {count > 0 ? (
+                              <div className="flex items-center gap-1 bg-white rounded-full border border-[#ff705f]/40 p-0.5 shadow-2xs">
+                                <button
+                                  type="button"
+                                  onClick={() => removeSauce(sauce.name)}
+                                  aria-label={`Diminuer sauce ${sauce.name}`}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-90 cursor-pointer"
+                                >
+                                  <Minus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                                <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+                                  {count}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => addSauce(sauce.name)}
+                                  aria-label={`Ajouter sauce ${sauce.name}`}
+                                  className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-90 shadow-2xs cursor-pointer"
+                                >
+                                  <Plus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                              </div>
+                            ) : (
                               <button
                                 type="button"
                                 onClick={() => addSauce(sauce.name)}
-                                aria-label={`Ajouter sauce ${sauce.name}`}
-                                className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-90 shadow-2xs cursor-pointer"
+                                aria-label={`Choisir sauce ${sauce.name}`}
+                                className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
                               >
                                 <Plus className="h-3 w-3 stroke-[3]" />
+                                <span>{totalSauceUnits < 1 ? "Choisir" : "+ 0,50 €"}</span>
                               </button>
-                            </div>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => addSauce(sauce.name)}
-                              aria-label={`Choisir sauce ${sauce.name}`}
-                              className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
-                            >
-                              <Plus className="h-3 w-3 stroke-[3]" />
-                              <span>Choisir</span>
-                            </button>
-                          )}
-                        </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -889,12 +933,15 @@ function SurMesurePage() {
                 {toppings.map((top) => {
                   const q = toppingQuantities[top.name] ?? 0;
                   const isSelected = q > 0;
+                  const isAvailable = isIngredientAvailable(stock, top.name);
                   return (
                     <div
                       key={top.id}
                       className={[
                         "flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-200",
-                        isSelected
+                        !isAvailable
+                          ? "border-red-300/40 bg-gray-100 opacity-60"
+                          : isSelected
                           ? "border-[#ff705f] bg-white shadow-sm"
                           : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
                       ].join(" ")}
@@ -903,50 +950,52 @@ function SurMesurePage() {
                         <span className="text-2xl">{top.emoji}</span>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-xs font-black text-[#2C1D16]">{top.name}</p>
-                          <p className="text-[10px] font-black text-[#ff705f]">
-                            {q === 0 ? "0,50 € / portion" : `${q} portion${q > 1 ? "s" : ""}`}
+                          <p className={`text-[10px] font-black ${!isAvailable ? "text-red-500 font-black" : "text-[#ff705f]"}`}>
+                            {!isAvailable ? "Victime du succès" : q === 0 ? "0,50 € / portion" : `${q} portion${q > 1 ? "s" : ""}`}
                           </p>
                         </div>
                       </div>
 
                       <div className="mt-2.5 flex items-center justify-between border-t border-[#DECBB3] pt-2">
                         <span className="text-[10px] font-bold text-[#6E5A49]">
-                          {q > 0 ? `x${q}` : "Extra +0,50 €"}
+                          {!isAvailable ? "Rupture" : q > 0 ? `x${q}` : "Extra +0,50 €"}
                         </span>
-                        <div className="flex items-center gap-1.5">
-                          {q > 0 ? (
-                            <>
-                              <button
-                                type="button"
-                                onClick={() => removeTopping(top.name)}
-                                className="flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm cursor-pointer"
-                                aria-label="Diminuer"
-                              >
-                                <Minus className="h-3 w-3 stroke-[3]" />
-                              </button>
-                              <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
-                                {q}
-                              </span>
+                        {isAvailable && (
+                          <div className="flex items-center gap-1.5">
+                            {q > 0 ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => removeTopping(top.name)}
+                                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white border border-[#ff705f]/40 text-[#ff705f] font-bold hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm cursor-pointer"
+                                  aria-label="Diminuer"
+                                >
+                                  <Minus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                                <span className="w-5 text-center text-xs font-black text-[#2C1D16]">
+                                  {q}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => addTopping(top.name)}
+                                  className="flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm cursor-pointer"
+                                  aria-label="Augmenter"
+                                >
+                                  <Plus className="h-3 w-3 stroke-[3]" />
+                                </button>
+                              </>
+                            ) : (
                               <button
                                 type="button"
                                 onClick={() => addTopping(top.name)}
-                                className="flex h-7 w-7 items-center justify-center rounded-full bg-[#ff705f] text-white font-bold hover:bg-[#ff5542] transition active:scale-95 shadow-sm cursor-pointer"
-                                aria-label="Augmenter"
+                                className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[10px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm cursor-pointer"
                               >
-                                <Plus className="h-3 w-3 stroke-[3]" />
+                                <Plus className="h-3 w-3" />
+                                <span>Ajouter</span>
                               </button>
-                            </>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => addTopping(top.name)}
-                              className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[10px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-sm cursor-pointer"
-                            >
-                              <Plus className="h-3 w-3" />
-                              <span>Ajouter</span>
-                            </button>
-                          )}
-                        </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
