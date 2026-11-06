@@ -6,7 +6,7 @@ import { S as useNavigate, b as Link } from "../_libs/@tanstack/react-router+[..
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
 import { H as CircleAlert, I as CreditCard, V as CircleCheckBig, c as Store, et as ArrowLeft, h as ShieldCheck, k as LoaderCircle } from "../_libs/lucide-react.mjs";
 import { o as getDeliveryZone } from "./bancontact-pro.server-DtY-SJJz.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-GspvHb7b.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-BuhBnmbQ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -410,9 +410,15 @@ function CheckoutPage() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 								className: "rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-lg font-black text-[#2C1D16]",
-									children: "Mode de règlement"
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex flex-wrap items-center justify-between gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+										className: "text-lg font-black text-[#2C1D16]",
+										children: "Mode de règlement"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-3.5 w-3.5 text-emerald-600" }), "Paiement sécurisé via Mollie"]
+									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "mt-4 grid gap-3 sm:grid-cols-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
@@ -422,25 +428,27 @@ function CheckoutPage() {
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex items-center justify-between w-full",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-sm font-black text-[#2C1D16]",
+														children: "Paiement en ligne"
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "inline-flex items-center rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase text-[#EADCC9]",
-													children: "Sécurisé SSL"
+													children: "Mollie · SSL"
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-sm font-black",
-												children: "Paiement sécurisé en ligne"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7A6857] leading-relaxed",
-												children: "Carte bancaire (Visa, Mastercard), Apple Pay, Payconiq ou Virement instantané"
+												children: "Cartes bancaires (Visa, Mastercard), Apple Pay, Payconiq, Bancontact ou Virement direct"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "mt-1 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-[#DECBB3]/40 w-full text-[10px] font-bold text-[#2C1D16]",
 												children: [
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 														className: "rounded bg-black/5 px-2 py-0.5",
-														children: "💳 Carte bancaire"
+														children: "💳 Cartes bancaires"
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 														className: "rounded bg-black/5 px-2 py-0.5",
@@ -464,14 +472,16 @@ function CheckoutPage() {
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex items-center justify-between w-full",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Store, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Store, { className: "h-5 w-5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-sm font-black text-[#2C1D16]",
+														children: fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "inline-flex items-center rounded-md bg-black/5 px-2 py-0.5 text-[10px] font-bold text-[#7A6857]",
 													children: fulfillment === "delivery" ? "Livraison" : "Comptoir"
 												})]
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-sm font-black",
-												children: fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7A6857] leading-relaxed",
@@ -554,17 +564,24 @@ function CheckoutPage() {
 								type: "submit",
 								disabled: loading,
 								className: "mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#ff705f] py-3.5 text-sm font-black text-white transition hover:bg-[#ff705f]/90 disabled:opacity-60",
-								children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-4 w-4 animate-spin" }), "Traitement…"] }) : paymentMethod === "online" ? "Payer en ligne en toute sécurité" : "Confirmer la commande"
+								children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "h-4 w-4 animate-spin" }), paymentMethod === "online" ? "Redirection vers Mollie…" : "Traitement…"] }) : paymentMethod === "online" ? "Payer en ligne via Mollie" : "Confirmer la commande"
 							}),
 							paymentMethod === "online" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "mt-3 rounded-2xl bg-white/5 border border-white/10 p-3 text-center",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									className: "text-[11px] font-bold text-emerald-400 flex items-center justify-center gap-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-4 w-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Paiement en ligne chiffré et sécurisé" })]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-[10px] text-white/60 mt-1",
-									children: "Cartes bancaires (Visa, Mastercard) · Apple Pay · Payconiq · Virement instantané"
-								})]
+								className: "mt-3 rounded-2xl bg-white/5 border border-white/10 p-3.5 text-center",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "text-[11px] font-bold text-emerald-400 flex items-center justify-center gap-1.5",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "h-4 w-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Paiement chiffré & sécurisé par Mollie" })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[10px] text-white/70 mt-1 leading-snug",
+										children: "Cartes (Visa, Mastercard, Amex) · Apple Pay · Payconiq · Bancontact · Belfius"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[9px] text-white/40 mt-1.5",
+										children: "🔒 Conforme normes bancaires européennes PCI-DSS & 3D Secure"
+									})
+								]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-3 text-center text-[10px] text-white/40",

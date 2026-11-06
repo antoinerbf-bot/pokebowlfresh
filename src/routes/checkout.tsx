@@ -377,7 +377,13 @@ function CheckoutPage() {
             </section>
 
             <section className="rounded-[24px] border border-[#DECBB3] bg-[#FAF5EE] p-6 shadow-[0_20px_60px_-38px_rgba(44,29,22,.35)]">
-              <h2 className="text-lg font-black text-[#2C1D16]">Mode de règlement</h2>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="text-lg font-black text-[#2C1D16]">Mode de règlement</h2>
+                <span className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                  Paiement sécurisé via Mollie
+                </span>
+              </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <button
@@ -390,17 +396,19 @@ function CheckoutPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <CreditCard className="h-5 w-5 text-[#ff705f]" />
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-5 w-5 text-[#ff705f]" />
+                      <span className="text-sm font-black text-[#2C1D16]">Paiement en ligne</span>
+                    </div>
                     <span className="inline-flex items-center rounded-md bg-[#2C1D16] px-2 py-0.5 text-[10px] font-black uppercase text-[#EADCC9]">
-                      Sécurisé SSL
+                      Mollie · SSL
                     </span>
                   </div>
-                  <span className="text-sm font-black">Paiement sécurisé en ligne</span>
                   <span className="text-xs text-[#7A6857] leading-relaxed">
-                    Carte bancaire (Visa, Mastercard), Apple Pay, Payconiq ou Virement instantané
+                    Cartes bancaires (Visa, Mastercard), Apple Pay, Payconiq, Bancontact ou Virement direct
                   </span>
                   <div className="mt-1 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-[#DECBB3]/40 w-full text-[10px] font-bold text-[#2C1D16]">
-                    <span className="rounded bg-black/5 px-2 py-0.5">💳 Carte bancaire</span>
+                    <span className="rounded bg-black/5 px-2 py-0.5">💳 Cartes bancaires</span>
                     <span className="rounded bg-black/5 px-2 py-0.5">🍎 Apple Pay</span>
                     <span className="rounded bg-black/5 px-2 py-0.5">📱 Payconiq</span>
                     <span className="rounded bg-black/5 px-2 py-0.5">⚡ Virement direct</span>
@@ -417,14 +425,16 @@ function CheckoutPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <Store className="h-5 w-5 text-[#ff705f]" />
+                    <div className="flex items-center gap-2">
+                      <Store className="h-5 w-5 text-[#ff705f]" />
+                      <span className="text-sm font-black text-[#2C1D16]">
+                        {fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"}
+                      </span>
+                    </div>
                     <span className="inline-flex items-center rounded-md bg-black/5 px-2 py-0.5 text-[10px] font-bold text-[#7A6857]">
                       {fulfillment === "delivery" ? "Livraison" : "Comptoir"}
                     </span>
                   </div>
-                  <span className="text-sm font-black">
-                    {fulfillment === "delivery" ? "Paiement au livreur" : "Payer sur place"}
-                  </span>
                   <span className="text-xs text-[#7A6857] leading-relaxed">
                     {fulfillment === "delivery"
                       ? "Espèces ou terminal de paiement mobile lors de la livraison"
@@ -490,22 +500,25 @@ function CheckoutPage() {
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Traitement…
+                  {paymentMethod === "online" ? "Redirection vers Mollie…" : "Traitement…"}
                 </>
               ) : paymentMethod === "online" ? (
-                "Payer en ligne en toute sécurité"
+                "Payer en ligne via Mollie"
               ) : (
                 "Confirmer la commande"
               )}
             </button>
             {paymentMethod === "online" && (
-              <div className="mt-3 rounded-2xl bg-white/5 border border-white/10 p-3 text-center">
+              <div className="mt-3 rounded-2xl bg-white/5 border border-white/10 p-3.5 text-center">
                 <p className="text-[11px] font-bold text-emerald-400 flex items-center justify-center gap-1.5">
                   <ShieldCheck className="h-4 w-4 shrink-0" />
-                  <span>Paiement en ligne chiffré et sécurisé</span>
+                  <span>Paiement chiffré & sécurisé par Mollie</span>
                 </p>
-                <p className="text-[10px] text-white/60 mt-1">
-                  Cartes bancaires (Visa, Mastercard) · Apple Pay · Payconiq · Virement instantané
+                <p className="text-[10px] text-white/70 mt-1 leading-snug">
+                  Cartes (Visa, Mastercard, Amex) · Apple Pay · Payconiq · Bancontact · Belfius
+                </p>
+                <p className="text-[9px] text-white/40 mt-1.5">
+                  🔒 Conforme normes bancaires européennes PCI-DSS & 3D Secure
                 </p>
               </div>
             )}
