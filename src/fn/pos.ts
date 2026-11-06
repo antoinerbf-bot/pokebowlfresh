@@ -8,6 +8,7 @@ import {
   acknowledgePrint,
   upsertOrder,
   clearAllOrdersFromStore,
+  updateOrderCustomFields,
 } from "../lib/order-store";
 import { buildKitchenReceipt, buildDeliveryReceipt } from "../lib/escpos";
 import { generateOrderId, type Order } from "../lib/orders";
@@ -274,5 +275,66 @@ export const createTestDeliveryOrder = createServerFn({ method: "POST" })
 
     await upsertOrder(testOrder);
     return { success: true, order: testOrder };
+  });
+
+export const acceptPosOrder = createServerFn({ method: "POST" })
+  .validator(
+    z.object({
+      pin: z.string().optional(),
+      orderId: z.string().min(1),
+    }),
+  )
+  .handler(async ({ data }) => {
+    if (!verifyPin(data.pin)) {
+      throw new Error("Code PIN invalide.");
+    }
+    const updated = await updateOrderCustomFields(data.orderId, {
+      acceptedAt: new Date().toISOString(),
+      status: "preparing",
+    });
+    return { success: true, order: updated };
+  });
+
+export const delayPosOrder = createServerFn({ method: "POST" })
+  .validator(
+    z.object({
+      pin: z.string().optional(),
+      orderId: z.string().min(1),
+      delayMinutes: z.number().int().positive(),
+      estimatedDeliveryTime: z.string().optional(),
+    }),
+  )
+  .handler(async ({ data }) => {
+    if (!verifyPin(data.pin)) {
+      throw new Error("Code PIN invalide.");
+    }
+    const updated = await updateOrderCustomFields(data.orderId, {
+      delayMinutes: data.delayMinutes,
+      delayedAt: new Date().toISOString(),
+      estimatedDeliveryTime: data.estimatedDeliveryTime,
+    });
+    return { success: true, order: updated };
+  });
+
+export const assignPosDriver = createServerFn({ method: "POST" })
+  .validator(
+    z.object({
+      pin: z.string().optional(),
+      orderId: z.string().min(1),
+      driverId: z.string().min(1),
+      driverName: z.string().min(1),
+      distanceKm: z.number().optional(),
+    }),
+  )
+  .handler(async ({ data }) => {
+    if (!verifyPin(data.pin)) {
+      throw new Error("Code PIN invalide.");
+    }
+    const updated = await updateOrderCustomFields(data.orderId, {
+      driverId: data.driverId,
+      driverName: data.driverName,
+      distanceKm: data.distanceKm,
+    });
+    return { success: true, order: updated };
   });
 

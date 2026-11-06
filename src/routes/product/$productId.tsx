@@ -9,6 +9,7 @@ import {
   detailedSauces,
   croustySauces,
   detailedMixIns,
+  croustyMixIns,
   drinks,
   type Topping,
 } from "../../lib/data";
@@ -323,7 +324,11 @@ function ProductPage() {
   const totalMixinUnits = Object.values(mixinQuantities).reduce((sum, q) => sum + q, 0);
   const mixinsExtraPrice = totalMixinUnits * 1.00;
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
-  const toppingsExtraPrice = totalToppingsCount * 0.50;
+  const toppingsExtraPrice = Object.entries(toppingQuantities).reduce((sum, [name, count]) => {
+    const top = toppings.find((t) => t.name.toLowerCase() === name.toLowerCase());
+    const price = top ? top.price : (name.toLowerCase().includes("cajou") ? 1.00 : 0.50);
+    return sum + count * price;
+  }, 0);
   const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
   // Pour Crossy Chicken : la sauce de base est déjà incluse dans le produit (0,00 €).
   // Chaque portion de Spicy Mayo ou Sauce soja sucrée est un supplément à +0,50 €.
@@ -1136,10 +1141,14 @@ function ProductPage() {
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div>
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
-                        Suppléments Légumes & Fruits Frais (+1,00 € / portion)
+                        {isCrousty
+                          ? "Légumes & Ingrédients Crossy Chicken (+1,00 € / portion)"
+                          : "Suppléments Légumes & Fruits Frais (+1,00 € / portion)"}
                       </h2>
                       <p className="text-[11px] text-[#7A6857]">
-                        Avocat, mangue, edamame, patates douces, grenade...
+                        {isCrousty
+                          ? "Sélection exclusive : Feta, Avocat, Mangue, Brocoli, Jalapeños"
+                          : "Avocat, mangue, edamame, patates douces, grenade..."}
                       </p>
                     </div>
                     {totalMixinUnits > 0 && (
@@ -1150,7 +1159,7 @@ function ProductPage() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-                    {detailedMixIns.map((mix) => {
+                    {(isCrousty ? croustyMixIns : detailedMixIns).map((mix) => {
                       const count = mixinQuantities[mix.name] ?? 0;
                       return (
                         <div
@@ -1210,7 +1219,7 @@ function ProductPage() {
                         Toppings Croustillants (+0,50 € / portion)
                       </h2>
                       <p className="text-[11px] text-[#7A6857]">
-                        Oignons frits, sésame grillé, noix de cajou, nachos...
+                        Oignon frit (+0,50 €), Noix de cajou (+1,00 €)
                       </p>
                     </div>
                     {totalToppingsCount > 0 && (

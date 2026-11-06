@@ -215,7 +215,19 @@ function SurMesurePage() {
 
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingsCount - 1);
-  const toppingsExtra = extraToppingsCount * 0.50;
+  const toppingList: number[] = [];
+  for (const [name, count] of Object.entries(toppingQuantities)) {
+    const isCajou = name.toLowerCase().includes("cajou");
+    const p = isCajou ? 1.00 : 0.50;
+    for (let i = 0; i < count; i++) {
+      toppingList.push(p);
+    }
+  }
+  toppingList.sort((a, b) => a - b);
+  if (toppingList.length > 0) {
+    toppingList.shift(); // 1er topping inclus offert (le moins cher)
+  }
+  const toppingsExtra = toppingList.reduce((sum, p) => sum + p, 0);
   const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
   const extraSauceCount = Math.max(0, totalSauceUnits - 1);
   const extraSaucePrice = extraSauceCount * 0.50;

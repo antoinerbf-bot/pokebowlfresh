@@ -274,6 +274,33 @@ function DeliveryTrackPage() {
           </div>
         </section>
 
+        {/* ─── Notification Retard Cuisine éventuel ─── */}
+        {order.delayMinutes && order.delayMinutes > 0 && (
+          <section className="rounded-2xl bg-amber-50 border-2 border-amber-300 p-4 text-amber-950 shadow-sm flex items-start gap-3">
+            <Clock className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-black text-sm text-amber-950">
+                Information cuisine : +{order.delayMinutes} min de délai supplémentaire
+              </p>
+              <p className="text-xs text-amber-800 mt-1 leading-relaxed">
+                En raison d'une forte affluence en cuisine, la préparation nécessite quelques minutes supplémentaires pour garantir des bols extra frais.
+                {order.estimatedDeliveryTime && ` Livraison estimée : vers ${order.estimatedDeliveryTime}.`}
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* ─── Livreur Assigné & Distance ─── */}
+        {order.driverName && (
+          <section className="rounded-2xl bg-emerald-50 border border-emerald-200 p-3.5 text-emerald-950 flex items-center justify-between text-xs font-bold">
+            <div className="flex items-center gap-2">
+              <Truck className="h-4 w-4 text-emerald-600" />
+              <span>Livreur assigné : <strong>{order.driverName}</strong></span>
+            </div>
+            {order.distanceKm && <span className="text-[11px] text-emerald-800">~{order.distanceKm} km depuis Visé centre</span>}
+          </section>
+        )}
+
         {/* Coordonnées Client & Appel Direct Livreur */}
         <section className="rounded-2xl bg-white p-5 shadow-sm border border-black/5 space-y-3">
           <div className="flex items-center justify-between">

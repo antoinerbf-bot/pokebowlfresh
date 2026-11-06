@@ -23,7 +23,11 @@ import { Route as ApiCreateTestOrderRouteImport } from './routes/api/create-test
 import { Route as ApiMollieWebhookRouteImport } from './routes/api/mollie-webhook'
 import { Route as ApiOrderStatusRouteImport } from './routes/api/order-status'
 import { Route as ApiOrdersRouteImport } from './routes/api/orders'
+import { Route as ApiPosMileageRouteImport } from './routes/api/pos-mileage'
 import { Route as ApiPosOrdersRouteImport } from './routes/api/pos-orders'
+import { Route as ApiRushPauseRouteImport } from './routes/api/rush-pause'
+import { Route as ApiRushStatusRouteImport } from './routes/api/rush-status'
+import { Route as ApiStockRouteImport } from './routes/api/stock'
 import { Route as ApiTrackOrderRouteImport } from './routes/api/track-order'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
@@ -104,9 +108,29 @@ const ApiOrdersRoute = ApiOrdersRouteImport.update({
   path: '/api/orders',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPosMileageRoute = ApiPosMileageRouteImport.update({
+  id: '/api/pos-mileage',
+  path: '/api/pos-mileage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPosOrdersRoute = ApiPosOrdersRouteImport.update({
   id: '/api/pos-orders',
   path: '/api/pos-orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRushPauseRoute = ApiRushPauseRouteImport.update({
+  id: '/api/rush-pause',
+  path: '/api/rush-pause',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRushStatusRoute = ApiRushStatusRouteImport.update({
+  id: '/api/rush-status',
+  path: '/api/rush-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStockRoute = ApiStockRouteImport.update({
+  id: '/api/stock',
+  path: '/api/stock',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTrackOrderRoute = ApiTrackOrderRouteImport.update({
@@ -170,7 +194,11 @@ export interface FileRoutesByFullPath {
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/order-status': typeof ApiOrderStatusRoute
   '/api/orders': typeof ApiOrdersRoute
+  '/api/pos-mileage': typeof ApiPosMileageRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
+  '/api/rush-pause': typeof ApiRushPauseRoute
+  '/api/rush-status': typeof ApiRushStatusRoute
+  '/api/stock': typeof ApiStockRoute
   '/api/track-order': typeof ApiTrackOrderRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/order/success': typeof OrderSuccessRoute
@@ -196,7 +224,11 @@ export interface FileRoutesByTo {
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/order-status': typeof ApiOrderStatusRoute
   '/api/orders': typeof ApiOrdersRoute
+  '/api/pos-mileage': typeof ApiPosMileageRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
+  '/api/rush-pause': typeof ApiRushPauseRoute
+  '/api/rush-status': typeof ApiRushStatusRoute
+  '/api/stock': typeof ApiStockRoute
   '/api/track-order': typeof ApiTrackOrderRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/order/success': typeof OrderSuccessRoute
@@ -223,7 +255,11 @@ export interface FileRoutesById {
   '/api/mollie-webhook': typeof ApiMollieWebhookRoute
   '/api/order-status': typeof ApiOrderStatusRoute
   '/api/orders': typeof ApiOrdersRoute
+  '/api/pos-mileage': typeof ApiPosMileageRoute
   '/api/pos-orders': typeof ApiPosOrdersRoute
+  '/api/rush-pause': typeof ApiRushPauseRoute
+  '/api/rush-status': typeof ApiRushStatusRoute
+  '/api/stock': typeof ApiStockRoute
   '/api/track-order': typeof ApiTrackOrderRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/order/success': typeof OrderSuccessRoute
@@ -251,7 +287,11 @@ export interface FileRouteTypes {
     | '/api/mollie-webhook'
     | '/api/order-status'
     | '/api/orders'
+    | '/api/pos-mileage'
     | '/api/pos-orders'
+    | '/api/rush-pause'
+    | '/api/rush-status'
+    | '/api/stock'
     | '/api/track-order'
     | '/blog/$slug'
     | '/order/success'
@@ -277,7 +317,11 @@ export interface FileRouteTypes {
     | '/api/mollie-webhook'
     | '/api/order-status'
     | '/api/orders'
+    | '/api/pos-mileage'
     | '/api/pos-orders'
+    | '/api/rush-pause'
+    | '/api/rush-status'
+    | '/api/stock'
     | '/api/track-order'
     | '/blog/$slug'
     | '/order/success'
@@ -303,7 +347,11 @@ export interface FileRouteTypes {
     | '/api/mollie-webhook'
     | '/api/order-status'
     | '/api/orders'
+    | '/api/pos-mileage'
     | '/api/pos-orders'
+    | '/api/rush-pause'
+    | '/api/rush-status'
+    | '/api/stock'
     | '/api/track-order'
     | '/blog/$slug'
     | '/order/success'
@@ -330,7 +378,11 @@ export interface RootRouteChildren {
   ApiMollieWebhookRoute: typeof ApiMollieWebhookRoute
   ApiOrderStatusRoute: typeof ApiOrderStatusRoute
   ApiOrdersRoute: typeof ApiOrdersRoute
+  ApiPosMileageRoute: typeof ApiPosMileageRoute
   ApiPosOrdersRoute: typeof ApiPosOrdersRoute
+  ApiRushPauseRoute: typeof ApiRushPauseRoute
+  ApiRushStatusRoute: typeof ApiRushStatusRoute
+  ApiStockRoute: typeof ApiStockRoute
   ApiTrackOrderRoute: typeof ApiTrackOrderRoute
   BlogSlugRoute: typeof BlogSlugRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
@@ -442,11 +494,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiOrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/pos-mileage': {
+      id: '/api/pos-mileage'
+      path: '/api/pos-mileage'
+      fullPath: '/api/pos-mileage'
+      preLoaderRoute: typeof ApiPosMileageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/pos-orders': {
       id: '/api/pos-orders'
       path: '/api/pos-orders'
       fullPath: '/api/pos-orders'
       preLoaderRoute: typeof ApiPosOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rush-pause': {
+      id: '/api/rush-pause'
+      path: '/api/rush-pause'
+      fullPath: '/api/rush-pause'
+      preLoaderRoute: typeof ApiRushPauseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rush-status': {
+      id: '/api/rush-status'
+      path: '/api/rush-status'
+      fullPath: '/api/rush-status'
+      preLoaderRoute: typeof ApiRushStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stock': {
+      id: '/api/stock'
+      path: '/api/stock'
+      fullPath: '/api/stock'
+      preLoaderRoute: typeof ApiStockRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/track-order': {
@@ -530,7 +610,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiMollieWebhookRoute: ApiMollieWebhookRoute,
   ApiOrderStatusRoute: ApiOrderStatusRoute,
   ApiOrdersRoute: ApiOrdersRoute,
+  ApiPosMileageRoute: ApiPosMileageRoute,
   ApiPosOrdersRoute: ApiPosOrdersRoute,
+  ApiRushPauseRoute: ApiRushPauseRoute,
+  ApiRushStatusRoute: ApiRushStatusRoute,
+  ApiStockRoute: ApiStockRoute,
   ApiTrackOrderRoute: ApiTrackOrderRoute,
   BlogSlugRoute: BlogSlugRoute,
   OrderSuccessRoute: OrderSuccessRoute,

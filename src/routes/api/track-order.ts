@@ -93,6 +93,11 @@ export const Route = createFileRoute("/api/track-order")({
                 deliveryFee: order.customer?.deliveryFee,
                 total: Number(order.total || 0),
                 paymentMethod: order.paymentMethod,
+                delayMinutes: order.delayMinutes,
+                delayedAt: order.delayedAt,
+                estimatedDeliveryTime: order.estimatedDeliveryTime,
+                driverName: order.driverName,
+                distanceKm: order.distanceKm,
                 items: (order.items || []).map((i) => ({
                   name: i.name,
                   quantity: i.quantity,

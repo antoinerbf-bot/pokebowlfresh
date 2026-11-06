@@ -16,6 +16,7 @@ import {
 } from "../lib/order-store";
 import { allToppings, bowls, drinks, desserts, EXTRA_PROTEIN_PRICE, EXTRA_SAUCE_PRICE } from "../lib/data";
 import { getDeliveryZone } from "../lib/delivery";
+import { getRushState } from "../lib/rush-store.server";
 
 export const orderItemSchema = z.object({
   id: z.string(),
@@ -131,34 +132,40 @@ export function canonicalizeItems(items: OrderItem[]): OrderItem[] {
         unitPrice += (extraMixInUnits + fetaUnits) * 1.00;
       }
 
-      // Toppings (1 inclus, +0.50€ chacun au-delà — aligné sur le composeur)
+      // Toppings (1 inclus dans le sur-mesure, suppléments : Oignon frit = 0,50 €, Noix de cajou = 1,00 €)
       const toppingLine = opts.find((t) => /^Toppings?\s*:/i.test(t));
+      const toppingPrices: number[] = [];
       if (toppingLine) {
         const rawContent = toppingLine
           .replace(/^Toppings?\s*:\s*/i, "")
           .replace(/\s*\(\+[\d.,]+€\)\s*$/, "");
-        let totalToppingUnits = 0;
         if (!/aucun/i.test(rawContent)) {
           const parts = rawContent.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
           for (const part of parts) {
             const match = part.match(/\(x(\d+)\)/i) || part.match(/x(\d+)/i);
             const count = match?.[1] ? parseInt(match[1], 10) : 1;
-            totalToppingUnits += isNaN(count) ? 1 : count;
+            const validCount = isNaN(count) ? 1 : count;
+            const isCajou = /cajou/i.test(part);
+            const p = isCajou ? 1.00 : 0.50;
+            for (let i = 0; i < validCount; i++) toppingPrices.push(p);
           }
         }
-        const extraToppings = Math.max(0, totalToppingUnits - 1);
-        unitPrice += extraToppings * 0.50;
       } else {
         const individualToppings = opts.filter((t) => /^Topping\s*:/i.test(t));
-        let totalToppingUnits = 0;
         for (const t of individualToppings) {
           const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
           const count = match?.[1] ? parseInt(match[1], 10) : 1;
-          totalToppingUnits += isNaN(count) ? 1 : count;
+          const validCount = isNaN(count) ? 1 : count;
+          const isCajou = /cajou/i.test(t);
+          const p = isCajou ? 1.00 : 0.50;
+          for (let i = 0; i < validCount; i++) toppingPrices.push(p);
         }
-        const extraToppings = Math.max(0, totalToppingUnits - 1);
-        unitPrice += extraToppings * 0.50;
       }
+      toppingPrices.sort((a, b) => a - b);
+      if (toppingPrices.length > 0) {
+        toppingPrices.shift(); // 1er inclus
+      }
+      unitPrice += toppingPrices.reduce((sum, p) => sum + p, 0);
 
       // Suppléments de sauce (+0.50€ par pot supplémentaire, illimité, ex: x3 = +1.50€)
       const extraSauces = opts.filter((t) =>
@@ -223,15 +230,43 @@ export function canonicalizeItems(items: OrderItem[]): OrderItem[] {
       }
       unitPrice += totalExtraMixinUnits * 1.00;
 
-      // Toppings additionnels (+0.50€ chaque portion, illimité)
+      // Toppings additionnels (Oignon frit = 0,50 €, Noix de cajou = 1,00 €)
       const toppingEntries = opts.filter((t) => /^Topping/i.test(t));
-      let totalSignatureToppings = 0;
       for (const t of toppingEntries) {
         const match = t.match(/\(x(\d+)\)/i) || t.match(/x(\d+)/i);
         const count = match?.[1] ? parseInt(match[1], 10) : 1;
-        totalSignatureToppings += isNaN(count) ? 1 : count;
+        const validCount = isNaN(count) ? 1 : count;
+        const isCajou = /cajou/i.test(t);
+        const price = isCajou ? 1.00 : 0.50;
+        unitPrice += validCount * price;
       }
-      unitPrice += totalSignatureToppings * 0.50;
+
+      // Validation stricte des 3 recettes Crispy Chicken
+      if (isCrousty) {
+        // Base exclusivement Riz
+        const baseOpt = opts.find((t) => /^Base\s*:/i.test(t));
+        if (baseOpt && !/riz/i.test(baseOpt)) {
+          throw new Error("Pour le Crispy Chicken, la base est exclusivement du riz.");
+        }
+        // Légumes exclusivement Feta, Avocat, Mangue, Brocoli, Jalapeños
+        for (const opt of opts) {
+          if (/^L[ée]gume\s*\/\s*Mix-in/i.test(opt)) {
+            const hasAllowed = /(feta|avocat|mangue|brocoli|brocolis|jalapeno|jalapeño)/i.test(opt);
+            if (!hasAllowed) {
+              throw new Error("Pour le Crispy Chicken, les légumes autorisés sont exclusivement : Feta, Avocat, Mangue, Brocoli, Jalapeños.");
+            }
+          }
+        }
+        // Sauces exclusivement Spicy Mayo & Sauce soja sucrée
+        for (const opt of opts) {
+          if (/(sauce\s+(extra|suppl[ée]mentaire|2[èe]me\s+pot)|suppl[ée]ment\s*sauce)/i.test(opt)) {
+            const isAllowedSauce = /(spicy\s*mayo|soja\s*sucr[ée]e?)/i.test(opt);
+            if (!isAllowedSauce) {
+              throw new Error("Pour le Crispy Chicken, les sauces autorisées sont exclusivement : Spicy Mayo et Sauce soja sucrée.");
+            }
+          }
+        }
+      }
 
       // Suppléments de sauce (+0.50€ par pot supplémentaire, illimité, ex: x3 = +1.50€)
       const extraSauces = opts.filter((t) =>
@@ -293,6 +328,14 @@ function computeSubtotal(items: OrderItem[]): number {
 export async function processCheckout(data: z.infer<typeof checkoutSchema>) {
     try {
     console.info("[Checkout] submitCheckout started", { fulfillment: data.customer.fulfillment, paymentMethod: data.paymentMethod, itemCount: data.items.length });
+
+    // ─── VÉRIFICATION MISE EN PAUSE RUSH (Contrôle Cuisine) ───────────
+    const rush = await getRushState();
+    if (rush.isPaused && rush.pause) {
+      const msg = rush.pause.messages?.fr || "Le restaurant est actuellement en plein rush. Les commandes sont temporairement suspendues.";
+      throw new Error(msg);
+    }
+
     const items = canonicalizeItems(data.items);
     const subtotal = computeSubtotal(items);
     if (subtotal <= 0) {

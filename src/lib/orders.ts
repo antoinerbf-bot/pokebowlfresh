@@ -37,6 +37,7 @@ export interface Order {
   id: string;
   deliveryToken?: string;
   createdAt: string;
+  acceptedAt?: string | null;
   status: OrderStatus;
   paymentMethod: PaymentMethod;
   molliePaymentId?: string;
@@ -48,6 +49,12 @@ export interface Order {
   printedAt?: string | null;
   printAttempts?: number;
   printError?: string | null;
+  delayMinutes?: 10 | 20 | 30 | null;
+  delayedAt?: string | null;
+  estimatedDeliveryTime?: string | null;
+  driverId?: string | null;
+  driverName?: string | null;
+  distanceKm?: number | null;
 }
 
 export function generateOrderId(): string {

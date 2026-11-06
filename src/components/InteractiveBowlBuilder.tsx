@@ -71,7 +71,19 @@ export function InteractiveBowlBuilder() {
 
   const totalToppingUnits = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const extraToppingsCount = Math.max(0, totalToppingUnits - 1);
-  const extraToppingsPrice = extraToppingsCount * 0.5;
+  const toppingList: number[] = [];
+  for (const [name, count] of Object.entries(toppingQuantities)) {
+    const isCajou = name.toLowerCase().includes("cajou");
+    const p = isCajou ? 1.00 : 0.50;
+    for (let i = 0; i < count; i++) {
+      toppingList.push(p);
+    }
+  }
+  toppingList.sort((a, b) => a - b);
+  if (toppingList.length > 0) {
+    toppingList.shift(); // 1er topping inclus offert
+  }
+  const extraToppingsPrice = toppingList.reduce((sum, p) => sum + p, 0);
   const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
   const extraSauceCount = Math.max(0, totalSauceUnits - 1);
   const extraSaucePrice = extraSauceCount * 0.5;

@@ -166,28 +166,42 @@ export const croustySauces: CustomIngredientOption[] = [
   },
 ];
 
-// ─── TOPPINGS (structure extensible) ─────────────────────────────────────────
-// Pour ajouter un nouveau topping : ajouter un objet à ce tableau.
-// Aucune autre modification n'est nécessaire.
+// ─── LÉGUMES EXCLUSIFS CROUSTY / CRISPY CHICKEN ──────────────────────────────
+// Pour les 3 plats Crispy Chicken : exclusivement Feta, Avocat, Mangue, Brocoli, Jalapeños.
+export const croustyMixIns: CustomIngredientOption[] = [
+  { id: "feta",      name: "Feta",      emoji: "🧀", extraPrice: 1.00 },
+  { id: "avocat",    name: "Avocat",    emoji: "🥑", extraPrice: 1.00 },
+  { id: "mangue",    name: "Mangue",    emoji: "🥭", extraPrice: 1.00 },
+  { id: "brocoli",   name: "Brocoli",   emoji: "🥦", extraPrice: 1.00 },
+  { id: "jalapenos", name: "Jalapeños", emoji: "🌶️", extraPrice: 1.00 },
+];
+
+export const croustyAllowedMixInsNames = [
+  "Feta",
+  "Avocat",
+  "Mangue",
+  "Brocoli",
+  "Brocolis",
+  "Jalapeños",
+  "Jalapenos",
+];
+
+// ─── TOPPINGS (strictement limités à Oignon frit et Noix de cajou) ────────────
 export interface Topping {
   id: string;
   name: string;
   emoji: string;
-  price: number;       // 0 = inclus
+  price: number;       // Tarif unitaire par portion
   available: boolean;
   category?: "crunch" | "spice" | "fresh" | "creamy";
 }
 
 export const toppings: Topping[] = [
-  { id: "oignons-frits",  name: "Oignons frits",   emoji: "🧅", price: 0.50, available: true, category: "crunch" },
-  { id: "sesame-seeds",   name: "Sésame seeds",    emoji: "🌱", price: 0.50, available: true, category: "crunch" },
-  { id: "noix-cajou",     name: "Noix de cajou",   emoji: "🥜", price: 0.50, available: true, category: "crunch" },
-  { id: "nachos",         name: "Nachos",          emoji: "🌽", price: 0.50, available: true, category: "crunch" },
-  { id: "flocons-chili",  name: "Flocons-Chili",   emoji: "🌶️", price: 0.50, available: true, category: "spice" },
-  { id: "wazabi",         name: "Wazabi",          emoji: "🟢", price: 0.50, available: true, category: "spice" },
+  { id: "oignons-frits", name: "Oignon frit",   emoji: "🧅", price: 0.50, available: true, category: "crunch" },
+  { id: "noix-cajou",    name: "Noix de cajou", emoji: "🥜", price: 1.00, available: true, category: "crunch" },
 ];
 
-// Pour les données legacy (commander.tsx, etc.)
+// Pour la rétro-compatibilité
 export const customToppings = toppings.map((t) => t.name);
 export const allToppings = customToppings;
 

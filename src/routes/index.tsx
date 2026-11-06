@@ -25,6 +25,7 @@ import { MobileAppStickyBar } from "@/components/MobileAppStickyBar";
 import { PokawaCategoriesCarousel } from "@/components/PokawaCategoriesCarousel";
 import { PokawaMagSection } from "@/components/PokawaMagSection";
 import { FaqNutritionSection, FAQ_ITEMS } from "@/components/FaqNutritionSection";
+import { HoursBanner } from "@/components/HoursBanner";
 
 const RESTAURANT_SCHEMA = {
   "@context": "https://schema.org",
@@ -109,12 +110,12 @@ export const Route = createFileRoute("/")({
 const MAPS_URL = "https://maps.app.goo.gl/TkddDsG9pwYb62558";
 
 const HOUR_ROWS = [
-  ["info.day.mon", "12:00 – 14:00 · 17:00 – 21:00"],
-  ["info.day.tue", "12:00 – 14:00 · 17:00 – 21:00"],
-  ["info.day.wed", "12:00 – 14:00 · 17:00 – 21:00"],
-  ["info.day.thu", "12:00 – 14:00 · 17:00 – 21:00"],
-  ["info.day.fri", "12:00 – 14:00 · 17:00 – 21:00"],
-  ["info.day.sat", "18:00 – 21:00"],
+  ["info.day.mon", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
+  ["info.day.tue", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
+  ["info.day.wed", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
+  ["info.day.thu", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
+  ["info.day.fri", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
+  ["info.day.sat", "Commandes dès 17h40 · Livraisons 18h00 – 20h30"],
   ["info.day.sun", "closed"],
 ] as const;
 
@@ -191,6 +192,11 @@ function Index() {
 
         {/* ════════════════════ 3. TICKER DÉFILANT ════════════════════ */}
         <Ticker />
+
+        {/* ════════════════════ 3.1 BANDEAU HORAIRES OFFICIELS & STATUT DIRECT ════════════════════ */}
+        <section className="mx-auto max-w-[1400px] px-4 pt-5 sm:px-6 lg:px-8">
+          <HoursBanner />
+        </section>
 
         {/* ════════════════════ 3.2 CARROUSEL DES CATÉGORIES (STYLE POKAWA) ════════════════════ */}
         <PokawaCategoriesCarousel />
@@ -339,25 +345,28 @@ function Index() {
                       </span>
                     </div>
 
-                    {/* Horaires regroupés du Lundi au Vendredi */}
+                    {/* Horaires officiels PokeNBowl */}
                     <div className="mt-4 space-y-2.5">
                       <div className="flex items-center justify-between rounded-2xl bg-[#F3ECE1] border border-[#E2D6C5] p-3 sm:px-4">
                         <div>
-                          <span className="block text-xs font-black text-[#2C1D16]">Du Lundi au Vendredi</span>
-                          <span className="text-[10px] text-[#766358] font-medium">Service midi & soir</span>
+                          <span className="block text-xs font-black text-[#2C1D16]">Prise de commandes</span>
+                          <span className="text-[10px] text-[#766358] font-medium">Site en ligne & téléphone</span>
                         </div>
                         <div className="text-right">
-                          <span className="block text-xs font-black text-[#2C1D16]">12:00 – 14:00</span>
-                          <span className="block text-xs font-black text-[#2C1D16]">17:00 – 21:00</span>
+                          <span className="block text-xs font-black text-[#ff705f]">Dès 17h40</span>
+                          <span className="block text-[9px] font-bold text-emerald-700">En direct de la cuisine</span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between rounded-2xl bg-[#F3ECE1] border border-[#E2D6C5] p-3 sm:px-4">
                         <div>
-                          <span className="block text-xs font-black text-[#2C1D16]">Samedi</span>
-                          <span className="text-[10px] text-[#766358] font-medium">Service du soir</span>
+                          <span className="block text-xs font-black text-[#2C1D16]">Livraisons à domicile</span>
+                          <span className="text-[10px] text-[#766358] font-medium">Zone Visé et communes limitrophes</span>
                         </div>
-                        <span className="text-xs font-black text-[#2C1D16]">18:00 – 21:00</span>
+                        <div className="text-right">
+                          <span className="block text-xs font-black text-[#2C1D16]">18:00 – 20:30</span>
+                          <span className="block text-[9px] font-bold text-[#b91c1c] uppercase">Aucune livraison le midi</span>
+                        </div>
                       </div>
 
                       <div className="flex items-center justify-between rounded-2xl bg-[#F3ECE1] border border-[#E2D6C5] p-3 sm:px-4">
@@ -509,8 +518,8 @@ function Index() {
                 <p className="font-bold text-white">Avenue du Pont 12, 4600 Visé</p>
                 <p>📞 0491 28 14 56</p>
                 <p className="text-[11px] leading-relaxed text-[#EADCC9]/60">
-                  Lun - Ven : 12h00 – 14h00 · 17h00 – 21h00<br />
-                  Samedi : 18h00 – 21h00<br />
+                  Commandes : dès 17h40<br />
+                  Livraisons : 18h00 – 20h30 (aucune livraison le midi)<br />
                   Dimanche : Fermé
                 </p>
                 <div className="pt-2">

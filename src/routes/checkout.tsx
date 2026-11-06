@@ -21,8 +21,8 @@ function CheckoutPage() {
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [fulfillment, setFulfillment] = useState<FulfillmentMethod>("delivery");
-  const pickupOptions = useMemo(() => buildPickupSlots(), []);
-  const [requestedTime, setRequestedTime] = useState(() => buildPickupSlots()[0] ?? "");
+  const timeOptions = useMemo(() => buildTimeSlots(fulfillment), [fulfillment]);
+  const [requestedTime, setRequestedTime] = useState(() => buildTimeSlots("delivery")[0] ?? "");
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
@@ -356,7 +356,7 @@ function CheckoutPage() {
                     className="mt-1 w-full rounded-xl border border-black/10 bg-[#F6F1E9] px-4 py-3 text-sm font-medium outline-none focus:border-[#ff705f]"
                   >
                     <option value="">Choisir un créneau</option>
-                    {pickupOptions.map((slot) => (
+                    {timeOptions.map((slot) => (
                       <option key={slot} value={slot}>
                         {slot}
                       </option>
@@ -532,36 +532,31 @@ function CheckoutPage() {
   );
 }
 
-function buildPickupSlots(): string[] {
+function buildTimeSlots(fulfillment: FulfillmentMethod): string[] {
   const slots: string[] = [];
   const now = new Date();
-  const windows = [
-    { day: 1, start: 12 * 60, end: 14 * 60 },
-    { day: 1, start: 17 * 60, end: 21 * 60 },
-    { day: 2, start: 12 * 60, end: 14 * 60 },
-    { day: 2, start: 17 * 60, end: 21 * 60 },
-    { day: 3, start: 12 * 60, end: 14 * 60 },
-    { day: 3, start: 17 * 60, end: 21 * 60 },
-    { day: 4, start: 12 * 60, end: 14 * 60 },
-    { day: 4, start: 17 * 60, end: 21 * 60 },
-    { day: 5, start: 12 * 60, end: 14 * 60 },
-    { day: 5, start: 17 * 60, end: 21 * 60 },
-    { day: 6, start: 18 * 60, end: 21 * 60 },
-  ];
+  // Horaires stricts : Prise de commande dès 17h40, début livraisons à 18h00, fin de service à 20h30. Aucune livraison le midi.
+  const startMinute = fulfillment === "delivery" ? 18 * 60 : 17 * 60 + 40;
+  const endMinute = 20 * 60 + 30;
 
   for (let dayOffset = 0; dayOffset <= 7; dayOffset += 1) {
     const d = new Date(now);
     d.setDate(now.getDate() + dayOffset);
-    const day = d.getDay();
-    const dayWindows = windows.filter((w) => w.day === day);
-    for (const window of dayWindows) {
-      for (let minute = window.start; minute <= window.end; minute += 15) {
-        const slotDate = new Date(d);
-        slotDate.setHours(Math.floor(minute / 60), minute % 60, 0, 0);
-        if (slotDate.getTime() < now.getTime() + 20 * 60 * 1000) continue;
-        const labelDay = dayOffset === 0 ? "Aujourd'hui" : dayOffset === 1 ? "Demain" : d.toLocaleDateString("fr-BE", { weekday: "short", day: "2-digit", month: "2-digit" });
-        slots.push(labelDay + " " + slotDate.toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit", hour12: false }));
-      }
+    for (let minute = startMinute; minute <= endMinute; minute += 15) {
+      const slotDate = new Date(d);
+      slotDate.setHours(Math.floor(minute / 60), minute % 60, 0, 0);
+      if (slotDate.getTime() < now.getTime() + 15 * 60 * 1000) continue;
+      const labelDay =
+        dayOffset === 0
+          ? "Aujourd'hui"
+          : dayOffset === 1
+          ? "Demain"
+          : d.toLocaleDateString("fr-BE", { weekday: "short", day: "2-digit", month: "2-digit" });
+      slots.push(
+        labelDay +
+          " " +
+          slotDate.toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit", hour12: false })
+      );
     }
   }
 

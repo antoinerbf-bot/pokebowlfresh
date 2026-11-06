@@ -423,6 +423,44 @@ export async function updateOrderStatus(orderId: string, status: Order["status"]
   }
 }
 
+export async function updateOrderCustomFields(
+  orderId: string,
+  fields: Partial<Order>,
+): Promise<Order | undefined> {
+  const cleanId = (orderId ?? "").trim();
+  if (!cleanId) return undefined;
+  const lowerId = cleanId.toLowerCase();
+
+  loadLocalOrders(true);
+  let order = memoryOrders.get(cleanId);
+  if (!order) {
+    order = Array.from(memoryOrders.values()).find(
+      (o) =>
+        (o.id && o.id.toLowerCase() === lowerId) ||
+        (o.deliveryToken && o.deliveryToken.toLowerCase() === lowerId),
+    );
+  }
+  if (order) {
+    Object.assign(order, fields);
+    memoryOrders.set(order.id, order);
+    saveLocalOrders();
+
+    if (fields.status && isPostgresConfigured()) {
+      try {
+        await ensureSchema();
+        const sql = getSql();
+        await sql`
+          UPDATE orders
+          SET status = ${fields.status}
+          WHERE id = ${order.id}
+        `;
+      } catch {}
+    }
+    return order;
+  }
+  return undefined;
+}
+
 export async function clearAllOrdersFromStore(): Promise<number> {
   loadLocalOrders(true);
   const count = memoryOrders.size;

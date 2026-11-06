@@ -31,6 +31,7 @@ import { useCart } from "../context/CartContext";
 import { CartDrawer } from "../components/CartDrawer";
 import { useStock } from "../hooks/useStock";
 import { useTranslation } from "../context/I18nContext";
+import { HoursBanner } from "../components/HoursBanner";
 
 const DESSERT_IMAGES: Record<string, string> = {
   "tira-spec": tiramisuSpeculoos,
@@ -390,6 +391,11 @@ function CommanderPage() {
       </header>
 
       <main className="mx-auto max-w-[1300px] px-4 py-5 sm:px-6 sm:py-6">
+        {/* ── Bandeau Horaires Officiels & Statut ─────────────── */}
+        <div className="mb-4">
+          <HoursBanner compact />
+        </div>
+
         {/* ── Compact Header Banner ─────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-[#DECBB3]">
           <div>
@@ -411,36 +417,72 @@ function CommanderPage() {
           </div>
         </div>
 
-        {/* ── Compact "Crée ton Bowl Sur Mesure" Strip ───────────── */}
+        {/* ── SHOWCASE MAJEUR : COMPOSER MON BOWL DE A À Z ───────────── */}
         {(activeTab === "all" || activeTab === "pokes") && !searchQuery && (
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border-2 border-[#ea580c]/30 bg-gradient-to-r from-[#2C1D16] via-[#3A251B] to-[#2C1D16] p-3.5 sm:p-4 text-white shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-[#ea580c] text-white text-xl shadow-xs">
-                🥣
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#EADCC9] px-2 py-0.2 text-[9px] font-black uppercase text-[#2C1D16]">
-                    Sur-Mesure
+          <div className="relative mb-8 overflow-hidden rounded-3xl border-2 border-[#ea580c]/70 bg-gradient-to-br from-[#1C120C] via-[#2A1810] to-[#170E08] p-5 sm:p-7 text-white shadow-[0_12px_40px_-10px_rgba(234,88,12,0.35)] ring-1 ring-white/10">
+            {/* Lueur d'ambiance d'arrière-plan */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#ea580c]/25 blur-3xl" />
+            <div className="pointer-events-none absolute -left-16 -bottom-16 h-56 w-56 rounded-full bg-emerald-500/15 blur-3xl" />
+
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              {/* Colonne gauche : Description & Arguments */}
+              <div className="space-y-3 max-w-2xl">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#ea580c] to-[#f97316] px-3 py-1 text-[11px] font-black uppercase tracking-wider text-white shadow-sm animate-pulse">
+                    <Sparkles className="h-3 w-3" /> N°1 DES VENTES
                   </span>
-                  <span className="text-xs font-extrabold text-[#ea580c]">Dès 10,00 €</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-[11px] font-extrabold uppercase text-[#FAF5EE] backdrop-blur-xs">
+                    🥣 100% PERSONNALISABLE
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 px-2.5 py-1 text-[11px] font-bold text-emerald-300">
+                    🥑 5 Légumes frais inclus dès 10,00 €
+                  </span>
                 </div>
-                <h2 className="text-sm sm:text-base font-black text-white">
-                  Crée ton Poké Bowl de A à Z
-                </h2>
-                <p className="text-[11px] text-[#EADCC9]/80 line-clamp-1">
-                  1 base, 5 légumes frais inclus, protéine, sauces maison et crunch au choix.
+
+                <div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
+                    Crée ton Poké Bowl de A à Z !
+                  </h2>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#EADCC9]/90 font-medium leading-relaxed">
+                    Compose librement selon tes envies du jour : choisis ta base, ta protéine fraîche (saumon minute, poulet rôti, scampis), tes 5 mix-ins croquants, tes sauces maison et tes toppings croustillants.
+                  </p>
+                </div>
+
+                {/* Étapes clés visuelles */}
+                <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-bold text-[#EADCC9]/80">
+                  <span className="rounded-lg bg-white/10 px-2.5 py-1">1. Base riz</span>
+                  <span className="text-[#ea580c]">→</span>
+                  <span className="rounded-lg bg-white/10 px-2.5 py-1">2. Protéine</span>
+                  <span className="text-[#ea580c]">→</span>
+                  <span className="rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2.5 py-1">3. 5 Légumes au choix</span>
+                  <span className="text-[#ea580c]">→</span>
+                  <span className="rounded-lg bg-white/10 px-2.5 py-1">4. Sauces & Crunch</span>
+                </div>
+              </div>
+
+              {/* Colonne droite : Gros bouton CTA irrésistible avec flèches & indicateurs */}
+              <div className="flex flex-col sm:items-center lg:items-end justify-center shrink-0 pt-2 lg:pt-0">
+                <div className="mb-2 hidden sm:flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-[#ea580c]">
+                  <span>✨</span> Crée ta recette sur-mesure <span>👇</span>
+                </div>
+
+                <Link
+                  to="/sur-mesure"
+                  className="group relative flex w-full sm:w-auto items-center justify-center gap-3.5 rounded-2xl bg-gradient-to-r from-[#FF5722] via-[#ea580c] to-[#d9480f] px-8 py-4 sm:px-10 sm:py-5 text-white font-black text-base sm:text-lg uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.65)] hover:shadow-[0_0_45px_rgba(234,88,12,0.95)] hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 ring-2 ring-white/40 cursor-pointer"
+                >
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                  </span>
+                  <span>COMPOSER MON BOWL</span>
+                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-2" />
+                </Link>
+
+                <p className="mt-2 text-center sm:text-right text-[11px] font-extrabold text-[#EADCC9]/70">
+                  Moyen 10,00 € · Grand 13,00 € · Prêt en 15 min
                 </p>
               </div>
             </div>
-
-            <Link
-              to="/sur-mesure"
-              className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#ea580c] hover:bg-[#c2410c] px-4 py-2 text-xs font-black uppercase tracking-wider text-white transition shrink-0 active:scale-95 shadow-xs"
-            >
-              <span>Composer mon bowl</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
           </div>
         )}
 
