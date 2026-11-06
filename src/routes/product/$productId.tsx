@@ -7,6 +7,7 @@ import {
   detailedBases,
   detailedProteins,
   detailedSauces,
+  croustySauces,
   detailedMixIns,
   drinks,
   type Topping,
@@ -250,10 +251,12 @@ function ProductPage() {
 
   // States (appelés inconditionnellement avant tout return anticipé — règle des Hooks React)
   const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
-  const [selectedBase, setSelectedBase] = React.useState<string>(product?.defaultBase || "Riz");
+  const [selectedBase, setSelectedBase] = React.useState<string>(isCrousty ? "Riz" : (product?.defaultBase || "Riz"));
   const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>(() => {
-    if (productId === "crousty-chicken-mix" || productId === "crousty-mix") {
-      return { "Sauce curry": 1, "Sauce blanche": 1 };
+    if (isCrousty) {
+      // Pour Crossy Chicken : la sauce de base est déjà incluse dans le produit à 0,00 €.
+      // Les suppléments de sauce (Spicy Mayo, Sauce soja sucrée) démarrent à 0.
+      return {};
     }
     const defaultS = product?.defaultSauce || "Spicy-Mayo";
     return defaultS ? { [defaultS]: 1 } : {};
@@ -274,9 +277,9 @@ function ProductPage() {
   // Réinitialiser la personnalisation lors d'un changement de fiche produit (/product/A -> /product/B)
   React.useEffect(() => {
     setSelectedSize("moyen");
-    setSelectedBase(product?.defaultBase || "Riz");
-    if (productId === "crousty-chicken-mix" || productId === "crousty-mix") {
-      setSauceQuantities({ "Sauce curry": 1, "Sauce blanche": 1 });
+    setSelectedBase(isCrousty ? "Riz" : (product?.defaultBase || "Riz"));
+    if (isCrousty) {
+      setSauceQuantities({});
     } else {
       const defaultS = product?.defaultSauce || "Spicy-Mayo";
       setSauceQuantities(defaultS ? { [defaultS]: 1 } : {});
@@ -288,7 +291,7 @@ function ProductPage() {
     setSelectedDrink(drinks[0]?.name || "Coca-Cola (33 cl)");
     setQty(1);
     setAdded(false);
-  }, [productId, product?.defaultBase, product?.defaultSauce]);
+  }, [productId, isCrousty, product?.defaultBase, product?.defaultSauce]);
 
   // Redirection si sur-mesure
   if (productId === "sur-mesure") {
@@ -322,9 +325,12 @@ function ProductPage() {
   const totalToppingsCount = Object.values(toppingQuantities).reduce((sum, q) => sum + q, 0);
   const toppingsExtraPrice = totalToppingsCount * 0.50;
   const totalSauceUnits = Object.values(sauceQuantities).reduce((sum, q) => sum + q, 0);
-  // Crousty Mix inclut 2 sauces d'office (Curry + Blanche), les autres formules 1 sauce incluse.
-  const includedSaucesCount = isCroustyMix ? 2 : 1;
-  const extraSauceCount = Math.max(0, totalSauceUnits - includedSaucesCount);
+  // Pour Crossy Chicken : la sauce de base est déjà incluse dans le produit (0,00 €).
+  // Chaque portion de Spicy Mayo ou Sauce soja sucrée est un supplément à +0,50 €.
+  // Pour les Poké Bowls : 1 sauce incluse offerte, puis +0,50 € par portion supplémentaire.
+  const extraSauceCount = isCrousty
+    ? totalSauceUnits
+    : Math.max(0, totalSauceUnits - 1);
   const extraSaucePrice = extraSauceCount * 0.50;
 
   const unitPrice = product.price + sizeExtra + extraProteinPrice + mixinsExtraPrice + toppingsExtraPrice + extraSaucePrice;
@@ -399,9 +405,9 @@ function ProductPage() {
 
   // Sauce stepper (sauces incluses selon formule, chaque portion supplémentaire à +0.50€)
   const addSauce = (name: string) => {
-    // Si plat standard avec 1 seule sauce offerte et qu'on clique sur une AUTRE sauce :
+    // Si plat standard Poké avec 1 seule sauce offerte et qu'on clique sur une AUTRE sauce :
     // On remplace sa sauce offerte par la nouvelle choisie sans surcoût !
-    if (!isCroustyMix && totalSauceUnits === 1 && !sauceQuantities[name]) {
+    if (!isCrousty && totalSauceUnits === 1 && !sauceQuantities[name]) {
       setSauceQuantities({ [name]: 1 });
       return;
     }
@@ -461,19 +467,32 @@ function ProductPage() {
     // Base
     optionsList.push(`Base : ${selectedBase}`);
 
-    // Sauces (Crousty Mix inclut Duo Curry & Blanche, plats standards incluent 1 sauce offerte)
-    const activeSauces = Object.entries(sauceQuantities).filter(([, q]) => q > 0);
-    if (activeSauces.length === 0) {
-      optionsList.push("Sauce : Sans sauce");
-    } else {
-      const sauceSummary = activeSauces
-        .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name))
-        .join(" + ");
-      optionsList.push(`Sauce : ${sauceSummary}`);
-      if (extraSauceCount > 0) {
+    // Sauces
+    if (isCrousty) {
+      optionsList.push("Sauce de base : Incluse dans le produit (0,00 €)");
+      const activeSauces = Object.entries(sauceQuantities).filter(([, q]) => q > 0);
+      if (activeSauces.length > 0) {
+        const sauceSummary = activeSauces
+          .map(([name, q]) => `${name}${q > 1 ? ` (x${q})` : ""}`)
+          .join(" + ");
         optionsList.push(
-          `Sauce extra (+${extraSaucePrice.toFixed(2)}€) : ${extraSauceCount} portion${extraSauceCount > 1 ? "s" : ""}`,
+          `Supplément Sauce (+${extraSaucePrice.toFixed(2)}€) : ${sauceSummary} (x${extraSauceCount})`,
         );
+      }
+    } else {
+      const activeSauces = Object.entries(sauceQuantities).filter(([, q]) => q > 0);
+      if (activeSauces.length === 0) {
+        optionsList.push("Sauce : Sans sauce");
+      } else {
+        const sauceSummary = activeSauces
+          .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name))
+          .join(" + ");
+        optionsList.push(`Sauce : ${sauceSummary}`);
+        if (extraSauceCount > 0) {
+          optionsList.push(
+            `Sauce extra (+${extraSaucePrice.toFixed(2)}€) : ${extraSauceCount} portion${extraSauceCount > 1 ? "s" : ""}`,
+          );
+        }
       }
     }
 
@@ -677,7 +696,7 @@ function ProductPage() {
                             Suppléments Protéines (+2,50 € / portion)
                           </span>
                           <span className="text-[11px] font-semibold text-[#7A542E]">
-                            Poulet croustillant, Saumon frais ou Crevettes grillées
+                            Portion supplémentaire de poulet croustillant doré minute
                           </span>
                         </div>
                         {totalExtraProteinUnits > 0 && (
@@ -687,11 +706,9 @@ function ProductPage() {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {[
                           { id: "crousty-poulet", name: "Poulet croustillant", emoji: "🍗" },
-                          { id: "crousty-saumon", name: "Saumon frais", emoji: "🐟" },
-                          { id: "crousty-scampis", name: "Crevettes (Scampis)", emoji: "🦐" },
                         ].map((prot) => {
                           const count = extraProteins[prot.name] ?? 0;
                           return (
@@ -859,30 +876,54 @@ function ProductPage() {
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16]">
                         {isCrousty ? "Base" : "2. Base au choix"}
                       </h2>
-                      <p className="text-[11px] text-[#7A6857]">Incluse · change selon tes envies</p>
+                      <p className="text-[11px] text-[#7A6857]">
+                        {isCrousty
+                          ? "Le Crossy Chicken est systématiquement servi avec du riz chaud"
+                          : "Incluse · change selon tes envies"}
+                      </p>
                     </div>
                     <span className="rounded-full bg-[#EADCC9] border border-[#D9C5AD] px-2.5 py-0.5 text-[10px] font-black text-[#2C1D16]">
                       {selectedBase}
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-                    {detailedBases.map((b) => (
-                      <button
-                        key={b.id}
-                        type="button"
-                        onClick={() => setSelectedBase(b.name)}
-                        className={[
-                          "flex flex-col items-center justify-center rounded-xl border-2 p-2.5 text-center transition-all",
-                          selectedBase === b.name
-                            ? "border-[#ff705f] bg-[#FFF4F1] font-black text-[#c0350f]"
-                            : "border-[#DECBB3] bg-[#FFFDF9] font-bold text-[#2C1D16] hover:border-[#ff705f]/40",
-                        ].join(" ")}
-                      >
-                        <span className="text-xl">{b.emoji}</span>
-                        <span className="mt-1 text-[11px] leading-tight">{b.name}</span>
-                      </button>
-                    ))}
-                  </div>
+
+                  {isCrousty ? (
+                    <div className="flex items-center justify-between rounded-2xl border-2 border-[#ea580c] bg-[#FFF4F1] p-3.5 text-left shadow-xs">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">🍚</span>
+                        <div>
+                          <span className="block text-xs font-black text-[#2C1D16]">
+                            Riz parfumé chaud
+                          </span>
+                          <span className="text-[10px] font-bold text-[#ea580c]">
+                            Base exclusive · Servie systématiquement avec du riz
+                          </span>
+                        </div>
+                      </div>
+                      <span className="rounded-full bg-[#ea580c] px-3 py-1 text-[10px] font-black uppercase text-white shadow-xs">
+                        Inclus
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                      {detailedBases.map((b) => (
+                        <button
+                          key={b.id}
+                          type="button"
+                          onClick={() => setSelectedBase(b.name)}
+                          className={[
+                            "flex flex-col items-center justify-center rounded-xl border-2 p-2.5 text-center transition-all",
+                            selectedBase === b.name
+                              ? "border-[#ff705f] bg-[#FFF4F1] font-black text-[#c0350f]"
+                              : "border-[#DECBB3] bg-[#FFFDF9] font-bold text-[#2C1D16] hover:border-[#ff705f]/40",
+                          ].join(" ")}
+                        >
+                          <span className="text-xl">{b.emoji}</span>
+                          <span className="mt-1 text-[11px] leading-tight">{b.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </section>
 
                 {/* ══ STEP 3: ALLERGIES & INGRÉDIENTS RETIRABLES ══════ */}
@@ -937,22 +978,28 @@ function ProductPage() {
                       <h2 className="text-sm font-black uppercase tracking-wider text-[#2C1D16] flex items-center gap-1.5">
                         <span className="text-base">🥫</span>
                         <span>
-                          {isCroustyMix
+                          {isCrousty
+                            ? "Sauces et Nappages disponibles"
+                            : isCroustyMix
                             ? "Duo de Sauces Signature (Curry & Blanche)"
-                            : isCrousty
-                            ? "Sauce de nappage au choix"
                             : "4. Sauces au choix"}
                         </span>
                       </h2>
                       <p className="text-[11px] text-[#7A6857] mt-0.5">
-                        {isCroustyMix
+                        {isCrousty
+                          ? "Votre Crossy Chicken contient déjà sa sauce de base (incluse et gratuite). Vous pouvez ajouter autant de suppléments de sauce que vous le souhaitez (+0,50 € par portion)."
+                          : isCroustyMix
                           ? "Le duo Sauce Curry onctueuse + Sauce Blanche maison est inclus dans la formule · sauces supplémentaires à +0,50 €."
                           : "La 1ère sauce est offerte (gratuite) · chaque portion supplémentaire est à +0,50 € (cumulable sans limite)."}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="rounded-full bg-[#2C1D16] px-3.5 py-1 text-xs font-black text-[#EADCC9] shadow-sm">
-                        {totalSauceUnits === 0
+                        {isCrousty
+                          ? extraSauceCount === 0
+                            ? "Sauce de base incluse (0,00 €)"
+                            : `${extraSauceCount} supplément${extraSauceCount > 1 ? "s" : ""} de sauce (+${extraSaucePrice.toFixed(2)} €)`
+                          : totalSauceUnits === 0
                           ? "Sans sauce"
                           : isCroustyMix
                           ? totalSauceUnits <= 2
@@ -968,23 +1015,23 @@ function ProductPage() {
                           onClick={setZeroSauce}
                           className="rounded-full border border-[#DECBB3] bg-[#FFFDF9] px-3 py-1 text-[11px] font-bold text-[#7A6857] hover:bg-[#2C1D16] hover:text-[#EADCC9] transition cursor-pointer shadow-2xs"
                         >
-                          Sans sauce
+                          {isCrousty ? "Retirer suppléments" : "Sans sauce"}
                         </button>
                       )}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {detailedSauces.map((s) => {
+                  <div className={`grid gap-3 ${isCrousty ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
+                    {(isCrousty ? croustySauces : detailedSauces).map((s) => {
                       const count = sauceQuantities[s.name] ?? 0;
                       const isSelected = count > 0;
                       return (
                         <div
                           key={s.id}
-                          className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
+                          className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3.5 transition-all duration-150 ${
                             isSelected
-                              ? "border-[#ff705f] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ff705f]/25"
-                              : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#ff705f]/50 hover:bg-white"
+                              ? "border-[#ea580c] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ea580c]/25"
+                              : "border-[#DECBB3] bg-[#FFFDF9] hover:border-[#ea580c]/50 hover:bg-white"
                           }`}
                         >
                           {/* Haut : Icône sauce + Badge profil goût */}
@@ -995,7 +1042,7 @@ function ProductPage() {
                             {s.badge && (
                               <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
                                 isSelected
-                                  ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
+                                  ? "bg-[#ea580c]/15 text-[#c2410c] border-[#ea580c]/30"
                                   : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
                               }`}>
                                 {s.badge}
@@ -1021,31 +1068,35 @@ function ProductPage() {
                           {/* Bas : Tarif & Stepper stable (hauteur constante) */}
                           <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
                             <span className={`text-[11px] font-black ${
-                              isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                              isSelected ? "text-[#ea580c]" : "text-[#7A6857]"
                             }`}>
-                              {isCroustyMix && (s.name === "Sauce curry" || s.name === "Sauce blanche")
+                              {isCrousty
+                                ? count === 0
+                                  ? "+0,50 € / portion"
+                                  : `${count} portion${count > 1 ? "s" : ""} (+${(count * 0.50).toFixed(2)} €)`
+                                : isCroustyMix && (s.name === "Sauce curry" || s.name === "Sauce blanche")
                                 ? count === 1
                                   ? "Incluse dans le Mix (0 €)"
                                   : count > 1
                                   ? `${count}x (+${((count - 1) * 0.50).toFixed(2)}€)`
                                   : "Incluse dans le Mix"
                                 : count === 0
-                                ? totalSauceUnits < includedSaucesCount
+                                ? totalSauceUnits < (isCroustyMix ? 2 : 1)
                                   ? "Incluse"
                                   : "+0,50 €"
-                                : count === 1 && totalSauceUnits <= includedSaucesCount
+                                : count === 1 && totalSauceUnits <= (isCroustyMix ? 2 : 1)
                                 ? "Offerte (0 €)"
                                 : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
                             </span>
 
                             <div className="flex items-center gap-1.5 shrink-0">
                               {count > 0 ? (
-                                <div className="flex items-center gap-1 bg-white rounded-full border border-[#ff705f]/40 p-0.5 shadow-2xs">
+                                <div className="flex items-center gap-1 bg-white rounded-full border border-[#ea580c]/40 p-0.5 shadow-2xs">
                                   <button
                                     type="button"
                                     onClick={() => removeSauce(s.name)}
                                     aria-label={`Diminuer sauce ${s.name}`}
-                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ff705f] font-black hover:bg-[#ff705f] hover:text-white transition active:scale-90 cursor-pointer"
+                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#FAF5EE] text-[#ea580c] font-black hover:bg-[#ea580c] hover:text-white transition active:scale-90 cursor-pointer"
                                   >
                                     <Minus className="h-3 w-3 stroke-[3]" />
                                   </button>
@@ -1056,7 +1107,7 @@ function ProductPage() {
                                     type="button"
                                     onClick={() => addSauce(s.name)}
                                     aria-label={`Ajouter sauce ${s.name}`}
-                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ff705f] text-white font-black hover:bg-[#ff5542] transition active:scale-90 shadow-2xs cursor-pointer"
+                                    className="flex h-6 w-6 items-center justify-center rounded-full bg-[#ea580c] text-white font-black hover:bg-[#c2410c] transition active:scale-90 shadow-2xs cursor-pointer"
                                   >
                                     <Plus className="h-3 w-3 stroke-[3]" />
                                   </button>
@@ -1066,10 +1117,10 @@ function ProductPage() {
                                   type="button"
                                   onClick={() => addSauce(s.name)}
                                   aria-label={`Choisir sauce ${s.name}`}
-                                  className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ff705f] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
+                                  className="flex items-center gap-1 rounded-full bg-[#2C1D16] px-2.5 py-1 text-[11px] font-black text-[#EADCC9] hover:bg-[#ea580c] hover:text-white transition active:scale-95 shadow-2xs cursor-pointer"
                                 >
                                   <Plus className="h-3 w-3 stroke-[3]" />
-                                  <span>Choisir</span>
+                                  <span>+ 0,50 €</span>
                                 </button>
                               )}
                             </div>

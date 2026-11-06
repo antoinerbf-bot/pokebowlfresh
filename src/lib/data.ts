@@ -147,6 +147,25 @@ export const detailedSauces: CustomIngredientOption[] = [
   { id: "sauce-blanche", name: "Sauce blanche",       emoji: "🤍", badge: "Fraîcheur 🤍",       description: "Recette fraîche aux fines herbes et pointe d'ail doux" },
 ];
 
+// ─── SAUCES EXCLUSIVES CROUSTY CHICKEN ─────────────────────────────────────────
+// Exclusivement 2 sauces autorisées pour Crossy Chicken : Spicy Mayo & Sauce soja sucrée
+export const croustySauces: CustomIngredientOption[] = [
+  {
+    id: "spicy-mayo",
+    name: "Spicy Mayo",
+    emoji: "🌶️",
+    badge: "Pimentée 🔥",
+    description: "Mayo onctueuse relevée au piment doux et sriracha",
+  },
+  {
+    id: "sauce-soja-sucree",
+    name: "Sauce soja sucrée",
+    emoji: "🥢",
+    badge: "Sirupeuse 🥢",
+    description: "Sauce soja japonaise douce, ronde et caramélisée",
+  },
+];
+
 // ─── TOPPINGS (structure extensible) ─────────────────────────────────────────
 // Pour ajouter un nouveau topping : ajouter un objet à ce tableau.
 // Aucune autre modification n'est nécessaire.

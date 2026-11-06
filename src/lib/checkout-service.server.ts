@@ -42,7 +42,7 @@ export const checkoutSchema = z.object({
   origin: z.string().url(),
 });
 
-function canonicalizeItems(items: OrderItem[]): OrderItem[] {
+export function canonicalizeItems(items: OrderItem[]): OrderItem[] {
   const catalog = new Map<string, number>([
     ...bowls.map((item) => [item.id, item.price] as const),
     ["sur-mesure", 10.00],
@@ -235,11 +235,19 @@ function canonicalizeItems(items: OrderItem[]): OrderItem[] {
 
       // Suppléments de sauce (+0.50€ par pot supplémentaire, illimité, ex: x3 = +1.50€)
       const extraSauces = opts.filter((t) =>
-        /sauce\s+(extra|suppl[ée]mentaire|2[èe]me\s+pot)/i.test(t),
+        /(sauce\s+(extra|suppl[ée]mentaire|2[èe]me\s+pot)|suppl[ée]ment\s*sauce)/i.test(t),
       );
       let totalExtraSauceUnits = 0;
       for (const es of extraSauces) {
-        const match = es.match(/\(x(\d+)\)/i) || es.match(/x(\d+)/i);
+        const priceMatch = es.match(/\(\+([\d.,]+)\s*€\)/i);
+        if (priceMatch?.[1]) {
+          const parsedPrice = parseFloat(priceMatch[1].replace(",", "."));
+          if (!isNaN(parsedPrice) && parsedPrice > 0) {
+            totalExtraSauceUnits += Math.round(parsedPrice / EXTRA_SAUCE_PRICE);
+            continue;
+          }
+        }
+        const match = es.match(/\(x(\d+)\)/i) || es.match(/x(\d+)/i) || es.match(/(\d+)\s*extra/i);
         const count = match?.[1] ? parseInt(match[1], 10) : 1;
         totalExtraSauceUnits += isNaN(count) ? 1 : count;
       }

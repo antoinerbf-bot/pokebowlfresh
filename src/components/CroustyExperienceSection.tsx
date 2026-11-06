@@ -372,7 +372,7 @@ export function CroustyExperienceSection({
       <div className="mt-6 flex items-center justify-center gap-2 text-center text-xs text-[#766358]">
         <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#ea580c]" />
         <span className="font-semibold">
-          Pour toute sauce supplémentaire : disponible en supplément lors de la commande (+1,00 €).
+          Pour toute sauce supplémentaire : disponible en supplément lors de la commande (+0,50 €).
         </span>
       </div>
     </div>
