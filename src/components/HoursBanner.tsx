@@ -114,3 +114,4 @@ export function HoursBanner({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
+

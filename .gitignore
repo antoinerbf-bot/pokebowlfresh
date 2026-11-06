@@ -10,8 +10,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-# Build output for O2Switch deployment
-.output/
+# Build output for O2Switch deployment (must be tracked for cPanel git deployment)
+!.output/
 server.js
 app.js
 

@@ -337,9 +337,8 @@ function SurMesurePage() {
                   key={lang}
                   type="button"
                   onClick={() => setLanguage(lang)}
-                  className={`rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${
-                    language === lang ? "bg-[#2C1D16] text-[#EADCC9]" : "text-[#6E5A49] hover:text-[#2C1D16]"
-                  }`}
+                  className={`rounded-full px-2 py-1 text-[9px] font-black uppercase transition-colors ${language === lang ? "bg-[#2C1D16] text-[#EADCC9]" : "text-[#6E5A49] hover:text-[#2C1D16]"
+                    }`}
                 >
                   {lang}
                 </button>
@@ -539,11 +538,10 @@ function SurMesurePage() {
                       return (
                         <div
                           key={idx}
-                          className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${
-                            emoji
+                          className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${emoji
                               ? "bg-white border-[#ff705f] shadow-sm scale-105"
                               : "bg-[#FAF5EE]/60 border-dashed border-[#C8B296] text-[10px] font-bold text-[#8A7665]"
-                          }`}
+                            }`}
                         >
                           {emoji || idx + 1}
                         </div>
@@ -585,10 +583,10 @@ function SurMesurePage() {
                             {isFeta
                               ? "+1,00 € / portion"
                               : q > 0
-                              ? `${q} portion${q > 1 ? "s" : ""}`
-                              : nonFetaUnits < INCLUDED_MIX_INS
-                              ? "Inclus (5 max)"
-                              : "+1,00 €"}
+                                ? `${q} portion${q > 1 ? "s" : ""}`
+                                : nonFetaUnits < INCLUDED_MIX_INS
+                                  ? "Inclus (5 max)"
+                                  : "+1,00 €"}
                           </span>
                         </div>
                       </button>
@@ -688,11 +686,10 @@ function SurMesurePage() {
                     return (
                       <div
                         key={`extra-${prot.id}`}
-                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
-                          q > 0
+                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${q > 0
                             ? "border-[#ff705f] bg-white shadow-sm"
                             : "border-[#DECBB3] bg-[#FAF5EE]"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <span className="text-xl">{prot.emoji}</span>
@@ -756,8 +753,8 @@ function SurMesurePage() {
                     {totalSauceUnits === 0
                       ? "Sans sauce"
                       : totalSauceUnits === 1
-                      ? "1 sauce offerte (0,00 €)"
-                      : `${totalSauceUnits} sauces (1 offerte + ${extraSauceCount} extra · +${extraSaucePrice.toFixed(2)} €)`}
+                        ? "1 sauce offerte (0,00 €)"
+                        : `${totalSauceUnits} sauces (1 offerte + ${extraSauceCount} extra · +${extraSaucePrice.toFixed(2)} €)`}
                   </span>
                   {totalSauceUnits > 0 && (
                     <button
@@ -778,11 +775,10 @@ function SurMesurePage() {
                   return (
                     <div
                       key={sauce.id}
-                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
-                        isSelected
+                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${isSelected
                           ? "border-[#ff705f] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ff705f]/25"
                           : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/50 hover:bg-white"
-                      }`}
+                        }`}
                     >
                       {/* Haut : Icône sauce + Badge profil goût */}
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -790,11 +786,10 @@ function SurMesurePage() {
                           {sauce.emoji}
                         </div>
                         {sauce.badge && (
-                          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                            isSelected
+                          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${isSelected
                               ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
                               : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
-                          }`}>
+                            }`}>
                             {sauce.badge}
                           </span>
                         )}
@@ -817,16 +812,15 @@ function SurMesurePage() {
 
                       {/* Bas : Tarif & Stepper stable (hauteur constante) */}
                       <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
-                        <span className={`text-[11px] font-black ${
-                          isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
-                        }`}>
+                        <span className={`text-[11px] font-black ${isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                          }`}>
                           {count === 0
                             ? totalSauceUnits <= 1
                               ? "1ère offerte"
                               : "+0,50 €"
                             : count === 1 && totalSauceUnits === 1
-                            ? "Offerte (0 €)"
-                            : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
+                              ? "Offerte (0 €)"
+                              : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
                         </span>
 
                         <div className="flex items-center gap-1.5 shrink-0">

@@ -296,3 +296,4 @@ export async function getRushHistory(): Promise<RushPauseRecord[]> {
   loadRushData(true);
   return memoryRushData.history.slice(0, 50);
 }
+

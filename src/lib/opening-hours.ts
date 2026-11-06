@@ -241,3 +241,4 @@ export function formatCountdown(totalSeconds: number): string {
   }
   return `${pad(m)}:${pad(s)}`;
 }
+
