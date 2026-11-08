@@ -1,8 +1,37 @@
+# Robots.txt — Poke N Bowl Visé (https://pokenbowl.be)
 User-agent: Googlebot
 Allow: /
+Allow: /commander
+Allow: /sur-mesure
+Allow: /product/
+Allow: /blog
+Allow: /blog/
+Allow: /contact
+Allow: /recrutement
+Allow: /assets/
+Disallow: /pos
+Disallow: /pos/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /track/
+Disallow: /api/
 
 User-agent: Bingbot
 Allow: /
+Allow: /commander
+Allow: /sur-mesure
+Allow: /product/
+Allow: /blog
+Allow: /blog/
+Allow: /contact
+Allow: /recrutement
+Allow: /assets/
+Disallow: /pos
+Disallow: /pos/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /track/
+Disallow: /api/
 
 User-agent: Twitterbot
 Allow: /
@@ -12,5 +41,19 @@ Allow: /
 
 User-agent: *
 Allow: /
+Allow: /commander
+Allow: /sur-mesure
+Allow: /product/
+Allow: /blog
+Allow: /blog/
+Allow: /contact
+Allow: /recrutement
+Allow: /assets/
+Disallow: /pos
+Disallow: /pos/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /track/
+Disallow: /api/
 
 Sitemap: https://pokenbowl.be/sitemap.xml

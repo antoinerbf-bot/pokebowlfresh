@@ -29,43 +29,99 @@ import { HoursBanner } from "@/components/HoursBanner";
 
 const RESTAURANT_SCHEMA = {
   "@context": "https://schema.org",
-  "@type": "FastFoodRestaurant",
+  "@type": ["Restaurant", "FastFoodRestaurant"],
   "name": "Poke N Bowl Visé",
-  "image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
+  "alternateName": [
+    "PokeNBowl",
+    "Poke N Bowl",
+    "Pokenbowl Visé",
+    "Pokenbowl Vise",
+    "Poke Bowl Visé",
+    "Poke Bowl Vise",
+    "Poké Bowl Visé"
+  ],
+  "image": [
+    "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
+    "https://pokenbowl.be/pwa-512x512.png"
+  ],
   "telephone": "+32491281456",
   "url": "https://pokenbowl.be",
+  "hasMenu": "https://pokenbowl.be/commander",
+  "menu": "https://pokenbowl.be/commander",
+  "servesCuisine": [
+    "Poké bowl",
+    "Hawaiian",
+    "Healthy Food",
+    "Crousty Chicken",
+    "Asian",
+    "Fast casual"
+  ],
+  "priceRange": "€€",
+  "currenciesAccepted": "EUR",
+  "paymentAccepted": "Cash, Credit Card, Apple Pay, Payconiq",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Avenue du Pont 12",
     "addressLocality": "Visé",
     "postalCode": "4600",
+    "addressRegion": "Liège",
     "addressCountry": "BE"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 50.7333,
-    "longitude": 5.6942
+    "latitude": 50.7337,
+    "longitude": 5.6931
   },
-  "servesCuisine": ["Poké bowl", "Fast casual", "Asian"],
-  "priceRange": "€€",
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "12:00",
-      "closes": "14:00"
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "17:30",
+      "closes": "20:30"
+    }
+  ],
+  "sameAs": [
+    "https://maps.app.goo.gl/TkddDsG9pwYb62558"
+  ],
+  "potentialAction": {
+    "@type": "OrderAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://pokenbowl.be/commander",
+      "inLanguage": "fr",
+      "actionPlatform": [
+        "http://schema.org/DesktopWebPlatform",
+        "http://schema.org/MobileWebPlatform"
+      ]
+    },
+    "deliveryMethod": [
+      "http://purl.org/goodrelations/v1#DeliveryModePickUp",
+      "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
+    ]
+  }
+};
+
+const BREADCRUMB_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "https://pokenbowl.be/"
     },
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "17:00",
-      "closes": "21:00"
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Carte & Menu",
+      "item": "https://pokenbowl.be/commander"
     },
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Saturday"],
-      "opens": "18:00",
-      "closes": "21:00"
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Composer son Poké Bowl",
+      "item": "https://pokenbowl.be/sur-mesure"
     }
   ]
 };
@@ -86,17 +142,48 @@ const FAQ_SCHEMA = {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" },
+      { title: "Poke N Bowl Visé | Poké Bowls Frais & Crousty Chicken (Livraison & Emporter)" },
       {
         name: "description",
         content:
-          "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon découpé minute, Crousty Chicken chaud (Formule Étudiant 11 € le midi) et desserts maison. Commande en ligne ou sur place !",
+          "Restaurant Poke N Bowl à Visé (4600) : savourez nos délicieux Poké Bowls frais préparés minute, saumon extra-frais découpé du jour, et notre Crousty Chicken chaud. Commande en ligne, livraison à domicile de 18h à 20h30 et retrait Avenue du Pont 12.",
       },
+      {
+        name: "keywords",
+        content:
+          "pokenbowl visé, pokenbowl vise, poke bowl visé, poke bowl vise, restaurant visé, livraison poke bowl vise, crousty chicken vise, poke bowl liège, commande pokebowl visé, pokenbowl 4600, avenue du pont vise",
+      },
+      { property: "og:title", content: "Poke N Bowl Visé | Poké Bowls Frais & Crousty Chicken" },
+      {
+        property: "og:description",
+        content:
+          "Restaurant Poke N Bowl à Visé (4600) : Poké Bowls frais découpés minute & Crousty Chicken chaud. Commandez en ligne pour emporter ou en livraison de 18h à 20h30.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://pokenbowl.be/" },
+      { property: "og:image", content: "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg" },
+      { property: "og:site_name", content: "Poke N Bowl Visé" },
+      { property: "og:locale", content: "fr_BE" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Poke N Bowl Visé | Poké Bowls Frais & Crousty Chicken" },
+      {
+        name: "twitter:description",
+        content:
+          "Le meilleur du Poké Bowl frais et Crousty Chicken chaud à Visé. Commande en ligne rapide, livraison et retrait.",
+      },
+      { name: "twitter:image", content: "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://pokenbowl.be/" },
     ],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify(RESTAURANT_SCHEMA),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(BREADCRUMB_SCHEMA),
       },
       {
         type: "application/ld+json",
@@ -146,7 +233,7 @@ function Ticker() {
     { icon: "🌱", text: "Saumon frais découpé du matin" },
     { icon: "🥢", text: "Riz préparé maison" },
     { icon: "🥑", text: "Avocats mûrs à point" },
-    { icon: "🍗", text: "Formule Étudiant Crousty 11 € avec canette (Midi uniquement)" },
+    { icon: "🍗", text: "Gamme Chaude Crousty Chicken 11 € avec canette" },
     { icon: "📍", text: "Centre de Visé · Avenue du Pont 12" },
     { icon: "🛵", text: "Click & Collect express en 15 min" },
   ];

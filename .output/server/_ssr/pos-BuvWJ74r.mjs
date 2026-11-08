@@ -1,9 +1,9 @@
 import { n as createServerFn } from "./ssr.mjs";
 import { a as numberType, n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
 import { a as getOrderFromStore, c as updateOrderCustomFields, l as updateOrderStatus, o as listOrdersFromStore, r as clearAllOrdersFromStore, s as requestOrderReprint, t as acknowledgePrint, u as upsertOrder } from "./order-store-pOittpxk.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-C_E7qsHo.js
+import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-BuvWJ74r.js
 /**
 * Générateur de commandes binaires ESC/POS pour Epson TM-m30III
 * Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
@@ -364,13 +364,9 @@ var createTestDeliveryOrder = createServerFn({ method: "POST" }).validator(objec
 				"+ Mayo-Wasabi (+0.50 €)",
 				"+ Mayo truffe (+0.50 €)",
 				"+ Teriyaki (+0.50 €)",
-				"Oignons frits",
-				"+ Noix de cajou (+0.50 €)",
-				"+ Graines de sésame (+0.50 €)",
-				"+ Nachos (+0.50 €)",
-				"+ Wasabi (+0.50 €)",
-				"+ Flocons-Chili (+0.50 €)",
-				"! Sans oignons"
+				"Oignon frit",
+				"+ Noix de cajou (+1.00 €)",
+				"! Sans concombre"
 			]
 		}, {
 			id: "crousty-chicken-curry",

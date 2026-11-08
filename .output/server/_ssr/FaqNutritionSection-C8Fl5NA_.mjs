@@ -2,10 +2,18 @@ import { i as __toESM } from "../_runtime.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
 import { Y as CircleQuestionMark, tt as ChevronDown } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/FaqNutritionSection-BOFtjS_G.js
+//#region node_modules/.nitro/vite/services/ssr/assets/FaqNutritionSection-C8Fl5NA_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FAQ_ITEMS = [
+	{
+		q: "Quels sont les horaires d'ouverture et de livraison de Poke N Bowl à Visé ?",
+		a: "Les prises de commandes en ligne ouvrent dès 17h30 sur notre site. Les livraisons à domicile sont assurées du lundi au samedi de 18h00 à 20h30 précises (aucune livraison le midi). Le retrait sur place en Click & Collect est disponible au 12 Avenue du Pont, 4600 Visé."
+	},
+	{
+		q: "Dans quelles communes et zones livrez-vous autour de Visé (4600) ?",
+		a: "Nous assurons la livraison rapide dans 19 communes et codes postaux de la Basse-Meuse : Visé (4600), Devant-le-Pont, Richelle, Argenteau, Warsage, Hermalle-sous-Argenteau, Oupeye, Haccourt, Dalhem, Bassenge et leurs environs. La livraison est offerte dès 50 € de commande !"
+	},
 	{
 		q: "D'où provient votre saumon et comment est-il préparé ?",
 		a: "Notre saumon atlantique est rigoureusement sélectionné pour sa fraîcheur et sa haute teneur en oméga-3. Chaque pièce est réceptionnée sous contrôle strict de température, désarêtée à la main et découpée minute en dés généreux chaque matin directement dans notre restaurant à Visé."

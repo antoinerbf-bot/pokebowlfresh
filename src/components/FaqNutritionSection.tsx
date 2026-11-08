@@ -8,6 +8,14 @@ interface FaqItem {
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
+    q: "Quels sont les horaires d'ouverture et de livraison de Poke N Bowl à Visé ?",
+    a: "Les prises de commandes en ligne ouvrent dès 17h30 sur notre site. Les livraisons à domicile sont assurées du lundi au samedi de 18h00 à 20h30 précises (aucune livraison le midi). Le retrait sur place en Click & Collect est disponible au 12 Avenue du Pont, 4600 Visé.",
+  },
+  {
+    q: "Dans quelles communes et zones livrez-vous autour de Visé (4600) ?",
+    a: "Nous assurons la livraison rapide dans 19 communes et codes postaux de la Basse-Meuse : Visé (4600), Devant-le-Pont, Richelle, Argenteau, Warsage, Hermalle-sous-Argenteau, Oupeye, Haccourt, Dalhem, Bassenge et leurs environs. La livraison est offerte dès 50 € de commande !",
+  },
+  {
     q: "D'où provient votre saumon et comment est-il préparé ?",
     a: "Notre saumon atlantique est rigoureusement sélectionné pour sa fraîcheur et sa haute teneur en oméga-3. Chaque pièce est réceptionnée sous contrôle strict de température, désarêtée à la main et découpée minute en dés généreux chaque matin directement dans notre restaurant à Visé.",
   },

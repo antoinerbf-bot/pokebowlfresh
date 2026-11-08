@@ -208,10 +208,15 @@ export function PokawaHeroExact() {
                 </span>
               </div>
 
-              {/* Titre élégant et épuré */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
-                {slide.dishName}
+              {/* Balise H1 SEO Principale pour Google (#1 pokenbowl vise) */}
+              <h1 className="sr-only">
+                Poke N Bowl Visé — Restaurant de Poké Bowls Frais, Crousty Chicken & Bowls sur mesure à Visé (4600)
               </h1>
+
+              {/* Titre du plat visuel */}
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
+                {slide.dishName}
+              </h2>
 
               {/* Sous-titre gourmand */}
               <p className="text-xs sm:text-base text-[#FAF5EE] font-semibold leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] max-w-xl">

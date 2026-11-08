@@ -8,7 +8,7 @@ import { F as LoaderCircle, G as CreditCard, Q as CircleAlert, Z as CircleCheckB
 import { c as getDeliveryZone } from "./bancontact-pro.server-DM2ZMn2Z.mjs";
 import { n as formatRushCountdown, r as useRushState } from "./RushPauseBanner-DtN6tzRr.mjs";
 import { n as getServiceSchedule } from "./opening-hours-DTFVo6EQ.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-GUjRQbPS.js
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-D1hu_jLe.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function CheckoutPage() {
@@ -484,26 +484,30 @@ function CheckoutPage() {
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-xs text-[#7A6857] leading-relaxed",
-												children: "Cartes bancaires (Visa, Mastercard), Apple Pay, Payconiq, Bancontact ou Virement direct"
+												children: "Cartes bancaires (Visa, Mastercard, Amex), Apple Pay, Payconiq ou Virement instantané"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "mt-1 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-[#DECBB3]/40 w-full text-[10px] font-bold text-[#2C1D16]",
 												children: [
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "rounded bg-black/5 px-2 py-0.5",
-														children: "💳 Cartes bancaires"
+														className: "rounded-lg bg-black/5 px-2.5 py-1 flex items-center gap-1 font-black",
+														children: "💳 Visa · Mastercard"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "rounded-lg bg-black text-white px-2.5 py-1 flex items-center gap-1 font-black shadow-xs",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+															className: "h-3 w-3 fill-current inline-block",
+															viewBox: "0 0 170 170",
+															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.59-7.71-11.66-14-4.88-7.5-8.83-16.14-11.86-25.91-3.03-9.77-4.55-19.34-4.55-28.71 0-14.79 3.8-27.18 11.41-37.16 7.6-9.98 17.1-15.08 28.5-15.3 4.89 0 10.14 1.25 15.75 3.75 5.61 2.5 9.4 3.81 11.37 3.93 1.63-.12 5.6-1.48 11.9-4.08 6.3-2.6 11.62-3.8 15.96-3.6 11.96.88 21.6 5.38 28.91 13.5-10.43 6.31-15.54 15.11-15.32 26.4.22 8.7 3.47 16.03 9.77 22 6.3 5.98 13.79 9.35 22.48 10.12-2.18 6.31-4.79 12.56-7.85 18.75zm-33.15-108.6c0-6.74 2.45-13.04 7.34-18.9 4.9-5.87 11.05-9.62 18.46-11.25.22 1.09.33 2.18.33 3.26 0 6.74-2.5 13.15-7.5 19.24-5 6.09-11.3 9.89-18.91 11.41-.11-1.3-.22-2.39-.22-3.76z" })
+														}), "Apple Pay"]
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "rounded bg-black/5 px-2 py-0.5",
-														children: "🍎 Apple Pay"
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "rounded bg-black/5 px-2 py-0.5",
+														className: "rounded-lg bg-pink-600/10 text-pink-700 border border-pink-500/20 px-2 py-0.5 font-black",
 														children: "📱 Payconiq"
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "rounded bg-black/5 px-2 py-0.5",
-														children: "⚡ Virement direct"
+														className: "rounded-lg bg-emerald-600/10 text-emerald-800 border border-emerald-500/20 px-2 py-0.5 font-bold",
+														children: "⚡ Virement"
 													})
 												]
 											})
@@ -618,7 +622,7 @@ function CheckoutPage() {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "text-[10px] text-white/70 mt-1 leading-snug",
-										children: "Cartes (Visa, Mastercard, Amex) · Apple Pay · Payconiq · Bancontact · Belfius"
+										children: "Cartes (Visa, Mastercard, Amex) · Apple Pay · Payconiq · Virement instantané"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "text-[9px] text-white/40 mt-1.5",

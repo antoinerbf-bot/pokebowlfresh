@@ -1027,75 +1027,94 @@ export function PosApplicationPage() {
             )}
           </div>
 
-          {/* Navigation 7 Onglets */}
-          <nav className="flex rounded-xl bg-black/40 p-1 overflow-x-auto max-w-[50vw]">
+          {/* Navigation 7 Onglets Hauts en Couleur (Ergonomie Tactile & Ludique) */}
+          <nav className="flex rounded-2xl bg-black/50 p-1.5 overflow-x-auto max-w-[55vw] gap-1 border border-white/10 shadow-inner">
             <button
               onClick={() => setActiveTab("dashboard")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "dashboard" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "dashboard"
+                  ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <LayoutDashboard className="h-3.5 w-3.5" />
+              <LayoutDashboard className="h-4 w-4 text-purple-300" />
               <span>Tableau de bord</span>
             </button>
 
             <button
               onClick={() => setActiveTab("kanban")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "kanban"
+                  ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <Layers className="h-3.5 w-3.5" />
-              <span>Commandes ({newOrdersList.length + preparingOrdersList.length + readyOrdersList.length})</span>
+              <Layers className="h-4 w-4 text-orange-200" />
+              <span>Commandes</span>
+              {newOrdersList.length + preparingOrdersList.length + readyOrdersList.length > 0 && (
+                <span className="rounded-full bg-white text-[#c93b2b] px-2 py-0.5 text-[10px] font-black shadow-xs">
+                  {newOrdersList.length + preparingOrdersList.length + readyOrdersList.length}
+                </span>
+              )}
             </button>
 
             <button
               onClick={() => setActiveTab("stock")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "stock" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "stock"
+                  ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <Salad className="h-3.5 w-3.5" />
+              <Salad className="h-4 w-4 text-emerald-200" />
               <span>Stocks</span>
             </button>
 
             <button
               onClick={() => setActiveTab("drivers")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "drivers" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "drivers"
+                  ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <Users className="h-3.5 w-3.5" />
+              <Users className="h-4 w-4 text-cyan-200" />
               <span>Livreurs</span>
             </button>
 
             <button
               onClick={() => setActiveTab("mileage")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "mileage" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "mileage"
+                  ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <Compass className="h-3.5 w-3.5" />
+              <Compass className="h-4 w-4 text-amber-200" />
               <span>Kilométrage</span>
             </button>
 
             <button
               onClick={() => setActiveTab("stats")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "stats" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "stats"
+                  ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <TrendingUp className="h-3.5 w-3.5" />
+              <TrendingUp className="h-4 w-4 text-pink-200" />
               <span>Stats</span>
             </button>
 
             <button
               onClick={() => setActiveTab("settings")}
-              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${
-                activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
+                activeTab === "settings"
+                  ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 scale-[1.03] ring-1 ring-white/30"
+                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
               }`}
             >
-              <Settings className="h-3.5 w-3.5" />
+              <Settings className="h-4 w-4 text-slate-300" />
               <span>Paramètres</span>
             </button>
           </nav>

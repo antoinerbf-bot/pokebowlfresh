@@ -19,18 +19,18 @@ import { a as getOrderFromStore, i as getOrderByDeliveryToken, l as updateOrderS
 import { a as getBancontactProApiKey, d as getRushHistory, f as getRushState, i as getAllBankKeyCandidates, l as getMollieApiKey, m as processCheckout, n as cancelRushPause, o as getBancontactProPayment, p as loadAndGetEnv, r as checkoutSchema, s as getCheckedFiles, t as activateRushPause, u as getMolliePayment } from "./bancontact-pro.server-DM2ZMn2Z.mjs";
 import { t as RushPauseBanner } from "./RushPauseBanner-DtN6tzRr.mjs";
 import { t as Route$28 } from "./order.success-ClqSIW9y.mjs";
-import { t as FAQ_ITEMS } from "./FaqNutritionSection-BOFtjS_G.mjs";
+import { t as FAQ_ITEMS } from "./FaqNutritionSection-C8Fl5NA_.mjs";
 import { t as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DBJZzrwH.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Ccj-YL3U.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-DyK5ybXV.css";
+var styles_default = "/assets/styles-9u5eQ7Q1.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -166,6 +166,38 @@ var Route$24 = createRootRouteWithContext()({
 				content: "Poke N Bowl Visé"
 			},
 			{
+				name: "robots",
+				content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+			},
+			{
+				name: "theme-color",
+				content: "#DECBB3"
+			},
+			{
+				name: "geo.region",
+				content: "BE-WLG"
+			},
+			{
+				name: "geo.placename",
+				content: "Visé"
+			},
+			{
+				name: "geo.position",
+				content: "50.7337;5.6931"
+			},
+			{
+				name: "ICBM",
+				content: "50.7337, 5.6931"
+			},
+			{
+				property: "og:site_name",
+				content: "Poke N Bowl Visé"
+			},
+			{
+				property: "og:locale",
+				content: "fr_BE"
+			},
+			{
 				property: "og:type",
 				content: "website"
 			},
@@ -245,62 +277,95 @@ function RootComponent() {
 		})] }) })
 	});
 }
-var $$splitComponentImporter$7 = () => import("./routes-BTlup7dc.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-KfHXMaaA.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
-	"@type": "FastFoodRestaurant",
+	"@type": ["Restaurant", "FastFoodRestaurant"],
 	"name": "Poke N Bowl Visé",
-	"image": "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg",
+	"alternateName": [
+		"PokeNBowl",
+		"Poke N Bowl",
+		"Pokenbowl Visé",
+		"Pokenbowl Vise",
+		"Poke Bowl Visé",
+		"Poke Bowl Vise",
+		"Poké Bowl Visé"
+	],
+	"image": ["https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg", "https://pokenbowl.be/pwa-512x512.png"],
 	"telephone": "+32491281456",
 	"url": "https://pokenbowl.be",
+	"hasMenu": "https://pokenbowl.be/commander",
+	"menu": "https://pokenbowl.be/commander",
+	"servesCuisine": [
+		"Poké bowl",
+		"Hawaiian",
+		"Healthy Food",
+		"Crousty Chicken",
+		"Asian",
+		"Fast casual"
+	],
+	"priceRange": "€€",
+	"currenciesAccepted": "EUR",
+	"paymentAccepted": "Cash, Credit Card, Apple Pay, Payconiq",
 	"address": {
 		"@type": "PostalAddress",
 		"streetAddress": "Avenue du Pont 12",
 		"addressLocality": "Visé",
 		"postalCode": "4600",
+		"addressRegion": "Liège",
 		"addressCountry": "BE"
 	},
 	"geo": {
 		"@type": "GeoCoordinates",
-		"latitude": 50.7333,
-		"longitude": 5.6942
+		"latitude": 50.7337,
+		"longitude": 5.6931
 	},
-	"servesCuisine": [
-		"Poké bowl",
-		"Fast casual",
-		"Asian"
-	],
-	"priceRange": "€€",
-	"openingHoursSpecification": [
+	"openingHoursSpecification": [{
+		"@type": "OpeningHoursSpecification",
+		"dayOfWeek": [
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday"
+		],
+		"opens": "17:30",
+		"closes": "20:30"
+	}],
+	"sameAs": ["https://maps.app.goo.gl/TkddDsG9pwYb62558"],
+	"potentialAction": {
+		"@type": "OrderAction",
+		"target": {
+			"@type": "EntryPoint",
+			"urlTemplate": "https://pokenbowl.be/commander",
+			"inLanguage": "fr",
+			"actionPlatform": ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"]
+		},
+		"deliveryMethod": ["http://purl.org/goodrelations/v1#DeliveryModePickUp", "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"]
+	}
+};
+var BREADCRUMB_SCHEMA = {
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
 		{
-			"@type": "OpeningHoursSpecification",
-			"dayOfWeek": [
-				"Monday",
-				"Tuesday",
-				"Wednesday",
-				"Thursday",
-				"Friday"
-			],
-			"opens": "12:00",
-			"closes": "14:00"
+			"@type": "ListItem",
+			"position": 1,
+			"name": "Accueil",
+			"item": "https://pokenbowl.be/"
 		},
 		{
-			"@type": "OpeningHoursSpecification",
-			"dayOfWeek": [
-				"Monday",
-				"Tuesday",
-				"Wednesday",
-				"Thursday",
-				"Friday"
-			],
-			"opens": "17:00",
-			"closes": "21:00"
+			"@type": "ListItem",
+			"position": 2,
+			"name": "Carte & Menu",
+			"item": "https://pokenbowl.be/commander"
 		},
 		{
-			"@type": "OpeningHoursSpecification",
-			"dayOfWeek": ["Saturday"],
-			"opens": "18:00",
-			"closes": "21:00"
+			"@type": "ListItem",
+			"position": 3,
+			"name": "Composer son Poké Bowl",
+			"item": "https://pokenbowl.be/sur-mesure"
 		}
 	]
 };
@@ -318,21 +383,83 @@ var FAQ_SCHEMA = {
 };
 var Route$23 = createFileRoute("/")({
 	head: () => ({
-		meta: [{ title: "Poke N Bowl Visé — Poké bowls frais & Crousty Chicken à emporter" }, {
-			name: "description",
-			content: "Poke N Bowl à Visé : le meilleur du Poké Bowl frais, saumon découpé minute, Crousty Chicken chaud (Formule Étudiant 11 € le midi) et desserts maison. Commande en ligne ou sur place !"
+		meta: [
+			{ title: "Poke N Bowl Visé | Poké Bowls Frais & Crousty Chicken (Livraison & Emporter)" },
+			{
+				name: "description",
+				content: "Restaurant Poke N Bowl à Visé (4600) : savourez nos délicieux Poké Bowls frais préparés minute, saumon extra-frais découpé du jour, et notre Crousty Chicken chaud. Commande en ligne, livraison à domicile de 18h à 20h30 et retrait Avenue du Pont 12."
+			},
+			{
+				name: "keywords",
+				content: "pokenbowl visé, pokenbowl vise, poke bowl visé, poke bowl vise, restaurant visé, livraison poke bowl vise, crousty chicken vise, poke bowl liège, commande pokebowl visé, pokenbowl 4600, avenue du pont vise"
+			},
+			{
+				property: "og:title",
+				content: "Poke N Bowl Visé | Poké Bowls Frais & Crousty Chicken"
+			},
+			{
+				property: "og:description",
+				content: "Restaurant Poke N Bowl à Visé (4600) : Poké Bowls frais découpés minute & Crousty Chicken chaud. Commandez en ligne pour emporter ou en livraison de 18h à 20h30."
+			},
+			{
+				property: "og:type",
+				content: "website"
+			},
+			{
+				property: "og:url",
+				content: "https://pokenbowl.be/"
+			},
+			{
+				property: "og:image",
+				content: "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg"
+			},
+			{
+				property: "og:site_name",
+				content: "Poke N Bowl Visé"
+			},
+			{
+				property: "og:locale",
+				content: "fr_BE"
+			},
+			{
+				name: "twitter:card",
+				content: "summary_large_image"
+			},
+			{
+				name: "twitter:title",
+				content: "Poke N Bowl Visé | Poké Bowls Frais & Crousty Chicken"
+			},
+			{
+				name: "twitter:description",
+				content: "Le meilleur du Poké Bowl frais et Crousty Chicken chaud à Visé. Commande en ligne rapide, livraison et retrait."
+			},
+			{
+				name: "twitter:image",
+				content: "https://pokenbowl.be/assets/hero-saumon-clean-wide.jpg"
+			}
+		],
+		links: [{
+			rel: "canonical",
+			href: "https://pokenbowl.be/"
 		}],
-		scripts: [{
-			type: "application/ld+json",
-			children: JSON.stringify(RESTAURANT_SCHEMA)
-		}, {
-			type: "application/ld+json",
-			children: JSON.stringify(FAQ_SCHEMA)
-		}]
+		scripts: [
+			{
+				type: "application/ld+json",
+				children: JSON.stringify(RESTAURANT_SCHEMA)
+			},
+			{
+				type: "application/ld+json",
+				children: JSON.stringify(BREADCRUMB_SCHEMA)
+			},
+			{
+				type: "application/ld+json",
+				children: JSON.stringify(FAQ_SCHEMA)
+			}
+		]
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
-var $$splitComponentImporter$6 = () => import("./checkout-GUjRQbPS.mjs");
+var $$splitComponentImporter$6 = () => import("./checkout-D1hu_jLe.mjs");
 var Route$22 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
 var $$splitComponentImporter$5 = () => import("./commander-CWYyFEI5.mjs");
 var COMMANDER_MENU_SCHEMA = {
@@ -1400,13 +1527,9 @@ async function createHandler(request) {
 					"+ Mayo-Wasabi (+0.50 €)",
 					"+ Mayo truffe (+0.50 €)",
 					"+ Teriyaki (+0.50 €)",
-					"Oignons frits",
-					"+ Noix de cajou (+0.50 €)",
-					"+ Graines de sésame (+0.50 €)",
-					"+ Nachos (+0.50 €)",
-					"+ Wasabi (+0.50 €)",
-					"+ Flocons-Chili (+0.50 €)",
-					"! Sans oignons"
+					"Oignon frit",
+					"+ Noix de cajou (+1.00 €)",
+					"! Sans concombre"
 				]
 			}, {
 				id: "crousty-chicken-curry",
@@ -3606,46 +3729,49 @@ function PosApplicationPage() {
 						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-						className: "flex rounded-xl bg-black/40 p-1 overflow-x-auto max-w-[50vw]",
+						className: "flex rounded-2xl bg-black/50 p-1.5 overflow-x-auto max-w-[55vw] gap-1 border border-white/10 shadow-inner",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("dashboard"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "dashboard" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayoutDashboard, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tableau de bord" })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "dashboard" ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayoutDashboard, { className: "h-4 w-4 text-purple-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tableau de bord" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("kanban"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "kanban" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-									"Commandes (",
-									newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
-									")"
-								] })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "kanban" ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, { className: "h-4 w-4 text-orange-200" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commandes" }),
+									newOrdersList.length + preparingOrdersList.length + readyOrdersList.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "rounded-full bg-white text-[#c93b2b] px-2 py-0.5 text-[10px] font-black shadow-xs",
+										children: newOrdersList.length + preparingOrdersList.length + readyOrdersList.length
+									})
+								]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("stock"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "stock" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Salad, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stocks" })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "stock" ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Salad, { className: "h-4 w-4 text-emerald-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stocks" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("drivers"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "drivers" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Livreurs" })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "drivers" ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "h-4 w-4 text-cyan-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Livreurs" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("mileage"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "mileage" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Compass, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kilométrage" })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "mileage" ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Compass, { className: "h-4 w-4 text-amber-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kilométrage" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("stats"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "stats" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stats" })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "stats" ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4 text-pink-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stats" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => setActiveTab("settings"),
-								className: `flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition cursor-pointer shrink-0 ${activeTab === "settings" ? "bg-[#ff705f] text-white shadow" : "text-[#8ea39b] hover:text-white"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Paramètres" })]
+								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "settings" ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, { className: "h-4 w-4 text-slate-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Paramètres" })]
 							})
 						]
 					}),

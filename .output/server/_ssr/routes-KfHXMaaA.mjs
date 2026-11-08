@@ -10,9 +10,9 @@ import { $ as ChevronRight, B as Funnel, E as Phone, J as Clock, M as MessageCir
 import { a as bowl_crousty_mix_default, c as bowl_sweet_chicken_default, d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, i as bowl_crousty_curry_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, o as bowl_saumon_default, p as drink_fanta_orange_default, r as bowl_crousty_blanche_default, s as bowl_scampis_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-CUw3aYqz.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-BpboJaFF.mjs";
 import { n as tiramisu_nutella_default, t as HoursBanner } from "./HoursBanner-DqXU3bxZ.mjs";
-import { n as FaqNutritionSection } from "./FaqNutritionSection-BOFtjS_G.mjs";
+import { n as FaqNutritionSection } from "./FaqNutritionSection-C8Fl5NA_.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BTlup7dc.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-KfHXMaaA.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [
@@ -1445,6 +1445,10 @@ function PokawaHeroExact() {
 									]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+									className: "sr-only",
+									children: "Poke N Bowl Visé — Restaurant de Poké Bowls Frais, Crousty Chicken & Bowls sur mesure à Visé (4600)"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-tight drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]",
 									children: slide.dishName
 								}),
@@ -4573,7 +4577,7 @@ function Ticker() {
 		},
 		{
 			icon: "🍗",
-			text: "Formule Étudiant Crousty 11 € avec canette (Midi uniquement)"
+			text: "Gamme Chaude Crousty Chicken 11 € avec canette"
 		},
 		{
 			icon: "📍",
