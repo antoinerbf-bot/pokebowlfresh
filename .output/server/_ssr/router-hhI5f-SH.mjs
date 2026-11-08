@@ -26,11 +26,11 @@ import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DunZDdRk.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-hhI5f-SH.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-9u5eQ7Q1.css";
+var styles_default = "/assets/styles-BsL04QnF.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -275,7 +275,7 @@ function RootComponent() {
 	}, [resolvedPathname]);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryClientProvider, {
 		client: queryClient,
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CartProvider, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RushPauseBanner, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(I18nProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CartProvider, { children: [!resolvedPathname.startsWith("/pos") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RushPauseBanner, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Suspense, {
 			fallback: null,
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 		})] }) })
@@ -2840,6 +2840,7 @@ function PosApplicationPage() {
 	const [modalQrDataUrl, setModalQrDataUrl] = (0, import_react.useState)("");
 	const [activeTab, setActiveTab] = (0, import_react.useState)("kanban");
 	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
+	const [kanbanMobileCol, setKanbanMobileCol] = (0, import_react.useState)("all");
 	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
@@ -3625,7 +3626,7 @@ function PosApplicationPage() {
 		return orders.filter((o) => o.createdAt.slice(0, 10) === todayStr && o.status !== "cancelled").reduce((acc, o) => acc + (o.total || 0), 0);
 	}, [orders]);
 	if (!isUnlocked) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "flex min-h-screen items-center justify-center bg-[#0d1a16] p-4 text-white",
+		className: "flex min-h-[100dvh] items-center justify-center bg-[#0d1a16] p-4 text-white",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "w-full max-w-sm rounded-3xl bg-[#142822] border border-white/10 p-8 shadow-2xl space-y-6 text-center",
 			children: [
@@ -3679,202 +3680,226 @@ function PosApplicationPage() {
 		})
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden",
+		className: "pos-screen-ui flex h-screen h-[100dvh] w-full flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-				className: "flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 sm:px-6 bg-[#162721]",
+				className: "flex h-14 sm:h-16 shrink-0 items-center justify-between border-b border-white/10 px-3 sm:px-6 bg-[#162721] gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 sm:gap-4 shrink-0",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "flex h-3 w-3 relative",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "text-sm sm:text-base font-black tracking-wider text-white",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hidden xs:inline",
+									children: "POKENBOWL "
+								}), "POS"]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: `hidden sm:flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-black ${kitchenLoad.badge}`,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+								kitchenLoad.label,
+								" (",
+								activeOrders.length,
+								")"
+							] })]
+						}),
+						rushState.isPaused ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center gap-1.5 sm:gap-2 rounded-xl bg-red-600 px-2.5 py-1 text-[11px] sm:text-xs font-black text-white shadow-lg animate-pulse",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pause, { className: "h-3.5 w-3.5" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+									"PAUSE ",
+									Math.floor(rushState.remainingSeconds / 60),
+									":",
+									(rushState.remainingSeconds % 60).toString().padStart(2, "0")
+								] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: handleResumeRush,
+									className: "ml-1 rounded-md bg-white text-red-700 px-1.5 py-0.5 text-[9px] sm:text-[10px] uppercase font-black hover:bg-white/90",
+									children: "Réouvrir"
+								})
+							]
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => setShowRushModal(true),
+							className: "hidden md:flex items-center gap-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 px-2.5 py-1 text-xs font-bold text-amber-300 transition cursor-pointer",
+							title: "Mettre temporairement en pause les nouvelles commandes sur le site",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pause, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pause Rush" })]
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1.5 sm:gap-2 shrink-0",
+					children: [
+						!rushState.isPaused && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "hidden lg:flex items-center gap-1 bg-black/40 rounded-xl p-1 border border-white/10",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] font-black uppercase text-[#8ea39b] px-1.5",
+									children: "Pause :"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => handleSetRushPause(10),
+									className: "rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-2 py-1 text-[10px] font-black shadow transition active:scale-95 cursor-pointer",
+									title: "Pause Rush 10 minutes",
+									children: "⏸️ 10m"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => handleSetRushPause(20),
+									className: "rounded-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-2 py-1 text-[10px] font-black shadow transition active:scale-95 cursor-pointer",
+									title: "Pause Rush 20 minutes",
+									children: "⏸️ 20m"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => handleSetRushPause(30),
+									className: "rounded-lg bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-2 py-1 text-[10px] font-black shadow transition active:scale-95 cursor-pointer",
+									title: "Pause Rush 30 minutes",
+									children: "⏸️ 30m"
+								})
+							]
+						}),
+						!rushState.isPaused && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => setShowRushModal(true),
+							className: "flex md:hidden items-center gap-1 rounded-xl bg-amber-500/20 border border-amber-500/40 px-2.5 py-1.5 text-[11px] font-bold text-amber-300",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pause, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pause" })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => {
+								if (!config.soundEnabled) {
+									enableSoundAndTest();
+									return;
+								}
+								const updated = {
+									...config,
+									soundEnabled: false
+								};
+								setConfig(updated);
+								savePrinterConfig(updated);
+							},
+							className: `rounded-xl p-2 sm:p-2.5 transition cursor-pointer ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"}`,
+							title: config.soundEnabled ? "Désactiver le son" : "Activer le son",
+							children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-4 w-4 sm:h-5 sm:w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-4 w-4 sm:h-5 sm:w-5" })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: loadOrders,
+							className: "rounded-xl bg-white/10 p-2 sm:p-2.5 text-white hover:bg-white/20 active:scale-95 transition cursor-pointer",
+							title: "Rafraîchir",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-4 w-4 sm:h-5 sm:w-5 ${loading ? "animate-spin" : ""}` })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+							href: `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`,
+							target: "_blank",
+							rel: "noreferrer",
+							className: "hidden xl:flex items-center gap-1.5 rounded-xl bg-black/40 hover:bg-black/60 px-2.5 py-1.5 text-xs font-bold border border-white/10 transition",
+							title: "Autoriser l'imprimante dans Chrome",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "h-3.5 w-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[#98aba3]",
+								children: config.printerIp
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setIsUnlocked(false),
+							className: "rounded-xl bg-white/5 hover:bg-white/15 p-2 sm:p-2.5 text-[#8ea39b] hover:text-white transition cursor-pointer",
+							title: "Verrouiller la caisse",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "h-4 w-4 sm:h-5 sm:w-5" })
+						})
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+				className: "flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 bg-[#0e1c17] border-b border-white/10 overflow-x-auto no-scrollbar scroll-smooth shrink-0",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-3 sm:gap-5",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("dashboard"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "dashboard" ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayoutDashboard, { className: "h-4 w-4 text-purple-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tableau de bord" })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("kanban"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "kanban" ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "flex h-3 w-3 relative",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" })]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-base sm:text-lg font-black tracking-wider text-white",
-									children: "POKENBOWL POS"
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: `hidden md:flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-black ${kitchenLoad.badge}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-									kitchenLoad.label,
-									" (",
-									activeOrders.length,
-									")"
-								] })]
-							}),
-							rushState.isPaused ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2 rounded-xl bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg animate-pulse",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pause, { className: "h-3.5 w-3.5" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-										"EN PAUSE · ",
-										Math.floor(rushState.remainingSeconds / 60),
-										":",
-										(rushState.remainingSeconds % 60).toString().padStart(2, "0")
-									] }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										onClick: handleResumeRush,
-										className: "ml-1 rounded-md bg-white text-red-700 px-2 py-0.5 text-[10px] uppercase font-black hover:bg-white/90",
-										children: "Réouvrir"
-									})
-								]
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								type: "button",
-								onClick: () => setShowRushModal(true),
-								className: "hidden sm:flex items-center gap-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 px-2.5 py-1 text-xs font-bold text-amber-300 transition",
-								title: "Mettre temporairement en pause les nouvelles commandes sur le site",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pause, { className: "h-3.5 w-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pause Rush" })]
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, { className: "h-4 w-4 text-orange-200" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commandes" }),
+							newOrdersList.length + preparingOrdersList.length + readyOrdersList.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "rounded-full bg-white text-[#c93b2b] px-2 py-0.5 text-[10px] font-black shadow-xs",
+								children: newOrdersList.length + preparingOrdersList.length + readyOrdersList.length
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-						className: "flex rounded-2xl bg-black/50 p-1.5 overflow-x-auto max-w-[55vw] gap-1 border border-white/10 shadow-inner",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("stock"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "stock" ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("dashboard"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "dashboard" ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayoutDashboard, { className: "h-4 w-4 text-purple-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tableau de bord" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("kanban"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "kanban" ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layers, { className: "h-4 w-4 text-orange-200" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Commandes" }),
-									newOrdersList.length + preparingOrdersList.length + readyOrdersList.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "rounded-full bg-white text-[#c93b2b] px-2 py-0.5 text-[10px] font-black shadow-xs",
-										children: newOrdersList.length + preparingOrdersList.length + readyOrdersList.length
-									})
-								]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("stock"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "stock" ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Salad, { className: "h-4 w-4 text-emerald-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stocks" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("drivers"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "drivers" ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "h-4 w-4 text-cyan-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Livreurs" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("mileage"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "mileage" ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Compass, { className: "h-4 w-4 text-amber-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kilométrage" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("stats"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "stats" ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4 text-pink-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stats" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => setActiveTab("settings"),
-								className: `flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${activeTab === "settings" ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 scale-[1.03] ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, { className: "h-4 w-4 text-slate-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Paramètres" })]
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Salad, { className: "h-4 w-4 text-emerald-200" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stocks" }),
+							stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "rounded-full bg-red-500 text-white px-2 py-0.5 text-[10px] font-black shadow-xs animate-pulse",
+								children: stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length
 							})
 						]
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-2",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("drivers"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "drivers" ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => {
-									if (!config.soundEnabled) {
-										enableSoundAndTest();
-										return;
-									}
-									const updated = {
-										...config,
-										soundEnabled: false
-									};
-									setConfig(updated);
-									savePrinterConfig(updated);
-								},
-								className: `rounded-xl p-2.5 transition ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"}`,
-								title: config.soundEnabled ? "Désactiver le son" : "Activer le son",
-								children: config.soundEnabled ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-5 w-5" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "h-5 w-5" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: loadOrders,
-								className: "rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition",
-								title: "Rafraîchir",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-5 w-5 ${loading ? "animate-spin" : ""}` })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-								href: `https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`,
-								target: "_blank",
-								rel: "noreferrer",
-								className: "hidden lg:flex items-center gap-1.5 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-2 text-xs font-bold border border-white/10 transition",
-								title: "Autoriser l'imprimante dans Chrome",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "h-4 w-4 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[#98aba3]",
-									children: config.printerIp
-								})]
-							}),
-							!rushState.isPaused ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "hidden sm:flex items-center gap-1.5 bg-black/40 rounded-2xl p-1 border border-white/10",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-[10px] font-black uppercase text-[#8ea39b] px-1.5",
-										children: "Pause :"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										onClick: () => handleSetRushPause(10),
-										className: "rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer",
-										title: "Pause Rush 10 minutes",
-										children: "⏸️ 10m"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										onClick: () => handleSetRushPause(20),
-										className: "rounded-xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer",
-										title: "Pause Rush 20 minutes",
-										children: "⏸️ 20m"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										onClick: () => handleSetRushPause(30),
-										className: "rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer",
-										title: "Pause Rush 30 minutes",
-										children: "⏸️ 30m"
-									})
-								]
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								onClick: handleResumeRush,
-								className: "hidden sm:flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-3 py-1.5 text-xs font-black shadow-lg shadow-emerald-500/30 animate-pulse active:scale-95 cursor-pointer transition",
-								children: "▶️ Réouvrir"
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "h-4 w-4 text-cyan-200" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Livreurs" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "rounded-full bg-white/15 px-1.5 py-0.5 text-[10px] font-bold text-white",
+								children: drivers.filter((d) => d.active).length
 							})
 						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("mileage"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "mileage" ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Compass, { className: "h-4 w-4 text-amber-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kilométrage" })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("stats"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "stats" ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4 text-pink-200" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Stats" })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: () => setActiveTab("settings"),
+						className: `flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "settings" ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 ring-1 ring-white/30" : "text-[#8ea39b] hover:text-white hover:bg-white/10"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, { className: "h-4 w-4 text-slate-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Paramètres" })]
 					})
 				]
 			}),
 			rushState.isPaused && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-amber-600 via-red-600 to-rose-700 px-5 py-2.5 text-white shadow-xl border-b-2 border-red-400",
+				className: "flex items-center justify-between gap-2 bg-gradient-to-r from-amber-600 via-red-600 to-rose-700 px-3 sm:px-5 py-2 text-white shadow-xl border-b-2 border-red-400 shrink-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "flex h-3 w-3 rounded-full bg-yellow-300 animate-ping" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-xs sm:text-sm font-black uppercase tracking-wider block",
-						children: "🔥 VICTIME DE NOTRE SUCCÈS — PRISE DE COMMANDES EN PAUSE SUR LE SITE"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[11px] text-white/80",
-						children: "Le site client affiche le décompte en direct. Les commandes en cuisine restent actives."
-					})] })]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-1.5 bg-black/40 px-3.5 py-1.5 rounded-xl border border-white/20",
+					className: "flex items-center gap-2 sm:gap-3 min-w-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "flex h-2.5 w-2.5 rounded-full bg-yellow-300 animate-ping shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "min-w-0",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-[10px] font-black uppercase text-amber-200",
+							className: "text-xs sm:text-sm font-black uppercase tracking-wider block truncate",
+							children: "🔥 VICTIME DE NOTRE SUCCÈS — COMMANDES EN PAUSE SUR LE SITE"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[11px] text-white/80 hidden md:inline",
+							children: "Le site client affiche le décompte en direct. Les commandes en cuisine restent actives."
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 shrink-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-1.5 bg-black/40 px-2.5 sm:px-3 py-1 rounded-xl border border-white/20",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-[10px] font-black uppercase text-amber-200 hidden sm:inline",
 							children: "Reprise dans :"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							className: "font-mono text-lg font-black text-white",
+							className: "font-mono text-sm sm:text-base font-black text-white",
 							children: [
 								Math.floor(rushState.remainingSeconds / 60),
 								":",
@@ -3884,17 +3909,17 @@ function PosApplicationPage() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						type: "button",
 						onClick: handleResumeRush,
-						className: "rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 cursor-pointer transition active:scale-95",
-						children: "▶️ Réouvrir maintenant"
+						className: "rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 cursor-pointer transition active:scale-95 shrink-0",
+						children: "▶️ Réouvrir"
 					})]
 				})]
 			}),
 			unacceptedOrders.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center justify-between bg-gradient-to-r from-red-600 via-[#ff705f] to-amber-600 px-5 py-2.5 text-white shadow-md animate-pulse",
+				className: "flex items-center justify-between gap-2 bg-gradient-to-r from-red-600 via-[#ff705f] to-amber-600 px-3 sm:px-5 py-2 text-white shadow-md animate-pulse shrink-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "flex h-3 w-3 rounded-full bg-white animate-ping" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "text-xs sm:text-sm font-black uppercase tracking-wider",
+					className: "flex items-center gap-2 sm:gap-3 min-w-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "flex h-2.5 w-2.5 rounded-full bg-white animate-ping shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "text-xs sm:text-sm font-black uppercase tracking-wider truncate",
 						children: [
 							"🔔 ",
 							unacceptedOrders.length,
@@ -3902,30 +3927,33 @@ function PosApplicationPage() {
 							unacceptedOrders.length > 1 ? "S" : "",
 							" COMMANDE",
 							unacceptedOrders.length > 1 ? "S" : "",
-							" EN ATTENTE DE VALIDATION"
+							" À VALIDER"
 						]
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "flex items-center gap-2",
+					className: "flex items-center gap-2 shrink-0",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						type: "button",
 						onClick: () => {
 							const first = unacceptedOrders[0];
 							if (first) setSelectedOrder(first);
 						},
-						className: "rounded-lg bg-white text-[#2C1D16] px-3 py-1 text-xs font-black shadow hover:bg-white/90",
+						className: "rounded-lg bg-white text-[#2C1D16] px-3 py-1 text-xs font-black shadow hover:bg-white/90 cursor-pointer transition active:scale-95",
 						children: "Voir & Valider"
 					})
 				})]
 			}),
 			printBannerError && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center justify-between bg-amber-500/20 border-b border-amber-500/40 px-5 py-2 text-xs text-amber-200",
+				className: "flex items-center justify-between gap-2 bg-amber-500/20 border-b border-amber-500/40 px-3 sm:px-5 py-1.5 text-xs text-amber-200 shrink-0",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: printBannerError })]
+					className: "flex items-center gap-2 min-w-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 text-amber-400 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "truncate",
+						children: printBannerError
+					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					onClick: () => setPrintBannerError(null),
-					className: "font-bold hover:text-white",
+					className: "font-bold hover:text-white px-2 py-0.5 cursor-pointer",
 					children: "✕"
 				})]
 			}),
@@ -3933,40 +3961,43 @@ function PosApplicationPage() {
 				className: "flex flex-1 min-h-0 overflow-hidden",
 				children: [
 					activeTab === "dashboard" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6",
+						className: "flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border-2 border-white/10 p-6 shadow-xl",
+								className: "rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border-2 border-white/10 p-4 sm:p-6 shadow-xl",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center gap-4",
+										className: "flex items-center gap-3 sm:gap-4",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: `h-14 w-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg transition-transform ${rushState.isPaused ? "bg-gradient-to-br from-red-500 to-rose-600 text-white animate-pulse scale-105" : "bg-gradient-to-br from-amber-500 to-orange-500 text-white"}`,
+											className: `h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg shrink-0 transition-transform ${rushState.isPaused ? "bg-gradient-to-br from-red-500 to-rose-600 text-white animate-pulse scale-105" : "bg-gradient-to-br from-amber-500 to-orange-500 text-white"}`,
 											children: rushState.isPaused ? "🔥" : "⚡"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black uppercase tracking-wider text-[#ff705f]",
-												children: "Gestion du Rush Cuisine"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-												className: "text-xl sm:text-2xl font-black text-white",
-												children: rushState.isPaused ? "Pause Active : Victime de notre succès !" : "Mise en Pause des Commandes Web"
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-xs text-[#8ea39b] mt-0.5",
-												children: rushState.isPaused ? "Le site public affiche 'Victime de notre succès' avec compte à rebours de reprise." : "Permet à la cuisine de souffler et préparer les commandes sans accumulation."
-											})
-										] })]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "min-w-0",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#ff705f]",
+													children: "Gestion du Rush Cuisine"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+													className: "text-lg sm:text-2xl font-black text-white truncate",
+													children: rushState.isPaused ? "Pause Active : Victime de notre succès !" : "Mise en Pause des Commandes Web"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+													className: "text-xs text-[#8ea39b] mt-0.5 line-clamp-2",
+													children: rushState.isPaused ? "Le site public affiche 'Victime de notre succès' avec compte à rebours de reprise." : "Permet à la cuisine de souffler et préparer les commandes sans accumulation."
+												})
+											]
+										})]
 									}), rushState.isPaused ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center gap-3",
+										className: "flex items-center gap-3 shrink-0",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "text-right",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "block text-xs font-black uppercase text-red-400",
+												className: "block text-[10px] sm:text-xs font-black uppercase text-red-400",
 												children: "Reprise dans"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "font-mono text-3xl font-black text-white tracking-wider",
+												className: "font-mono text-2xl sm:text-3xl font-black text-white tracking-wider",
 												children: [
 													Math.floor(rushState.remainingSeconds / 60),
 													":",
@@ -3975,16 +4006,16 @@ function PosApplicationPage() {
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: handleResumeRush,
-											className: "rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition hover:scale-105 active:scale-95 cursor-pointer",
+											className: "rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition hover:scale-105 active:scale-95 cursor-pointer shrink-0",
 											children: "▶️ Réouvrir maintenant"
 										})]
 									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: () => setShowRushModal(true),
-										className: "rounded-2xl bg-gradient-to-r from-amber-500 to-[#ea580c] hover:from-amber-400 hover:to-orange-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg shadow-amber-500/30 transition hover:scale-105 active:scale-95 cursor-pointer",
+										className: "rounded-2xl bg-gradient-to-r from-amber-500 to-[#ea580c] hover:from-amber-400 hover:to-orange-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg shadow-amber-500/30 transition hover:scale-105 active:scale-95 cursor-pointer shrink-0",
 										children: "⏸️ Mettre en pause le site"
 									})]
 								}), !rushState.isPaused && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "mt-4 flex flex-wrap items-center gap-3",
+									className: "mt-4 flex flex-wrap items-center gap-2 sm:gap-3",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-xs font-bold text-[#8ea39b]",
@@ -3992,89 +4023,89 @@ function PosApplicationPage() {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => handleSetRushPause(10),
-											className: "rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer",
+											className: "rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-black shadow-md shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer",
 											children: "⏸️ 10 Minutes"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => handleSetRushPause(20),
-											className: "rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition cursor-pointer",
+											className: "rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-black shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition cursor-pointer",
 											children: "⏸️ 20 Minutes"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => handleSetRushPause(30),
-											className: "rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-red-600/20 hover:scale-105 active:scale-95 transition cursor-pointer",
+											className: "rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-black shadow-md shadow-red-600/20 hover:scale-105 active:scale-95 transition cursor-pointer",
 											children: "⏸️ 30 Minutes"
 										})
 									]
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-2 lg:grid-cols-4 gap-4",
+								className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-[#142822] border border-white/10 p-4",
+										className: "rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black uppercase text-[#ff705f]",
+												className: "text-[11px] sm:text-xs font-black uppercase text-[#ff705f]",
 												children: "À Valider"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-1 font-mono text-3xl font-black text-white",
+												className: "mt-1 font-mono text-2xl sm:text-3xl font-black text-white",
 												children: newOrdersList.length
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-1 text-[11px] text-[#8ea39b]",
+												className: "mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]",
 												children: "Nouvelles commandes urgentes"
 											})
 										]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-[#142822] border border-white/10 p-4",
+										className: "rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black uppercase text-amber-400",
+												className: "text-[11px] sm:text-xs font-black uppercase text-amber-400",
 												children: "En Préparation"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-1 font-mono text-3xl font-black text-white",
+												className: "mt-1 font-mono text-2xl sm:text-3xl font-black text-white",
 												children: preparingOrdersList.length
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												className: "mt-1 text-[11px] text-[#8ea39b]",
+												className: "mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]",
 												children: ["Temps estimé : ", kitchenLoad.estTime]
 											})
 										]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-[#142822] border border-white/10 p-4",
+										className: "rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black uppercase text-blue-400",
+												className: "text-[11px] sm:text-xs font-black uppercase text-blue-400",
 												children: "En Livraison / Prêtes"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-1 font-mono text-3xl font-black text-white",
+												className: "mt-1 font-mono text-2xl sm:text-3xl font-black text-white",
 												children: readyOrdersList.length
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "mt-1 text-[11px] text-[#8ea39b]",
+												className: "mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]",
 												children: "Départ Avenue du Pont 12"
 											})
 										]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "rounded-2xl bg-[#142822] border border-white/10 p-4",
+										className: "rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-xs font-black uppercase text-emerald-400",
+												className: "text-[11px] sm:text-xs font-black uppercase text-emerald-400",
 												children: "CA Aujourd'hui"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												className: "mt-1 font-mono text-3xl font-black text-white",
+												className: "mt-1 font-mono text-2xl sm:text-3xl font-black text-white",
 												children: [todayRevenue.toFixed(2), " €"]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												className: "mt-1 text-[11px] text-[#8ea39b]",
+												className: "mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]",
 												children: [completedOrdersList.length, " terminées"]
 											})
 										]
@@ -4082,16 +4113,16 @@ function PosApplicationPage() {
 								]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "rounded-3xl bg-[#142822] border border-white/10 p-5 space-y-3",
+								className: "rounded-3xl bg-[#142822] border border-white/10 p-4 sm:p-5 space-y-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center justify-between",
+									className: "flex items-center justify-between gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "font-black text-base text-white",
-										children: "Commandes en cours nécessitant une action"
+										className: "font-black text-sm sm:text-base text-white truncate",
+										children: "Commandes nécessitant une action"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: () => setActiveTab("kanban"),
-										className: "text-xs font-bold text-[#ff705f] hover:underline",
-										children: "Ouvrir le Kanban complet →"
+										className: "text-xs font-bold text-[#ff705f] hover:underline shrink-0",
+										children: "Kanban complet →"
 									})]
 								}), activeOrders.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-xs text-[#8ea39b] py-6 text-center",
@@ -4099,9 +4130,9 @@ function PosApplicationPage() {
 								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "divide-y divide-white/5",
 									children: activeOrders.slice(0, 5).map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center justify-between py-3",
+										className: "flex items-center justify-between py-3 gap-2",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "space-y-0.5",
+											className: "space-y-0.5 min-w-0 flex-1 pr-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex items-center gap-2",
 												children: [
@@ -4110,18 +4141,18 @@ function PosApplicationPage() {
 														children: o.id
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "text-xs font-bold text-white",
+														className: "text-xs font-bold text-white truncate",
 														children: o.customer.name
 													}),
 													!o.acceptedAt && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "rounded-full bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 text-[10px] font-black uppercase animate-pulse",
+														className: "rounded-full bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 text-[10px] font-black uppercase animate-pulse shrink-0",
 														children: "Non acceptée"
 													})
 												]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-												className: "text-[11px] text-[#8ea39b]",
+												className: "text-[11px] text-[#8ea39b] truncate",
 												children: [
-													o.customer.fulfillment === "delivery" ? `🛵 Livraison : ${o.customer.address}` : "🥡 Retrait sur place",
+													o.customer.fulfillment === "delivery" ? `🛵 ${o.customer.address}` : "🥡 Retrait sur place",
 													" · ",
 													o.items.length,
 													" articles · ",
@@ -4130,14 +4161,14 @@ function PosApplicationPage() {
 												]
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "flex items-center gap-2",
+											className: "flex items-center gap-2 shrink-0",
 											children: !o.acceptedAt ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => handleAcceptOrder(o),
-												className: "rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-black uppercase tracking-wider animate-pulse shadow",
+												className: "rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-black uppercase tracking-wider animate-pulse shadow cursor-pointer",
 												children: "Accepter"
 											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => setSelectedOrder(o),
-												className: "rounded-xl bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs font-bold",
+												className: "rounded-xl bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs font-bold cursor-pointer",
 												children: "Détails"
 											})
 										})]
@@ -4147,60 +4178,133 @@ function PosApplicationPage() {
 						]
 					}),
 					activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-								title: "À Valider",
-								badgeCount: newOrdersList.length,
-								color: "bg-red-500",
-								orders: newOrdersList,
-								onSelect: setSelectedOrder,
-								onReprint: handleManualReprint,
-								onAcceptOrder: handleAcceptOrder,
-								onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
-								nextLabel: "Passer en Préparation",
-								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-3.5 h-3.5" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-								title: "En Préparation",
-								badgeCount: preparingOrdersList.length,
-								color: "bg-[#ff705f]",
-								orders: preparingOrdersList,
-								onSelect: setSelectedOrder,
-								onReprint: handleManualReprint,
-								onNextStatus: (id) => handleUpdateStatus(id, "ready"),
-								nextLabel: "Prête / En Livraison",
-								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-3.5 h-3.5" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-								title: "Prêtes & En Livraison",
-								badgeCount: readyOrdersList.length,
-								color: "bg-blue-500",
-								orders: readyOrdersList,
-								onSelect: setSelectedOrder,
-								onReprint: handleManualReprint,
-								onNextStatus: (id) => handleUpdateStatus(id, "completed"),
-								nextLabel: "Terminer",
-								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-3.5 h-3.5" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-								title: "Terminées",
-								badgeCount: completedOrdersList.length,
-								color: "bg-emerald-500",
-								orders: completedOrdersList.slice(0, 30),
-								onSelect: setSelectedOrder,
-								onReprint: handleManualReprint,
-								onNextStatus: () => {},
-								nextLabel: "Archivée",
-								nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3.5 h-3.5" })
-							})
-						]
+						className: "flex-1 flex flex-col min-h-0 overflow-hidden",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex lg:hidden items-center gap-1.5 px-3 py-2 bg-[#12231e] border-b border-white/5 overflow-x-auto shrink-0 no-scrollbar",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setKanbanMobileCol("all"),
+									className: `px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "all" ? "bg-white text-black shadow" : "bg-white/10 text-white/70 hover:bg-white/15"}`,
+									children: [
+										"Vue Défilante (",
+										newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
+										")"
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setKanbanMobileCol("new"),
+									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "new" ? "bg-red-500 text-white shadow-lg shadow-red-500/40 ring-2 ring-white/30" : "bg-red-500/20 text-red-300 hover:bg-red-500/30"}`,
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-red-400" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "À Valider" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+											children: newOrdersList.length
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setKanbanMobileCol("preparing"),
+									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "preparing" ? "bg-[#ff705f] text-white shadow-lg shadow-[#ff705f]/40 ring-2 ring-white/30" : "bg-[#ff705f]/20 text-[#ff8e80] hover:bg-[#ff705f]/30"}`,
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-[#ff705f]" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "En Préparation" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+											children: preparingOrdersList.length
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setKanbanMobileCol("ready"),
+									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "ready" ? "bg-blue-500 text-white shadow-lg shadow-blue-500/40 ring-2 ring-white/30" : "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"}`,
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-blue-400" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Prêtes / Livraison" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+											children: readyOrdersList.length
+										})
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setKanbanMobileCol("completed"),
+									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "completed" ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-white/30" : "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"}`,
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-emerald-400" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Terminées" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+											children: completedOrdersList.length
+										})
+									]
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex-1 flex lg:grid lg:grid-cols-4 gap-3 p-2.5 sm:p-3 overflow-x-auto lg:overflow-hidden snap-x snap-mandatory min-h-0",
+							children: [
+								(kanbanMobileCol === "all" || kanbanMobileCol === "new") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+									title: "À Valider",
+									badgeCount: newOrdersList.length,
+									color: "bg-red-500",
+									orders: newOrdersList,
+									onSelect: setSelectedOrder,
+									onReprint: handleManualReprint,
+									onAcceptOrder: handleAcceptOrder,
+									onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
+									nextLabel: "Passer en Préparation",
+									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-3.5 h-3.5" }),
+									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+								}),
+								(kanbanMobileCol === "all" || kanbanMobileCol === "preparing") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+									title: "En Préparation",
+									badgeCount: preparingOrdersList.length,
+									color: "bg-[#ff705f]",
+									orders: preparingOrdersList,
+									onSelect: setSelectedOrder,
+									onReprint: handleManualReprint,
+									onNextStatus: (id) => handleUpdateStatus(id, "ready"),
+									nextLabel: "Prête / En Livraison",
+									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-3.5 h-3.5" }),
+									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+								}),
+								(kanbanMobileCol === "all" || kanbanMobileCol === "ready") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+									title: "Prêtes & En Livraison",
+									badgeCount: readyOrdersList.length,
+									color: "bg-blue-500",
+									orders: readyOrdersList,
+									onSelect: setSelectedOrder,
+									onReprint: handleManualReprint,
+									onNextStatus: (id) => handleUpdateStatus(id, "completed"),
+									nextLabel: "Terminer",
+									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-3.5 h-3.5" }),
+									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+								}),
+								(kanbanMobileCol === "all" || kanbanMobileCol === "completed") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+									title: "Terminées",
+									badgeCount: completedOrdersList.length,
+									color: "bg-emerald-500",
+									orders: completedOrdersList.slice(0, 30),
+									onSelect: setSelectedOrder,
+									onReprint: handleManualReprint,
+									onNextStatus: () => {},
+									nextLabel: "Archivée",
+									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3.5 h-3.5" }),
+									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+								})
+							]
+						})]
 					}),
 					activeTab === "stock" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex-1 flex flex-col min-h-0 bg-[#0d1a16] p-4 sm:p-6 overflow-hidden",
+						className: "flex-1 flex flex-col min-h-0 bg-[#0d1a16] p-3 sm:p-6 overflow-hidden",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10 shrink-0",
+								className: "flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-white/10 shrink-0",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-center gap-2",
@@ -4208,12 +4312,12 @@ function PosApplicationPage() {
 											className: "px-2.5 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40",
 											children: "🥗 STOCKS EN DIRECT"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-xs text-[#8ea39b]",
+											className: "text-xs text-[#8ea39b] hidden sm:inline",
 											children: "• Mise à jour instantanée du site pokenbowl.be"
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-										className: "text-2xl font-black text-white mt-1",
+										className: "text-xl sm:text-2xl font-black text-white mt-1",
 										children: "Gestion des Produits & Ingrédients"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -4221,10 +4325,10 @@ function PosApplicationPage() {
 										children: "Cliquez sur un bouton coloré pour basculer instantanément : 🟢 Disponible, 🟠 Stock faible, ou 🔴 Victime de son succès."
 									})
 								] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex flex-wrap items-center gap-2.5",
+									className: "flex flex-wrap items-center gap-2",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex items-center gap-2 bg-black/40 rounded-2xl px-3.5 py-2 border border-white/10",
+											className: "flex items-center gap-2 bg-black/40 rounded-2xl px-3 py-1.5 sm:px-3.5 sm:py-2 border border-white/10",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "text-xs font-black text-emerald-400",
@@ -4243,19 +4347,19 @@ function PosApplicationPage() {
 													children: [
 														"🔴 ",
 														stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length,
-														" Victimes du succès"
+														" Rupture"
 													]
 												})
 											]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "relative",
+											className: "relative flex-1 sm:flex-initial",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 												type: "text",
 												placeholder: "🔍 Filtrer un ingrédient...",
 												value: stockSearch,
 												onChange: (e) => setStockSearch(e.target.value),
-												className: "rounded-2xl bg-black/40 border border-white/15 pl-4 pr-9 py-2 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f] w-48 sm:w-60"
+												className: "rounded-2xl bg-black/40 border border-white/15 pl-4 pr-9 py-2 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f] w-full sm:w-60"
 											}), stockSearch && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => setStockSearch(""),
 												className: "absolute right-2.5 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-xs",
@@ -4264,7 +4368,7 @@ function PosApplicationPage() {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: loadStock,
-											className: "rounded-2xl bg-white/10 hover:bg-white/20 p-2.5 text-white transition active:scale-95",
+											className: "rounded-2xl bg-white/10 hover:bg-white/20 p-2 sm:p-2.5 text-white transition active:scale-95 cursor-pointer shrink-0",
 											title: "Actualiser les stocks",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: "h-4 w-4" })
 										})
@@ -4272,7 +4376,7 @@ function PosApplicationPage() {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flex gap-2 py-3 overflow-x-auto shrink-0 no-scrollbar",
+								className: "flex gap-2 py-2.5 sm:py-3 overflow-x-auto shrink-0 no-scrollbar",
 								children: [
 									{
 										id: "all",
@@ -4332,10 +4436,10 @@ function PosApplicationPage() {
 									const isActive = stockCategory === cat.id || cat.id === "bowl" && stockCategory === "bowls" || cat.id === "base" && stockCategory === "bases" || cat.id === "protein" && stockCategory === "proteins" || cat.id === "ingredient" && stockCategory === "vegetables" || cat.id === "sauce" && stockCategory === "sauces" || cat.id === "topping" && stockCategory === "toppings" || cat.id === "drink" && stockCategory === "drinks" || cat.id === "dessert" && stockCategory === "desserts";
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										onClick: () => setStockCategory(cat.id),
-										className: `flex items-center gap-2 rounded-2xl px-4 py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${isActive ? "bg-gradient-to-r from-[#ff705f] to-[#ea580c] text-white shadow-lg shadow-[#ea580c]/30 scale-105" : "bg-[#142822] text-[#8ea39b] hover:text-white hover:bg-[#1a352d] border border-white/5"}`,
+										className: `flex items-center gap-2 rounded-2xl px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${isActive ? "bg-gradient-to-r from-[#ff705f] to-[#ea580c] text-white shadow-lg shadow-[#ea580c]/30 scale-105" : "bg-[#142822] text-[#8ea39b] hover:text-white hover:bg-[#1a352d] border border-white/5"}`,
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-base",
+												className: "text-sm sm:text-base",
 												children: cat.emoji
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: cat.label }),
@@ -4348,7 +4452,7 @@ function PosApplicationPage() {
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 pt-2 pb-6",
+								className: "flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 pt-2 pb-6 min-h-0",
 								children: stocks.filter((s) => {
 									if (stockCategory === "all") return true;
 									if (stockCategory === "bowl" || stockCategory === "bowls") return s.category === "bowl";
@@ -4430,7 +4534,7 @@ function PosApplicationPage() {
 						]
 					}),
 					activeTab === "drivers" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6",
+						className: "flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10",
@@ -4508,7 +4612,7 @@ function PosApplicationPage() {
 						]
 					}),
 					activeTab === "mileage" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6",
+						className: "flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10",
@@ -4697,9 +4801,11 @@ function PosApplicationPage() {
 								})]
 							}),
 							editingLogId && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4",
+								className: "fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4",
+								onClick: () => setEditingLogId(null),
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white",
+									className: "w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white shadow-2xl",
+									onClick: (e) => e.stopPropagation(),
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 											className: "font-black text-base",
@@ -4742,12 +4848,12 @@ function PosApplicationPage() {
 						]
 					}),
 					activeTab === "stats" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6",
+						className: "flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 							className: "text-xl font-black text-white",
 							children: "Statistiques de Vente & Performance"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "grid grid-cols-2 lg:grid-cols-4 gap-4",
+							className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "rounded-2xl bg-[#142822] border border-white/10 p-4",
@@ -4793,7 +4899,7 @@ function PosApplicationPage() {
 						})]
 					}),
 					activeTab === "settings" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6",
+						className: "flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 								className: "text-xl font-black text-white",
@@ -4896,218 +5002,255 @@ function PosApplicationPage() {
 				]
 			}),
 			selectedOrder && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4",
+				className: "fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-2 sm:p-4",
+				onClick: () => setSelectedOrder(null),
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto",
+					className: "w-full max-w-xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col rounded-3xl bg-[#142822] border border-white/15 shadow-2xl text-white overflow-hidden",
+					onClick: (e) => e.stopPropagation(),
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center justify-between border-b border-white/10 pb-4",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-mono text-xl font-black",
-								children: selectedOrder.id
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								className: "text-xs text-[#8ea39b] mt-0.5",
-								children: ["Créée à ", new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")]
-							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "flex items-center justify-between border-b border-white/10 px-4 sm:px-6 py-3.5 bg-[#172e27] shrink-0",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-mono text-lg sm:text-xl font-black",
+										children: selectedOrder.id
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: `rounded-md px-2 py-0.5 text-[10px] font-black uppercase ${selectedOrder.customer.fulfillment === "delivery" ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" : "bg-amber-500/20 text-amber-300 border border-amber-500/30"}`,
+										children: selectedOrder.customer.fulfillment === "delivery" ? "🛵 Livraison" : "🥡 Retrait"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-xs text-[#8ea39b]",
+										children: new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")
+									})
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
 								onClick: () => setSelectedOrder(null),
-								className: "rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20",
+								className: "rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20 transition cursor-pointer",
+								title: "Fermer",
 								children: "✕"
 							})]
 						}),
-						!selectedOrder.acceptedAt && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-2xl bg-gradient-to-r from-red-600 to-[#ff705f] p-4 text-center space-y-2 shadow-lg animate-pulse",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs font-black uppercase tracking-wider text-white",
-								children: "⚠️ Cette commande doit être validée par la cuisine"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => handleAcceptOrder(selectedOrder),
-								className: "w-full rounded-xl bg-white text-[#2C1D16] py-3 text-sm font-black uppercase tracking-wider hover:bg-white/90 shadow transition",
-								children: "🔔 ACCEPTER LA COMMANDE"
-							})]
-						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black uppercase text-amber-300",
-									children: "Signaler un retard cuisine au client"
-								}), selectedOrder.delayMinutes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full",
-									children: [
-										"Retard : +",
-										selectedOrder.delayMinutes,
-										" min"
-									]
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-3 gap-2",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => handleDelayOrder(selectedOrder, 10),
-										className: "rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition",
-										children: "+10 min"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => handleDelayOrder(selectedOrder, 20),
-										className: "rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition",
-										children: "+20 min"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => handleDelayOrder(selectedOrder, 30),
-										className: "rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition",
-										children: "+30 min"
-									})
-								]
-							})]
-						}),
-						selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black uppercase text-emerald-400",
-									children: "Assigner un Livreur"
-								}), selectedOrder.driverName && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full",
-									children: [
-										"Assigné à ",
-										selectedOrder.driverName,
-										" (",
-										selectedOrder.distanceKm ?? 3.5,
-										" km)"
-									]
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flex gap-2",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
-									value: selectedOrder.driverId || "",
-									onChange: (e) => handleAssignDriverToOrder(selectedOrder, e.target.value),
-									className: "flex-1 rounded-xl bg-black/60 border border-white/15 px-3 py-2 text-xs text-white",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-										value: "",
-										children: "Sélectionner un livreur..."
-									}), drivers.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
-										value: d.id,
-										children: [
-											d.name,
-											" ",
-											d.active ? "(En service)" : "(Inactif)"
-										]
-									}, d.id))]
-								})
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-2xl bg-black/30 p-4 space-y-2",
+							className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 min-h-0",
 							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex justify-between items-center",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-base font-black",
-										children: selectedOrder.customer.name
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
-										href: `tel:${selectedOrder.customer.phone}`,
-										className: "flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: selectedOrder.customer.phone })]
+								!selectedOrder.acceptedAt && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-gradient-to-r from-red-600 to-[#ff705f] p-4 text-center space-y-2 shadow-lg animate-pulse",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs font-black uppercase tracking-wider text-white",
+										children: "⚠️ Cette commande doit être validée par la cuisine"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										type: "button",
+										onClick: () => handleAcceptOrder(selectedOrder),
+										className: "w-full rounded-xl bg-white text-[#2C1D16] py-3 text-sm font-black uppercase tracking-wider hover:bg-white/90 shadow transition cursor-pointer",
+										children: "🔔 ACCEPTER LA COMMANDE"
 									})]
 								}),
-								selectedOrder.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-xs text-[#8ea39b] pt-1 border-t border-white/5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "font-bold text-white",
-										children: selectedOrder.customer.address
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
-										selectedOrder.customer.postalCode,
-										" ",
-										selectedOrder.customer.city
-									] })]
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-xs text-[#EADCC9] font-bold",
-									children: "Retrait sur place"
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black uppercase text-amber-300",
+											children: "Signaler un retard cuisine au client"
+										}), selectedOrder.delayMinutes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full",
+											children: [
+												"Retard : +",
+												selectedOrder.delayMinutes,
+												" min"
+											]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "grid grid-cols-3 gap-2",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => handleDelayOrder(selectedOrder, 10),
+												className: "rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition cursor-pointer",
+												children: "+10 min"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => handleDelayOrder(selectedOrder, 20),
+												className: "rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition cursor-pointer",
+												children: "+20 min"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => handleDelayOrder(selectedOrder, 30),
+												className: "rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition cursor-pointer",
+												children: "+30 min"
+											})
+										]
+									})]
 								}),
-								selectedOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white",
+								selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black uppercase text-emerald-400",
+											children: "Assigner un Livreur"
+										}), selectedOrder.driverName && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full",
+											children: [
+												"Assigné à ",
+												selectedOrder.driverName,
+												" (",
+												selectedOrder.distanceKm ?? 3.5,
+												" km)"
+											]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "flex gap-2",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+											value: selectedOrder.driverId || "",
+											onChange: (e) => handleAssignDriverToOrder(selectedOrder, e.target.value),
+											className: "flex-1 rounded-xl bg-black/60 border border-white/15 px-3 py-2 text-xs text-white",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+												value: "",
+												children: "Sélectionner un livreur..."
+											}), drivers.map((d) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+												value: d.id,
+												children: [
+													d.name,
+													" ",
+													d.active ? "(En service)" : "(Inactif)"
+												]
+											}, d.id))]
+										})
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-black/30 p-4 space-y-2",
 									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Note :" }),
-										" ",
-										selectedOrder.customer.notes
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex justify-between items-center",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-base font-black",
+												children: selectedOrder.customer.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+												href: `tel:${selectedOrder.customer.phone}`,
+												className: "flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5 text-[#ff705f]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: selectedOrder.customer.phone })]
+											})]
+										}),
+										selectedOrder.customer.fulfillment === "delivery" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-xs text-[#8ea39b] pt-1 border-t border-white/5",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "font-bold text-white",
+												children: selectedOrder.customer.address
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+												selectedOrder.customer.postalCode,
+												" ",
+												selectedOrder.customer.city
+											] })]
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-[#EADCC9] font-bold",
+											children: "Retrait sur place (Avenue du Pont 12, Visé)"
+										}),
+										selectedOrder.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Note :" }),
+												" ",
+												selectedOrder.customer.notes
+											]
+										})
 									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "space-y-2",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black uppercase text-[#8ea39b]",
+											children: "Articles commandés"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+											className: "divide-y divide-white/5 bg-black/20 rounded-2xl p-3",
+											children: selectedOrder.items.map((it, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+												className: "py-2 first:pt-0 last:pb-0",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex justify-between font-bold text-sm",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+														it.quantity,
+														"× ",
+														it.name
+													] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "font-mono",
+														children: [(it.price * it.quantity).toFixed(2), " €"]
+													})]
+												}), it.toppings && it.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50",
+													children: it.toppings.map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: top }, tidx))
+												})]
+											}, idx))
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex justify-between items-center pt-2 px-2 font-black text-base",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "font-mono text-emerald-400 text-lg",
+												children: [selectedOrder.total.toFixed(2), " €"]
+											})]
+										})
+									]
+								}),
+								selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-xs font-black uppercase text-emerald-400",
+											children: "Navigation Livreur"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold",
+											children: "1-Clic GPS"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "grid grid-cols-2 gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => openGoogleMapsApp(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`),
+											className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps"]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											type: "button",
+											onClick: () => openWazeApp(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`),
+											className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze"]
+										})]
+									})]
 								})
 							]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "space-y-2",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black uppercase text-[#8ea39b]",
-									children: "Articles commandés"
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-									className: "divide-y divide-white/5 bg-black/20 rounded-2xl p-3",
-									children: selectedOrder.items.map((it, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
-										className: "py-2 first:pt-0 last:pb-0",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex justify-between font-bold text-sm",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-												it.quantity,
-												"× ",
-												it.name
-											] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [(it.price * it.quantity).toFixed(2), " €"] })]
-										}), it.toppings && it.toppings.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50",
-											children: it.toppings.map((top, tidx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: top }, tidx))
-										})]
-									}, idx))
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex justify-between items-center pt-2 px-2 font-black text-base",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [selectedOrder.total.toFixed(2), " €"] })]
-								})
-							]
-						}),
-						selectedOrder.customer.fulfillment === "delivery" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-black uppercase text-emerald-400",
-									children: "Navigation Livreur"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold",
-									children: "1-Clic"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-2 gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => openGoogleMapsApp(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`),
-									className: "flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Google Maps (App)"]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => openWazeApp(`${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`),
-									className: "flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigation, { className: "w-3.5 h-3.5" }), "Waze (App)"]
-								})]
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "pt-2",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							className: "border-t border-white/10 px-4 sm:px-6 py-3 bg-[#11221c] flex items-center gap-2 shrink-0",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
 								onClick: () => handleManualReprint(selectedOrder.id),
 								disabled: printingOrderId === selectedOrder.id,
-								className: "w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-5 h-5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Imprimer Ticket Thermique (80mm)" })]
-							})
+								className: "flex-1 rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3 px-4 text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-lg cursor-pointer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Imprimer Ticket (80mm)" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setSelectedOrder(null),
+								className: "rounded-2xl bg-white/10 hover:bg-white/20 text-white px-5 py-3 text-xs sm:text-sm font-bold transition cursor-pointer",
+								children: "Fermer"
+							})]
 						})
 					]
 				})
 			}),
 			showRushModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4",
+				className: "fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4",
+				onClick: () => setShowRushModal(false),
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white text-center",
+					className: "w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white text-center shadow-2xl",
+					onClick: (e) => e.stopPropagation(),
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-400",
@@ -5145,8 +5288,9 @@ function PosApplicationPage() {
 							]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
 							onClick: () => setShowRushModal(false),
-							className: "mt-2 text-xs text-[#8ea39b] hover:text-white underline",
+							className: "mt-2 text-xs text-[#8ea39b] hover:text-white underline cursor-pointer",
 							children: "Annuler"
 						})
 					]
@@ -5155,23 +5299,23 @@ function PosApplicationPage() {
 		]
 	}) });
 }
-function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, onAcceptOrder, onNextStatus, nextLabel, nextIcon }) {
+function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, onAcceptOrder, onNextStatus, nextLabel, nextIcon, className = "" }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "flex flex-col rounded-2xl bg-[#142822] border border-white/5 overflow-hidden",
+		className: `flex flex-col rounded-2xl bg-[#142822] border border-white/10 overflow-hidden min-h-0 h-full ${className}`,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex items-center justify-between p-3.5 border-b border-white/5 bg-black/20",
+			className: "flex items-center justify-between p-3 sm:p-3.5 border-b border-white/10 bg-black/25 shrink-0",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `w-3 h-3 rounded-full ${color}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-					className: "text-sm font-black tracking-wide text-white",
+				className: "flex items-center gap-2 min-w-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `w-3 h-3 rounded-full shrink-0 ${color}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "text-xs sm:text-sm font-black tracking-wide text-white truncate",
 					children: title
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-white",
+				className: "rounded-full bg-white/10 px-2 sm:px-2.5 py-0.5 text-xs font-black text-white shrink-0",
 				children: badgeCount
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "flex-1 overflow-y-auto p-2.5 space-y-2.5",
+			className: "flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-2.5 min-h-0",
 			children: orders.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "flex h-32 items-center justify-center text-xs font-bold text-[#62776f]",
 				children: "Aucune commande"
@@ -5183,25 +5327,31 @@ function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, o
 				].includes(o.status);
 				return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					onClick: () => onSelect(o),
-					className: `rounded-2xl p-3.5 shadow transition cursor-pointer space-y-2.5 border ${isUnaccepted ? "bg-red-950/40 border-red-500/60 ring-2 ring-red-500/40 animate-pulse" : "bg-black/40 border-white/10 hover:border-white/30"}`,
+					className: `rounded-2xl p-3 sm:p-3.5 shadow transition cursor-pointer space-y-2 border ${isUnaccepted ? "bg-red-950/40 border-red-500/70 ring-2 ring-red-500/50 animate-pulse" : "bg-black/40 border-white/10 hover:border-white/30"}`,
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center justify-between",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-mono text-sm font-black text-white",
-								children: o.id
+							className: "flex items-center justify-between gap-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-1.5 min-w-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-mono text-xs sm:text-sm font-black text-white truncate",
+									children: o.id
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: `rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase ${o.customer.fulfillment === "delivery" ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" : "bg-amber-500/20 text-amber-300 border border-amber-500/30"}`,
+									children: o.customer.fulfillment === "delivery" ? "🛵 Livr." : "🥡 Emp."
+								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-[#8ea39b]",
+								className: "rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-[#8ea39b] shrink-0",
 								children: o.customer.requestedTime
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center justify-between",
+							className: "flex items-center justify-between gap-1",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-base font-black text-white",
+								className: "text-sm sm:text-base font-black text-white truncate",
 								children: o.customer.name
 							}), o.delayMinutes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded",
+								className: "text-[10px] font-bold text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded shrink-0",
 								children: [
 									"+",
 									o.delayMinutes,
@@ -5209,34 +5359,51 @@ function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, o
 								]
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							className: "text-xs font-semibold text-[#8ea39b]",
+							className: "text-[11px] sm:text-xs font-semibold text-[#8ea39b] truncate",
 							children: [
 								o.items.reduce((acc, it) => acc + it.quantity, 0),
 								" articles · ",
-								o.total.toFixed(2),
-								" €"
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-white font-mono font-bold",
+									children: [o.total.toFixed(2), " €"]
+								})
 							]
 						})] }),
 						o.customer.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							className: "text-xs bg-[#ff705f]/15 p-2 rounded-xl text-[#ff8e80] line-clamp-1 font-bold",
+							className: "text-[11px] bg-[#ff705f]/15 border border-[#ff705f]/30 p-2 rounded-xl text-[#ff8e80] line-clamp-2 font-bold leading-tight",
 							children: ["! ", o.customer.notes]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "pt-1 flex items-center gap-2 border-t border-white/5",
+							className: "pt-1.5 flex items-center gap-2 border-t border-white/10",
 							onClick: (e) => e.stopPropagation(),
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
 								onClick: () => onReprint(o.id),
-								className: "rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition",
-								title: "Réimprimer",
+								className: "rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition shrink-0 cursor-pointer",
+								title: "Réimprimer le ticket",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5" })
 							}), isUnaccepted && onAcceptOrder ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
 								onClick: () => onAcceptOrder(o),
-								className: "flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2 text-xs font-black text-white active:scale-95 transition shadow-lg animate-pulse",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "ACCEPTER" })]
+								className: "flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2 px-2 text-xs font-black text-white active:scale-95 transition shadow-lg animate-pulse cursor-pointer truncate",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-3.5 h-3.5 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "truncate",
+									children: "ACCEPTER"
+								})]
+							}) : o.status === "completed" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex-1 text-center py-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20",
+								children: "✓ Archivée"
 							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
 								onClick: () => onNextStatus(o.id),
-								className: "flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition",
-								children: [nextIcon, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: nextLabel })]
+								className: "flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 px-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition cursor-pointer truncate",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "shrink-0",
+									children: nextIcon
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "truncate",
+									children: nextLabel
+								})]
 							})]
 						})
 					]

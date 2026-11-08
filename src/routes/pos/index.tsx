@@ -85,6 +85,7 @@ export function PosApplicationPage() {
 
   const [activeTab, setActiveTab] = useState<PosTab>("kanban");
   const [searchQuery, setSearchQuery] = useState("");
+  const [kanbanMobileCol, setKanbanMobileCol] = useState<"all" | "new" | "preparing" | "ready" | "completed">("all");
 
   // Configuration Imprimante & Audio
   const [config, setConfig] = useState<PrinterConfig>(loadPrinterConfig);
@@ -931,7 +932,7 @@ export function PosApplicationPage() {
   // ── Écran de Déverrouillage PIN ──
   if (!isUnlocked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0d1a16] p-4 text-white">
+      <div className="flex min-h-[100dvh] items-center justify-center bg-[#0d1a16] p-4 text-white">
         <div className="w-full max-w-sm rounded-3xl bg-[#142822] border border-white/10 p-8 shadow-2xl space-y-6 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#ff705f]/20 text-[#ff705f]">
             <Shield className="h-8 w-8" />
@@ -982,34 +983,36 @@ export function PosApplicationPage() {
   // ── Interface Complète POS ──
   return (
     <>
-      <div className="pos-screen-ui flex h-screen w-screen flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
-        {/* ─── Barre Supérieure POS ─────────────────────────────────────────── */}
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 sm:px-6 bg-[#162721]">
-          {/* Logo & Indicateur de charge */}
-          <div className="flex items-center gap-3 sm:gap-5">
+      <div className="pos-screen-ui flex h-screen h-[100dvh] w-full flex-col bg-[#0d1a16] text-[#e6ece9] select-none font-sans overflow-hidden">
+        {/* ─── Barre Supérieure POS (Compacte, Épurée, Zéro Collision) ─── */}
+        <header className="flex h-14 sm:h-16 shrink-0 items-center justify-between border-b border-white/10 px-3 sm:px-6 bg-[#162721] gap-2">
+          {/* Gauche : Logo, Statut Live & Charge */}
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             <div className="flex items-center gap-2">
               <span className="flex h-3 w-3 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-              <span className="text-base sm:text-lg font-black tracking-wider text-white">POKENBOWL POS</span>
+              <span className="text-sm sm:text-base font-black tracking-wider text-white">
+                <span className="hidden xs:inline">POKENBOWL </span>POS
+              </span>
             </div>
 
             {/* Badge Charge Cuisine */}
-            <div className={`hidden md:flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-black ${kitchenLoad.badge}`}>
+            <div className={`hidden sm:flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-black ${kitchenLoad.badge}`}>
               <Flame className="h-3.5 w-3.5" />
               <span>{kitchenLoad.label} ({activeOrders.length})</span>
             </div>
 
             {/* Statut Pause Rush Global */}
             {rushState.isPaused ? (
-              <div className="flex items-center gap-2 rounded-xl bg-red-600 px-3 py-1 text-xs font-black text-white shadow-lg animate-pulse">
+              <div className="flex items-center gap-1.5 sm:gap-2 rounded-xl bg-red-600 px-2.5 py-1 text-[11px] sm:text-xs font-black text-white shadow-lg animate-pulse">
                 <Pause className="h-3.5 w-3.5" />
-                <span>EN PAUSE · {Math.floor(rushState.remainingSeconds / 60)}:{(rushState.remainingSeconds % 60).toString().padStart(2, "0")}</span>
+                <span>PAUSE {Math.floor(rushState.remainingSeconds / 60)}:{(rushState.remainingSeconds % 60).toString().padStart(2, "0")}</span>
                 <button
                   type="button"
                   onClick={handleResumeRush}
-                  className="ml-1 rounded-md bg-white text-red-700 px-2 py-0.5 text-[10px] uppercase font-black hover:bg-white/90"
+                  className="ml-1 rounded-md bg-white text-red-700 px-1.5 py-0.5 text-[9px] sm:text-[10px] uppercase font-black hover:bg-white/90"
                 >
                   Réouvrir
                 </button>
@@ -1018,7 +1021,7 @@ export function PosApplicationPage() {
               <button
                 type="button"
                 onClick={() => setShowRushModal(true)}
-                className="hidden sm:flex items-center gap-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 px-2.5 py-1 text-xs font-bold text-amber-300 transition"
+                className="hidden md:flex items-center gap-1.5 rounded-xl bg-amber-500/20 border border-amber-500/40 hover:bg-amber-500/30 px-2.5 py-1 text-xs font-bold text-amber-300 transition cursor-pointer"
                 title="Mettre temporairement en pause les nouvelles commandes sur le site"
               >
                 <Pause className="h-3.5 w-3.5" />
@@ -1027,100 +1030,51 @@ export function PosApplicationPage() {
             )}
           </div>
 
-          {/* Navigation 7 Onglets Hauts en Couleur (Ergonomie Tactile & Ludique) */}
-          <nav className="flex rounded-2xl bg-black/50 p-1.5 overflow-x-auto max-w-[55vw] gap-1 border border-white/10 shadow-inner">
-            <button
-              onClick={() => setActiveTab("dashboard")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "dashboard"
-                  ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <LayoutDashboard className="h-4 w-4 text-purple-300" />
-              <span>Tableau de bord</span>
-            </button>
+          {/* Droite : Outils Rapides & Sécurité */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Pauses Rapides Caisse (1-clic direct sur écrans larges) */}
+            {!rushState.isPaused && (
+              <div className="hidden lg:flex items-center gap-1 bg-black/40 rounded-xl p-1 border border-white/10">
+                <span className="text-[10px] font-black uppercase text-[#8ea39b] px-1.5">Pause :</span>
+                <button
+                  type="button"
+                  onClick={() => handleSetRushPause(10)}
+                  className="rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-2 py-1 text-[10px] font-black shadow transition active:scale-95 cursor-pointer"
+                  title="Pause Rush 10 minutes"
+                >
+                  ⏸️ 10m
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSetRushPause(20)}
+                  className="rounded-lg bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-2 py-1 text-[10px] font-black shadow transition active:scale-95 cursor-pointer"
+                  title="Pause Rush 20 minutes"
+                >
+                  ⏸️ 20m
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSetRushPause(30)}
+                  className="rounded-lg bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-2 py-1 text-[10px] font-black shadow transition active:scale-95 cursor-pointer"
+                  title="Pause Rush 30 minutes"
+                >
+                  ⏸️ 30m
+                </button>
+              </div>
+            )}
 
-            <button
-              onClick={() => setActiveTab("kanban")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "kanban"
-                  ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <Layers className="h-4 w-4 text-orange-200" />
-              <span>Commandes</span>
-              {newOrdersList.length + preparingOrdersList.length + readyOrdersList.length > 0 && (
-                <span className="rounded-full bg-white text-[#c93b2b] px-2 py-0.5 text-[10px] font-black shadow-xs">
-                  {newOrdersList.length + preparingOrdersList.length + readyOrdersList.length}
-                </span>
-              )}
-            </button>
+            {/* Bouton Pause Rush Mobile si non pausé */}
+            {!rushState.isPaused && (
+              <button
+                type="button"
+                onClick={() => setShowRushModal(true)}
+                className="flex md:hidden items-center gap-1 rounded-xl bg-amber-500/20 border border-amber-500/40 px-2.5 py-1.5 text-[11px] font-bold text-amber-300"
+              >
+                <Pause className="h-3.5 w-3.5" />
+                <span>Pause</span>
+              </button>
+            )}
 
-            <button
-              onClick={() => setActiveTab("stock")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "stock"
-                  ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <Salad className="h-4 w-4 text-emerald-200" />
-              <span>Stocks</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("drivers")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "drivers"
-                  ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <Users className="h-4 w-4 text-cyan-200" />
-              <span>Livreurs</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("mileage")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "mileage"
-                  ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <Compass className="h-4 w-4 text-amber-200" />
-              <span>Kilométrage</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("stats")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "stats"
-                  ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <TrendingUp className="h-4 w-4 text-pink-200" />
-              <span>Stats</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab("settings")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 ${
-                activeTab === "settings"
-                  ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 scale-[1.03] ring-1 ring-white/30"
-                  : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-              }`}
-            >
-              <Settings className="h-4 w-4 text-slate-300" />
-              <span>Paramètres</span>
-            </button>
-          </nav>
-
-          {/* Outils & Contrôles Rapides */}
-          <div className="flex items-center gap-2">
             {/* Toggle Son */}
             <button
               onClick={() => {
@@ -1132,21 +1086,21 @@ export function PosApplicationPage() {
                 setConfig(updated);
                 savePrinterConfig(updated);
               }}
-              className={`rounded-xl p-2.5 transition ${
+              className={`rounded-xl p-2 sm:p-2.5 transition cursor-pointer ${
                 config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
               }`}
               title={config.soundEnabled ? "Désactiver le son" : "Activer le son"}
             >
-              {config.soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+              {config.soundEnabled ? <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" /> : <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" />}
             </button>
 
             {/* Rafraîchir */}
             <button
               onClick={loadOrders}
-              className="rounded-xl bg-white/10 p-2.5 text-white hover:bg-white/20 active:scale-95 transition"
+              className="rounded-xl bg-white/10 p-2 sm:p-2.5 text-white hover:bg-white/20 active:scale-95 transition cursor-pointer"
               title="Rafraîchir"
             >
-              <RefreshCw className={`h-5 w-5 ${loading ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-4 w-4 sm:h-5 sm:w-5 ${loading ? "animate-spin" : ""}`} />
             </button>
 
             {/* IP Imprimante */}
@@ -1154,81 +1108,151 @@ export function PosApplicationPage() {
               href={`https://${config.printerIp}:8043/cgi-bin/epos/service.cgi`}
               target="_blank"
               rel="noreferrer"
-              className="hidden lg:flex items-center gap-1.5 rounded-xl bg-black/40 hover:bg-black/60 px-3 py-2 text-xs font-bold border border-white/10 transition"
+              className="hidden xl:flex items-center gap-1.5 rounded-xl bg-black/40 hover:bg-black/60 px-2.5 py-1.5 text-xs font-bold border border-white/10 transition"
               title="Autoriser l'imprimante dans Chrome"
             >
-              <Printer className="h-4 w-4 text-[#ff705f]" />
+              <Printer className="h-3.5 w-3.5 text-[#ff705f]" />
               <span className="text-[#98aba3]">{config.printerIp}</span>
             </a>
 
-            {/* Pauses Rapides Caisse (Accès 1-clic direct depuis tous les onglets) */}
-            {!rushState.isPaused ? (
-              <div className="hidden sm:flex items-center gap-1.5 bg-black/40 rounded-2xl p-1 border border-white/10">
-                <span className="text-[10px] font-black uppercase text-[#8ea39b] px-1.5">Pause :</span>
-                <button
-                  type="button"
-                  onClick={() => handleSetRushPause(10)}
-                  className="rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer"
-                  title="Pause Rush 10 minutes"
-                >
-                  ⏸️ 10m
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSetRushPause(20)}
-                  className="rounded-xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer"
-                  title="Pause Rush 20 minutes"
-                >
-                  ⏸️ 20m
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSetRushPause(30)}
-                  className="rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-2.5 py-1 text-[11px] font-black shadow transition active:scale-95 cursor-pointer"
-                  title="Pause Rush 30 minutes"
-                >
-                  ⏸️ 30m
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={handleResumeRush}
-                className="hidden sm:flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-3 py-1.5 text-xs font-black shadow-lg shadow-emerald-500/30 animate-pulse active:scale-95 cursor-pointer transition"
-              >
-                ▶️ Réouvrir
-              </button>
-            )}
+            {/* Verrouiller PIN */}
+            <button
+              onClick={() => setIsUnlocked(false)}
+              className="rounded-xl bg-white/5 hover:bg-white/15 p-2 sm:p-2.5 text-[#8ea39b] hover:text-white transition cursor-pointer"
+              title="Verrouiller la caisse"
+            >
+              <Shield className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
           </div>
         </header>
 
+        {/* ─── Barre de Navigation des 7 Onglets (Dédiée, fluide, tactile, Zéro collision) ─── */}
+        <nav className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 bg-[#0e1c17] border-b border-white/10 overflow-x-auto no-scrollbar scroll-smooth shrink-0">
+          <button
+            onClick={() => setActiveTab("dashboard")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "dashboard"
+                ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <LayoutDashboard className="h-4 w-4 text-purple-300" />
+            <span>Tableau de bord</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("kanban")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "kanban"
+                ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <Layers className="h-4 w-4 text-orange-200" />
+            <span>Commandes</span>
+            {newOrdersList.length + preparingOrdersList.length + readyOrdersList.length > 0 && (
+              <span className="rounded-full bg-white text-[#c93b2b] px-2 py-0.5 text-[10px] font-black shadow-xs">
+                {newOrdersList.length + preparingOrdersList.length + readyOrdersList.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("stock")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "stock"
+                ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <Salad className="h-4 w-4 text-emerald-200" />
+            <span>Stocks</span>
+            {stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length > 0 && (
+              <span className="rounded-full bg-red-500 text-white px-2 py-0.5 text-[10px] font-black shadow-xs animate-pulse">
+                {stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("drivers")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "drivers"
+                ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <Users className="h-4 w-4 text-cyan-200" />
+            <span>Livreurs</span>
+            <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[10px] font-bold text-white">
+              {drivers.filter((d) => d.active).length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("mileage")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "mileage"
+                ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <Compass className="h-4 w-4 text-amber-200" />
+            <span>Kilométrage</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("stats")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "stats"
+                ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <TrendingUp className="h-4 w-4 text-pink-200" />
+            <span>Stats</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
+              activeTab === "settings"
+                ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 ring-1 ring-white/30"
+                : "text-[#8ea39b] hover:text-white hover:bg-white/10"
+            }`}
+          >
+            <Settings className="h-4 w-4 text-slate-300" />
+            <span>Paramètres</span>
+          </button>
+        </nav>
+
         {/* ─── Bannière Pause Rush Active (Visible sur tous les onglets du POS) ─── */}
         {rushState.isPaused && (
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-amber-600 via-red-600 to-rose-700 px-5 py-2.5 text-white shadow-xl border-b-2 border-red-400">
-            <div className="flex items-center gap-3">
-              <span className="flex h-3 w-3 rounded-full bg-yellow-300 animate-ping" />
-              <div>
-                <span className="text-xs sm:text-sm font-black uppercase tracking-wider block">
-                  🔥 VICTIME DE NOTRE SUCCÈS — PRISE DE COMMANDES EN PAUSE SUR LE SITE
+          <div className="flex items-center justify-between gap-2 bg-gradient-to-r from-amber-600 via-red-600 to-rose-700 px-3 sm:px-5 py-2 text-white shadow-xl border-b-2 border-red-400 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-yellow-300 animate-ping shrink-0" />
+              <div className="min-w-0">
+                <span className="text-xs sm:text-sm font-black uppercase tracking-wider block truncate">
+                  🔥 VICTIME DE NOTRE SUCCÈS — COMMANDES EN PAUSE SUR LE SITE
                 </span>
-                <span className="text-[11px] text-white/80">
+                <span className="text-[11px] text-white/80 hidden md:inline">
                   Le site client affiche le décompte en direct. Les commandes en cuisine restent actives.
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 bg-black/40 px-3.5 py-1.5 rounded-xl border border-white/20">
-                <span className="text-[10px] font-black uppercase text-amber-200">Reprise dans :</span>
-                <span className="font-mono text-lg font-black text-white">
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1.5 bg-black/40 px-2.5 sm:px-3 py-1 rounded-xl border border-white/20">
+                <span className="text-[10px] font-black uppercase text-amber-200 hidden sm:inline">Reprise dans :</span>
+                <span className="font-mono text-sm sm:text-base font-black text-white">
                   {Math.floor(rushState.remainingSeconds / 60)}:{(rushState.remainingSeconds % 60).toString().padStart(2, "0")}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={handleResumeRush}
-                className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 cursor-pointer transition active:scale-95"
+                className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 cursor-pointer transition active:scale-95 shrink-0"
               >
-                ▶️ Réouvrir maintenant
+                ▶️ Réouvrir
               </button>
             </div>
           </div>
@@ -1236,21 +1260,21 @@ export function PosApplicationPage() {
 
         {/* ─── Bannière Alerte : Commandes Non Acceptées ─────────────────── */}
         {unacceptedOrders.length > 0 && (
-          <div className="flex items-center justify-between bg-gradient-to-r from-red-600 via-[#ff705f] to-amber-600 px-5 py-2.5 text-white shadow-md animate-pulse">
-            <div className="flex items-center gap-3">
-              <span className="flex h-3 w-3 rounded-full bg-white animate-ping" />
-              <span className="text-xs sm:text-sm font-black uppercase tracking-wider">
-                🔔 {unacceptedOrders.length} NOUVELLE{unacceptedOrders.length > 1 ? "S" : ""} COMMANDE{unacceptedOrders.length > 1 ? "S" : ""} EN ATTENTE DE VALIDATION
+          <div className="flex items-center justify-between gap-2 bg-gradient-to-r from-red-600 via-[#ff705f] to-amber-600 px-3 sm:px-5 py-2 text-white shadow-md animate-pulse shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-white animate-ping shrink-0" />
+              <span className="text-xs sm:text-sm font-black uppercase tracking-wider truncate">
+                🔔 {unacceptedOrders.length} NOUVELLE{unacceptedOrders.length > 1 ? "S" : ""} COMMANDE{unacceptedOrders.length > 1 ? "S" : ""} À VALIDER
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => {
                   const first = unacceptedOrders[0];
                   if (first) setSelectedOrder(first);
                 }}
-                className="rounded-lg bg-white text-[#2C1D16] px-3 py-1 text-xs font-black shadow hover:bg-white/90"
+                className="rounded-lg bg-white text-[#2C1D16] px-3 py-1 text-xs font-black shadow hover:bg-white/90 cursor-pointer transition active:scale-95"
               >
                 Voir & Valider
               </button>
@@ -1260,12 +1284,12 @@ export function PosApplicationPage() {
 
         {/* ─── Bannière Erreur Impression Réseau ───────────────────────── */}
         {printBannerError && (
-          <div className="flex items-center justify-between bg-amber-500/20 border-b border-amber-500/40 px-5 py-2 text-xs text-amber-200">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-amber-400" />
-              <span>{printBannerError}</span>
+          <div className="flex items-center justify-between gap-2 bg-amber-500/20 border-b border-amber-500/40 px-3 sm:px-5 py-1.5 text-xs text-amber-200 shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0" />
+              <span className="truncate">{printBannerError}</span>
             </div>
-            <button onClick={() => setPrintBannerError(null)} className="font-bold hover:text-white">✕</button>
+            <button onClick={() => setPrintBannerError(null)} className="font-bold hover:text-white px-2 py-0.5 cursor-pointer">✕</button>
           </div>
         )}
 
@@ -1273,26 +1297,26 @@ export function PosApplicationPage() {
         <div className="flex flex-1 min-h-0 overflow-hidden">
           {/* ══════ TAB 1 : DASHBOARD / RUSH & CHARGE CUISINE ══════ */}
           {activeTab === "dashboard" && (
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
               {/* Carte Contrôle Pause Rush */}
-              <div className="rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border-2 border-white/10 p-6 shadow-xl">
+              <div className="rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border-2 border-white/10 p-4 sm:p-6 shadow-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
-                  <div className="flex items-center gap-4">
-                    <div className={`h-14 w-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg transition-transform ${
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className={`h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg shrink-0 transition-transform ${
                       rushState.isPaused
                         ? "bg-gradient-to-br from-red-500 to-rose-600 text-white animate-pulse scale-105"
                         : "bg-gradient-to-br from-amber-500 to-orange-500 text-white"
                     }`}>
                       {rushState.isPaused ? "🔥" : "⚡"}
                     </div>
-                    <div>
-                      <span className="text-xs font-black uppercase tracking-wider text-[#ff705f]">Gestion du Rush Cuisine</span>
-                      <h2 className="text-xl sm:text-2xl font-black text-white">
+                    <div className="min-w-0">
+                      <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#ff705f]">Gestion du Rush Cuisine</span>
+                      <h2 className="text-lg sm:text-2xl font-black text-white truncate">
                         {rushState.isPaused
                           ? "Pause Active : Victime de notre succès !"
                           : "Mise en Pause des Commandes Web"}
                       </h2>
-                      <p className="text-xs text-[#8ea39b] mt-0.5">
+                      <p className="text-xs text-[#8ea39b] mt-0.5 line-clamp-2">
                         {rushState.isPaused
                           ? "Le site public affiche 'Victime de notre succès' avec compte à rebours de reprise."
                           : "Permet à la cuisine de souffler et préparer les commandes sans accumulation."}
@@ -1301,16 +1325,16 @@ export function PosApplicationPage() {
                   </div>
 
                   {rushState.isPaused ? (
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 shrink-0">
                       <div className="text-right">
-                        <span className="block text-xs font-black uppercase text-red-400">Reprise dans</span>
-                        <span className="font-mono text-3xl font-black text-white tracking-wider">
+                        <span className="block text-[10px] sm:text-xs font-black uppercase text-red-400">Reprise dans</span>
+                        <span className="font-mono text-2xl sm:text-3xl font-black text-white tracking-wider">
                           {Math.floor(rushState.remainingSeconds / 60)}:{(rushState.remainingSeconds % 60).toString().padStart(2, "0")}
                         </span>
                       </div>
                       <button
                         onClick={handleResumeRush}
-                        className="rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-6 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition hover:scale-105 active:scale-95 cursor-pointer"
+                        className="rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 text-white px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/30 transition hover:scale-105 active:scale-95 cursor-pointer shrink-0"
                       >
                         ▶️ Réouvrir maintenant
                       </button>
@@ -1318,7 +1342,7 @@ export function PosApplicationPage() {
                   ) : (
                     <button
                       onClick={() => setShowRushModal(true)}
-                      className="rounded-2xl bg-gradient-to-r from-amber-500 to-[#ea580c] hover:from-amber-400 hover:to-orange-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg shadow-amber-500/30 transition hover:scale-105 active:scale-95 cursor-pointer"
+                      className="rounded-2xl bg-gradient-to-r from-amber-500 to-[#ea580c] hover:from-amber-400 hover:to-orange-500 text-white px-5 py-3 text-xs font-black uppercase tracking-wider shadow-lg shadow-amber-500/30 transition hover:scale-105 active:scale-95 cursor-pointer shrink-0"
                     >
                       ⏸️ Mettre en pause le site
                     </button>
@@ -1327,23 +1351,23 @@ export function PosApplicationPage() {
 
                 {/* 3 boutons rapides de pause */}
                 {!rushState.isPaused && (
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-3">
                     <span className="text-xs font-bold text-[#8ea39b]">Pauses rapides directes :</span>
                     <button
                       onClick={() => handleSetRushPause(10)}
-                      className="rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
+                      className="rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-black shadow-md shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
                     >
                       ⏸️ 10 Minutes
                     </button>
                     <button
                       onClick={() => handleSetRushPause(20)}
-                      className="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
+                      className="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-black shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
                     >
                       ⏸️ 20 Minutes
                     </button>
                     <button
                       onClick={() => handleSetRushPause(30)}
-                      className="rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-4 py-2.5 text-xs font-black shadow-md shadow-red-600/20 hover:scale-105 active:scale-95 transition cursor-pointer"
+                      className="rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-black shadow-md shadow-red-600/20 hover:scale-105 active:scale-95 transition cursor-pointer"
                     >
                       ⏸️ 30 Minutes
                     </button>
@@ -1352,38 +1376,38 @@ export function PosApplicationPage() {
               </div>
 
               {/* Indicateurs Clés Métier */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="rounded-2xl bg-[#142822] border border-white/10 p-4">
-                  <span className="text-xs font-black uppercase text-[#ff705f]">À Valider</span>
-                  <p className="mt-1 font-mono text-3xl font-black text-white">{newOrdersList.length}</p>
-                  <p className="mt-1 text-[11px] text-[#8ea39b]">Nouvelles commandes urgentes</p>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4">
+                  <span className="text-[11px] sm:text-xs font-black uppercase text-[#ff705f]">À Valider</span>
+                  <p className="mt-1 font-mono text-2xl sm:text-3xl font-black text-white">{newOrdersList.length}</p>
+                  <p className="mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]">Nouvelles commandes urgentes</p>
                 </div>
 
-                <div className="rounded-2xl bg-[#142822] border border-white/10 p-4">
-                  <span className="text-xs font-black uppercase text-amber-400">En Préparation</span>
-                  <p className="mt-1 font-mono text-3xl font-black text-white">{preparingOrdersList.length}</p>
-                  <p className="mt-1 text-[11px] text-[#8ea39b]">Temps estimé : {kitchenLoad.estTime}</p>
+                <div className="rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4">
+                  <span className="text-[11px] sm:text-xs font-black uppercase text-amber-400">En Préparation</span>
+                  <p className="mt-1 font-mono text-2xl sm:text-3xl font-black text-white">{preparingOrdersList.length}</p>
+                  <p className="mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]">Temps estimé : {kitchenLoad.estTime}</p>
                 </div>
 
-                <div className="rounded-2xl bg-[#142822] border border-white/10 p-4">
-                  <span className="text-xs font-black uppercase text-blue-400">En Livraison / Prêtes</span>
-                  <p className="mt-1 font-mono text-3xl font-black text-white">{readyOrdersList.length}</p>
-                  <p className="mt-1 text-[11px] text-[#8ea39b]">Départ Avenue du Pont 12</p>
+                <div className="rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4">
+                  <span className="text-[11px] sm:text-xs font-black uppercase text-blue-400">En Livraison / Prêtes</span>
+                  <p className="mt-1 font-mono text-2xl sm:text-3xl font-black text-white">{readyOrdersList.length}</p>
+                  <p className="mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]">Départ Avenue du Pont 12</p>
                 </div>
 
-                <div className="rounded-2xl bg-[#142822] border border-white/10 p-4">
-                  <span className="text-xs font-black uppercase text-emerald-400">CA Aujourd'hui</span>
-                  <p className="mt-1 font-mono text-3xl font-black text-white">{todayRevenue.toFixed(2)} €</p>
-                  <p className="mt-1 text-[11px] text-[#8ea39b]">{completedOrdersList.length} terminées</p>
+                <div className="rounded-2xl bg-[#142822] border border-white/10 p-3 sm:p-4">
+                  <span className="text-[11px] sm:text-xs font-black uppercase text-emerald-400">CA Aujourd'hui</span>
+                  <p className="mt-1 font-mono text-2xl sm:text-3xl font-black text-white">{todayRevenue.toFixed(2)} €</p>
+                  <p className="mt-1 text-[10px] sm:text-[11px] text-[#8ea39b]">{completedOrdersList.length} terminées</p>
                 </div>
               </div>
 
               {/* Commandes Récentes Prioritaires */}
-              <div className="rounded-3xl bg-[#142822] border border-white/10 p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-black text-base text-white">Commandes en cours nécessitant une action</h3>
-                  <button onClick={() => setActiveTab("kanban")} className="text-xs font-bold text-[#ff705f] hover:underline">
-                    Ouvrir le Kanban complet →
+              <div className="rounded-3xl bg-[#142822] border border-white/10 p-4 sm:p-5 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-black text-sm sm:text-base text-white truncate">Commandes nécessitant une action</h3>
+                  <button onClick={() => setActiveTab("kanban")} className="text-xs font-bold text-[#ff705f] hover:underline shrink-0">
+                    Kanban complet →
                   </button>
                 </div>
 
@@ -1392,34 +1416,34 @@ export function PosApplicationPage() {
                 ) : (
                   <div className="divide-y divide-white/5">
                     {activeOrders.slice(0, 5).map((o) => (
-                      <div key={o.id} className="flex items-center justify-between py-3">
-                        <div className="space-y-0.5">
+                      <div key={o.id} className="flex items-center justify-between py-3 gap-2">
+                        <div className="space-y-0.5 min-w-0 flex-1 pr-2">
                           <div className="flex items-center gap-2">
                             <span className="font-mono text-xs font-black text-white">{o.id}</span>
-                            <span className="text-xs font-bold text-white">{o.customer.name}</span>
+                            <span className="text-xs font-bold text-white truncate">{o.customer.name}</span>
                             {!o.acceptedAt && (
-                              <span className="rounded-full bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 text-[10px] font-black uppercase animate-pulse">
+                              <span className="rounded-full bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 text-[10px] font-black uppercase animate-pulse shrink-0">
                                 Non acceptée
                               </span>
                             )}
                           </div>
-                          <p className="text-[11px] text-[#8ea39b]">
-                            {o.customer.fulfillment === "delivery" ? `🛵 Livraison : ${o.customer.address}` : "🥡 Retrait sur place"} · {o.items.length} articles · {o.total.toFixed(2)} €
+                          <p className="text-[11px] text-[#8ea39b] truncate">
+                            {o.customer.fulfillment === "delivery" ? `🛵 ${o.customer.address}` : "🥡 Retrait sur place"} · {o.items.length} articles · {o.total.toFixed(2)} €
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 shrink-0">
                           {!o.acceptedAt ? (
                             <button
                               onClick={() => handleAcceptOrder(o)}
-                              className="rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-black uppercase tracking-wider animate-pulse shadow"
+                              className="rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-black uppercase tracking-wider animate-pulse shadow cursor-pointer"
                             >
                               Accepter
                             </button>
                           ) : (
                             <button
                               onClick={() => setSelectedOrder(o)}
-                              className="rounded-xl bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs font-bold"
+                              className="rounded-xl bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs font-bold cursor-pointer"
                             >
                               Détails
                             </button>
@@ -1433,79 +1457,157 @@ export function PosApplicationPage() {
             </div>
           )}
 
-          {/* ══════ TAB 2 : COMMANDES KANBAN ══════ */}
+          {/* ══════ TAB 2 : COMMANDES KANBAN (RESPONSIVE PC & MOBILE) ══════ */}
           {activeTab === "kanban" && (
-            <div className="grid flex-1 grid-cols-4 gap-3 p-3 overflow-hidden">
-              {/* Colonne 1 : À VALIDER */}
-              <KanbanColumn
-                title="À Valider"
-                badgeCount={newOrdersList.length}
-                color="bg-red-500"
-                orders={newOrdersList}
-                onSelect={setSelectedOrder}
-                onReprint={handleManualReprint}
-                onAcceptOrder={handleAcceptOrder}
-                onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
-                nextLabel="Passer en Préparation"
-                nextIcon={<CookingPot className="w-3.5 h-3.5" />}
-              />
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+              {/* Sélecteur de Colonne Mobile (< lg) */}
+              <div className="flex lg:hidden items-center gap-1.5 px-3 py-2 bg-[#12231e] border-b border-white/5 overflow-x-auto shrink-0 no-scrollbar">
+                <button
+                  type="button"
+                  onClick={() => setKanbanMobileCol("all")}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
+                    kanbanMobileCol === "all"
+                      ? "bg-white text-black shadow"
+                      : "bg-white/10 text-white/70 hover:bg-white/15"
+                  }`}
+                >
+                  Vue Défilante ({newOrdersList.length + preparingOrdersList.length + readyOrdersList.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setKanbanMobileCol("new")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
+                    kanbanMobileCol === "new"
+                      ? "bg-red-500 text-white shadow-lg shadow-red-500/40 ring-2 ring-white/30"
+                      : "bg-red-500/20 text-red-300 hover:bg-red-500/30"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-red-400" />
+                  <span>À Valider</span>
+                  <span className="rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]">{newOrdersList.length}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setKanbanMobileCol("preparing")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
+                    kanbanMobileCol === "preparing"
+                      ? "bg-[#ff705f] text-white shadow-lg shadow-[#ff705f]/40 ring-2 ring-white/30"
+                      : "bg-[#ff705f]/20 text-[#ff8e80] hover:bg-[#ff705f]/30"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#ff705f]" />
+                  <span>En Préparation</span>
+                  <span className="rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]">{preparingOrdersList.length}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setKanbanMobileCol("ready")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
+                    kanbanMobileCol === "ready"
+                      ? "bg-blue-500 text-white shadow-lg shadow-blue-500/40 ring-2 ring-white/30"
+                      : "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  <span>Prêtes / Livraison</span>
+                  <span className="rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]">{readyOrdersList.length}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setKanbanMobileCol("completed")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
+                    kanbanMobileCol === "completed"
+                      ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-white/30"
+                      : "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span>Terminées</span>
+                  <span className="rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]">{completedOrdersList.length}</span>
+                </button>
+              </div>
 
-              {/* Colonne 2 : EN PRÉPARATION */}
-              <KanbanColumn
-                title="En Préparation"
-                badgeCount={preparingOrdersList.length}
-                color="bg-[#ff705f]"
-                orders={preparingOrdersList}
-                onSelect={setSelectedOrder}
-                onReprint={handleManualReprint}
-                onNextStatus={(id) => handleUpdateStatus(id, "ready")}
-                nextLabel="Prête / En Livraison"
-                nextIcon={<CheckCircle className="w-3.5 h-3.5" />}
-              />
+              {/* Colonnes Kanban : Grid 4 colonnes sur PC (>= lg) ou Défilement Horizontal / Colonne Unique sur Mobile (< lg) */}
+              <div className="flex-1 flex lg:grid lg:grid-cols-4 gap-3 p-2.5 sm:p-3 overflow-x-auto lg:overflow-hidden snap-x snap-mandatory min-h-0">
+                {(kanbanMobileCol === "all" || kanbanMobileCol === "new") && (
+                  <KanbanColumn
+                    title="À Valider"
+                    badgeCount={newOrdersList.length}
+                    color="bg-red-500"
+                    orders={newOrdersList}
+                    onSelect={setSelectedOrder}
+                    onReprint={handleManualReprint}
+                    onAcceptOrder={handleAcceptOrder}
+                    onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
+                    nextLabel="Passer en Préparation"
+                    nextIcon={<CookingPot className="w-3.5 h-3.5" />}
+                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                  />
+                )}
 
-              {/* Colonne 3 : PRÊTES & EN LIVRAISON */}
-              <KanbanColumn
-                title="Prêtes & En Livraison"
-                badgeCount={readyOrdersList.length}
-                color="bg-blue-500"
-                orders={readyOrdersList}
-                onSelect={setSelectedOrder}
-                onReprint={handleManualReprint}
-                onNextStatus={(id) => handleUpdateStatus(id, "completed")}
-                nextLabel="Terminer"
-                nextIcon={<Truck className="w-3.5 h-3.5" />}
-              />
+                {(kanbanMobileCol === "all" || kanbanMobileCol === "preparing") && (
+                  <KanbanColumn
+                    title="En Préparation"
+                    badgeCount={preparingOrdersList.length}
+                    color="bg-[#ff705f]"
+                    orders={preparingOrdersList}
+                    onSelect={setSelectedOrder}
+                    onReprint={handleManualReprint}
+                    onNextStatus={(id) => handleUpdateStatus(id, "ready")}
+                    nextLabel="Prête / En Livraison"
+                    nextIcon={<CheckCircle className="w-3.5 h-3.5" />}
+                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                  />
+                )}
 
-              {/* Colonne 4 : TERMINÉES */}
-              <KanbanColumn
-                title="Terminées"
-                badgeCount={completedOrdersList.length}
-                color="bg-emerald-500"
-                orders={completedOrdersList.slice(0, 30)}
-                onSelect={setSelectedOrder}
-                onReprint={handleManualReprint}
-                onNextStatus={() => {}}
-                nextLabel="Archivée"
-                nextIcon={<Check className="w-3.5 h-3.5" />}
-              />
+                {(kanbanMobileCol === "all" || kanbanMobileCol === "ready") && (
+                  <KanbanColumn
+                    title="Prêtes & En Livraison"
+                    badgeCount={readyOrdersList.length}
+                    color="bg-blue-500"
+                    orders={readyOrdersList}
+                    onSelect={setSelectedOrder}
+                    onReprint={handleManualReprint}
+                    onNextStatus={(id) => handleUpdateStatus(id, "completed")}
+                    nextLabel="Terminer"
+                    nextIcon={<Truck className="w-3.5 h-3.5" />}
+                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                  />
+                )}
+
+                {(kanbanMobileCol === "all" || kanbanMobileCol === "completed") && (
+                  <KanbanColumn
+                    title="Terminées"
+                    badgeCount={completedOrdersList.length}
+                    color="bg-emerald-500"
+                    orders={completedOrdersList.slice(0, 30)}
+                    onSelect={setSelectedOrder}
+                    onReprint={handleManualReprint}
+                    onNextStatus={() => {}}
+                    nextLabel="Archivée"
+                    nextIcon={<Check className="w-3.5 h-3.5" />}
+                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                  />
+                )}
+              </div>
             </div>
           )}
 
           {/* ══════ TAB 3 : GESTION DES STOCKS & INGRÉDIENTS (ULTRA-LUDIQUE & PRO) ══════ */}
           {activeTab === "stock" && (
-            <div className="flex-1 flex flex-col min-h-0 bg-[#0d1a16] p-4 sm:p-6 overflow-hidden">
+            <div className="flex-1 flex flex-col min-h-0 bg-[#0d1a16] p-3 sm:p-6 overflow-hidden">
               {/* Entête & Statistiques Flash */}
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10 shrink-0">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-white/10 shrink-0">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40">
                       🥗 STOCKS EN DIRECT
                     </span>
-                    <span className="text-xs text-[#8ea39b]">
+                    <span className="text-xs text-[#8ea39b] hidden sm:inline">
                       • Mise à jour instantanée du site pokenbowl.be
                     </span>
                   </div>
-                  <h2 className="text-2xl font-black text-white mt-1">
+                  <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
                     Gestion des Produits & Ingrédients
                   </h2>
                   <p className="text-xs text-[#8ea39b]">
@@ -1514,8 +1616,8 @@ export function PosApplicationPage() {
                 </div>
 
                 {/* Compteurs ludiques & recherche */}
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <div className="flex items-center gap-2 bg-black/40 rounded-2xl px-3.5 py-2 border border-white/10">
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex items-center gap-2 bg-black/40 rounded-2xl px-3 py-1.5 sm:px-3.5 sm:py-2 border border-white/10">
                     <span className="text-xs font-black text-emerald-400">
                       🟢 {stocks.filter((s) => s.status === "available" || (!s.status && s.available)).length} Dispos
                     </span>
@@ -1525,17 +1627,17 @@ export function PosApplicationPage() {
                         ? "text-red-400 animate-pulse"
                         : "text-white/60"
                     }`}>
-                      🔴 {stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length} Victimes du succès
+                      🔴 {stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length} Rupture
                     </span>
                   </div>
 
-                  <div className="relative">
+                  <div className="relative flex-1 sm:flex-initial">
                     <input
                       type="text"
                       placeholder="🔍 Filtrer un ingrédient..."
                       value={stockSearch}
                       onChange={(e) => setStockSearch(e.target.value)}
-                      className="rounded-2xl bg-black/40 border border-white/15 pl-4 pr-9 py-2 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f] w-48 sm:w-60"
+                      className="rounded-2xl bg-black/40 border border-white/15 pl-4 pr-9 py-2 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f] w-full sm:w-60"
                     />
                     {stockSearch && (
                       <button
@@ -1549,7 +1651,7 @@ export function PosApplicationPage() {
 
                   <button
                     onClick={loadStock}
-                    className="rounded-2xl bg-white/10 hover:bg-white/20 p-2.5 text-white transition active:scale-95"
+                    className="rounded-2xl bg-white/10 hover:bg-white/20 p-2 sm:p-2.5 text-white transition active:scale-95 cursor-pointer shrink-0"
                     title="Actualiser les stocks"
                   >
                     <RefreshCw className="h-4 w-4" />
@@ -1558,7 +1660,7 @@ export function PosApplicationPage() {
               </div>
 
               {/* Catégories de filtres super colorées et tactiles */}
-              <div className="flex gap-2 py-3 overflow-x-auto shrink-0 no-scrollbar">
+              <div className="flex gap-2 py-2.5 sm:py-3 overflow-x-auto shrink-0 no-scrollbar">
                 {[
                   { id: "all", label: "Tous", emoji: "✨", count: stocks.length },
                   { id: "bowl", label: "Bowls Signatures", emoji: "🥣", count: stocks.filter((s) => s.category === "bowl").length },
@@ -1585,13 +1687,13 @@ export function PosApplicationPage() {
                     <button
                       key={cat.id}
                       onClick={() => setStockCategory(cat.id)}
-                      className={`flex items-center gap-2 rounded-2xl px-4 py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${
+                      className={`flex items-center gap-2 rounded-2xl px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${
                         isActive
                           ? "bg-gradient-to-r from-[#ff705f] to-[#ea580c] text-white shadow-lg shadow-[#ea580c]/30 scale-105"
                           : "bg-[#142822] text-[#8ea39b] hover:text-white hover:bg-[#1a352d] border border-white/5"
                       }`}
                     >
-                      <span className="text-base">{cat.emoji}</span>
+                      <span className="text-sm sm:text-base">{cat.emoji}</span>
                       <span>{cat.label}</span>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] ${
                         isActive ? "bg-white/25 text-white" : "bg-black/30 text-white/50"
@@ -1604,7 +1706,7 @@ export function PosApplicationPage() {
               </div>
 
               {/* Grille des Produits & Ingrédients */}
-              <div className="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 pt-2 pb-6">
+              <div className="flex-1 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 pt-2 pb-6 min-h-0">
                 {stocks
                   .filter((s) => {
                     if (stockCategory === "all") return true;
@@ -1728,7 +1830,7 @@ export function PosApplicationPage() {
 
           {/* ══════ TAB 4 : GESTION DES LIVREURS ══════ */}
           {activeTab === "drivers" && (
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
                 <div>
                   <h2 className="text-xl font-black text-white">Gestion de la Flotte Livreurs</h2>
@@ -1797,7 +1899,7 @@ export function PosApplicationPage() {
 
           {/* ══════ TAB 5 : KILOMÉTRAGE & EXPORT CSV ══════ */}
           {activeTab === "mileage" && (
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
                 <div>
                   <h2 className="text-xl font-black text-white">Suivi Kilométrique des Livraisons</h2>
@@ -1900,8 +2002,14 @@ export function PosApplicationPage() {
 
               {/* Modale Correction Kilométrique */}
               {editingLogId && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-                  <div className="w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white">
+                <div
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4"
+                  onClick={() => setEditingLogId(null)}
+                >
+                  <div
+                    className="w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white shadow-2xl"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <h3 className="font-black text-base">Ajustement Manuel des Kilomètres</h3>
                     <p className="text-xs text-[#8ea39b]">
                       Saisissez la distance réelle parcourue en cas de détour routier ou d'erreur GPS :
@@ -1943,9 +2051,9 @@ export function PosApplicationPage() {
 
           {/* ══════ TAB 6 : STATISTIQUES ══════ */}
           {activeTab === "stats" && (
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0">
               <h2 className="text-xl font-black text-white">Statistiques de Vente & Performance</h2>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div className="rounded-2xl bg-[#142822] border border-white/10 p-4">
                   <span className="text-xs font-black uppercase text-emerald-400">Total Commandes</span>
                   <p className="mt-1 font-mono text-3xl font-black text-white">{orders.length}</p>
@@ -1974,7 +2082,7 @@ export function PosApplicationPage() {
 
           {/* ══════ TAB 7 : PARAMÈTRES (IMPRIMANTE, AUDIO, PIN) ══════ */}
           {activeTab === "settings" && (
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 min-h-0">
               <h2 className="text-xl font-black text-white">Paramètres Matériel & Terminal</h2>
 
               {/* Imprimante Epson */}
@@ -2059,200 +2167,231 @@ export function PosApplicationPage() {
           )}
         </div>
 
-        {/* ─── MODALE DÉTAILS COMMANDE ──────────────────────────────────── */}
+        {/* ─── MODALE DÉTAILS COMMANDE (ERGONOMIE MOBILE & PC) ──────────────────────────────────── */}
         {selectedOrder && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-            <div className="w-full max-w-xl rounded-3xl bg-[#142822] border border-white/15 p-6 shadow-2xl space-y-5 text-white max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <div>
-                  <span className="font-mono text-xl font-black">{selectedOrder.id}</span>
-                  <p className="text-xs text-[#8ea39b] mt-0.5">
-                    Créée à {new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")}
-                  </p>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-2 sm:p-4"
+            onClick={() => setSelectedOrder(null)}
+          >
+            <div
+              className="w-full max-w-xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col rounded-3xl bg-[#142822] border border-white/15 shadow-2xl text-white overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header Fixe de la Modale */}
+              <div className="flex items-center justify-between border-b border-white/10 px-4 sm:px-6 py-3.5 bg-[#172e27] shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-lg sm:text-xl font-black">{selectedOrder.id}</span>
+                  <span className={`rounded-md px-2 py-0.5 text-[10px] font-black uppercase ${
+                    selectedOrder.customer.fulfillment === "delivery"
+                      ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
+                      : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                  }`}>
+                    {selectedOrder.customer.fulfillment === "delivery" ? "🛵 Livraison" : "🥡 Retrait"}
+                  </span>
+                  <span className="text-xs text-[#8ea39b]">
+                    {new Date(selectedOrder.createdAt).toLocaleTimeString("fr-BE")}
+                  </span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedOrder(null)}
-                  className="rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20"
+                  className="rounded-full bg-white/10 w-9 h-9 flex items-center justify-center text-sm font-black hover:bg-white/20 transition cursor-pointer"
+                  title="Fermer"
                 >
                   ✕
                 </button>
               </div>
 
-              {/* Bouton ACCEPTER LA COMMANDE si non acceptée */}
-              {!selectedOrder.acceptedAt && (
-                <div className="rounded-2xl bg-gradient-to-r from-red-600 to-[#ff705f] p-4 text-center space-y-2 shadow-lg animate-pulse">
-                  <p className="text-xs font-black uppercase tracking-wider text-white">
-                    ⚠️ Cette commande doit être validée par la cuisine
-                  </p>
-                  <button
-                    onClick={() => handleAcceptOrder(selectedOrder)}
-                    className="w-full rounded-xl bg-white text-[#2C1D16] py-3 text-sm font-black uppercase tracking-wider hover:bg-white/90 shadow transition"
-                  >
-                    🔔 ACCEPTER LA COMMANDE
-                  </button>
-                </div>
-              )}
+              {/* Corps Défilable de la Modale */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 min-h-0">
+                {/* Bouton ACCEPTER LA COMMANDE si non acceptée */}
+                {!selectedOrder.acceptedAt && (
+                  <div className="rounded-2xl bg-gradient-to-r from-red-600 to-[#ff705f] p-4 text-center space-y-2 shadow-lg animate-pulse">
+                    <p className="text-xs font-black uppercase tracking-wider text-white">
+                      ⚠️ Cette commande doit être validée par la cuisine
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleAcceptOrder(selectedOrder)}
+                      className="w-full rounded-xl bg-white text-[#2C1D16] py-3 text-sm font-black uppercase tracking-wider hover:bg-white/90 shadow transition cursor-pointer"
+                    >
+                      🔔 ACCEPTER LA COMMANDE
+                    </button>
+                  </div>
+                )}
 
-              {/* Signalement de Retard Cuisine (+10, +20, +30 min) */}
-              <div className="rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase text-amber-300">Signaler un retard cuisine au client</span>
-                  {selectedOrder.delayMinutes && (
-                    <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full">
-                      Retard : +{selectedOrder.delayMinutes} min
-                    </span>
-                  )}
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    onClick={() => handleDelayOrder(selectedOrder, 10)}
-                    className="rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition"
-                  >
-                    +10 min
-                  </button>
-                  <button
-                    onClick={() => handleDelayOrder(selectedOrder, 20)}
-                    className="rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition"
-                  >
-                    +20 min
-                  </button>
-                  <button
-                    onClick={() => handleDelayOrder(selectedOrder, 30)}
-                    className="rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition"
-                  >
-                    +30 min
-                  </button>
-                </div>
-              </div>
-
-              {/* Assignation Livreur & Distance */}
-              {selectedOrder.customer.fulfillment === "delivery" && (
+                {/* Signalement de Retard Cuisine (+10, +20, +30 min) */}
                 <div className="rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black uppercase text-emerald-400">Assigner un Livreur</span>
-                    {selectedOrder.driverName && (
-                      <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full">
-                        Assigné à {selectedOrder.driverName} ({selectedOrder.distanceKm ?? 3.5} km)
+                    <span className="text-xs font-black uppercase text-amber-300">Signaler un retard cuisine au client</span>
+                    {selectedOrder.delayMinutes && (
+                      <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full">
+                        Retard : +{selectedOrder.delayMinutes} min
                       </span>
                     )}
                   </div>
-                  <div className="flex gap-2">
-                    <select
-                      value={selectedOrder.driverId || ""}
-                      onChange={(e) => handleAssignDriverToOrder(selectedOrder, e.target.value)}
-                      className="flex-1 rounded-xl bg-black/60 border border-white/15 px-3 py-2 text-xs text-white"
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleDelayOrder(selectedOrder, 10)}
+                      className="rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition cursor-pointer"
                     >
-                      <option value="">Sélectionner un livreur...</option>
-                      {drivers.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {d.name} {d.active ? "(En service)" : "(Inactif)"}
-                        </option>
-                      ))}
-                    </select>
+                      +10 min
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelayOrder(selectedOrder, 20)}
+                      className="rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition cursor-pointer"
+                    >
+                      +20 min
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelayOrder(selectedOrder, 30)}
+                      className="rounded-xl bg-white/10 hover:bg-amber-500/30 text-white py-1.5 text-xs font-bold transition cursor-pointer"
+                    >
+                      +30 min
+                    </button>
                   </div>
                 </div>
-              )}
 
-              {/* Infos Client */}
-              <div className="rounded-2xl bg-black/30 p-4 space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-base font-black">{selectedOrder.customer.name}</span>
-                  <a
-                    href={`tel:${selectedOrder.customer.phone}`}
-                    className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
-                    <span>{selectedOrder.customer.phone}</span>
-                  </a>
-                </div>
-                {selectedOrder.customer.fulfillment === "delivery" ? (
-                  <div className="text-xs text-[#8ea39b] pt-1 border-t border-white/5">
-                    <p className="font-bold text-white">{selectedOrder.customer.address}</p>
-                    <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
-                  </div>
-                ) : (
-                  <p className="text-xs text-[#EADCC9] font-bold">Retrait sur place</p>
-                )}
-                {selectedOrder.customer.notes && (
-                  <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">
-                    <strong>Note :</strong> {selectedOrder.customer.notes}
-                  </div>
-                )}
-              </div>
-
-              {/* Articles */}
-              <div className="space-y-2">
-                <span className="text-xs font-black uppercase text-[#8ea39b]">Articles commandés</span>
-                <ul className="divide-y divide-white/5 bg-black/20 rounded-2xl p-3">
-                  {selectedOrder.items.map((it, idx) => (
-                    <li key={idx} className="py-2 first:pt-0 last:pb-0">
-                      <div className="flex justify-between font-bold text-sm">
-                        <span>{it.quantity}× {it.name}</span>
-                        <span>{(it.price * it.quantity).toFixed(2)} €</span>
-                      </div>
-                      {it.toppings && it.toppings.length > 0 && (
-                        <div className="pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50">
-                          {it.toppings.map((top, tidx) => (
-                            <p key={tidx}>{top}</p>
-                          ))}
-                        </div>
+                {/* Assignation Livreur & Distance */}
+                {selectedOrder.customer.fulfillment === "delivery" && (
+                  <div className="rounded-2xl bg-black/30 p-3.5 space-y-2 border border-white/10">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-black uppercase text-emerald-400">Assigner un Livreur</span>
+                      {selectedOrder.driverName && (
+                        <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full">
+                          Assigné à {selectedOrder.driverName} ({selectedOrder.distanceKm ?? 3.5} km)
+                        </span>
                       )}
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex justify-between items-center pt-2 px-2 font-black text-base">
-                  <span>Total</span>
-                  <span>{selectedOrder.total.toFixed(2)} €</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <select
+                        value={selectedOrder.driverId || ""}
+                        onChange={(e) => handleAssignDriverToOrder(selectedOrder, e.target.value)}
+                        className="flex-1 rounded-xl bg-black/60 border border-white/15 px-3 py-2 text-xs text-white"
+                      >
+                        <option value="">Sélectionner un livreur...</option>
+                        {drivers.map((d) => (
+                          <option key={d.id} value={d.id}>
+                            {d.name} {d.active ? "(En service)" : "(Inactif)"}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {/* Infos Client */}
+                <div className="rounded-2xl bg-black/30 p-4 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-base font-black">{selectedOrder.customer.name}</span>
+                    <a
+                      href={`tel:${selectedOrder.customer.phone}`}
+                      className="flex items-center gap-1.5 text-xs font-bold text-[#EADCC9] bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl transition"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-[#ff705f]" />
+                      <span>{selectedOrder.customer.phone}</span>
+                    </a>
+                  </div>
+                  {selectedOrder.customer.fulfillment === "delivery" ? (
+                    <div className="text-xs text-[#8ea39b] pt-1 border-t border-white/5">
+                      <p className="font-bold text-white">{selectedOrder.customer.address}</p>
+                      <p>{selectedOrder.customer.postalCode} {selectedOrder.customer.city}</p>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-[#EADCC9] font-bold">Retrait sur place (Avenue du Pont 12, Visé)</p>
+                  )}
+                  {selectedOrder.customer.notes && (
+                    <div className="text-xs bg-[#ff705f]/15 border border-[#ff705f]/30 p-2.5 rounded-xl text-white">
+                      <strong>Note :</strong> {selectedOrder.customer.notes}
+                    </div>
+                  )}
                 </div>
+
+                {/* Articles */}
+                <div className="space-y-2">
+                  <span className="text-xs font-black uppercase text-[#8ea39b]">Articles commandés</span>
+                  <ul className="divide-y divide-white/5 bg-black/20 rounded-2xl p-3">
+                    {selectedOrder.items.map((it, idx) => (
+                      <li key={idx} className="py-2 first:pt-0 last:pb-0">
+                        <div className="flex justify-between font-bold text-sm">
+                          <span>{it.quantity}× {it.name}</span>
+                          <span className="font-mono">{(it.price * it.quantity).toFixed(2)} €</span>
+                        </div>
+                        {it.toppings && it.toppings.length > 0 && (
+                          <div className="pl-4 text-xs text-[#8ea39b] space-y-0.5 mt-1 border-l border-[#ff705f]/50">
+                            {it.toppings.map((top, tidx) => (
+                              <p key={tidx}>{top}</p>
+                            ))}
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex justify-between items-center pt-2 px-2 font-black text-base">
+                    <span>Total</span>
+                    <span className="font-mono text-emerald-400 text-lg">{selectedOrder.total.toFixed(2)} €</span>
+                  </div>
+                </div>
+
+                {/* Navigation GPS pour Livraison */}
+                {selectedOrder.customer.fulfillment === "delivery" && (
+                  <div className="rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-black uppercase text-emerald-400">Navigation Livreur</span>
+                      <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
+                        1-Clic GPS
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openGoogleMapsApp(
+                            `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`
+                          )
+                        }
+                        className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer"
+                      >
+                        <Navigation className="w-3.5 h-3.5" />
+                        Google Maps
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openWazeApp(
+                            `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`
+                          )
+                        }
+                        className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer"
+                      >
+                        <Navigation className="w-3.5 h-3.5" />
+                        Waze
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Navigation GPS pour Livraison */}
-              {selectedOrder.customer.fulfillment === "delivery" && (
-                <div className="rounded-2xl bg-[#1b322a] border border-white/10 p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-black uppercase text-emerald-400">Navigation Livreur</span>
-                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-mono font-bold">
-                      1-Clic
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openGoogleMapsApp(
-                          `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`
-                        )
-                      }
-                      className="flex items-center justify-center gap-2 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      Google Maps (App)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        openWazeApp(
-                          `${selectedOrder.customer.address ?? ""}, ${selectedOrder.customer.postalCode ?? ""} ${selectedOrder.customer.city ?? ""}`
-                        )
-                      }
-                      className="flex items-center justify-center gap-2 rounded-xl bg-[#33ccff] hover:bg-[#2bb8e6] text-[#003d52] py-2.5 text-xs font-black shadow transition active:scale-95 cursor-pointer"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      Waze (App)
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Impression Ticket */}
-              <div className="pt-2">
+              {/* Pied Fixe de la Modale */}
+              <div className="border-t border-white/10 px-4 sm:px-6 py-3 bg-[#11221c] flex items-center gap-2 shrink-0">
                 <button
+                  type="button"
                   onClick={() => handleManualReprint(selectedOrder.id)}
                   disabled={printingOrderId === selectedOrder.id}
-                  className="w-full rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3.5 px-4 text-sm font-black transition flex items-center justify-center gap-2 shadow-lg"
+                  className="flex-1 rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3 px-4 text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-lg cursor-pointer"
                 >
-                  <Printer className="w-5 h-5" />
-                  <span>Imprimer Ticket Thermique (80mm)</span>
+                  <Printer className="w-4 h-4 shrink-0" />
+                  <span>Imprimer Ticket (80mm)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedOrder(null)}
+                  className="rounded-2xl bg-white/10 hover:bg-white/20 text-white px-5 py-3 text-xs sm:text-sm font-bold transition cursor-pointer"
+                >
+                  Fermer
                 </button>
               </div>
             </div>
@@ -2261,8 +2400,14 @@ export function PosApplicationPage() {
 
         {/* ─── MODALE MISE EN PAUSE RUSH ────────────────────────────────── */}
         {showRushModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4">
-            <div className="w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white text-center">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4"
+            onClick={() => setShowRushModal(false)}
+          >
+            <div
+              className="w-full max-w-md rounded-3xl bg-[#142822] border border-white/15 p-6 space-y-4 text-white text-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-400">
                 <Pause className="h-7 w-7" />
               </div>
@@ -2296,8 +2441,9 @@ export function PosApplicationPage() {
               </div>
 
               <button
+                type="button"
                 onClick={() => setShowRushModal(false)}
-                className="mt-2 text-xs text-[#8ea39b] hover:text-white underline"
+                className="mt-2 text-xs text-[#8ea39b] hover:text-white underline cursor-pointer"
               >
                 Annuler
               </button>
@@ -2321,6 +2467,7 @@ interface ColumnProps {
   onNextStatus: (id: string) => void;
   nextLabel: string;
   nextIcon: React.ReactNode;
+  className?: string;
 }
 
 function KanbanColumn({
@@ -2334,20 +2481,23 @@ function KanbanColumn({
   onNextStatus,
   nextLabel,
   nextIcon,
+  className = "",
 }: ColumnProps) {
   return (
-    <div className="flex flex-col rounded-2xl bg-[#142822] border border-white/5 overflow-hidden">
-      <div className="flex items-center justify-between p-3.5 border-b border-white/5 bg-black/20">
-        <div className="flex items-center gap-2">
-          <span className={`w-3 h-3 rounded-full ${color}`} />
-          <h2 className="text-sm font-black tracking-wide text-white">{title}</h2>
+    <div className={`flex flex-col rounded-2xl bg-[#142822] border border-white/10 overflow-hidden min-h-0 h-full ${className}`}>
+      {/* Header Colonne */}
+      <div className="flex items-center justify-between p-3 sm:p-3.5 border-b border-white/10 bg-black/25 shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className={`w-3 h-3 rounded-full shrink-0 ${color}`} />
+          <h2 className="text-xs sm:text-sm font-black tracking-wide text-white truncate">{title}</h2>
         </div>
-        <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-black text-white">
+        <span className="rounded-full bg-white/10 px-2 sm:px-2.5 py-0.5 text-xs font-black text-white shrink-0">
           {badgeCount}
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5">
+      {/* Cartes Commandes */}
+      <div className="flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-2.5 min-h-0">
         {orders.length === 0 ? (
           <div className="flex h-32 items-center justify-center text-xs font-bold text-[#62776f]">
             Aucune commande
@@ -2360,67 +2510,86 @@ function KanbanColumn({
               <div
                 key={o.id}
                 onClick={() => onSelect(o)}
-                className={`rounded-2xl p-3.5 shadow transition cursor-pointer space-y-2.5 border ${
+                className={`rounded-2xl p-3 sm:p-3.5 shadow transition cursor-pointer space-y-2 border ${
                   isUnaccepted
-                    ? "bg-red-950/40 border-red-500/60 ring-2 ring-red-500/40 animate-pulse"
+                    ? "bg-red-950/40 border-red-500/70 ring-2 ring-red-500/50 animate-pulse"
                     : "bg-black/40 border-white/10 hover:border-white/30"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-sm font-black text-white">{o.id}</span>
-                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-[#8ea39b]">
+                {/* Entête Carte : ID + Heure + Badge Fulfillment */}
+                <div className="flex items-center justify-between gap-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="font-mono text-xs sm:text-sm font-black text-white truncate">{o.id}</span>
+                    <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase ${
+                      o.customer.fulfillment === "delivery"
+                        ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
+                        : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                    }`}>
+                      {o.customer.fulfillment === "delivery" ? "🛵 Livr." : "🥡 Emp."}
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-[#8ea39b] shrink-0">
                     {o.customer.requestedTime}
                   </span>
                 </div>
 
+                {/* Nom Client + Retard + Articles */}
                 <div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-base font-black text-white">{o.customer.name}</p>
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-sm sm:text-base font-black text-white truncate">{o.customer.name}</p>
                     {o.delayMinutes && (
-                      <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-bold text-amber-400 bg-amber-500/20 px-1.5 py-0.5 rounded shrink-0">
                         +{o.delayMinutes}m
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-semibold text-[#8ea39b]">
-                    {o.items.reduce((acc, it) => acc + it.quantity, 0)} articles · {o.total.toFixed(2)} €
+                  <p className="text-[11px] sm:text-xs font-semibold text-[#8ea39b] truncate">
+                    {o.items.reduce((acc, it) => acc + it.quantity, 0)} articles · <span className="text-white font-mono font-bold">{o.total.toFixed(2)} €</span>
                   </p>
                 </div>
 
+                {/* Notes client éventuelles */}
                 {o.customer.notes && (
-                  <p className="text-xs bg-[#ff705f]/15 p-2 rounded-xl text-[#ff8e80] line-clamp-1 font-bold">
+                  <p className="text-[11px] bg-[#ff705f]/15 border border-[#ff705f]/30 p-2 rounded-xl text-[#ff8e80] line-clamp-2 font-bold leading-tight">
                     ! {o.customer.notes}
                   </p>
                 )}
 
                 {/* Actions sur la carte */}
                 <div
-                  className="pt-1 flex items-center gap-2 border-t border-white/5"
+                  className="pt-1.5 flex items-center gap-2 border-t border-white/10"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button
+                    type="button"
                     onClick={() => onReprint(o.id)}
-                    className="rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition"
-                    title="Réimprimer"
+                    className="rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition shrink-0 cursor-pointer"
+                    title="Réimprimer le ticket"
                   >
                     <Printer className="w-3.5 h-3.5" />
                   </button>
 
                   {isUnaccepted && onAcceptOrder ? (
                     <button
+                      type="button"
                       onClick={() => onAcceptOrder(o)}
-                      className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2 text-xs font-black text-white active:scale-95 transition shadow-lg animate-pulse"
+                      className="flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2 px-2 text-xs font-black text-white active:scale-95 transition shadow-lg animate-pulse cursor-pointer truncate"
                     >
-                      <Bell className="w-3.5 h-3.5" />
-                      <span>ACCEPTER</span>
+                      <Bell className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">ACCEPTER</span>
                     </button>
+                  ) : o.status === "completed" ? (
+                    <div className="flex-1 text-center py-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                      ✓ Archivée
+                    </div>
                   ) : (
                     <button
+                      type="button"
                       onClick={() => onNextStatus(o.id)}
-                      className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition"
+                      className="flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 px-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition cursor-pointer truncate"
                     >
-                      {nextIcon}
-                      <span>{nextLabel}</span>
+                      <span className="shrink-0">{nextIcon}</span>
+                      <span className="truncate">{nextLabel}</span>
                     </button>
                   )}
                 </div>

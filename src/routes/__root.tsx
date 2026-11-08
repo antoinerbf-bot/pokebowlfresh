@@ -214,7 +214,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <CartProvider>
-          <RushPauseBanner />
+          {!resolvedPathname.startsWith("/pos") && <RushPauseBanner />}
           {/* Required: nested routes render here. Suspense prevents lazy route chunks from bubbling into CatchBoundary. */}
           <Suspense fallback={null}>
             <Outlet />
