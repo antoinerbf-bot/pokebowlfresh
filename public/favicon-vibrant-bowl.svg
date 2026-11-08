@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Ombre portée douce sous le bol pour décoller de l'onglet -->
+    <filter id="bowlDropShadow" x="-15%" y="-15%" width="130%" height="135%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2.2" flood-color="#000000" flood-opacity="0.38"/>
+    </filter>
+
+    <!-- Dégradé Céramique Blanche Éclatante -->
+    <linearGradient id="ceramicGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#F8F5F0"/>
+      <stop offset="100%" stop-color="#E5DDD2"/>
+    </linearGradient>
+
+    <!-- Dégradé Saumon Frais Sashimi Lumineux -->
+    <linearGradient id="salmonJuicy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A60"/>
+      <stop offset="50%" stop-color="#FF5033"/>
+      <stop offset="100%" stop-color="#DE2308"/>
+    </linearGradient>
+
+    <!-- Dégradé Avocat Ripe & Creamy -->
+    <linearGradient id="avoJuicy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#86EFAC"/>
+      <stop offset="50%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#15803D"/>
+    </linearGradient>
+
+    <!-- Dégradé Mangue Tropicale Mûre -->
+    <linearGradient id="mangoJuicy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A"/>
+      <stop offset="45%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+
+    <!-- Dégradé Edamames & Algues Wakamé -->
+    <linearGradient id="edamameGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+
+    <!-- Dégradé Baguettes Bambou Doré -->
+    <linearGradient id="bambooWood" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE8CD"/>
+      <stop offset="50%" stop-color="#D4A373"/>
+      <stop offset="100%" stop-color="#8C5828"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    /* Support parfait Dark Mode / Light Mode */
+    .bowl-rim { stroke: #FFFFFF; stroke-width: 2.5; }
+    @media (prefers-color-scheme: dark) {
+      .bowl-rim { stroke: #FFFFFF; stroke-width: 2.8; stroke-opacity: 0.95; }
+    }
+  </style>
+
+  <!-- Baguettes Bambou en diagonale derrière les toppings -->
+  <line x1="6" y1="14" x2="56" y2="52" stroke="url(#bambooWood)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="12" y1="8" x2="60" y2="44" stroke="url(#bambooWood)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="14" y1="10" x2="24" y2="18" stroke="#FFE9D0" stroke-width="1.2" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Corps du bol circulaire céramique blanche (Rayon 26 -> Diamètre 52px, occupe 82% du canvas) -->
+  <circle cx="32" cy="32" r="26" fill="url(#ceramicGlow)" filter="url(#bowlDropShadow)" class="bowl-rim"/>
+  <!-- Fond intérieur du bol (Riz sushi tiède assaisonné) -->
+  <circle cx="32" cy="32" r="23" fill="#FFFDF9"/>
+
+  <!-- ══════════ 4 QUADRANTS GOURMANDS GÉANTS & CONTRASTÉS ══════════ -->
+
+  <!-- 1. QUARTIER SAUMON FRAIS (Haut Droit) -->
+  <path d="M 32 32 L 32 9 A 23 23 0 0 1 55 32 Z" fill="url(#salmonJuicy)"/>
+  <!-- Marbrures de saumon blanches grasses -->
+  <path d="M 36 12 Q 43 20 50 28" stroke="#FFE7E0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <path d="M 34 20 Q 40 26 46 32" stroke="#FFE7E0" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <!-- Cubes de saumon en relief -->
+  <rect x="42" y="14" width="7" height="7" rx="2" fill="#FFA18D" stroke="#DE2308" stroke-width="0.7"/>
+  <rect x="36" y="21" width="6.5" height="6.5" rx="2" fill="#FF6B50" stroke="#DE2308" stroke-width="0.7"/>
+
+  <!-- 2. QUARTIER AVOCAT ÉMINCÉ EN ÉVENTAIL (Haut Gauche) -->
+  <path d="M 32 32 L 9 32 A 23 23 0 0 1 32 9 Z" fill="#14532D"/>
+  <path d="M 32 32 L 11 26 A 23 23 0 0 1 26 11 Z" fill="url(#avoJuicy)"/>
+  <path d="M 32 32 L 15 21 A 23 23 0 0 1 21 15 Z" fill="#86EFAC"/>
+  <path d="M 32 32 L 21 16 A 23 23 0 0 1 27 12 Z" fill="#DCFCE7"/>
+  <path d="M 16 26 Q 24 18 31 16" stroke="#F0FDF4" stroke-width="1.2" fill="none" opacity="0.8"/>
+
+  <!-- 3. QUARTIER MANGUE TROPICALE JUTEUSE (Bas Gauche) -->
+  <path d="M 32 32 L 9 32 A 23 23 0 0 0 32 55 Z" fill="url(#mangoJuicy)"/>
+  <!-- Dés de mangue bien découpés et contrastés -->
+  <rect x="14" y="36" width="7.5" height="7.5" rx="2" fill="#FEF08A" stroke="#EA580C" stroke-width="0.8"/>
+  <rect x="22" y="42" width="7.5" height="7.5" rx="2" fill="#F59E0B" stroke="#B45309" stroke-width="0.8"/>
+  <rect x="15" y="44" width="6" height="6" rx="1.6" fill="#FDE047" stroke="#EA580C" stroke-width="0.7"/>
+
+  <!-- 4. QUARTIER EDAMAMES CROQUANTS & WAKAMÉ (Bas Droit) -->
+  <path d="M 32 32 L 32 55 A 23 23 0 0 0 55 32 Z" fill="#0F3820"/>
+  <!-- Perles d'édamames éclatantes -->
+  <circle cx="41" cy="42" r="4.2" fill="url(#edamameGlow)" stroke="#14532D" stroke-width="0.8"/>
+  <circle cx="42" cy="40.5" r="1.2" fill="#BBF7D0" opacity="0.9"/>
+  <circle cx="48" cy="36" r="3.8" fill="#22C55E" stroke="#14532D" stroke-width="0.8"/>
+  <circle cx="49" cy="35" r="1" fill="#BBF7D0" opacity="0.9"/>
+  <circle cx="36" cy="37" r="3.4" fill="#4ADE80" stroke="#166534" stroke-width="0.8"/>
+  <circle cx="46" cy="46" r="3" fill="#15803D" stroke="#0F3820" stroke-width="0.7"/>
+
+  <!-- ══════════ CENTRE : CŒUR SÉSAME BLANC & NOIR ══════════ -->
+  <circle cx="32" cy="32" r="3.8" fill="#1E293B" stroke="#FFFFFF" stroke-width="0.8"/>
+  <circle cx="28.5" cy="31" r="1" fill="#FFFFFF"/>
+  <circle cx="35.5" cy="31" r="1" fill="#0F172A"/>
+  <circle cx="31" cy="35" r="1" fill="#FFFFFF"/>
+  <circle cx="33.5" cy="35.5" r="0.9" fill="#0F172A"/>
+  <circle cx="30" cy="28.5" r="0.9" fill="#0F172A"/>
+  <circle cx="34" cy="28.5" r="0.9" fill="#FFFFFF"/>
+</svg>

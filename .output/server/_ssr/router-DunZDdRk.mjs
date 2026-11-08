@@ -26,7 +26,7 @@ import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Ccj-YL3U.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DunZDdRk.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -233,6 +233,10 @@ var Route$24 = createRootRouteWithContext()({
 				rel: "icon",
 				type: "image/png",
 				href: "/favicon.png"
+			},
+			{
+				rel: "shortcut icon",
+				href: "/favicon.ico"
 			},
 			{
 				rel: "apple-touch-icon",
