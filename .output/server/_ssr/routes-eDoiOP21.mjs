@@ -6,13 +6,13 @@ import { n as useTranslation } from "./I18nContext-CfPib1Ml.mjs";
 import { n as useCart } from "./CartContext-D7fTgwIa.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { $ as ChevronRight, B as Funnel, E as Phone, J as Clock, M as MessageCircle, N as Menu, P as MapPin, R as Instagram, S as RotateCcw, T as Plus, U as ExternalLink, V as Flame, W as CupSoda, X as CircleCheck, _ as ShieldCheck, at as BriefcaseBusiness, b as Search, ct as Award, d as Star, et as ChevronLeft, f as Sparkles, h as ShoppingBag, j as Minus, lt as ArrowRight, nt as ChefHat, ot as BookOpen, rt as Check, st as Bell, t as X, tt as ChevronDown, z as Heart } from "../_libs/lucide-react.mjs";
+import { B as Heart, E as Phone, F as MapPin, G as CupSoda, H as Flame, M as Minus, N as MessageCircle, P as Menu, S as RotateCcw, T as Plus, V as Funnel, W as ExternalLink, Y as Clock, Z as CircleCheck, _ as ShieldCheck, b as Search, ct as Bell, d as Star, et as ChevronRight, f as Sparkles, h as ShoppingBag, it as Check, lt as Award, nt as ChevronDown, ot as BriefcaseBusiness, rt as ChefHat, st as BookOpen, t as X, tt as ChevronLeft, ut as ArrowRight, z as Instagram } from "../_libs/lucide-react.mjs";
 import { a as bowl_crousty_mix_default, c as bowl_sweet_chicken_default, d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, i as bowl_crousty_curry_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, o as bowl_saumon_default, p as drink_fanta_orange_default, r as bowl_crousty_blanche_default, s as bowl_scampis_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-CUw3aYqz.mjs";
 import { t as BLOG_ARTICLES } from "./blogArticles-BpboJaFF.mjs";
 import { n as tiramisu_nutella_default, t as HoursBanner } from "./HoursBanner-DqXU3bxZ.mjs";
 import { n as FaqNutritionSection } from "./FaqNutritionSection-C8Fl5NA_.mjs";
 import { n as motion, r as AnimatePresence, t as useReducedMotion } from "../_libs/framer-motion+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-KfHXMaaA.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-eDoiOP21.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var SUGGESTIONS = [
@@ -1564,13 +1564,7 @@ function InteractiveBowlBuilder() {
 	const [base, setBase] = import_react.useState(() => detailedBases[0]);
 	const [proteine, setProteine] = import_react.useState(() => detailedProteins[0]);
 	const [extraProteins, setExtraProteins] = import_react.useState({});
-	const [mixinQuantities, setMixinQuantities] = import_react.useState({
-		Avocat: 1,
-		Mangue: 1,
-		Edamame: 1,
-		"Salade d'algues": 1,
-		Maïs: 1
-	});
+	const [mixinQuantities, setMixinQuantities] = import_react.useState({});
 	const [sauceQuantities, setSauceQuantities] = import_react.useState({});
 	const [toppingQuantities, setToppingQuantities] = import_react.useState({ "Oignons frits": 1 });
 	const [added, setAdded] = import_react.useState(false);
@@ -1696,13 +1690,7 @@ function InteractiveBowlBuilder() {
 		setBase(detailedBases[0]);
 		setProteine(detailedProteins[0]);
 		setExtraProteins({});
-		setMixinQuantities({
-			Avocat: 1,
-			Mangue: 1,
-			Edamame: 1,
-			"Salade d'algues": 1,
-			Maïs: 1
-		});
+		setMixinQuantities({});
 		setSauceQuantities({});
 		setToppingQuantities({ "Oignons frits": 1 });
 	};
@@ -1748,7 +1736,7 @@ function InteractiveBowlBuilder() {
 				`Base : ${base.name}`,
 				`Protéine : ${proteine.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
 				...extraProteinLines,
-				`Mix-ins : ${mixinFormatted.length > 0 ? mixinFormatted.join(", ") : "Aucun"}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
+				mixinFormatted.length > 0 ? `Mix-ins : ${mixinFormatted.join(", ")}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}` : "Mix-ins : Aucun légume",
 				`Sauce : ${firstSauce}`,
 				...extraSauceLines,
 				`Toppings : ${toppingFormatted.length > 0 ? toppingFormatted.join(", ") : "Aucun"}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`
@@ -2496,7 +2484,7 @@ function InteractiveBowlBuilder() {
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "flex flex-wrap gap-1",
-											children: selectedMixinBadges.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											children: selectedMixinBadges.length > 0 ? selectedMixinBadges.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 												className: "rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]",
 												children: [
 													m.emoji,
@@ -2504,7 +2492,10 @@ function InteractiveBowlBuilder() {
 													m.name,
 													m.qty > 1 ? ` (x${m.qty})` : ""
 												]
-											}, m.name))
+											}, m.name)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[11px] font-medium text-[#6E5A49] italic",
+												children: "Aucun légume sélectionné (libre choix)"
+											})
 										})]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

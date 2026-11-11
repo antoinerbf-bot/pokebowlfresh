@@ -31,13 +31,7 @@ export function InteractiveBowlBuilder() {
   const [base, setBase] = React.useState(() => detailedBases[0]!);
   const [proteine, setProteine] = React.useState(() => detailedProteins[0]!); // Poulet par défaut
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
-  const [mixinQuantities, setMixinQuantities] = React.useState<Record<string, number>>({
-    Avocat: 1,
-    Mangue: 1,
-    Edamame: 1,
-    "Salade d'algues": 1,
-    Maïs: 1,
-  });
+  const [mixinQuantities, setMixinQuantities] = React.useState<Record<string, number>>({});
   const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({});
   const [toppingQuantities, setToppingQuantities] = React.useState<Record<string, number>>({
     "Oignons frits": 1,
@@ -180,13 +174,7 @@ export function InteractiveBowlBuilder() {
     setBase(detailedBases[0]!);
     setProteine(detailedProteins[0]!);
     setExtraProteins({});
-    setMixinQuantities({
-      Avocat: 1,
-      Mangue: 1,
-      Edamame: 1,
-      "Salade d'algues": 1,
-      Maïs: 1,
-    });
+    setMixinQuantities({});
     setSauceQuantities({});
     setToppingQuantities({ "Oignons frits": 1 });
   };
@@ -256,7 +244,9 @@ export function InteractiveBowlBuilder() {
         `Base : ${base.name}`,
         `Protéine : ${proteine.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
         ...extraProteinLines,
-        `Mix-ins : ${mixinFormatted.length > 0 ? mixinFormatted.join(", ") : "Aucun"}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`,
+        mixinFormatted.length > 0
+          ? `Mix-ins : ${mixinFormatted.join(", ")}${extraMixinsCount > 0 ? ` (+${extraMixinsPrice.toFixed(2)}€)` : ""}`
+          : "Mix-ins : Aucun légume",
         `Sauce : ${firstSauce}`,
         ...extraSauceLines,
         `Toppings : ${toppingFormatted.length > 0 ? toppingFormatted.join(", ") : "Aucun"}${extraToppingsCount > 0 ? ` (+${extraToppingsPrice.toFixed(2)}€)` : ""}`,
@@ -358,19 +348,17 @@ export function InteractiveBowlBuilder() {
                 key={s.step}
                 type="button"
                 onClick={() => setActiveStep(s.step)}
-                className={`group relative rounded-2xl p-3.5 text-left transition-all duration-200 border-2 cursor-pointer ${
-                  isCurrent
+                className={`group relative rounded-2xl p-3.5 text-left transition-all duration-200 border-2 cursor-pointer ${isCurrent
                     ? "bg-[#2C1D16] text-white border-[#ff705f] shadow-lg scale-[1.02]"
                     : isDone
-                    ? "bg-[#FAF5EE] text-[#2C1D16] border-[#C8B296] hover:border-[#2C1D16]"
-                    : "bg-[#FAF5EE]/75 text-[#6E5A49] border-[#DECBB3] hover:bg-[#FAF5EE] hover:border-[#2C1D16]/40"
-                }`}
+                      ? "bg-[#FAF5EE] text-[#2C1D16] border-[#C8B296] hover:border-[#2C1D16]"
+                      : "bg-[#FAF5EE]/75 text-[#6E5A49] border-[#DECBB3] hover:bg-[#FAF5EE] hover:border-[#2C1D16]/40"
+                  }`}
               >
                 <div className="flex items-center justify-between gap-1.5">
                   <span
-                    className={`flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider ${
-                      isCurrent ? "text-[#EADCC9]" : isDone ? "text-[#ff705f]" : "text-[#6E5A49]"
-                    }`}
+                    className={`flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider ${isCurrent ? "text-[#EADCC9]" : isDone ? "text-[#ff705f]" : "text-[#6E5A49]"
+                      }`}
                   >
                     <span className="text-base">{s.icon}</span>
                     <span>{s.title}</span>
@@ -378,9 +366,8 @@ export function InteractiveBowlBuilder() {
                   {isDone && <CheckCircle2 className="h-4 w-4 text-[#ff705f] shrink-0" />}
                 </div>
                 <span
-                  className={`mt-1 block text-xs font-extrabold truncate ${
-                    isCurrent ? "text-white" : "text-[#2C1D16]"
-                  }`}
+                  className={`mt-1 block text-xs font-extrabold truncate ${isCurrent ? "text-white" : "text-[#2C1D16]"
+                    }`}
                 >
                   {s.detail}
                 </span>
@@ -409,28 +396,25 @@ export function InteractiveBowlBuilder() {
                       <button
                         type="button"
                         onClick={() => setSize("moyen")}
-                        className={`flex flex-col rounded-2xl p-4 border-2 text-left transition cursor-pointer ${
-                          size === "moyen"
+                        className={`flex flex-col rounded-2xl p-4 border-2 text-left transition cursor-pointer ${size === "moyen"
                             ? "bg-[#2C1D16] text-white border-[#2C1D16] shadow-md"
                             : "bg-[#F3E9DA]/60 border-[#DECBB3] text-[#2C1D16] hover:border-[#2C1D16]/50"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-black text-sm uppercase">Format Moyen</span>
                           <span
-                            className={`rounded-full px-3 py-0.5 text-xs font-black ${
-                              size === "moyen"
+                            className={`rounded-full px-3 py-0.5 text-xs font-black ${size === "moyen"
                                 ? "bg-[#EADCC9] text-[#2C1D16]"
                                 : "bg-[#2C1D16] text-[#EADCC9]"
-                            }`}
+                              }`}
                           >
                             10,00 €
                           </span>
                         </div>
                         <span
-                          className={`text-xs font-medium mt-1.5 ${
-                            size === "moyen" ? "text-[#EADCC9]/85" : "text-[#6E5A49]"
-                          }`}
+                          className={`text-xs font-medium mt-1.5 ${size === "moyen" ? "text-[#EADCC9]/85" : "text-[#6E5A49]"
+                            }`}
                         >
                           Portion régulière généreuse · 5 légumes inclus
                         </span>
@@ -439,11 +423,10 @@ export function InteractiveBowlBuilder() {
                       <button
                         type="button"
                         onClick={() => setSize("grand")}
-                        className={`flex flex-col rounded-2xl p-4 border-2 text-left transition cursor-pointer ${
-                          size === "grand"
+                        className={`flex flex-col rounded-2xl p-4 border-2 text-left transition cursor-pointer ${size === "grand"
                             ? "bg-[#2C1D16] text-white border-[#2C1D16] shadow-md"
                             : "bg-[#F3E9DA]/60 border-[#DECBB3] text-[#2C1D16] hover:border-[#2C1D16]/50"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-black text-sm uppercase">Format Grand</span>
@@ -452,9 +435,8 @@ export function InteractiveBowlBuilder() {
                           </span>
                         </div>
                         <span
-                          className={`text-xs font-medium mt-1.5 ${
-                            size === "grand" ? "text-[#EADCC9]/85" : "text-[#6E5A49]"
-                          }`}
+                          className={`text-xs font-medium mt-1.5 ${size === "grand" ? "text-[#EADCC9]/85" : "text-[#6E5A49]"
+                            }`}
                         >
                           Grand format maxi faim · Base & garnitures renforcées
                         </span>
@@ -474,11 +456,10 @@ export function InteractiveBowlBuilder() {
                             key={b.id}
                             type="button"
                             onClick={() => setBase(b)}
-                            className={`flex items-center gap-3 rounded-2xl p-3.5 border-2 text-left transition cursor-pointer ${
-                              isSelected
+                            className={`flex items-center gap-3 rounded-2xl p-3.5 border-2 text-left transition cursor-pointer ${isSelected
                                 ? "bg-[#FFF3EF] border-[#ff705f] shadow-sm ring-2 ring-[#ff705f]/20"
                                 : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA] hover:border-[#2C1D16]/40"
-                            }`}
+                              }`}
                           >
                             <span className="text-2xl">{b.emoji}</span>
                             <div className="min-w-0 flex-1">
@@ -544,11 +525,10 @@ export function InteractiveBowlBuilder() {
                         return (
                           <div
                             key={idx}
-                            className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${
-                              emoji
+                            className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${emoji
                                 ? "bg-white border-[#ff705f] shadow-sm scale-105"
                                 : "bg-[#FAF5EE]/60 border-dashed border-[#C8B296] text-[10px] font-bold text-[#8A7665]"
-                            }`}
+                              }`}
                           >
                             {emoji || idx + 1}
                           </div>
@@ -565,11 +545,10 @@ export function InteractiveBowlBuilder() {
                       return (
                         <div
                           key={m.id}
-                          className={`flex items-center justify-between gap-2 rounded-2xl p-2.5 border-2 transition ${
-                            qty > 0
+                          className={`flex items-center justify-between gap-2 rounded-2xl p-2.5 border-2 transition ${qty > 0
                               ? "bg-white border-[#ff705f] shadow-sm"
                               : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
-                          }`}
+                            }`}
                         >
                           <button
                             type="button"
@@ -585,10 +564,10 @@ export function InteractiveBowlBuilder() {
                                 {isFeta
                                   ? "+1,00 € / portion"
                                   : qty > 0
-                                  ? `${qty} portion${qty > 1 ? "s" : ""}`
-                                  : nonFetaCount < INCLUDED_MIXINS
-                                  ? "Inclus (5 max)"
-                                  : "+1,00 €"}
+                                    ? `${qty} portion${qty > 1 ? "s" : ""}`
+                                    : nonFetaCount < INCLUDED_MIXINS
+                                      ? "Inclus (5 max)"
+                                      : "+1,00 €"}
                               </span>
                             </div>
                           </button>
@@ -647,11 +626,10 @@ export function InteractiveBowlBuilder() {
                             key={p.id}
                             type="button"
                             onClick={() => setProteine(p)}
-                            className={`flex flex-col items-center justify-center rounded-2xl p-4 border-2 text-center transition cursor-pointer ${
-                              isSelected
+                            className={`flex flex-col items-center justify-center rounded-2xl p-4 border-2 text-center transition cursor-pointer ${isSelected
                                 ? "bg-[#FFF3EF] border-[#ff705f] shadow-md ring-2 ring-[#ff705f]/20"
                                 : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
-                            }`}
+                              }`}
                           >
                             <span className="text-3xl mb-1.5">{p.emoji}</span>
                             <span className="font-black text-sm text-[#2C1D16]">{p.name}</span>
@@ -694,11 +672,10 @@ export function InteractiveBowlBuilder() {
                         return (
                           <div
                             key={`extra-${p.id}`}
-                            className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
-                              qty > 0
+                            className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${qty > 0
                                 ? "bg-white border-[#ff705f] shadow-sm"
                                 : "bg-[#FAF5EE] border-[#DECBB3]"
-                            }`}
+                              }`}
                           >
                             <div className="flex items-center gap-2 min-w-0">
                               <span className="text-xl">{p.emoji}</span>
@@ -765,11 +742,10 @@ export function InteractiveBowlBuilder() {
                       <button
                         type="button"
                         onClick={setZeroSauce}
-                        className={`rounded-xl px-3 py-1.5 text-xs font-black transition cursor-pointer ${
-                          totalSauceUnits === 0
+                        className={`rounded-xl px-3 py-1.5 text-xs font-black transition cursor-pointer ${totalSauceUnits === 0
                             ? "bg-[#2C1D16] text-[#EADCC9] shadow-sm"
                             : "bg-[#F3E9DA] text-[#6E5A49] hover:bg-[#2C1D16] hover:text-white"
-                        }`}
+                          }`}
                       >
                         🚫 Sans sauce
                       </button>
@@ -789,11 +765,10 @@ export function InteractiveBowlBuilder() {
                       return (
                         <div
                           key={s.id}
-                          className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
-                            isSelected
+                          className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${isSelected
                               ? "bg-[#FFF5F2] border-[#ff705f] shadow-sm ring-1 ring-[#ff705f]/25"
                               : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:border-[#ff705f]/50 hover:bg-white"
-                          }`}
+                            }`}
                         >
                           {/* Haut : Icône sauce + Badge profil goût */}
                           <div className="flex items-start justify-between gap-2 mb-2">
@@ -801,11 +776,10 @@ export function InteractiveBowlBuilder() {
                               {s.emoji}
                             </div>
                             {s.badge && (
-                              <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                                isSelected
+                              <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${isSelected
                                   ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
                                   : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
-                              }`}>
+                                }`}>
                                 {s.badge}
                               </span>
                             )}
@@ -828,16 +802,15 @@ export function InteractiveBowlBuilder() {
 
                           {/* Bas : Tarif & Stepper stable */}
                           <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
-                            <span className={`text-[11px] font-black ${
-                              isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
-                            }`}>
+                            <span className={`text-[11px] font-black ${isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                              }`}>
                               {qty === 0
                                 ? totalSauceUnits <= 1
                                   ? "1ère offerte"
                                   : "+0,50 €"
                                 : qty === 1 && totalSauceUnits === 1
-                                ? "Offerte (0 €)"
-                                : `${qty}x (+${(qty * 0.50).toFixed(2)}€)`}
+                                  ? "Offerte (0 €)"
+                                  : `${qty}x (+${(qty * 0.50).toFixed(2)}€)`}
                             </span>
 
                             <div className="flex items-center gap-1.5 shrink-0">
@@ -911,11 +884,10 @@ export function InteractiveBowlBuilder() {
                       return (
                         <div
                           key={tp.id}
-                          className={`flex items-center justify-between gap-2 rounded-2xl p-3 border-2 transition ${
-                            qty > 0
+                          className={`flex items-center justify-between gap-2 rounded-2xl p-3 border-2 transition ${qty > 0
                               ? "bg-white border-[#ff705f] shadow-sm ring-1 ring-[#ff705f]/20"
                               : "bg-[#F3E9DA]/55 border-[#DECBB3] hover:bg-[#F3E9DA]"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="text-xl">{tp.emoji}</span>
@@ -968,11 +940,10 @@ export function InteractiveBowlBuilder() {
                 type="button"
                 disabled={activeStep === 1}
                 onClick={() => setActiveStep((curr) => Math.max(1, curr - 1))}
-                className={`text-xs font-black px-4 py-2.5 rounded-full transition ${
-                  activeStep === 1
+                className={`text-xs font-black px-4 py-2.5 rounded-full transition ${activeStep === 1
                     ? "opacity-30 cursor-not-allowed text-[#8A7665]"
                     : "bg-[#F3E9DA] text-[#2C1D16] hover:bg-[#2C1D16] hover:text-white cursor-pointer"
-                }`}
+                  }`}
               >
                 ← Étape précédente
               </button>
@@ -1068,15 +1039,21 @@ export function InteractiveBowlBuilder() {
                     )}
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {selectedMixinBadges.map((m) => (
-                      <span
-                        key={m.name}
-                        className="rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
-                      >
-                        {m.emoji} {m.name}
-                        {m.qty > 1 ? ` (x${m.qty})` : ""}
+                    {selectedMixinBadges.length > 0 ? (
+                      selectedMixinBadges.map((m) => (
+                        <span
+                          key={m.name}
+                          className="rounded-lg bg-[#FAF5EE] border border-[#DECBB3] px-2 py-0.5 text-[10px] font-bold text-[#2C1D16]"
+                        >
+                          {m.emoji} {m.name}
+                          {m.qty > 1 ? ` (x${m.qty})` : ""}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[11px] font-medium text-[#6E5A49] italic">
+                        Aucun légume sélectionné (libre choix)
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
 
@@ -1168,9 +1145,8 @@ export function InteractiveBowlBuilder() {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className={`btn-primary w-full py-4 text-sm font-black flex items-center justify-center gap-2 shadow-lift transition duration-200 cursor-pointer ${
-                  added ? "bg-[#2C1D16]" : ""
-                }`}
+                className={`btn-primary w-full py-4 text-sm font-black flex items-center justify-center gap-2 shadow-lift transition duration-200 cursor-pointer ${added ? "bg-[#2C1D16]" : ""
+                  }`}
               >
                 {added ? (
                   <>

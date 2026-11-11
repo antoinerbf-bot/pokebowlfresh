@@ -1,44 +1,110 @@
 import { t as cs } from "../_libs/neondatabase__serverless.mjs";
 import fs from "node:fs";
 import path from "node:path";
-//#region node_modules/.nitro/vite/services/ssr/assets/order-store-pOittpxk.js
+//#region node_modules/.nitro/vite/services/ssr/assets/order-store-Ca1SPxcK.js
 function isPostgresConfigured() {
 	return Boolean(process.env.DATABASE_URL?.trim());
 }
 var memoryOrders = /* @__PURE__ */ new Map();
 var lastLoadedTime = 0;
-function getStoreCandidatePaths() {
+function getCandidatePathsForFile(filename) {
 	const candidateDirs = [
 		process.env.ORDERS_DATA_DIR,
 		"/home/puzo3938/pokenbowl.be",
 		process.cwd(),
 		"/tmp"
 	].filter(Boolean);
+	const seen = /* @__PURE__ */ new Set();
 	const paths = [];
 	for (const dir of candidateDirs) try {
-		paths.push(path.join(dir, "pokenbowl-orders.json"));
+		const fullPath = path.join(dir, filename);
+		if (!seen.has(fullPath)) {
+			seen.add(fullPath);
+			paths.push(fullPath);
+		}
 	} catch {}
 	return paths;
+}
+function getStoreCandidatePaths() {
+	return getCandidatePathsForFile("pokenbowl-orders.json");
+}
+function getDeletedTombstonePaths() {
+	return getCandidatePathsForFile("pokenbowl-deleted-orders.json");
+}
+function loadDeletedTombstones() {
+	const mergedIds = /* @__PURE__ */ new Set();
+	let maxClearedAtMs = 0;
+	for (const filePath of getDeletedTombstonePaths()) try {
+		if (!fs.existsSync(filePath)) continue;
+		const raw = fs.readFileSync(filePath, "utf-8");
+		if (!raw) continue;
+		const parsed = JSON.parse(raw);
+		if (Array.isArray(parsed.deletedIds)) {
+			for (const id of parsed.deletedIds) if (typeof id === "string" && id.trim()) mergedIds.add(id.trim().toLowerCase());
+		}
+		if (typeof parsed.clearedAtMs === "number" && parsed.clearedAtMs > maxClearedAtMs) maxClearedAtMs = parsed.clearedAtMs;
+	} catch {}
+	return {
+		deletedIds: Array.from(mergedIds).slice(-500),
+		clearedAtMs: maxClearedAtMs || void 0
+	};
+}
+function saveDeletedTombstones(data) {
+	const normalized = {
+		deletedIds: Array.from(new Set(data.deletedIds.map((s) => s.trim().toLowerCase()).filter(Boolean))).slice(-500),
+		...data.clearedAtMs ? { clearedAtMs: data.clearedAtMs } : {}
+	};
+	const jsonStr = JSON.stringify(normalized, null, 2);
+	for (const filePath of getDeletedTombstonePaths()) try {
+		const dir = path.dirname(filePath);
+		if (fs.existsSync(dir)) fs.writeFileSync(filePath, jsonStr, "utf-8");
+	} catch {}
+}
+function isOrderDeletedByTombstone(order, tombstones) {
+	const idLower = (order.id ?? "").trim().toLowerCase();
+	const dtLower = (order.deliveryToken ?? "").trim().toLowerCase();
+	if (idLower && tombstones.deletedIds.includes(idLower)) return true;
+	if (dtLower && tombstones.deletedIds.includes(dtLower)) return true;
+	if (tombstones.clearedAtMs && order.createdAt) {
+		const createdMs = new Date(order.createdAt).getTime();
+		if (!isNaN(createdMs) && createdMs <= tombstones.clearedAtMs) return true;
+	}
+	return false;
 }
 function loadLocalOrders(force = false) {
 	const now = Date.now();
 	if (!force && now - lastLoadedTime < 300 && memoryOrders.size > 0) return;
 	lastLoadedTime = now;
+	const tombstones = loadDeletedTombstones();
 	const candidates = getStoreCandidatePaths();
-	for (const filePath of candidates) try {
-		if (fs.existsSync(filePath)) {
-			const raw = fs.readFileSync(filePath, "utf-8");
-			if (raw && raw.trim().length > 2) {
-				const list = JSON.parse(raw);
-				if (Array.isArray(list)) {
-					for (const item of list) if (item?.id) {
-						const existing = memoryOrders.get(item.id);
-						if (!existing || item.status !== existing.status || item.deliveryToken || !existing.deliveryToken) memoryOrders.set(item.id, item);
-					}
-				}
+	const existingFiles = [];
+	candidates.forEach((filePath, idx) => {
+		try {
+			if (fs.existsSync(filePath)) {
+				const stat = fs.statSync(filePath);
+				existingFiles.push({
+					filePath,
+					mtimeMs: stat.mtimeMs,
+					priority: idx
+				});
+			}
+		} catch {}
+	});
+	existingFiles.sort((a, b) => {
+		if (Math.abs(b.mtimeMs - a.mtimeMs) > 1) return b.mtimeMs - a.mtimeMs;
+		return a.priority - b.priority;
+	});
+	for (const { filePath } of existingFiles) try {
+		const raw = fs.readFileSync(filePath, "utf-8");
+		if (raw && raw.trim().length >= 2) {
+			const list = JSON.parse(raw);
+			if (Array.isArray(list)) {
+				memoryOrders.clear();
+				for (const item of list) if (item?.id && !isOrderDeletedByTombstone(item, tombstones)) memoryOrders.set(item.id, item);
+				return;
 			}
 		}
-	} catch (err) {}
+	} catch {}
 }
 function saveLocalOrders() {
 	try {
@@ -190,7 +256,8 @@ async function getOrderByDeliveryToken(token) {
 }
 async function listOrdersFromStore(limit = 200) {
 	loadLocalOrders(true);
-	if (!isPostgresConfigured()) return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+	const tombstones = loadDeletedTombstones();
+	if (!isPostgresConfigured()) return Array.from(memoryOrders.values()).filter((o) => !isOrderDeletedByTombstone(o, tombstones)).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
 	try {
 		await ensureSchema();
 		const rows = await getSql()`
@@ -202,16 +269,36 @@ async function listOrdersFromStore(limit = 200) {
       LIMIT ${limit}
     `;
 		const merged = /* @__PURE__ */ new Map();
-		for (const row of rows.map(rowToOrder)) merged.set(row.id, row);
-		for (const order of memoryOrders.values()) if (!merged.has(order.id)) merged.set(order.id, order);
+		for (const row of rows.map(rowToOrder)) {
+			if (isOrderDeletedByTombstone(row, tombstones)) continue;
+			const localMem = memoryOrders.get(row.id);
+			merged.set(row.id, localMem ? {
+				...row,
+				acceptedAt: localMem.acceptedAt ?? row.acceptedAt,
+				delayMinutes: localMem.delayMinutes ?? row.delayMinutes,
+				delayedAt: localMem.delayedAt ?? row.delayedAt,
+				estimatedDeliveryTime: localMem.estimatedDeliveryTime ?? row.estimatedDeliveryTime,
+				driverId: localMem.driverId ?? row.driverId,
+				driverName: localMem.driverName ?? row.driverName,
+				distanceKm: localMem.distanceKm ?? row.distanceKm
+			} : row);
+		}
+		for (const order of memoryOrders.values()) if (!merged.has(order.id) && !isOrderDeletedByTombstone(order, tombstones)) merged.set(order.id, order);
 		return Array.from(merged.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
 	} catch (err) {
 		console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
-		return Array.from(memoryOrders.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+		return Array.from(memoryOrders.values()).filter((o) => !isOrderDeletedByTombstone(o, tombstones)).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
 	}
 }
 async function upsertOrder(order) {
 	loadLocalOrders(true);
+	const tombstones = loadDeletedTombstones();
+	const idLower = (order.id ?? "").trim().toLowerCase();
+	const dtLower = (order.deliveryToken ?? "").trim().toLowerCase();
+	if (tombstones.deletedIds.includes(idLower) || dtLower && tombstones.deletedIds.includes(dtLower)) {
+		tombstones.deletedIds = tombstones.deletedIds.filter((id) => id !== idLower && (!dtLower || id !== dtLower));
+		saveDeletedTombstones(tombstones);
+	}
 	memoryOrders.set(order.id, { ...order });
 	saveLocalOrders();
 	if (!isPostgresConfigured()) return;
@@ -296,9 +383,49 @@ async function updateOrderCustomFields(orderId, fields) {
 		return order;
 	}
 }
+async function deleteOrderFromStore(orderId) {
+	const cleanId = (orderId ?? "").trim();
+	if (!cleanId) return false;
+	const lowerId = cleanId.toLowerCase();
+	loadLocalOrders(true);
+	const removedIds = [cleanId];
+	let removedLocally = false;
+	for (const [key, order] of Array.from(memoryOrders.entries())) {
+		const kLower = key.toLowerCase();
+		const dtLower = (order.deliveryToken ?? "").trim().toLowerCase();
+		if (key === cleanId || kLower === lowerId || dtLower && dtLower === lowerId) {
+			removedIds.push(key);
+			if (order.deliveryToken) removedIds.push(order.deliveryToken);
+			memoryOrders.delete(key);
+			removedLocally = true;
+		}
+	}
+	const tombstones = loadDeletedTombstones();
+	tombstones.deletedIds = [...tombstones.deletedIds, ...removedIds];
+	saveDeletedTombstones(tombstones);
+	lastLoadedTime = Date.now();
+	saveLocalOrders();
+	let removedDb = false;
+	if (isPostgresConfigured()) {
+		await ensureSchema();
+		removedDb = (await getSql()`
+      DELETE FROM orders
+      WHERE id = ${cleanId}
+         OR delivery_token = ${cleanId}
+         OR LOWER(id) = ${lowerId}
+         OR LOWER(delivery_token) = ${lowerId}
+      RETURNING id
+    `).length > 0;
+	}
+	return removedLocally || removedDb;
+}
 async function clearAllOrdersFromStore() {
 	loadLocalOrders(true);
-	const count = memoryOrders.size;
+	const existingKeys = Array.from(memoryOrders.keys());
+	let count = memoryOrders.size;
+	const tombstones = loadDeletedTombstones();
+	tombstones.deletedIds = [...tombstones.deletedIds, ...existingKeys];
+	saveDeletedTombstones(tombstones);
 	memoryOrders.clear();
 	lastLoadedTime = Date.now();
 	saveLocalOrders();
@@ -311,12 +438,12 @@ async function clearAllOrdersFromStore() {
 	} catch {}
 	if (isPostgresConfigured()) try {
 		await ensureSchema();
-		await getSql()`TRUNCATE TABLE orders CASCADE`;
+		const deletedRows = await getSql()`DELETE FROM orders RETURNING id`;
+		count = Math.max(count, deletedRows.length);
 	} catch (err) {
-		console.error("[OrderStore] Erreur TRUNCATE orders Postgres:", err);
-		try {
-			await getSql()`DELETE FROM orders`;
-		} catch {}
+		console.error("[OrderStore] Erreur DELETE orders Postgres:", err);
+		await ensureSchema();
+		await getSql()`TRUNCATE TABLE orders CASCADE`;
 	}
 	return count;
 }
@@ -427,4 +554,4 @@ async function acknowledgePrint(orderId, success, errorMessage) {
   `;
 }
 //#endregion
-export { getOrderFromStore as a, updateOrderCustomFields as c, getOrderByDeliveryToken as i, updateOrderStatus as l, claimNextPrintJob as n, listOrdersFromStore as o, clearAllOrdersFromStore as r, requestOrderReprint as s, acknowledgePrint as t, upsertOrder as u };
+export { getOrderByDeliveryToken as a, requestOrderReprint as c, upsertOrder as d, deleteOrderFromStore as i, updateOrderCustomFields as l, claimNextPrintJob as n, getOrderFromStore as o, clearAllOrdersFromStore as r, listOrdersFromStore as s, acknowledgePrint as t, updateOrderStatus as u };

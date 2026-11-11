@@ -45,6 +45,7 @@ import {
   getOrderReceipts,
   ackPosPrint,
   createTestDeliveryOrder,
+  deletePosOrder,
   clearPosOrders,
   acceptPosOrder,
   delayPosOrder,
@@ -86,6 +87,14 @@ export function PosApplicationPage() {
   const [activeTab, setActiveTab] = useState<PosTab>("kanban");
   const [searchQuery, setSearchQuery] = useState("");
   const [kanbanMobileCol, setKanbanMobileCol] = useState<"all" | "new" | "preparing" | "ready" | "completed">("all");
+  const [deleteConfirm, setDeleteConfirm] = useState<
+    | { type: "single"; order: Order }
+    | { type: "all"; count: number }
+    | null
+  >(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [posNotice, setPosNotice] = useState<string | null>(null);
+  const deleteGenerationRef = useRef(0);
 
   // Configuration Imprimante & Audio
   const [config, setConfig] = useState<PrinterConfig>(loadPrinterConfig);
@@ -110,7 +119,7 @@ export function PosApplicationPage() {
     try {
       const raw = localStorage.getItem("pnb_printed_orders");
       if (raw) return new Set(JSON.parse(raw));
-    } catch {}
+    } catch { }
     return new Set();
   };
 
@@ -121,7 +130,7 @@ export function PosApplicationPage() {
       ids.add(id);
       const arr = Array.from(ids).slice(-200);
       localStorage.setItem("pnb_printed_orders", JSON.stringify(arr));
-    } catch {}
+    } catch { }
   };
 
   const knownOrderStatuses = useRef<Map<string, Order["status"]>>(new Map());
@@ -147,7 +156,7 @@ export function PosApplicationPage() {
         const data = await res.json();
         setRushState(data);
       }
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
@@ -253,7 +262,7 @@ export function PosApplicationPage() {
           setStocks(data.items);
         }
       }
-    } catch {}
+    } catch { }
   };
 
   const handleUpdateStock = async (id: string, updates: Partial<StockItem>) => {
@@ -264,10 +273,10 @@ export function PosApplicationPage() {
       prev.map((item) =>
         item.id === id
           ? {
-              ...item,
-              ...updates,
-              ...(targetAvailable !== undefined ? { available: targetAvailable } : {}),
-            }
+            ...item,
+            ...updates,
+            ...(targetAvailable !== undefined ? { available: targetAvailable } : {}),
+          }
           : item,
       ),
     );
@@ -315,7 +324,7 @@ export function PosApplicationPage() {
         const l = await logsRes.json();
         if (l.success) setMileageLogs(l.logs);
       }
-    } catch {}
+    } catch { }
   };
 
   const handleAddDriver = async () => {
@@ -348,7 +357,7 @@ export function PosApplicationPage() {
       if (data.success) {
         setDrivers(data.drivers);
       }
-    } catch {}
+    } catch { }
   };
 
   const handleAssignDriverToOrder = async (order: Order, driverId: string) => {
@@ -367,7 +376,7 @@ export function PosApplicationPage() {
           const distData = await distRes.json();
           if (distData.distanceKm) dist = distData.distanceKm;
         }
-      } catch {}
+      } catch { }
 
       await assignPosDriver({
         data: {
@@ -454,7 +463,7 @@ export function PosApplicationPage() {
         color: { dark: "#000000", light: "#ffffff" },
       })
         .then(setModalQrDataUrl)
-        .catch(() => {});
+        .catch(() => { });
     } else {
       setModalQrDataUrl("");
     }
@@ -550,7 +559,7 @@ export function PosApplicationPage() {
         playTone(now + 0.2, 783.99, 0.22, 0.9, "triangle", 3.0, 0.15);
         playTone(now + 0.3, 1046.5, 0.45, 0.95, "triangle", 2.5, 0.2);
       }
-    } catch {}
+    } catch { }
   };
 
   // ── Alarme sonore continue tant qu'il y a des commandes non acceptées ──
@@ -576,6 +585,7 @@ export function PosApplicationPage() {
 
   // ── Chargement des commandes ──
   const loadOrders = async () => {
+    const genAtStart = deleteGenerationRef.current;
     try {
       let newOrders: Order[] | null = null;
       try {
@@ -596,6 +606,11 @@ export function PosApplicationPage() {
       if (!newOrders) {
         const res = await getPosOrders({ data: { pin } });
         newOrders = res.orders;
+      }
+
+      // Si une suppression vient d'avoir lieu pendant cette requête, ignorer la réponse périmée
+      if (deleteGenerationRef.current !== genAtStart) {
+        return;
       }
 
       const printableStatuses: Order["status"][] = ["paid", "awaiting_pickup", "awaiting_delivery"];
@@ -727,7 +742,7 @@ export function PosApplicationPage() {
         setPrintBannerError(null);
         try {
           await ackPosPrint({ data: { pin, orderId: order.id, success: true } });
-        } catch {}
+        } catch { }
       } else {
         setPrintLog((prev) => [
           { time: now, msg: `Échec commande ${order.id} : ${res.message}`, type: "err" },
@@ -770,11 +785,11 @@ export function PosApplicationPage() {
             if (selectedOrder && selectedOrder.id === orderId) {
               setSelectedOrder((prev) => (prev ? { ...prev, status } : null));
             }
-            loadOrders().catch(() => {});
+            loadOrders().catch(() => { });
             return;
           }
         }
-      } catch {}
+      } catch { }
 
       await setPosOrderStatus({ data: { pin, orderId, status } });
       await loadOrders();
@@ -828,15 +843,93 @@ export function PosApplicationPage() {
     }
   };
 
-  const handleClearAllOrders = async () => {
-    if (!window.confirm("Êtes-vous certain de vouloir vider TOUTES les commandes ?")) return;
+  const showPosNotice = (msg: string) => {
+    setPosNotice(msg);
+    setTimeout(() => {
+      setPosNotice((cur) => (cur === msg ? null : cur));
+    }, 3500);
+  };
+
+  const requestDeleteOrder = (order: Order) => {
+    setDeleteConfirm({ type: "single", order });
+  };
+
+  const handleClearAllOrders = () => {
+    setDeleteConfirm({ type: "all", count: orders.length });
+  };
+
+  const executeConfirmedDelete = async () => {
+    if (!deleteConfirm || isDeleting) return;
+    setIsDeleting(true);
+    deleteGenerationRef.current += 1;
+
     try {
-      await clearPosOrders({ data: { pin } });
-      setOrders([]);
-      setSelectedOrder(null);
-      alert("Commandes effacées.");
+      if (deleteConfirm.type === "single") {
+        const targetId = deleteConfirm.order.id;
+        let deletedOk = false;
+
+        try {
+          const res = await fetch(`/api/pos-orders?orderId=${encodeURIComponent(targetId)}`, {
+            method: "DELETE",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "x-pos-pin": pin || "1234",
+            },
+            body: JSON.stringify({ orderId: targetId, pin: pin || "1234" }),
+          });
+          if (res.ok) {
+            const json = await res.json();
+            if (json.success) deletedOk = true;
+          }
+        } catch { }
+
+        if (!deletedOk) {
+          await deletePosOrder({ data: { pin, orderId: targetId } });
+        }
+
+        deleteGenerationRef.current += 1;
+        setOrders((prev) => prev.filter((o) => o.id !== targetId));
+        if (selectedOrder?.id === targetId) {
+          setSelectedOrder(null);
+        }
+        knownOrderStatuses.current.delete(targetId);
+        setDeleteConfirm(null);
+        showPosNotice(`Commande ${targetId} supprimée définitivement.`);
+      } else {
+        let clearedOk = false;
+
+        try {
+          const res = await fetch("/api/pos-orders", {
+            method: "DELETE",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "x-pos-pin": pin || "1234",
+            },
+            body: JSON.stringify({ pin: pin || "1234" }),
+          });
+          if (res.ok) {
+            const json = await res.json();
+            if (json.success) clearedOk = true;
+          }
+        } catch { }
+
+        if (!clearedOk) {
+          await clearPosOrders({ data: { pin } });
+        }
+
+        deleteGenerationRef.current += 1;
+        setOrders([]);
+        setSelectedOrder(null);
+        knownOrderStatuses.current.clear();
+        setDeleteConfirm(null);
+        showPosNotice("Toutes les commandes ont été supprimées.");
+      }
     } catch (e: any) {
-      alert("Erreur : " + (e?.message ?? String(e)));
+      alert("Erreur lors de la suppression : " + (e?.message ?? String(e)));
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -857,7 +950,7 @@ export function PosApplicationPage() {
       const created = data.order as Order;
       setOrders((prev) => [created, ...prev.filter((o) => o.id !== created.id)]);
       setSelectedOrder(created);
-      loadOrders().catch(() => {});
+      loadOrders().catch(() => { });
     } catch (e: any) {
       alert("Erreur création commande test : " + (e?.message ?? String(e)));
     } finally {
@@ -1086,9 +1179,8 @@ export function PosApplicationPage() {
                 setConfig(updated);
                 savePrinterConfig(updated);
               }}
-              className={`rounded-xl p-2 sm:p-2.5 transition cursor-pointer ${
-                config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
-              }`}
+              className={`rounded-xl p-2 sm:p-2.5 transition cursor-pointer ${config.soundEnabled ? "bg-emerald-500/20 text-emerald-400" : "bg-white/5 text-[#6c7d76]"
+                }`}
               title={config.soundEnabled ? "Désactiver le son" : "Activer le son"}
             >
               {config.soundEnabled ? <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" /> : <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" />}
@@ -1130,11 +1222,10 @@ export function PosApplicationPage() {
         <nav className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2 bg-[#0e1c17] border-b border-white/10 overflow-x-auto no-scrollbar scroll-smooth shrink-0">
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "dashboard"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "dashboard"
                 ? "bg-gradient-to-r from-purple-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-600/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <LayoutDashboard className="h-4 w-4 text-purple-300" />
             <span>Tableau de bord</span>
@@ -1142,11 +1233,10 @@ export function PosApplicationPage() {
 
           <button
             onClick={() => setActiveTab("kanban")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "kanban"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "kanban"
                 ? "bg-gradient-to-r from-[#ff705f] via-[#e55342] to-[#c93b2b] text-white shadow-lg shadow-[#ff705f]/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <Layers className="h-4 w-4 text-orange-200" />
             <span>Commandes</span>
@@ -1159,11 +1249,10 @@ export function PosApplicationPage() {
 
           <button
             onClick={() => setActiveTab("stock")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "stock"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "stock"
                 ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-teal-700 text-white shadow-lg shadow-emerald-500/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <Salad className="h-4 w-4 text-emerald-200" />
             <span>Stocks</span>
@@ -1176,11 +1265,10 @@ export function PosApplicationPage() {
 
           <button
             onClick={() => setActiveTab("drivers")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "drivers"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "drivers"
                 ? "bg-gradient-to-r from-blue-500 via-sky-600 to-cyan-600 text-white shadow-lg shadow-blue-500/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <Users className="h-4 w-4 text-cyan-200" />
             <span>Livreurs</span>
@@ -1191,11 +1279,10 @@ export function PosApplicationPage() {
 
           <button
             onClick={() => setActiveTab("mileage")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "mileage"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "mileage"
                 ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white shadow-lg shadow-amber-500/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <Compass className="h-4 w-4 text-amber-200" />
             <span>Kilométrage</span>
@@ -1203,11 +1290,10 @@ export function PosApplicationPage() {
 
           <button
             onClick={() => setActiveTab("stats")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "stats"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "stats"
                 ? "bg-gradient-to-r from-fuchsia-600 via-pink-600 to-rose-600 text-white shadow-lg shadow-pink-500/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <TrendingUp className="h-4 w-4 text-pink-200" />
             <span>Stats</span>
@@ -1215,11 +1301,10 @@ export function PosApplicationPage() {
 
           <button
             onClick={() => setActiveTab("settings")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${
-              activeTab === "settings"
+            className={`flex items-center gap-1.5 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-black transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap ${activeTab === "settings"
                 ? "bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 text-white shadow-lg shadow-slate-700/40 ring-1 ring-white/30"
                 : "text-[#8ea39b] hover:text-white hover:bg-white/10"
-            }`}
+              }`}
           >
             <Settings className="h-4 w-4 text-slate-300" />
             <span>Paramètres</span>
@@ -1293,6 +1378,17 @@ export function PosApplicationPage() {
           </div>
         )}
 
+        {/* ─── Notification Confirmation Action POS ──────────────────────── */}
+        {posNotice && (
+          <div className="flex items-center justify-between gap-2 bg-emerald-600/25 border-b border-emerald-500/40 px-3 sm:px-5 py-1.5 text-xs text-emerald-200 font-bold shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0" />
+              <span className="truncate">{posNotice}</span>
+            </div>
+            <button onClick={() => setPosNotice(null)} className="font-bold hover:text-white px-2 py-0.5 cursor-pointer">✕</button>
+          </div>
+        )}
+
         {/* ─── Contenu Principal des 7 Onglets ──────────────────────────── */}
         <div className="flex flex-1 min-h-0 overflow-hidden">
           {/* ══════ TAB 1 : DASHBOARD / RUSH & CHARGE CUISINE ══════ */}
@@ -1302,11 +1398,10 @@ export function PosApplicationPage() {
               <div className="rounded-3xl bg-gradient-to-br from-[#162721] to-[#12211c] border-2 border-white/10 p-4 sm:p-6 shadow-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <div className={`h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg shrink-0 transition-transform ${
-                      rushState.isPaused
+                    <div className={`h-12 w-12 sm:h-14 sm:w-14 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl shadow-lg shrink-0 transition-transform ${rushState.isPaused
                         ? "bg-gradient-to-br from-red-500 to-rose-600 text-white animate-pulse scale-105"
                         : "bg-gradient-to-br from-amber-500 to-orange-500 text-white"
-                    }`}>
+                      }`}>
                       {rushState.isPaused ? "🔥" : "⚡"}
                     </div>
                     <div className="min-w-0">
@@ -1448,6 +1543,15 @@ export function PosApplicationPage() {
                               Détails
                             </button>
                           )}
+                          <button
+                            type="button"
+                            onClick={() => requestDeleteOrder(o)}
+                            className="rounded-xl bg-red-500/10 hover:bg-red-500/25 text-red-400/80 hover:text-red-300 border border-red-500/20 p-1.5 transition cursor-pointer"
+                            title={`Supprimer la commande ${o.id}`}
+                            aria-label={`Supprimer la commande ${o.id}`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -1460,27 +1564,65 @@ export function PosApplicationPage() {
           {/* ══════ TAB 2 : COMMANDES KANBAN (RESPONSIVE PC & MOBILE) ══════ */}
           {activeTab === "kanban" && (
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+              {/* Barre d'outils Kanban : Recherche + Action Globale « Vider toutes les commandes » */}
+              <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#12231e] border-b border-white/10 shrink-0">
+                <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+                  <div className="relative flex-1 max-w-xs">
+                    <Search className="w-3.5 h-3.5 text-[#8ea39b] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Rechercher n° commande, client, tél..."
+                      className="w-full rounded-xl bg-black/40 border border-white/15 pl-8 pr-8 py-1.5 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f]"
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-xs cursor-pointer"
+                        title="Effacer la recherche"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                  <span className="hidden sm:inline-flex items-center rounded-xl bg-black/30 border border-white/10 px-2.5 py-1 text-[11px] font-bold text-[#8ea39b]">
+                    {filteredOrders.length} commande{filteredOrders.length > 1 ? "s" : ""}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleClearAllOrders}
+                  disabled={orders.length === 0 || isDeleting}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-red-600/20 hover:bg-red-600/35 disabled:opacity-40 disabled:cursor-not-allowed text-red-300 border border-red-500/35 px-3 py-1.5 text-xs font-black transition active:scale-95 cursor-pointer shrink-0"
+                  title="Supprimer toutes les commandes affichées dans le POS"
+                >
+                  <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                  <span>Vider toutes les commandes</span>
+                </button>
+              </div>
+
               {/* Sélecteur de Colonne Mobile (< lg) */}
               <div className="flex lg:hidden items-center gap-1.5 px-3 py-2 bg-[#12231e] border-b border-white/5 overflow-x-auto shrink-0 no-scrollbar">
                 <button
                   type="button"
                   onClick={() => setKanbanMobileCol("all")}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
-                    kanbanMobileCol === "all"
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "all"
                       ? "bg-white text-black shadow"
                       : "bg-white/10 text-white/70 hover:bg-white/15"
-                  }`}
+                    }`}
                 >
                   Vue Défilante ({newOrdersList.length + preparingOrdersList.length + readyOrdersList.length})
                 </button>
                 <button
                   type="button"
                   onClick={() => setKanbanMobileCol("new")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
-                    kanbanMobileCol === "new"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "new"
                       ? "bg-red-500 text-white shadow-lg shadow-red-500/40 ring-2 ring-white/30"
                       : "bg-red-500/20 text-red-300 hover:bg-red-500/30"
-                  }`}
+                    }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-red-400" />
                   <span>À Valider</span>
@@ -1489,11 +1631,10 @@ export function PosApplicationPage() {
                 <button
                   type="button"
                   onClick={() => setKanbanMobileCol("preparing")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
-                    kanbanMobileCol === "preparing"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "preparing"
                       ? "bg-[#ff705f] text-white shadow-lg shadow-[#ff705f]/40 ring-2 ring-white/30"
                       : "bg-[#ff705f]/20 text-[#ff8e80] hover:bg-[#ff705f]/30"
-                  }`}
+                    }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-[#ff705f]" />
                   <span>En Préparation</span>
@@ -1502,11 +1643,10 @@ export function PosApplicationPage() {
                 <button
                   type="button"
                   onClick={() => setKanbanMobileCol("ready")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
-                    kanbanMobileCol === "ready"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "ready"
                       ? "bg-blue-500 text-white shadow-lg shadow-blue-500/40 ring-2 ring-white/30"
                       : "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"
-                  }`}
+                    }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-blue-400" />
                   <span>Prêtes / Livraison</span>
@@ -1515,11 +1655,10 @@ export function PosApplicationPage() {
                 <button
                   type="button"
                   onClick={() => setKanbanMobileCol("completed")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${
-                    kanbanMobileCol === "completed"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "completed"
                       ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-white/30"
                       : "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"
-                  }`}
+                    }`}
                 >
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   <span>Terminées</span>
@@ -1527,69 +1666,88 @@ export function PosApplicationPage() {
                 </button>
               </div>
 
-              {/* Colonnes Kanban : Grid 4 colonnes sur PC (>= lg) ou Défilement Horizontal / Colonne Unique sur Mobile (< lg) */}
-              <div className="flex-1 flex lg:grid lg:grid-cols-4 gap-3 p-2.5 sm:p-3 overflow-x-auto lg:overflow-hidden snap-x snap-mandatory min-h-0">
-                {(kanbanMobileCol === "all" || kanbanMobileCol === "new") && (
-                  <KanbanColumn
-                    title="À Valider"
-                    badgeCount={newOrdersList.length}
-                    color="bg-red-500"
-                    orders={newOrdersList}
-                    onSelect={setSelectedOrder}
-                    onReprint={handleManualReprint}
-                    onAcceptOrder={handleAcceptOrder}
-                    onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
-                    nextLabel="Passer en Préparation"
-                    nextIcon={<CookingPot className="w-3.5 h-3.5" />}
-                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
-                  />
-                )}
+              {/* État vide propre lorsque toutes les commandes ont été supprimées ou qu'aucune commande n'existe */}
+              {orders.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center p-6">
+                  <div className="max-w-md w-full rounded-3xl bg-[#142822] border border-white/10 p-8 text-center space-y-3 shadow-xl">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
+                      <Package className="h-7 w-7" />
+                    </div>
+                    <h3 className="text-lg font-black text-white">Aucune commande affichée</h3>
+                    <p className="text-xs text-[#8ea39b] leading-relaxed">
+                      Toutes les commandes ont été supprimées ou il n&apos;y a pas encore de commande en attente. Les nouvelles commandes web apparaîtront ici automatiquement.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                /* Colonnes Kanban : Grid 4 colonnes sur PC (>= lg) ou Défilement Horizontal / Colonne Unique sur Mobile (< lg) */
+                <div className="flex-1 flex lg:grid lg:grid-cols-4 gap-3 p-2.5 sm:p-3 overflow-x-auto lg:overflow-hidden snap-x snap-mandatory min-h-0">
+                  {(kanbanMobileCol === "all" || kanbanMobileCol === "new") && (
+                    <KanbanColumn
+                      title="À Valider"
+                      badgeCount={newOrdersList.length}
+                      color="bg-red-500"
+                      orders={newOrdersList}
+                      onSelect={setSelectedOrder}
+                      onReprint={handleManualReprint}
+                      onDeleteOrder={requestDeleteOrder}
+                      onAcceptOrder={handleAcceptOrder}
+                      onNextStatus={(id) => handleUpdateStatus(id, "preparing")}
+                      nextLabel="Passer en Préparation"
+                      nextIcon={<CookingPot className="w-3.5 h-3.5" />}
+                      className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                    />
+                  )}
 
-                {(kanbanMobileCol === "all" || kanbanMobileCol === "preparing") && (
-                  <KanbanColumn
-                    title="En Préparation"
-                    badgeCount={preparingOrdersList.length}
-                    color="bg-[#ff705f]"
-                    orders={preparingOrdersList}
-                    onSelect={setSelectedOrder}
-                    onReprint={handleManualReprint}
-                    onNextStatus={(id) => handleUpdateStatus(id, "ready")}
-                    nextLabel="Prête / En Livraison"
-                    nextIcon={<CheckCircle className="w-3.5 h-3.5" />}
-                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
-                  />
-                )}
+                  {(kanbanMobileCol === "all" || kanbanMobileCol === "preparing") && (
+                    <KanbanColumn
+                      title="En Préparation"
+                      badgeCount={preparingOrdersList.length}
+                      color="bg-[#ff705f]"
+                      orders={preparingOrdersList}
+                      onSelect={setSelectedOrder}
+                      onReprint={handleManualReprint}
+                      onDeleteOrder={requestDeleteOrder}
+                      onNextStatus={(id) => handleUpdateStatus(id, "ready")}
+                      nextLabel="Prête / En Livraison"
+                      nextIcon={<CheckCircle className="w-3.5 h-3.5" />}
+                      className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                    />
+                  )}
 
-                {(kanbanMobileCol === "all" || kanbanMobileCol === "ready") && (
-                  <KanbanColumn
-                    title="Prêtes & En Livraison"
-                    badgeCount={readyOrdersList.length}
-                    color="bg-blue-500"
-                    orders={readyOrdersList}
-                    onSelect={setSelectedOrder}
-                    onReprint={handleManualReprint}
-                    onNextStatus={(id) => handleUpdateStatus(id, "completed")}
-                    nextLabel="Terminer"
-                    nextIcon={<Truck className="w-3.5 h-3.5" />}
-                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
-                  />
-                )}
+                  {(kanbanMobileCol === "all" || kanbanMobileCol === "ready") && (
+                    <KanbanColumn
+                      title="Prêtes & En Livraison"
+                      badgeCount={readyOrdersList.length}
+                      color="bg-blue-500"
+                      orders={readyOrdersList}
+                      onSelect={setSelectedOrder}
+                      onReprint={handleManualReprint}
+                      onDeleteOrder={requestDeleteOrder}
+                      onNextStatus={(id) => handleUpdateStatus(id, "completed")}
+                      nextLabel="Terminer"
+                      nextIcon={<Truck className="w-3.5 h-3.5" />}
+                      className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                    />
+                  )}
 
-                {(kanbanMobileCol === "all" || kanbanMobileCol === "completed") && (
-                  <KanbanColumn
-                    title="Terminées"
-                    badgeCount={completedOrdersList.length}
-                    color="bg-emerald-500"
-                    orders={completedOrdersList.slice(0, 30)}
-                    onSelect={setSelectedOrder}
-                    onReprint={handleManualReprint}
-                    onNextStatus={() => {}}
-                    nextLabel="Archivée"
-                    nextIcon={<Check className="w-3.5 h-3.5" />}
-                    className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
-                  />
-                )}
-              </div>
+                  {(kanbanMobileCol === "all" || kanbanMobileCol === "completed") && (
+                    <KanbanColumn
+                      title="Terminées"
+                      badgeCount={completedOrdersList.length}
+                      color="bg-emerald-500"
+                      orders={completedOrdersList.slice(0, 30)}
+                      onSelect={setSelectedOrder}
+                      onReprint={handleManualReprint}
+                      onDeleteOrder={requestDeleteOrder}
+                      onNextStatus={() => { }}
+                      nextLabel="Archivée"
+                      nextIcon={<Check className="w-3.5 h-3.5" />}
+                      className={`${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -1622,11 +1780,10 @@ export function PosApplicationPage() {
                       🟢 {stocks.filter((s) => s.status === "available" || (!s.status && s.available)).length} Dispos
                     </span>
                     <span className="text-white/20">|</span>
-                    <span className={`text-xs font-black ${
-                      stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length > 0
+                    <span className={`text-xs font-black ${stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length > 0
                         ? "text-red-400 animate-pulse"
                         : "text-white/60"
-                    }`}>
+                      }`}>
                       🔴 {stocks.filter((s) => s.status === "out_of_stock" || s.available === false).length} Rupture
                     </span>
                   </div>
@@ -1687,17 +1844,15 @@ export function PosApplicationPage() {
                     <button
                       key={cat.id}
                       onClick={() => setStockCategory(cat.id)}
-                      className={`flex items-center gap-2 rounded-2xl px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${
-                        isActive
+                      className={`flex items-center gap-2 rounded-2xl px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-black transition shrink-0 cursor-pointer shadow-sm ${isActive
                           ? "bg-gradient-to-r from-[#ff705f] to-[#ea580c] text-white shadow-lg shadow-[#ea580c]/30 scale-105"
                           : "bg-[#142822] text-[#8ea39b] hover:text-white hover:bg-[#1a352d] border border-white/5"
-                      }`}
+                        }`}
                     >
                       <span className="text-sm sm:text-base">{cat.emoji}</span>
                       <span>{cat.label}</span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] ${
-                        isActive ? "bg-white/25 text-white" : "bg-black/30 text-white/50"
-                      }`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive ? "bg-white/25 text-white" : "bg-black/30 text-white/50"
+                        }`}>
                         {cat.count}
                       </span>
                     </button>
@@ -1730,13 +1885,12 @@ export function PosApplicationPage() {
                     return (
                       <div
                         key={item.id}
-                        className={`rounded-3xl p-4 flex flex-col justify-between transition-all duration-200 border-2 shadow-lg ${
-                          isOutOfStock
+                        className={`rounded-3xl p-4 flex flex-col justify-between transition-all duration-200 border-2 shadow-lg ${isOutOfStock
                             ? "bg-[#251313] border-red-500/80 shadow-red-500/20"
                             : isLow
-                            ? "bg-[#251d10] border-amber-500/60 shadow-amber-500/20"
-                            : "bg-[#142822] border-emerald-500/30 hover:border-emerald-500/60"
-                        }`}
+                              ? "bg-[#251d10] border-amber-500/60 shadow-amber-500/20"
+                              : "bg-[#142822] border-emerald-500/30 hover:border-emerald-500/60"
+                          }`}
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2">
@@ -1749,18 +1903,18 @@ export function PosApplicationPage() {
                                   {item.category === "bowl"
                                     ? "Bowl"
                                     : item.category === "base"
-                                    ? "Base"
-                                    : item.category === "protein"
-                                    ? "Protéine"
-                                    : item.category === "ingredient"
-                                    ? "Légume / Mix-in"
-                                    : item.category === "sauce"
-                                    ? "Sauce"
-                                    : item.category === "topping"
-                                    ? "Topping"
-                                    : item.category === "drink"
-                                    ? "Boisson"
-                                    : "Dessert"}
+                                      ? "Base"
+                                      : item.category === "protein"
+                                        ? "Protéine"
+                                        : item.category === "ingredient"
+                                          ? "Légume / Mix-in"
+                                          : item.category === "sauce"
+                                            ? "Sauce"
+                                            : item.category === "topping"
+                                              ? "Topping"
+                                              : item.category === "drink"
+                                                ? "Boisson"
+                                                : "Dessert"}
                                 </span>
                                 <h4 className="font-black text-sm text-white truncate" title={item.name}>
                                   {item.name}
@@ -1772,13 +1926,12 @@ export function PosApplicationPage() {
                           {/* Badge de statut actuel */}
                           <div className="mt-3 flex items-center justify-between">
                             <span
-                              className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${
-                                isOutOfStock
+                              className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${isOutOfStock
                                   ? "bg-red-500 text-white shadow-md shadow-red-500/40 animate-pulse"
                                   : isLow
-                                  ? "bg-amber-500 text-black font-black shadow-md shadow-amber-500/40"
-                                  : "bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40"
-                              }`}
+                                    ? "bg-amber-500 text-black font-black shadow-md shadow-amber-500/40"
+                                    : "bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40"
+                                }`}
                             >
                               {isOutOfStock ? "🔴 Victime de son succès" : isLow ? "🟠 Stock Faible" : "🟢 Disponible"}
                             </span>
@@ -1790,33 +1943,30 @@ export function PosApplicationPage() {
                           <button
                             type="button"
                             onClick={() => handleUpdateStock(item.id, { status: "available", available: true })}
-                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${
-                              isAvailable
+                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${isAvailable
                                 ? "bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-emerald-300 scale-102"
                                 : "bg-white/5 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
-                            }`}
+                              }`}
                           >
                             🟢 Dispo
                           </button>
                           <button
                             type="button"
                             onClick={() => handleUpdateStock(item.id, { status: "low", available: true })}
-                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${
-                              isLow
+                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${isLow
                                 ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/40 ring-2 ring-amber-300 scale-102"
                                 : "bg-white/5 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30"
-                            }`}
+                              }`}
                           >
                             🟠 Faible
                           </button>
                           <button
                             type="button"
                             onClick={() => handleUpdateStock(item.id, { status: "out_of_stock", available: false })}
-                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${
-                              isOutOfStock
+                            className={`rounded-2xl py-2.5 text-center text-xs font-black transition-all cursor-pointer ${isOutOfStock
                                 ? "bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400 scale-102 animate-pulse"
                                 : "bg-white/5 text-red-400 hover:bg-red-500/20 border border-red-500/30"
-                            }`}
+                              }`}
                           >
                             🔴 Rupture
                           </button>
@@ -1878,9 +2028,8 @@ export function PosApplicationPage() {
                       </div>
                       <button
                         onClick={() => handleToggleDriver(drv.id)}
-                        className={`rounded-lg px-2.5 py-1 text-[10px] font-black uppercase transition ${
-                          drv.active ? "bg-emerald-500/20 text-emerald-300" : "bg-white/10 text-slate-400"
-                        }`}
+                        className={`rounded-lg px-2.5 py-1 text-[10px] font-black uppercase transition ${drv.active ? "bg-emerald-500/20 text-emerald-300" : "bg-white/10 text-slate-400"
+                          }`}
                       >
                         {drv.active ? "En Service" : "Inactif"}
                       </button>
@@ -2135,11 +2284,10 @@ export function PosApplicationPage() {
                         savePrinterConfig(updated);
                         playAlertSound(true, theme.id as any);
                       }}
-                      className={`rounded-2xl p-3 text-xs font-bold border transition ${
-                        config.soundTheme === theme.id
+                      className={`rounded-2xl p-3 text-xs font-bold border transition ${config.soundTheme === theme.id
                           ? "bg-[#ff705f]/20 border-[#ff705f] text-white"
                           : "bg-black/30 border-white/10 text-[#8ea39b]"
-                      }`}
+                        }`}
                     >
                       {theme.name}
                     </button>
@@ -2147,20 +2295,24 @@ export function PosApplicationPage() {
                 </div>
               </div>
 
-              {/* Bouton création commande test */}
-              <div className="pt-4 flex gap-3">
+              {/* Bouton création commande test & purge */}
+              <div className="pt-4 flex flex-wrap gap-3">
                 <button
+                  type="button"
                   onClick={handleCreateTestOrder}
                   disabled={creatingTestOrder}
-                  className="rounded-2xl bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 text-xs font-bold"
+                  className="rounded-2xl bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white px-4 py-2.5 text-xs font-bold cursor-pointer"
                 >
                   Générer une commande test de livraison
                 </button>
                 <button
+                  type="button"
                   onClick={handleClearAllOrders}
-                  className="rounded-2xl bg-red-600/20 hover:bg-red-600/40 text-red-300 border border-red-500/30 px-4 py-2.5 text-xs font-bold"
+                  disabled={orders.length === 0 || isDeleting}
+                  className="inline-flex items-center gap-1.5 rounded-2xl bg-red-600/20 hover:bg-red-600/40 disabled:opacity-40 disabled:cursor-not-allowed text-red-300 border border-red-500/30 px-4 py-2.5 text-xs font-bold cursor-pointer"
                 >
-                  Vider toutes les commandes
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Vider toutes les commandes</span>
                 </button>
               </div>
             </div>
@@ -2181,11 +2333,10 @@ export function PosApplicationPage() {
               <div className="flex items-center justify-between border-b border-white/10 px-4 sm:px-6 py-3.5 bg-[#172e27] shrink-0">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-lg sm:text-xl font-black">{selectedOrder.id}</span>
-                  <span className={`rounded-md px-2 py-0.5 text-[10px] font-black uppercase ${
-                    selectedOrder.customer.fulfillment === "delivery"
+                  <span className={`rounded-md px-2 py-0.5 text-[10px] font-black uppercase ${selectedOrder.customer.fulfillment === "delivery"
                       ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
                       : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                  }`}>
+                    }`}>
                     {selectedOrder.customer.fulfillment === "delivery" ? "🛵 Livraison" : "🥡 Retrait"}
                   </span>
                   <span className="text-xs text-[#8ea39b]">
@@ -2379,6 +2530,15 @@ export function PosApplicationPage() {
               <div className="border-t border-white/10 px-4 sm:px-6 py-3 bg-[#11221c] flex items-center gap-2 shrink-0">
                 <button
                   type="button"
+                  onClick={() => requestDeleteOrder(selectedOrder)}
+                  className="rounded-2xl bg-red-600/20 hover:bg-red-600/35 text-red-300 border border-red-500/30 p-3 transition cursor-pointer shrink-0"
+                  title="Supprimer cette commande"
+                  aria-label={`Supprimer la commande ${selectedOrder.id}`}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
                   onClick={() => handleManualReprint(selectedOrder.id)}
                   disabled={printingOrderId === selectedOrder.id}
                   className="flex-1 rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3 px-4 text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-lg cursor-pointer"
@@ -2450,6 +2610,75 @@ export function PosApplicationPage() {
             </div>
           </div>
         )}
+
+        {/* ─── MODALE DE CONFIRMATION SUPPRESSION COMMANDE(S) ───────────── */}
+        {deleteConfirm && (
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-xs p-4"
+            onClick={() => !isDeleting && setDeleteConfirm(null)}
+          >
+            <div
+              className="w-full max-w-md rounded-3xl bg-[#142822] border border-red-500/35 p-6 space-y-4 text-white text-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-400 border border-red-500/30">
+                <Trash2 className="h-7 w-7" />
+              </div>
+
+              {deleteConfirm.type === "single" ? (
+                <>
+                  <h3 className="text-lg sm:text-xl font-black text-white">
+                    Supprimer la commande {deleteConfirm.order.id} ?
+                  </h3>
+                  <p className="text-xs text-[#8ea39b] leading-relaxed">
+                    Client : <strong className="text-white">{deleteConfirm.order.customer.name}</strong> ·{" "}
+                    <strong className="text-white">{deleteConfirm.order.total.toFixed(2)} €</strong>
+                    <br />
+                    Cette commande sera supprimée définitivement du POS et de la base de données. Les autres commandes restent intactes.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-lg sm:text-xl font-black text-white">
+                    Vider toutes les commandes ?
+                  </h3>
+                  <p className="text-xs text-[#8ea39b] leading-relaxed">
+                    <strong className="text-red-300">
+                      Voulez-vous vraiment supprimer toutes les commandes ? Cette action est irréversible.
+                    </strong>
+                    <br />
+                    <span className="inline-block mt-1">
+                      {deleteConfirm.count} commande{deleteConfirm.count > 1 ? "s" : ""} affichée{deleteConfirm.count > 1 ? "s" : ""} sera{deleteConfirm.count > 1 ? "ont" : ""} supprimée{deleteConfirm.count > 1 ? "s" : ""}. Les stocks, paramètres et relevés kilométriques restent conservés.
+                    </span>
+                  </p>
+                </>
+              )}
+
+              <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={() => setDeleteConfirm(null)}
+                  className="flex-1 rounded-2xl bg-white/10 hover:bg-white/20 disabled:opacity-50 py-3 text-xs font-black uppercase tracking-wider text-white transition cursor-pointer"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={executeConfirmedDelete}
+                  className="flex-1 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 disabled:opacity-60 py-3 text-xs font-black uppercase tracking-wider text-white shadow-lg shadow-red-600/30 transition active:scale-95 cursor-pointer"
+                >
+                  {isDeleting
+                    ? "Suppression..."
+                    : deleteConfirm.type === "single"
+                      ? "Supprimer"
+                      : "Confirmer et vider"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
@@ -2463,6 +2692,7 @@ interface ColumnProps {
   orders: Order[];
   onSelect: (o: Order) => void;
   onReprint: (id: string) => void;
+  onDeleteOrder: (o: Order) => void;
   onAcceptOrder?: (o: Order) => void;
   onNextStatus: (id: string) => void;
   nextLabel: string;
@@ -2477,6 +2707,7 @@ function KanbanColumn({
   orders,
   onSelect,
   onReprint,
+  onDeleteOrder,
   onAcceptOrder,
   onNextStatus,
   nextLabel,
@@ -2499,8 +2730,9 @@ function KanbanColumn({
       {/* Cartes Commandes */}
       <div className="flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-2.5 min-h-0">
         {orders.length === 0 ? (
-          <div className="flex h-32 items-center justify-center text-xs font-bold text-[#62776f]">
-            Aucune commande
+          <div className="flex flex-col h-32 items-center justify-center gap-1.5 text-xs font-bold text-[#62776f]">
+            <Package className="w-5 h-5 opacity-50" />
+            <span>Aucune commande</span>
           </div>
         ) : (
           orders.map((o) => {
@@ -2510,21 +2742,19 @@ function KanbanColumn({
               <div
                 key={o.id}
                 onClick={() => onSelect(o)}
-                className={`rounded-2xl p-3 sm:p-3.5 shadow transition cursor-pointer space-y-2 border ${
-                  isUnaccepted
+                className={`rounded-2xl p-3 sm:p-3.5 shadow transition cursor-pointer space-y-2 border ${isUnaccepted
                     ? "bg-red-950/40 border-red-500/70 ring-2 ring-red-500/50 animate-pulse"
                     : "bg-black/40 border-white/10 hover:border-white/30"
-                }`}
+                  }`}
               >
                 {/* Entête Carte : ID + Heure + Badge Fulfillment */}
                 <div className="flex items-center justify-between gap-1">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <span className="font-mono text-xs sm:text-sm font-black text-white truncate">{o.id}</span>
-                    <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase ${
-                      o.customer.fulfillment === "delivery"
+                    <span className={`rounded-md px-1.5 py-0.5 text-[9px] font-black uppercase ${o.customer.fulfillment === "delivery"
                         ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
                         : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                    }`}>
+                      }`}>
                       {o.customer.fulfillment === "delivery" ? "🛵 Livr." : "🥡 Emp."}
                     </span>
                   </div>
@@ -2557,7 +2787,7 @@ function KanbanColumn({
 
                 {/* Actions sur la carte */}
                 <div
-                  className="pt-1.5 flex items-center gap-2 border-t border-white/10"
+                  className="pt-1.5 flex items-center gap-1.5 border-t border-white/10"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button
@@ -2592,6 +2822,16 @@ function KanbanColumn({
                       <span className="truncate">{nextLabel}</span>
                     </button>
                   )}
+
+                  <button
+                    type="button"
+                    onClick={() => onDeleteOrder(o)}
+                    className="rounded-xl bg-red-500/10 p-2 text-red-400/80 hover:text-red-300 hover:bg-red-500/25 border border-red-500/20 transition shrink-0 cursor-pointer"
+                    title={`Supprimer la commande ${o.id}`}
+                    aria-label={`Supprimer la commande ${o.id}`}
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
             );

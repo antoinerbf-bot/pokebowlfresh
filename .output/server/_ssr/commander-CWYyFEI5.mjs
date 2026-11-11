@@ -6,7 +6,7 @@ import { n as useTranslation } from "./I18nContext-CfPib1Ml.mjs";
 import { n as useCart } from "./CartContext-D7fTgwIa.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { J as Clock, P as MapPin, T as Plus, V as Flame, b as Search, f as Sparkles, h as ShoppingBag, lt as ArrowRight, p as SlidersHorizontal, rt as Check } from "../_libs/lucide-react.mjs";
+import { F as MapPin, H as Flame, T as Plus, Y as Clock, b as Search, f as Sparkles, h as ShoppingBag, it as Check, p as SlidersHorizontal, ut as ArrowRight } from "../_libs/lucide-react.mjs";
 import { d as drink_eau_gazeuse_default, f as drink_eau_plate_default, g as tiramisu_speculoos_default, h as tiramisu_oreo_default, l as drink_coca_cola_default, m as drink_ice_tea_default, n as DishImage, p as drink_fanta_orange_default, t as CartDrawer, u as drink_coca_zero_default } from "./CartDrawer-CUw3aYqz.mjs";
 import { t as useStock } from "./useStock-CmhMz0nb.mjs";
 import { n as tiramisu_nutella_default, t as HoursBanner } from "./HoursBanner-DqXU3bxZ.mjs";

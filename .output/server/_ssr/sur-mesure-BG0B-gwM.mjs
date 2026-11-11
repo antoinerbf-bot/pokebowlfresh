@@ -7,10 +7,10 @@ import { n as useTranslation } from "./I18nContext-CfPib1Ml.mjs";
 import { n as useCart } from "./CartContext-D7fTgwIa.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as BrandLogo } from "./BrandLogo-f92236nt.mjs";
-import { T as Plus, h as ShoppingBag, j as Minus, nt as ChefHat, rt as Check, ut as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { M as Minus, T as Plus, dt as ArrowLeft, h as ShoppingBag, it as Check, rt as ChefHat } from "../_libs/lucide-react.mjs";
 import { o as bowl_saumon_default, t as CartDrawer } from "./CartDrawer-CUw3aYqz.mjs";
 import { t as useStock } from "./useStock-CmhMz0nb.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-CN7SoLx3.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sur-mesure-BG0B-gwM.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var BASE_PRICE = 10;
@@ -22,13 +22,7 @@ function SurMesurePage() {
 	const count = items.reduce((sum, item) => sum + item.quantity, 0);
 	const [selectedSize, setSelectedSize] = import_react.useState("moyen");
 	const [selectedBase, setSelectedBase] = import_react.useState(detailedBases[0] ?? null);
-	const [mixinQuantities, setMixinQuantities] = import_react.useState({
-		Avocat: 1,
-		Mangue: 1,
-		Edamame: 1,
-		"Salade d'algues": 1,
-		Maïs: 1
-	});
+	const [mixinQuantities, setMixinQuantities] = import_react.useState({});
 	const [selectedProtein, setSelectedProtein] = import_react.useState(detailedProteins[0] ?? null);
 	const [extraProteins, setExtraProteins] = import_react.useState({});
 	const [sauceQuantities, setSauceQuantities] = import_react.useState({});
@@ -156,12 +150,11 @@ function SurMesurePage() {
 	const extraProteinsFormatted = Object.entries(extraProteins).filter(([, q]) => q > 0).map(([name, q]) => q > 1 ? `${name} (x${q})` : name);
 	const saucesFormatted = Object.entries(sauceQuantities).filter(([, q]) => q > 0).map(([name, q]) => q > 1 ? `${name} (x${q})` : name);
 	const isBaseReady = selectedBase !== null;
-	const isMixInsReady = totalMixInUnits >= 1;
+	const isMixInsReady = totalMixInUnits >= 0;
 	const isProteinReady = selectedProtein !== null;
 	const isValid = isBaseReady && isMixInsReady && isProteinReady;
 	const getMissingReason = () => {
 		if (!isBaseReady) return "Étape 1 : Choisis une base";
-		if (!isMixInsReady) return "Étape 2 : Sélectionne au moins 1 légume ou mix-in";
 		if (!isProteinReady) return "Étape 3 : Choisis une protéine";
 		return null;
 	};
@@ -184,7 +177,7 @@ function SurMesurePage() {
 			`Base : ${selectedBase.name}`,
 			`Protéine : ${selectedProtein.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
 			...extraProteinLines,
-			`Mix-ins : ${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
+			mixinsFormatted.length > 0 ? `Mix-ins : ${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}` : "Mix-ins : Aucun légume",
 			`Sauce : ${mainSauceName}`,
 			...extraSauceLines,
 			...toppingsFormatted.length > 0 ? [`Toppings : ${toppingsFormatted.join(", ")}${extraToppingsCount > 0 ? ` (+${toppingsExtra.toFixed(2)}€)` : ""}`] : ["Toppings : Aucun"]

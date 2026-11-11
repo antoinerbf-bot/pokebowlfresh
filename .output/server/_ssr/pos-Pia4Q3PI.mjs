@@ -1,9 +1,9 @@
 import { n as createServerFn } from "./ssr.mjs";
 import { a as numberType, n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
-import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
-import { a as getOrderFromStore, c as updateOrderCustomFields, l as updateOrderStatus, o as listOrdersFromStore, r as clearAllOrdersFromStore, s as requestOrderReprint, t as acknowledgePrint, u as upsertOrder } from "./order-store-pOittpxk.mjs";
 import { t as createServerRpc } from "./createServerRpc-A6pJPYTF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/pos-BuvWJ74r.js
+import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
+import { c as requestOrderReprint, d as upsertOrder, i as deleteOrderFromStore, l as updateOrderCustomFields, o as getOrderFromStore, r as clearAllOrdersFromStore, s as listOrdersFromStore, t as acknowledgePrint, u as updateOrderStatus } from "./order-store-Ca1SPxcK.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/pos-Pia4Q3PI.js
 /**
 * Générateur de commandes binaires ESC/POS pour Epson TM-m30III
 * Largeur : 42 caractères (standard 80mm en police A espacée ou 48 colonnes max)
@@ -206,6 +206,22 @@ var getPosOrders_createServerFn_handler = createServerRpc({
 var getPosOrders = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(getPosOrders_createServerFn_handler, async ({ data }) => {
 	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
 	return { orders: await listOrdersFromStore(100) };
+});
+var deletePosOrder_createServerFn_handler = createServerRpc({
+	id: "d2134403df1b1222533b142ff55edda4d814583449fa6285d23e84f6077d8d69",
+	name: "deletePosOrder",
+	filename: "src/fn/pos.ts"
+}, (opts) => deletePosOrder.__executeServer(opts));
+var deletePosOrder = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	orderId: stringType().min(1)
+})).handler(deletePosOrder_createServerFn_handler, async ({ data }) => {
+	if (!verifyPin(data.pin)) throw new Error("Code PIN invalide.");
+	return {
+		success: true,
+		deleted: await deleteOrderFromStore(data.orderId),
+		orderId: data.orderId
+	};
 });
 var clearPosOrders_createServerFn_handler = createServerRpc({
 	id: "f71d4a2a3fa4522e8eb6e2e96a25deba4a08891c3184339dd4ece96b48294ef8",
@@ -484,4 +500,4 @@ var assignPosDriver = createServerFn({ method: "POST" }).validator(objectType({
 	};
 });
 //#endregion
-export { acceptPosOrder_createServerFn_handler, ackPosPrint_createServerFn_handler, assignPosDriver_createServerFn_handler, clearPosOrders_createServerFn_handler, createTestDeliveryOrder_createServerFn_handler, delayPosOrder_createServerFn_handler, getOrderReceipts_createServerFn_handler, getPosOrders_createServerFn_handler, setPosOrderStatus_createServerFn_handler, triggerReprint_createServerFn_handler };
+export { acceptPosOrder_createServerFn_handler, ackPosPrint_createServerFn_handler, assignPosDriver_createServerFn_handler, clearPosOrders_createServerFn_handler, createTestDeliveryOrder_createServerFn_handler, delayPosOrder_createServerFn_handler, deletePosOrder_createServerFn_handler, getOrderReceipts_createServerFn_handler, getPosOrders_createServerFn_handler, setPosOrderStatus_createServerFn_handler, triggerReprint_createServerFn_handler };

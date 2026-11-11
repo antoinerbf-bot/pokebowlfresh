@@ -7,7 +7,7 @@ import { t as I18nProvider } from "./I18nContext-CfPib1Ml.mjs";
 import { t as CartProvider } from "./CartContext-D7fTgwIa.mjs";
 import { C as useRouter, _ as lazyRouteComponent, b as Link, d as Scripts, f as HeadContent, g as Outlet, h as createRouter, p as useRouterState, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as Route$25 } from "../_productId-c5r0iU0-.mjs";
-import { C as RefreshCw, E as Phone, H as FileSpreadsheet, I as LayoutDashboard, K as CookingPot, L as Layers, O as Pause, V as Flame, Z as CircleCheckBig, a as Truck, g as Shield, i as Users, k as Navigation, n as VolumeX, o as TriangleAlert, q as Compass, r as Volume2, rt as Check, s as TrendingUp, st as Bell, w as Printer, x as Salad, y as Settings } from "../_libs/lucide-react.mjs";
+import { A as Navigation, C as RefreshCw, E as Phone, H as Flame, J as Compass, L as LayoutDashboard, O as Pause, Q as CircleCheckBig, R as Layers, U as FileSpreadsheet, a as Truck, b as Search, c as Trash2, ct as Bell, g as Shield, i as Users, it as Check, k as Package, n as VolumeX, o as TriangleAlert, q as CookingPot, r as Volume2, s as TrendingUp, w as Printer, x as Salad, y as Settings } from "../_libs/lucide-react.mjs";
 import { n as createServerFn } from "./ssr.mjs";
 import { t as createSsrRpc } from "./createSsrRpc-C1p7zOu_.mjs";
 import { a as numberType, n as booleanType, o as objectType, r as enumType, s as stringType } from "../_libs/zod.mjs";
@@ -15,8 +15,8 @@ import { t as BLOG_ARTICLES } from "./blogArticles-BpboJaFF.mjs";
 import { t as Route$26 } from "../_slug-CMUY-Lu2.mjs";
 import { i as openWazeApp, r as openGoogleMapsApp, t as Route$27 } from "../_token-MdFG7lWU.mjs";
 import { t as generateOrderId } from "./orders-CaaHT_fT.mjs";
-import { a as getOrderFromStore, i as getOrderByDeliveryToken, l as updateOrderStatus, n as claimNextPrintJob, o as listOrdersFromStore, r as clearAllOrdersFromStore, t as acknowledgePrint, u as upsertOrder } from "./order-store-pOittpxk.mjs";
-import { a as getBancontactProApiKey, d as getRushHistory, f as getRushState, i as getAllBankKeyCandidates, l as getMollieApiKey, m as processCheckout, n as cancelRushPause, o as getBancontactProPayment, p as loadAndGetEnv, r as checkoutSchema, s as getCheckedFiles, t as activateRushPause, u as getMolliePayment } from "./bancontact-pro.server-DM2ZMn2Z.mjs";
+import { a as getOrderByDeliveryToken, d as upsertOrder, i as deleteOrderFromStore, n as claimNextPrintJob, o as getOrderFromStore, r as clearAllOrdersFromStore, s as listOrdersFromStore, t as acknowledgePrint, u as updateOrderStatus } from "./order-store-Ca1SPxcK.mjs";
+import { a as getBancontactProApiKey, d as getRushHistory, f as getRushState, i as getAllBankKeyCandidates, l as getMollieApiKey, m as processCheckout, n as cancelRushPause, o as getBancontactProPayment, p as loadAndGetEnv, r as checkoutSchema, s as getCheckedFiles, t as activateRushPause, u as getMolliePayment } from "./bancontact-pro.server-nDjfd1sn.mjs";
 import { t as RushPauseBanner } from "./RushPauseBanner-DtN6tzRr.mjs";
 import { t as Route$28 } from "./order.success-ClqSIW9y.mjs";
 import { t as FAQ_ITEMS } from "./FaqNutritionSection-C8Fl5NA_.mjs";
@@ -26,11 +26,11 @@ import { t as require_lib } from "../_libs/qrcode.mjs";
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-hhI5f-SH.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Cz6FiZB4.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
-var styles_default = "/assets/styles-BsL04QnF.css";
+var styles_default = "/assets/styles-DG890Gas.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -281,7 +281,7 @@ function RootComponent() {
 		})] }) })
 	});
 }
-var $$splitComponentImporter$7 = () => import("./routes-KfHXMaaA.mjs");
+var $$splitComponentImporter$7 = () => import("./routes-eDoiOP21.mjs");
 var RESTAURANT_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": ["Restaurant", "FastFoodRestaurant"],
@@ -463,7 +463,7 @@ var Route$23 = createFileRoute("/")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
-var $$splitComponentImporter$6 = () => import("./checkout-D1hu_jLe.mjs");
+var $$splitComponentImporter$6 = () => import("./checkout-CSW-foU7.mjs");
 var Route$22 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$6, "component") });
 var $$splitComponentImporter$5 = () => import("./commander-CWYyFEI5.mjs");
 var COMMANDER_MENU_SCHEMA = {
@@ -568,7 +568,7 @@ var Route$19 = createFileRoute("/recrutement")({
 	head: () => ({ meta: [{ title: "Recrutement — Poke N Bowl Visé" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$3, "component")
 });
-var $$splitComponentImporter$2 = () => import("./sur-mesure-CN7SoLx3.mjs");
+var $$splitComponentImporter$2 = () => import("./sur-mesure-BG0B-gwM.mjs");
 var SUR_MESURE_SCHEMA = {
 	"@context": "https://schema.org",
 	"@type": "Product",
@@ -2352,21 +2352,44 @@ var Route$8 = createFileRoute("/api/pos-orders")({ server: { handlers: {
 	},
 	DELETE: async ({ request }) => {
 		try {
-			if (!isAuthorizedPosRequest(request)) return new Response(JSON.stringify({
+			let body = {};
+			try {
+				if ((request.headers.get("content-type") || "").includes("application/json")) body = await request.json() ?? {};
+			} catch {}
+			if (!isAuthorizedPosRequest(request, body.pin)) return new Response(JSON.stringify({
 				success: false,
 				error: "Code PIN POS requis"
 			}), {
 				status: 401,
 				headers: { "Content-Type": "application/json" }
 			});
+			const orderId = (new URL(request.url).searchParams.get("orderId") ?? body.orderId ?? "").trim();
+			if (orderId) {
+				const deleted = await deleteOrderFromStore(orderId);
+				return new Response(JSON.stringify({
+					success: true,
+					deleted,
+					orderId,
+					message: `Commande ${orderId} supprimée avec succès`
+				}), {
+					status: 200,
+					headers: {
+						"Content-Type": "application/json",
+						"Cache-Control": "no-store"
+					}
+				});
+			}
 			const deletedCount = await clearAllOrdersFromStore();
 			return new Response(JSON.stringify({
 				success: true,
-				message: "Toutes les anciennes commandes ont été effacées avec succès",
+				message: "Toutes les commandes ont été effacées avec succès",
 				deletedCount
 			}), {
 				status: 200,
-				headers: { "Content-Type": "application/json" }
+				headers: {
+					"Content-Type": "application/json",
+					"Cache-Control": "no-store"
+				}
 			});
 		} catch (err) {
 			return new Response(JSON.stringify({
@@ -2773,6 +2796,10 @@ var Route$3 = createFileRoute("/blog/")({
 	component: lazyRouteComponent($$splitComponentImporter, "component")
 });
 var getPosOrders = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(createSsrRpc("6df01f8264c863e15506dc49e8b2d2a94b806dd823923c9fc73a10634cf60562"));
+var deletePosOrder = createServerFn({ method: "POST" }).validator(objectType({
+	pin: stringType().optional(),
+	orderId: stringType().min(1)
+})).handler(createSsrRpc("d2134403df1b1222533b142ff55edda4d814583449fa6285d23e84f6077d8d69"));
 var clearPosOrders = createServerFn({ method: "POST" }).validator(objectType({ pin: stringType().optional() })).handler(createSsrRpc("f71d4a2a3fa4522e8eb6e2e96a25deba4a08891c3184339dd4ece96b48294ef8"));
 var setPosOrderStatus = createServerFn({ method: "POST" }).validator(objectType({
 	pin: stringType().optional(),
@@ -2841,6 +2868,10 @@ function PosApplicationPage() {
 	const [activeTab, setActiveTab] = (0, import_react.useState)("kanban");
 	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
 	const [kanbanMobileCol, setKanbanMobileCol] = (0, import_react.useState)("all");
+	const [deleteConfirm, setDeleteConfirm] = (0, import_react.useState)(null);
+	const [isDeleting, setIsDeleting] = (0, import_react.useState)(false);
+	const [posNotice, setPosNotice] = (0, import_react.useState)(null);
+	const deleteGenerationRef = (0, import_react.useRef)(0);
 	const [config, setConfig] = (0, import_react.useState)(loadPrinterConfig);
 	const [printingOrderId, setPrintingOrderId] = (0, import_react.useState)(null);
 	const [testingPrinter, setTestingPrinter] = (0, import_react.useState)(false);
@@ -3286,6 +3317,7 @@ function PosApplicationPage() {
 		config.soundEnabled
 	]);
 	const loadOrders = async () => {
+		const genAtStart = deleteGenerationRef.current;
 		try {
 			let newOrders = null;
 			try {
@@ -3304,6 +3336,7 @@ function PosApplicationPage() {
 				console.warn("[POS] Erreur REST /api/pos-orders, fallback RPC:", err);
 			}
 			if (!newOrders) newOrders = (await getPosOrders({ data: { pin } })).orders;
+			if (deleteGenerationRef.current !== genAtStart) return;
 			const printableStatuses = [
 				"paid",
 				"awaiting_pickup",
@@ -3534,15 +3567,87 @@ function PosApplicationPage() {
 			setTestingPrinter(false);
 		}
 	};
-	const handleClearAllOrders = async () => {
-		if (!window.confirm("Êtes-vous certain de vouloir vider TOUTES les commandes ?")) return;
+	const showPosNotice = (msg) => {
+		setPosNotice(msg);
+		setTimeout(() => {
+			setPosNotice((cur) => cur === msg ? null : cur);
+		}, 3500);
+	};
+	const requestDeleteOrder = (order) => {
+		setDeleteConfirm({
+			type: "single",
+			order
+		});
+	};
+	const handleClearAllOrders = () => {
+		setDeleteConfirm({
+			type: "all",
+			count: orders.length
+		});
+	};
+	const executeConfirmedDelete = async () => {
+		if (!deleteConfirm || isDeleting) return;
+		setIsDeleting(true);
+		deleteGenerationRef.current += 1;
 		try {
-			await clearPosOrders({ data: { pin } });
-			setOrders([]);
-			setSelectedOrder(null);
-			alert("Commandes effacées.");
+			if (deleteConfirm.type === "single") {
+				const targetId = deleteConfirm.order.id;
+				let deletedOk = false;
+				try {
+					const res = await fetch(`/api/pos-orders?orderId=${encodeURIComponent(targetId)}`, {
+						method: "DELETE",
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json",
+							"x-pos-pin": pin || "1234"
+						},
+						body: JSON.stringify({
+							orderId: targetId,
+							pin: pin || "1234"
+						})
+					});
+					if (res.ok) {
+						if ((await res.json()).success) deletedOk = true;
+					}
+				} catch {}
+				if (!deletedOk) await deletePosOrder({ data: {
+					pin,
+					orderId: targetId
+				} });
+				deleteGenerationRef.current += 1;
+				setOrders((prev) => prev.filter((o) => o.id !== targetId));
+				if (selectedOrder?.id === targetId) setSelectedOrder(null);
+				knownOrderStatuses.current.delete(targetId);
+				setDeleteConfirm(null);
+				showPosNotice(`Commande ${targetId} supprimée définitivement.`);
+			} else {
+				let clearedOk = false;
+				try {
+					const res = await fetch("/api/pos-orders", {
+						method: "DELETE",
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json",
+							"x-pos-pin": pin || "1234"
+						},
+						body: JSON.stringify({ pin: pin || "1234" })
+					});
+					if (res.ok) {
+						if ((await res.json()).success) clearedOk = true;
+					}
+				} catch {}
+				if (!clearedOk) await clearPosOrders({ data: { pin } });
+				deleteGenerationRef.current += 1;
+				setOrders([]);
+				setSelectedOrder(null);
+				knownOrderStatuses.current.clear();
+				setDeleteConfirm(null);
+				showPosNotice("Toutes les commandes ont été supprimées.");
+			}
 		} catch (e) {
-			alert("Erreur : " + (e?.message ?? String(e)));
+			alert("Erreur lors de la suppression : " + (e?.message ?? String(e)));
+		} finally {
+			setIsDeleting(false);
 		}
 	};
 	const [creatingTestOrder, setCreatingTestOrder] = (0, import_react.useState)(false);
@@ -3957,6 +4062,20 @@ function PosApplicationPage() {
 					children: "✕"
 				})]
 			}),
+			posNotice && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center justify-between gap-2 bg-emerald-600/25 border-b border-emerald-500/40 px-3 sm:px-5 py-1.5 text-xs text-emerald-200 font-bold shrink-0",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 min-w-0",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "h-4 w-4 text-emerald-400 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "truncate",
+						children: posNotice
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: () => setPosNotice(null),
+					className: "font-bold hover:text-white px-2 py-0.5 cursor-pointer",
+					children: "✕"
+				})]
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex flex-1 min-h-0 overflow-hidden",
 				children: [
@@ -4160,9 +4279,9 @@ function PosApplicationPage() {
 													" €"
 												]
 											})]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex items-center gap-2 shrink-0",
-											children: !o.acceptedAt ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											children: [!o.acceptedAt ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => handleAcceptOrder(o),
 												className: "rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-black uppercase tracking-wider animate-pulse shadow cursor-pointer",
 												children: "Accepter"
@@ -4170,7 +4289,14 @@ function PosApplicationPage() {
 												onClick: () => setSelectedOrder(o),
 												className: "rounded-xl bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 text-xs font-bold cursor-pointer",
 												children: "Détails"
-											})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => requestDeleteOrder(o),
+												className: "rounded-xl bg-red-500/10 hover:bg-red-500/25 text-red-400/80 hover:text-red-300 border border-red-500/20 p-1.5 transition cursor-pointer",
+												title: `Supprimer la commande ${o.id}`,
+												"aria-label": `Supprimer la commande ${o.id}`,
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" })
+											})]
 										})]
 									}, o.id))
 								})]
@@ -4179,126 +4305,192 @@ function PosApplicationPage() {
 					}),
 					activeTab === "kanban" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex-1 flex flex-col min-h-0 overflow-hidden",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex lg:hidden items-center gap-1.5 px-3 py-2 bg-[#12231e] border-b border-white/5 overflow-x-auto shrink-0 no-scrollbar",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#12231e] border-b border-white/10 shrink-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-2 flex-1 min-w-[200px]",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "relative flex-1 max-w-xs",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-3.5 h-3.5 text-[#8ea39b] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "text",
+												value: searchQuery,
+												onChange: (e) => setSearchQuery(e.target.value),
+												placeholder: "Rechercher n° commande, client, tél...",
+												className: "w-full rounded-xl bg-black/40 border border-white/15 pl-8 pr-8 py-1.5 text-xs text-white placeholder-[#8ea39b]/70 focus:outline-none focus:ring-2 focus:ring-[#ff705f]"
+											}),
+											searchQuery && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => setSearchQuery(""),
+												className: "absolute right-2.5 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-xs cursor-pointer",
+												title: "Effacer la recherche",
+												children: "✕"
+											})
+										]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "hidden sm:inline-flex items-center rounded-xl bg-black/30 border border-white/10 px-2.5 py-1 text-[11px] font-bold text-[#8ea39b]",
+										children: [
+											filteredOrders.length,
+											" commande",
+											filteredOrders.length > 1 ? "s" : ""
+										]
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									type: "button",
-									onClick: () => setKanbanMobileCol("all"),
-									className: `px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "all" ? "bg-white text-black shadow" : "bg-white/10 text-white/70 hover:bg-white/15"}`,
+									onClick: handleClearAllOrders,
+									disabled: orders.length === 0 || isDeleting,
+									className: "inline-flex items-center gap-1.5 rounded-xl bg-red-600/20 hover:bg-red-600/35 disabled:opacity-40 disabled:cursor-not-allowed text-red-300 border border-red-500/35 px-3 py-1.5 text-xs font-black transition active:scale-95 cursor-pointer shrink-0",
+									title: "Supprimer toutes les commandes affichées dans le POS",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Vider toutes les commandes" })]
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex lg:hidden items-center gap-1.5 px-3 py-2 bg-[#12231e] border-b border-white/5 overflow-x-auto shrink-0 no-scrollbar",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setKanbanMobileCol("all"),
+										className: `px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "all" ? "bg-white text-black shadow" : "bg-white/10 text-white/70 hover:bg-white/15"}`,
+										children: [
+											"Vue Défilante (",
+											newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
+											")"
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setKanbanMobileCol("new"),
+										className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "new" ? "bg-red-500 text-white shadow-lg shadow-red-500/40 ring-2 ring-white/30" : "bg-red-500/20 text-red-300 hover:bg-red-500/30"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-red-400" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "À Valider" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+												children: newOrdersList.length
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setKanbanMobileCol("preparing"),
+										className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "preparing" ? "bg-[#ff705f] text-white shadow-lg shadow-[#ff705f]/40 ring-2 ring-white/30" : "bg-[#ff705f]/20 text-[#ff8e80] hover:bg-[#ff705f]/30"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-[#ff705f]" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "En Préparation" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+												children: preparingOrdersList.length
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setKanbanMobileCol("ready"),
+										className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "ready" ? "bg-blue-500 text-white shadow-lg shadow-blue-500/40 ring-2 ring-white/30" : "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-blue-400" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Prêtes / Livraison" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+												children: readyOrdersList.length
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										type: "button",
+										onClick: () => setKanbanMobileCol("completed"),
+										className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "completed" ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-white/30" : "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"}`,
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-emerald-400" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Terminées" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
+												children: completedOrdersList.length
+											})
+										]
+									})
+								]
+							}),
+							orders.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex-1 flex items-center justify-center p-6",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "max-w-md w-full rounded-3xl bg-[#142822] border border-white/10 p-8 text-center space-y-3 shadow-xl",
 									children: [
-										"Vue Défilante (",
-										newOrdersList.length + preparingOrdersList.length + readyOrdersList.length,
-										")"
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setKanbanMobileCol("new"),
-									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "new" ? "bg-red-500 text-white shadow-lg shadow-red-500/40 ring-2 ring-white/30" : "bg-red-500/20 text-red-300 hover:bg-red-500/30"}`,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-red-400" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "À Valider" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
-											children: newOrdersList.length
-										})
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setKanbanMobileCol("preparing"),
-									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "preparing" ? "bg-[#ff705f] text-white shadow-lg shadow-[#ff705f]/40 ring-2 ring-white/30" : "bg-[#ff705f]/20 text-[#ff8e80] hover:bg-[#ff705f]/30"}`,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-[#ff705f]" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "En Préparation" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
-											children: preparingOrdersList.length
-										})
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setKanbanMobileCol("ready"),
-									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "ready" ? "bg-blue-500 text-white shadow-lg shadow-blue-500/40 ring-2 ring-white/30" : "bg-blue-500/20 text-blue-300 hover:bg-blue-500/30"}`,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-blue-400" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Prêtes / Livraison" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
-											children: readyOrdersList.length
-										})
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									type: "button",
-									onClick: () => setKanbanMobileCol("completed"),
-									className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black shrink-0 transition cursor-pointer ${kanbanMobileCol === "completed" ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/40 ring-2 ring-white/30" : "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"}`,
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-emerald-400" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Terminées" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "rounded-full bg-black/40 px-1.5 py-0.2 text-[10px]",
-											children: completedOrdersList.length
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/25",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Package, { className: "h-7 w-7" })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-lg font-black text-white",
+											children: "Aucune commande affichée"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-[#8ea39b] leading-relaxed",
+											children: "Toutes les commandes ont été supprimées ou il n'y a pas encore de commande en attente. Les nouvelles commandes web apparaîtront ici automatiquement."
 										})
 									]
 								})
-							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex-1 flex lg:grid lg:grid-cols-4 gap-3 p-2.5 sm:p-3 overflow-x-auto lg:overflow-hidden snap-x snap-mandatory min-h-0",
-							children: [
-								(kanbanMobileCol === "all" || kanbanMobileCol === "new") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "À Valider",
-									badgeCount: newOrdersList.length,
-									color: "bg-red-500",
-									orders: newOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onAcceptOrder: handleAcceptOrder,
-									onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
-									nextLabel: "Passer en Préparation",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-3.5 h-3.5" }),
-									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
-								}),
-								(kanbanMobileCol === "all" || kanbanMobileCol === "preparing") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "En Préparation",
-									badgeCount: preparingOrdersList.length,
-									color: "bg-[#ff705f]",
-									orders: preparingOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: (id) => handleUpdateStatus(id, "ready"),
-									nextLabel: "Prête / En Livraison",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-3.5 h-3.5" }),
-									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
-								}),
-								(kanbanMobileCol === "all" || kanbanMobileCol === "ready") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "Prêtes & En Livraison",
-									badgeCount: readyOrdersList.length,
-									color: "bg-blue-500",
-									orders: readyOrdersList,
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: (id) => handleUpdateStatus(id, "completed"),
-									nextLabel: "Terminer",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-3.5 h-3.5" }),
-									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
-								}),
-								(kanbanMobileCol === "all" || kanbanMobileCol === "completed") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
-									title: "Terminées",
-									badgeCount: completedOrdersList.length,
-									color: "bg-emerald-500",
-									orders: completedOrdersList.slice(0, 30),
-									onSelect: setSelectedOrder,
-									onReprint: handleManualReprint,
-									onNextStatus: () => {},
-									nextLabel: "Archivée",
-									nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3.5 h-3.5" }),
-									className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
-								})
-							]
-						})]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex-1 flex lg:grid lg:grid-cols-4 gap-3 p-2.5 sm:p-3 overflow-x-auto lg:overflow-hidden snap-x snap-mandatory min-h-0",
+								children: [
+									(kanbanMobileCol === "all" || kanbanMobileCol === "new") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+										title: "À Valider",
+										badgeCount: newOrdersList.length,
+										color: "bg-red-500",
+										orders: newOrdersList,
+										onSelect: setSelectedOrder,
+										onReprint: handleManualReprint,
+										onDeleteOrder: requestDeleteOrder,
+										onAcceptOrder: handleAcceptOrder,
+										onNextStatus: (id) => handleUpdateStatus(id, "preparing"),
+										nextLabel: "Passer en Préparation",
+										nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CookingPot, { className: "w-3.5 h-3.5" }),
+										className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+									}),
+									(kanbanMobileCol === "all" || kanbanMobileCol === "preparing") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+										title: "En Préparation",
+										badgeCount: preparingOrdersList.length,
+										color: "bg-[#ff705f]",
+										orders: preparingOrdersList,
+										onSelect: setSelectedOrder,
+										onReprint: handleManualReprint,
+										onDeleteOrder: requestDeleteOrder,
+										onNextStatus: (id) => handleUpdateStatus(id, "ready"),
+										nextLabel: "Prête / En Livraison",
+										nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheckBig, { className: "w-3.5 h-3.5" }),
+										className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+									}),
+									(kanbanMobileCol === "all" || kanbanMobileCol === "ready") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+										title: "Prêtes & En Livraison",
+										badgeCount: readyOrdersList.length,
+										color: "bg-blue-500",
+										orders: readyOrdersList,
+										onSelect: setSelectedOrder,
+										onReprint: handleManualReprint,
+										onDeleteOrder: requestDeleteOrder,
+										onNextStatus: (id) => handleUpdateStatus(id, "completed"),
+										nextLabel: "Terminer",
+										nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Truck, { className: "w-3.5 h-3.5" }),
+										className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+									}),
+									(kanbanMobileCol === "all" || kanbanMobileCol === "completed") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KanbanColumn, {
+										title: "Terminées",
+										badgeCount: completedOrdersList.length,
+										color: "bg-emerald-500",
+										orders: completedOrdersList.slice(0, 30),
+										onSelect: setSelectedOrder,
+										onReprint: handleManualReprint,
+										onDeleteOrder: requestDeleteOrder,
+										onNextStatus: () => {},
+										nextLabel: "Archivée",
+										nextIcon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3.5 h-3.5" }),
+										className: `${kanbanMobileCol === "all" ? "w-[85vw] sm:w-[340px] shrink-0 snap-center" : "w-full flex-1"} lg:w-auto lg:shrink`
+									})
+								]
+							})
+						]
 					}),
 					activeTab === "stock" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex-1 flex flex-col min-h-0 bg-[#0d1a16] p-3 sm:p-6 overflow-hidden",
@@ -4985,16 +5177,19 @@ function PosApplicationPage() {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "pt-4 flex gap-3",
+								className: "pt-4 flex flex-wrap gap-3",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
 									onClick: handleCreateTestOrder,
 									disabled: creatingTestOrder,
-									className: "rounded-2xl bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 text-xs font-bold",
+									className: "rounded-2xl bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white px-4 py-2.5 text-xs font-bold cursor-pointer",
 									children: "Générer une commande test de livraison"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
 									onClick: handleClearAllOrders,
-									className: "rounded-2xl bg-red-600/20 hover:bg-red-600/40 text-red-300 border border-red-500/30 px-4 py-2.5 text-xs font-bold",
-									children: "Vider toutes les commandes"
+									disabled: orders.length === 0 || isDeleting,
+									className: "inline-flex items-center gap-1.5 rounded-2xl bg-red-600/20 hover:bg-red-600/40 disabled:opacity-40 disabled:cursor-not-allowed text-red-300 border border-red-500/30 px-4 py-2.5 text-xs font-bold cursor-pointer",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Vider toutes les commandes" })]
 								})]
 							})
 						]
@@ -5229,18 +5424,29 @@ function PosApplicationPage() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "border-t border-white/10 px-4 sm:px-6 py-3 bg-[#11221c] flex items-center gap-2 shrink-0",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								type: "button",
-								onClick: () => handleManualReprint(selectedOrder.id),
-								disabled: printingOrderId === selectedOrder.id,
-								className: "flex-1 rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3 px-4 text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-lg cursor-pointer",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Imprimer Ticket (80mm)" })]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								onClick: () => setSelectedOrder(null),
-								className: "rounded-2xl bg-white/10 hover:bg-white/20 text-white px-5 py-3 text-xs sm:text-sm font-bold transition cursor-pointer",
-								children: "Fermer"
-							})]
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => requestDeleteOrder(selectedOrder),
+									className: "rounded-2xl bg-red-600/20 hover:bg-red-600/35 text-red-300 border border-red-500/30 p-3 transition cursor-pointer shrink-0",
+									title: "Supprimer cette commande",
+									"aria-label": `Supprimer la commande ${selectedOrder.id}`,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => handleManualReprint(selectedOrder.id),
+									disabled: printingOrderId === selectedOrder.id,
+									className: "flex-1 rounded-2xl bg-[#ff705f] hover:bg-[#ff5a47] disabled:opacity-60 text-white py-3 px-4 text-xs sm:text-sm font-black transition flex items-center justify-center gap-2 shadow-lg cursor-pointer",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Imprimer Ticket (80mm)" })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => setSelectedOrder(null),
+									className: "rounded-2xl bg-white/10 hover:bg-white/20 text-white px-5 py-3 text-xs sm:text-sm font-bold transition cursor-pointer",
+									children: "Fermer"
+								})
+							]
 						})
 					]
 				})
@@ -5295,11 +5501,93 @@ function PosApplicationPage() {
 						})
 					]
 				})
+			}),
+			deleteConfirm && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-xs p-4",
+				onClick: () => !isDeleting && setDeleteConfirm(null),
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "w-full max-w-md rounded-3xl bg-[#142822] border border-red-500/35 p-6 space-y-4 text-white text-center shadow-2xl",
+					onClick: (e) => e.stopPropagation(),
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/20 text-red-400 border border-red-500/30",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "h-7 w-7" })
+						}),
+						deleteConfirm.type === "single" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+							className: "text-lg sm:text-xl font-black text-white",
+							children: [
+								"Supprimer la commande ",
+								deleteConfirm.order.id,
+								" ?"
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-xs text-[#8ea39b] leading-relaxed",
+							children: [
+								"Client : ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+									className: "text-white",
+									children: deleteConfirm.order.customer.name
+								}),
+								" ·",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", {
+									className: "text-white",
+									children: [deleteConfirm.order.total.toFixed(2), " €"]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
+								"Cette commande sera supprimée définitivement du POS et de la base de données. Les autres commandes restent intactes."
+							]
+						})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-lg sm:text-xl font-black text-white",
+							children: "Vider toutes les commandes ?"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-xs text-[#8ea39b] leading-relaxed",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+									className: "text-red-300",
+									children: "Voulez-vous vraiment supprimer toutes les commandes ? Cette action est irréversible."
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "inline-block mt-1",
+									children: [
+										deleteConfirm.count,
+										" commande",
+										deleteConfirm.count > 1 ? "s" : "",
+										" affichée",
+										deleteConfirm.count > 1 ? "s" : "",
+										" sera",
+										deleteConfirm.count > 1 ? "ont" : "",
+										" supprimée",
+										deleteConfirm.count > 1 ? "s" : "",
+										". Les stocks, paramètres et relevés kilométriques restent conservés."
+									]
+								})
+							]
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col sm:flex-row gap-2.5 pt-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								disabled: isDeleting,
+								onClick: () => setDeleteConfirm(null),
+								className: "flex-1 rounded-2xl bg-white/10 hover:bg-white/20 disabled:opacity-50 py-3 text-xs font-black uppercase tracking-wider text-white transition cursor-pointer",
+								children: "Annuler"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								disabled: isDeleting,
+								onClick: executeConfirmedDelete,
+								className: "flex-1 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 disabled:opacity-60 py-3 text-xs font-black uppercase tracking-wider text-white shadow-lg shadow-red-600/30 transition active:scale-95 cursor-pointer",
+								children: isDeleting ? "Suppression..." : deleteConfirm.type === "single" ? "Supprimer" : "Confirmer et vider"
+							})]
+						})
+					]
+				})
 			})
 		]
 	}) });
 }
-function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, onAcceptOrder, onNextStatus, nextLabel, nextIcon, className = "" }) {
+function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, onDeleteOrder, onAcceptOrder, onNextStatus, nextLabel, nextIcon, className = "" }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: `flex flex-col rounded-2xl bg-[#142822] border border-white/10 overflow-hidden min-h-0 h-full ${className}`,
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -5316,9 +5604,9 @@ function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, o
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "flex-1 overflow-y-auto p-2 sm:p-2.5 space-y-2.5 min-h-0",
-			children: orders.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "flex h-32 items-center justify-center text-xs font-bold text-[#62776f]",
-				children: "Aucune commande"
+			children: orders.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col h-32 items-center justify-center gap-1.5 text-xs font-bold text-[#62776f]",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Package, { className: "w-5 h-5 opacity-50" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Aucune commande" })]
 			}) : orders.map((o) => {
 				const isUnaccepted = !o.acceptedAt && [
 					"paid",
@@ -5374,37 +5662,48 @@ function KanbanColumn({ title, badgeCount, color, orders, onSelect, onReprint, o
 							children: ["! ", o.customer.notes]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "pt-1.5 flex items-center gap-2 border-t border-white/10",
+							className: "pt-1.5 flex items-center gap-1.5 border-t border-white/10",
 							onClick: (e) => e.stopPropagation(),
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								onClick: () => onReprint(o.id),
-								className: "rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition shrink-0 cursor-pointer",
-								title: "Réimprimer le ticket",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5" })
-							}), isUnaccepted && onAcceptOrder ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								type: "button",
-								onClick: () => onAcceptOrder(o),
-								className: "flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2 px-2 text-xs font-black text-white active:scale-95 transition shadow-lg animate-pulse cursor-pointer truncate",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-3.5 h-3.5 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "truncate",
-									children: "ACCEPTER"
-								})]
-							}) : o.status === "completed" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flex-1 text-center py-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20",
-								children: "✓ Archivée"
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								type: "button",
-								onClick: () => onNextStatus(o.id),
-								className: "flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 px-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition cursor-pointer truncate",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "shrink-0",
-									children: nextIcon
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "truncate",
-									children: nextLabel
-								})]
-							})]
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => onReprint(o.id),
+									className: "rounded-xl bg-white/10 p-2 text-[#8ea39b] hover:text-white hover:bg-white/20 transition shrink-0 cursor-pointer",
+									title: "Réimprimer le ticket",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-3.5 h-3.5" })
+								}),
+								isUnaccepted && onAcceptOrder ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => onAcceptOrder(o),
+									className: "flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2 px-2 text-xs font-black text-white active:scale-95 transition shadow-lg animate-pulse cursor-pointer truncate",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-3.5 h-3.5 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "truncate",
+										children: "ACCEPTER"
+									})]
+								}) : o.status === "completed" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "flex-1 text-center py-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20",
+									children: "✓ Archivée"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => onNextStatus(o.id),
+									className: "flex-1 min-w-0 flex items-center justify-center gap-1.5 rounded-xl bg-[#ff705f] py-2 px-2 text-xs font-black text-white hover:bg-[#ff5a47] active:scale-95 transition cursor-pointer truncate",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "shrink-0",
+										children: nextIcon
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "truncate",
+										children: nextLabel
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => onDeleteOrder(o),
+									className: "rounded-xl bg-red-500/10 p-2 text-red-400/80 hover:text-red-300 hover:bg-red-500/25 border border-red-500/20 transition shrink-0 cursor-pointer",
+									title: `Supprimer la commande ${o.id}`,
+									"aria-label": `Supprimer la commande ${o.id}`,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-3.5 h-3.5" })
+								})
+							]
 						})
 					]
 				}, o.id);

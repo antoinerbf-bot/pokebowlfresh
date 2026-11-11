@@ -2,7 +2,7 @@ import { i as __toESM } from "../_runtime.mjs";
 import { r as catalogLabels } from "./stock-store-CCPbgyY-.mjs";
 import { n as require_react } from "../_libs/@radix-ui/react-compose-refs+[...].mjs";
 import { n as require_jsx_runtime } from "../_libs/radix-ui__react-context+react.mjs";
-import { C as RefreshCw, F as LoaderCircle, g as Shield } from "../_libs/lucide-react.mjs";
+import { C as RefreshCw, I as LoaderCircle, g as Shield } from "../_libs/lucide-react.mjs";
 import { n as resetStock, r as setStockItem, t as getStock } from "./stock-B4lq5nRy.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/stocks-u0qhEZeQ.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

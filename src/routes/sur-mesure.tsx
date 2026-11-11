@@ -81,13 +81,7 @@ function SurMesurePage() {
   // Form State
   const [selectedSize, setSelectedSize] = React.useState<"moyen" | "grand">("moyen");
   const [selectedBase, setSelectedBase] = React.useState<CustomIngredientOption | null>(detailedBases[0] ?? null);
-  const [mixinQuantities, setMixinQuantities] = React.useState<Record<string, number>>({
-    Avocat: 1,
-    Mangue: 1,
-    Edamame: 1,
-    "Salade d'algues": 1,
-    Maïs: 1,
-  });
+  const [mixinQuantities, setMixinQuantities] = React.useState<Record<string, number>>({});
   const [selectedProtein, setSelectedProtein] = React.useState<CustomIngredientOption | null>(detailedProteins[0] ?? null);
   const [extraProteins, setExtraProteins] = React.useState<Record<string, number>>({});
   const [sauceQuantities, setSauceQuantities] = React.useState<Record<string, number>>({});
@@ -254,16 +248,15 @@ function SurMesurePage() {
     .filter(([, q]) => q > 0)
     .map(([name, q]) => (q > 1 ? `${name} (x${q})` : name));
 
-  // Validation
+  // Validation (les légumes / mix-ins sont entièrement libres : 0, 1 ou plusieurs)
   const isBaseReady = selectedBase !== null;
-  const isMixInsReady = totalMixInUnits >= 1;
+  const isMixInsReady = totalMixInUnits >= 0;
   const isProteinReady = selectedProtein !== null;
   const isSauceReady = true; // Sauces are optional (can be "Sans sauce" or selected)
   const isValid = isBaseReady && isMixInsReady && isProteinReady;
 
   const getMissingReason = () => {
     if (!isBaseReady) return "Étape 1 : Choisis une base";
-    if (!isMixInsReady) return "Étape 2 : Sélectionne au moins 1 légume ou mix-in";
     if (!isProteinReady) return "Étape 3 : Choisis une protéine";
     return null;
   };
@@ -295,7 +288,9 @@ function SurMesurePage() {
       `Base : ${selectedBase.name}`,
       `Protéine : ${selectedProtein.name}${mainProteinExtra > 0 ? ` (+${mainProteinExtra.toFixed(2)}€)` : ""}`,
       ...extraProteinLines,
-      `Mix-ins : ${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`,
+      mixinsFormatted.length > 0
+        ? `Mix-ins : ${mixinsFormatted.join(", ")}${extraMixInsCount > 0 ? ` (+${mixInsExtra.toFixed(2)}€)` : ""}`
+        : "Mix-ins : Aucun légume",
       `Sauce : ${mainSauceName}`,
       ...extraSauceLines,
       ...(toppingsFormatted.length > 0
@@ -489,8 +484,8 @@ function SurMesurePage() {
                         !isAvailable
                           ? "border-red-300/40 bg-gray-100 opacity-60 cursor-not-allowed"
                           : isSelected
-                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm cursor-pointer"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40 cursor-pointer",
+                            ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm cursor-pointer"
+                            : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40 cursor-pointer",
                       ].join(" ")}
                     >
                       <span className="text-2xl">{base.emoji}</span>
@@ -548,8 +543,8 @@ function SurMesurePage() {
                         <div
                           key={idx}
                           className={`flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm transition-all ${emoji
-                              ? "bg-white border-[#ff705f] shadow-sm scale-105"
-                              : "bg-[#FAF5EE]/60 border-dashed border-[#C8B296] text-[10px] font-bold text-[#8A7665]"
+                            ? "bg-white border-[#ff705f] shadow-sm scale-105"
+                            : "bg-[#FAF5EE]/60 border-dashed border-[#C8B296] text-[10px] font-bold text-[#8A7665]"
                             }`}
                         >
                           {emoji || idx + 1}
@@ -577,8 +572,8 @@ function SurMesurePage() {
                         !isAvailable
                           ? "border-red-300/40 bg-gray-100 opacity-60"
                           : q > 0
-                          ? "border-[#ff705f] bg-white shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:bg-[#F3E9DA]",
+                            ? "border-[#ff705f] bg-white shadow-sm"
+                            : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:bg-[#F3E9DA]",
                       ].join(" ")}
                     >
                       <button
@@ -596,12 +591,12 @@ function SurMesurePage() {
                             {!isAvailable
                               ? "Victime du succès"
                               : isFeta
-                              ? "+1,00 € / portion"
-                              : q > 0
-                                ? `${q} portion${q > 1 ? "s" : ""}`
-                                : nonFetaUnits < INCLUDED_MIX_INS
-                                  ? "Inclus (5 max)"
-                                  : "+1,00 €"}
+                                ? "+1,00 € / portion"
+                                : q > 0
+                                  ? `${q} portion${q > 1 ? "s" : ""}`
+                                  : nonFetaUnits < INCLUDED_MIX_INS
+                                    ? "Inclus (5 max)"
+                                    : "+1,00 €"}
                           </span>
                         </div>
                       </button>
@@ -663,8 +658,8 @@ function SurMesurePage() {
                         !isAvailable
                           ? "border-red-300/40 bg-gray-100 opacity-60 cursor-not-allowed"
                           : isSelected
-                          ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm cursor-pointer"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40 cursor-pointer",
+                            ? "border-[#ff705f] bg-[#FFF3EF] shadow-sm cursor-pointer"
+                            : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40 cursor-pointer",
                       ].join(" ")}
                     >
                       <span className="text-3xl mb-1">{prot.emoji}</span>
@@ -712,13 +707,12 @@ function SurMesurePage() {
                     return (
                       <div
                         key={`extra-${prot.id}`}
-                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${
-                          !isAvailable
+                        className={`flex items-center justify-between rounded-xl border-2 p-3 transition ${!isAvailable
                             ? "border-red-300/40 bg-gray-100 opacity-60"
                             : q > 0
-                            ? "border-[#ff705f] bg-white shadow-sm"
-                            : "border-[#DECBB3] bg-[#FAF5EE]"
-                        }`}
+                              ? "border-[#ff705f] bg-white shadow-sm"
+                              : "border-[#DECBB3] bg-[#FAF5EE]"
+                          }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <span className="text-xl">{prot.emoji}</span>
@@ -807,13 +801,12 @@ function SurMesurePage() {
                   return (
                     <div
                       key={sauce.id}
-                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${
-                        !isAvailable
+                      className={`group relative flex flex-col justify-between rounded-2xl border-2 p-3 transition-all duration-150 ${!isAvailable
                           ? "border-red-300/40 bg-gray-100 opacity-60"
                           : isSelected
-                          ? "border-[#ff705f] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ff705f]/25"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/50 hover:bg-white"
-                      }`}
+                            ? "border-[#ff705f] bg-[#FFF5F2] shadow-sm ring-1 ring-[#ff705f]/25"
+                            : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#ff705f]/50 hover:bg-white"
+                        }`}
                     >
                       {/* Haut : Icône sauce + Badge profil goût */}
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -826,8 +819,8 @@ function SurMesurePage() {
                           </span>
                         ) : sauce.badge && (
                           <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${isSelected
-                              ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
-                              : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
+                            ? "bg-[#ff705f]/15 text-[#c0350f] border-[#ff705f]/30"
+                            : "bg-[#FAF5EE] text-[#7A6857] border-[#DECBB3]"
                             }`}>
                             {sauce.badge}
                           </span>
@@ -851,18 +844,17 @@ function SurMesurePage() {
 
                       {/* Bas : Tarif & Stepper stable (hauteur constante) */}
                       <div className="flex items-center justify-between pt-2 border-t border-[#DECBB3]/50 mt-auto">
-                        <span className={`text-[11px] font-black ${
-                          !isAvailable ? "text-red-500 font-bold" : isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
-                        }`}>
+                        <span className={`text-[11px] font-black ${!isAvailable ? "text-red-500 font-bold" : isSelected ? "text-[#ff705f]" : "text-[#7A6857]"
+                          }`}>
                           {!isAvailable
                             ? "Victime de son succès"
                             : count === 0
-                            ? totalSauceUnits <= 1
-                              ? "1ère offerte"
-                              : "+0,50 €"
-                            : count === 1 && totalSauceUnits === 1
-                              ? "Offerte (0 €)"
-                              : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
+                              ? totalSauceUnits <= 1
+                                ? "1ère offerte"
+                                : "+0,50 €"
+                              : count === 1 && totalSauceUnits === 1
+                                ? "Offerte (0 €)"
+                                : `${count}x (+${(count * 0.50).toFixed(2)}€)`}
                         </span>
 
                         {isAvailable && (
@@ -942,8 +934,8 @@ function SurMesurePage() {
                         !isAvailable
                           ? "border-red-300/40 bg-gray-100 opacity-60"
                           : isSelected
-                          ? "border-[#ff705f] bg-white shadow-sm"
-                          : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
+                            ? "border-[#ff705f] bg-white shadow-sm"
+                            : "border-[#DECBB3] bg-[#F3E9DA]/50 hover:border-[#2C1D16]/40",
                       ].join(" ")}
                     >
                       <div className="flex items-center gap-2.5">

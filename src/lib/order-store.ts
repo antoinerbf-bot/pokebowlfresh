@@ -29,7 +29,12 @@ function isPostgresConfigured(): boolean {
 const memoryOrders = new Map<string, Order>();
 let lastLoadedTime = 0;
 
-function getStoreCandidatePaths(): string[] {
+interface DeletedOrdersTombstone {
+  deletedIds: string[];
+  clearedAtMs?: number;
+}
+
+function getCandidatePathsForFile(filename: string): string[] {
   const candidateDirs = [
     process.env.ORDERS_DATA_DIR,
     "/home/puzo3938/pokenbowl.be",
@@ -37,31 +42,86 @@ function getStoreCandidatePaths(): string[] {
     "/tmp",
   ].filter(Boolean) as string[];
 
+  const seen = new Set<string>();
   const paths: string[] = [];
   for (const dir of candidateDirs) {
     try {
-      paths.push(path.join(dir, "pokenbowl-orders.json"));
-    } catch {}
+      const fullPath = path.join(dir, filename);
+      if (!seen.has(fullPath)) {
+        seen.add(fullPath);
+        paths.push(fullPath);
+      }
+    } catch { }
   }
   return paths;
 }
 
-function getStoreFilePath(): string {
-  const candidates = getStoreCandidatePaths();
-  // 1. Si le fichier existe déjà dans l'un des dossiers, le réutiliser
-  for (const p of candidates) {
+function getStoreCandidatePaths(): string[] {
+  return getCandidatePathsForFile("pokenbowl-orders.json");
+}
+
+function getDeletedTombstonePaths(): string[] {
+  return getCandidatePathsForFile("pokenbowl-deleted-orders.json");
+}
+
+function loadDeletedTombstones(): DeletedOrdersTombstone {
+  const mergedIds = new Set<string>();
+  let maxClearedAtMs = 0;
+
+  for (const filePath of getDeletedTombstonePaths()) {
     try {
-      if (fs.existsSync(p)) return p;
-    } catch {}
+      if (!fs.existsSync(filePath)) continue;
+      const raw = fs.readFileSync(filePath, "utf-8");
+      if (!raw) continue;
+      const parsed = JSON.parse(raw) as Partial<DeletedOrdersTombstone>;
+      if (Array.isArray(parsed.deletedIds)) {
+        for (const id of parsed.deletedIds) {
+          if (typeof id === "string" && id.trim()) {
+            mergedIds.add(id.trim().toLowerCase());
+          }
+        }
+      }
+      if (typeof parsed.clearedAtMs === "number" && parsed.clearedAtMs > maxClearedAtMs) {
+        maxClearedAtMs = parsed.clearedAtMs;
+      }
+    } catch { }
   }
-  // 2. Sinon chercher le premier dossier parent existant
-  for (const p of candidates) {
+
+  return {
+    deletedIds: Array.from(mergedIds).slice(-500),
+    clearedAtMs: maxClearedAtMs || undefined,
+  };
+}
+
+function saveDeletedTombstones(data: DeletedOrdersTombstone): void {
+  const normalized: DeletedOrdersTombstone = {
+    deletedIds: Array.from(new Set(data.deletedIds.map((s) => s.trim().toLowerCase()).filter(Boolean))).slice(-500),
+    ...(data.clearedAtMs ? { clearedAtMs: data.clearedAtMs } : {}),
+  };
+  const jsonStr = JSON.stringify(normalized, null, 2);
+
+  for (const filePath of getDeletedTombstonePaths()) {
     try {
-      const dir = path.dirname(p);
-      if (fs.existsSync(dir)) return p;
-    } catch {}
+      const dir = path.dirname(filePath);
+      if (fs.existsSync(dir)) {
+        fs.writeFileSync(filePath, jsonStr, "utf-8");
+      }
+    } catch { }
   }
-  return path.join(process.cwd(), "pokenbowl-orders.json");
+}
+
+function isOrderDeletedByTombstone(order: Order, tombstones: DeletedOrdersTombstone): boolean {
+  const idLower = (order.id ?? "").trim().toLowerCase();
+  const dtLower = (order.deliveryToken ?? "").trim().toLowerCase();
+  if (idLower && tombstones.deletedIds.includes(idLower)) return true;
+  if (dtLower && tombstones.deletedIds.includes(dtLower)) return true;
+  if (tombstones.clearedAtMs && order.createdAt) {
+    const createdMs = new Date(order.createdAt).getTime();
+    if (!isNaN(createdMs) && createdMs <= tombstones.clearedAtMs) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function loadLocalOrders(force = false): void {
@@ -72,26 +132,41 @@ export function loadLocalOrders(force = false): void {
   }
   lastLoadedTime = now;
 
+  const tombstones = loadDeletedTombstones();
   const candidates = getStoreCandidatePaths();
-  for (const filePath of candidates) {
+  const existingFiles: Array<{ filePath: string; mtimeMs: number; priority: number }> = [];
+
+  candidates.forEach((filePath, idx) => {
     try {
       if (fs.existsSync(filePath)) {
-        const raw = fs.readFileSync(filePath, "utf-8");
-        if (raw && raw.trim().length > 2) {
-          const list = JSON.parse(raw);
-          if (Array.isArray(list)) {
-            for (const item of list) {
-              if (item?.id) {
-                const existing = memoryOrders.get(item.id);
-                if (!existing || item.status !== existing.status || item.deliveryToken || !existing.deliveryToken) {
-                  memoryOrders.set(item.id, item);
-                }
-              }
+        const stat = fs.statSync(filePath);
+        existingFiles.push({ filePath, mtimeMs: stat.mtimeMs, priority: idx });
+      }
+    } catch { }
+  });
+
+  // Lire le fichier valide le plus récent (y compris "[]" après suppression)
+  existingFiles.sort((a, b) => {
+    if (Math.abs(b.mtimeMs - a.mtimeMs) > 1) return b.mtimeMs - a.mtimeMs;
+    return a.priority - b.priority;
+  });
+
+  for (const { filePath } of existingFiles) {
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      if (raw && raw.trim().length >= 2) {
+        const list = JSON.parse(raw);
+        if (Array.isArray(list)) {
+          memoryOrders.clear();
+          for (const item of list) {
+            if (item?.id && !isOrderDeletedByTombstone(item, tombstones)) {
+              memoryOrders.set(item.id, item);
             }
           }
+          return;
         }
       }
-    } catch (err) {
+    } catch {
       // Ignorer les erreurs individuelles de lecture
     }
   }
@@ -109,13 +184,13 @@ export function saveLocalOrders(): void {
         if (fs.existsSync(dir)) {
           fs.writeFileSync(filePath, jsonStr, "utf-8");
         }
-      } catch {}
+      } catch { }
     }
 
     // Sauvegarde miroir ultra-fiable dans /tmp (accessible par tous les workers Passenger)
     try {
       fs.writeFileSync("/tmp/pokenbowl-orders.json", jsonStr, "utf-8");
-    } catch {}
+    } catch { }
   } catch (err) {
     console.error("[OrderStore] Échec sauvegarde fichier local commandes:", err);
   }
@@ -304,8 +379,10 @@ export async function getOrderByDeliveryToken(token: string): Promise<Order | un
 
 export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
   loadLocalOrders(true);
+  const tombstones = loadDeletedTombstones();
   if (!isPostgresConfigured()) {
     return Array.from(memoryOrders.values())
+      .filter((o) => !isOrderDeletedByTombstone(o, tombstones))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit);
   }
@@ -321,13 +398,32 @@ export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
       ORDER BY created_at DESC
       LIMIT ${limit}
     `) as DbRow[];
-    // PostgreSQL is the primary store, but include locally persisted orders too.
-    // This prevents an order saved locally from disappearing from the POS if the
-    // database insert failed or the DB is temporarily behind.
+    // PostgreSQL is the primary store, but include locally persisted orders and custom POS fields too.
+    // Tombstones guarantee deleted orders never resurrect across Passenger workers or replicas.
     const merged = new Map<string, Order>();
-    for (const row of rows.map(rowToOrder)) merged.set(row.id, row);
+    for (const row of rows.map(rowToOrder)) {
+      if (isOrderDeletedByTombstone(row, tombstones)) continue;
+      const localMem = memoryOrders.get(row.id);
+      merged.set(
+        row.id,
+        localMem
+          ? {
+            ...row,
+            acceptedAt: localMem.acceptedAt ?? row.acceptedAt,
+            delayMinutes: localMem.delayMinutes ?? row.delayMinutes,
+            delayedAt: localMem.delayedAt ?? row.delayedAt,
+            estimatedDeliveryTime: localMem.estimatedDeliveryTime ?? row.estimatedDeliveryTime,
+            driverId: localMem.driverId ?? row.driverId,
+            driverName: localMem.driverName ?? row.driverName,
+            distanceKm: localMem.distanceKm ?? row.distanceKm,
+          }
+          : row,
+      );
+    }
     for (const order of memoryOrders.values()) {
-      if (!merged.has(order.id)) merged.set(order.id, order);
+      if (!merged.has(order.id) && !isOrderDeletedByTombstone(order, tombstones)) {
+        merged.set(order.id, order);
+      }
     }
     return Array.from(merged.values())
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -335,6 +431,7 @@ export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
   } catch (err) {
     console.error("[OrderStore] Erreur listOrdersFromStore Postgres, fallback local:", err);
     return Array.from(memoryOrders.values())
+      .filter((o) => !isOrderDeletedByTombstone(o, tombstones))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit);
   }
@@ -343,6 +440,18 @@ export async function listOrdersFromStore(limit = 200): Promise<Order[]> {
 export async function upsertOrder(order: Order): Promise<void> {
   // Sauvegarde locale systématique (partagée entre tous les workers Passenger)
   loadLocalOrders(true);
+  const tombstones = loadDeletedTombstones();
+  const idLower = (order.id ?? "").trim().toLowerCase();
+  const dtLower = (order.deliveryToken ?? "").trim().toLowerCase();
+  if (
+    tombstones.deletedIds.includes(idLower) ||
+    (dtLower && tombstones.deletedIds.includes(dtLower))
+  ) {
+    tombstones.deletedIds = tombstones.deletedIds.filter(
+      (id) => id !== idLower && (!dtLower || id !== dtLower),
+    );
+    saveDeletedTombstones(tombstones);
+  }
   memoryOrders.set(order.id, { ...order });
   saveLocalOrders();
 
@@ -454,16 +563,67 @@ export async function updateOrderCustomFields(
           SET status = ${fields.status}
           WHERE id = ${order.id}
         `;
-      } catch {}
+      } catch { }
     }
     return order;
   }
   return undefined;
 }
 
+export async function deleteOrderFromStore(orderId: string): Promise<boolean> {
+  const cleanId = (orderId ?? "").trim();
+  if (!cleanId) return false;
+  const lowerId = cleanId.toLowerCase();
+
+  loadLocalOrders(true);
+  const removedIds: string[] = [cleanId];
+  let removedLocally = false;
+
+  for (const [key, order] of Array.from(memoryOrders.entries())) {
+    const kLower = key.toLowerCase();
+    const dtLower = (order.deliveryToken ?? "").trim().toLowerCase();
+    if (key === cleanId || kLower === lowerId || (dtLower && dtLower === lowerId)) {
+      removedIds.push(key);
+      if (order.deliveryToken) removedIds.push(order.deliveryToken);
+      memoryOrders.delete(key);
+      removedLocally = true;
+    }
+  }
+
+  const tombstones = loadDeletedTombstones();
+  tombstones.deletedIds = [...tombstones.deletedIds, ...removedIds];
+  saveDeletedTombstones(tombstones);
+
+  lastLoadedTime = Date.now();
+  saveLocalOrders();
+
+  let removedDb = false;
+  if (isPostgresConfigured()) {
+    await ensureSchema();
+    const sql = getSql();
+    const deletedRows = (await sql`
+      DELETE FROM orders
+      WHERE id = ${cleanId}
+         OR delivery_token = ${cleanId}
+         OR LOWER(id) = ${lowerId}
+         OR LOWER(delivery_token) = ${lowerId}
+      RETURNING id
+    `) as { id: string }[];
+    removedDb = deletedRows.length > 0;
+  }
+
+  return removedLocally || removedDb;
+}
+
 export async function clearAllOrdersFromStore(): Promise<number> {
   loadLocalOrders(true);
-  const count = memoryOrders.size;
+  const existingKeys = Array.from(memoryOrders.keys());
+  let count = memoryOrders.size;
+
+  const tombstones = loadDeletedTombstones();
+  tombstones.deletedIds = [...tombstones.deletedIds, ...existingKeys];
+  saveDeletedTombstones(tombstones);
+
   memoryOrders.clear();
   lastLoadedTime = Date.now();
   saveLocalOrders();
@@ -474,25 +634,25 @@ export async function clearAllOrdersFromStore(): Promise<number> {
       if (fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, "[]", "utf-8");
       }
-    } catch {}
+    } catch { }
   }
 
   // Miroir /tmp
   try {
     fs.writeFileSync("/tmp/pokenbowl-orders.json", "[]", "utf-8");
-  } catch {}
+  } catch { }
 
   if (isPostgresConfigured()) {
     try {
       await ensureSchema();
       const sql = getSql();
-      await sql`TRUNCATE TABLE orders CASCADE`;
+      const deletedRows = (await sql`DELETE FROM orders RETURNING id`) as { id: string }[];
+      count = Math.max(count, deletedRows.length);
     } catch (err) {
-      console.error("[OrderStore] Erreur TRUNCATE orders Postgres:", err);
-      try {
-        const sql = getSql();
-        await sql`DELETE FROM orders`;
-      } catch {}
+      console.error("[OrderStore] Erreur DELETE orders Postgres:", err);
+      await ensureSchema();
+      const sql = getSql();
+      await sql`TRUNCATE TABLE orders CASCADE`;
     }
   }
 

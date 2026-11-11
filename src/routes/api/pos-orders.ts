@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { listOrdersFromStore, updateOrderStatus, acknowledgePrint, clearAllOrdersFromStore } from "../../lib/order-store";
+import {
+  listOrdersFromStore,
+  updateOrderStatus,
+  acknowledgePrint,
+  deleteOrderFromStore,
+  clearAllOrdersFromStore,
+} from "../../lib/order-store";
 
 function isAuthorizedPosRequest(request: Request, bodyPin?: string): boolean {
   const expectedPin = process.env["POS_PIN"] ?? "1234";
@@ -84,20 +90,57 @@ export const Route = createFileRoute("/api/pos-orders")({
       },
       DELETE: async ({ request }) => {
         try {
-          if (!isAuthorizedPosRequest(request)) {
+          let body: { orderId?: string; pin?: string } = {};
+          try {
+            const contentType = request.headers.get("content-type") || "";
+            if (contentType.includes("application/json")) {
+              body = (await request.json()) ?? {};
+            }
+          } catch { }
+
+          if (!isAuthorizedPosRequest(request, body.pin)) {
             return new Response(
               JSON.stringify({ success: false, error: "Code PIN POS requis" }),
               { status: 401, headers: { "Content-Type": "application/json" } },
             );
           }
+
+          const url = new URL(request.url);
+          const orderId = (url.searchParams.get("orderId") ?? body.orderId ?? "").trim();
+
+          if (orderId) {
+            const deleted = await deleteOrderFromStore(orderId);
+            return new Response(
+              JSON.stringify({
+                success: true,
+                deleted,
+                orderId,
+                message: `Commande ${orderId} supprimée avec succès`,
+              }),
+              {
+                status: 200,
+                headers: {
+                  "Content-Type": "application/json",
+                  "Cache-Control": "no-store",
+                },
+              },
+            );
+          }
+
           const deletedCount = await clearAllOrdersFromStore();
           return new Response(
             JSON.stringify({
               success: true,
-              message: "Toutes les anciennes commandes ont été effacées avec succès",
+              message: "Toutes les commandes ont été effacées avec succès",
               deletedCount,
             }),
-            { status: 200, headers: { "Content-Type": "application/json" } },
+            {
+              status: 200,
+              headers: {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-store",
+              },
+            },
           );
         } catch (err: any) {
           return new Response(

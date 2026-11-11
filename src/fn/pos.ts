@@ -7,6 +7,7 @@ import {
   requestOrderReprint,
   acknowledgePrint,
   upsertOrder,
+  deleteOrderFromStore,
   clearAllOrdersFromStore,
   updateOrderCustomFields,
 } from "../lib/order-store";
@@ -27,6 +28,16 @@ export const getPosOrders = createServerFn({ method: "POST" })
 
     const orders = await listOrdersFromStore(100);
     return { orders };
+  });
+
+export const deletePosOrder = createServerFn({ method: "POST" })
+  .validator(z.object({ pin: z.string().optional(), orderId: z.string().min(1) }))
+  .handler(async ({ data }) => {
+    if (!verifyPin(data.pin)) {
+      throw new Error("Code PIN invalide.");
+    }
+    const deleted = await deleteOrderFromStore(data.orderId);
+    return { success: true, deleted, orderId: data.orderId };
   });
 
 export const clearPosOrders = createServerFn({ method: "POST" })

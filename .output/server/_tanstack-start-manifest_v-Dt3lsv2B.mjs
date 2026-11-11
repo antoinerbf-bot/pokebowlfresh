@@ -1,7 +1,7 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BOdlDjUd.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-Dt3lsv2B.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/__root.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/__root.tsx",
 		children: [
 			"/",
 			"/checkout",
@@ -33,7 +33,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/api/printer/queue"
 		],
 		preloads: [
-			"/assets/index-CJuRQNMV.js",
+			"/assets/index-vPGFNxiY.js",
 			"/assets/createLucideIcon-Cwt3h4uJ.js",
 			"/assets/invariant-BeDuhpwN.js",
 			"/assets/link-DNNmk_Uj.js"
@@ -41,23 +41,22 @@ var tsrStartManifest = () => ({ routes: {
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-CJuRQNMV.js"
+			src: "/assets/index-vPGFNxiY.js"
 		} }]
 	},
 	"/": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/index.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-DxwKm5jx.js",
-			"/assets/CartDrawer-CJrIp8n6.js",
+			"/assets/routes-wPwabw4P.js",
+			"/assets/CartDrawer-CBCl48TN.js",
 			"/assets/book-open-wkVtoW8e.js",
 			"/assets/briefcase-business-D93Q2jPt.js",
 			"/assets/chef-hat-Y59weHxi.js",
 			"/assets/chevron-right-Cnj3luwS.js",
 			"/assets/circle-check-BKVHuuRY.js",
 			"/assets/map-pin-CkDOt-0u.js",
-			"/assets/HoursBanner-COBzOzn5.js",
-			"/assets/search-Dv_p_hXC.js",
+			"/assets/HoursBanner-Cf88S69K.js",
 			"/assets/shield-check-DPCK8fus.js",
 			"/assets/shopping-bag-CxA4XNWa.js",
 			"/assets/star-D8D0kTfC.js",
@@ -65,10 +64,10 @@ var tsrStartManifest = () => ({ routes: {
 		]
 	},
 	"/checkout": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/checkout.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/checkout.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/checkout-Cywk1YS7.js",
+			"/assets/checkout-DYDosEt3.js",
 			"/assets/arrow-left-Dyuwrwe5.js",
 			"/assets/circle-alert-BvofYqlP.js",
 			"/assets/store-BT49HRsR.js",
@@ -79,21 +78,20 @@ var tsrStartManifest = () => ({ routes: {
 		]
 	},
 	"/commander": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/commander.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/commander.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/commander--id7kAw1.js",
-			"/assets/CartDrawer-CJrIp8n6.js",
+			"/assets/commander-Ds8vngqO.js",
+			"/assets/CartDrawer-CBCl48TN.js",
 			"/assets/map-pin-CkDOt-0u.js",
-			"/assets/HoursBanner-COBzOzn5.js",
-			"/assets/search-Dv_p_hXC.js",
+			"/assets/HoursBanner-Cf88S69K.js",
 			"/assets/shopping-bag-CxA4XNWa.js",
 			"/assets/BrandLogo-U0RymHuS.js",
-			"/assets/useStock-Dgfnpw7m.js"
+			"/assets/useStock-CTUpw4XH.js"
 		]
 	},
 	"/contact": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/contact.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/contact.tsx",
 		children: void 0,
 		preloads: [
 			"/assets/contact-C4qzhKht.js",
@@ -105,7 +103,7 @@ var tsrStartManifest = () => ({ routes: {
 		]
 	},
 	"/recrutement": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/recrutement.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/recrutement.tsx",
 		children: void 0,
 		preloads: [
 			"/assets/recrutement-CYHG8Bkx.js",
@@ -117,44 +115,44 @@ var tsrStartManifest = () => ({ routes: {
 		]
 	},
 	"/sur-mesure": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/sur-mesure.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/sur-mesure.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/sur-mesure-D64Xd9iz.js",
+			"/assets/sur-mesure-B_vvb_3a.js",
 			"/assets/arrow-left-Dyuwrwe5.js",
-			"/assets/CartDrawer-CJrIp8n6.js",
+			"/assets/CartDrawer-CBCl48TN.js",
 			"/assets/chef-hat-Y59weHxi.js",
 			"/assets/shopping-bag-CxA4XNWa.js",
 			"/assets/BrandLogo-U0RymHuS.js",
-			"/assets/useStock-Dgfnpw7m.js"
+			"/assets/useStock-CTUpw4XH.js"
 		]
 	},
 	"/admin/stocks": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/admin/stocks.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/admin/stocks.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/stocks-DmEg5vxd.js",
+			"/assets/stocks-CCxH41d1.js",
 			"/assets/loader-circle-DWi0hMJw.js",
-			"/assets/stock-BDP0CrIR.js"
+			"/assets/stock-DLecNBNK.js"
 		]
 	},
 	"/blog/$slug": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/blog/$slug.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/blog/$slug.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_slug-C8DAKukI.js",
+			"/assets/_slug-DaNJdcCw.js",
 			"/assets/arrow-left-Dyuwrwe5.js",
-			"/assets/CartDrawer-CJrIp8n6.js",
+			"/assets/CartDrawer-CBCl48TN.js",
 			"/assets/chevron-right-Cnj3luwS.js",
 			"/assets/shopping-bag-CxA4XNWa.js",
 			"/assets/BrandLogo-U0RymHuS.js"
 		]
 	},
 	"/order/success": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/order.success.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/order.success.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/order.success-CTFk7ObN.js",
+			"/assets/order.success-SNfw9oDk.js",
 			"/assets/circle-check-BKVHuuRY.js",
 			"/assets/store-BT49HRsR.js",
 			"/assets/loader-circle-DWi0hMJw.js",
@@ -163,22 +161,22 @@ var tsrStartManifest = () => ({ routes: {
 		]
 	},
 	"/product/$productId": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/product/$productId.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/product/$productId.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_productId-CMAdBonn.js",
+			"/assets/_productId-Cr7AHHCw.js",
 			"/assets/arrow-left-Dyuwrwe5.js",
-			"/assets/CartDrawer-CJrIp8n6.js",
+			"/assets/CartDrawer-CBCl48TN.js",
 			"/assets/shield-check-DPCK8fus.js",
 			"/assets/BrandLogo-U0RymHuS.js",
-			"/assets/useStock-Dgfnpw7m.js"
+			"/assets/useStock-CTUpw4XH.js"
 		]
 	},
 	"/track/$token": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/track/$token.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/track/$token.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/_token-BF7UUNsj.js",
+			"/assets/_token-D1vL_98p.js",
 			"/assets/circle-alert-BvofYqlP.js",
 			"/assets/loader-circle-DWi0hMJw.js",
 			"/assets/map-pin-CkDOt-0u.js",
@@ -186,14 +184,13 @@ var tsrStartManifest = () => ({ routes: {
 		]
 	},
 	"/blog/": {
-		filePath: "/home/runner/work/pokebowlfresh/pokebowlfresh/src/routes/blog/index.tsx",
+		filePath: "/Users/rousseauantoine/.gemini/antigravity/scratch/pokebowlfresh-o2/src/routes/blog/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/blog-CTlCbaeg.js",
+			"/assets/blog-DYqnzHVj.js",
 			"/assets/arrow-left-Dyuwrwe5.js",
-			"/assets/CartDrawer-CJrIp8n6.js",
+			"/assets/CartDrawer-CBCl48TN.js",
 			"/assets/book-open-wkVtoW8e.js",
-			"/assets/search-Dv_p_hXC.js",
 			"/assets/shopping-bag-CxA4XNWa.js",
 			"/assets/BrandLogo-U0RymHuS.js"
 		]
